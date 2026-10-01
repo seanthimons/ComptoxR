@@ -13,6 +13,7 @@ verify_specmill <- function(
   }
   description <- utils::packageDescription(pin$package, lib.loc = lib)
   if (
+    !identical(description$Version, pin$version) ||
     !identical(description[['Config/specmill/source-commit']], pin$source_commit) ||
       !identical(description[['Config/specmill/source-archive-sha256']], pin$source_archive_sha256)
   ) {

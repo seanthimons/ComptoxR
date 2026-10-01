@@ -1,0 +1,143 @@
+--- a/R/z_generic_request.R
++++ b/R/z_generic_request.R
+@@ -287,10 +287,7 @@
+     mult_count <- ceiling(length(query) / batch_limit)
+ 
+     if (length(query) > batch_limit) {
+-      query_list <- split(
+-        query,
+-        rep(1:mult_count, each = batch_limit, length.out = length(query))
+-      )
++      query_list <- .ct_request_batched(identity, query, size = batch_limit)
+     } else {
+       query_list <- list(query)
+     }
+@@ -346,31 +343,24 @@
+   req_list <- purrr::map(
+     query_list,
+     function(query_part) {
+-      req <- httr2::request(base_url) %>%
+-        httr2::req_url_path_append(endpoint) %>%
+-        httr2::req_headers(
+-          Accept = content_type
+-        )
+-
+-      if (auth) {
+-        req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
+-      }
++      req <- httr2::request(base_url) %>% httr2::req_url_path_append(endpoint)
++      request_body <- NULL
++      body_media <- "application/json"
++      headers <- list(Accept = content_type)
++      if (auth) headers[["x-api-key"]] <- ct_api_key()
+ 
+       # Implementation for POST requests (Typically bulk searches)
+       if (toupper(method) == "POST") {
+-        req <- req %>%
+-          httr2::req_method("POST")
+-
+         # Set request body based on body_type
+         if (body_type == "raw_text") {
+           # Send as newline-delimited plain text (e.g., /chemical/search/equal/)
+-          body_text <- paste(query_part, collapse = "\n")
+-          req <- req %>% httr2::req_body_raw(body_text, type = "text/plain")
++          request_body <- paste(query_part, collapse = "\n")
++          body_media <- "text/plain"
+         } else if (!is.null(body)) {
+-          req <- req %>% httr2::req_body_json(body, auto_unbox = TRUE)
++          request_body <- body
+         } else {
+           # Default: Send as JSON array
+-          req <- req %>% httr2::req_body_json(query_part, auto_unbox = FALSE)
++          request_body <- I(query_part)
+         }
+ 
+         # Append additional path parameters if provided
+@@ -384,8 +374,6 @@
+         req <- req %>% httr2::req_url_query(!!!ellipsis_args)
+       } else {
+         # Implementation for GET requests
+-        req <- req %>% httr2::req_method("GET")
+-
+         # Scenario A: Static endpoint (no query appending)
+         if (batch_limit == 0) {
+           # Add original query value to query parameters if provided
+@@ -432,14 +420,7 @@
+         }
+       }
+ 
+-      # Add retry with exponential backoff for transient errors (429, 5xx)
+-      req <- req %>%
+-        httr2::req_retry(
+-          max_tries = 3,
+-          is_transient = is_transient_error
+-        )
+-
+-      return(req)
++      .ct_request_build(req, if (toupper(method) == "POST") "POST" else "GET", request_body, headers, body_media)
+     }
+   )
+ 
+@@ -941,27 +922,14 @@
+     cli::cli_end()
+   }
+ 
+-  # 4. Request building
+-  req <- httr2::request(base_url) %>%
+-    httr2::req_url_path_append(endpoint) %>%
+-    httr2::req_method("POST") %>%
+-    httr2::req_body_json(payload) %>%
+-    httr2::req_headers(Accept = content_type)
+-
++  # Client policy supplies the URL, credentials and chemical payload.
++  req <- httr2::request(base_url) %>% httr2::req_url_path_append(endpoint)
+   if (length(query_params) > 0) {
+     req <- do.call(httr2::req_url_query, c(list(req), query_params))
+   }
+-
+-  if (auth) {
+-    req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
+-  }
+-
+-  # Add retry with exponential backoff for transient errors (429, 5xx)
+-  req <- req %>%
+-    httr2::req_retry(
+-      max_tries = 3,
+-      is_transient = is_transient_error
+-    )
++  headers <- list(Accept = content_type)
++  if (auth) headers[["x-api-key"]] <- ct_api_key()
++  req <- .ct_request_build(req, "POST", payload, headers)
+ 
+   # 5. Debugging
+   if (run_debug) {
+@@ -1338,3 +1306,17 @@
+ 
+   tibble::tibble()
+ }
++
++# Client-owned adapter: preserve historical URL bytes and unbounded timeout.
++.ct_request_build <- function(target, method, body, headers, body_media = "application/json") {
++  previous <- options(comptoxr_native.dry_run = TRUE, comptoxr_native.request = list(),
++    comptoxr_native.run_verbose = FALSE)
++  on.exit(options(previous), add = TRUE)
++  curl::curl_parse_url(target$url)
++  origin <- httr2::url_modify(target$url, path = "", query = NULL, fragment = NULL)
++  path <- substring(target$url, nchar(origin) + 1L)
++  req <- .ct_request(method, path, list(), list(), body, headers = headers,
++    body_media = body_media, server = list(url = origin),
++    request_controls = list(max_retries = 2, retry_writes = TRUE, retry_policy = is_transient_error))
++  httr2::req_options(req, timeout_ms = NULL)
++}
+--- a/tests/testthat/test-generic_request_edge.R
++++ b/tests/testthat/test-generic_request_edge.R
+@@ -199,7 +199,8 @@
+   )
+   # Both items fit in one batch and become the JSON-array request body.
+   expect_equal(captured_method, "POST")
+-  expect_equal(captured_body, c("A", "B"))
++  expect_equal(as.vector(captured_body), c("A", "B"))
++  expect_s3_class(captured_body, "AsIs")
+ })
+ 
+ # --- path_params + batching abort (downstream wrappers rely on this guard) ---

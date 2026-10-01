@@ -17,7 +17,7 @@ chemi_resolver_lookupCASRN <- function(query) {
     base::stop("Required input: query")
   }
   base::evalq(
-    function(values, schemas, validate) {
+    function(values, schemas, validate, locations) {
       for (name in names(values)) {
         value <- values[[name]]
         if (is.null(value)) {
@@ -34,7 +34,7 @@ chemi_resolver_lookupCASRN <- function(query) {
           value <- as.list(value)
         }
         tryCatch(validate(value, schema), error = function(e) {
-          stop("Invalid public input ", name, ": ", conditionMessage(e), call. = FALSE)
+          stop("Invalid ", locations[[name]], " parameter ", name, ": ", conditionMessage(e), call. = FALSE)
         })
       }
       invisible(NULL)
@@ -49,13 +49,13 @@ chemi_resolver_lookupCASRN <- function(query) {
         check_json <- function(value, depth = 0L) {
           nodes <<- nodes + 1L
           if (depth > 32L) {
-            stop("Body depth limit exceeded (32); possible cycle")
+            stop("Depth limit exceeded (32); possible cycle")
           }
           if (nodes > 20000L) {
-            stop("Body node limit exceeded (20000)")
+            stop("Node limit exceeded (20000)")
           }
           if (is.environment(value)) {
-            stop("Body contains an environment or cycle")
+            stop("Value contains an environment or cycle")
           }
           if (is.list(value)) {
             for (child in value) {
@@ -107,19 +107,19 @@ chemi_resolver_lookupCASRN <- function(query) {
         validate <- function(value, schema, strict = FALSE) {
           validations <<- validations + 1L
           if (validations > 20000L) {
-            stop("Body validation node limit exceeded (20000)")
+            stop("Validation node limit exceeded (20000)")
           }
           ref <- attr(schema, "specmill_ref")
           if (!is.null(ref)) {
             schema <- definitions[[ref]]
             if (is.null(schema)) {
-              stop("Missing recursive body definition")
+              stop("Missing recursive schema definition")
             }
           }
           type <- unlist(schema$type, use.names = FALSE)
           strict <- strict || length(type) > 1L || any(c("oneOf", "anyOf", "allOf") %in% names(schema))
           if (is.object(value) || !is.null(dim(value))) {
-            stop("Body must contain plain JSON values")
+            stop("Value must contain plain JSON values")
           }
           scalar <- is.atomic(value) && length(value) == 1L && !anyNA(value) && is.null(names(value))
           shape <- if (is.null(value)) {
@@ -144,7 +144,7 @@ chemi_resolver_lookupCASRN <- function(query) {
             ""
           }
           if (!nzchar(shape)) {
-            stop("Invalid body scalar type")
+            stop("Invalid scalar type")
           }
           legacy_empty_object <- !strict && identical(shape, "array") && !length(value) && identical(type, "object")
           if (
@@ -153,11 +153,11 @@ chemi_resolver_lookupCASRN <- function(query) {
               !legacy_empty_object &&
               !(shape %in% type || (shape == "integer" && "number" %in% type))
           ) {
-            stop("Invalid body scalar type")
+            stop("Invalid scalar type")
           }
           if (shape == "null") {
             if (length(type) && !("null" %in% type) && !isTRUE(schema$nullable)) {
-              stop("Explicit null body is not nullable")
+              stop("Explicit null is not nullable")
             }
           } else if (shape == "object" || legacy_empty_object) {
             keys <- names(value)
@@ -165,10 +165,10 @@ chemi_resolver_lookupCASRN <- function(query) {
               keys <- character()
             }
             if (anyNA(keys) || anyDuplicated(keys) || any(!nzchar(keys))) {
-              stop("Invalid body object names")
+              stop("Invalid object names")
             }
             if (!all(unlist(schema$required) %in% keys)) {
-              stop("Missing required body fields")
+              stop("Missing required fields")
             }
             if (
               any(vapply(
@@ -177,11 +177,11 @@ chemi_resolver_lookupCASRN <- function(query) {
                 logical(1)
               ))
             ) {
-              stop("Read-only body fields are not allowed")
+              stop("Read-only fields are not allowed")
             }
             unknown <- setdiff(keys, names(schema$properties))
             if (length(unknown) && isFALSE(schema$additionalProperties)) {
-              stop("Unknown body fields")
+              stop("Unknown fields")
             }
             value <- lapply(seq_along(value), function(i) {
               child <- schema$properties[[keys[[i]]]]
@@ -200,7 +200,7 @@ chemi_resolver_lookupCASRN <- function(query) {
               (!is.null(schema$minItems) && length(value) < schema$minItems) ||
                 (!is.null(schema$maxItems) && length(value) > schema$maxItems)
             ) {
-              stop("Invalid body array length")
+              stop("Invalid array length")
             }
             value <- lapply(value, validate, schema = schema$items, strict = strict)
           }
@@ -218,14 +218,14 @@ chemi_resolver_lookupCASRN <- function(query) {
                   is.numeric(schema$exclusiveMaximum) &&
                   value >= schema$exclusiveMaximum))
           ) {
-            stop("Invalid body numeric bounds")
+            stop("Invalid numeric bounds")
           }
           if (
             numeric_value &&
               !is.null(schema$multipleOf) &&
               abs(value / schema$multipleOf - round(value / schema$multipleOf)) > sqrt(.Machine$double.eps)
           ) {
-            stop("Invalid body multipleOf")
+            stop("Invalid multipleOf")
           }
           if (
             shape == "string" &&
@@ -233,13 +233,13 @@ chemi_resolver_lookupCASRN <- function(query) {
                 (!is.null(schema$maxLength) && nchar(value) > schema$maxLength) ||
                 (!is.null(schema$pattern) && !grepl(schema$pattern, value, perl = TRUE)))
           ) {
-            stop("Invalid body string")
+            stop("Invalid string")
           }
           if (!is.null(schema$enum) && !any(vapply(schema$enum, equal_json, logical(1), y = value))) {
-            stop("Invalid body enum")
+            stop("Invalid enum")
           }
           if ("const" %in% names(schema) && !equal_json(value, schema$const)) {
-            stop("Invalid body const")
+            stop("Invalid const")
           }
           if (
             ((!is.null(schema$minProperties) &&
@@ -251,7 +251,7 @@ chemi_resolver_lookupCASRN <- function(query) {
                 !is.null(names(value)) &&
                 length(value) > schema$maxProperties))
           ) {
-            stop("Invalid body object size")
+            stop("Invalid object size")
           }
           if (
             isTRUE(schema$uniqueItems) &&
@@ -264,7 +264,7 @@ chemi_resolver_lookupCASRN <- function(query) {
                 logical(1)
               ))
           ) {
-            stop("Duplicate body array items")
+            stop("Duplicate array items")
           }
           for (field in c("allOf", "anyOf", "oneOf")) {
             if (!field %in% names(schema)) {
@@ -282,13 +282,13 @@ chemi_resolver_lookupCASRN <- function(query) {
               logical(1)
             )
             if (field == "allOf" && !all(matches)) {
-              stop("Body allOf requires every branch")
+              stop("allOf requires every branch")
             }
             if (field == "anyOf" && !any(matches)) {
-              stop("Body anyOf matched no branches")
+              stop("anyOf matched no branches")
             }
             if (field == "oneOf" && sum(matches) != 1L) {
-              stop("Body oneOf matched ", sum(matches), " branches; expected exactly one")
+              stop("oneOf matched ", sum(matches), " branches; expected exactly one")
             }
           }
           value
@@ -296,7 +296,8 @@ chemi_resolver_lookupCASRN <- function(query) {
         validate(value, schema)
       },
       envir = base::baseenv()
-    )
+    ),
+    c(query = "query")
   )
   params <- base::list("query" = query)
   if (base::is.character(params[["query"]]) && base::any(!base::nzchar(params[["query"]]))) {

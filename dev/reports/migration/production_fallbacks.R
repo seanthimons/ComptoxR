@@ -1,5 +1,6 @@
 # Check the same production schema routes used by the existing downloader.
 production_fallbacks <- function(root = '.migration-evidence/production') {
+  source('R/schema.R', local = TRUE)
   report <- utils::read.csv(file.path(root, 'acquisition.csv'))
   for (suffix in c('openapi.json', 'swagger.json', 'swagger.yaml', 'swagger.yml', 'swagger?format=json')) {
     pending <- which(!report$valid & startsWith(report$file, 'chemi-'))
@@ -22,7 +23,7 @@ production_fallbacks <- function(root = '.migration-evidence/production') {
       }
       i <- pending[[j]]
       path <- file.path(root, report$file[[i]])
-      writeBin(httr2::resp_body_raw(response), path)
+      .write_downloaded_schema(httr2::resp_body_raw(response), path)
       report$url[[i]] <- urls[[j]]
       report$status[[i]] <- 200L
       report$valid[[i]] <- TRUE
