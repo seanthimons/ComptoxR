@@ -23,7 +23,7 @@
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_chet_reaction_database <- function(
-  page = 0,
+  page = 1,
   size = NULL,
   query = NULL,
   lib_name = NULL,
@@ -74,7 +74,7 @@ chemi_chet_reaction_database <- function(
     }),
     "paginate" = params[["all_pages"]],
     "max_pages" = params[["max_pages"]],
-    "pagination_strategy" = "page_size"
+    "pagination_strategy" = "chet_page"
   )
   result
 }

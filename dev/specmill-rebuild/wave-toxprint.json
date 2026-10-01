@@ -26,7 +26,8 @@
     "apis/chemi-toxprint-prod-rebuild.yml": "b01a3f20826fd1485edf777505b5049dd1ab19face05730d5a95a16868c426d6",
     "schema/chemi-toxprints-prod.json": "f1ebc2f1bf1581c3eea75de7c4e6d5e6c7b4bd41c585f52bba14b3d2ee5d6447",
     "R/chemi_toxprint.R": "957f17fcfcd470b83ee911a728c3bb31d3bf6f3a6175da7750f9b2746b47be24",
-    "R/z_generic_request.R": "2f886fb44b83949ce61bf295d2ef63f5b5f4a9e1ded70c644ac291ffa8ea05d8"
+    "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
+    "R/z_specmill_request.R": "ca8ddce1d9a4645fd1199f5c0b86aac153a8d64c97b2902e4dacd989cc64471e"
   },
   "reviewed_retained_diagnostics": [
     {
@@ -107,5 +108,10 @@
     },
     "generation_inputs_unchanged_since_rehearsal": true,
     "source_documentation_hooks_pin_unchanged": true
+  },
+  "helper_adoption_review": {
+    "issue": 342,
+    "toolkit": "0.1.11",
+    "scope": "Request construction and decoding delegate to emitted native transport; retained ToxPrint synthesis, formals, visibility and response policy unchanged. Reverify with installed-client comparison."
   }
 }

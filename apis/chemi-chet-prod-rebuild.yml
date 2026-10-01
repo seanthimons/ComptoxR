@@ -112,7 +112,7 @@ operations:
     inputs:
       page:
         type: numeric
-        default: 0.0
+        default: 1.0
         description: Optional parameter
       size:
         type: character
@@ -160,7 +160,7 @@ operations:
           - params
           - max_pages
         pagination_strategy:
-          value: page_size
+          value: chet_page
     docs:
       title: Chemical counts by library
       lifecycle: experimental
@@ -183,7 +183,7 @@ operations:
     inputs:
       page:
         type: numeric
-        default: 0.0
+        default: 1.0
         description: Optional parameter
       size:
         type: character
@@ -263,7 +263,7 @@ operations:
           - params
           - max_pages
         pagination_strategy:
-          value: page_size
+          value: chet_page
     docs:
       title: Search chemicals
       lifecycle: experimental
@@ -471,7 +471,7 @@ operations:
     inputs:
       page:
         type: numeric
-        default: 0.0
+        default: 1.0
         description: Optional parameter
       size:
         type: character
@@ -575,7 +575,7 @@ operations:
           - params
           - max_pages
         pagination_strategy:
-          value: page_size
+          value: chet_page
     docs:
       title: Search reactions
       lifecycle: experimental

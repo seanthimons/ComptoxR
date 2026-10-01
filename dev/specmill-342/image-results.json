@@ -1,0 +1,44 @@
+{
+  "checked_at": "2026-10-01 20:31:17 UTC",
+  "endpoint": "https://hcd.rtpnc.epa.gov/api/chet/chemicals/1/image",
+  "magick": "2.9.1",
+  "results": {
+    "png": {
+      "status": 200,
+      "media": "image/png",
+      "classes": "magick-image",
+      "response_bytes": 4392,
+      "image": {
+        "format": "PNG",
+        "width": 346,
+        "height": 195,
+        "colorspace": "sRGB",
+        "matte": true,
+        "filesize": 4392,
+        "density": "+72x+72"
+      }
+    },
+    "svg": {
+      "status": 200,
+      "media": "image/svg+xml",
+      "classes": "magick-image",
+      "response_bytes": 6745,
+      "image": {
+        "format": "SVG",
+        "width": 343,
+        "height": 194,
+        "colorspace": "sRGB",
+        "matte": true,
+        "filesize": 7718,
+        "density": "+72x+72"
+      }
+    },
+    "pdf": {
+      "status": 200,
+      "media": "application/pdf",
+      "classes": "raw",
+      "response_bytes": 3069,
+      "image": null
+    }
+  }
+}

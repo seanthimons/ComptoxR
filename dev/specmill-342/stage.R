@@ -1,5 +1,5 @@
-# Offline rehearsal only; this never overwrites the live client's helpers.
-stage_issue342 <- function(root = 'dev/specmill-pilot/artifacts/issue-342-rehearsal') {
+# Reproduce the reviewed facade patch and native helper in a disposable checkout.
+stage_issue342 <- function(root = 'dev/specmill-pilot/artifacts/issue-342-adoption-reproduction') {
   source('dev/install_specmill.R', local = TRUE)
   verify_specmill()
   if (file.exists(root)) {
@@ -8,7 +8,8 @@ stage_issue342 <- function(root = 'dev/specmill-pilot/artifacts/issue-342-rehear
   dir.create(root, recursive = TRUE)
   archive <- tempfile(fileext = '.tar')
   on.exit(unlink(archive), add = TRUE)
-  status <- system2('git', c('archive', '--format=tar', paste0('--output=', shQuote(archive)), 'HEAD'))
+  review <- jsonlite::read_json('dev/specmill-342/adoption.json')
+  status <- system2('git', c('archive', '--format=tar', paste0('--output=', shQuote(archive)), review$base_commit))
   if (status != 0L) {
     stop('Cannot archive the current committed client.')
   }
@@ -18,16 +19,8 @@ stage_issue342 <- function(root = 'dev/specmill-pilot/artifacts/issue-342-rehear
   if (status != 0L) {
     stop('Compatibility patch no longer applies; review before adoption.')
   }
-  scaffold <- specmill:::request_helper_scaffold(
-    '.ct_request',
-    'https://example.invalid',
-    NULL,
-    'COMPTOXR_NATIVE_DRY_RUN',
-    companions = 'batching'
-  )
-  dir.create(file.path(root, '.specmill/helpers'), recursive = TRUE, showWarnings = FALSE)
-  writeLines(scaffold$code, file.path(root, 'R/z_specmill_request.R'))
-  writeLines(scaffold$provenance, file.path(root, '.specmill/helpers/.ct_request.json'))
+  source('dev/specmill-342/emit.R', local = TRUE)
+  emit_issue342(root, mode = 'apply')
   message('Staged compatibility candidate at ', root)
   invisible(root)
 }

@@ -5,7 +5,7 @@
 \title{Search chemicals}
 \usage{
 chemi_chet_chemicals_database(
-  page = 0,
+  page = 1,
   size = NULL,
   query = NULL,
   exact_search = NULL,

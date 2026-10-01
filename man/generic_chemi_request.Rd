@@ -63,7 +63,7 @@ as provided, preserving array order and duplicates.}
 as lists; CSV and TSV responses are parsed as data frames.}
 
 \item{paginate}{Boolean; whether to automatically fetch all pages. Defaults to FALSE.
-When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
+When TRUE, uses generated pagination support to loop through pages.}
 
 \item{max_pages}{Maximum pages to fetch when paginate=TRUE. Defaults to 100.}
 

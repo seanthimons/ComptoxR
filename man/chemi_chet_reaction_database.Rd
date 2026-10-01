@@ -5,7 +5,7 @@
 \title{Search reactions}
 \usage{
 chemi_chet_reaction_database(
-  page = 0,
+  page = 1,
   size = NULL,
   query = NULL,
   lib_name = NULL,

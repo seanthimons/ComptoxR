@@ -64,11 +64,12 @@ jobs:
       - name: Check generated wrappers and tests
         run: |
           Rscript -e 'source("dev/check_public_api.R"); check_public_api(membership = FALSE)'
+          Rscript dev/specmill-342/verify.R
           Rscript dev/generate_specmill.R --check
 
       - name: Run fixed contracts and client policy tests
         run: |
-          Rscript -e 'testthat::test_local(filter = "^(contract-.*|generic_request_edge|hooks_stage_server|chemi_search|ct_chemical_list_all_hooks)$", stop_on_failure = TRUE)'
+          Rscript -e 'testthat::test_local(filter = "^(contract-.*|generic_request|generic_request_edge|generic_chemi_request|pubchem_offline|hooks_stage_server|chemi_search|ct_chemical_list_all_hooks|specmill_adoption)$", stop_on_failure = TRUE)'
 
       - name: Verify regeneration changes no files
         run: |

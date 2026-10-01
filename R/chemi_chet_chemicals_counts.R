@@ -15,7 +15,7 @@
 #' chemi_chet_chemicals_counts(page = "DTXSID7020182")
 #' }
 # Generated with specmill; do not edit by hand.
-chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE, max_pages = 100) {
+chemi_chet_chemicals_counts <- function(page = 1, size = NULL, all_pages = TRUE, max_pages = 100) {
   params <- base::list("page" = page, "size" = size, "all_pages" = all_pages, "max_pages" = max_pages)
   result <- generic_request(
     "endpoint" = "chemicals/counts",
@@ -33,7 +33,7 @@ chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE,
     }),
     "paginate" = params[["all_pages"]],
     "max_pages" = params[["max_pages"]],
-    "pagination_strategy" = "page_size"
+    "pagination_strategy" = "chet_page"
   )
   result
 }
