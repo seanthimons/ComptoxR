@@ -1,6 +1,10 @@
 {
   "version": 1,
   "files": {
+    "R/api_validation.R": {
+      "hash": "f356e94438548c3b55e37b6be1637dbf22686eb0c0a915bf83bb253ef4de014d",
+      "operations": "specmill validation"
+    },
     "R/chemi_alerts_alerts.R": {
       "hash": "d9449ac36904d3826633e15e7f4a6391bcdfc89501d095ecbb1519adf9a006e0",
       "operations": "alerts-pilot GET /api/alerts/alerts"
@@ -322,11 +326,11 @@
       "operations": "chemi-resolver-prod-rebuild GET /api/resolver/links"
     },
     "R/chemi_resolver_lookup.R": {
-      "hash": "46960a683ec9740740aa0e3ec3217456ecfacf623449b2927c83e27ec0636262",
+      "hash": "7a367dabd9042b0a547febb32ec327e1b0d3d780310e0f25e5c8185af1313073",
       "operations": "chemi-resolver-prod-rebuild GET /api/resolver/lookup"
     },
     "R/chemi_resolver_lookupCASRN.R": {
-      "hash": "fb16b5692673d7b7fe70c3e90fe41c49eaa48099f3366a7fa986b542870d35c5",
+      "hash": "ab4f633e6d6ce781ac78f455d81f3026ce7d3c3c114f378998951112d1bc0d41",
       "operations": "chemi-resolver-prod-rebuild GET /api/resolver/lookupCASRN"
     },
     "R/chemi_resolver_mesh.R": {
@@ -1994,12 +1998,13 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.11",
+  "toolkit_version": "0.1.12",
   "inputs": {
     "DESCRIPTION": "3eb80bd7eb26cc8be3a18e8dcd418c73a87d9ed86ed2562b47b74e118903609e",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
     "NAMESPACE": "f6f4f431687cc68c978b4d234ae61aa2d66dc7dd939470445edf8bdfe7596a1c",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
+    "R/api_validation.R": "f356e94438548c3b55e37b6be1637dbf22686eb0c0a915bf83bb253ef4de014d",
     "R/chemi_alerts.R": "06d82edbfc21e80604f654d034606d72f03545cb2edb199cd5709d931cb6c0bc",
     "R/chemi_alerts_alerts.R": "d9449ac36904d3826633e15e7f4a6391bcdfc89501d095ecbb1519adf9a006e0",
     "R/chemi_alerts_groups.R": "b900101cb03e903031e8aeacf7cb2cf2e80900f004ce1cff6660b635c1f333f1",
@@ -2125,8 +2130,8 @@
     "R/chemi_resolver_ghs_pcodes.R": "1c2b77ae6f4c7300fe37efb6b5d91b0d11ad5868da9777e9b689a00f8af9fda9",
     "R/chemi_resolver_hcodes.R": "4c0ebd563c47fc02fb339d0cd6955135f53550055c510f32def34e23bd62839b",
     "R/chemi_resolver_links.R": "0f3cc8e90fafc990f9a2def9802cbd380f19035d08ae9082494076d726a5117f",
-    "R/chemi_resolver_lookup.R": "46960a683ec9740740aa0e3ec3217456ecfacf623449b2927c83e27ec0636262",
-    "R/chemi_resolver_lookupCASRN.R": "fb16b5692673d7b7fe70c3e90fe41c49eaa48099f3366a7fa986b542870d35c5",
+    "R/chemi_resolver_lookup.R": "7a367dabd9042b0a547febb32ec327e1b0d3d780310e0f25e5c8185af1313073",
+    "R/chemi_resolver_lookupCASRN.R": "ab4f633e6d6ce781ac78f455d81f3026ce7d3c3c114f378998951112d1bc0d41",
     "R/chemi_resolver_lookup_bulk.R": "7d91a679db518c4617fd9549e3668f23795ae356b3391c8863413a554619f34e",
     "R/chemi_resolver_mesh.R": "432335f7ab7b67599c26bd8da918ac379f4cffa49cb141dca29e00aff9406c1c",
     "R/chemi_resolver_orderBySimilarity.R": "39869a66aeb37100c6d517ca0ce161b69cf9a10dd51d9fba37838bed8287c6a2",
