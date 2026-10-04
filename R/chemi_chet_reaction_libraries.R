@@ -14,7 +14,7 @@
 chemi_chet_reaction_libraries <- function() {
   params <- base::list()
   result <- generic_request(
-    "endpoint" = "reaction/libraries",
+    "endpoint" = "chet/reaction/libraries",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

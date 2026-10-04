@@ -32,7 +32,7 @@ test_that("chemi_chet_reaction_database_old_by_pagenum_and_searchterm passes req
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_request")
   expect_equal(call[["query"]], 1L)
-  expect_equal(call[["endpoint"]], "reaction/database-old/")
+  expect_equal(call[["endpoint"]], "chet/reaction/database-old/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
   expect_equal(call[["server"]], "chemi_burl")

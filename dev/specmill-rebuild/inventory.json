@@ -1,10 +1,10 @@
 {
-  "commit": "d996565e9a8ae91e499e6c0a818cdf80173d0703",
+  "commit": "fc8360fce6b96250c75a956db1ca3a3caaeec8e6",
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.8",
-    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
-    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "version": "0.1.11",
+    "source_commit": "d59014365b8b30bde2ce319b5e60d9c3f94fe48f",
+    "source_archive_sha256": "4b8c8c4dddacc457450a4b55ccb9358194544c2cd568c88b44f373b0adb3ffa0",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -797,7 +797,7 @@
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/counts",
       "lifecycle": "experimental",
-      "formals": "pairlist(page = 0, size = NULL, all_pages = TRUE, max_pages = 100)"
+      "formals": "pairlist(page = 1, size = NULL, all_pages = TRUE, max_pages = 100)"
     },
     {
       "name": "chemi_chet_chemicals_database_old",
@@ -827,7 +827,7 @@
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/database",
       "lifecycle": "experimental",
-      "formals": "pairlist(page = 0, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100)"
+      "formals": "pairlist(page = 1, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100)"
     },
     {
       "name": "chemi_chet_chemicals_image",
@@ -927,7 +927,7 @@
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/database",
       "lifecycle": "experimental",
-      "formals": "pairlist(page = 0, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100)"
+      "formals": "pairlist(page = 1, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100)"
     },
     {
       "name": "chemi_chet_reaction_dbcounts",
@@ -5360,6 +5360,16 @@
       "formals": "pairlist(record = FALSE, timeout = 30)"
     },
     {
+      "name": ".write_downloaded_schema",
+      "file": "R/schema.R",
+      "exported": false,
+      "category": "runtime",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(bytes = , path = , pretty = FALSE))"
+    },
+    {
       "name": "epi_schema",
       "file": "R/schema.R",
       "exported": false,
@@ -6018,6 +6028,136 @@
       "operation": null,
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = NULL, namespace = \"cid\", operation = , output = \"JSON\", server = \"pubchem_burl\", method = \"GET\", body = NULL, pluck_path = NULL, tidy = TRUE))"
+    },
+    {
+      "name": ".ct_request_build",
+      "file": "R/z_generic_request.R",
+      "exported": false,
+      "category": "runtime",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(target = , method = , body = , headers = , body_media = \"application/json\"))"
+    },
+    {
+      "name": ".ct_response_json",
+      "file": "R/z_generic_request.R",
+      "exported": false,
+      "category": "runtime",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(response = ))"
+    },
+    {
+      "name": ".ct_request_pages",
+      "file": "R/z_generic_request.R",
+      "exported": false,
+      "category": "runtime",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(req = , next_req = , max_reqs = , on_error = \"return\", progress = FALSE))"
+    },
+    {
+      "name": ".ct_response_delimited",
+      "file": "R/z_generic_request.R",
+      "exported": false,
+      "category": "runtime",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(response = , context = , decode = ))"
+    },
+    {
+      "name": ".ct_request",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(method = , path = , path_params = , query = , body = , headers = base::list(), query_serialization = base::list(), body_media = \"application/json\", auth = NULL, batch = base::list(), parameter_serialization = base::list(), cookies = base::list(), body_encoding = base::list(), form_schema = NULL, server = base::list(url = \"https://example.invalid\"), request_controls = base::list(), response_policy = base::getOption(base::paste0(base::tolower(base::sub(\"_DRY_RUN$\", \"\", \"COMPTOXR_NATIVE_DRY_RUN\")),     \".response_policy\"))))"
+    },
+    {
+      "name": ".ct_request_decode",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(response = , method = \"GET\", response_policy = NULL))"
+    },
+    {
+      "name": ".ct_request_delimited",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(response = , context = , decode = ))"
+    },
+    {
+      "name": ".ct_request_records",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(result = , collection = base::character(), query = NULL, null_to_na = FALSE, keyed = FALSE))"
+    },
+    {
+      "name": ".ct_request_table",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(records = , type_convert = TRUE, names_to = NULL, as_table = base::identity))"
+    },
+    {
+      "name": ".ct_request_batched",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(fn = , items = , size = , ... = , policy = base::getOption(base::paste0(base::tolower(base::sub(\"_DRY_RUN$\", \"\", \"COMPTOXR_NATIVE_DRY_RUN\")), \"..ct_request.batching\"), base::list())))"
+    },
+    {
+      "name": ".ct_request_paginated",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(fn = , ... = , mode = , parameter = , size_parameter = NULL, page_size = NULL, start = NULL, items = , max_pages = 100, max_items = NULL, next_cursor = NULL, completed = NULL, advance = NULL, stop_on_short = FALSE, error_policy = \"stop\", warn_limits = TRUE, format = NULL, policy = base::getOption(base::paste0(base::tolower(base::sub(\"_DRY_RUN$\", \"\", \"COMPTOXR_NATIVE_DRY_RUN\")), \"..ct_request.pagination\"), base::list())))"
+    },
+    {
+      "name": ".ct_request_pagination_token",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(value = ))"
+    },
+    {
+      "name": ".ct_request_paginated_links",
+      "file": "R/z_specmill_request.R",
+      "exported": false,
+      "category": "utility",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(request = , items = , next_link = function(response) httr2::resp_link_url(response, \"next\"), max_pages = 100, max_items = NULL, warn_limits = TRUE, error_policy = \"stop\", format = NULL, policy = base::getOption(base::paste0(base::tolower(base::sub(\"_DRY_RUN$\", \"\", \"COMPTOXR_NATIVE_DRY_RUN\")), \"..ct_request.pagination_links\"), base::list())))"
     },
     {
       "name": ".ComptoxREnv",

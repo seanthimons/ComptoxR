@@ -14,7 +14,7 @@
 chemi_chet_reaction_database_old <- function() {
   params <- base::list()
   result <- generic_request(
-    "endpoint" = "reaction/database_old",
+    "endpoint" = "chet/reaction/database_old",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

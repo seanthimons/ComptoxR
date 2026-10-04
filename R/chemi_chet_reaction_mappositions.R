@@ -16,7 +16,7 @@ chemi_chet_reaction_mappositions <- function(map_id) {
   params <- base::list("map_id" = map_id)
   result <- generic_request(
     "query" = params[["map_id"]],
-    "endpoint" = "reaction/mappositions/",
+    "endpoint" = "chet/reaction/mappositions/",
     "method" = "GET",
     "batch_limit" = 1,
     "server" = "chemi_burl",

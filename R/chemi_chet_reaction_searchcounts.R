@@ -16,7 +16,7 @@
 chemi_chet_reaction_searchcounts <- function(search_input, search_type = NULL) {
   result <- generic_request(
     query = search_input,
-    endpoint = "reaction/searchcounts/",
+    endpoint = "chet/reaction/searchcounts/",
     method = "GET",
     batch_limit = 1,
     server = "chemi_burl",

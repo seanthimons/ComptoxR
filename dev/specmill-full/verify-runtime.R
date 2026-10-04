@@ -36,9 +36,14 @@ baseline_snapshot <- Sys.getenv('COMPTOXR_BASELINE_SNAPSHOT')
 before <- if (nzchar(baseline_snapshot)) {
   readRDS(baseline_snapshot)
 } else {
+  # #339: frozen ChET cases carry the corrected chet/ endpoint; the original client sent none.
+  original_cases <- lapply(full_cases, function(x) {
+    if (startsWith(x$arguments$endpoint %||% '', 'chet/')) x$arguments$endpoint <- sub('^chet/', '', x$arguments$endpoint)
+    x
+  })
   callr::r(
     verify_client,
-    list(libs[[1]], file.path(out, 'before'), lookup_cases, full_cases),
+    list(libs[[1]], file.path(out, 'before'), lookup_cases, original_cases),
     libpath = c(libs[[1]], .libPaths())
   )
 }
@@ -145,6 +150,18 @@ for (name in chet_cases) {
   stopifnot(identical(first, new$requests[[1L]]))
 }
 unchanged_cases <- setdiff(unchanged_cases, chet_cases)
+# #339: the other ChET wrappers now add the schema's /api/chet server path; nothing else changes.
+chet_path_cases <- grep('^(invalid-[a-z]+-)?chemi_chet_', unchanged_cases, value = TRUE)
+for (name in chet_path_cases) {
+  old <- before$cases[[name]]
+  old$requests <- lapply(old$requests, function(r) {
+    r$path <- sub('^/chemi/', '/chemi/chet/', r$path)
+    r
+  })
+  old$warnings <- sub('in "(chemicals|reaction)/', 'in "chet/\\1/', old$warnings)
+  stopifnot(identical(old, after$cases[[name]]))
+}
+unchanged_cases <- setdiff(unchanged_cases, chet_path_cases)
 # Failure diagnostics contain output directory names; compare successful cases directly.
 stopifnot(
   identical(before_interfaces, after$interfaces),
@@ -164,6 +181,7 @@ report <- list(
   corrected_options_cases = as.list(options_cases),
   corrected_chet_exports = as.list(chet_exports),
   corrected_chet_cases = as.list(chet_cases),
+  chet_path_cases = as.list(chet_path_cases),
   baseline_snapshot_sha256 = if (nzchar(baseline_snapshot)) {
     digest::digest(file = baseline_snapshot, algo = 'sha256')
   } else {

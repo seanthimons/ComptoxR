@@ -37,7 +37,10 @@ options_corrections <- c('chemi_stdizer_records', 'chemi_toxprints_assays_bulk')
 prediction_bodies <- c('chemi_opera_bulk', 'chemi_predictor_models_predict_bulk')
 callbacks <- new.env(parent = baseenv())
 sys.source('dev/specmill_callbacks.R', callbacks)
-short_path <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key)))
+# ChET paths sit below its schema server, /api/chet (#339).
+# ponytail: ChET is the only schema whose server has a path below /api; read servers[[1]]$url if another appears.
+server_base <- function(schema) if (identical(schema, 'chemi-chet-prod.json')) 'chet/' else ''
+short_path <- function(key, schema = '') paste0(server_base(schema), sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key))))
 binding <- function(x, parameters) {
   if (is.symbol(x) && as.character(x) %in% parameters) {
     return(list(from = list('params', as.character(x))))
@@ -242,7 +245,7 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
               return(identical(op$schema, 'ctx-chemical-prod.json') &&
                 identical(op$key, 'GET /chemical/msready/search/by-mass/{start}/{end}'))
             }
-            startsWith(op$key, paste0(method, ' ')) && identical(short_path(op$key), args$endpoint) &&
+            startsWith(op$key, paste0(method, ' ')) && identical(short_path(op$key, op$schema), args$endpoint) &&
               startsWith(op$schema, prefix)
           }, operations)
           if (length(matches) != 1L) stop('No unique supported schema/method/path match; no route guessed')

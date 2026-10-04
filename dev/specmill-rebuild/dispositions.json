@@ -2653,7 +2653,7 @@
     "name": "chemi_chet_chemicals_counts",
     "file": "R/chemi_chet_chemicals_counts.R",
     "lifecycle": "experimental",
-    "formals": "pairlist(page = 0, size = NULL, all_pages = TRUE, max_pages = 100)",
+    "formals": "pairlist(page = 1, size = NULL, all_pages = TRUE, max_pages = 100)",
     "siblings": [],
     "disposition": "generated",
     "mapping": {
@@ -2668,7 +2668,7 @@
     "name": "chemi_chet_chemicals_database",
     "file": "R/chemi_chet_chemicals_database.R",
     "lifecycle": "experimental",
-    "formals": "pairlist(page = 0, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100)",
+    "formals": "pairlist(page = 1, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100)",
     "siblings": [],
     "disposition": "generated",
     "mapping": {
@@ -2706,7 +2706,7 @@
       "helper": "generic_request",
       "helper_calls": 1,
       "method": "GET",
-      "endpoint": "chemicals/image",
+      "endpoint": "chet/chemicals/image",
       "supported": [
         "chemi-chet-prod.json GET /chemicals/{chemical_id}/image"
       ],
@@ -2786,7 +2786,7 @@
       "helper": "generic_chemi_request",
       "helper_calls": 1,
       "method": "POST",
-      "endpoint": "reaction/batchsearch",
+      "endpoint": "chet/reaction/batchsearch",
       "supported": [
         "chemi-chet-prod.json POST /reaction/batchsearch"
       ],
@@ -2798,7 +2798,7 @@
     "name": "chemi_chet_reaction_database",
     "file": "R/chemi_chet_reaction_database.R",
     "lifecycle": "experimental",
-    "formals": "pairlist(page = 0, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100)",
+    "formals": "pairlist(page = 1, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100)",
     "siblings": [],
     "disposition": "generated",
     "mapping": {
@@ -5470,7 +5470,7 @@
       "helper": "generic_request",
       "helper_calls": 1,
       "method": "GET",
-      "endpoint": "reaction/database-old/",
+      "endpoint": "chet/reaction/database-old/",
       "supported": [
         "chemi-chet-prod.json GET /reaction/database-old/{pagenum}/{searchterm}"
       ],
@@ -5490,7 +5490,7 @@
       "helper": "generic_request",
       "helper_calls": 1,
       "method": "GET",
-      "endpoint": "reaction/searchcounts/",
+      "endpoint": "chet/reaction/searchcounts/",
       "supported": [
         "chemi-chet-prod.json GET /reaction/searchcounts/{search_input}/{search_type}"
       ],

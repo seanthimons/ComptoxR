@@ -17,7 +17,7 @@
 chemi_chet_reaction <- function(query = NULL, searchType = NULL, substringTF = NULL) {
   params <- base::list("query" = query, "searchType" = searchType, "substringTF" = substringTF)
   result <- generic_request(
-    "endpoint" = "reaction/search",
+    "endpoint" = "chet/reaction/search",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

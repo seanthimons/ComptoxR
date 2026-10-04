@@ -33,7 +33,7 @@ the user subsequently authorized the closeout actions recorded below.
 | #341 | Keep open pending explicit retention documentation | Either generate the aggregate fallback with declared second-route support, or use its allowed retention path by citing #341 in both dispositions.json and REPORT.md. Those explicit citations are currently absent. |
 | #331, #342 | Keep closed | Recent helper adoption, reproducibility protections and published pagination/image evidence support completion. |
 | #335, #338 | Already closed | Retention is allowed by their completion rules. Do not describe every listed wrapper as generated or infer that other-branch execution is present here. |
-| #339 | Restore fix in PR branch or reopen | Closure cites commits on local feat/specmill-hooks-wave. Current PR branch still lacks the prefix in 24 of 28 exported ChET wrappers. |
+| #339 | Keep closed | Fix restored on this branch: all 28 ChET wrappers use `chet/`; see REPORT.md "ChET server path on the PR branch (#339)". |
 | #325, PR #345 | Keep open; PR stays draft | Remaining schema automation, opt-out adoption, hook and preservation/maintenance gates prevent milestone completion. |
 
 ## Standards and runtime findings

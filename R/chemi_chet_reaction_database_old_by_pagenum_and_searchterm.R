@@ -16,7 +16,7 @@
 chemi_chet_reaction_database_old_by_pagenum_and_searchterm <- function(pagenum, searchterm = NULL) {
   result <- generic_request(
     query = pagenum,
-    endpoint = "reaction/database-old/",
+    endpoint = "chet/reaction/database-old/",
     method = "GET",
     batch_limit = 1,
     server = "chemi_burl",

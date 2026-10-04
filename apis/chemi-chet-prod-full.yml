@@ -23,7 +23,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/database-old
+          value: chet/chemicals/database-old
         method:
           value: GET
         batch_limit:
@@ -60,7 +60,7 @@ operations:
           - params
           - dtxsid
         endpoint:
-          value: chemicals/verify/
+          value: chet/chemicals/verify/
         method:
           value: GET
         batch_limit:
@@ -90,7 +90,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/database_old
+          value: chet/reaction/database_old
         method:
           value: GET
         batch_limit:
@@ -119,7 +119,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/dbcounts
+          value: chet/reaction/dbcounts
         method:
           value: GET
         batch_limit:
@@ -148,7 +148,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/libraries
+          value: chet/reaction/libraries
         method:
           value: GET
         batch_limit:
@@ -185,7 +185,7 @@ operations:
           - params
           - map_id
         endpoint:
-          value: reaction/mappositions/
+          value: chet/reaction/mappositions/
         method:
           value: GET
         batch_limit:
@@ -215,7 +215,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/maps
+          value: chet/reaction/maps
         method:
           value: GET
         batch_limit:

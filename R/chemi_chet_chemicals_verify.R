@@ -16,7 +16,7 @@ chemi_chet_chemicals_verify <- function(dtxsid) {
   params <- base::list("dtxsid" = dtxsid)
   result <- generic_request(
     "query" = params[["dtxsid"]],
-    "endpoint" = "chemicals/verify/",
+    "endpoint" = "chet/chemicals/verify/",
     "method" = "GET",
     "batch_limit" = 1,
     "server" = "chemi_burl",

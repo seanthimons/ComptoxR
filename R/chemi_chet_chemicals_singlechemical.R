@@ -15,7 +15,7 @@
 chemi_chet_chemicals_singlechemical <- function(dtxsid = NULL) {
   params <- base::list("dtxsid" = dtxsid)
   result <- generic_request(
-    "endpoint" = "chemicals/singlechemical",
+    "endpoint" = "chet/chemicals/singlechemical",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

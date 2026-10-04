@@ -19,7 +19,9 @@ chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
   options$search_level <- search_level
   result <- generic_chemi_request(
     query = dtxsids,
-    endpoint = "reaction/batchsearch",
+    endpoint = "chet/reaction/batchsearch",
+    sid_label = "dtxsids",
+    array_payload = TRUE,
     options = options,
     tidy = FALSE
   )

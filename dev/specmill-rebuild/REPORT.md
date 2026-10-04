@@ -855,3 +855,37 @@ verify the additional routes, or a verified upstream service repair allows its
 removal. Future adoption requires reviewed localhost fallback cases and a wave.
 The retention reasons cite #341 and the upstream blocker. No wrapper, hook,
 schema, mapping or runtime behavior changes in this closeout.
+
+## ChET server path on the PR branch (#339)
+
+The `d4dc1ea9` fix cited when #339 closed exists only on
+`feat/specmill-hooks-wave`. This branch had corrected 4 of the 28 `chemi_chet_*`
+wrappers (image and the three #331 pagination wrappers). The other 24 still sent
+`https://hcd.rtpnc.epa.gov/api/reaction/...` and got back the HTML app shell.
+
+A clean-room client generated with Specmill alone from
+`schema/chemi-chet-prod.json`, with the schema origin recorded, resolves
+`https://hcd.rtpnc.epa.gov/api/chet` + `/reaction/libraries` and returns JSON live.
+Specmill handles the schema server correctly. The defect is in the explicit
+`generic_request` mappings (`server: chemi_burl` plus a hand-written `endpoint`),
+which ignore the server path. It goes away once ChET moves to the native helper.
+Until then, the fix is applied in the mappings:
+
+- Every endpoint in both ChET service configs starts with `chet/`. 21 generated
+  wrappers were regenerated, and the prefix is the only change in each.
+- Retained `searchcounts`, `database_old_by_pagenum_and_searchterm` and
+  `batchsearch` get the same prefix. `batchsearch` sends the schema's
+  `{"dtxsids": [...], "search_level": ...}` body (`sid_label`, `array_payload`).
+- The ChET contract fixtures and the `specmill-full` frozen runtime cases carry
+  `chet/`. `verify-runtime.R` runs the original client with that prefix removed,
+  then compares the 65 remaining ChET cases with `/chet` inserted.
+- `wave.R` and `dispositions.R` match ChET routes below `chet/`. The inventory
+  and ledger were refreshed.
+
+Result: `generate_specmill.R --check` is clean, and `specmill-342/verify.R` and the
+contract/adoption tests pass. The installed-client comparison against `4fd720b9`
+matched all 1474 localhost cases, with 0 candidate failures. Live, every ChET
+wrapper that takes no arguments returned JSON, as did `batchsearch` and
+`searchcounts` (with `search_type`). The exceptions are `reaction/database_old`
+and `reaction/database-old/{page}/{term}`, which return upstream HTTP 500
+`application/problem+json`.

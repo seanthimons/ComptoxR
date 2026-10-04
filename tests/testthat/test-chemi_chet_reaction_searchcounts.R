@@ -30,7 +30,7 @@ test_that("chemi_chet_reaction_searchcounts passes request metadata to helper", 
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_request")
   expect_equal(call[["query"]], "DTXSID7020182")
-  expect_equal(call[["endpoint"]], "reaction/searchcounts/")
+  expect_equal(call[["endpoint"]], "chet/reaction/searchcounts/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
   expect_equal(call[["server"]], "chemi_burl")
