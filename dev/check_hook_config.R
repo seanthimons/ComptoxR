@@ -23,7 +23,7 @@ check_hook_config <- function(root = '.') {
       }
     }
   }
-  result <- wrapmaint::validate_hooks(config, wrappers, hooks)
+  result <- specmill::validate_hooks(config, wrappers, hooks)
   if (!result$valid) {
     stop(paste(result$errors, collapse = '\n'), call. = FALSE)
   }

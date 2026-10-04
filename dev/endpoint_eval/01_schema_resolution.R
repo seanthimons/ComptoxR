@@ -1,5 +1,5 @@
 # Compatibility entry point; implementation is installed development tooling.
-wrapmaint::bind_tools("schema", environment())
+specmill::bind_tools("schema", environment())
 formals(preprocess_schema)$exclude_endpoints <- quote(ENDPOINT_PATTERNS_TO_EXCLUDE)
 
 # Client schema stage selection remains local.

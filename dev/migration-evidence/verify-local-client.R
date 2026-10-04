@@ -1,5 +1,5 @@
 verify_local_runtime <- function(client) {
-  stopifnot(!'wrapmaint' %in% loadedNamespaces(), !'ComptoxR' %in% loadedNamespaces())
+  stopifnot(!'specmill' %in% loadedNamespaces(), !'ComptoxR' %in% loadedNamespaces())
   local <- if (is.environment(client)) client else new.env(parent = baseenv())
   if (!is.environment(client)) {
     sys.source(client, envir = local)
@@ -24,7 +24,7 @@ verify_local_runtime <- function(client) {
     identical(calls[[3]]$url, 'https://local.invalid/api/refresh')
   )
   failed <- try(httr2::with_mocked_responses(function(req) httr2::response(404), local$refresh()), silent = TRUE)
-  stopifnot(inherits(failed, 'try-error'), !'wrapmaint' %in% loadedNamespaces(), !'ComptoxR' %in% loadedNamespaces())
+  stopifnot(inherits(failed, 'try-error'), !'specmill' %in% loadedNamespaces(), !'ComptoxR' %in% loadedNamespaces())
   cat(
     'Fresh runtime: 3 mocked HTTP requests, encoded path/query, JSON body, propagated HTTP error; no toolkit or ComptoxR loaded.\n'
   )
@@ -36,7 +36,7 @@ verify_local_client <- function(root = '.') {
   sys.source(file.path(root, 'dev/generate_local_client.R'), envir = context)
   input <- tempfile('local-input-')
   dir.create(input)
-  fixture <- system.file('catalogue/schema.json', package = 'wrapmaint', mustWork = TRUE)
+  fixture <- system.file('catalogue/schema.json', package = 'specmill', mustWork = TRUE)
   file.copy(fixture, file.path(input, 'catalogue.json'))
   output <- tempfile('local-output-')
   generate <- function(target, schema = 'catalogue.json') {
@@ -84,7 +84,7 @@ verify_local_client <- function(root = '.') {
 }
 
 verify_frozen_alerts_runtime <- function(client) {
-  stopifnot(!'wrapmaint' %in% loadedNamespaces(), !'ComptoxR' %in% loadedNamespaces())
+  stopifnot(!'specmill' %in% loadedNamespaces(), !'ComptoxR' %in% loadedNamespaces())
   local <- if (is.environment(client)) client else new.env(parent = baseenv())
   if (!is.environment(client)) {
     sys.source(client, envir = local)
@@ -96,7 +96,7 @@ verify_frozen_alerts_runtime <- function(client) {
   response <- httr2::with_mocked_responses(mock, local$groupGet('a/b'))
   stopifnot(
     identical(httr2::resp_body_json(response)$id, 'a/b'),
-    !'wrapmaint' %in% loadedNamespaces(),
+    !'specmill' %in% loadedNamespaces(),
     !'ComptoxR' %in% loadedNamespaces()
   )
   cat('Frozen alerts client: mocked GET, encoded path and JSON response passed without toolkit or ComptoxR.\n')
@@ -143,7 +143,7 @@ if (sys.nframe() == 0L) {
     verify_local_install(args[[2]], normalizePath('dev/migration-evidence/verify-local-client.R'), args[[3]])
   } else if (length(args) && args[[1]] == '--installed') {
     .libPaths(c(args[[2]], .Library))
-    stopifnot(!requireNamespace('wrapmaint', quietly = TRUE), !requireNamespace('ComptoxR', quietly = TRUE))
+    stopifnot(!requireNamespace('specmill', quietly = TRUE), !requireNamespace('ComptoxR', quietly = TRUE))
     local <- asNamespace(args[[3]])
     if (args[[3]] == 'localcataloguegenerated') verify_local_runtime(local) else verify_frozen_alerts_runtime(local)
   } else {

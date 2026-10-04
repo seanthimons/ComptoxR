@@ -1,7 +1,7 @@
 # Client policy is prepared once; the installed engine performs comparisons.
 source(here::here('dev/toolkit_adapter.R'))
 .diff_tools <- comptox_tools(here::here())
-wrapmaint::bind_tools('diff', .diff_tools)
+specmill::bind_tools('diff', .diff_tools)
 list2env(
   mget(
     c('classify_param_change', 'diff_single_schema', 'diff_schemas', 'format_diff_markdown', 'count_diff_changes'),

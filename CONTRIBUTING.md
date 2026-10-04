@@ -52,12 +52,14 @@ from the legacy generator's Air 0.9.0 installation.
 Install the reviewed development toolkit before running schema commands:
 
 ```r
-source("dev/install_toolkit.R")
-install_toolkit()
+source("dev/install_specmill.R")
+install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
+.libPaths(c("dev/specmill-pilot/artifacts/toolkit-library", .libPaths()))
 ```
 
-The archive URL and SHA-256 are pinned in `dev/toolkit-lock.json`. The toolkit
-is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
+The specmill revision and source-archive SHA-256 are pinned in
+`dev/specmill-lock.json`; `install_specmill()` archives that revision from a local
+specmill checkout (default `../specmill`). Specmill is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
 version with this repository's `air.toml`. Public generation uses approved production
 schemas only. Keep other schemas and generated clients outside this checkout.
 Regenerate a promoted operation from its approved production schema.

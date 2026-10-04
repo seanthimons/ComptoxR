@@ -3,7 +3,7 @@ if (!exists('toolkit_root', inherits = FALSE)) {
   toolkit_root <- here::here()
 }
 client_path <- function(...) file.path(toolkit_root, ...)
-wrapmaint::bind_tools("runner", environment())
+specmill::bind_tools("runner", environment())
 formals(run_generator)$pkg_dir <- quote(client_path("R"))
 formals(endpoint_coverage)$pkg_dir <- quote(client_path("R"))
 # ==============================================================================

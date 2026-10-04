@@ -1,4 +1,4 @@
-wrapmaint::bind_tools("test_helpers", environment())
+specmill::bind_tools("test_helpers", environment())
 # Configuration and small helpers for generated wrapper contract tests.
 
 tg_config <- list(

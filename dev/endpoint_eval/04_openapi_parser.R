@@ -1,4 +1,4 @@
-wrapmaint::bind_tools("parser", environment())
+specmill::bind_tools("parser", environment())
 supported_methods <- c("get", "post")
 body_requires_resolution <- function(...) uses_chemical_schema(...)
 # ==============================================================================

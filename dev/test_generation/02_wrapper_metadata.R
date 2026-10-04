@@ -1,4 +1,4 @@
-wrapmaint::bind_tools("ast", environment())
+specmill::bind_tools("ast", environment())
 # Metadata extraction from exported wrapper functions.
 
 tg_read_hook_config <- function(root = ".") {

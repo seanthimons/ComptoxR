@@ -1,7 +1,7 @@
 # Development-only adapter. Every client path is rooted in this explicit checkout.
 comptox_tools <- function(root) {
   root <- normalizePath(root, winslash = '/', mustWork = TRUE)
-  context <- new.env(parent = asNamespace('wrapmaint'))
+  context <- new.env(parent = asNamespace('specmill'))
   context$toolkit_root <- root
   sys.source(file.path(root, 'dev/stub_specs.R'), envir = context)
   context
@@ -71,12 +71,12 @@ generate_comptox <- function(root, mode = c('check', 'plan', 'apply'), rebuild =
     }
     identical(ownership$classify_experimental_file(path)$status, 'selected')
   }
-  changes <- wrapmaint::apply_files(root, output, remove = setdiff(original, files), mode = mode, owned = owns)
+  changes <- specmill::apply_files(root, output, remove = setdiff(original, files), mode = mode, owned = owns)
   invisible(list(
     files = changes,
     results = results,
     manifest = list(
-      toolkit = as.character(utils::packageVersion('wrapmaint')),
+      toolkit = as.character(utils::packageVersion('specmill')),
       schemas = tools::md5sum(list.files(file.path(root, 'schema'), '\\.json$', full.names = TRUE)),
       hooks = tools::md5sum(file.path(root, 'inst/hook_config.yml')),
       policy_version = 'comptox-compatibility-1',

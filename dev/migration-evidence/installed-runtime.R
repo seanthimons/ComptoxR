@@ -7,7 +7,7 @@ installed_runtime <- function(root = '.') {
   for (field in intersect(c('Imports', 'Depends'), colnames(fields))) {
     dependencies <- c(dependencies, trimws(sub(' *\\(.*', '', strsplit(fields[[1, field]], ',')[[1]])))
   }
-  dependencies <- setdiff(dependencies, c('R', 'wrapmaint'))
+  dependencies <- setdiff(dependencies, c('R', 'specmill'))
   all <- unique(c(
     dependencies,
     unlist(tools::package_dependencies(
@@ -17,17 +17,17 @@ installed_runtime <- function(root = '.') {
       recursive = TRUE
     ))
   ))
-  for (package in setdiff(all, c('R', 'wrapmaint'))) {
+  for (package in setdiff(all, c('R', 'specmill'))) {
     path <- find.package(package)
     if (!startsWith(normalizePath(path, winslash = '/'), normalizePath(.Library, winslash = '/'))) {
       if (!dir.exists(file.path(lib, package))) stopifnot(file.copy(path, lib, recursive = TRUE))
     }
   }
-  fixture <- system.file('catalogue', package = 'wrapmaint', mustWork = TRUE)
+  fixture <- system.file('catalogue', package = 'specmill', mustWork = TRUE)
   catalogue <- tempfile('runtime-catalogue-')
   dir.create(catalogue)
   file.copy(list.files(fixture, full.names = TRUE), catalogue, recursive = TRUE)
-  wrapmaint::generate_client(
+  specmill::generate_client(
     catalogue,
     list(
       files = file.path(catalogue, 'schema.json'),
@@ -53,7 +53,7 @@ installed_runtime <- function(root = '.') {
     c(
       paste('Isolated library:', lib),
       paste('Installed dependency packages:', length(all)),
-      'Installed ComptoxR and localcatalogue run with wrapmaint absent from every runtime library.'
+      'Installed ComptoxR and localcatalogue run with specmill absent from every runtime library.'
     ),
     file.path(root, 'dev/migration-evidence/toolkit-runtime.txt')
   )
@@ -62,7 +62,7 @@ if (sys.nframe() == 0L) {
   args <- commandArgs(trailingOnly = TRUE)
   if (length(args) && args[[1]] == '--runtime') {
     .libPaths(c(args[[2]], .Library))
-    stopifnot(!requireNamespace('wrapmaint', quietly = TRUE))
+    stopifnot(!requireNamespace('specmill', quietly = TRUE))
     library(ComptoxR)
     library(localcatalogue)
     localcatalogue::clear_calls()
@@ -89,7 +89,7 @@ if (sys.nframe() == 0L) {
     for (file in generated) {
       testthat::test_file(file, env = helper, reporter = 'silent', load_helpers = FALSE, stop_on_failure = TRUE)
     }
-    stopifnot(!'wrapmaint' %in% loadedNamespaces())
+    stopifnot(!'specmill' %in% loadedNamespaces())
     cat(length(generated), 'installed ComptoxR generated contract files passed with no toolkit available.\n')
   } else {
     installed_runtime()
