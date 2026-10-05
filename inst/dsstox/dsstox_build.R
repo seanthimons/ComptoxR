@@ -222,7 +222,8 @@
   }
   # Columns absent from a given export (e.g. newer dumps drop INCHIKEY/IDENTIFIER) become NULL
   for (col in c("PREFERRED_NAME", "CASRN", "MOLECULAR_FORMULA", "INCHIKEY", "IUPAC_NAME",
-                "SMILES", "IDENTIFIER", "DTXCID", "INCHI")) {
+                "SMILES", "IDENTIFIER", "DTXCID", "INCHI",
+                "QSAR_READY_SMILES", "MS_READY_SMILES")) {
     DBI::dbExecute(dsstox_db, sprintf("ALTER TABLE dsstox_raw ADD COLUMN IF NOT EXISTS %s VARCHAR", col))
   }
 
@@ -245,13 +246,14 @@
    WITH
    base AS (
      SELECT DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
-            SMILES, MOLECULAR_FORMULA, IDENTIFIER, DTXCID, INCHI
+            SMILES, MOLECULAR_FORMULA, IDENTIFIER, DTXCID, INCHI,
+            QSAR_READY_SMILES, MS_READY_SMILES
      FROM dsstox_raw
    ),
    exploded AS (
      SELECT
        DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
-       SMILES, MOLECULAR_FORMULA, DTXCID, INCHI,
+       SMILES, MOLECULAR_FORMULA, DTXCID, INCHI, QSAR_READY_SMILES, MS_READY_SMILES,
        TRIM(id.ident) AS IDENTIFIER,
        TRIM(UPPER(id.ident)) AS ident_upper
      FROM base,
@@ -260,7 +262,7 @@
      UNION ALL
      SELECT
        DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
-       SMILES, MOLECULAR_FORMULA, DTXCID, INCHI,
+       SMILES, MOLECULAR_FORMULA, DTXCID, INCHI, QSAR_READY_SMILES, MS_READY_SMILES,
        NULL AS IDENTIFIER, NULL AS ident_upper
      FROM base
      WHERE IDENTIFIER IS NULL
@@ -276,7 +278,8 @@
      UNPIVOT (
        values FOR parent_col IN (
          PREFERRED_NAME, CASRN, MOLECULAR_FORMULA, INCHIKEY,
-         IUPAC_NAME, SMILES, ident_upper, IDENTIFIER, DTXCID, INCHI
+         IUPAC_NAME, SMILES, ident_upper, IDENTIFIER, DTXCID, INCHI,
+         QSAR_READY_SMILES, MS_READY_SMILES
        )
      )
      WHERE values IS NOT NULL
@@ -294,6 +297,8 @@
        WHEN 'IDENTIFIER'        THEN 8
        WHEN 'DTXCID'            THEN 9
        WHEN 'INCHI'             THEN 10
+       WHEN 'QSAR_READY_SMILES' THEN 11
+       WHEN 'MS_READY_SMILES'   THEN 12
      END AS sort_order
    FROM unpivoted
    ORDER BY DTXSID, sort_order"
