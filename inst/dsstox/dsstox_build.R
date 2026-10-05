@@ -5,6 +5,7 @@
 #
 # Usage:
 #   Rscript data-raw/dsstox.R
+#   DSSTOX_ZIP=/path/to/DSSTox.zip Rscript data-raw/dsstox.R  (skip Clowder)
 #   — or —
 #   dss_install()  (from within ComptoxR)
 
@@ -45,9 +46,15 @@
     dir.create(output_dir, recursive = TRUE)
   }
 
+  # A local zip is an explicit rebuild request, so it bypasses the staleness check
+  local_zip <- Sys.getenv("DSSTOX_ZIP")
+  if (nzchar(local_zip) && !file.exists(local_zip)) {
+    cli::cli_abort("{.envvar DSSTOX_ZIP} file not found: {.path {local_zip}}")
+  }
+
   # -- Staleness check --------------------------------------------------------
 
-  if (file.exists(output_path)) {
+  if (file.exists(output_path) && !nzchar(local_zip)) {
     file_age_days <- as.numeric(
       difftime(Sys.time(), file.info(output_path)$mtime, units = "days")
     )
@@ -72,9 +79,14 @@
 
   # -- Download from Clowder -------------------------------------------------
 
-  cli::cli_alert_info("Fetching file list from Clowder...")
-
-  dss_entry <- .dsstox_latest_upstream_entry()
+  if (nzchar(local_zip)) {
+    cli::cli_alert_info("Using local DSSTox zip {.path {local_zip}}.")
+    # ponytail: version keys on file mtime; the next Clowder release reads as new and rebuilds once
+    dss_entry <- list(id = "local", date_created = format(file.mtime(local_zip), "%Y-%m-%d"))
+  } else {
+    cli::cli_alert_info("Fetching file list from Clowder...")
+    dss_entry <- .dsstox_latest_upstream_entry()
+  }
   dss_version <- .dsstox_upstream_version_from_entry(dss_entry)
 
   # -- Download & extract -----------------------------------------------------
@@ -94,12 +106,16 @@
   old_timeout <- getOption("timeout")
   options(timeout = 3600)
   on.exit(options(timeout = old_timeout), add = TRUE)
-  download.file(
-    url = paste0("https://clowder.edap-cluster.com/api/files/", dss_entry$id, "/blob"),
-    destfile = zip_path,
-    mode = "wb",
-    quiet = FALSE
-  )
+  if (nzchar(local_zip)) {
+    file.copy(local_zip, zip_path)
+  } else {
+    download.file(
+      url = paste0("https://clowder.edap-cluster.com/api/files/", dss_entry$id, "/blob"),
+      destfile = zip_path,
+      mode = "wb",
+      quiet = FALSE
+    )
+  }
 
   utils::unzip(zip_path, exdir = raw_dir)
   file.remove(zip_path)
@@ -193,6 +209,23 @@
     )
   )
 
+  # Exports differ in header style ("preferred name" vs PREFERRED_NAME); normalize to the latter
+  for (col in DBI::dbListFields(dsstox_db, "dsstox_raw")) {
+    norm <- toupper(gsub("[^A-Za-z0-9]+", "_", trimws(col)))
+    if (!identical(norm, col)) {
+      DBI::dbExecute(dsstox_db, sprintf('ALTER TABLE dsstox_raw RENAME COLUMN "%s" TO "%s"', col, norm))
+    }
+  }
+  raw_cols <- DBI::dbListFields(dsstox_db, "dsstox_raw")
+  if (!"DTXSID" %in% raw_cols) {
+    cli::cli_abort(c("DSSTox export has no DTXSID column.", "i" = "Columns: {raw_cols}"))
+  }
+  # Columns absent from a given export (e.g. newer dumps drop INCHIKEY/IDENTIFIER) become NULL
+  for (col in c("PREFERRED_NAME", "CASRN", "MOLECULAR_FORMULA", "INCHIKEY", "IUPAC_NAME",
+                "SMILES", "IDENTIFIER", "DTXCID", "INCHI")) {
+    DBI::dbExecute(dsstox_db, sprintf("ALTER TABLE dsstox_raw ADD COLUMN IF NOT EXISTS %s VARCHAR", col))
+  }
+
   raw_count <- DBI::dbGetQuery(dsstox_db, "SELECT count(*) AS n FROM dsstox_raw")$n
   cli::cli_alert_success("Loaded {format(raw_count, big.mark = ',')} raw rows.")
 
@@ -212,13 +245,13 @@
    WITH
    base AS (
      SELECT DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
-            SMILES, MOLECULAR_FORMULA, IDENTIFIER
+            SMILES, MOLECULAR_FORMULA, IDENTIFIER, DTXCID, INCHI
      FROM dsstox_raw
    ),
    exploded AS (
      SELECT
        DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
-       SMILES, MOLECULAR_FORMULA,
+       SMILES, MOLECULAR_FORMULA, DTXCID, INCHI,
        TRIM(id.ident) AS IDENTIFIER,
        TRIM(UPPER(id.ident)) AS ident_upper
      FROM base,
@@ -227,7 +260,7 @@
      UNION ALL
      SELECT
        DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
-       SMILES, MOLECULAR_FORMULA,
+       SMILES, MOLECULAR_FORMULA, DTXCID, INCHI,
        NULL AS IDENTIFIER, NULL AS ident_upper
      FROM base
      WHERE IDENTIFIER IS NULL
@@ -243,7 +276,7 @@
      UNPIVOT (
        values FOR parent_col IN (
          PREFERRED_NAME, CASRN, MOLECULAR_FORMULA, INCHIKEY,
-         IUPAC_NAME, SMILES, ident_upper, IDENTIFIER
+         IUPAC_NAME, SMILES, ident_upper, IDENTIFIER, DTXCID, INCHI
        )
      )
      WHERE values IS NOT NULL
@@ -259,6 +292,8 @@
        WHEN 'SMILES'            THEN 6
        WHEN 'ident_upper'       THEN 7
        WHEN 'IDENTIFIER'        THEN 8
+       WHEN 'DTXCID'            THEN 9
+       WHEN 'INCHI'             THEN 10
      END AS sort_order
    FROM unpivoted
    ORDER BY DTXSID, sort_order"
