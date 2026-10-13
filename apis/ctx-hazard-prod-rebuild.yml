@@ -34,6 +34,8 @@ selection:
   - POST /hazard/toxval/search/by-dtxsid/
 helper: generic_request
 documentation: yes
+authentication:
+  api_key: ctx
 operations:
   GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_adme_ivive_search
@@ -771,31 +773,19 @@ operations:
   GET /hazard/toxval/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_toxval_search
     file: R/ct_hazard_toxval_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: hazard/toxval/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID0021125
   GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
@@ -963,34 +953,22 @@ operations:
   POST /hazard/toxval/search/by-dtxsid/:
     name: ct_hazard_toxval_search_bulk
     file: R/ct_hazard_toxval_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: hazard/toxval/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      max_items: 100
+      split: yes
+      on_error: drop
     docs:
       title: Get data for a batch of DTXSID(s).
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query:
+      - body:
         - DTXSID1024122
         - DTXSID4020533
-        - DTXSID00205033
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

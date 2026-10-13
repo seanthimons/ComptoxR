@@ -1,5 +1,8 @@
 config_version: 1
 package: ComptoxR
+# CTX credential name -> environment variable read by the generated auth.
+authentication:
+  ctx: ctx_api_key
 formatter:
   name: air
   version: 0.11.0

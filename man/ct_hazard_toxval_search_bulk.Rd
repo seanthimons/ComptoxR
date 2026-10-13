@@ -4,19 +4,19 @@
 \alias{ct_hazard_toxval_search_bulk}
 \title{Get data for a batch of DTXSID(s).}
 \usage{
-ct_hazard_toxval_search_bulk(query)
+ct_hazard_toxval_search_bulk(body)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{body}{Request body. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_hazard_toxval_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+ct_hazard_toxval_search_bulk(body = list("DTXSID1024122", "DTXSID4020533"))
 }
 }
