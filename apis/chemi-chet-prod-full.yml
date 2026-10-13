@@ -142,27 +142,14 @@ operations:
   GET /reaction/libraries:
     name: chemi_chet_reaction_libraries
     file: R/chemi_chet_reaction_libraries.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/libraries
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
     docs:
       title: List reaction libraries
       lifecycle: experimental
-      parameters: {}
       return: Returns a tibble with results (array of objects)
       tags:
         apiStage: public

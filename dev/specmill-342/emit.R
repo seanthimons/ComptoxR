@@ -18,8 +18,8 @@ emit_issue342 <- function(root = '.', mode = c('check', 'apply'), adopt = NULL) 
   decoder <- substring(code, start, end - 1L)
   code <- paste0(
     substring(code, 1L, start - 1L),
-    '  .ct_request_decode(response, method, response_policy)\n}',
-    '\n\n.ct_request_decode <- function(response, method = "GET", response_policy = NULL) {\n',
+    '  .ct_request_decode(response, method, response_policy, policy_query)\n}',
+    '\n\n.ct_request_decode <- function(response, method = "GET", response_policy = NULL, policy_query = NULL) {\n',
     # The caller owns logging; it is already handled in native transport.
     sub('  if (verbose) base::message(\'HTTP \', status)\n', '', decoder, fixed = TRUE),
     substring(code, end)

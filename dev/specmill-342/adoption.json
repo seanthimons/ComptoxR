@@ -6,15 +6,15 @@
   "base_commit": "080fc7ea860a4b0a085a338b608b25b4fad0baf9",
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.11",
-    "source_commit": "d59014365b8b30bde2ce319b5e60d9c3f94fe48f",
-    "source_archive_sha256": "4b8c8c4dddacc457450a4b55ccb9358194544c2cd568c88b44f373b0adb3ffa0",
+    "version": "0.1.16",
+    "source_commit": "733146a8c2abf45737faf1c61fd51c520115f661",
+    "source_archive_sha256": "c6b918ff8d1950f5684fc08047d4b5103750c4cc8b68dba2780c2c787e96a428",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "adopted_sha256": {
     "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
-    "R/z_specmill_request.R": "ca8ddce1d9a4645fd1199f5c0b86aac153a8d64c97b2902e4dacd989cc64471e",
+    "R/z_specmill_request.R": "1679f809da498b8de5df6b61b5d856e200781d3f4d1ae5a5f53dda4ea967e280",
     "dev/specmill-342/compatibility.patch": "d17ea06902eeb2f8a9be6a52d206f1f5df13ecdfe7e6e9d5a5aeff3afcf05c76",
     "dev/specmill-342/emit.R": "d80b71f5b84072ccdd5cb1a57721e51e3a2744221e630c80d061652f3bbfb3b5",
     "DESCRIPTION": "3df8e472ec2667e41102a95b3b9d792965f7d414276d954481539a19eaf5b793",

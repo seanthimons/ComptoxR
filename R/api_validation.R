@@ -214,12 +214,33 @@ parameter_values <- function (values, schemas, validate, locations)
             next
         }
         schema <- schemas[[name]]
-        if (identical(schema$type, "array") && is.atomic(value) && !is.object(value) && is.null(dim(value)) && is.null(names(value))) {
-            value <- as.list(value)
+        vector <- is.atomic(value) && !is.object(value) && is.null(dim(value)) && is.null(names(value))
+        composed <- length(schema$type) > 1L || any(c("oneOf", "anyOf", "allOf") %in% names(schema))
+        candidates <- if (vector && (identical(schema$type, "array") || (composed && length(value) != 1L))) {
+            list(as.list(value))
         }
-        tryCatch(validate(value, schema), error = function(e) {
-            stop("Invalid ", locations[[name]], " parameter ", name, ": ", conditionMessage(e), call. = FALSE)
-        })
+        else if (vector && composed) {
+            list(value, as.list(value))
+        }
+        else {
+            list(value)
+        }
+        problem <- NULL
+        for (candidate in candidates) {
+            message <- tryCatch({
+                validate(candidate, schema)
+                NULL
+            }, error = conditionMessage)
+            if (is.null(message)) {
+                problem <- NULL
+                break
+            }
+            if (is.null(problem)) 
+                problem <- message
+        }
+        if (!is.null(problem)) {
+            stop("Invalid ", locations[[name]], " parameter ", name, ": ", problem, call. = FALSE)
+        }
     }
     invisible(NULL)
 }

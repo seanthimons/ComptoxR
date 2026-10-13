@@ -119,3 +119,21 @@
   value <- gsub('(https?://)[^/@[:space:]]+@', '\\1<redacted>@', value, ignore.case = TRUE)
   gsub('(https?://[^?#[:space:]]+)[?#][^[:space:]]*', '\\1', value, ignore.case = TRUE)
 }
+
+# Specmill server resolver for native wrappers: one ComptoxR service key per API.
+# Relative schema servers carry the /api prefix in their paths, so they get the origin only.
+.ct_server_url <- function(key, server) {
+  url <- .endpoint_url(.endpoint_target(key))
+  if (is.null(server$url)) sub('^(https?://[^/]+).*$', '\\1', url) else url
+}
+
+# Specmill response policy: the same tibble output as generic_request(tidy = TRUE).
+.ct_tidy <- function(response, context, decode) {
+  body <- unwrap_collection_envelope(decode())
+  if (is.list(body) && !is.null(names(body))) {
+    # The API doesn't echo the input on single-object responses; name it in a query column.
+    if (length(context$query) == 1L) attr(body, 'query') <- context$query
+    body <- list(body)
+  }
+  safe_tidy_bind(body)
+}
