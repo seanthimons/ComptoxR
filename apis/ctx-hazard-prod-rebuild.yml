@@ -523,6 +523,7 @@ operations:
       return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID0021125
+        category: Dose Response Summary Value
   GET /hazard/toxval/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_toxval_search
     file: R/ct_hazard_toxval_search.R

@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' ct_hazard_toxval_search_by_category(dtxsid = "DTXSID0021125")
+#' ct_hazard_toxval_search_by_category(dtxsid = "DTXSID0021125", category = "Dose Response Summary Value")
 #' }
 # Generated with specmill; do not edit by hand.
 ct_hazard_toxval_search_by_category <- function(dtxsid, category) {

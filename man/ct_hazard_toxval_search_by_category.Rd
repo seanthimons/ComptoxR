@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxval_search_by_category(dtxsid = "DTXSID0021125")
+ct_hazard_toxval_search_by_category(dtxsid = "DTXSID0021125", category = "Dose Response Summary Value")
 }
 }

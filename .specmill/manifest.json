@@ -874,7 +874,7 @@
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_toxval_search_by_category.R": {
-      "hash": "dc7b4d19b78b1a54653c5f3ce07bc4b56d68b21a2dd456a66100f56d004b2818",
+      "hash": "a11a3694487d5999d58f292fc5bdb1ebed0afc53f871e0ccd2aba8a77731d924",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-category/{dtxsid}"
     },
     "R/ct_hazard_toxval_supercategory_search.R": {
@@ -2297,7 +2297,7 @@
     "R/ct_hazard_toxref_search_by_study_id.R": "7756c5684e57cc496ecf049be905a38e1e50c53fb637107b978381f7e02886b9",
     "R/ct_hazard_toxref_search_by_study_type.R": "aab3807a54754a685ea3d97329ab2607f354b68c6a8496171d8ab5109d6756b9",
     "R/ct_hazard_toxval_search.R": "e1b61cd7dba5fb3d7db004bafb8bf9a0077acd4f4bbd173a288b78e958c13b44",
-    "R/ct_hazard_toxval_search_by_category.R": "dc7b4d19b78b1a54653c5f3ce07bc4b56d68b21a2dd456a66100f56d004b2818",
+    "R/ct_hazard_toxval_search_by_category.R": "a11a3694487d5999d58f292fc5bdb1ebed0afc53f871e0ccd2aba8a77731d924",
     "R/ct_hazard_toxval_supercategory_search.R": "8124849c038c41b36ae9112371b0d48e906425d4a2cc3bd209773a809721592d",
     "R/ct_related.R": "6903c01d8b08f861fb8065fdf1f70d93ce3a8e3308af541f561f4549b3ae9b4d",
     "R/ct_similar.R": "908cad81521f06388df4722e4b2c5c17a893f8b9584b5cadfe050ce2a77769e6",
@@ -2388,7 +2388,7 @@
     "apis/ctx-chemical-prod-rebuild.yml": "71d856ebe4c59d5a0ecb5c97d0e59ff190ddc101d2cdd2b019b9bfdd18f2bb26",
     "apis/ctx-exposure-prod-full.yml": "06b6990fd5e0dd2cc3ee01dddba5f62711fc8d0b3f39f858fd019932efd316a2",
     "apis/ctx-exposure-prod-rebuild.yml": "fb8a7275aac9d4ea007075950ac4ce7b244e0b3f5c213db749f649abbe217d50",
-    "apis/ctx-hazard-prod-rebuild.yml": "34315cbe98c9f0e1f3b9286fa96719a99e741121f808934dfddc8981bc7d731b",
+    "apis/ctx-hazard-prod-rebuild.yml": "e3de38e7a6982a9f924759db37da3fad10cedaafff7c955bb95d337e7d7f37c5",
     "apis/ctx-pilot.yml": "008550b2b74bee1b9cdeb6f69770d2556299eac31c69d84c62c0040903edc847",
     "apis/epi-pilot.yml": "4a81753827c8d51b245f307a318bb0565442d8f7fbafeda14e762484a2d3e66a",
     "apis/epi-suite-prod-full.yml": "5749a0815a8e96a197f345d69a6aa70269a9cf132aedfcae7d835b2dd49eb0bc",
@@ -2762,7 +2762,7 @@
     "man/ct_hazard_toxref_search_by_study_type.Rd": "f0dcbbd3f7da3c300322ed7b1818ccf02dde8113c872d44c3e09512a9ad09675",
     "man/ct_hazard_toxval_search.Rd": "740e4c380ad0902daf98c5a7de9aed9df55875ef538638b0afdd974096f760f7",
     "man/ct_hazard_toxval_search_bulk.Rd": "dc987c60206c56296ad39c4c25ecd1a6b05438667877f89dfe07689b2016995e",
-    "man/ct_hazard_toxval_search_by_category.Rd": "c75033ff6aa12908110d30285fb2cdf94794a1ee4058d222b377b9b88050c9cf",
+    "man/ct_hazard_toxval_search_by_category.Rd": "105970fcd7e93b086a5d245aef62760a4897805a328055874354cd5a51566858",
     "man/ct_hazard_toxval_supercategory_search.Rd": "745661e317ba9d395f043dbf3c4aedae5295cbf8dff4dd9f58d4b141123047c3",
     "man/ct_related.Rd": "7d7dc45560a6ce4e165836ac63d54adf12b3a77665941c760355cabc21d42c66",
     "man/ct_schema.Rd": "156252ad16bb5ec61234d843a23ded920dbe354e824e85a7473bb2318d76e92f",
