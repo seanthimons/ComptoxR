@@ -12,26 +12,22 @@ selection:
   - POST /exposure/seem/demographic/search/by-dtxsid/
 helper: generic_request
 documentation: yes
+authentication:
+  api_key: ctx
 operations:
   GET /exposure/functional-use/category:
     name: ct_exposure_functional_use_category
     file: R/ct_exposure_functional_use_category.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: exposure/functional-use/category
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get functional use categories
       lifecycle: stable
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - {}
   GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}:

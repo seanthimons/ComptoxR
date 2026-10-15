@@ -36,6 +36,8 @@ selection:
   - POST /bioactivity/data/search/by-spid/
 helper: generic_request
 documentation: yes
+authentication:
+  api_key: ctx
 operations:
   GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_analyticalqc_search
@@ -160,31 +162,16 @@ operations:
   GET /bioactivity/assay/:
     name: ct_bioactivity_assay
     file: R/ct_bioactivity_assay.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      projection:
-        type: character
-        default: assay-all
-        description: 'Optional parameter (default: assay-all)'
-    request:
-      arguments:
-        endpoint:
-          value: bioactivity/assay/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get all assay annotations
       lifecycle: stable
-      parameters:
-        projection: 'Optional parameter (default: assay-all)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - projection: assay-all
   GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}:
@@ -229,22 +216,16 @@ operations:
   GET /bioactivity/assay/count:
     name: ct_bioactivity_assay_count
     file: R/ct_bioactivity_assay_count.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: bioactivity/assay/count
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get total assay count
       lifecycle: stable
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - {}
   GET /bioactivity/assay/search/by-aeid/{aeid}:
@@ -617,79 +598,31 @@ operations:
   GET /bioactivity/data/summary/search/by-tissue/:
     name: ct_bioactivity_data_search_by_tissue
     file: R/ct_bioactivity_data_search_by_tissue.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: DSSTox Substance Identifier
-      tissue:
-        type: character
-        required: yes
-        description: assay format's tissue of origin
-    request:
-      arguments:
-        endpoint:
-          value: bioactivity/data/summary/search/by-tissue/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        tissue:
-          from:
-          - params
-          - tissue
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get summary data by DTXSID and assay tissue origin
       lifecycle: stable
-      parameters:
-        dtxsid: DSSTox Substance Identifier
-        tissue: assay format's tissue of origin
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7024241
   GET /bioactivity/models/search/:
     name: ct_bioactivity_models_search
     file: R/ct_bioactivity_models_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: dtxsid
-      model:
-        type: character
-        required: yes
-        description: model
-    request:
-      arguments:
-        endpoint:
-          value: bioactivity/models/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        model:
-          from:
-          - params
-          - model
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get predictions by DTXSID and model
       lifecycle: stable
-      parameters:
-        dtxsid: dtxsid
-        model: model
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /bioactivity/models/search/by-dtxsid/{dtxsid}:

@@ -33,6 +33,8 @@ selection:
   - POST /chemical/search/equal/
 helper: generic_request
 documentation: yes
+authentication:
+  api_key: ctx
 operations:
   GET /chemical/detail/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_detail_search_by_dtxcid
@@ -80,31 +82,16 @@ operations:
   GET /chemical/detail/search/by-smiles/:
     name: ct_chemical_detail_search_by_smiles
     file: R/ct_chemical_detail_search_by_smiles.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      smiles:
-        type: character
-        required: yes
-        description: SMILES String
-    request:
-      arguments:
-        endpoint:
-          value: chemical/detail/search/by-smiles/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        smiles:
-          from:
-          - params
-          - smiles
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data by SMILES
       lifecycle: stable
-      parameters:
-        smiles: SMILES String
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - smiles: CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1
   GET /chemical/fate/search/by-dtxsid/{dtxsid}:
@@ -140,118 +127,46 @@ operations:
   GET /chemical/fate/summary/experimental/search/:
     name: ct_chemical_fate_experimental_search
     file: R/ct_chemical_fate_experimental_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: Required parameter
-      propName:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: chemical/fate/summary/experimental/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        propName:
-          from:
-          - params
-          - propName
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get experimental fate summary by DTXSID and property
       lifecycle: stable
-      parameters:
-        dtxsid: Required parameter
-        propName: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /chemical/fate/summary/predicted/search/:
     name: ct_chemical_fate_predicted_search
     file: R/ct_chemical_fate_predicted_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: Required parameter
-      propName:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: chemical/fate/summary/predicted/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        propName:
-          from:
-          - params
-          - propName
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get predicted fate summary by DTXSID and property
       lifecycle: stable
-      parameters:
-        dtxsid: Required parameter
-        propName: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /chemical/fate/summary/search/:
     name: ct_chemical_fate_summary_search
     file: R/ct_chemical_fate_summary_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: Required parameter
-      propName:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: chemical/fate/summary/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        propName:
-          from:
-          - params
-          - propName
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get fate summary by DTXSID and property
       lifecycle: stable
-      parameters:
-        dtxsid: Required parameter
-        propName: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}:
@@ -403,22 +318,16 @@ operations:
   GET /chemical/list/type:
     name: ct_chemical_list_type
     file: R/ct_chemical_list_type.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chemical/list/type
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get all list types
       lifecycle: stable
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
       - {}
   GET /chemical/msready/search/by-mass/{start}/{end}:
@@ -465,22 +374,16 @@ operations:
   GET /chemical/property/experimental/name:
     name: ct_chemical_property_experimental_name
     file: R/ct_chemical_property_experimental_name.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chemical/property/experimental/name
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get all experimental property options
       lifecycle: stable
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - {}
   GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}:
@@ -516,22 +419,16 @@ operations:
   GET /chemical/property/predicted/name:
     name: ct_chemical_property_predicted_name
     file: R/ct_chemical_property_predicted_name.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chemical/property/predicted/name
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get all predicted property options
       lifecycle: stable
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - {}
   GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}:
@@ -567,118 +464,46 @@ operations:
   GET /chemical/property/summary/experimental/search/:
     name: ct_chemical_property_summary_experimental_search
     file: R/ct_chemical_property_summary_experimental_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: Required parameter
-      propName:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: chemical/property/summary/experimental/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        propName:
-          from:
-          - params
-          - propName
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get experimental summary by DTXSID and property
       lifecycle: stable
-      parameters:
-        dtxsid: Required parameter
-        propName: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /chemical/property/summary/predicted/search/:
     name: ct_chemical_property_summary_predicted_search
     file: R/ct_chemical_property_summary_predicted_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: Required parameter
-      propName:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: chemical/property/summary/predicted/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        propName:
-          from:
-          - params
-          - propName
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get predicted property summary by DTXSID and property
       lifecycle: stable
-      parameters:
-        dtxsid: Required parameter
-        propName: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /chemical/property/summary/search/:
     name: ct_chemical_property_summary_search
     file: R/ct_chemical_property_summary_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: Required parameter
-      propName:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: chemical/property/summary/search/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        dtxsid:
-          from:
-          - params
-          - dtxsid
-        propName:
-          from:
-          - params
-          - propName
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get summary by DTXSID and property
       lifecycle: stable
-      parameters:
-        dtxsid: Required parameter
-        propName: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
   GET /chemical/property/summary/search/by-dtxsid/{dtxsid}:

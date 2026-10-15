@@ -27,6 +27,8 @@ selection:
   - GET /exposure/seem/general/search/by-dtxsid/{dtxsid}
 helper: generic_request
 documentation: yes
+authentication:
+  api_key: ctx
 operations:
   GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_ccd_chem_weight_fractions_search
@@ -362,22 +364,16 @@ operations:
   GET /exposure/list-presence/tags:
     name: ct_exposure_list_presence_tags
     file: R/ct_exposure_list_presence_tags.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: exposure/list-presence/tags
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get List Presence Tags
       lifecycle: experimental
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -480,22 +476,16 @@ operations:
   GET /exposure/mmdb/mediums:
     name: ct_exposure_mmdb_mediums
     file: R/ct_exposure_mmdb_mediums.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: exposure/mmdb/mediums
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get all Media options
       lifecycle: experimental
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -598,22 +588,16 @@ operations:
   GET /exposure/product-data/puc:
     name: ct_exposure_product_data_puc
     file: R/ct_exposure_product_data_puc.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: exposure/product-data/puc
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get all product use categories
       lifecycle: experimental
-      parameters: {}
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
