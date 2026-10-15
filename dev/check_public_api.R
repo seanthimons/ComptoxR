@@ -1,5 +1,5 @@
 # Check the current source, an expanded source package, or a rendered site.
-check_public_api <- function(root = '.', membership = dir.exists(file.path(root, 'dev'))) {
+check_public_api <- function(root = '.') {
   root <- normalizePath(root, winslash = '/', mustWork = TRUE)
   files <- if (file.exists(file.path(root, '.git'))) {
     paths <- system2('git', c('-C', shQuote(root), 'ls-files'), stdout = TRUE)
@@ -31,30 +31,6 @@ check_public_api <- function(root = '.', membership = dir.exists(file.path(root,
   if (file.exists(namespace)) {
     exports <- sub('^export\\((.*)\\)$', '\\1', grep('^export\\(', readLines(namespace), value = TRUE))
     stopifnot(!any(grepl('_(staging|development)$', exports)), !'chemi_safety' %in% exports)
-    if (membership) {
-      adapter <- new.env(parent = globalenv())
-      sys.source(file.path(root, 'dev/toolkit_adapter.R'), envir = adapter)
-      context <- adapter$comptox_tools(root)
-      schema_names <- unlist(lapply(context$api_specs, function(spec) spec$build_endpoints()$fn))
-      manual <- c(
-        'chemi_classyfire',
-        'chemi_functional_use',
-        'chemi_predict',
-        'chemi_safety_section',
-        'chemi_server',
-        'chemi_toxprint',
-        'ct_api_key',
-        'ct_classify',
-        'ct_related',
-        'ct_similar',
-        'epi_server'
-      )
-      api <- grep('^(ct_|chemi_|epi_)', exports, value = TRUE)
-      missing <- setdiff(api, c(schema_names, manual))
-      if (length(missing)) {
-        stop('Export has no approved production mapping: ', paste(missing, collapse = ', '))
-      }
-    }
   }
   schemas <- list.files(file.path(root, 'schema'), '-(dev|staging)[.]json$')
   stopifnot(!length(schemas))

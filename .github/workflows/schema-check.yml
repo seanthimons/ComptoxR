@@ -174,20 +174,19 @@ jobs:
         id: diff
         continue-on-error: true
         run: |
-          source("dev/diff_schemas.R")
           # Compare only approved production schemas, including newly added domains.
-          results <- diff_schemas(
+          results <- specmill::schema_diff(
             "schema_old",
             "schema",
             pattern = "-prod[.]json$",
             stage_priority = "prod",
             exclude_pattern = "ui|coverage_baseline|schema_hashes"
           )
-          md <- format_diff_markdown(results)
+          md <- specmill::format_diff_markdown(results)
           writeLines(md, "schema_diff_report.md")
 
           # Count changes for workflow outputs (robust to empty/error results)
-          counts <- count_diff_changes(results)
+          counts <- specmill::count_diff_changes(results)
           breaking <- counts$breaking
           nonbreaking <- counts$nonbreaking
 
@@ -215,13 +214,10 @@ jobs:
             git diff --stat -- schema/ schema_hashes.csv
           fi
 
-      - name: Generate function stubs
+      - name: Generate wrappers
         id: stubs
         if: steps.schema_changes.outputs.changed == 'true'
-        run: |
-          source("dev/generate_stubs.R")
-          generate_stubs_main(args = c("--rebuild=ct", "--rebuild=chemi", "--rebuild=epi"))
-        shell: Rscript {0}
+        run: Rscript dev/generate_specmill.R --apply
 
       - name: Update documentation
         if: steps.schema_changes.outputs.changed == 'true'
@@ -256,20 +252,13 @@ jobs:
       - name: Check generation and hooks
         if: steps.schema_changes.outputs.changed == 'true'
         run: |
-          Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+          Rscript dev/generate_specmill.R --check
           Rscript dev/generate_tests.R --check
           Rscript dev/check_hook_config.R
 
       - name: Check public API boundary
         run: |
           Rscript dev/check_public_api.R
-
-      - name: Calculate coverage
-        id: coverage
-        if: steps.schema_changes.outputs.changed == 'true'
-        run: |
-          source("dev/calculate_coverage.R")
-        shell: Rscript {0}
 
       - name: Check for all changes
         id: changes
@@ -385,17 +374,6 @@ jobs:
           echo "- **Tests Removed:** ${{ steps.tests.outputs.tests_removed || '0' }}" >> pr_body.md
           echo "- **Generated Test Check:** ${{ steps.generated_test_check.outputs.check_status || 'not_run' }}" >> pr_body.md
           echo "- **Gaps Remaining:** ${{ steps.tests.outputs.gaps_remaining || '0' }}" >> pr_body.md
-
-          # Add coverage section
-          cat >> pr_body.md << 'COVERAGE'
-
-          ### API Coverage
-          | API | Coverage | Endpoints | Functions |
-          |-----|----------|-----------|-----------|
-          COVERAGE
-          echo "| CompTox Dashboard (ct_*) | ${{ steps.coverage.outputs.ccd_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_functions_fmt || 'N/A' }} |" >> pr_body.md
-          echo "| Cheminformatics (chemi_*) | ${{ steps.coverage.outputs.chemi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_functions_fmt || 'N/A' }} |" >> pr_body.md
-          echo "| EPI Suite (epi_*) | ${{ steps.coverage.outputs.epi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.epi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.epi_functions_fmt || 'N/A' }} |" >> pr_body.md
 
           # Add review checklist with breaking change awareness
           BREAKING="${{ steps.diff.outputs.breaking_count || '0' }}"

@@ -65,7 +65,7 @@ jobs:
 
       - name: Check generated wrappers and tests
         run: |
-          Rscript -e 'source("dev/check_public_api.R"); check_public_api(membership = FALSE)'
+          Rscript -e 'source("dev/check_public_api.R"); check_public_api()'
           Rscript dev/specmill-342/verify.R
           Rscript dev/generate_specmill.R --check
 

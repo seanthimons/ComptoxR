@@ -65,9 +65,9 @@ schemas only. Keep other schemas and generated clients outside this checkout.
 Regenerate a promoted operation from its approved production schema.
 
 ```bash
-Rscript dev/generate_stubs.R --rebuild=ct --rebuild=chemi --rebuild=epi
+Rscript dev/generate_specmill.R --apply
 Rscript dev/generate_tests.R --generate
-Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+Rscript dev/generate_specmill.R --check
 Rscript dev/generate_tests.R --check
 Rscript dev/check_hook_config.R
 Rscript dev/check_public_api.R

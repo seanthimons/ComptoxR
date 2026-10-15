@@ -112,22 +112,12 @@ test_that("apply removes only selected files within the endpoint prefix", {
   expect_true(file.exists(adjacent))
 })
 
-test_that("schema updates rebuild experimental API wrappers", {
+test_that("schema updates regenerate wrappers through specmill", {
   workflow <- testthat::test_path("..", "..", ".github", "workflows", "schema-check.yml")
   testthat::skip_if_not(file.exists(workflow), "Maintainer-only test requires workflow files")
 
   expect_true(any(grepl(
-    '"--rebuild=ct"',
-    readLines(workflow, warn = FALSE),
-    fixed = TRUE
-  )))
-  expect_true(any(grepl(
-    '"--rebuild=chemi"',
-    readLines(workflow, warn = FALSE),
-    fixed = TRUE
-  )))
-  expect_true(any(grepl(
-    '"--rebuild=epi"',
+    "Rscript dev/generate_specmill.R --apply",
     readLines(workflow, warn = FALSE),
     fixed = TRUE
   )))

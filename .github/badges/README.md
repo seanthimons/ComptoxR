@@ -1,5 +1,8 @@
 # Schema Coverage Badges
 
+> These badge files are frozen. The script that computed them (`dev/calculate_coverage.R`)
+> was removed with the legacy stub generator; `specmill::coverage_report()` replaces it.
+
 This directory contains the badge data files for displaying CCD (CompTox Chemical Dashboard) and Cheminformatic schema coverage in the README.
 
 ## What are Schema Coverage Badges?

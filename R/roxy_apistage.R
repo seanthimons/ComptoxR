@@ -2,8 +2,8 @@
 #
 # Records the deployment stage (public / staging / development) of the API schema
 # a generated wrapper was built from, and renders it as its own section in the
-# rendered `.Rd` help page. Generated stubs emit `#' @apiStage <stage>` (see
-# dev/endpoint_eval/07_stub_generation.R); this file teaches roxygen2 how to parse
+# rendered `.Rd` help page. Generated wrappers emit `#' @apiStage <stage>` (set in
+# the service docs in apis/*.yml); this file teaches roxygen2 how to parse
 # and render that tag.
 #
 # The S3 methods below are registered against roxygen2 generics in .onLoad() via
