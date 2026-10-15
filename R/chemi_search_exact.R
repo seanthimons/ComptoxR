@@ -1,42 +1,39 @@
 #' Search Exact
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param smiles Required parameter
 #' @param exportSmiles Optional parameter
 #' @param exportMol Optional parameter
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_search_exact(smiles = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_search_exact <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(exportSmiles)) {
-    options[['exportSmiles']] <- exportSmiles
-  }
-  if (!is.null(exportMol)) {
-    options[['exportMol']] <- exportMol
-  }
+  params <- base::list("smiles" = smiles, "exportSmiles" = exportSmiles, "exportMol" = exportMol)
   result <- generic_request(
-    endpoint = "search/exact",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    "endpoint" = "search/exact",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = base::local({
+      .body <- base::Filter(
+        base::Negate(base::is.null),
+        base::list(
+          "smiles" = params[["smiles"]],
+          "exportSmiles" = params[["exportSmiles"]],
+          "exportMol" = params[["exportMol"]]
+        )
+      )
+      if (base::length(.body)) .body else base::list()
+    })
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

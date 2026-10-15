@@ -75,11 +75,11 @@ test_that("generic_request progress follows the verbose option", {
   )
 
   testthat::with_mocked_bindings(
-    req_perform_iterative = function(req, next_req, max_reqs, on_error, progress) {
+    .ct_request_pages = function(req, next_req, max_reqs, on_error, progress) {
       progress_values <<- c(progress_values, progress)
       list(response)
     },
-    .package = "httr2",
+    .package = "ComptoxR",
     {
       for (verbose in c(FALSE, TRUE)) {
         suppressMessages(withr::with_options(

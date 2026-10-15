@@ -1,0 +1,264 @@
+id: chemi-search-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-search-prod.json
+selection:
+  include:
+  - GET /api/search/exact
+  - GET /api/search/gethazard
+  - GET /api/search/similar
+  - GET /api/search/substructure
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/search/exact:
+    name: chemi_search_exact
+    file: R/chemi_search_exact.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+      exportSmiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportMol:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: search/exact
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            exportSmiles:
+              from:
+              - params
+              - exportSmiles
+            exportMol:
+              from:
+              - params
+              - exportMol
+    docs:
+      title: Search Exact
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        exportSmiles: Optional parameter
+        exportMol: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/search/gethazard:
+    name: chemi_search_gethazard
+    file: R/chemi_search_gethazard.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      sid:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: search/gethazard
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            sid:
+              from:
+              - params
+              - sid
+    docs:
+      title: Search Gethazard
+      lifecycle: experimental
+      parameters:
+        sid: Required parameter
+      return: Returns a tibble with results
+      examples:
+      - sid: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/search/similar:
+    name: chemi_search_similar
+    file: R/chemi_search_similar.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      dtxsid:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportSmiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportMol:
+        type: character
+        default: ~
+        description: Optional parameter
+      min:
+        type: character
+        default: ~
+        description: Optional parameter
+      max:
+        type: character
+        default: ~
+        description: Optional parameter
+      similarityType:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: search/similar
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            exportSmiles:
+              from:
+              - params
+              - exportSmiles
+            exportMol:
+              from:
+              - params
+              - exportMol
+            min:
+              from:
+              - params
+              - min
+            max:
+              from:
+              - params
+              - max
+            similarityType:
+              from:
+              - params
+              - similarityType
+    docs:
+      title: Search Similar
+      lifecycle: experimental
+      parameters:
+        smiles: Optional parameter
+        dtxsid: Optional parameter
+        exportSmiles: Optional parameter
+        exportMol: Optional parameter
+        min: Optional parameter
+        max: Optional parameter
+        similarityType: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/search/substructure:
+    name: chemi_search_substructure
+    file: R/chemi_search_substructure.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+      exportSmiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportMol:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: search/substructure
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            exportSmiles:
+              from:
+              - params
+              - exportSmiles
+            exportMol:
+              from:
+              - params
+              - exportMol
+    docs:
+      title: Search Substructure
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        exportSmiles: Optional parameter
+        exportMol: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

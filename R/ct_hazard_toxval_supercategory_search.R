@@ -1,25 +1,23 @@
 #' Get all toxval supercategories by dtxsid
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns a scalar value
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' ct_hazard_toxval_supercategory_search(dtxsid = "DTXSID0021125")
 #' }
+# Generated with specmill; do not edit by hand.
 ct_hazard_toxval_supercategory_search <- function(dtxsid) {
+  params <- base::list("dtxsid" = dtxsid)
   result <- generic_request(
-    query = dtxsid,
-    endpoint = "hazard/toxval/supercategory/search/by-dtxsid/",
-    method = "GET",
-    batch_limit = 1
+    "query" = params[["dtxsid"]],
+    "endpoint" = "hazard/toxval/supercategory/search/by-dtxsid/",
+    "method" = "GET",
+    "batch_limit" = 1
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

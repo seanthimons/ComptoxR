@@ -1,0 +1,758 @@
+id: ctx-exposure-prod-full
+schemas:
+  files:
+  - schema/ctx-exposure-prod.json
+selection:
+  include:
+  - GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}
+  - POST /exposure/httk/search/by-dtxsid/
+  - GET /exposure/httk/search/by-dtxsid/{dtxsid}
+  - POST /exposure/list-presence/search/by-dtxsid/
+  - GET /exposure/list-presence/search/by-dtxsid/{dtxsid}
+  - GET /exposure/list-presence/tags
+  - GET /exposure/mmdb/aggregate/by-medium
+  - GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}
+  - GET /exposure/mmdb/mediums
+  - GET /exposure/mmdb/single-sample/by-medium
+  - GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}
+  - GET /exposure/product-data/puc
+  - POST /exposure/product-data/search/by-dtxsid/
+  - GET /exposure/product-data/search/by-dtxsid/{dtxsid}
+  - POST /exposure/seem/general/search/by-dtxsid/
+  - GET /exposure/seem/general/search/by-dtxsid/{dtxsid}
+helper: generic_request
+documentation: yes
+operations:
+  GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_chem_weight_fractions_search
+    file: R/ct_exposure_ccd_chem_weight_fractions_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/chem-weight-fractions/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get Chemical Weight Fractions data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_functional_use_search
+    file: R/ct_exposure_ccd_functional_use_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/functional-use/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get Reported Functional Use data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_keywords_search
+    file: R/ct_exposure_ccd_keywords_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/keywords/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get General Use Keywords data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_monitoring_data_search
+    file: R/ct_exposure_ccd_monitoring_data_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      projection:
+        type: character
+        default: ~
+        description: 'Specifies if projection is used. Option: ccd-biomonitoring,
+          If omitted, the default CCDBiomonitoring data is returned.'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/monitoring-data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get Biomonitoring data by DTXSID with CCD projection
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies if projection is used. Option: ccd-biomonitoring, If
+          omitted, the default CCDBiomonitoring data is returned.'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_production_volume_search
+    file: R/ct_exposure_ccd_production_volume_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/production-volume/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get Production Volume data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_puc_search
+    file: R/ct_exposure_ccd_puc_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/puc/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get Product Use Category data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  POST /exposure/httk/search/by-dtxsid/:
+    name: ct_exposure_httk_search_bulk
+    file: R/ct_exposure_httk_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/httk/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get httk data for a batch of DTXSIDs
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
+  GET /exposure/httk/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_httk_search
+    file: R/ct_exposure_httk_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/httk/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get httk data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  POST /exposure/list-presence/search/by-dtxsid/:
+    name: ct_exposure_list_presence_search_bulk
+    file: R/ct_exposure_list_presence_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/list-presence/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get List Presence data for a batch of DTXSIDs
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
+  GET /exposure/list-presence/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_list_presence_search
+    file: R/ct_exposure_list_presence_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/list-presence/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get List Presence data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/list-presence/tags:
+    name: ct_exposure_list_presence_tags
+    file: R/ct_exposure_list_presence_tags.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: exposure/list-presence/tags
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get List Presence Tags
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /exposure/mmdb/aggregate/by-medium:
+    name: ct_exposure_mmdb_aggregate_by_medium
+    file: R/ct_exposure_mmdb_aggregate_by_medium.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      medium:
+        type: character
+        required: yes
+        description: harmonized medium
+      pageNumber:
+        type: numeric
+        default: 1.0
+        description: 'Optional parameter (default: 1)'
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        endpoint:
+          value: exposure/mmdb/aggregate/by-medium
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        medium:
+          from:
+          - params
+          - medium
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_number
+    docs:
+      title: Get Aggregate data by Medium
+      lifecycle: experimental
+      parameters:
+        medium: harmonized medium
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - medium: surface water
+  GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}:
+    name: ct_exposure_mmdb_aggregate
+    file: R/ct_exposure_mmdb_aggregate.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/mmdb/aggregate/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get Aggregate data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /exposure/mmdb/mediums:
+    name: ct_exposure_mmdb_mediums
+    file: R/ct_exposure_mmdb_mediums.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: exposure/mmdb/mediums
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get all Media options
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /exposure/mmdb/single-sample/by-medium:
+    name: ct_exposure_mmdb_single_sample_by_medium
+    file: R/ct_exposure_mmdb_single_sample_by_medium.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      medium:
+        type: character
+        required: yes
+        description: harmonized medium
+      pageNumber:
+        type: numeric
+        default: 1.0
+        description: 'Optional parameter (default: 1)'
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        endpoint:
+          value: exposure/mmdb/single-sample/by-medium
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        medium:
+          from:
+          - params
+          - medium
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_number
+    docs:
+      title: Get Single Sample data by Medium
+      lifecycle: experimental
+      parameters:
+        medium: harmonized medium
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - medium: surface water
+  GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}:
+    name: ct_exposure_mmdb_single_sample
+    file: R/ct_exposure_mmdb_single_sample.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/mmdb/single-sample/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get Single Sample data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /exposure/product-data/puc:
+    name: ct_exposure_product_data_puc
+    file: R/ct_exposure_product_data_puc.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: exposure/product-data/puc
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get all product use categories
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /exposure/product-data/search/by-dtxsid/:
+    name: ct_exposure_product_data_search_bulk
+    file: R/ct_exposure_product_data_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/product-data/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get product data for a batch of DTXSIDs
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
+  GET /exposure/product-data/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_product_data_search
+    file: R/ct_exposure_product_data_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/product-data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get product data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+  POST /exposure/seem/general/search/by-dtxsid/:
+    name: ct_exposure_seem_general_search_bulk
+    file: R/ct_exposure_seem_general_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/seem/general/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get SEEM General Exposure Prediction data for a batch of DTXSIDs
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
+  GET /exposure/seem/general/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_seem_general_search
+    file: R/ct_exposure_seem_general_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      projection:
+        type: character
+        default: ~
+        description: 'Specifies whether to use projection. Optional: ccd-general.'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/seem/general/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get SEEM General Exposure Prediction data by DTXSID
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies whether to use projection. Optional: ccd-general.'
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

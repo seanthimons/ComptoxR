@@ -1,0 +1,165 @@
+{
+  "wave": "resolver-transformations",
+  "base_commit": "7cfeeafb3233eb05dc4dff1e11579a1aec33d932",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 3,
+  "generated_operations": 0,
+  "retained_operations": 3,
+  "files": [
+    "R/chemi_resolver_getsimilaritymap.R",
+    "R/chemi_classyfire.R",
+    "R/chemi_safety_rqcodes.R"
+  ],
+  "reviewed_routes": {
+    "chemi_resolver_getsimilaritymap": "chemi-resolver-prod.json POST /api/resolver/getsimilaritymap",
+    "chemi_classyfire": "chemi-amos-prod.json GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+    "chemi_safety_rqcodes": "chemi-safety-prod.json POST /api/safety/rqcodes"
+  },
+  "policies": {
+    "chemi_resolver_getsimilaritymap": "Retain initial chemicals=NULL in pre-hook params, partial parameter updates, flat resolved chemicals, skip before post hooks, optional section omission, lowercase sort serialization and post-hook params excluding chemicals. Pinned generation captures only public inputs and cannot reproduce both exact hook states with existing bindings. No hook is added to force generation.",
+    "chemi_classyfire": "Retain nrow-gated dplyr::select with any_of aliases, exact classification column order and unchanged empty results; no lifecycle badge. Pinned generation without new hooks returns the untransformed helper response.",
+    "chemi_safety_rqcodes": "Retain query=NULL and the existing generic_chemi_request empty-query error before transport. When helper is mocked, retain rqCode pluck/compact, NULL empty result, row binding, rq splitting and numeric pounds/kilograms conversion with existing errors/warnings. Schema requires a Chemical array; correction needs separate authorization. Pinned generation without new hooks returns the untransformed helper response."
+  },
+  "issue_337_entries_remaining": 11,
+  "upstream_blocked_amos_entries": 5,
+  "source_sha256": {
+    "chemi_resolver_getsimilaritymap": "5835303edbd361feb61823306ae9bcf1d7f17a3f6a9e8802c0c87f4458978e9a",
+    "chemi_classyfire": "244ce3ec19aaf6f457c55b47f974d2aea830315b7ac3a3e351471e76450b7002",
+    "chemi_safety_rqcodes": "86cb75833d2eb6c183ba11c167c978a4cbc0d81efc2564f502527ea060193743"
+  },
+  "behavior_corrections": [],
+  "compatibility_probe": {
+    "chemi_resolver_getsimilaritymap": {
+      "generated_pre_params": [
+        "query",
+        "idType",
+        "section",
+        "sort",
+        "hclust_method",
+        "format"
+      ],
+      "original_pre_params": [
+        "query",
+        "idType",
+        "section",
+        "sort",
+        "hclust_method",
+        "format",
+        "chemicals"
+      ],
+      "compatible": false
+    },
+    "chemi_classyfire": {
+      "generated_class": [
+        "tbl_df",
+        "tbl",
+        "data.frame"
+      ],
+      "original_class": [
+        "tbl_df",
+        "tbl",
+        "data.frame"
+      ],
+      "generated_fields": [
+        "query",
+        "superklass",
+        "klass",
+        "subklass",
+        "kingdom",
+        "extra"
+      ],
+      "original_fields": [
+        "dtxsid",
+        "kingdom",
+        "superclass",
+        "class",
+        "subclass"
+      ],
+      "compatible": false
+    },
+    "chemi_safety_rqcodes": {
+      "generated_class": [
+        "list"
+      ],
+      "original_class": [
+        "tbl_df",
+        "tbl",
+        "data.frame"
+      ],
+      "generated_fields": [],
+      "original_fields": [
+        "code",
+        "rq_lbs",
+        "rq_kgs"
+      ],
+      "compatible": false
+    }
+  },
+  "verification": {
+    "contract_and_regression_tests": "passed",
+    "regression_assertions": 92,
+    "total_assertions": 1651,
+    "test_failures": 0,
+    "test_errors": 0,
+    "test_warnings": 0,
+    "installed_original_regressions": "passed",
+    "legacy_generator_check": "passed",
+    "retained_source_byte_identical": true,
+    "retained_sources_excluded_from_removal_allowlist": true,
+    "documentation_and_namespace_unchanged": true,
+    "toolkit_pin_unchanged": true,
+    "existing_uncommitted_work_preserved": true,
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "runtime_results": "dev/specmill-rebuild/runtime-resolver-transformations-results.json",
+    "runtime_scope": "Installed original and migrated client, localhost only; synthetic responses",
+    "localhost_cases": 1353,
+    "new_wave_cases": 36,
+    "new_wave_requests_and_objects_equal": true,
+    "candidate_failures": 0,
+    "prior_corrected_query_cases": 12,
+    "prior_corrected_options_cases": 14,
+    "exported_signatures": 409,
+    "helper_signatures_equal": true,
+    "unchanged_request_fields_and_objects_equal": true,
+    "runtime_scheduler": "Existing dev/specmill-full/verify-runtime.R with independent clients scheduled concurrently through callr::r_bg; comparison and prior-correction assertions unchanged.",
+    "commands": [
+      "Rscript /tmp/stage-resolver-transformations.R",
+      "Rscript dev/specmill-rebuild/probe-transformations.R",
+      "Rscript dev/generate_specmill.R --apply",
+      "R_LIBS=dev/specmill-pilot/artifacts/legacy-toolkit-library Rscript dev/generate_tests.R --generate",
+      "R_LIBS=dev/specmill-pilot/artifacts/legacy-toolkit-library Rscript dev/generate_tests.R --check",
+      "R CMD INSTALL --library=dev/specmill-pilot/artifacts/resolver-transformations-library .",
+      "R_LIBS=dev/specmill-pilot/artifacts/legacy-toolkit-library COMPTOXR_CRAN_SAFE_TESTS=true NOT_CRAN=false Rscript -e testthat::test_local(...)",
+      "COMPTOXR_CRAN_SAFE_TESTS=true NOT_CRAN=false Rscript -e library(ComptoxR,lib.loc=before-library);testthat::test_dir(...)",
+      "Rscript /tmp/resolver-bulk-parallel-runtime.R <before-library> <candidate-library> <runtime-output> dev/specmill-rebuild/runtime-resolver-transformations-results.json",
+      "Rscript dev/specmill-rebuild/rehearse.R"
+    ],
+    "sequential_runtime_replay": "Rscript dev/specmill-full/verify-runtime.R <before-library> <candidate-library> <runtime-output> dev/specmill-rebuild/runtime-resolver-transformations-results.json",
+    "rehearsal": {
+      "commit": "95b83b4c0af0c22bd76f7535834855befbd4502a",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "byte_identical": true,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": []
+    }
+  },
+  "retired_tests": [
+    "tests/testthat/test-chemi_resolver_getsimilaritymap.R",
+    "tests/testthat/test-chemi_classyfire.R",
+    "tests/testthat/test-chemi_safety_rqcodes.R"
+  ],
+  "dispositions": {
+    "chemi_resolver_getsimilaritymap": "retained_mapped",
+    "chemi_classyfire": "retained_mapped",
+    "chemi_safety_rqcodes": "retained_mapped"
+  }
+}

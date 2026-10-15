@@ -14,6 +14,7 @@ on:
       - 'man/**'
       - 'vignettes/**'
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
     paths-ignore:
       - 'NEWS.md'
@@ -36,7 +37,7 @@ concurrency:
 
 jobs:
   r-cmd-check:
-    if: github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
     runs-on: ${{ matrix.config.os }}
 

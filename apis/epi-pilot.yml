@@ -1,0 +1,57 @@
+id: epi-pilot
+schemas:
+  files:
+  - schema/epi-suite-prod.json
+selection:
+  include:
+  - GET /api/search
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/search:
+    name: epi_search
+    file: R/epi_search.R
+    implementation: generated
+    inputs:
+      query:
+        required: yes
+        type: character
+        description: Required parameter
+      limit:
+        default: 20.0
+        type: numeric
+        description: 'Optional parameter (default: 20)'
+    request:
+      arguments:
+        endpoint:
+          value: search
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        query_params:
+          object:
+            query:
+              from:
+              - params
+              - query
+            limit:
+              from:
+              - params
+              - limit
+    docs:
+      title: Search embedded experimental data
+      lifecycle: experimental
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - query: benzene
+contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds
+hook_config: inst/hook_config.yml

@@ -199,7 +199,8 @@ test_that("generic_request batch_limit>1 sends a bulk POST JSON array", {
   )
   # Both items fit in one batch and become the JSON-array request body.
   expect_equal(captured_method, "POST")
-  expect_equal(captured_body, c("A", "B"))
+  expect_equal(as.vector(captured_body), c("A", "B"))
+  expect_s3_class(captured_body, "AsIs")
 })
 
 # --- path_params + batching abort (downstream wrappers rely on this guard) ---

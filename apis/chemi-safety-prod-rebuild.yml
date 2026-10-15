@@ -1,0 +1,31 @@
+id: chemi-safety-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-safety-prod.json
+selection:
+  include:
+  - POST /api/safety/rqcodes
+helper: generic_chemi_request
+documentation: yes
+operations:
+  POST /api/safety/rqcodes:
+    name: chemi_safety_rqcodes
+    file: R/chemi_safety_rqcodes.R
+    helper: generic_chemi_request
+    implementation: existing
+    inputs: {}
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: safety/rqcodes
+        tidy:
+          value: no
+    specialization: Retain query=NULL and the existing generic_chemi_request empty-query
+      error before transport. When helper is mocked, retain rqCode pluck/compact,
+      NULL empty result, row binding, rq splitting and numeric pounds/kilograms conversion
+      with existing errors/warnings. Schema requires a Chemical array; correction
+      needs separate authorization. Pinned generation without new hooks returns the
+      untransformed helper response.
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

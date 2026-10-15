@@ -1,0 +1,80 @@
+{
+  "issues": [
+    331,
+    342
+  ],
+  "base_commit": "080fc7ea860a4b0a085a338b608b25b4fad0baf9",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.11",
+    "source_commit": "d59014365b8b30bde2ce319b5e60d9c3f94fe48f",
+    "source_archive_sha256": "4b8c8c4dddacc457450a4b55ccb9358194544c2cd568c88b44f373b0adb3ffa0",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "adopted_sha256": {
+    "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
+    "R/z_specmill_request.R": "ca8ddce1d9a4645fd1199f5c0b86aac153a8d64c97b2902e4dacd989cc64471e",
+    "dev/specmill-342/compatibility.patch": "d17ea06902eeb2f8a9be6a52d206f1f5df13ecdfe7e6e9d5a5aeff3afcf05c76",
+    "dev/specmill-342/emit.R": "d80b71f5b84072ccdd5cb1a57721e51e3a2744221e630c80d061652f3bbfb3b5",
+    "DESCRIPTION": "3df8e472ec2667e41102a95b3b9d792965f7d414276d954481539a19eaf5b793",
+    "R/chemi_chet_chemicals_image.R": "a4280cbd047a2762902901f995735ba1d1a5ad5d513baa0e4f4b3f7c1694b1b4"
+  },
+  "retained_definitions": [
+    "generic_search_request",
+    "generic_pubchem_request",
+    "safe_tidy_bind",
+    "is_transient_error",
+    "parse_delimited_response",
+    "unwrap_collection_envelope"
+  ],
+  "client_facades": [
+    "generic_request",
+    "generic_chemi_request"
+  ],
+  "generated_implementation": [
+    ".ct_request",
+    ".ct_request_decode",
+    ".ct_request_batched",
+    ".ct_request_paginated"
+  ],
+  "accepted_changes": {
+    "chet_page_default": {
+      "exports": [
+        "chemi_chet_chemicals_counts",
+        "chemi_chet_chemicals_database",
+        "chemi_chet_reaction_database"
+      ],
+      "before": 0,
+      "after": 1,
+      "strategy": "chet_page"
+    },
+    "chet_image": "Required magick dependency: PNG/SVG return images, PDF stays raw. Correct the broken image route to /api/chet/chemicals/{chemical_id}/image.",
+    "chet_pagination_routes": "Three pagination wrappers use /api/chet/chemicals/counts, /api/chet/chemicals/database and /api/chet/reaction/database."
+  },
+  "verification": {
+    "upstream_scripts_passed": 13,
+    "installed_runtime_cases": 1474,
+    "candidate_failures": 0,
+    "exported_signatures_reviewed": 409,
+    "changed_exported_defaults": 3,
+    "generic_helper_signatures_equal": true,
+    "runtime_report": "dev/specmill-pilot/artifacts/issue-342-adopted-runtime-results.json",
+    "runtime_report_sha256": "79fd973a65d6973cabb4d5ea5fab99f9a3df5d56a0f99b0209640397a93cae6f",
+    "magick_installed": true,
+    "magick_version": "2.9.1",
+    "image_endpoint": "https://hcd.rtpnc.epa.gov/api/chet/chemicals/1/image",
+    "live_image_formats_verified": [
+      "png",
+      "svg",
+      "pdf"
+    ],
+    "image_results_sha256": "2f212933ec253d7db552b55fde391cb0d66a85bd2fa461f15c43c60ba84ebc36",
+    "live_pagination_rows": {
+      "chemi_chet_chemicals_counts": 4420,
+      "chemi_chet_chemicals_database": 4028,
+      "chemi_chet_reaction_database": 5152
+    },
+    "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
+  }
+}

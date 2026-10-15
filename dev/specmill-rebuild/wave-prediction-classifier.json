@@ -1,0 +1,106 @@
+{
+  "wave": "prediction-classifier",
+  "base_commit": "3ddbe3f3df100c22cf51c91ba7e66a71e66f4e05",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 1,
+  "generated_operations": 0,
+  "retained_operations": 1,
+  "retained_client_utilities": 1,
+  "excluded_scraper_wrappers": 1,
+  "files": {
+    "chemi_predict": "R/chemi_predict.R",
+    "ct_classify": "R/ct_classify.R",
+    "ct_related": "R/ct_related.R"
+  },
+  "reviewed_routes": {
+    "chemi_predict": "chemi-webtest-prod.json POST /api/webtest/predict",
+    "ct_classify": {},
+    "ct_related": {}
+  },
+  "dispositions": {
+    "chemi_predict": "retained_mapped",
+    "ct_classify": "retained_client_utility",
+    "ct_related": "retained_excluded"
+  },
+  "source_sha256": {
+    "chemi_predict": "a30dac865778a6d75af71a20148152c5b89b6c1d78ec13a4a73cbff63cac78ad",
+    "ct_classify": "0c8c1d78799c0397b44dd0cdaab77a8eb1628acd228e169519ed89a6f67be9cc",
+    "ct_related": "de3aa6daf849493cc1f1e05ac33cb340923a6f36ec051d97ae34bf4d1a94cbe1"
+  },
+  "policies": {
+    "chemi_predict": "Retain identifier resolution before report validation; preserve resolved objects as structures, ordered structures/report body fields with retained NULL/FALSE/zero, legacy report field despite schema format, auto_unbox, explicit Accept header, no authentication/retries/hooks, unconditional CLI messages, invalid-report warnings and JSON fallback, empty resolution errors, native report/missing-argument errors and parsed response/error behavior. Imported req_perform and the complete resolver/transport/response flow cannot be replaced by an existing compatible toolkit binding or callback.",
+    "ct_classify": "Local dataframe classifier, not an HTTP endpoint: .onLoad initializes create_compound_classifier in .ComptoxREnv; ct_classify reuses it with a NULL-only lazy fallback. Retain grouped factory file, original vectorized isTRUE decisions, field order, classes, cache and errors. No schema/method/path keys, transport, hooks or lifecycle badge.",
+    "ct_related": "Excluded from generation at user direction: legacy Dashboard scraper endpoint, not production ctx-api. Preserve explicit https://comptox.epa.gov/dashboard-api/ccdapp2/ server, GET related-substances/search/by-dtxsid, auth=FALSE, per-item id queries and existing questioning badge; do not infer a supported production schema key."
+  },
+  "behavior_corrections": [],
+  "issue_337_entries_remaining": 6,
+  "upstream_blocked_amos_entries": 5,
+  "remaining_non_amos": [
+    "chemi_toxprint"
+  ],
+  "compatibility_probe": {
+    "chemi_predict": {
+      "original_inputs": [
+        "query",
+        "report"
+      ],
+      "generated_inputs": [
+        "body"
+      ],
+      "compatible": false,
+      "toolkit_retention_limit": "Missing client helper: req_perform"
+    }
+  },
+  "existing_patterns_reviewed": {
+    "prediction_body_callback": "Requires schema oneOf body alternatives; does not implement resolver/transport/response orchestration. PredictionRequest has no oneOf.",
+    "webtest_prediction_hooks": "Require endpoint/method inputs, bulk canonical-SMILES resolution, skip/error rows and a format=JSON body; those change chemi_predict resolution order, payload, warning/error and return behavior.",
+    "hook_registry": "No chemi_predict or ct_classify hook configuration/calls exist; none added.",
+    "ct_related_badge": "Original questioning badge in R/ct_related.R and existing documentation remains unchanged."
+  },
+  "verification": {
+    "tests": {
+      "passed": 1952,
+      "failed": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "installed_original_focused_assertions": 118,
+    "installed_candidate_focused_assertions": 118,
+    "legacy_generator_check": true,
+    "native_generator_check": true,
+    "prior_query_corrections": 12,
+    "prior_options_corrections": 14,
+    "source_documentation_hooks_pin_unchanged": true,
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "rehearsal": {
+      "commit": "0cf48ad64fd5e044656a1d059b7829ec997348ca",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": [],
+      "byte_identical": true
+    },
+    "generation_inputs_unchanged_since_rehearsal": true,
+    "runtime": {
+      "results_file": "dev/specmill-rebuild/runtime-prediction-classifier-results.json",
+      "scope": "Installed original and migrated client, localhost only; synthetic responses",
+      "passed_cases": 1453,
+      "new_cases": 57,
+      "unchanged_request_fields_and_objects_equal": true,
+      "candidate_failures": 0,
+      "exported_signatures_compared": 409,
+      "helper_signatures_equal": true,
+      "prior_query_corrections_asserted": 12,
+      "prior_options_corrections_asserted": 14,
+      "runner": "Existing verifier expressions and assertions, independent clients in parallel; output redirected to files to avoid blocked channels. Completed immutable request records read once per client. No client behavior or comparison assertions changed."
+    }
+  }
+}

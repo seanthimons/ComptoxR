@@ -21,29 +21,52 @@ if (!exists("generated_contract_ensure_package", mode = "function")) {
 }
 generated_contract_ensure_package()
 
-test_that("chemi_resolver_lookup_bulk aborts on empty/NULL ids before any request", {
-  expect_error(chemi_resolver_lookup_bulk(NULL), "non-empty character vector")
-  expect_error(chemi_resolver_lookup_bulk(character(0)), "non-empty character vector")
+test_that("bulk resolver validates ids before options and helper invocation", {
+  called <- FALSE
+  local_mocked_bindings(generic_chemi_request = function(...) {
+    called <<- TRUE
+    stop("Helper must not run")
+  }, .package = "ComptoxR")
+  for (ids in list(NULL, character(), list(), integer())) {
+    expect_error(chemi_resolver_lookup_bulk(ids, idsType = stop("Options must not be evaluated")),
+      "ids must be a non-empty character vector", fixed = TRUE, class = "rlang_error")
+    expect_false(called)
+  }
+  expect_error(chemi_resolver_lookup_bulk(), 'argument "ids" is missing', fixed = TRUE)
+  expect_false(called)
 })
 
-test_that("chemi_resolver_lookup_bulk coerces ids to character and crosses the helper boundary", {
+test_that("bulk resolver preserves coercion and its complete helper boundary", {
   captured <- NULL
-  local_mocked_bindings(
-    generic_chemi_request = function(...) {
-      captured <<- list(...)
-      "SENTINEL"
-    },
-    .package = "ComptoxR"
-  )
-
-  res <- chemi_resolver_lookup_bulk(ids = c(1L, 2L))
-
-  expect_identical(res, "SENTINEL")
-  expect_type(captured$query, "character")
-  expect_identical(captured$query, c("1", "2"))
-  expect_identical(captured$endpoint, "resolver/lookup")
-  expect_identical(captured$sid_label, "ids")
-  expect_true(captured$array_payload)
+  local_mocked_bindings(generic_chemi_request = function(...) {
+    captured <<- list(...)
+    "SENTINEL"
+  }, .package = "ComptoxR")
+  for (ids in list(c(1L, 2L), 0, FALSE, TRUE, factor(c("b", "a")), list("one", "two"),
+    c("one", "one", NA_character_, ""), "caf\u00e9 +/&")) {
+    expect_identical(chemi_resolver_lookup_bulk(ids), "SENTINEL")
+    expect_identical(captured, list(query = as.character(ids), endpoint = "resolver/lookup",
+      options = list(idsType = "AnyId", fuzzy = "Not", mol = FALSE), sid_label = "ids",
+      array_payload = TRUE, tidy = TRUE))
+  }
+  for (value in list(NULL, FALSE, 0, "unknown-enum", list())) {
+    chemi_resolver_lookup_bulk("one", idsType = value, fuzzy = value, mol = value,
+      filters = value, format = value, tidy = FALSE)
+    options <- list(idsType = value, fuzzy = value, mol = value)
+    if (!is.null(value)) options <- c(options, list(filters = value, format = value))
+    expect_identical(captured$options, options)
+    expect_identical(captured$tidy, FALSE)
+  }
+  for (setting in c(NA_character_, "0", "2", "1000")) {
+    withr::with_envvar(c(batch_limit = setting), {
+      chemi_resolver_lookup_bulk(c("one", "two", "three"))
+      expect_identical(captured$query, c("one", "two", "three"))
+      expect_false("batch_limit" %in% names(captured))
+    })
+  }
+  chemi_resolver_lookup_bulk("one", filters = list(flag = FALSE, count = 0), format = "JSON")
+  expect_identical(captured$options, list(idsType = "AnyId", fuzzy = "Not", mol = FALSE,
+    filters = list(flag = FALSE, count = 0), format = "JSON"))
 })
 
 # ---- resolve-then-POST cluster (#219) ------------------------------------

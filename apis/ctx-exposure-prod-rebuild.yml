@@ -1,0 +1,196 @@
+id: ctx-exposure-prod-rebuild
+schemas:
+  files:
+  - schema/ctx-exposure-prod.json
+selection:
+  include:
+  - GET /exposure/functional-use/category
+  - GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}
+  - GET /exposure/functional-use/search/by-dtxsid/{dtxsid}
+  - GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}
+  - POST /exposure/functional-use/search/by-dtxsid/
+  - POST /exposure/seem/demographic/search/by-dtxsid/
+helper: generic_request
+documentation: yes
+operations:
+  GET /exposure/functional-use/category:
+    name: ct_exposure_functional_use_category
+    file: R/ct_exposure_functional_use_category.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: exposure/functional-use/category
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get functional use categories
+      lifecycle: stable
+      parameters: {}
+      return: Returns a scalar value
+      examples:
+      - {}
+  GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_functional_use_probability_search
+    file: R/ct_exposure_functional_use_probability_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/functional-use/probability/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get functional use probability by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/functional-use/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_functional_use_search
+    file: R/ct_exposure_functional_use_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/functional-use/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get functional use data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0020232
+  GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_seem_demographic_search
+    file: R/ct_exposure_seem_demographic_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      projection:
+        type: character
+        default: ~
+        description: 'Specifies whether to use projection. Optional: ccd-demographic.'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/seem/demographic/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get SEEM Demographic Exposure Prediction data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies whether to use projection. Optional: ccd-demographic.'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0020232
+  POST /exposure/functional-use/search/by-dtxsid/:
+    name: ct_exposure_functional_use_search_bulk
+    file: R/ct_exposure_functional_use_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/functional-use/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get functional-use data for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query: DTXSID1024122
+  POST /exposure/seem/demographic/search/by-dtxsid/:
+    name: ct_exposure_seem_demographic_search_bulk
+    file: R/ct_exposure_seem_demographic_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/seem/demographic/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get SEEM Demographic Exposure Prediction data for batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query: DTXSID1024122
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

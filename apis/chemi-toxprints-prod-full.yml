@@ -1,0 +1,145 @@
+id: chemi-toxprints-prod-full
+schemas:
+  files:
+  - schema/chemi-toxprints-prod.json
+selection:
+  include:
+  - GET /api/toxprints/assays/{name}
+  - POST /api/toxprints/chemicals_categories
+  - GET /api/toxprints/enrichments
+  - POST /api/toxprints/toxprints_categories
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/toxprints/assays/{name}:
+    name: chemi_toxprints_assays_by_name
+    file: R/chemi_toxprints_assays_by_name.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - name
+        endpoint:
+          value: toxprints/assays/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      parameters:
+        name: 'Primary query parameter. Type: string'
+      return: Returns a list with result object
+      tags:
+        apiStage: public
+      examples:
+      - name: DTXSID7020182
+  POST /api/toxprints/chemicals_categories:
+    name: chemi_toxprints_chemicals_categories
+    file: R/chemi_toxprints_chemicals_categories.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemicals
+        endpoint:
+          value: toxprints/chemicals_categories
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Toxprints Chemicals Categories
+      lifecycle: experimental
+      parameters:
+        chemicals: Optional parameter
+      return: Returns a list with result object
+      tags:
+        apiStage: public
+      examples:
+      - chemicals: DTXSID1024122
+  GET /api/toxprints/enrichments:
+    name: chemi_toxprints_enrichments
+    file: R/chemi_toxprints_enrichments.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/enrichments
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Toxprints Enrichments
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a list with result object
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /api/toxprints/toxprints_categories:
+    name: chemi_toxprints_toxprints_categories
+    file: R/chemi_toxprints_toxprints_categories.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      chemical:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemical
+        endpoint:
+          value: toxprints/toxprints_categories
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Toxprints Toxprints Categories
+      lifecycle: experimental
+      parameters:
+        chemical: Optional parameter
+      return: Returns a list with result object
+      tags:
+        apiStage: public
+      examples:
+      - chemical: DTXSID1024122
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

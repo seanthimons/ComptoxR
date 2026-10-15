@@ -1,0 +1,18 @@
+# Inactive reviewed proposal: use the explicit retained_direct mapping in screen-results.json.
+id: chemi-prediction-classifier-rebuild
+schemas:
+  files:
+  - schema/chemi-webtest-prod.json
+selection:
+  include:
+  - POST /api/webtest/predict
+helper: generic_chemi_request
+documentation: true
+operations:
+  POST /api/webtest/predict:
+    name: chemi_predict
+    file: R/chemi_predict.R
+    helper: req_perform
+    implementation: existing
+    specialization: Preserve the original resolver-before-report-validation flow, resolved objects as structures, legacy report body field, Accept header, absent auth/retry/hooks, warnings and JSON fallback, validation errors, messages and parsed responses. Imported req_perform cannot own the fixed contract under the pinned toolkit. No new hooks or shim.
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

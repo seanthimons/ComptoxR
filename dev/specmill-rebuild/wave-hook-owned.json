@@ -1,0 +1,57 @@
+{
+  "wave": "hook-owned",
+  "base_commit": "86171715e3f6e32801187fdc5eb7371701adf33e",
+  "worktree": "/tmp/comptoxr-issue-340/dev/specmill-pilot/artifacts/wave-hook-owned",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 10,
+  "files": [
+    "R/chemi_padel.R",
+    "R/chemi_mordred.R",
+    "R/chemi_rdkit.R",
+    "R/chemi_webtest.R",
+    "R/chemi_webtest_predict.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M R/chemi_mordred.R",
+    " M R/chemi_padel.R",
+    " M R/chemi_rdkit.R",
+    " M R/chemi_webtest.R",
+    " M R/chemi_webtest_predict.R",
+    " M dev/specmill-rebuild/runtime-cases.rds",
+    " M specmill.yml",
+    " M tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    "?? apis/chemi-mordred-prod-rebuild.yml",
+    "?? apis/chemi-padel-prod-rebuild.yml",
+    "?? apis/chemi-rdkit-prod-rebuild.yml",
+    "?? apis/chemi-webtest-prod-rebuild.yml",
+    "?? tests/testthat/test-contract-chemi_mordred.R",
+    "?? tests/testthat/test-contract-chemi_mordred_bulk.R",
+    "?? tests/testthat/test-contract-chemi_padel.R",
+    "?? tests/testthat/test-contract-chemi_padel_bulk.R",
+    "?? tests/testthat/test-contract-chemi_rdkit.R",
+    "?? tests/testthat/test-contract-chemi_rdkit_bulk.R",
+    "?? tests/testthat/test-contract-chemi_webtest.R",
+    "?? tests/testthat/test-contract-chemi_webtest_bulk.R",
+    "?? tests/testthat/test-contract-chemi_webtest_predict.R",
+    "?? tests/testthat/test-contract-chemi_webtest_predict_bulk.R"
+  ],
+  "verification": {
+    "documentation_unchanged": true,
+    "contract_and_hook_tests": "passed",
+    "localhost_cases": 1151,
+    "exported_signatures": 409,
+    "candidate_failures": 0,
+    "rebuild_commit": "d5c4224dfd2932463987e9f77d53cc8f46893842",
+    "rebuild_files": 217,
+    "rebuild_operations": 249,
+    "rebuild_byte_identical": true
+  }
+}

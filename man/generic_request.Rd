@@ -73,14 +73,14 @@ JSON-encoded instead of the batched \code{query} payload.}
 API parameters whose names collide with \code{generic_request()} formals.}
 
 \item{paginate}{Boolean; whether to automatically fetch all pages for paginated endpoints.
-Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
+Defaults to FALSE. When TRUE, uses generated pagination support to loop through
 pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.}
 
 \item{max_pages}{Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
 Acts as a safety limit to prevent runaway pagination loops.}
 
 \item{pagination_strategy}{The pagination strategy to use. One of: "offset_limit", "page_number",
-"page_size", "cursor", or NULL. When NULL, paginate is ignored.
+"page_size", "chet_page", "cursor", or NULL. When NULL, paginate is ignored.
 Usually set by generated stubs from Phase 19 metadata.}
 
 \item{pagination_cursor_location}{For cursor pagination, the schema-derived
@@ -97,7 +97,7 @@ cursor location: "query" or "body". Defaults to "query".}
 Depends on content_type:
 - JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
 - text/plain: A character string.
-- image/*: Raw bytes, or a magick image object if the magick package is available.
+- image/*: A magick image object, with raw bytes as a fallback for unreadable images.
 If no results are found, returns an empty tibble, empty list, or NULL.
 }
 \description{

@@ -1,0 +1,35 @@
+id: chemi-custom-functional_use-rebuild
+schemas:
+  files:
+  - schema/chemi-amos-prod.json
+selection:
+  include:
+  - GET /api/amos/functional_uses_for_dtxsid/{dtxsid}
+helper: generic_chemi_request
+documentation: yes
+operations:
+  GET /api/amos/functional_uses_for_dtxsid/{dtxsid}:
+    name: chemi_functional_use
+    file: R/chemi_functional_use.R
+    helper: req_perform_sequential
+    implementation: existing
+    inputs:
+      query:
+        type: character
+        required: yes
+    request:
+      arguments:
+        on_error:
+          value: continue
+        progress:
+          value: yes
+    specialization: Retain direct httr2 requests, nonempty-character validation before
+      messages, raw path appending, duplicate/NA/blank identifiers, no auth/retry,
+      unconditional messages/progress, first-request debug dry run, success filtering
+      and named functional_classes tibble aggregation when parsing/list utilities
+      are mocked. Real JSON currently parses to a list and jsonlite::flatten rejects
+      it; unqualified list_c is also unavailable in the package namespace; preserve
+      this existing error without correction. Generic helper normalization, retries,
+      errors and return shaping differ; no existing callback preserves the entire
+      flow. No hooks or lifecycle badge.
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

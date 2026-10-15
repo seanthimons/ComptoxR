@@ -1,0 +1,39 @@
+id: chemi-custom-safety_section-rebuild
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  include:
+  - GET /api/resolver/pubchem-section
+helper: generic_chemi_request
+documentation: yes
+operations:
+  GET /api/resolver/pubchem-section:
+    name: chemi_safety_section
+    file: R/chemi_safety_sections.R
+    helper: req_perform_sequential
+    implementation: existing
+    inputs:
+      query:
+        type: character
+        required: yes
+      section:
+        type: character
+        default: ~
+    request:
+      arguments:
+        on_error:
+          value: continue
+        progress:
+          value: yes
+    specialization: Retain direct httr2 requests and section-before-query validation/evaluation
+      order, including missing-argument errors. Preserve per-query query/idType=DTXSID/section
+      order, duplicate/NULL/empty/FALSE/zero behavior, no auth/retry or debug short-circuit,
+      unconditional messages/progress, success filtering, named nested sections, Value
+      extraction, Markup removal and NULL no-response result. Real named JSON currently
+      fails in resps_data with a name-merging error. Unqualified list_c/keep_at/discard_at
+      are also unavailable in the package namespace; preserve their current errors
+      and test transformations with mocked utilities. Pinned generation returns unprocessed
+      responses and forces query before section validation. No hooks or lifecycle
+      badge.
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

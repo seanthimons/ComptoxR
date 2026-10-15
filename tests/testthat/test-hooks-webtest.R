@@ -41,7 +41,6 @@ test_that("WebTEST prediction interfaces retain generated public contracts", {
       regexpr("generic_", body_text, fixed = TRUE)[[1]] < regexpr('"post_response"', body_text, fixed = TRUE)[[1]],
       info = fn_name
     )
-    expect_match(body_text, "post_data <- req_data", fixed = TRUE, info = fn_name)
   }
 })
 

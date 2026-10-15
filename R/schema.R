@@ -180,20 +180,7 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
     }
 
     destfile <- here::here('schema', paste0('chemi-', endpoint, '-', server, ext))
-    # Pretty-print JSON for readable diffs; fall back to raw bytes for YAML/errors
-    if (ext == '.json') {
-      parsed <- tryCatch(
-        jsonlite::fromJSON(text_preview, simplifyVector = FALSE),
-        error = function(e) NULL
-      )
-      if (!is.null(parsed)) {
-        jsonlite::write_json(parsed, destfile, pretty = TRUE, auto_unbox = TRUE)
-      } else {
-        writeBin(body_raw, destfile)
-      }
-    } else {
-      writeBin(body_raw, destfile)
-    }
+    .write_downloaded_schema(body_raw, destfile, pretty = ext == '.json')
     return(list(success = TRUE, status = status))
   }
 
@@ -292,6 +279,30 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
   }
 
   invisible(NULL)
+}
+
+# Shared by schema downloads and development freeze/fallback acquisition (#344).
+.write_downloaded_schema <- function(bytes, path, pretty = FALSE) {
+  json <- grepl('[.]json$', path, ignore.case = TRUE)
+  schema <- tryCatch(
+    if (json) jsonlite::fromJSON(rawToChar(bytes), simplifyVector = FALSE) else
+      yaml::yaml.load(rawToChar(bytes), eval.expr = FALSE),
+    error = function(e) NULL
+  )
+  normalized <- is.list(schema) && identical(schema$swagger, '2.0') && identical(schema$basePath, '')
+  if (normalized) {
+    # Operation paths already carry the service prefix; the root adds none.
+    schema$basePath <- '/'
+    cli::cli_alert_info('Normalized empty Swagger 2.0 basePath in {basename(path)} to /.')
+  }
+  if (json && !is.null(schema) && (pretty || normalized)) {
+    jsonlite::write_json(schema, path, pretty = TRUE, auto_unbox = TRUE)
+  } else if (normalized) {
+    writeLines(yaml::as.yaml(schema), path, useBytes = TRUE)
+  } else {
+    writeBin(bytes, path)
+  }
+  invisible(normalized)
 }
 
 #' Download the EPI Suite API schema

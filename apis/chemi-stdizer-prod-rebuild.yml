@@ -1,0 +1,63 @@
+id: chemi-stdizer-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - POST /api/stdizer/records
+helper: generic_request
+documentation: yes
+operations:
+  POST /api/stdizer/records:
+    name: chemi_stdizer_records
+    file: R/chemi_stdizer_records.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      full:
+        type: character
+        default: ~
+        description: Optional parameter
+      options:
+        type: character
+        default: ~
+        description: Optional parameter
+      records:
+        type: character
+        default: ~
+        description: Optional parameter
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - full
+        endpoint:
+          value: stdizer/records
+        options:
+          compact_object:
+            options:
+              from:
+              - params
+              - options
+            records:
+              from:
+              - params
+              - records
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Records
+      lifecycle: experimental
+      parameters:
+        full: Optional parameter
+        options: Optional parameter
+        records: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - full: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
