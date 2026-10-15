@@ -790,43 +790,43 @@
       "operations": ["ctx-exposure-prod-full POST /exposure/seem/general/search/by-dtxsid/", "ctx-exposure-prod-full GET /exposure/seem/general/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_adme_ivive_search.R": {
-      "hash": "4f62789d40069b71f8ea949b434c096d6f2852c5ea85876415e8137fa30301e6",
+      "hash": "8d2d00a8ae5c42e2690bc8a9ab42de76384e9e81c1ec92a002ba701455df5572",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_cancer_search.R": {
-      "hash": "0800ef0065269eb7e4435b17d608be9a676c45634ae7f4dd16e08bfe6360e0ee",
+      "hash": "446e85292f966bb09749af5c7e115b24035633a42e78bf665f546e1a85bc9407",
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/cancer-summary/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_genetox_details_search.R": {
-      "hash": "86de1d5a27c57b5047665107dcf1059e41edcc8df7942612a7c623dcf4c3caf1",
+      "hash": "56b3cd32ccb7579dc41eea5745cd954fb199dd3c4a1c0e9628ea0998a1d8702a",
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/genetox/details/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_genetox_search.R": {
-      "hash": "1df4ab6c5c98aee03a633921e656cf1df291a8ef144e20917391eab66de0aa2e",
+      "hash": "0f508cdb91f90d2530375e7751c3e5dae201ce219fc2d0f5e2c8e38f27145dd0",
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/genetox/summary/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_hawc_search.R": {
-      "hash": "b719ee9d326ad76a921bf73b6084df989a6cc36ec70dd1c9adf9049f00aefd5b",
+      "hash": "d0eab61a4a0353e94574ddd55f1e34cb25e98e954b1e3976921e797ec65f20de",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/hawc/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_iris_search.R": {
-      "hash": "ab69fb8f3146e1608388cb368606eca59060b305521b094ecfa9a8096792925b",
+      "hash": "a2a18b0303c89d4a36d208f5b7b03f2fed7aed8fed336621d667d82a45d8a701",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/iris/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_pprtv_search.R": {
-      "hash": "a8836276d456819b585bbd8203382c4e01d2b8abf86a9cbfaf94da2acbffd5e6",
+      "hash": "430a5fc6586dfb87c7df4c1a19bd1028bcfa60c3151b36ab83678106fe1e523d",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/pprtv/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_skin_eye_search.R": {
-      "hash": "7e4782c1cb05a1a4548875291d9d964bb9c4329ae73637385325d1fe01ae697c",
+      "hash": "3e88afb82616360d66ebdeb5b5e46336c242717e46a1050d478b0e80f5cb6819",
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/skin-eye/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_toxref_data_search.R": {
-      "hash": "db03b24566c0cecd2037249a56fcf2d4ad24fcf4da35c22449429ab55c9edbb1",
+      "hash": "91f218baa45e28eb8b44a93df208f0ca07b10894182124cf7b8d170a1c557767",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_toxref_data_search_by_study_id.R": {
-      "hash": "840531dd8d3bbb683ed261749765340846686038a62b884297fd64f613a5d8a1",
+      "hash": "e225d837666c381113625a2aa27d0d8878d48c8e9341bd1bc462f807d67c6d4c",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-id/{studyId}"
     },
     "R/ct_hazard_toxref_data_search_by_study_type.R": {
@@ -834,11 +834,11 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-type/{studyType}"
     },
     "R/ct_hazard_toxref_effects_search.R": {
-      "hash": "40df12f7e57b68b25fe0e7f99e0ce9830205da89f5a1252a8ef0f1d7227d25b0",
+      "hash": "170bc637b1959f121baa06bb6205d7603949fd684e083bc5e7c15f27bd866417",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_toxref_effects_search_by_study_id.R": {
-      "hash": "e0391b153e5084b172982fc3a8bbf3b5ffe96b875e4d09de9f483a57bf48d887",
+      "hash": "452a17825647e194cf5d91dd7a4b2de183d01026169cf727823b549abd80877c",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-study-id/{studyId}"
     },
     "R/ct_hazard_toxref_effects_search_by_study_type.R": {
@@ -846,11 +846,11 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-study-type/{studyType}"
     },
     "R/ct_hazard_toxref_observations_search.R": {
-      "hash": "85522624df3ac6cd96e1e6dfe768b44741e068b54faf597ba29b3fd130cb3e59",
+      "hash": "53bffab653c83a9ce7a95497464753941b5f1bc1bc78e220f97b7c02762175d0",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_toxref_observations_search_by_study_id.R": {
-      "hash": "5816e4fc373323caac99ddbfa112cd85bf58882cd1a6ffa5ed71a24bc5d5b9ea",
+      "hash": "f72f413ddd7a0186050c4d24738a2da443e10951493bd3157093ae9bea7f0303",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-study-id/{studyId}"
     },
     "R/ct_hazard_toxref_observations_search_by_study_type.R": {
@@ -858,15 +858,15 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-study-type/{studyType}"
     },
     "R/ct_hazard_toxref_search.R": {
-      "hash": "4188bccd0f35d4f27a47a54f23ee28a6cf1a9e52edc3c6a1cb65ffd108a53981",
+      "hash": "0e7d99d685b437b0f4d05fa9e42015243231ad159fcc04f603b444f6ac951dda",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}"
     },
     "R/ct_hazard_toxref_search_by_study_id.R": {
-      "hash": "cfdde9e84d86bcdc653c11ee7576f3d36db75161af25dbe352f06ee25ebd037f",
+      "hash": "7756c5684e57cc496ecf049be905a38e1e50c53fb637107b978381f7e02886b9",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-id/{studyId}"
     },
     "R/ct_hazard_toxref_search_by_study_type.R": {
-      "hash": "4dbbb352fd000390d07cc0182f1e97dc7e3025e8f197f1d89842b3c24da37f20",
+      "hash": "aab3807a54754a685ea3d97329ab2607f354b68c6a8496171d8ab5109d6756b9",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-type/{studyType}"
     },
     "R/ct_hazard_toxval_search.R": {
@@ -874,11 +874,11 @@
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_toxval_search_by_category.R": {
-      "hash": "8b2022e6accb3277cfca5b56886e14e875b2062cf2d03fa9b733ffae38ae105f",
+      "hash": "dc7b4d19b78b1a54653c5f3ce07bc4b56d68b21a2dd456a66100f56d004b2818",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-category/{dtxsid}"
     },
     "R/ct_hazard_toxval_supercategory_search.R": {
-      "hash": "8fb82eca5658121fb57706c332f77cc508b933eb3027b2d5a2cc572767b2f699",
+      "hash": "8124849c038c41b36ae9112371b0d48e906425d4a2cc3bd209773a809721592d",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"
     },
     "R/epi_ecosar_polymer_amphoteric.R": {
@@ -1858,11 +1858,11 @@
       "operations": "ctx-exposure-prod-full POST /exposure/seem/general/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_adme_ivive_search.R": {
-      "hash": "e4d1d661cdf490b54cfa125fee5906dde426b5a190962a7e6233a3089d11b4bf",
+      "hash": "0e3266dc27aac0f40b8aa83df9e74091d2dd97e9f32a9c1d3ad3f0d85e385492",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_cancer_search.R": {
-      "hash": "62dd2836589e07866c11917809e0c9967d9010f2e358b6afc59dc0ccc595b4b8",
+      "hash": "1424a78618e6b7193ded036b212a7a6c5f3b4dbb38780b54ebea9bcfb727c8f2",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_cancer_search_bulk.R": {
@@ -1870,7 +1870,7 @@
       "operations": "ctx-hazard-prod-rebuild POST /hazard/cancer-summary/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_genetox_details_search.R": {
-      "hash": "cd581bc5dac4c8582d8bdc80d589514e984683ed27a13ffe71ec13399230a5cd",
+      "hash": "4ab1b06c392558a08d59af57e77ceee094e65d952181edfc8790a2a0a5357c8f",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_genetox_details_search_bulk.R": {
@@ -1878,7 +1878,7 @@
       "operations": "ctx-hazard-prod-rebuild POST /hazard/genetox/details/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_genetox_search.R": {
-      "hash": "b5dd032037ec3c94bd66e5984d71ad7b95d4ddb083f64663ac972b8ce8a84902",
+      "hash": "96c784026deca9b648eac6c9384ad8a37ac2691d717bb0ec848c905a26108dc6",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_genetox_search_bulk.R": {
@@ -1886,19 +1886,19 @@
       "operations": "ctx-hazard-prod-rebuild POST /hazard/genetox/summary/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_hawc_search.R": {
-      "hash": "805c1612a51e8dce58f16f731bed9fa414d471bf420a138443e099d655f3d332",
+      "hash": "a526ce44f2ff0994d00415b0bef5941611a2cd2940729293f09d6e79fae9c012",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/hawc/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_iris_search.R": {
-      "hash": "d9d2f36003a1e9364e8f2893c811baa6534cb23c5c957e04c28d5a9b7e35c266",
+      "hash": "83f902d61731ab405d1bfc843d0f4f19d2c0e032d02cf7d19e14b9e1cad14eeb",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/iris/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_pprtv_search.R": {
-      "hash": "d0d69d606096aa2157529ec010da5faeea24f30a1803f6a45ed7163f5e6f2bb8",
+      "hash": "a9c1f294d69727a9a38d65c217f8e5649c8ce64d6118c8b3146e97bbe1e81bc9",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/pprtv/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_skin_eye_search.R": {
-      "hash": "79cda89ed3d8b5b3fe309ef4ad94fefb8525f3102193699f2f4ae0a6a38b2142",
+      "hash": "0d2384d057bd53e7f61daade5b94d11ce0a947bacc327bc697b46b1f5bc78d6d",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_skin_eye_search_bulk.R": {
@@ -1906,11 +1906,11 @@
       "operations": "ctx-hazard-prod-rebuild POST /hazard/skin-eye/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_data_search.R": {
-      "hash": "0ca37a25d98548c5351c8c0644c79e36e75e10dc67fcc168fc0fa98e444fc717",
+      "hash": "ad02354504721a5a838097ee6d44b16a74c7ea1c8791cbefcee5be107de4a292",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_data_search_by_study_id.R": {
-      "hash": "66d0f9cbf4da09ed71b496f961b588f34efa441580be9852f365853dea0f6c52",
+      "hash": "916ebd6405edf272b1d8520f4aae68c3421ca2001028d5947cde64dca1352775",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-id/{studyId}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_data_search_by_study_type.R": {
@@ -1918,11 +1918,11 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-type/{studyType}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_effects_search.R": {
-      "hash": "5d16a2343d060677cd30ba9d4b70071a1d8d5bf2c53064cc0d6354dbcf733199",
+      "hash": "2036d26949777cd41aec04398317d4daaf831ef8a46a27f90e670fe295e029d9",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_effects_search_by_study_id.R": {
-      "hash": "9b0bf81e2883508b86c084f22c5469fbb64ac6f2cd95f8559133c39353b7ed7a",
+      "hash": "398de2aa237e73e18000af8ee826e79a99c9a38543d06dbf2a728dbf4d9ce53c",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-study-id/{studyId}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_effects_search_by_study_type.R": {
@@ -1930,11 +1930,11 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-study-type/{studyType}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_observations_search.R": {
-      "hash": "c8e44d24cc7a9fbd5beaf45f70f000ac8101498f9b957c4f277b94edf6cd5381",
+      "hash": "12dd4434e74969b43fdccf53c945c7179a2b3d57624c8b78eae033e37e62b8c5",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_observations_search_by_study_id.R": {
-      "hash": "da2a694f45fdb70764dd9055e3bb351b1595dbe387493029b5a4182a198010a7",
+      "hash": "ee3151e39763e316a4edb2e3609c428767d01ded312944e3c6102e6a3f5cc7f8",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-study-id/{studyId}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_observations_search_by_study_type.R": {
@@ -1942,15 +1942,15 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-study-type/{studyType}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_search.R": {
-      "hash": "6e1dff30d7735b230f2065ee4cde50403b5fe6a7fcfc7dce741d130d0f7408b2",
+      "hash": "ffc5dd88f3d32089a9b0e9d63f191a1183b02ac6dca955489fb5ff6f3ca35711",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_search_by_study_id.R": {
-      "hash": "ff628bd366346d618cd122b1c60bb55c57f903b63b9a3a1472b0e34da4763521",
+      "hash": "01eaeb243d2a79d1aff3dbe903723449372fc66ce84f833ad5ee225d44ccad5e",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-id/{studyId}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_search_by_study_type.R": {
-      "hash": "3b73180a8e9ce1b9e3f9e19d501564e5b7556a6a54350c5d99878157744447bb",
+      "hash": "fbdf7b0843bb9c456bd5a91389e2bb0af92991076bdc11c33ad483e943cfdd8d",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-type/{studyType}"
     },
     "tests/testthat/test-contract-ct_hazard_toxval_search.R": {
@@ -1962,11 +1962,11 @@
       "operations": "ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_toxval_search_by_category.R": {
-      "hash": "5a7ae11081328ba29a78c353647195b2fcbcb93e98380a75705b637c8614013c",
+      "hash": "4ec0a60101e526bcd38ce8d7a74b4406b23dd20f4bc229c22a1c4736b50208ad",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-category/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_toxval_supercategory_search.R": {
-      "hash": "221fb60ec15f488c7bf78d1d755a182fd880eb712f4fee5c7030d06cc34ad953",
+      "hash": "ddc7038cee622e6de0263538863978b1660e9fb22318e8e7a80eb367e555c85f",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-epi_ecosar_polymer_amphoteric.R": {
@@ -2276,29 +2276,29 @@
     "R/ct_exposure_product_data_search.R": "b92cae629d38a96a800a9ee7f8fee308ba7b7c7a5dd1041c5faacba79bda4eb5",
     "R/ct_exposure_seem_demographic_search.R": "921e51a3253177911af87cd3b45c62d7aa7d51939b933226adf6621ebdea8465",
     "R/ct_exposure_seem_general_search.R": "161e0987f6ee694c593bf1affa24cb9231bbe84d692a431925fa9ab004488ecd",
-    "R/ct_hazard_adme_ivive_search.R": "4f62789d40069b71f8ea949b434c096d6f2852c5ea85876415e8137fa30301e6",
-    "R/ct_hazard_cancer_search.R": "0800ef0065269eb7e4435b17d608be9a676c45634ae7f4dd16e08bfe6360e0ee",
-    "R/ct_hazard_genetox_details_search.R": "86de1d5a27c57b5047665107dcf1059e41edcc8df7942612a7c623dcf4c3caf1",
-    "R/ct_hazard_genetox_search.R": "1df4ab6c5c98aee03a633921e656cf1df291a8ef144e20917391eab66de0aa2e",
-    "R/ct_hazard_hawc_search.R": "b719ee9d326ad76a921bf73b6084df989a6cc36ec70dd1c9adf9049f00aefd5b",
-    "R/ct_hazard_iris_search.R": "ab69fb8f3146e1608388cb368606eca59060b305521b094ecfa9a8096792925b",
-    "R/ct_hazard_pprtv_search.R": "a8836276d456819b585bbd8203382c4e01d2b8abf86a9cbfaf94da2acbffd5e6",
-    "R/ct_hazard_skin_eye_search.R": "7e4782c1cb05a1a4548875291d9d964bb9c4329ae73637385325d1fe01ae697c",
-    "R/ct_hazard_toxref_data_search.R": "db03b24566c0cecd2037249a56fcf2d4ad24fcf4da35c22449429ab55c9edbb1",
-    "R/ct_hazard_toxref_data_search_by_study_id.R": "840531dd8d3bbb683ed261749765340846686038a62b884297fd64f613a5d8a1",
+    "R/ct_hazard_adme_ivive_search.R": "8d2d00a8ae5c42e2690bc8a9ab42de76384e9e81c1ec92a002ba701455df5572",
+    "R/ct_hazard_cancer_search.R": "446e85292f966bb09749af5c7e115b24035633a42e78bf665f546e1a85bc9407",
+    "R/ct_hazard_genetox_details_search.R": "56b3cd32ccb7579dc41eea5745cd954fb199dd3c4a1c0e9628ea0998a1d8702a",
+    "R/ct_hazard_genetox_search.R": "0f508cdb91f90d2530375e7751c3e5dae201ce219fc2d0f5e2c8e38f27145dd0",
+    "R/ct_hazard_hawc_search.R": "d0eab61a4a0353e94574ddd55f1e34cb25e98e954b1e3976921e797ec65f20de",
+    "R/ct_hazard_iris_search.R": "a2a18b0303c89d4a36d208f5b7b03f2fed7aed8fed336621d667d82a45d8a701",
+    "R/ct_hazard_pprtv_search.R": "430a5fc6586dfb87c7df4c1a19bd1028bcfa60c3151b36ab83678106fe1e523d",
+    "R/ct_hazard_skin_eye_search.R": "3e88afb82616360d66ebdeb5b5e46336c242717e46a1050d478b0e80f5cb6819",
+    "R/ct_hazard_toxref_data_search.R": "91f218baa45e28eb8b44a93df208f0ca07b10894182124cf7b8d170a1c557767",
+    "R/ct_hazard_toxref_data_search_by_study_id.R": "e225d837666c381113625a2aa27d0d8878d48c8e9341bd1bc462f807d67c6d4c",
     "R/ct_hazard_toxref_data_search_by_study_type.R": "1fcb05c48d3b01c524810d5745864b3ed5dd5fdb6651a0b77d9f99076ec86f91",
-    "R/ct_hazard_toxref_effects_search.R": "40df12f7e57b68b25fe0e7f99e0ce9830205da89f5a1252a8ef0f1d7227d25b0",
-    "R/ct_hazard_toxref_effects_search_by_study_id.R": "e0391b153e5084b172982fc3a8bbf3b5ffe96b875e4d09de9f483a57bf48d887",
+    "R/ct_hazard_toxref_effects_search.R": "170bc637b1959f121baa06bb6205d7603949fd684e083bc5e7c15f27bd866417",
+    "R/ct_hazard_toxref_effects_search_by_study_id.R": "452a17825647e194cf5d91dd7a4b2de183d01026169cf727823b549abd80877c",
     "R/ct_hazard_toxref_effects_search_by_study_type.R": "3f8a34d0e44b21df5517722697029b1357e1012f414ad9b0a99d572e4bf5030c",
-    "R/ct_hazard_toxref_observations_search.R": "85522624df3ac6cd96e1e6dfe768b44741e068b54faf597ba29b3fd130cb3e59",
-    "R/ct_hazard_toxref_observations_search_by_study_id.R": "5816e4fc373323caac99ddbfa112cd85bf58882cd1a6ffa5ed71a24bc5d5b9ea",
+    "R/ct_hazard_toxref_observations_search.R": "53bffab653c83a9ce7a95497464753941b5f1bc1bc78e220f97b7c02762175d0",
+    "R/ct_hazard_toxref_observations_search_by_study_id.R": "f72f413ddd7a0186050c4d24738a2da443e10951493bd3157093ae9bea7f0303",
     "R/ct_hazard_toxref_observations_search_by_study_type.R": "a11161ba2517a604fb2d468eacf56619c53ea1f09639da7bdce2a1844b5441f3",
-    "R/ct_hazard_toxref_search.R": "4188bccd0f35d4f27a47a54f23ee28a6cf1a9e52edc3c6a1cb65ffd108a53981",
-    "R/ct_hazard_toxref_search_by_study_id.R": "cfdde9e84d86bcdc653c11ee7576f3d36db75161af25dbe352f06ee25ebd037f",
-    "R/ct_hazard_toxref_search_by_study_type.R": "4dbbb352fd000390d07cc0182f1e97dc7e3025e8f197f1d89842b3c24da37f20",
+    "R/ct_hazard_toxref_search.R": "0e7d99d685b437b0f4d05fa9e42015243231ad159fcc04f603b444f6ac951dda",
+    "R/ct_hazard_toxref_search_by_study_id.R": "7756c5684e57cc496ecf049be905a38e1e50c53fb637107b978381f7e02886b9",
+    "R/ct_hazard_toxref_search_by_study_type.R": "aab3807a54754a685ea3d97329ab2607f354b68c6a8496171d8ab5109d6756b9",
     "R/ct_hazard_toxval_search.R": "e1b61cd7dba5fb3d7db004bafb8bf9a0077acd4f4bbd173a288b78e958c13b44",
-    "R/ct_hazard_toxval_search_by_category.R": "8b2022e6accb3277cfca5b56886e14e875b2062cf2d03fa9b733ffae38ae105f",
-    "R/ct_hazard_toxval_supercategory_search.R": "8fb82eca5658121fb57706c332f77cc508b933eb3027b2d5a2cc572767b2f699",
+    "R/ct_hazard_toxval_search_by_category.R": "dc7b4d19b78b1a54653c5f3ce07bc4b56d68b21a2dd456a66100f56d004b2818",
+    "R/ct_hazard_toxval_supercategory_search.R": "8124849c038c41b36ae9112371b0d48e906425d4a2cc3bd209773a809721592d",
     "R/ct_related.R": "6903c01d8b08f861fb8065fdf1f70d93ce3a8e3308af541f561f4549b3ae9b4d",
     "R/ct_similar.R": "908cad81521f06388df4722e4b2c5c17a893f8b9584b5cadfe050ce2a77769e6",
     "R/data.R": "f9c54be716e4874035c2c24e55665057dc5b29e4a626f25811f2d1b2c64a054f",
@@ -2388,7 +2388,7 @@
     "apis/ctx-chemical-prod-rebuild.yml": "0da20d3e4a38cd2d28604067a644dac261f40f80b22876d9807ecdbca07f01a7",
     "apis/ctx-exposure-prod-full.yml": "6367d9d468e79d009e8e889fb8f687dadb17d746126ec58e20a9ffac46033714",
     "apis/ctx-exposure-prod-rebuild.yml": "18e010df260acc9b789278e833f223f5be3ebf65502485ed0fae13172d76db30",
-    "apis/ctx-hazard-prod-rebuild.yml": "5732370dcd4ede3f38a48c8d2f99845f2f83ff419ff752df748abb21e01161bd",
+    "apis/ctx-hazard-prod-rebuild.yml": "34315cbe98c9f0e1f3b9286fa96719a99e741121f808934dfddc8981bc7d731b",
     "apis/ctx-pilot.yml": "008550b2b74bee1b9cdeb6f69770d2556299eac31c69d84c62c0040903edc847",
     "apis/epi-pilot.yml": "4a81753827c8d51b245f307a318bb0565442d8f7fbafeda14e762484a2d3e66a",
     "apis/epi-suite-prod-full.yml": "5749a0815a8e96a197f345d69a6aa70269a9cf132aedfcae7d835b2dd49eb0bc",
@@ -2736,34 +2736,34 @@
     "man/ct_exposure_seem_demographic_search_bulk.Rd": "394be06ac771be7f8a66933b6d6b1463b841f2d702556a6ced3cdefd4932895e",
     "man/ct_exposure_seem_general_search.Rd": "2bd41c74a57a26ff14ddbe80bc4cf7749b2a29c2e9d7df3a16a4d59dbdd15d23",
     "man/ct_exposure_seem_general_search_bulk.Rd": "d2657701b7635123a0805245f3f40bcf7f4205b540cf7dd0e9445832d85b22fb",
-    "man/ct_hazard_adme_ivive_search.Rd": "6ddb2f939c97e9d16bdf889d26a22bb5b29f192f00235529c8cff80ca4b8d131",
-    "man/ct_hazard_cancer_search.Rd": "4ebfc55e3733e4013ea8a3319659b790ca0da3dd9d577bae717a8caff316fcef",
+    "man/ct_hazard_adme_ivive_search.Rd": "cefa1918b08869e4661aaec0d73478f6c0f9ff59913bfd357d30c7450049f3c3",
+    "man/ct_hazard_cancer_search.Rd": "b66f3b45dc37541132cd1a59c2a742c5844db559835d3c7bbb3cfe3e53d1e1fb",
     "man/ct_hazard_cancer_search_bulk.Rd": "f8fdedc7eb93e55c06485f03c3cf85ed5f6a2312753a7ff85428c03f9fd92e2e",
-    "man/ct_hazard_genetox_details_search.Rd": "bbbf63be1bc38bc702a573ca42adeb79b07e87b3d48a1bf84e96d45929c7b7e0",
+    "man/ct_hazard_genetox_details_search.Rd": "e533f2d1e083597164b4fdf798878c5c29ce0593aa4eae1bb41027cf0d46b712",
     "man/ct_hazard_genetox_details_search_bulk.Rd": "f34fc3d06287aa435ae86248aaf0528c773385b73a3983ee5840fc869b652e5a",
-    "man/ct_hazard_genetox_search.Rd": "300cec04d458674c4abb26f5687d79bb1a1d1a6566d37790ca6c17228d70e309",
+    "man/ct_hazard_genetox_search.Rd": "f27fe4366e9dd2a5a4a36fd3c366770fb17024121470189b76f22204c0db637d",
     "man/ct_hazard_genetox_search_bulk.Rd": "339b24141cd4849d6a34f4f1be4fc30542633c60d77d0ac980ffb93fd9b99f6d",
-    "man/ct_hazard_hawc_search.Rd": "686af5535105c91558ed4eb6f4335b85e7de02bb387cdb2b812361bb246df269",
-    "man/ct_hazard_iris_search.Rd": "804176aa21d7c2b25457e806c71493f38e5c2a59d46be95cd8fd56cbfe17055e",
-    "man/ct_hazard_pprtv_search.Rd": "9d2366aaae06458082e288b5e70ad109ef7571e3af1e5b9c0ad6e7505534a97d",
-    "man/ct_hazard_skin_eye_search.Rd": "b13381794a898c5b0c4ded16e785d87a8de9445e991558b61c497ddd9ef8d301",
+    "man/ct_hazard_hawc_search.Rd": "d1acd8565ab431f3ffac8cfe8591d581a179979283b09b15f67982ff23a0b85e",
+    "man/ct_hazard_iris_search.Rd": "665b6db22ae9c0613ab1e31bbd513aa6ee59518cf0d0a395b15c8534620d05b8",
+    "man/ct_hazard_pprtv_search.Rd": "beb287c54baaf37b7bc3706ecd8a8f84717c6dc6d359fc78f9a6f92885bc8cdb",
+    "man/ct_hazard_skin_eye_search.Rd": "deb1fa976ec4233eb62bfa39a8a3d123759ecee24bd81ee7b6accf505ba33c50",
     "man/ct_hazard_skin_eye_search_bulk.Rd": "9617b9bd42c31c10d7d5f44fff90935a2af20aaa5fb9d624283510da12e694b2",
-    "man/ct_hazard_toxref_data_search.Rd": "7694e1c463330d535f1a0d0cc56c6b153a394349de0fa7aa6f5ae554f8e76f88",
-    "man/ct_hazard_toxref_data_search_by_study_id.Rd": "640d6d9fc52f498cd04d0dbb48633703c55bc80a0d4b9aa6c0a7cae76bd8fb05",
+    "man/ct_hazard_toxref_data_search.Rd": "94709caa95ba5c5f6403b5adde2dd11b9c35896731d82a6e138484cd8a0e8b45",
+    "man/ct_hazard_toxref_data_search_by_study_id.Rd": "3bdccde5387a0af930cba93059dd94c0cb1502813ab75e90b95a51d497275f40",
     "man/ct_hazard_toxref_data_search_by_study_type.Rd": "12220eb54f3e751c7255e1274e25f6e48d0017c08f1d46432e54e69c440191e7",
-    "man/ct_hazard_toxref_effects_search.Rd": "25e8a0f9172f9791e7281b7fdb7facdd81835df573a49b4117c2e038b447ebdb",
-    "man/ct_hazard_toxref_effects_search_by_study_id.Rd": "9051bd20cc7079ad502f1fd1a8f2c1576c9e932f5d145eb471476d32bf6de138",
+    "man/ct_hazard_toxref_effects_search.Rd": "7a74f3606d8c0ec27afd84a5633c52d989e67e4d51b1c4b9886ff943426b2f99",
+    "man/ct_hazard_toxref_effects_search_by_study_id.Rd": "7e0a57ed84466faa7317b301e4f2f5c67ddb9ba2c71bda3fe986293606517ce5",
     "man/ct_hazard_toxref_effects_search_by_study_type.Rd": "350ac0e5675adbef6588e649e2109fa86918e867886e5b5c31a696e02f98226d",
-    "man/ct_hazard_toxref_observations_search.Rd": "a7424060ef5af2f447feccbcc3af8c715dd5ab860fc713f744e109a61de6da9c",
-    "man/ct_hazard_toxref_observations_search_by_study_id.Rd": "46f1e5f3e328c539a93be13b298e2f18c0a8e7af868cc6238c37b65f2e47c59c",
+    "man/ct_hazard_toxref_observations_search.Rd": "8b2a8b117b4d4862b23af7c500b9698be31883e5325c13e076c4f267780c2f41",
+    "man/ct_hazard_toxref_observations_search_by_study_id.Rd": "85db858224c62070e005ca46c027b58321fb0f1746d1c84f12b0280730069abe",
     "man/ct_hazard_toxref_observations_search_by_study_type.Rd": "7c7dab8d010322b5aedf58a2a2bf9b240e5db9970a513e67f160c7d20f61e3ff",
-    "man/ct_hazard_toxref_search.Rd": "3c957b49120cf94fc312a47b64740687e1df612f5b70d8ed8dae69ac5c0e0f10",
-    "man/ct_hazard_toxref_search_by_study_id.Rd": "46806dde78e4f399e1bcadafc6cde15f518f071c6a666cb41911389e1b8c9d96",
-    "man/ct_hazard_toxref_search_by_study_type.Rd": "9c0600ab3f2a923c0bb4a764ce514754ce4165690d270a32642ebcfb6c758803",
+    "man/ct_hazard_toxref_search.Rd": "6626f7bf2bad062fbd84e696f196dae8bced93707cc34ef57b3e0ebec1a19a04",
+    "man/ct_hazard_toxref_search_by_study_id.Rd": "8a939e13e5745b3a5a89bf4984bc9bc839c1a2012dbf360a8338f3c1f1bec16b",
+    "man/ct_hazard_toxref_search_by_study_type.Rd": "f0dcbbd3f7da3c300322ed7b1818ccf02dde8113c872d44c3e09512a9ad09675",
     "man/ct_hazard_toxval_search.Rd": "740e4c380ad0902daf98c5a7de9aed9df55875ef538638b0afdd974096f760f7",
     "man/ct_hazard_toxval_search_bulk.Rd": "dc987c60206c56296ad39c4c25ecd1a6b05438667877f89dfe07689b2016995e",
-    "man/ct_hazard_toxval_search_by_category.Rd": "9f89c6fa9bf865f09ce8dbe95a02fc172e96916f37d1d0f136ad46782e6ea1bd",
-    "man/ct_hazard_toxval_supercategory_search.Rd": "28be1fcf0e628913d859409703252781108768456cccdf68b345f1231b4d3980",
+    "man/ct_hazard_toxval_search_by_category.Rd": "c75033ff6aa12908110d30285fb2cdf94794a1ee4058d222b377b9b88050c9cf",
+    "man/ct_hazard_toxval_supercategory_search.Rd": "745661e317ba9d395f043dbf3c4aedae5295cbf8dff4dd9f58d4b141123047c3",
     "man/ct_related.Rd": "7d7dc45560a6ce4e165836ac63d54adf12b3a77665941c760355cabc21d42c66",
     "man/ct_schema.Rd": "156252ad16bb5ec61234d843a23ded920dbe354e824e85a7473bb2318d76e92f",
     "man/ct_similar.Rd": "3c553de1c5c8d92b8d9dec9be73c0ae2aa388f5a7845e2f631ac03a42bfd05ec",
@@ -2900,7 +2900,7 @@
     "specmill.yml": "911106dc215d6fd52b5c416bc526c31930ff1f0176750aa6e6537b13da87ac09",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "953cd8c8f3f5748331e5de42d3dc4003f764c40bf1a75f0542c732c67f73366d",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "23f217b16269afc3feea27bbd3f425655b257065b1afacc93488a710d84b066e"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "ac55e914d516e9a2624abb8656f65d12f59e7467134eb24c8b6f5cba7e1ea28d"
   },
   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
   "formatter": {
