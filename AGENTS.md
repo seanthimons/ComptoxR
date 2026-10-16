@@ -8,7 +8,11 @@ issue in [seanthimons/specmill](https://github.com/seanthimons/specmill) to
 fix it there. Don't work around it locally with a hand-written wrapper, a
 patched helper, or a change to `generic_request`.
 
-Each issue should include:
+File it as soon as you find the gap; don't ask first. If the gap is in an
+open Specmill PR (a fix under test that doesn't fully work), comment on that
+PR instead of opening a new issue. Tell the user what you filed and link it.
+
+Each issue or comment should include:
 
 - the ComptoxR wrapper and the operation it calls (method, path, schema file);
 - what the old wrapper did, and what Specmill produces instead or can't produce;
