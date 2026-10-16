@@ -153,18 +153,16 @@ test_that("response observer sees batched and paginated helper responses", {
   expect_identical(statuses, c(200L, 200L))
 
   statuses <- integer()
+  # Paging sends one request per page through httr2::req_perform().
+  pages <- c(
+    '{"totalRecordsCount":2,"recordsCount":1,"offset":0,"records":[{"id":1}]}',
+    '{"totalRecordsCount":2,"recordsCount":1,"offset":1,"records":[{"id":2}]}'
+  )
   testthat::local_mocked_bindings(
-    req_perform_iterative = function(req, ...) {
-      list(
-        probe_json_response(
-          req,
-          body = '{"totalRecordsCount":2,"recordsCount":1,"offset":0,"records":[{"id":1}]}'
-        ),
-        probe_json_response(
-          req,
-          body = '{"totalRecordsCount":2,"recordsCount":1,"offset":1,"records":[{"id":2}]}'
-        )
-      )
+    req_perform = function(req, ...) {
+      page <- pages[[1]]
+      pages <<- pages[-1]
+      probe_json_response(req, body = page)
     },
     .package = "httr2"
   )
