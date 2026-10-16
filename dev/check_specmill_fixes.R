@@ -38,29 +38,45 @@ check_specmill_fixes <- function(live = FALSE) {
       paste(names(counts), counts, sep = "=", collapse = " "))
   }
 
-  # specmill#101: a generated wrapper fetches every page by default and stops on an empty page.
+  # specmill#101: a generated wrapper fetches every page by default and returns the records.
+  # CTX wraps each page in {data, pageNumber, recordsOnPage, totalPages, totalRecords}; past the
+  # last page it still returns the envelope with empty data, so the stop must use totalPages.
   fn <- "ct_hazard_toxref_data_search_by_study_type"
   check(101, "paginated wrapper is generated with .ct_request", uses_ct_request(fn))
   pages <- list(
     list(list(studyType = "DEV", sex = "F"), list(studyType = "DEV", sex = "F")),
-    list(list(studyType = "DEV", sex = "M")),
-    list()
+    list(list(studyType = "DEV", sex = "M"))
   )
   requested <- integer()
   mock_pages <- function(req) {
     page <- as.integer(httr2::url_parse(req$url)$query$pageNumber %||% 1)
     requested <<- c(requested, page)
-    json(if (page <= length(pages)) pages[[page]] else list())
+    data <- if (page <= length(pages)) pages[[page]] else list()
+    json(list(
+      studyType = "DEV", totalRecords = 3L, recordsOnPage = length(data),
+      pageNumber = page, totalPages = length(pages), data = data
+    ))
   }
   out <- httr2::with_mocked_responses(mock_pages, ns[[fn]]("DEV"))
-  check(101, "fetches all pages by default", NROW(out) == 3 && identical(requested, 1:3), paste("pages", paste(requested, collapse = ",")))
+  check(101, "fetches pages 1..totalPages by default", NROW(out) == 3 && identical(requested, 1:2),
+    sprintf("%d rows, pages %s", NROW(out), paste(utils::head(requested, 5), collapse = ",")))
+  check(101, "returns records, not page envelopes", !any(c("data", "totalPages") %in% names(out)),
+    paste(utils::head(names(out), 6), collapse = ","))
   check(101, "keeps types across pages", identical(out$sex, c("F", "F", "M")), paste(out$sex, collapse = ","))
   if ("all_pages" %in% names(formals(ns[[fn]]))) {
     requested <- integer()
     out <- httr2::with_mocked_responses(mock_pages, ns[[fn]]("DEV", all_pages = FALSE))
-    check(101, "all_pages = FALSE fetches one page", NROW(out) == 2 && identical(requested, 1L))
+    check(101, "all_pages = FALSE fetches one page", NROW(out) == 2 && identical(requested, 1L),
+      sprintf("%d rows, pages %s", NROW(out), paste(utils::head(requested, 5), collapse = ",")))
   } else {
     check(101, "all_pages = FALSE fetches one page", FALSE, "no all_pages argument")
+  }
+
+  if (live) {
+    # DNT: 3 pages of up to 10000, 28039 records (checked 2026-10-16).
+    live_out <- ns[[fn]]("DNT")
+    check(101, "live DNT returns every record", NROW(live_out) == 28039 && !"data" %in% names(live_out),
+      sprintf("%d rows", NROW(live_out)))
   }
 
   # specmill#102: group totals count every operation in the schemas their services reference.
