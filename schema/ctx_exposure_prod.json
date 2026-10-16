@@ -77,6 +77,11 @@
           "lowerweightfraction": {
             "type": "number"
           },
+          "prodName": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string"
+          },
           "prod_type": {
             "maxLength": 100,
             "minLength": 0,
@@ -84,11 +89,6 @@
           },
           "prodfam": {
             "maxLength": 50,
-            "minLength": 0,
-            "type": "string"
-          },
-          "prodName": {
-            "maxLength": 255,
             "minLength": 0,
             "type": "string"
           },
@@ -153,26 +153,6 @@
         },
         "type": "object"
       },
-      "CCDProductionVolume": {
-        "properties": {
-          "amount": {
-            "type": "string"
-          },
-          "dtxsid": {
-            "maxLength": 50,
-            "minLength": 0,
-            "type": "string"
-          },
-          "id": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "CCDProductUseCategory": {
         "properties": {
           "definition": {
@@ -214,6 +194,26 @@
           "pucKind": {
             "maxLength": 50,
             "minLength": 0,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CCDProductionVolume": {
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "dtxsid": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
             "type": "string"
           }
         },
