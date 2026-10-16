@@ -129,6 +129,8 @@
 
 # Specmill response policy: the same tibble output as generic_request(tidy = TRUE).
 .ct_tidy <- function(response, context, decode) {
+  # probe_api_function() reads HTTP statuses through this observer.
+  observe_api_responses(list(response))
   body <- unwrap_collection_envelope(decode())
   # The API doesn't echo the input on single-object responses; name it in a query column.
   single <- is.list(body) && !is.null(names(body))
@@ -140,6 +142,7 @@
 
 # Specmill response policy for paged CTX endpoints: each page is an envelope around `data`.
 .ct_paged <- function(response, context, decode) {
+  observe_api_responses(list(response))
   body <- decode()
   table <- .ct_request_table(
     .ct_request_records(body, collection = 'data'),
