@@ -25,43 +25,24 @@ selection:
   - GET /chemical/synonym/search/by-dtxsid/{dtxsid}
 helper: generic_request
 documentation: yes
+authentication:
+  api_key: ctx
 operations:
   GET /chemical/count/by-exact-formula/{formula}:
     name: ct_chemical_count_by_exact_formula
     file: R/ct_chemical_count_by_exact_formula.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      formula:
-        type: character
-        required: yes
-        description: 'Chemical formula. Type: string'
-      projection:
-        type: character
-        default: count
-        description: 'Optional parameter (default: count)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - formula
-        endpoint:
-          value: chemical/count/by-exact-formula/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
     docs:
       title: Get chemical count by exact formula
       lifecycle: experimental
-      parameters:
-        formula: 'Chemical formula. Type: string'
-        projection: 'Optional parameter (default: count)'
       return: Returns a tibble with results
       tags:
         apiStage: public
@@ -70,39 +51,18 @@ operations:
   GET /chemical/count/by-msready-formula/{formula}:
     name: ct_chemical_count_by_msready_formula
     file: R/ct_chemical_count_by_msready_formula.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      formula:
-        type: character
-        required: yes
-        description: 'Chemical formula. Type: string'
-      projection:
-        type: character
-        default: count
-        description: 'Optional parameter (default: count)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - formula
-        endpoint:
-          value: chemical/count/by-msready-formula/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
     docs:
       title: Get chemical count by MS-ready formula
       lifecycle: experimental
-      parameters:
-        formula: 'Chemical formula. Type: string'
-        projection: 'Optional parameter (default: count)'
       return: Returns a tibble with results
       tags:
         apiStage: public
@@ -143,31 +103,19 @@ operations:
   GET /chemical/extra-data/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_extra_data_search
     file: R/ct_chemical_extra_data_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chemical/extra-data/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get data by DTXSID
       lifecycle: experimental
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -373,31 +321,19 @@ operations:
   GET /chemical/msready/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_msready_search_by_dtxcid
     file: R/ct_chemical_msready_search_by_dtxcid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxcid:
-        type: character
-        required: yes
-        description: 'DSSTox Compound Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxcid
-        endpoint:
-          value: chemical/msready/search/by-dtxcid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxcid
+      on_error: drop
     docs:
       title: Get MS-ready chemicals by DTXCID
       lifecycle: experimental
-      parameters:
-        dtxcid: 'DSSTox Compound Identifier. Type: string'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -405,31 +341,19 @@ operations:
   GET /chemical/msready/search/by-formula/{formula}:
     name: ct_chemical_msready_search_by_formula
     file: R/ct_chemical_msready_search_by_formula.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      formula:
-        type: character
-        required: yes
-        description: 'Chemical formula. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - formula
-        endpoint:
-          value: chemical/msready/search/by-formula/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
     docs:
       title: Get MS-ready chemicals by formula
       lifecycle: experimental
-      parameters:
-        formula: 'Chemical formula. Type: string'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -437,31 +361,19 @@ operations:
   GET /chemical/search/by-exact-formula/{formula}:
     name: ct_chemical_search_by_exact_formula
     file: R/ct_chemical_search_by_exact_formula.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      formula:
-        type: character
-        required: yes
-        description: 'Chemical formula. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - formula
-        endpoint:
-          value: chemical/search/by-exact-formula/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
     docs:
       title: Get chemicals by exact formula
       lifecycle: experimental
-      parameters:
-        formula: 'Chemical formula. Type: string'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -501,31 +413,19 @@ operations:
   GET /chemical/search/by-msready-formula/{formula}:
     name: ct_chemical_search_by_msready_formula
     file: R/ct_chemical_search_by_msready_formula.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      formula:
-        type: character
-        required: yes
-        description: 'Chemical formula. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - formula
-        endpoint:
-          value: chemical/search/by-msready-formula/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
     docs:
       title: Get chemicals by MS-ready formula
       lifecycle: experimental
-      parameters:
-        formula: 'Chemical formula. Type: string'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -533,53 +433,19 @@ operations:
   GET /chemical/search/contain/{word}:
     name: ct_chemical_search_contain
     file: R/ct_chemical_search_contain.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      word:
-        type: character
-        required: yes
-        description: 'Substring of word to seach for. Values supplied as the ''word''
-          parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number
-          (CASRN), or InChIKey.. Type: string'
-      top:
-        type: numeric
-        default: 0.0
-        description: 'Optional parameter (default: 0)'
-      projection:
-        type: character
-        default: chemicalsearchall
-        description: 'Optional parameter (default: chemicalsearchall)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - word
-        endpoint:
-          value: chemical/search/contain/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        top:
-          from:
-          - params
-          - top
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: word
+      on_error: drop
     docs:
       title: Get chemicals by substring value
       lifecycle: experimental
-      parameters:
-        word: 'Substring of word to seach for. Values supplied as the ''word'' parameter
-          can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN),
-          or InChIKey.. Type: string'
-        top: 'Optional parameter (default: 0)'
-        projection: 'Optional parameter (default: chemicalsearchall)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -587,44 +453,19 @@ operations:
   GET /chemical/search/start-with/{word}:
     name: ct_chemical_search_start_with
     file: R/ct_chemical_search_start_with.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      word:
-        type: character
-        required: yes
-        description: 'Starting string of word to search for. Values supplied as the
-          ''word'' parameter can include chemical name, DTXSID, DTXCID, CAS Registry
-          Number (CASRN), or InChIKey.. Type: string'
-      top:
-        type: numeric
-        default: 500.0
-        description: 'Optional parameter (default: 500)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - word
-        endpoint:
-          value: chemical/search/start-with/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        top:
-          from:
-          - params
-          - top
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: word
+      on_error: drop
     docs:
       title: Get chemicals by starting value
       lifecycle: experimental
-      parameters:
-        word: 'Starting string of word to search for. Values supplied as the ''word''
-          parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number
-          (CASRN), or InChIKey.. Type: string'
-        top: 'Optional parameter (default: 500)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -664,42 +505,19 @@ operations:
   GET /chemical/synonym/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_synonym_search
     file: R/ct_chemical_synonym_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-      projection:
-        type: character
-        default: ~
-        description: 'Projections available include: ccd-synonyms and chemical-synonym-all.
-          By default, chemical-synonym-all will be returned.'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chemical/synonym/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get synonyms by DTXSID
       lifecycle: experimental
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-        projection: 'Projections available include: ccd-synonyms and chemical-synonym-all.
-          By default, chemical-synonym-all will be returned.'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:

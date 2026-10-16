@@ -14,7 +14,7 @@ testthat::test_that("ct_chemical_search_contain completes the fixed call sequenc
       contract$calls[[position]]$response
     }
   }
-  testthat::local_mocked_bindings(generic_request = mock_for("generic_request"), .package = "ComptoxR")
+  testthat::local_mocked_bindings(.ct_request = mock_for(".ct_request"), .package = "ComptoxR")
   result <- do.call(ComptoxR::ct_chemical_search_contain, contract$inputs)
   testthat::expect_identical(captured, lapply(contract$calls, function(x) x[c('helper', 'arguments')]))
   testthat::expect_identical(result, contract$result)

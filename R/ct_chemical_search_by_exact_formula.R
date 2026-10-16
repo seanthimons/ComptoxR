@@ -3,8 +3,8 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param formula Chemical formula. Type: string
-#' @return Returns a tibble with results (array of objects)
+#' @param formula formula Accepts a vector: one request is sent per element and the results are combined.
+#' @return Returns a tibble with results
 #' @apiStage public
 #' @export
 #' @examples
@@ -13,12 +13,43 @@
 #' }
 # Generated with specmill; do not edit by hand.
 ct_chemical_search_by_exact_formula <- function(formula) {
-  params <- base::list("formula" = formula)
-  result <- generic_request(
-    "query" = params[["formula"]],
-    "endpoint" = "chemical/search/by-exact-formula/",
-    "method" = "GET",
-    "batch_limit" = 1
+  if (base::is.null(formula)) {
+    base::stop("Required input: formula")
+  }
+  .api_validation$parameter_values(
+    base::list("formula" = formula),
+    list(formula = list(type = "array", items = list(type = "string"))),
+    .api_validation$body_value,
+    c(formula = "path")
   )
-  result
+  params <- base::list("formula" = formula)
+  send <- function(params) {
+    result <- .ct_request(
+      method = "GET",
+      path = "/chemical/search/by-exact-formula/{formula}",
+      path_params = base::list("formula" = params[["formula"]]),
+      query = base::list(),
+      body = NULL,
+      response_policy = ".ct_tidy",
+      server = list(url = "https://comptox.epa.gov/ctx-api"),
+      server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
+      auth = list(list(list(
+        scheme = "ctx",
+        type = "apiKey",
+        location = "header",
+        name = "x-api-key",
+        envvar = "ctx_api_key"
+      )))
+    )
+    result
+  }
+  .ct_request_each(
+    function(chunk) {
+      params["formula"] <- base::list(chunk)
+      send(params)
+    },
+    params[["formula"]],
+    1L,
+    on_error = "drop"
+  )
 }

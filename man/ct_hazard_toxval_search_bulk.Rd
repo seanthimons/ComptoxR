@@ -4,10 +4,10 @@
 \alias{ct_hazard_toxval_search_bulk}
 \title{Get data for a batch of DTXSID(s).}
 \usage{
-ct_hazard_toxval_search_bulk(body)
+ct_hazard_toxval_search_bulk(dtxsid)
 }
 \arguments{
-\item{body}{Request body. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
+\item{dtxsid}{DSSTox substance identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxval_search_bulk(body = list("DTXSID1024122", "DTXSID4020533"))
+ct_hazard_toxval_search_bulk(dtxsid = list("DTXSID1024122", "DTXSID4020533"))
 }
 }

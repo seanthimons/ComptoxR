@@ -33,100 +33,55 @@ operations:
   GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_functional_use_probability_search
     file: R/ct_exposure_functional_use_probability_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: exposure/functional-use/probability/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get functional use probability by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID0020232
   GET /exposure/functional-use/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_functional_use_search
     file: R/ct_exposure_functional_use_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: exposure/functional-use/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get functional use data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID0020232
   GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_seem_demographic_search
     file: R/ct_exposure_seem_demographic_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-      projection:
-        type: character
-        default: ~
-        description: 'Specifies whether to use projection. Optional: ccd-demographic.'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: exposure/seem/demographic/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get SEEM Demographic Exposure Prediction data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-        projection: 'Specifies whether to use projection. Optional: ccd-demographic.'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID0020232
   POST /exposure/functional-use/search/by-dtxsid/:

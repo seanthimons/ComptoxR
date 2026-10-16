@@ -16,7 +16,7 @@ testthat::test_that("ct_exposure_ccd_chem_weight_fractions_search completes the 
       contract$calls[[position]]$response
     }
   }
-  testthat::local_mocked_bindings(generic_request = mock_for("generic_request"), .package = "ComptoxR")
+  testthat::local_mocked_bindings(.ct_request = mock_for(".ct_request"), .package = "ComptoxR")
   result <- do.call(ComptoxR::ct_exposure_ccd_chem_weight_fractions_search, contract$inputs)
   testthat::expect_identical(captured, lapply(contract$calls, function(x) x[c('helper', 'arguments')]))
   testthat::expect_identical(result, contract$result)

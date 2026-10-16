@@ -7,16 +7,16 @@
 ct_bioactivity_data_search_by_m4id(m4id)
 }
 \arguments{
-\item{m4id}{M4ID. Type: integer}
+\item{m4id}{m4id Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_search_by_m4id(m4id = "7826737")
+ct_bioactivity_data_search_by_m4id(m4id = 7826737L)
 }
 }
