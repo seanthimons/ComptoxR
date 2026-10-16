@@ -2,7 +2,7 @@
   "version": 1,
   "files": {
     "R/api_auth.R": {
-      "hash": "d9b44ff230dbbe5435cf25ef50b75ba411b381fef71028612251e67f4cafb6b4",
+      "hash": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
       "operations": "specmill authentication"
     },
     "R/api_validation.R": {
@@ -830,7 +830,7 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-id/{studyId}"
     },
     "R/ct_hazard_toxref_data_search_by_study_type.R": {
-      "hash": "1fcb05c48d3b01c524810d5745864b3ed5dd5fdb6651a0b77d9f99076ec86f91",
+      "hash": "ef955647e5e124ef759c9323eb9f0d178e53f783b697d4c54e7981c6dab14a1f",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-type/{studyType}"
     },
     "R/ct_hazard_toxref_effects_search.R": {
@@ -870,7 +870,7 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-type/{studyType}"
     },
     "R/ct_hazard_toxval_search.R": {
-      "hash": "e1b61cd7dba5fb3d7db004bafb8bf9a0077acd4f4bbd173a288b78e958c13b44",
+      "hash": "23a90f4167ad3fe4c6a0d52a9d8a95eb15101dcb381757d5e6e3b017e7626764",
       "operations": ["ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_toxval_search_by_category.R": {
@@ -1914,7 +1914,7 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-id/{studyId}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_data_search_by_study_type.R": {
-      "hash": "9e9ee3cdcc41d0157a50e122ce68392beef574da18767a86334934ddde255a66",
+      "hash": "b264d036bf9259bdbd366a32b8a181af963df5551876fa9ebdd0836442776b62",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-type/{studyType}"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_effects_search.R": {
@@ -1958,7 +1958,7 @@
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_hazard_toxval_search_bulk.R": {
-      "hash": "21bde4d63b94b7676d871d28d7fbd5caa2ef9763c06d7d99bd67dd6bbbcdb89a",
+      "hash": "64deb2f9b61b709f8319d530f92aad64932b1d4d49a96e872c3c77d61f1dd55a",
       "operations": "ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_toxval_search_by_category.R": {
@@ -2002,13 +2002,13 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.16",
+  "toolkit_version": "0.1.17",
   "inputs": {
     "DESCRIPTION": "3eb80bd7eb26cc8be3a18e8dcd418c73a87d9ed86ed2562b47b74e118903609e",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
     "NAMESPACE": "85f2e1cd8da15eb12eae45766c105d3c7deb92d5a6ed3b63e3226c4bd832871c",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
-    "R/api_auth.R": "d9b44ff230dbbe5435cf25ef50b75ba411b381fef71028612251e67f4cafb6b4",
+    "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
     "R/api_validation.R": "11fe67fe5c6d45339c3095f51ce1d27026a55ac085387bd59a9e1464901fdcad",
     "R/chemi_alerts.R": "06d82edbfc21e80604f654d034606d72f03545cb2edb199cd5709d931cb6c0bc",
     "R/chemi_alerts_alerts.R": "d9449ac36904d3826633e15e7f4a6391bcdfc89501d095ecbb1519adf9a006e0",
@@ -2286,7 +2286,7 @@
     "R/ct_hazard_skin_eye_search.R": "3e88afb82616360d66ebdeb5b5e46336c242717e46a1050d478b0e80f5cb6819",
     "R/ct_hazard_toxref_data_search.R": "91f218baa45e28eb8b44a93df208f0ca07b10894182124cf7b8d170a1c557767",
     "R/ct_hazard_toxref_data_search_by_study_id.R": "e225d837666c381113625a2aa27d0d8878d48c8e9341bd1bc462f807d67c6d4c",
-    "R/ct_hazard_toxref_data_search_by_study_type.R": "1fcb05c48d3b01c524810d5745864b3ed5dd5fdb6651a0b77d9f99076ec86f91",
+    "R/ct_hazard_toxref_data_search_by_study_type.R": "ef955647e5e124ef759c9323eb9f0d178e53f783b697d4c54e7981c6dab14a1f",
     "R/ct_hazard_toxref_effects_search.R": "170bc637b1959f121baa06bb6205d7603949fd684e083bc5e7c15f27bd866417",
     "R/ct_hazard_toxref_effects_search_by_study_id.R": "452a17825647e194cf5d91dd7a4b2de183d01026169cf727823b549abd80877c",
     "R/ct_hazard_toxref_effects_search_by_study_type.R": "3f8a34d0e44b21df5517722697029b1357e1012f414ad9b0a99d572e4bf5030c",
@@ -2296,7 +2296,7 @@
     "R/ct_hazard_toxref_search.R": "0e7d99d685b437b0f4d05fa9e42015243231ad159fcc04f603b444f6ac951dda",
     "R/ct_hazard_toxref_search_by_study_id.R": "7756c5684e57cc496ecf049be905a38e1e50c53fb637107b978381f7e02886b9",
     "R/ct_hazard_toxref_search_by_study_type.R": "aab3807a54754a685ea3d97329ab2607f354b68c6a8496171d8ab5109d6756b9",
-    "R/ct_hazard_toxval_search.R": "e1b61cd7dba5fb3d7db004bafb8bf9a0077acd4f4bbd173a288b78e958c13b44",
+    "R/ct_hazard_toxval_search.R": "23a90f4167ad3fe4c6a0d52a9d8a95eb15101dcb381757d5e6e3b017e7626764",
     "R/ct_hazard_toxval_search_by_category.R": "a11a3694487d5999d58f292fc5bdb1ebed0afc53f871e0ccd2aba8a77731d924",
     "R/ct_hazard_toxval_supercategory_search.R": "8124849c038c41b36ae9112371b0d48e906425d4a2cc3bd209773a809721592d",
     "R/ct_related.R": "6903c01d8b08f861fb8065fdf1f70d93ce3a8e3308af541f561f4549b3ae9b4d",
@@ -2341,7 +2341,7 @@
     "R/pubchem_synonyms.R": "d1aabf4b99913a1175663528576ceed7aba9cefefb0bb9f785c8ce7979840146",
     "R/roxy_apistage.R": "e69b42018b719976b8a8e06c7d7bdb3c1f73651c2038b2cc4deee809688ba788",
     "R/schema.R": "b966d2645ff5ba50545fffe64884e940e9765b19cc3b736be3e069ea49bb7a5c",
-    "R/service_endpoints.R": "583e80b86e444d711e4201757f4a0ce025213cdc4aaf52c99dc16a181a2769fc",
+    "R/service_endpoints.R": "3af0e166b51dfa4f11314451b5a3edc5cdff9100ff223e2c0a9a0d57ca627df7",
     "R/tox_connection.R": "bf409d84aa2a4ca3349fa566b24a2f1ed27bef6395cb02e0ac6ae105845d1ff5",
     "R/tox_functions.R": "394a5a9e18716dda8a438d667135fdfb39d24fc8415c582522d4ea79f2bf2658",
     "R/util_cas.R": "882d1e38b212775958ece2a7fe1b9f7ea8d09687a81ee8dd3700e787b3c1dd24",
@@ -2352,8 +2352,8 @@
     "R/utils-pipe.R": "46373367178015c987248669ea7eeb34d4f52598e1ef5ea4ecb1351c75091312",
     "R/z_db_download.R": "9a268696141778e16af30ed29e09dbb082865ab72f322660140d1af7b1fda635",
     "R/z_db_version.R": "9e4e15ea5311098c605f0c13dd20df6acd635514435c26fa1da99c551559bc7e",
-    "R/z_generic_request.R": "240b92b00c11f5d09390b8ef452e0e9676a3d9525a20a518438bfb25deb177dc",
-    "R/z_specmill_request.R": "62ba266f04977187a61575b9f9f5c08626fd1d242665c2b75b50697fcd026bdb",
+    "R/z_generic_request.R": "32ca68e0bdd87ace101b6205377c9116a6374643ee464a88f8dfbcbfb6a2c64e",
+    "R/z_specmill_request.R": "32e650e6b0cc93d1a693fc310d84e3da974f95cd0c526d8036f2f1b3f076ca41",
     "R/zzz.R": "0030a14d94dff8e0b90bc40014744a02ecc86dab2217e0ed8db6d0be2753008a",
     "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
     "apis/alerts-pilot.yml": "98111708ad28031ace7af599cc1154b7d82d434e1127ab41b4362fb6ef88505b",
@@ -2388,7 +2388,7 @@
     "apis/ctx-chemical-prod-rebuild.yml": "71d856ebe4c59d5a0ecb5c97d0e59ff190ddc101d2cdd2b019b9bfdd18f2bb26",
     "apis/ctx-exposure-prod-full.yml": "06b6990fd5e0dd2cc3ee01dddba5f62711fc8d0b3f39f858fd019932efd316a2",
     "apis/ctx-exposure-prod-rebuild.yml": "fb8a7275aac9d4ea007075950ac4ce7b244e0b3f5c213db749f649abbe217d50",
-    "apis/ctx-hazard-prod-rebuild.yml": "e3de38e7a6982a9f924759db37da3fad10cedaafff7c955bb95d337e7d7f37c5",
+    "apis/ctx-hazard-prod-rebuild.yml": "16ddfd19b28131f1912dcae1bc0d3a334239bd25a6ac90a4d8a60693d033db48",
     "apis/ctx-pilot.yml": "008550b2b74bee1b9cdeb6f69770d2556299eac31c69d84c62c0040903edc847",
     "apis/epi-pilot.yml": "4a81753827c8d51b245f307a318bb0565442d8f7fbafeda14e762484a2d3e66a",
     "apis/epi-suite-prod-full.yml": "5749a0815a8e96a197f345d69a6aa70269a9cf132aedfcae7d835b2dd49eb0bc",
@@ -2898,9 +2898,9 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "specmill.yml": "911106dc215d6fd52b5c416bc526c31930ff1f0176750aa6e6537b13da87ac09",
-    "tests/testthat/fixtures/specmill-full-contracts.rds": "523e746744897054c7cbde681f909131eb1ac6ded63d4e5b4c4533a6b587dceb",
+    "tests/testthat/fixtures/specmill-full-contracts.rds": "a4d8593840ca3f680c87f1a65d160f88ee9d47021693108d0d3864b7c177d8c2",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "d3c1da2e8f833c0450440cf06077f7285c89abdaf9621d5d66619ee77b09feeb"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "9fbe4cd75eccd435548eed82864725c2a5dc683ecfbd0165235269af70443d72"
   },
   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
   "formatter": {

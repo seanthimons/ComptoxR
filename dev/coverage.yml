@@ -3,13 +3,17 @@ baseline: dev/coverage-baseline.json
 groups:
   ccd:
     services: '^ctx-'
+    denominator: schema
     label: CCD coverage
     badge: .github/badges/ccd-coverage.json
   chemi:
     services: '^(chemi|alerts|amos|search)-'
+    exclude: ['^OPTIONS ']
+    denominator: schema
     label: Cheminformatic coverage
     badge: .github/badges/chemi-coverage.json
   epi:
     services: '^epi-'
+    denominator: schema
     label: EPI Suite coverage
     badge: .github/badges/epi-coverage.json

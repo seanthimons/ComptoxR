@@ -2,6 +2,7 @@
 testthat::test_that("ct_hazard_toxval_search_bulk completes the fixed call sequence", {
   contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["ct_hazard_toxval_search_bulk"]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
+  names(contract$inputs)[names(contract$inputs) == "body"] <- "dtxsid"
   captured <- list()
   mock_for <- function(name) {
     force(name)

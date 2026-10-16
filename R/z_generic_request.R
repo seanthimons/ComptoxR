@@ -422,7 +422,7 @@ generic_request <- function(
         }
       }
 
-      .ct_request_build(req, if (toupper(method) == "POST") "POST" else "GET", request_body, headers, body_media)
+      .ct_legacy_build(req, if (toupper(method) == "POST") "POST" else "GET", request_body, headers, body_media)
     }
   )
 
@@ -433,11 +433,11 @@ generic_request <- function(
   }
 
   # --- 5.5. Pagination ---
-  # When paginate=TRUE, use .ct_request_pages() instead of normal execution
+  # When paginate=TRUE, use .ct_legacy_pages() instead of normal execution
   if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
     first_req <- req_list[[1]]
 
-    # Build strategy-specific next_req callback for .ct_request_pages()
+    # Build strategy-specific next_req callback for .ct_legacy_pages()
     if (pagination_strategy == "offset_limit" && !is.null(path_params)) {
       # AMOS-style: limit in path (query), offset in path_params
       # iterate_with_offset doesn't support path params, so use custom next_req
@@ -559,7 +559,7 @@ generic_request <- function(
     }
 
     # Execute iterative pagination
-    resps <- .ct_request_pages(
+    resps <- .ct_legacy_pages(
       first_req,
       next_req = next_req,
       max_reqs = max_pages,
@@ -918,7 +918,7 @@ generic_chemi_request <- function(
   if (auth) {
     headers[["x-api-key"]] <- ct_api_key()
   }
-  req <- .ct_request_build(req, "POST", payload, headers)
+  req <- .ct_legacy_build(req, "POST", payload, headers)
 
   # 5. Debugging
   if (run_debug) {
@@ -947,7 +947,7 @@ generic_chemi_request <- function(
       req %>% httr2::req_body_json_modify(offset = new_offset)
     }
 
-    resps <- .ct_request_pages(
+    resps <- .ct_legacy_pages(
       req,
       next_req = next_req,
       max_reqs = max_pages,
@@ -1297,7 +1297,7 @@ generic_pubchem_request <- function(
 }
 
 # Client-owned adapter: preserve historical URL bytes and unbounded timeout.
-.ct_request_build <- function(target, method, body, headers, body_media = "application/json") {
+.ct_legacy_build <- function(target, method, body, headers, body_media = "application/json") {
   previous <- options(
     comptoxr_native.dry_run = TRUE,
     comptoxr_native.request = list(),
@@ -1336,7 +1336,7 @@ generic_pubchem_request <- function(
 
 # Native iteration owns the loop; existing callbacks own URL/body advancement.
 # Retain responses, including the final empty page/error, for the observer.
-.ct_request_pages <- function(req, next_req, max_reqs, on_error = "return", progress = FALSE) {
+.ct_legacy_pages <- function(req, next_req, max_reqs, on_error = "return", progress = FALSE) {
   total <- max_reqs
   bar <- if (progress) cli::cli_progress_bar("Fetching pages", total = max_reqs) else NULL
   if (progress) {

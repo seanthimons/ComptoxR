@@ -220,55 +220,21 @@ operations:
   GET /hazard/toxref/data/search/by-study-type/{studyType}:
     name: ct_hazard_toxref_data_search_by_study_type
     file: R/ct_hazard_toxref_data_search_by_study_type.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      studyType:
-        type: character
-        required: yes
-        description: 'Study Type. Type: string'
-      pageNumber:
-        type: numeric
-        default: 1.0
-        description: 'Optional parameter (default: 1)'
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - studyType
-        endpoint:
-          value: hazard/toxref/data/search/by-study-type/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        pageNumber:
-          from:
-          - params
-          - pageNumber
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          value: 100.0
-        pagination_strategy:
-          value: page_number
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
     docs:
       title: Get all data by Study Type
       lifecycle: stable
-      parameters:
-        studyType: 'Study Type. Type: string'
-        pageNumber: 'Optional parameter (default: 1)'
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - studyType: DEV
   GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}:
@@ -697,6 +663,9 @@ operations:
     file: R/ct_hazard_toxval_search.R
     helper: .ct_request
     implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
     server:
       resolver: .ct_server_url
       key: ctx_burl
@@ -710,7 +679,7 @@ operations:
       lifecycle: stable
       return: Returns a tibble with results
       examples:
-      - body:
+      - dtxsid:
         - DTXSID1024122
         - DTXSID4020533
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

@@ -26,8 +26,8 @@
     "apis/chemi-toxprint-prod-rebuild.yml": "b01a3f20826fd1485edf777505b5049dd1ab19face05730d5a95a16868c426d6",
     "schema/chemi-toxprints-prod.json": "f1ebc2f1bf1581c3eea75de7c4e6d5e6c7b4bd41c585f52bba14b3d2ee5d6447",
     "R/chemi_toxprint.R": "957f17fcfcd470b83ee911a728c3bb31d3bf6f3a6175da7750f9b2746b47be24",
-    "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
-    "R/z_specmill_request.R": "1679f809da498b8de5df6b61b5d856e200781d3f4d1ae5a5f53dda4ea967e280"
+    "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+    "R/z_specmill_request.R": "72b5d091849a7fd75b2b90a3a951803b7c7185aa3f963f92e16f58eb39a6b737"
   },
   "reviewed_retained_diagnostics": [
     {

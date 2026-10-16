@@ -130,10 +130,27 @@
 # Specmill response policy: the same tibble output as generic_request(tidy = TRUE).
 .ct_tidy <- function(response, context, decode) {
   body <- unwrap_collection_envelope(decode())
-  if (is.list(body) && !is.null(names(body))) {
-    # The API doesn't echo the input on single-object responses; name it in a query column.
-    if (length(context$query) == 1L) attr(body, 'query') <- context$query
-    body <- list(body)
-  }
-  safe_tidy_bind(body)
+  # The API doesn't echo the input on single-object responses; name it in a query column.
+  single <- is.list(body) && !is.null(names(body))
+  .ct_request_table(
+    .ct_request_records(body, query = if (single && length(context$query) == 1L) context$query),
+    build = safe_tidy_bind
+  )
+}
+
+# Specmill response policy for paged CTX endpoints: each page is an envelope around `data`.
+.ct_paged <- function(response, context, decode) {
+  body <- decode()
+  table <- .ct_request_table(
+    .ct_request_records(body, collection = 'data'),
+    build = safe_tidy_bind
+  )
+  attr(table, 'paging') <- body[c('pageNumber', 'totalPages')]
+  table
+}
+
+# Specmill pagination stop: the envelope names the last page.
+.ct_last_page <- function(response, state) {
+  paging <- attr(response, 'paging')
+  isTRUE(paging$pageNumber >= paging$totalPages)
 }
