@@ -15,14 +15,17 @@
 # Generated with specmill; do not edit by hand.
 epi_search <- function(query, limit = 20) {
   params <- base::list("query" = query, "limit" = limit)
-  result <- generic_request(
-    "endpoint" = "search",
+  result <- .ct_request(
     "method" = "GET",
-    "batch_limit" = 0,
-    "server" = "epi_burl",
-    "auth" = FALSE,
-    "tidy" = FALSE,
-    "query_params" = base::list("query" = params[["query"]], "limit" = params[["limit"]])
+    "path" = "/api/search",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = base::list("query" = params[["query"]], "limit" = params[["limit"]]),
+    "body" = NULL,
+    "headers" = list(Accept = "application/json"),
+    "server" = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    "server_resolver" = list(name = ".ct_server_url", key = "epi_burl", relative = "/"),
+    "auth" = NULL,
+    "response_policy" = ".ct_static_list"
   )
   result <- run_hook("epi_search", "post_response", base::list(result = result, params = params))
   result

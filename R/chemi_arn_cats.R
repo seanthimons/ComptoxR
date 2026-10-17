@@ -62,17 +62,33 @@ chemi_arn_cats <- function(smiles, model = "RF") {
 # Generated with specmill; do not edit by hand.
 chemi_arn_cats_bulk <- function(chemicals = NULL, model = "RF", smiles = NULL) {
   params <- base::list("chemicals" = chemicals, "model" = model, "smiles" = smiles)
-  result <- generic_chemi_request(
-    "query" = params[["chemicals"]],
-    "endpoint" = "arn_cats",
-    "options" = base::local({
-      .body <- base::Filter(
-        base::Negate(base::is.null),
-        base::list("model" = params[["model"]], "smiles" = params[["smiles"]])
-      )
-      if (base::length(.body)) .body else base::list()
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/arn_cats",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = structure(list(), names = character(0)),
+    "body" = base::local({
+      ids <- unique(as.vector(params[["chemicals"]]))
+      ids <- ids[!is.na(ids) & ids != ""]
+      if (!length(ids)) {
+        cli::cli_abort("Either query or chemicals parameter must be provided.")
+      }
+      chemicals <- lapply(ids, function(id) base::list(sid = id))
+      options <- Filter(Negate(is.null), base::list(model = params[["model"]], smiles = params[["smiles"]]))
+      if (!length(options)) {
+        options <- structure(list(), names = character())
+      }
+      if (TRUE) {
+        base::list(chemicals = chemicals, options = options)
+      } else {
+        chemicals
+      }
     }),
-    "tidy" = FALSE
+    "headers" = list(Accept = "application/json"),
+    "server" = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = ""),
+    "auth" = NULL,
+    "response_policy" = ".ct_prediction"
   )
   result
 }

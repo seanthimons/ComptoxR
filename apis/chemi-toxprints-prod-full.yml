@@ -14,19 +14,37 @@ operations:
   GET /api/toxprints/assays/{name}:
     name: chemi_toxprints_assays_by_name
     file: R/chemi_toxprints_assays_by_name.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: name
-      on_error: drop
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - name
+        endpoint:
+          value: toxprints/assays/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Toxprints Assays
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        name: 'Primary query parameter. Type: string'
+      return: Returns a list with result object
       tags:
         apiStage: public
       examples:

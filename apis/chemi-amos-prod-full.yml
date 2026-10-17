@@ -34,68 +34,117 @@ operations:
   GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}:
     name: chemi_amos_record_ids_for_substance
     file: R/chemi_amos_record_ids_for_substance.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: dtxsid
-      on_error: drop
-    docs:
-      tags:
-        apiStage: public
-      title: Returns a list of record IDs that are associated with the given DTXSID.  This
-        is intended to help when filtering
-      lifecycle: experimental
-      return: Returns a list of results
-      examples:
-      - dtxsid: DTXSID7020182
-        record_type: method
+    helper: generic_request
+    implementation: existing
+    inputs:
+      dtxsid:
+        required: yes
+        type: character
+      record_type:
+        default: ~
+        type: character
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/record_ids_for_substance/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            record_type:
+              from:
+              - params
+              - record_type
+    specialization: 'Retain legacy normalization until Specmill #135 is released and
+      pinned.'
   GET /api/amos/method_with_spectra/{search_type}/{internal_id}:
     name: chemi_amos_method_with_spectra
     file: R/chemi_amos_method_with_spectra.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: search_type
-      on_error: drop
-    docs:
-      tags:
-        apiStage: public
-      title: Returns information about a method with linked spectra, given an ID for
-        either a spectrum or a method.
-      lifecycle: experimental
-      return: Returns a list of results
-      examples:
-      - search_type: method
-        internal_id: '1'
+    helper: generic_request
+    implementation: existing
+    inputs:
+      search_type:
+        required: yes
+        type: character
+      internal_id:
+        default: ~
+        type: character
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - search_type
+        endpoint:
+          value: amos/method_with_spectra/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            internal_id:
+              from:
+              - params
+              - internal_id
+    specialization: 'Retain legacy normalization until Specmill #135 is released and
+      pinned.'
   GET /api/amos/get_pdf/{record_type}/{internal_id}:
     name: chemi_amos_get_pdf
     file: R/chemi_amos_get_pdf.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_file
-    batch:
-      fan_out: record_type
-      on_error: drop
-    docs:
-      tags:
-        apiStage: public
-      title: Retrieves a PDF from the database by the internal ID and type of record.
-      lifecycle: experimental
-      return: Returns a list of results
-      examples:
-      - record_type: method
-        internal_id: '1'
+    helper: generic_request
+    implementation: existing
+    inputs:
+      record_type:
+        required: yes
+        type: character
+      internal_id:
+        default: ~
+        type: character
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - record_type
+        endpoint:
+          value: amos/get_pdf/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            internal_id:
+              from:
+              - params
+              - internal_id
+    specialization: 'Retain legacy normalization until Specmill #135 is released and
+      pinned.'
   GET /api/amos/database_summary/:
     name: chemi_amos_database
     file: R/chemi_amos_database.R
@@ -106,8 +155,8 @@ operations:
       key: chemi_burl
     response_policy: .ct_static_list
     docs:
-      title: Returns a summary of the records in the database, organized by record types,
-        methodologies, and sources.
+      title: Returns a summary of the records in the database, organized by record
+        types, methodologies, and sources.
       lifecycle: experimental
       return: Returns a list of results
       tags:
@@ -117,19 +166,37 @@ operations:
   GET /api/amos/dtxsids_from_functional_use/{functional_use}:
     name: chemi_amos_dtxsids_from_functional_use
     file: R/chemi_amos_dtxsids_from_functional_use.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: functional_use
-      on_error: drop
+    inputs:
+      functional_use:
+        type: character
+        required: yes
+        description: Functional use classification to search for.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - functional_use
+        endpoint:
+          value: amos/dtxsids_from_functional_use/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns all substances associated with the specified functional use classification.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        functional_use: Functional use classification to search for.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -137,20 +204,38 @@ operations:
   GET /api/amos/find_dtxsids/{internal_id}:
     name: chemi_amos_find_dtxsids
     file: R/chemi_amos_find_dtxsids.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the record of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/find_dtxsids/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Returns a list of DTXSIDs associated with the specified internal ID, along
-        with additional substance information.
+      title: Returns a list of DTXSIDs associated with the specified internal ID,
+        along with additional substance information.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the record of interest.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -158,19 +243,37 @@ operations:
   GET /api/amos/formula_search/{formula}:
     name: chemi_amos_formula
     file: R/chemi_amos_formula.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: formula
-      on_error: drop
+    inputs:
+      formula:
+        type: character
+        required: yes
+        description: Molecular formula to search by.  Formula should be in Hill form.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: amos/formula_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns a list of substances that have the given molecular formula.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        formula: Molecular formula to search by.  Formula should be in Hill form.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -178,19 +281,37 @@ operations:
   GET /api/amos/functional_class_search/{functional_class}:
     name: chemi_amos_functional_class
     file: R/chemi_amos_functional_class.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: functional_class
-      on_error: drop
+    inputs:
+      functional_class:
+        type: character
+        required: yes
+        description: Functional use class.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - functional_class
+        endpoint:
+          value: amos/functional_class_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns a list of DTXSIDs for the given functional use.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        functional_class: Functional use class.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -198,19 +319,37 @@ operations:
   GET /api/amos/functional_uses_for_dtxsid/{dtxsid}:
     name: chemi_amos_functional_uses_for_dtxsid
     file: R/chemi_amos_functional_uses_for_dtxsid.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: dtxsid
-      on_error: drop
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: The DTXSID for the substance of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/functional_uses_for_dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns a list of functional use classifications for a substance.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -218,20 +357,38 @@ operations:
   GET /api/amos/get_fact_sheet_editor_info/{internal_id}:
     name: chemi_amos_get_fact_sheet_editor_info
     file: R/chemi_amos_get_fact_sheet_editor_info.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the fact sheet of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_fact_sheet_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Retrieves metadata from the database about a single fact sheet.  This is
-        not necessarily just the metadata that
+      title: Retrieves metadata from the database about a single fact sheet.  This
+        is not necessarily just the metadata that
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the fact sheet of interest.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -239,20 +396,38 @@ operations:
   GET /api/amos/get_method_editor_info/{internal_id}:
     name: chemi_amos_get_method_editor_info
     file: R/chemi_amos_get_method_editor_info.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the method of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_method_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Retrieves metadata from the database about a single method.  This is not
-        necessarily just the metadata that appears
+      title: Retrieves metadata from the database about a single method.  This is
+        not necessarily just the metadata that appears
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the method of interest.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -260,20 +435,38 @@ operations:
   GET /api/amos/get_ms_ready_methods/{inchikey}:
     name: chemi_amos_get_ms_ready_methods
     file: R/chemi_amos_get_ms_ready_methods.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: inchikey
-      on_error: drop
+    inputs:
+      inchikey:
+        type: character
+        required: yes
+        description: InChIKey to search by.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - inchikey
+        endpoint:
+          value: amos/get_ms_ready_methods/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Retrieves a list of methods that contain the MS-Ready forms of a given
         substance but not the substance itself.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        inchikey: InChIKey to search by.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -281,20 +474,38 @@ operations:
   GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}:
     name: chemi_amos_get_nmr_spectrum_editor_info
     file: R/chemi_amos_get_nmr_spectrum_editor_info.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the NMR spectrum.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_nmr_spectrum_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Retrieves metadata from the database about a single NMR spectrum.  It is
-        currently intended only to retrieve
+      title: Retrieves metadata from the database about a single NMR spectrum.  It
+        is currently intended only to retrieve
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the NMR spectrum.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -302,20 +513,38 @@ operations:
   GET /api/amos/get_product_declaration_editor_info/{internal_id}:
     name: chemi_amos_get_product_declaration_editor_info
     file: R/chemi_amos_get_product_declaration_editor_info.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the product declaration.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_product_declaration_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Retrieves metadata from the database about a single product declaration.  This
         is not necessarily just the metadata
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the product declaration.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -323,20 +552,38 @@ operations:
   GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}:
     name: chemi_amos_get_safety_data_sheet_editor_info
     file: R/chemi_amos_get_safety_data_sheet_editor_info.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the safety data sheet.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_safety_data_sheet_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Retrieves metadata from the database about a single safety data sheet.  This
         is not necessarily just the metadata
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the safety data sheet.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -344,20 +591,40 @@ operations:
   GET /api/amos/get_substances_for_search_term/{search_term}:
     name: chemi_amos_get_substances_for_term
     file: R/chemi_amos_get_substances_for_term.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: search_term
-      on_error: drop
+    inputs:
+      search_term:
+        type: character
+        required: yes
+        description: A substance identifier.  If it cannot be parsed as an InChIKey,
+          CASRN, or DTXSID, it is assumed to be a name.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - search_term
+        endpoint:
+          value: amos/get_substances_for_search_term/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Returns substance(s) that match a search term.  Since some substance names
-        can have slashes in them, <path> is used
+      title: Returns substance(s) that match a search term.  Since some substance
+        names can have slashes in them, <path> is used
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        search_term: A substance identifier.  If it cannot be parsed as an InChIKey,
+          CASRN, or DTXSID, it is assumed to be a name.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -365,19 +632,37 @@ operations:
   GET /api/amos/inchikey_first_block_search/{first_block}:
     name: chemi_amos_inchikey_first_block
     file: R/chemi_amos_inchikey_first_block.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: first_block
-      on_error: drop
+    inputs:
+      first_block:
+        type: character
+        required: yes
+        description: First block of an InChIKey.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - first_block
+        endpoint:
+          value: amos/inchikey_first_block_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns a list of substances found by InChIKey.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        first_block: First block of an InChIKey.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -410,8 +695,8 @@ operations:
       key: chemi_burl
     response_policy: .ct_static_list
     docs:
-      title: Returns a list of all functional use classes that are assigned to at least
-        one substance.
+      title: Returns a list of all functional use classes that are assigned to at
+        least one substance.
       lifecycle: experimental
       return: Returns a list of results
       tags:
@@ -421,19 +706,37 @@ operations:
   GET /api/amos/record_id_search/{internal_id}:
     name: chemi_amos_record_id
     file: R/chemi_amos_record_id.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        type: character
+        required: yes
+        description: Unique ID of the record of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/record_id_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Searches for a record in the database by ID.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        internal_id: Unique ID of the record of interest.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -441,19 +744,39 @@ operations:
   GET /api/amos/record_type_count/{record_type}:
     name: chemi_amos_record_type_count
     file: R/chemi_amos_record_type_count.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: record_type
-      on_error: drop
+    inputs:
+      record_type:
+        type: character
+        required: yes
+        description: Record type.  Accepted values are "analytical_qc", "fact_sheets",
+          and "methods".
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - record_type
+        endpoint:
+          value: amos/record_type_count/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns the number of records of the given type.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        record_type: Record type.  Accepted values are "analytical_qc", "fact_sheets",
+          and "methods".
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -461,20 +784,38 @@ operations:
   GET /api/amos/substring_search/{substring}:
     name: chemi_amos_substring
     file: R/chemi_amos_substring.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: substring
-      on_error: drop
+    inputs:
+      substring:
+        type: character
+        required: yes
+        description: A name substring to search by.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - substring
+        endpoint:
+          value: amos/substring_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Returns information on substances where the specified substring is in or
-        equal to a name.
+      title: Returns information on substances where the specified substring is in
+        or equal to a name.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        substring: A name substring to search by.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -482,19 +823,38 @@ operations:
   GET /api/amos/search/{dtxsid}:
     name: chemi_amos
     file: R/chemi_amos.R
-    helper: .ct_request
+    helper: generic_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: dtxsid
-      on_error: drop
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: The DTXSID for the substance of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Retrieves a list of records from the database that contain a searched DTXSID.
+      title: Retrieves a list of records from the database that contain a searched
+        DTXSID.
       lifecycle: experimental
-      return: Returns a list of results
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:

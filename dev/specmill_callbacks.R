@@ -46,3 +46,20 @@ prediction_body <- function(operation) {
 mass_range_path_params <- function(operation) {
   quote(c(end = params[["end"]]))
 }
+
+# Project classifier identifiers and nullable options into the reviewed chemical payload.
+classifier_body <- function(operation) {
+  fields <- intersect(vapply(operation$parameters, `[[`, '', 'name'), c('model', 'smiles'))
+  options <- as.call(c(list(quote(base::list)), stats::setNames(lapply(fields, function(name) {
+    call('[[', as.name('params'), name)
+  }), fields)))
+  substitute(base::local({
+    ids <- unique(as.vector(params[['chemicals']]))
+    ids <- ids[!is.na(ids) & ids != '']
+    if (!length(ids)) cli::cli_abort('Either query or chemicals parameter must be provided.')
+    chemicals <- lapply(ids, function(id) base::list(sid = id))
+    options <- Filter(Negate(is.null), OPTIONS)
+    if (!length(options)) options <- structure(list(), names = character())
+    if (WRAP) base::list(chemicals = chemicals, options = options) else chemicals
+  }), list(OPTIONS = options, WRAP = !grepl('/ncc_cats$', operation$key)))
+}

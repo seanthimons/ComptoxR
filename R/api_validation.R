@@ -299,6 +299,16 @@ text_input <- function (value)
     }
     value
 }
+batch_limit <- function (env, default, cap = NULL) 
+{
+    value <- suppressWarnings(as.numeric(Sys.getenv(env, unset = as.character(default))))
+    if (length(value) != 1L || is.na(value) || !is.finite(value) || value < 1 || value != floor(value) || value > .Machine$integer.max) {
+        stop("batch.max_items from ", env, " must resolve to a positive R integer", call. = FALSE)
+    }
+    if (is.null(cap)) 
+        value
+    else min(value, cap)
+}
 text_value <- function (value, encoding = "scalar", max_items = NULL) 
 {
     if (!is.character(encoding) || length(encoding) != 1L || is.na(encoding) || !encoding %in% c("scalar", "lines")) {

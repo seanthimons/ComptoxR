@@ -7,6 +7,18 @@ probe_json_response <- function(req, status = 200L, url = req$url, body = '[{"ok
   )
 }
 
+# Exercise native failures while public vector wrappers await Specmill #135.
+probe_native_wrapper <- function(id) {
+  .ct_request_each(function(chunk) {
+    .ct_request(
+      method = "GET", path = "/api/alerts/groups/{id}",
+      path_params = list(id = chunk), query = list(), body = NULL,
+      response_policy = ".ct_list",
+      server_resolver = list(name = ".ct_server_url", key = "chemi_burl")
+    )
+  }, id, 1L, on_error = "drop")
+}
+
 test_that("probe resolves Chemi wrappers case-insensitively and forwards arguments", {
   withr::local_envvar(chemi_burl = "https://original.example/api")
   had_observer <- exists("probe_observer", envir = .ComptoxREnv, inherits = FALSE)
@@ -65,6 +77,8 @@ test_that("probe uses the approved CompTox default", {
 })
 
 test_that("probe reports empty, non-200, redirected, and thrown results", {
+  testthat::local_mocked_bindings(chemi_alerts_groups_by_id = probe_native_wrapper,
+    .package = "ComptoxR")
   cases <- list(
     list(body = '[]', message = 'Result is empty'),
     list(status = 503L, message = 'HTTP status was not 200'),
@@ -185,6 +199,8 @@ test_that("response observer sees batched and paginated helper responses", {
 
 
 test_that("probe rejects partial native batches with unobserved request failures", {
+  testthat::local_mocked_bindings(chemi_alerts_groups_by_id = probe_native_wrapper,
+    .package = "ComptoxR")
   testthat::local_mocked_bindings(req_perform = function(req, ...) {
     if (endsWith(req$url, "/group-2")) stop("request exploded")
     probe_json_response(req)

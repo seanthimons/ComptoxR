@@ -1,75 +1,27 @@
 #' Get data by DTXSID
 #'
-#' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#' @param dtxsid dtxsid Accepts a vector: one request is sent per element and the results are combined.
-#' @param projection Projection options for chemical details APIs
-#' @return Returns a tibble with results
+#'
+#' @param dtxsid DSSTox Substance Identifier. Type: string
+#' @param projection Projection options for chemical details APIs . Options: chemicaldetailstandard, chemicalidentifier, chemicalstructure, ntatoolkit, ccdchemicaldetails, ccdassaydetails, chemicaldetailall, compact (default: chemicaldetailall)
+#' @return Returns a scalar value
 #' @export
+#'
 #' @examples
 #' \dontrun{
 #' ct_chemical_detail_search(dtxsid = "DTXSID7020182")
 #' }
-# Generated with specmill; do not edit by hand.
 ct_chemical_detail_search <- function(dtxsid, projection = "chemicaldetailall") {
-  if (base::is.null(dtxsid)) {
-    base::stop("Required input: dtxsid")
-  }
-  .api_validation$parameter_values(
-    base::list("dtxsid" = dtxsid, "projection" = projection),
-    list(
-      dtxsid = list(type = "array", items = list(type = "string")),
-      projection = list(
-        description = "Projection options for chemical details APIs ",
-        enum = list(
-          "chemicaldetailstandard",
-          "chemicalidentifier",
-          "chemicalstructure",
-          "ntatoolkit",
-          "ccdchemicaldetails",
-          "ccdassaydetails",
-          "chemicaldetailall",
-          "compact"
-        ),
-        type = "string",
-        default = "chemicaldetailall"
-      )
-    ),
-    .api_validation$body_value,
-    c(dtxsid = "path", projection = "query")
+  result <- generic_request(
+    query = dtxsid,
+    endpoint = "chemical/detail/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1,
+    `projection` = projection
   )
-  params <- base::list("dtxsid" = dtxsid, "projection" = projection)
-  if (base::is.character(params[["projection"]]) && base::any(!base::nzchar(params[["projection"]]))) {
-    base::stop("Empty query parameter: projection")
-  }
-  send <- function(params) {
-    result <- .ct_request(
-      method = "GET",
-      path = "/chemical/detail/search/by-dtxsid/{dtxsid}",
-      path_params = base::list("dtxsid" = params[["dtxsid"]]),
-      query = base::list("projection" = params[["projection"]]),
-      body = NULL,
-      response_policy = ".ct_tidy",
-      server = list(url = "https://comptox.epa.gov/ctx-api"),
-      server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
-      auth = list(list(list(
-        scheme = "ctx",
-        type = "apiKey",
-        location = "header",
-        name = "x-api-key",
-        envvar = "ctx_api_key"
-      )))
-    )
-    result
-  }
-  .ct_request_each(
-    function(chunk) {
-      params["dtxsid"] <- base::list(chunk)
-      send(params)
-    },
-    params[["dtxsid"]],
-    1L,
-    on_error = "drop"
-  )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }

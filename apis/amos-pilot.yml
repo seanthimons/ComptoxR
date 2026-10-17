@@ -52,19 +52,34 @@ operations:
   GET /api/amos/get_ir_spectrum/{internal_id}:
     name: chemi_amos_get_ir_spectrum
     file: R/chemi_amos_get_ir_spectrum.R
-    helper: .ct_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the IR spectrum of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_ir_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns an IR spectrum by database ID.
       lifecycle: experimental
-      return: Returns a list of results
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -72,19 +87,34 @@ operations:
   GET /api/amos/get_nmr_spectrum/{internal_id}:
     name: chemi_amos_get_nmr_spectrum
     file: R/chemi_amos_get_nmr_spectrum.R
-    helper: .ct_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the NMR spectrum of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_nmr_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Endpoint for retrieving a specified NMR spectrum from the database.
       lifecycle: experimental
-      return: Returns a list of results
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -92,20 +122,35 @@ operations:
   GET /api/amos/get_mass_spectrum/{internal_id}:
     name: chemi_amos_get_mass_spectrum
     file: R/chemi_amos_get_mass_spectrum.R
-    helper: .ct_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the mass spectrum of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_mass_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Retrieves a mass spectrum by its ID in AMOS's database with supporting
         information.
       lifecycle: experimental
-      return: Returns a list of results
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -113,19 +158,34 @@ operations:
   GET /api/amos/get_info_by_id/{internal_id}:
     name: chemi_amos_get_info_by_id
     file: R/chemi_amos_get_info_by_id.R
-    helper: .ct_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: internal_id
-      on_error: drop
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the record of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_info_by_id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Returns general information about a record by ID.
       lifecycle: experimental
-      return: Returns a list of results
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -133,19 +193,35 @@ operations:
   GET /api/amos/get_classification_for_dtxsid/{dtxsid}:
     name: chemi_amos_get_classification_for_dtxsid
     file: R/chemi_amos_get_classification_for_dtxsid.R
-    helper: .ct_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: dtxsid
-      on_error: drop
+    inputs:
+      dtxsid:
+        required: yes
+        type: character
+        description: The DTXSID for the substance of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/get_classification_for_dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
-      title: Returns the top four levels of a ClassyFire classification of a given substance.
+      title: Returns the top four levels of a ClassyFire classification of a given
+        substance.
       lifecycle: experimental
-      return: Returns a list of results
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -153,20 +229,35 @@ operations:
   GET /api/amos/search_by_text/{substr}:
     name: chemi_amos_by_text
     file: R/chemi_amos_by_text.R
-    helper: .ct_request
     implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    response_policy: .ct_list
-    batch:
-      fan_out: substr
-      on_error: drop
+    inputs:
+      substr:
+        required: yes
+        type: character
+        description: The substring to search for.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - substr
+        endpoint:
+          value: amos/search_by_text/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
     docs:
       title: Retrieves a list of records from the ElasticSearch database that contain
         a searched substring
       lifecycle: experimental
-      return: Returns a list of results
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:

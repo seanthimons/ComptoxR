@@ -990,3 +990,114 @@ zero failures or warnings. Both GET siblings remain covered. The focused
 checks include raw JSON/NULL result shape and all previously reviewed input
 variants; the complete suite had already passed after the runtime pin update.
 Final generation freshness check passed for the two prediction POST wrappers.
+
+## Five native classifier POST wrappers, 17 October 2026
+
+The AMNB NATE, ARN Cats, NCC Cats, PFAS Atlas and PFAS Cats bulk wrappers use the
+native transport with their existing public arguments. A generation callback
+projects unique, non-empty identifiers into chemical records and retains the
+nullable model/SMILES options. NCC keeps its unwrapped array. The response policy
+preserves the decoded JSON structure used by the previous helper.
+
+Before adoption, all five rendered candidates passed localhost comparisons
+against the frozen legacy implementations. Captures matched exact body bytes,
+method, path, query and headers, with identical results. Cases cover duplicates,
+blank/missing identifiers, UTF-8, FALSE and zero identifiers/options, NULL model
+and nested option values. Empty inputs fail before HTTP. No live classifier POST
+or undocumented body correction is claimed.
+
+## Published Specmill 0.1.23 and analytical QC, 17 October 2026
+
+The development pin advances to released v0.1.23, source/tag
+`2d480996ec6607c823d0a85be1a3de6a438b429d`, with verified Git archive SHA256
+`cbabe13134734c1f34ce5553d6515ceef7159b97b491ac0b1c11415a0fc221ea`.
+The emitted native helper is byte-identical to v0.1.22. The adoption record
+retains that review in its history and verifies the current release pin.
+
+Analytical QC uses the released operation-scoped API-key security correction,
+the existing CTX credential mapping and the native tibble response policy.
+Its archived schema remains unchanged. The unreleased dynamic bulk binding,
+AMOS path/body corrections and pager metadata setting remain isolated.
+
+Released-pin QC verification passed against the production read-only endpoint:
+29 rows and 16 columns match the retained implementation; replaying the same
+captured response also matches exactly, including column order and attributes.
+Localhost captures verify the API-key header, correct path and zero GET body
+bytes. The six updated native contracts, classifier normalization/option tests
+and prediction regressions passed without failures or warnings. Helper adoption
+freshness and ownership checks pass against the current pin.
+
+## Normalization hold and PR136 verification, 17 October 2026
+
+The analytical-QC native adoption above is held again by Specmill #135. Its
+released security correction is verified, but the native wrapper also needs
+legacy identifier cleanup before validation and iteration. The five classifier
+POSTs remain native because their existing body projection already performs
+that cleanup. The production development pin stays at released v0.1.23.
+
+The normalization audit found affected recent and earlier CTX migrations.
+Their native operation settings, contracts and focused tests are preserved in
+`held-normalization.rds`. Affected wrappers return to their legacy helper
+mappings until the shared upstream fix is released and pinned. Static requests
+and structured mass bodies are reviewed separately; line semantics are not
+changed by this hold.
+
+Isolated actual-wrapper verification of Specmill PR136 at
+`213dd7ee68dc1a643264db795d97aa83be5a98ef` passed for AMOS info-by-ID and both
+chemical-detail array POSTs. Localhost requests and full results match the
+legacy implementations for duplicates, blanks, NA, nested input lists and
+UTF-8. Named and positional calls agree. Normalization runs once per call
+before fan-out/chunking; arrays retain 2/1 splits and singleton JSON arrays.
+Empty input errors precede projection evaluation and HTTP. Replacement values
+still undergo normal validation. Exact-search line duplicates and LF bytes
+remain unchanged without normalization configured. Final generation freshness
+passed against that exact commit. This is isolation evidence, not production
+adoption of an unreleased source.
+
+The completed audit holds 144 wrappers: 120 fan-out GETs and 24 ordinary array
+POSTs. `held-normalization.json` lists every operation and output file. The RDS
+contains their pre-hold native configurations/contracts plus the focused native
+tests, so adoption can resume after a released normalization fix. The two detail
+arrays and exact-search lines remain retained under their separate reviews.
+
+## Published Specmill 0.1.24 and EPI search, 17 October 2026
+
+The development pin advances to released v0.1.24 at
+`49b2ddeea8476dd9d2b2e6a7f6fa2908815a1b3a`, with verified Git archive SHA256
+`35d136a776d3cfd76d0628682baa7f630b88394fa60c2cca3a6c944c3a109293`.
+It releases per-call environment/default/cap batch sizing and includes the
+prior security/body-order/text fixes. The emitted helper remains byte-identical.
+Normalization is absent from this release, so the 144-wrapper hold remains.
+
+EPI search now uses the native helper and the existing post-response formatting
+hook. Its public query/limit arguments and defaults are preserved. Independent
+localhost comparisons cover default options, UTF-8/reserved characters and an
+explicit NULL limit, checking exact method/path/query/Accept header, absence of
+authentication, zero body bytes and identical formatted results.
+
+The final history pass adds the earlier ToxVal bulk POST to the hold. Its native
+migration predates the other CTX array wave, bringing ordinary arrays to 24 and
+the combined hold to 144. Probe tests now exercise native request-failure
+aggregation through a test fixture, independently of whether the selected
+public alerts wrapper is temporarily retained. Public wrapper forwarding and
+retained-input cleanup remain tested separately.
+
+All 144 saved native candidates subsequently passed instrumentation at the
+exact PR136 commit: cleanup executes once per wrapper call, duplicate inputs
+collapse, blank/NA character entries are removed, and empty cleanup fails
+before the request helper. The 24 ordinary arrays and both detail arrays also
+configure successfully with per-call environment batch sizing. The refreshed
+localhost fan-out/detail-array checks pass with both features together, and the
+final full candidate freshness check passes.
+
+Specmill v0.1.24 also exposes a cosmetic emission defect tracked in
+[specmill#138](https://github.com/seanthimons/specmill/issues/138): the new shared
+batch validator introduces two trailing-whitespace lines. Runtime tests and
+freshness are unaffected. The generated file is preserved exactly; this is the
+only current `git diff --check` exception and is reported upstream.
+
+Validation of the retained v0.1.24 state: complete CRAN-safe package suite passes
+3,599 assertions, zero failures and zero warnings. Fifty tests skip for absent
+local databases, optional pROC, external source-build paths or opt-in integration.
+Released-helper provenance/ownership checks and final client generation freshness
+pass. Native classifier and EPI-search request comparisons pass independently.

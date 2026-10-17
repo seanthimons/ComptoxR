@@ -3,56 +3,23 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#' @param spid Sample identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.
-#' @return Returns a tibble with results
+#' @param query Character vector of strings to send in request body
+#' @return Returns a scalar value
 #' @export
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_data_search_by_spid_bulk(spid = list("EPAPLT0232A03", "EPAPLT0232A04"))
+#' ct_bioactivity_data_search_by_spid_bulk(query = "DTXSID1024122")
 #' }
 # Generated with specmill; do not edit by hand.
-ct_bioactivity_data_search_by_spid_bulk <- function(spid) {
-  if (base::missing(spid)) {
-    base::stop("Required spid")
-  }
-  if (!base::missing(spid)) {
-    spid <- base::tryCatch(
-      .api_validation$body_value(spid, list(items = list(type = "string"), type = "array")),
-      error = function(e) base::stop("Invalid spid: ", base::conditionMessage(e), call. = FALSE)
-    )
-    if (base::is.null(spid)) spid <- jsonlite::unbox(NA)
-  }
-  params <- base::list("spid" = spid)
-  send <- function(params) {
-    result <- .ct_request(
-      method = "POST",
-      path = "/bioactivity/data/search/by-spid/",
-      path_params = base::list(),
-      query = base::list(),
-      body = params[["spid"]],
-      response_policy = ".ct_tidy",
-      server = list(url = "https://comptox.epa.gov/ctx-api"),
-      server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
-      auth = list(list(list(
-        scheme = "ctx",
-        type = "apiKey",
-        location = "header",
-        name = "x-api-key",
-        envvar = "ctx_api_key"
-      ))),
-      batch = list(max_items = 100L)
-    )
-    result
-  }
-  .ct_request_each(
-    function(chunk) {
-      params["spid"] <- base::list(chunk)
-      send(params)
-    },
-    params[["spid"]],
-    100L,
-    on_error = "drop"
+ct_bioactivity_data_search_by_spid_bulk <- function(query) {
+  params <- base::list("query" = query)
+  result <- generic_request(
+    "query" = params[["query"]],
+    "endpoint" = "bioactivity/data/search/by-spid/",
+    "method" = "POST",
+    "batch_limit" = as.numeric(Sys.getenv("batch_limit", "100"))
   )
+  result
 }
 
 #' Get data by SPID
@@ -60,8 +27,8 @@ ct_bioactivity_data_search_by_spid_bulk <- function(spid) {
 #' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#' @param spid spid Accepts a vector: one request is sent per element and the results are combined.
-#' @return Returns a tibble with results
+#' @param spid sample ID (SPID). Type: string
+#' @return Returns a tibble with results (array of objects)
 #' @export
 #' @examples
 #' \dontrun{
@@ -69,43 +36,12 @@ ct_bioactivity_data_search_by_spid_bulk <- function(spid) {
 #' }
 # Generated with specmill; do not edit by hand.
 ct_bioactivity_data_search_by_spid <- function(spid) {
-  if (base::is.null(spid)) {
-    base::stop("Required input: spid")
-  }
-  .api_validation$parameter_values(
-    base::list("spid" = spid),
-    list(spid = list(type = "array", items = list(type = "string"))),
-    .api_validation$body_value,
-    c(spid = "path")
-  )
   params <- base::list("spid" = spid)
-  send <- function(params) {
-    result <- .ct_request(
-      method = "GET",
-      path = "/bioactivity/data/search/by-spid/{spid}",
-      path_params = base::list("spid" = params[["spid"]]),
-      query = base::list(),
-      body = NULL,
-      response_policy = ".ct_tidy",
-      server = list(url = "https://comptox.epa.gov/ctx-api"),
-      server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
-      auth = list(list(list(
-        scheme = "ctx",
-        type = "apiKey",
-        location = "header",
-        name = "x-api-key",
-        envvar = "ctx_api_key"
-      )))
-    )
-    result
-  }
-  .ct_request_each(
-    function(chunk) {
-      params["spid"] <- base::list(chunk)
-      send(params)
-    },
-    params[["spid"]],
-    1L,
-    on_error = "drop"
+  result <- generic_request(
+    "query" = params[["spid"]],
+    "endpoint" = "bioactivity/data/search/by-spid/",
+    "method" = "GET",
+    "batch_limit" = 1
   )
+  result
 }

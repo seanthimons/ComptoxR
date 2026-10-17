@@ -4,7 +4,6 @@ testthat::test_that("ct_hazard_genetox_details_search_bulk completes the fixed c
     "ct_hazard_genetox_details_search_bulk"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
-  names(contract$inputs)[names(contract$inputs) == "body"] <- "dtxsid"
   captured <- list()
   mock_for <- function(name) {
     force(name)
@@ -17,7 +16,7 @@ testthat::test_that("ct_hazard_genetox_details_search_bulk completes the fixed c
       contract$calls[[position]]$response
     }
   }
-  testthat::local_mocked_bindings(.ct_request = mock_for(".ct_request"), .package = "ComptoxR")
+  testthat::local_mocked_bindings(generic_request = mock_for("generic_request"), .package = "ComptoxR")
   result <- do.call(ComptoxR::ct_hazard_genetox_details_search_bulk, contract$inputs)
   testthat::expect_identical(captured, lapply(contract$calls, function(x) x[c('helper', 'arguments')]))
   testthat::expect_identical(result, contract$result)

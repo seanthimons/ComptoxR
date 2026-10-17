@@ -29,7 +29,7 @@ operations:
   POST /api/pfas_atlas:
     name: chemi_pfas_atlas_bulk
     file: R/chemi_pfas_atlas.R
-    helper: generic_chemi_request
+    helper: .ct_request
     implementation: generated
     inputs:
       chemicals:
@@ -44,20 +44,32 @@ operations:
           the previous PFAS Atlas POST format.
     request:
       arguments:
+        method:
+          value: POST
+        path:
+          value: /api/pfas_atlas
+        path_params:
+          value: {}
         query:
-          from:
-          - params
-          - chemicals
-        endpoint:
-          value: pfas_atlas
-        options:
-          compact_object:
-            smiles:
-              from:
-              - params
-              - smiles
-        tidy:
-          value: no
+          value: {}
+        body:
+          callback: classifier_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: ''
+        auth:
+          value: ~
+        response_policy:
+          value: .ct_prediction
     docs:
       title: Generate PFAS Atlas categories for multiple molecules
       lifecycle: experimental
@@ -71,4 +83,7 @@ operations:
       - chemicals: DTXSID1024122
       tags:
         apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
