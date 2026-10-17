@@ -29,6 +29,11 @@ helper: generic_request
 documentation: yes
 authentication:
   api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
 operations:
   GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_ccd_chem_weight_fractions_search
@@ -153,35 +158,25 @@ operations:
   POST /exposure/httk/search/by-dtxsid/:
     name: ct_exposure_httk_search_bulk
     file: R/ct_exposure_httk_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: exposure/httk/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get httk data for a batch of DTXSIDs
       lifecycle: experimental
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   GET /exposure/httk/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_httk_search
     file: R/ct_exposure_httk_search.R
@@ -205,35 +200,25 @@ operations:
   POST /exposure/list-presence/search/by-dtxsid/:
     name: ct_exposure_list_presence_search_bulk
     file: R/ct_exposure_list_presence_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: exposure/list-presence/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get List Presence data for a batch of DTXSIDs
       lifecycle: experimental
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   GET /exposure/list-presence/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_list_presence_search
     file: R/ct_exposure_list_presence_search.R
@@ -396,35 +381,25 @@ operations:
   POST /exposure/product-data/search/by-dtxsid/:
     name: ct_exposure_product_data_search_bulk
     file: R/ct_exposure_product_data_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: exposure/product-data/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get product data for a batch of DTXSIDs
       lifecycle: experimental
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   GET /exposure/product-data/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_product_data_search
     file: R/ct_exposure_product_data_search.R
@@ -448,35 +423,25 @@ operations:
   POST /exposure/seem/general/search/by-dtxsid/:
     name: ct_exposure_seem_general_search_bulk
     file: R/ct_exposure_seem_general_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: exposure/seem/general/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get SEEM General Exposure Prediction data for a batch of DTXSIDs
       lifecycle: experimental
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   GET /exposure/seem/general/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_seem_general_search
     file: R/ct_exposure_seem_general_search.R

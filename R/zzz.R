@@ -605,6 +605,9 @@ run_verbose <- function(verbose = FALSE) {
 #' Set batch limit for POST requests
 #'
 #' Sets the global batch limit for POST requests. Defaults to 200.
+#' Only wrappers still built on `generic_request()` read this limit. Wrappers
+#' generated with the native Specmill helper split requests at a fixed size
+#' set per API (100 items for CTX) and ignore it.
 #' @param limit Numeric number
 #' @export
 

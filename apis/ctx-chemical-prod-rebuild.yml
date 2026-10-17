@@ -35,6 +35,11 @@ helper: generic_request
 documentation: yes
 authentication:
   api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
 operations:
   GET /chemical/detail/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_detail_search_by_dtxcid
@@ -455,36 +460,23 @@ operations:
   POST /chemical/fate/search/by-dtxsid/:
     name: ct_chemical_fate_search_bulk
     file: R/ct_chemical_fate_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: chemical/fate/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get fate data for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query:
-        - DTXSID1024122
-        - DTXSID4020533
-        - DTXSID00205033
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   POST /chemical/msready/search/by-mass/:
     name: ct_chemical_msready_search_by_mass_bulk
     file: R/ct_chemical_msready_search_by_mass.R
@@ -535,63 +527,43 @@ operations:
   POST /chemical/property/experimental/search/by-dtxsid/:
     name: ct_chemical_property_experimental_search_bulk
     file: R/ct_chemical_property_experimental_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: chemical/property/experimental/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get experimental properties for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   POST /chemical/property/predicted/search/by-dtxsid/:
     name: ct_chemical_property_predicted_search_bulk
     file: R/ct_chemical_property_predicted_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: chemical/property/predicted/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get predicted properties for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   POST /chemical/search/equal/:
     name: ct_chemical_search_equal_bulk
     file: R/ct_chemical_search_equal.R

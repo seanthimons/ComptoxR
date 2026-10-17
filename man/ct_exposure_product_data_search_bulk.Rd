@@ -4,20 +4,20 @@
 \alias{ct_exposure_product_data_search_bulk}
 \title{Get product data for a batch of DTXSIDs}
 \usage{
-ct_exposure_product_data_search_bulk(query)
+ct_exposure_product_data_search_bulk(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox substance identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_exposure_product_data_search_bulk(query = "DTXSID1024122")
+ct_exposure_product_data_search_bulk(dtxsid = list("DTXSID7020182", "DTXSID2021315"))
 }
 }
 \section{API stage}{

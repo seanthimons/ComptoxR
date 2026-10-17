@@ -14,6 +14,11 @@ helper: generic_request
 documentation: yes
 authentication:
   api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
 operations:
   GET /exposure/functional-use/category:
     name: ct_exposure_functional_use_category
@@ -87,61 +92,41 @@ operations:
   POST /exposure/functional-use/search/by-dtxsid/:
     name: ct_exposure_functional_use_search_bulk
     file: R/ct_exposure_functional_use_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: exposure/functional-use/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get functional-use data for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   POST /exposure/seem/demographic/search/by-dtxsid/:
     name: ct_exposure_seem_demographic_search_bulk
     file: R/ct_exposure_seem_demographic_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: exposure/seem/demographic/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get SEEM Demographic Exposure Prediction data for batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

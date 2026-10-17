@@ -4,19 +4,19 @@
 \alias{ct_chemical_property_experimental_search_bulk}
 \title{Get experimental properties for a batch of DTXSIDs}
 \usage{
-ct_chemical_property_experimental_search_bulk(query)
+ct_chemical_property_experimental_search_bulk(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox substance identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_chemical_property_experimental_search_bulk(query = "DTXSID1024122")
+ct_chemical_property_experimental_search_bulk(dtxsid = list("DTXSID7020182", "DTXSID2021315"))
 }
 }

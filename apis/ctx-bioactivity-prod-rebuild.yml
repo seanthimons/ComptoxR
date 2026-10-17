@@ -38,6 +38,11 @@ helper: generic_request
 documentation: yes
 authentication:
   api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
 operations:
   GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_analyticalqc_search
@@ -490,187 +495,121 @@ operations:
   POST /bioactivity/assay/search/by-aeid/:
     name: ct_bioactivity_assay_search_by_aeid_bulk
     file: R/ct_bioactivity_assay_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/assay/search/by-aeid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: aeid
+      description: Assay endpoint identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get assay annotations for a batch of AEIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - aeid:
+        - "3032"
+        - "3033"
   POST /bioactivity/data/aed/search/by-dtxsid/:
     name: ct_bioactivity_data_aed_search_bulk
     file: R/ct_bioactivity_data_aed_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/aed/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get AED data for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
-      - query:
-        - DTXSID1024122
-        - DTXSID4020533
-        - DTXSID00205033
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   POST /bioactivity/data/search/by-aeid/:
     name: ct_bioactivity_data_search_by_aeid_bulk
     file: R/ct_bioactivity_data_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-aeid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: aeid
+      description: Assay endpoint identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data for a batch of AEIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - aeid:
+        - "3032"
+        - "3033"
   POST /bioactivity/data/search/by-dtxsid/:
     name: ct_bioactivity_data_search_bulk
     file: R/ct_bioactivity_data_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get bioactivity data for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query:
-        - DTXSID1024122
-        - DTXSID4020533
-        - DTXSID00205033
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
   POST /bioactivity/data/search/by-m4id/:
     name: ct_bioactivity_data_search_by_m4id_bulk
     file: R/ct_bioactivity_data_search_by_m4id.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-m4id/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: m4id
+      description: Level 4 model identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data for a batch of M4IDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - m4id:
+        - "7826737"
+        - "7826738"
   POST /bioactivity/data/search/by-spid/:
     name: ct_bioactivity_data_search_by_spid_bulk
     file: R/ct_bioactivity_data_search_by_spid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-spid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: spid
+      description: Sample identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data for a batch of SPIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - spid:
+        - EPAPLT0232A03
+        - EPAPLT0232A04
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

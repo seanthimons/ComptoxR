@@ -4,19 +4,19 @@
 \alias{ct_bioactivity_assay_search_by_aeid_bulk}
 \title{Get assay annotations for a batch of AEIDs}
 \usage{
-ct_bioactivity_assay_search_by_aeid_bulk(query)
+ct_bioactivity_assay_search_by_aeid_bulk(aeid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{aeid}{Assay endpoint identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_assay_search_by_aeid_bulk(query = "DTXSID1024122")
+ct_bioactivity_assay_search_by_aeid_bulk(aeid = list("3032", "3033"))
 }
 }

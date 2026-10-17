@@ -3,23 +3,56 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#' @param query Character vector of strings to send in request body
-#' @return Returns a scalar value
+#' @param aeid Assay endpoint identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.
+#' @return Returns a tibble with results
 #' @export
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_assay_search_by_aeid_bulk(query = "DTXSID1024122")
+#' ct_bioactivity_assay_search_by_aeid_bulk(aeid = list("3032", "3033"))
 #' }
 # Generated with specmill; do not edit by hand.
-ct_bioactivity_assay_search_by_aeid_bulk <- function(query) {
-  params <- base::list("query" = query)
-  result <- generic_request(
-    "query" = params[["query"]],
-    "endpoint" = "bioactivity/assay/search/by-aeid/",
-    "method" = "POST",
-    "batch_limit" = as.numeric(Sys.getenv("batch_limit", "100"))
+ct_bioactivity_assay_search_by_aeid_bulk <- function(aeid) {
+  if (base::missing(aeid)) {
+    base::stop("Required aeid")
+  }
+  if (!base::missing(aeid)) {
+    aeid <- base::tryCatch(
+      .api_validation$body_value(aeid, list(items = list(type = "string"), type = "array")),
+      error = function(e) base::stop("Invalid aeid: ", base::conditionMessage(e), call. = FALSE)
+    )
+    if (base::is.null(aeid)) aeid <- jsonlite::unbox(NA)
+  }
+  params <- base::list("aeid" = aeid)
+  send <- function(params) {
+    result <- .ct_request(
+      method = "POST",
+      path = "/bioactivity/assay/search/by-aeid/",
+      path_params = base::list(),
+      query = base::list(),
+      body = params[["aeid"]],
+      response_policy = ".ct_tidy",
+      server = list(url = "https://comptox.epa.gov/ctx-api"),
+      server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
+      auth = list(list(list(
+        scheme = "ctx",
+        type = "apiKey",
+        location = "header",
+        name = "x-api-key",
+        envvar = "ctx_api_key"
+      ))),
+      batch = list(max_items = 100L)
+    )
+    result
+  }
+  .ct_request_each(
+    function(chunk) {
+      params["aeid"] <- base::list(chunk)
+      send(params)
+    },
+    params[["aeid"]],
+    100L,
+    on_error = "drop"
   )
-  result
 }
 
 #' Get assay annotations by AEID
