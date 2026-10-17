@@ -67,6 +67,7 @@ ct_chemical_list_search <- function(dtxsid, projection = "chemicallistall") {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

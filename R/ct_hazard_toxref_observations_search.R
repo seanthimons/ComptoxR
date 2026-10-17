@@ -55,6 +55,7 @@ ct_hazard_toxref_observations_search <- function(dtxsid) {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -60,7 +60,8 @@ chemi_classyfire <- function(query) {
     },
     params[["query"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
   kept <- base::attr(result, "failed", exact = TRUE)
   result <- run_hook("chemi_classyfire", "post_combine", base::list(result = result, params = params))

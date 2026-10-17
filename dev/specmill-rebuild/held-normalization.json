@@ -871,5 +871,10 @@
     }
   },
   "released_version": "0.1.25",
-  "released_source_commit": "01fe162db735249a497ea9d30811b1d646733aa4"
+  "released_source_commit": "01fe162db735249a497ea9d30811b1d646733aa4",
+  "failure_policy_review": {
+    "status": "local_native_candidate_failure_attribute_parity_pending",
+    "blocker": "https://github.com/seanthimons/specmill/issues/142",
+    "empty_constructor": ".ct_empty_table"
+  }
 }

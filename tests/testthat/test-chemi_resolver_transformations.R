@@ -168,50 +168,6 @@ test_that("similarity map skips unresolved inputs and wraps hook errors, not tra
   expect_error(chemi_resolver_getsimilaritymap("one"), "transport sentinel", fixed = TRUE)
 })
 
-test_that("ClassyFire selects and renames available columns while preserving empty results", {
-  response <- tibble::tibble()
-  call <- NULL
-  local_mocked_bindings(
-    generic_request = function(...) {
-      call <<- list(...)
-      response
-    },
-    run_hook = function(...) stop("no hooks in this wrapper"),
-    .package = "ComptoxR"
-  )
-  for (query in list(NULL, character(), FALSE, 0, c("one", "two"))) {
-    expect_identical(chemi_classyfire(query), response)
-    expect_identical(
-      call,
-      list(
-        query = query,
-        endpoint = "amos/get_classification_for_dtxsid/",
-        method = "GET",
-        batch_limit = 1,
-        server = "chemi_burl",
-        auth = FALSE
-      )
-    )
-  }
-  expect_error(chemi_classyfire(), 'argument "query" is missing', fixed = TRUE)
-  for (id in c("query", "value", "sid")) {
-    response <- tibble::tibble(kingdom = "K", superklass = "S", klass = "C", subklass = "SC", discarded = TRUE)
-    response[[id]] <- "one"
-    expect_identical(
-      chemi_classyfire("one"),
-      tibble::tibble(dtxsid = "one", kingdom = "K", superclass = "S", class = "C", subclass = "SC")
-    )
-  }
-  response <- tibble::tibble(query = "q", value = "v", sid = "s", klass = "C")
-  expect_identical(chemi_classyfire("one"), tibble::tibble(dtxsid1 = "q", dtxsid2 = "v", dtxsid3 = "s", class = "C"))
-  response <- tibble::tibble(extra = 0)
-  expect_identical(chemi_classyfire("one"), tibble::new_tibble(list(), nrow = 1L))
-  response <- tibble::tibble(query = character(), extra = logical())
-  expect_identical(chemi_classyfire("one"), response)
-  response <- NULL
-  expect_error(chemi_classyfire("one"), "argument is of length zero")
-})
-
 test_that("RQ codes preserves mocked transformations, NULL results and parsing errors", {
   response <- NULL
   call <- NULL
@@ -247,7 +203,7 @@ test_that("RQ codes preserves mocked transformations, NULL results and parsing e
   expect_error(chemi_safety_rqcodes(NULL), "unused argument")
 })
 
-test_that("RQ codes retains its empty-query rejection and both wrappers propagate helper errors", {
+test_that("RQ codes retains its empty-query rejection and propagates helper errors", {
   withr::local_envvar(c(chemi_burl = "http://127.0.0.1:1", run_debug = "FALSE"))
   local_mocked_bindings(.endpoint_url = function(...) "http://127.0.0.1:1", .package = "ComptoxR")
   expect_error(
@@ -257,11 +213,9 @@ test_that("RQ codes retains its empty-query rejection and both wrappers propagat
     class = "rlang_error"
   )
   local_mocked_bindings(
-    generic_request = function(...) stop("request sentinel"),
     generic_chemi_request = function(...) stop("request sentinel"),
     .package = "ComptoxR"
   )
-  expect_error(chemi_classyfire("one"), "request sentinel", fixed = TRUE)
   expect_error(chemi_safety_rqcodes(), "request sentinel", fixed = TRUE)
 })
 

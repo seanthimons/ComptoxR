@@ -1,0 +1,32 @@
+{
+  "wrapper": "ct_chemical_list_all",
+  "operation": "GET /chemical/list/all",
+  "schema": "schema/ctx-chemical-prod.json",
+  "schema_sha256": "36ef02ed4594e7fee972ba882b69246d4bf7b0c65c8d43edfb79d38f2885baa1",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.26",
+    "source_commit": "3206891c579f4a8464c8bf137ee533bbb39a5f38",
+    "source_archive_sha256": "8800b06f0f8e95d5788b476a62fb0667eb67446c8dfc9d94e43487610ddc9250",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "public_formals": "function(projection = \"chemicallistall\", return_dtxsid = FALSE, coerce = FALSE)",
+  "hooks": {
+    "pre_request": "select_chemical_list_all_projection",
+    "post_response": "format_chemical_list_all_result"
+  },
+  "legacy_http_cases": 20,
+  "fixture": "tests/testthat/fixtures/native-ctx-list-all.rds",
+  "live_claim": false,
+  "http_failure_review": {
+    "cases": 6,
+    "statuses": [404, 500],
+    "exact": ["results", "attributes", "warnings"],
+    "hook_replacement": true,
+    "credential_401_hard_error": true,
+    "transport_hard_error": true,
+    "mechanism": "Existing response_policy checks context$status before decode().",
+    "upstream_evidence": "https://github.com/seanthimons/specmill/issues/143#issuecomment-6243310301"
+  }
+}

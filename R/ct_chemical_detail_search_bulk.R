@@ -84,6 +84,7 @@ ct_chemical_detail_search_bulk <- function(query, projection = "chemicaldetailal
     },
     params[["query"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

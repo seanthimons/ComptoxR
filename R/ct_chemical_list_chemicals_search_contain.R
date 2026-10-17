@@ -62,6 +62,7 @@ ct_chemical_list_chemicals_search_contain <- function(list, word) {
     },
     params[["list"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

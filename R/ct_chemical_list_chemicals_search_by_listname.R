@@ -55,6 +55,7 @@ ct_chemical_list_chemicals_search_by_listname <- function(list) {
     },
     params[["list"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

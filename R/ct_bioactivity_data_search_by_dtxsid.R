@@ -59,6 +59,7 @@ ct_bioactivity_data_search_by_dtxsid <- function(dtxsid, projection = NULL) {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

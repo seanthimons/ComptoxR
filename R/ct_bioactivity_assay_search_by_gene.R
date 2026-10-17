@@ -55,6 +55,7 @@ ct_bioactivity_assay_search_by_gene <- function(geneSymbol) {
     },
     params[["geneSymbol"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

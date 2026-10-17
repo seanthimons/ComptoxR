@@ -54,6 +54,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get ADME data for IVIVE by DTXSID with CCD projection
       lifecycle: stable
@@ -74,6 +75,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXSID
       lifecycle: stable
@@ -94,6 +96,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get detailed data by DTXSID with CCD projection
       lifecycle: stable
@@ -114,6 +117,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary data by DTXSID
       lifecycle: stable
@@ -134,6 +138,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get HAWC link by DTXSID
       lifecycle: stable
@@ -154,6 +159,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get IRIS data by DTXSID
       lifecycle: stable
@@ -174,6 +180,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get PPRTV data by DTXSID
       lifecycle: stable
@@ -194,6 +201,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXSID
       lifecycle: stable
@@ -214,6 +222,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get all data by DTXSID
       lifecycle: stable
@@ -234,6 +243,7 @@ operations:
     batch:
       fan_out: studyId
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get all data by Study ID
       lifecycle: stable
@@ -281,6 +291,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get effects data by DTXSID
       lifecycle: stable
@@ -301,6 +312,7 @@ operations:
     batch:
       fan_out: studyId
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get effects data by Study ID
       lifecycle: stable
@@ -348,6 +360,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get observations by DTXSID
       lifecycle: stable
@@ -368,6 +381,7 @@ operations:
     batch:
       fan_out: studyId
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get observations by Study ID
       lifecycle: stable
@@ -415,6 +429,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary data by DTXSID
       lifecycle: stable
@@ -435,6 +450,7 @@ operations:
     batch:
       fan_out: studyId
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary data by Study ID
       lifecycle: stable
@@ -455,6 +471,7 @@ operations:
     batch:
       fan_out: studyType
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary data by Study Type
       lifecycle: stable
@@ -475,6 +492,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get all data by dtxsid and category
       lifecycle: stable
@@ -496,6 +514,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXSID
       lifecycle: stable
@@ -516,6 +535,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get all toxval supercategories by dtxsid
       lifecycle: stable
@@ -552,6 +572,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /hazard/genetox/details/search/by-dtxsid/:
     name: ct_hazard_genetox_details_search_bulk
     file: R/ct_hazard_genetox_details_search.R
@@ -580,6 +601,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /hazard/genetox/summary/search/by-dtxsid/:
     name: ct_hazard_genetox_search_bulk
     file: R/ct_hazard_genetox_search.R
@@ -608,6 +630,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /hazard/skin-eye/search/by-dtxsid/:
     name: ct_hazard_skin_eye_search_bulk
     file: R/ct_hazard_skin_eye_search.R
@@ -636,6 +659,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /hazard/toxval/search/by-dtxsid/:
     name: ct_hazard_toxval_search_bulk
     file: R/ct_hazard_toxval_search.R
@@ -664,4 +688,5 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

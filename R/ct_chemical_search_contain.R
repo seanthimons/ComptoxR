@@ -68,6 +68,7 @@ ct_chemical_search_contain <- function(word, top = 0L, projection = "chemicalsea
     },
     params[["word"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

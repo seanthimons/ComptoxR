@@ -56,6 +56,7 @@ ct_exposure_ccd_production_volume_search <- function(dtxsid) {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -55,6 +55,7 @@ ct_bioactivity_aop_search_by_toxcast_aeid <- function(toxcastAeid) {
     },
     params[["toxcastAeid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

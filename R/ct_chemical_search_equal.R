@@ -87,6 +87,7 @@ ct_chemical_search_equal <- function(word, projection = "chemicalsearchall") {
     },
     params[["word"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

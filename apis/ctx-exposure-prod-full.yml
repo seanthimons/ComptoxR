@@ -47,6 +47,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Chemical Weight Fractions data by DTXSID
       lifecycle: experimental
@@ -69,6 +70,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Reported Functional Use data by DTXSID
       lifecycle: experimental
@@ -91,6 +93,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get General Use Keywords data by DTXSID
       lifecycle: experimental
@@ -113,6 +116,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Biomonitoring data by DTXSID with CCD projection
       lifecycle: experimental
@@ -135,6 +139,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Production Volume data by DTXSID
       lifecycle: experimental
@@ -157,6 +162,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Product Use Category data by DTXSID
       lifecycle: experimental
@@ -197,6 +203,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /exposure/httk/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_httk_search
     file: R/ct_exposure_httk_search.R
@@ -209,6 +216,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get httk data by DTXSID
       lifecycle: experimental
@@ -249,6 +257,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /exposure/list-presence/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_list_presence_search
     file: R/ct_exposure_list_presence_search.R
@@ -261,6 +270,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get List Presence data by DTXSID
       lifecycle: experimental
@@ -324,6 +334,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Aggregate data by DTXSID
       lifecycle: experimental
@@ -387,6 +398,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Single Sample data by DTXSID
       lifecycle: experimental
@@ -444,6 +456,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /exposure/product-data/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_product_data_search
     file: R/ct_exposure_product_data_search.R
@@ -456,6 +469,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get product data by DTXSID
       lifecycle: experimental
@@ -496,6 +510,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /exposure/seem/general/search/by-dtxsid/{dtxsid}:
     name: ct_exposure_seem_general_search
     file: R/ct_exposure_seem_general_search.R
@@ -508,6 +523,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get SEEM General Exposure Prediction data by DTXSID
       lifecycle: experimental

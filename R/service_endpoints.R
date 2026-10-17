@@ -127,6 +127,9 @@
   if (is.null(server$url)) sub('^(https?://[^/]+).*$', '\\1', url) else url
 }
 
+# All-failed batches need the same table container as successful tidy responses.
+.ct_empty_table <- function() tibble::tibble()
+
 # Specmill response policy: the same tibble output as generic_request(tidy = TRUE).
 .ct_tidy <- function(response, context, decode) {
   # probe_api_function() reads HTTP statuses through this observer.
@@ -187,4 +190,22 @@
 .ct_last_page <- function(response, state) {
   paging <- attr(response, 'paging')
   isTRUE(paging$pageNumber >= paging$totalPages)
+}
+
+# Preserve list-all static attribution, warnings and ordinary HTTP failure results.
+.ct_list_all <- function(response, context, decode) {
+  if (context$status >= 400L && context$status != 401L) {
+    observe_api_responses(list(response))
+    endpoint <- "chemical/list/all"
+    cli::cli_warn("API request to {.val {endpoint}} failed for {.val {'_static_'}} with status {context$status}")
+    return(tibble::tibble())
+  }
+  body <- decode()
+  records <- unwrap_collection_envelope(body)
+  if (is.list(records) && is.null(names(records)) && !length(records)) {
+    endpoint <- "chemical/list/all"
+    cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+  }
+  context$query <- "_static_"
+  .ct_tidy(response, context, function() body)
 }

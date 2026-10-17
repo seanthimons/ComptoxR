@@ -84,7 +84,8 @@ ct_chemical_detail_search_by_dtxcid_bulk <- function(query, projection = "chemic
     },
     params[["query"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }
 
@@ -166,6 +167,7 @@ ct_chemical_detail_search_by_dtxcid <- function(dtxcid, projection = "chemicalde
     },
     params[["dtxcid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -1,0 +1,24 @@
+{
+  "status": "migration_failure_parity_review_in_progress",
+  "production_pin": "0.1.26",
+  "batch_empty_constructor": ".ct_empty_table",
+  "batch_metadata": {
+    "issue": "https://github.com/seanthimons/specmill/issues/142",
+    "pull_request": "https://github.com/seanthimons/specmill/pull/144",
+    "isolated_commit": "03a8523b1098f1a5ee22db161ccfc03e64b8cb56",
+    "verification": "https://github.com/seanthimons/specmill/pull/144#issuecomment-6243273907",
+    "cases": 24,
+    "actual_wrappers": [
+      "ct_chemical_detail_search_bulk",
+      "ct_chemical_detail_search_by_dtxcid",
+      "chemi_classyfire"
+    ],
+    "result": "Exact all/partial HTTP failure values and attributes, Classyfire post-combine, and final whole-client freshness pass; adoption awaits release."
+  },
+  "unbatched_policy": {
+    "issue": "https://github.com/seanthimons/specmill/issues/143",
+    "status": "actual_list_all_existing_seam_pass",
+    "result": "Exact old/new 404/500 values, attributes, warning and hooks pass; 401/transport remain hard errors. No upstream mechanism required."
+  },
+  "remaining_review": ["Legacy multi-input list results preserve numeric batch names and NULL placeholders; status-before-decode plus metadata suppression alone does not reproduce the complete contract.", "File response media and failed-input positions require separate review."]
+}

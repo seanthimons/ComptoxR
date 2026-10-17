@@ -59,7 +59,8 @@ ct_chemical_msready_search_by_dtxcid_bulk <- function(dtxcid) {
     },
     params[["dtxcid"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }
 
@@ -121,6 +122,7 @@ ct_chemical_msready_search_by_dtxcid <- function(dtxcid) {
     },
     params[["dtxcid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

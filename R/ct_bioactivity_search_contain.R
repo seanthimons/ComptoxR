@@ -62,6 +62,7 @@ ct_bioactivity_search_contain <- function(value, top = 0L) {
     },
     params[["value"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

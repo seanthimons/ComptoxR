@@ -45,6 +45,7 @@ operations:
     batch:
       fan_out: formula
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemical count by exact formula
       lifecycle: experimental
@@ -67,6 +68,7 @@ operations:
     batch:
       fan_out: formula
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemical count by MS-ready formula
       lifecycle: experimental
@@ -107,6 +109,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /chemical/extra-data/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_extra_data_search
     file: R/ct_chemical_extra_data_search.R
@@ -119,6 +122,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXSID
       lifecycle: experimental
@@ -269,6 +273,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /chemical/msready/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_msready_search_by_dtxcid
     file: R/ct_chemical_msready_search_by_dtxcid.R
@@ -281,6 +286,7 @@ operations:
     batch:
       fan_out: dtxcid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get MS-ready chemicals by DTXCID
       lifecycle: experimental
@@ -303,6 +309,7 @@ operations:
     batch:
       fan_out: formula
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get MS-ready chemicals by formula
       lifecycle: experimental
@@ -325,6 +332,7 @@ operations:
     batch:
       fan_out: formula
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemicals by exact formula
       lifecycle: experimental
@@ -365,6 +373,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /chemical/search/by-msready-formula/{formula}:
     name: ct_chemical_search_by_msready_formula
     file: R/ct_chemical_search_by_msready_formula.R
@@ -377,6 +386,7 @@ operations:
     batch:
       fan_out: formula
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemicals by MS-ready formula
       lifecycle: experimental
@@ -399,6 +409,7 @@ operations:
     batch:
       fan_out: word
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemicals by substring value
       lifecycle: experimental
@@ -421,6 +432,7 @@ operations:
     batch:
       fan_out: word
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemicals by starting value
       lifecycle: experimental
@@ -461,6 +473,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   GET /chemical/synonym/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_synonym_search
     file: R/ct_chemical_synonym_search.R
@@ -473,6 +486,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get synonyms by DTXSID
       lifecycle: experimental

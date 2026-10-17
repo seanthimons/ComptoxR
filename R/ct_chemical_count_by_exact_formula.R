@@ -63,6 +63,7 @@ ct_chemical_count_by_exact_formula <- function(formula, projection = "count") {
     },
     params[["formula"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

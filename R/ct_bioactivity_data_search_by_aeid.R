@@ -58,7 +58,8 @@ ct_bioactivity_data_search_by_aeid_bulk <- function(aeid) {
     },
     params[["aeid"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }
 
@@ -119,6 +120,7 @@ ct_bioactivity_data_search_by_aeid <- function(aeid) {
     },
     params[["aeid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

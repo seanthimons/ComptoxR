@@ -55,6 +55,7 @@ ct_hazard_toxref_observations_search_by_study_id <- function(studyId) {
     },
     params[["studyId"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

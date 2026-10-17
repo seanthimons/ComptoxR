@@ -62,6 +62,7 @@ ct_hazard_toxval_search_by_category <- function(dtxsid, category) {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

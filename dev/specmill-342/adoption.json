@@ -82,9 +82,9 @@
     "base_commit": "49f60add",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.25",
-      "source_commit": "01fe162db735249a497ea9d30811b1d646733aa4",
-      "source_archive_sha256": "4173d7e493c5055da72133360c9ffcf987245c4582f5101799eb2c017c08100a",
+      "version": "0.1.26",
+      "source_commit": "3206891c579f4a8464c8bf137ee533bbb39a5f38",
+      "source_archive_sha256": "8800b06f0f8e95d5788b476a62fb0667eb67446c8dfc9d94e43487610ddc9250",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
       "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
     },
-    "review": "Released 0.1.23 security-correction adoption. Re-emitted native runtime matches the previous released helper exactly; prior adoption records preserved."
+    "review": "Released 0.1.26 reviewed AMOS path declaration adoption. Re-emitted native and generic helpers are byte-identical to the previously reviewed release; prior adoption records preserved."
   },
   "adoption_history": [
     {
@@ -140,6 +140,24 @@
         "version": "0.1.24",
         "source_commit": "49b2ddeea8476dd9d2b2e6a7f6fa2908815a1b3a",
         "source_archive_sha256": "35d136a776d3cfd76d0628682baa7f630b88394fa60c2cca3a6c944c3a109293",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.23 security-correction adoption. Re-emitted native runtime matches the previous released helper exactly; prior adoption records preserved."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.25",
+        "source_commit": "01fe162db735249a497ea9d30811b1d646733aa4",
+        "source_archive_sha256": "4173d7e493c5055da72133360c9ffcf987245c4582f5101799eb2c017c08100a",
         "source_repository": "https://github.com/seanthimons/specmill",
         "archive_format": "git archive --format=tar <source_commit>"
       },

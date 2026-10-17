@@ -24,6 +24,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXSID
       lifecycle: stable
@@ -54,6 +55,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get chemical details in bulk
       lifecycle: stable
@@ -65,30 +67,72 @@ operations:
   GET /chemical/list/all:
     name: ct_chemical_list_all
     file: R/ct_chemical_list_all.R
-    implementation: existing
+    implementation: generated
     inputs:
       projection:
         default: chemicallistall
         type: character
+        description: 'Projection options for chemical lists: chemicallistall, chemicallistwithdtxsids,
+          chemicallistname, or ccdchemicaldetaillists.'
       return_dtxsid:
         default: no
         type: logical
+        description: Return all DTXSIDs contained within each list.
       coerce:
         default: no
         type: logical
+        description: Split DTXSID strings into per-list vectors when return_dtxsid
+          is TRUE.
     request:
       arguments:
-        endpoint:
-          value: chemical/list/all
         method:
           value: GET
-        batch_limit:
-          value: 0.0
-        projection:
-          from:
-          - params
-          - projection
-    specialization: Retain stable pre/post hooks, partial parameter updates and early
-      skip result.
+        path:
+          value: /chemical/list/all
+        path_params:
+          value: {}
+        query:
+          object:
+            projection:
+              from:
+              - params
+              - projection
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          value: .ct_list_all
+    helper: .ct_request
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_list_all
+    post_on_skip: no
+    post_state: parameters
+    docs:
+      title: Get all lists
+      lifecycle: stable
+      return: A tibble of chemical lists, or a named list when both return_dtxsid
+        and coerce are TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - projection: chemicallistall
 contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds
 hook_config: inst/hook_config.yml

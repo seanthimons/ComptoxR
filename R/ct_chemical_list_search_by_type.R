@@ -67,6 +67,7 @@ ct_chemical_list_search_by_type <- function(type, projection = "chemicallistall"
     },
     params[["type"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -62,6 +62,7 @@ ct_bioactivity_assay_single_conc_search_by_aeid <- function(aeid, projection = "
     },
     params[["aeid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -60,6 +60,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get analytical QC data by DTXSID
       lifecycle: stable
@@ -80,6 +81,7 @@ operations:
     batch:
       fan_out: entrezGeneId
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get AOP data by Entrez Gene ID
       lifecycle: stable
@@ -100,6 +102,7 @@ operations:
     batch:
       fan_out: eventNumber
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get AOP data by Key Event
       lifecycle: stable
@@ -120,6 +123,7 @@ operations:
     batch:
       fan_out: toxcastAeid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get AOP data by ToxCast AEID
       lifecycle: stable
@@ -155,6 +159,7 @@ operations:
     batch:
       fan_out: aeid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get DTXSID list by AEID
       lifecycle: stable
@@ -190,6 +195,7 @@ operations:
     batch:
       fan_out: aeid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get assay annotations by AEID
       lifecycle: stable
@@ -225,6 +231,7 @@ operations:
     batch:
       fan_out: geneSymbol
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get assay summary by gene symbol
       lifecycle: stable
@@ -245,6 +252,7 @@ operations:
     batch:
       fan_out: aeid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get single conc data by AEID
       lifecycle: stable
@@ -265,6 +273,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get AED data by DTXSID
       lifecycle: stable
@@ -285,6 +294,7 @@ operations:
     batch:
       fan_out: aeid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by AEID
       lifecycle: stable
@@ -305,6 +315,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXSID
       lifecycle: stable
@@ -325,6 +336,7 @@ operations:
     batch:
       fan_out: m4id
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by M4ID
       lifecycle: stable
@@ -345,6 +357,7 @@ operations:
     batch:
       fan_out: spid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by SPID
       lifecycle: stable
@@ -365,6 +378,7 @@ operations:
     batch:
       fan_out: aeid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary data by AEID
       lifecycle: stable
@@ -385,6 +399,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary data by DTXSID
       lifecycle: stable
@@ -435,6 +450,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get predictions by DTXSID
       lifecycle: stable
@@ -455,6 +471,7 @@ operations:
     batch:
       fan_out: value
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Search by substring value
       lifecycle: stable
@@ -475,6 +492,7 @@ operations:
     batch:
       fan_out: value
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Search by exact value
       lifecycle: stable
@@ -495,6 +513,7 @@ operations:
     batch:
       fan_out: value
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Search by starting value
       lifecycle: stable
@@ -531,6 +550,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /bioactivity/data/aed/search/by-dtxsid/:
     name: ct_bioactivity_data_aed_search_bulk
     file: R/ct_bioactivity_data_aed_search.R
@@ -559,6 +579,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /bioactivity/data/search/by-aeid/:
     name: ct_bioactivity_data_search_by_aeid_bulk
     file: R/ct_bioactivity_data_search_by_aeid.R
@@ -587,6 +608,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /bioactivity/data/search/by-dtxsid/:
     name: ct_bioactivity_data_search_bulk
     file: R/ct_bioactivity_data_search.R
@@ -615,6 +637,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /bioactivity/data/search/by-m4id/:
     name: ct_bioactivity_data_search_by_m4id_bulk
     file: R/ct_bioactivity_data_search_by_m4id.R
@@ -643,6 +666,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /bioactivity/data/search/by-spid/:
     name: ct_bioactivity_data_search_by_spid_bulk
     file: R/ct_bioactivity_data_search_by_spid.R
@@ -671,4 +695,5 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

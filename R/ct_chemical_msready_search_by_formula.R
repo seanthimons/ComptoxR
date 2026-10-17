@@ -56,6 +56,7 @@ ct_chemical_msready_search_by_formula <- function(formula) {
     },
     params[["formula"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

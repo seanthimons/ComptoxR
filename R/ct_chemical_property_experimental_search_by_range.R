@@ -74,6 +74,7 @@ ct_chemical_property_experimental_search_by_range <- function(propertyName, star
     },
     params[["propertyName"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -55,6 +55,7 @@ ct_bioactivity_aop_search_by_event_number <- function(eventNumber) {
     },
     params[["eventNumber"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

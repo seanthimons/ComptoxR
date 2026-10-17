@@ -28,6 +28,8 @@ selection:
   - GET /api/amos/substring_search/{substring}
   - GET /api/amos/search/{dtxsid}
   - GET /api/amos/get_classification_for_dtxsid/{dtxsid}
+  - GET /api/amos/get_similar_structures/{identifier_type}/{identifier}
+  - GET /api/amos/list_sources_by_record_type/{record_type}
 helper: generic_request
 documentation: yes
 operations:
@@ -624,6 +626,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get Classyfire classification for DTXSID
       description: This function retrieves Classyfire classifications for a given
@@ -661,5 +664,62 @@ operations:
           value: []
         response_policy:
           value: .ct_tidy
+  GET /api/amos/get_similar_structures/{identifier_type}/{identifier}:
+    name: chemi_amos_get_similar_structures
+    file: R/chemi_amos_get_similar_structures.R
+    helper: .ct_request
+    implementation: generated
+    path_parameters_correction:
+      parameters:
+        identifier_type:
+          type: string
+        identifier:
+          type: string
+      reason: Reviewed staging declarations and production read-only captures.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: identifier_type
+      on_error: drop
+    docs:
+      title: chemi amos get similar structures
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - identifier_type: DTXSID
+        identifier: DTXSID7020182
+    normalize_inputs:
+      identifier_type: .ct_legacy_query
+  GET /api/amos/list_sources_by_record_type/{record_type}:
+    name: chemi_amos_list_sources_by_record_type
+    file: R/chemi_amos_list_sources_by_record_type.R
+    helper: .ct_request
+    implementation: generated
+    path_parameters_correction:
+      parameters:
+        record_type:
+          type: string
+      reason: Reviewed staging declarations and production read-only captures.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: record_type
+      on_error: drop
+    docs:
+      title: chemi amos list sources by record type
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - record_type: method
+    normalize_inputs:
+      record_type: .ct_legacy_query
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds
 hook_config: inst/hook_config.yml

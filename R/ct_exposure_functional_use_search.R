@@ -58,7 +58,8 @@ ct_exposure_functional_use_search_bulk <- function(dtxsid) {
     },
     params[["dtxsid"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }
 
@@ -119,6 +120,7 @@ ct_exposure_functional_use_search <- function(dtxsid) {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

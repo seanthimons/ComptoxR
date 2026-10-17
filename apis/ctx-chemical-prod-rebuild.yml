@@ -58,6 +58,7 @@ operations:
     batch:
       fan_out: propertyId
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get predicted properties by property and range
       lifecycle: stable
@@ -120,6 +121,7 @@ operations:
     batch:
       fan_out: propertyName
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get experimental properties by property and range
       lifecycle: stable
@@ -182,6 +184,7 @@ operations:
     batch:
       fan_out: list
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get DTXSIDs for list and containing starting string in chemical name
       lifecycle: stable
@@ -239,6 +242,7 @@ operations:
     batch:
       fan_out: list
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get DTXSIDs for list and containing exact string in chemical name
       lifecycle: stable
@@ -296,6 +300,7 @@ operations:
     batch:
       fan_out: list
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get DTXSIDs for list and containing substring in chemical name
       lifecycle: stable
@@ -353,6 +358,7 @@ operations:
     batch:
       fan_out: dtxcid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data by DTXCID
       lifecycle: stable
@@ -388,6 +394,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get fate data by DTXSID
       lifecycle: stable
@@ -453,6 +460,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get fate summary by DTXSID
       lifecycle: stable
@@ -473,6 +481,7 @@ operations:
     batch:
       fan_out: list
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get DTXSIDs by list
       lifecycle: stable
@@ -493,6 +502,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get lists containing DTXSID
       lifecycle: stable
@@ -513,6 +523,7 @@ operations:
     batch:
       fan_out: type
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get lists by list type
       lifecycle: stable
@@ -548,6 +559,7 @@ operations:
     batch:
       fan_out: start
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get MS-ready chemicals using mass range
       lifecycle: experimental
@@ -622,6 +634,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get experimental properties by DTXSID
       lifecycle: stable
@@ -657,6 +670,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get predicted properties by DTXSID
       lifecycle: stable
@@ -722,6 +736,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get summary by DTXSID
       lifecycle: stable
@@ -742,6 +757,7 @@ operations:
     batch:
       fan_out: word
       on_error: drop
+      empty: .ct_empty_table
     post_on_skip: no
     post_state: parameters
     docs:
@@ -774,6 +790,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get data for a batch of DTXCIDs
       lifecycle: stable
@@ -810,6 +827,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /chemical/msready/search/by-mass/:
     name: ct_chemical_msready_search_by_mass_bulk
     file: R/ct_chemical_msready_search_by_mass.R
@@ -863,6 +881,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /chemical/property/predicted/search/by-dtxsid/:
     name: ct_chemical_property_predicted_search_bulk
     file: R/ct_chemical_property_predicted_search.R
@@ -891,6 +910,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /chemical/search/equal/:
     name: ct_chemical_search_equal_bulk
     file: R/ct_chemical_search_equal.R

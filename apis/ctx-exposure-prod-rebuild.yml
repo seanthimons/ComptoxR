@@ -47,6 +47,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get functional use probability by DTXSID
       lifecycle: stable
@@ -67,6 +68,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get functional use data by DTXSID
       lifecycle: stable
@@ -87,6 +89,7 @@ operations:
     batch:
       fan_out: dtxsid
       on_error: drop
+      empty: .ct_empty_table
     docs:
       title: Get SEEM Demographic Exposure Prediction data by DTXSID
       lifecycle: stable
@@ -123,6 +126,7 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
   POST /exposure/seem/demographic/search/by-dtxsid/:
     name: ct_exposure_seem_demographic_search_bulk
     file: R/ct_exposure_seem_demographic_search.R
@@ -151,4 +155,5 @@ operations:
         default: 100
       split: yes
       on_error: drop
+      empty: .ct_empty_table
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

@@ -58,6 +58,7 @@ ct_bioactivity_data_search_bulk <- function(dtxsid) {
     },
     params[["dtxsid"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -74,6 +74,7 @@ ct_chemical_property_predicted_search_by_range <- function(propertyId, start, en
     },
     params[["propertyId"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -63,6 +63,7 @@ ct_chemical_search_start_with <- function(word, top = 500L) {
     },
     params[["word"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

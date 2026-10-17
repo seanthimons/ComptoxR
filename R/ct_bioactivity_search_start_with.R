@@ -62,6 +62,7 @@ ct_bioactivity_search_start_with <- function(value, top = 500L) {
     },
     params[["value"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

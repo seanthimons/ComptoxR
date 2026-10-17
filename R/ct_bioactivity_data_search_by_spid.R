@@ -58,7 +58,8 @@ ct_bioactivity_data_search_by_spid_bulk <- function(spid) {
     },
     params[["spid"]],
     .batch_limit,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }
 
@@ -119,6 +120,7 @@ ct_bioactivity_data_search_by_spid <- function(spid) {
     },
     params[["spid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

@@ -55,6 +55,7 @@ ct_bioactivity_data_summary_search_by_aeid <- function(aeid) {
     },
     params[["aeid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }

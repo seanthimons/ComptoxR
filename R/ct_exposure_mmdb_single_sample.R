@@ -56,6 +56,7 @@ ct_exposure_mmdb_single_sample <- function(dtxsid) {
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 }
