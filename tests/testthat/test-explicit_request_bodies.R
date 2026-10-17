@@ -4,7 +4,7 @@ test_that("explicit body builders preserve fields, NULL omission and falsy value
     captured <<- list(...)
     list(result = "unchanged")
   }, .package = "ComptoxR")
-  for (name in c("ct_chemical_msready_search_by_mass_bulk", "epi_submit_batch")) {
+  for (name in "epi_submit_batch") {
     fun <- getExportedValue("ComptoxR", name)
     fields <- names(formals(fun))
     required <- if (name == "epi_submit_batch") "modules" else fields
@@ -37,23 +37,4 @@ test_that("explicit body builders preserve fields, NULL omission and falsy value
       })
     }
   }
-})
-
-test_that("mass-range GET keeps optional end and vector path semantics", {
-  captured <- NULL
-  local_mocked_bindings(generic_request = function(...) {
-    captured <<- list(...)
-    list(result = "unchanged")
-  }, .package = "ComptoxR")
-  expect_identical(formals(ct_chemical_msready_search_by_mass), formals(function(start, end = NULL) NULL))
-  expect_identical(ct_chemical_msready_search_by_mass(200.9), list(result = "unchanged"))
-  expect_null(captured$path_params)
-  for (end in list(NULL, 200.95, FALSE, 0, character(), c(201, 202))) {
-    ct_chemical_msready_search_by_mass(200.9, end)
-    expect_identical(captured, list(query = 200.9, endpoint = "chemical/msready/search/by-mass/",
-      method = "GET", batch_limit = 1, path_params = c(end = end)))
-  }
-  ct_chemical_msready_search_by_mass(NULL)
-  expect_null(captured$query)
-  expect_error(ct_chemical_msready_search_by_mass(), 'argument "start" is missing', fixed = TRUE)
 })

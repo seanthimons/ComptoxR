@@ -197,37 +197,18 @@ operations:
   GET /bioactivity/assay/search/by-endpoint/:
     name: ct_bioactivity_assay_search_by_endpoint
     file: R/ct_bioactivity_assay_search_by_endpoint.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      endpoint:
-        type: character
-        required: yes
-        description: Required parameter
-    post_on_skip: no
-    post_state: parameters
-    request:
-      arguments:
-        endpoint:
-          value: bioactivity/assay/search/by-endpoint/
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        query_params:
-          object:
-            endpoint:
-              from:
-              - params
-              - endpoint
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get AEID by assay component endpoint name
       lifecycle: stable
-      parameters:
-        endpoint: Required parameter
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - endpoint: DTXSID7020182
+      - endpoint: CCTE_GLTED_hIYD
   GET /bioactivity/assay/search/by-gene/{geneSymbol}:
     name: ct_bioactivity_assay_search_by_gene
     file: R/ct_bioactivity_assay_search_by_gene.R

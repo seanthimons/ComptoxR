@@ -4,22 +4,20 @@
 \alias{ct_chemical_msready_search_by_mass_bulk}
 \title{Get MS-ready chemicals for a batch of mass ranges}
 \usage{
-ct_chemical_msready_search_by_mass_bulk(error, masses)
+ct_chemical_msready_search_by_mass_bulk(body)
 }
 \arguments{
-\item{error}{Required parameter}
-
-\item{masses}{Required parameter}
+\item{body}{A named list with integer error (mass tolerance) and a numeric masses vector.}
 }
 \value{
-Returns a list with result object
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_chemical_msready_search_by_mass_bulk(error = "DTXSID1024122")
+ct_chemical_msready_search_by_mass_bulk(body = list(error = 5L, masses = list(200.9, 201L)))
 }
 }
 \section{API stage}{

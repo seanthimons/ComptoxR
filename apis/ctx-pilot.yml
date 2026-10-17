@@ -8,40 +8,31 @@ selection:
   - POST /chemical/detail/search/by-dtxsid/
   - GET /chemical/list/all
 helper: generic_request
+authentication:
+  api_key: ctx
 documentation: yes
 operations:
   GET /chemical/detail/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_detail_search
     file: R/ct_chemical_detail_search.R
-    implementation: existing
-    inputs:
-      dtxsid:
-        required: yes
-        type: character
-      projection:
-        default: chemicaldetailall
-        type: character
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chemical/detail/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
-    specialization: Retain stable grouped source, authentication, response shaping
-      and client-owned input normalization.
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
   POST /chemical/detail/search/by-dtxsid/:
     name: ct_chemical_detail_search_bulk
-    file: R/ct_chemical_detail_search.R
+    file: R/ct_chemical_detail_search_bulk.R
     implementation: existing
     inputs:
       query:

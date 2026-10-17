@@ -43,13 +43,19 @@ contracts <- list(
   ct_chemical_detail_search = contract(
     list(dtxsid = 'DTXSID7020182'),
     list(
-      query = 'DTXSID7020182',
-      endpoint = 'chemical/detail/search/by-dtxsid/',
       method = 'GET',
-      batch_limit = 1,
-      projection = 'chemicaldetailall'
+      path = '/chemical/detail/search/by-dtxsid/{dtxsid}',
+      path_params = list(dtxsid = 'DTXSID7020182'),
+      query = list(projection = 'chemicaldetailall'),
+      body = NULL,
+      response_policy = '.ct_tidy',
+      server = list(url = 'https://comptox.epa.gov/ctx-api'),
+      server_resolver = list(name = '.ct_server_url', key = 'ctx_burl'),
+      auth = list(list(list(scheme = 'ctx', type = 'apiKey', location = 'header',
+                            name = 'x-api-key', envvar = 'ctx_api_key')))
     ),
-    response
+    response,
+    helper = '.ct_request'
   ),
   ct_chemical_detail_search_bulk = contract(
     list(query = c('DTXSID7020182', 'DTXSID1024122')),

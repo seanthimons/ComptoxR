@@ -35,7 +35,10 @@ test_that("ct_*() identifier functions work against the offline CTX mock", {
   detail <- ct_chemical_detail_search("DTXSID7020182")
   expect_identical(detail$casrn, "80-05-7")
   expect_true("averageMass" %in% names(detail))
-  expect_error(ct_chemical_detail_search("DTXSID000"), "400")
+  expect_warning(missing <- ct_chemical_detail_search("DTXSID000"), "400")
+  expect_type(missing, "list")
+  expect_length(missing, 0)
+  expect_match(unname(attr(missing, "failed")), "400")
 
   bulk <- ct_chemical_detail_search_bulk(c("DTXSID7020182", "DTXSID000", "DTXSID2021315"))
   expect_identical(bulk$dtxsid, c("DTXSID2021315", "DTXSID7020182"))
