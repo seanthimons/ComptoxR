@@ -3,8 +3,8 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param name Primary query parameter. Type: string
-#' @return Returns a list with result object
+#' @param name name Accepts a vector: one request is sent per element and the results are combined.
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
 #' @examples
@@ -13,15 +13,37 @@
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_toxprints_assays_by_name <- function(name) {
-  params <- base::list("name" = name)
-  result <- generic_request(
-    "query" = params[["name"]],
-    "endpoint" = "toxprints/assays/",
-    "method" = "GET",
-    "batch_limit" = 1,
-    "server" = "chemi_burl",
-    "auth" = FALSE,
-    "tidy" = FALSE
+  if (base::is.null(name)) {
+    base::stop("Required input: name")
+  }
+  .api_validation$parameter_values(
+    base::list("name" = name),
+    list(name = list(type = "array", items = list(type = "string"))),
+    .api_validation$body_value,
+    c(name = "path")
   )
-  result
+  params <- base::list("name" = name)
+  send <- function(params) {
+    result <- .ct_request(
+      method = "GET",
+      path = "/api/toxprints/assays/{name}",
+      path_params = base::list("name" = params[["name"]]),
+      query = base::list(),
+      body = NULL,
+      response_policy = ".ct_list",
+      server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+      server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+      auth = list()
+    )
+    result
+  }
+  .ct_request_each(
+    function(chunk) {
+      params["name"] <- base::list(chunk)
+      send(params)
+    },
+    params[["name"]],
+    1L,
+    on_error = "drop"
+  )
 }

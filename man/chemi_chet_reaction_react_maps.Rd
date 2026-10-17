@@ -7,17 +7,17 @@
 chemi_chet_reaction_react_maps(react_id = NULL)
 }
 \arguments{
-\item{react_id}{Optional parameter}
+\item{react_id}{react_id}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_react_maps(react_id = "DTXSID7020182")
+chemi_chet_reaction_react_maps()
 }
 }
 \section{API stage}{

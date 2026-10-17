@@ -27,81 +27,35 @@ operations:
   GET /chemicals/alias:
     name: chemi_chet_chemicals_alias
     file: R/chemi_chet_chemicals_alias.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/alias
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            dtxsid:
-              from:
-              - params
-              - dtxsid
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Fetch aliases for a chemical
       lifecycle: experimental
-      parameters:
-        dtxsid: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - dtxsid: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /chemicals/chemset:
     name: chemi_chet_chemicals_chemset
     file: R/chemi_chet_chemicals_chemset.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      setid:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/chemset
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            setid:
-              from:
-              - params
-              - setid
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List chemicals by library
       lifecycle: experimental
-      parameters:
-        setid: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - setid: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /chemicals/counts:
@@ -285,180 +239,67 @@ operations:
   GET /chemicals/database/stats:
     name: chemi_chet_chemicals_database_stats
     file: R/chemi_chet_chemicals_database_stats.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      total:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/database/stats
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            total:
-              from:
-              - params
-              - total
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Chemical stats and library names
       lifecycle: experimental
-      parameters:
-        total: Optional parameter
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
-      - total: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /chemicals/maps:
     name: chemi_chet_chemicals_maps
     file: R/chemi_chet_chemicals_maps.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      chemid:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/maps
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            chemid:
-              from:
-              - params
-              - chemid
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Map list for a chemical
       lifecycle: experimental
-      parameters:
-        chemid: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - chemid: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /chemicals/singlechemical:
     name: chemi_chet_chemicals_singlechemical
     file: R/chemi_chet_chemicals_singlechemical.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/singlechemical
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            dtxsid:
-              from:
-              - params
-              - dtxsid
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Fetch a single chemical
       lifecycle: experimental
-      parameters:
-        dtxsid: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - dtxsid: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /chemicals/suggest:
     name: chemi_chet_chemicals_suggest
     file: R/chemi_chet_chemicals_suggest.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: User-entered chemical name, DTXSID, CASRN, or resolver-supported
-          identifier.
-      limit:
-        type: numeric
-        default: 8.0
-        description: 'Optional parameter (default: 8)'
-      only_in_reactions:
-        type: character
-        default: 'true'
-        description: 'If true, only suggest chemicals that participate in at least
-          one reaction. (default: true)'
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/suggest
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            query:
-              from:
-              - params
-              - query
-            limit:
-              from:
-              - params
-              - limit
-            only_in_reactions:
-              from:
-              - params
-              - only_in_reactions
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Suggest CheT chemicals for look-ahead search
       lifecycle: experimental
-      parameters:
-        query: User-entered chemical name, DTXSID, CASRN, or resolver-supported identifier.
-        limit: 'Optional parameter (default: 8)'
-        only_in_reactions: 'If true, only suggest chemicals that participate in at
-          least one reaction. (default: true)'
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
       - query: DTXSID7020182
       tags:
@@ -600,348 +441,137 @@ operations:
   GET /reaction/database/stats:
     name: chemi_chet_reaction_database_stats
     file: R/chemi_chet_reaction_database_stats.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      reaction_id:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/database/stats
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            reaction_id:
-              from:
-              - params
-              - reaction_id
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Reaction stats and filters
       lifecycle: experimental
-      parameters:
-        reaction_id: Optional parameter
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
-      - reaction_id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/details:
     name: chemi_chet_reaction_details
     file: R/chemi_chet_reaction_details.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      lib_id:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/details
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            lib_id:
-              from:
-              - params
-              - lib_id
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List details for a library
       lifecycle: experimental
-      parameters:
-        lib_id: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - lib_id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/mapid:
     name: chemi_chet_reaction_mapid
     file: R/chemi_chet_reaction_mapid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      map_id:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/mapid
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            map_id:
-              from:
-              - params
-              - map_id
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List reactions for a map
       lifecycle: experimental
-      parameters:
-        map_id: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - map_id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/react_maps:
     name: chemi_chet_reaction_react_maps
     file: R/chemi_chet_reaction_react_maps.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      react_id:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/react_maps
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            react_id:
-              from:
-              - params
-              - react_id
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List maps for a reaction
       lifecycle: experimental
-      parameters:
-        react_id: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - react_id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/reactionmap:
     name: chemi_chet_reaction_reactionmap
     file: R/chemi_chet_reaction_reactionmap.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      id:
-        type: character
-        default: ~
-        description: Optional parameter
-      searchtype:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/reactionmap
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            id:
-              from:
-              - params
-              - id
-            searchtype:
-              from:
-              - params
-              - searchtype
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Build reaction map
       lifecycle: experimental
-      parameters:
-        id: Optional parameter
-        searchtype: Optional parameter
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
-      - id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/search:
     name: chemi_chet_reaction
     file: R/chemi_chet_reaction.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        default: ~
-        description: Optional parameter
-      searchType:
-        type: character
-        default: ~
-        description: Optional parameter
-      substringTF:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/search
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            query:
-              from:
-              - params
-              - query
-            searchType:
-              from:
-              - params
-              - searchType
-            substringTF:
-              from:
-              - params
-              - substringTF
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Search reactions and chemicals
       lifecycle: experimental
-      parameters:
-        query: Optional parameter
-        searchType: Optional parameter
-        substringTF: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - query: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/singlereaction:
     name: chemi_chet_reaction_singlereaction
     file: R/chemi_chet_reaction_singlereaction.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      reaction_id:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/singlereaction
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            reaction_id:
-              from:
-              - params
-              - reaction_id
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Fetch a single reaction
       lifecycle: experimental
-      parameters:
-        reaction_id: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - reaction_id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
   GET /reaction/table:
     name: chemi_chet_reaction_table
     file: R/chemi_chet_reaction_table.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      reaction_id:
-        type: character
-        default: ~
-        description: Optional parameter
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/table
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            reaction_id:
-              from:
-              - params
-              - reaction_id
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Fetch reaction detail table
       lifecycle: experimental
-      parameters:
-        reaction_id: Optional parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
-      - reaction_id: DTXSID7020182
+      - {}
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

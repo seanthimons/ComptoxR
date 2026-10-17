@@ -16,86 +16,50 @@ operations:
   GET /api/ecosar/polymer/amphoteric:
     name: epi_ecosar_polymer_amphoteric
     file: R/epi_ecosar_polymer_amphoteric.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: ecosar/polymer/amphoteric
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: epi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_list
     docs:
       title: Estimate an amphoteric polymer
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
-      - {}
+      - solubilityType: INSOLUBLE
   GET /api/ecosar/polymer/anionic:
     name: epi_ecosar_polymer_anionic
     file: R/epi_ecosar_polymer_anionic.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: ecosar/polymer/anionic
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: epi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_list
     docs:
       title: Estimate an anionic polymer
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
-      - {}
+      - solubilityType: INSOLUBLE
   GET /api/ecosar/polymer/polycationic:
     name: epi_ecosar_polymer_polycationic
     file: R/epi_ecosar_polymer_polycationic.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: ecosar/polymer/polycationic
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: epi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_list
     docs:
       title: Estimate a polycationic polymer
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -103,88 +67,52 @@ operations:
   GET /api/ecosar/surfactant/amphoteric:
     name: epi_ecosar_surfactant_amphoteric
     file: R/epi_ecosar_surfactant_amphoteric.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: ecosar/surfactant/amphoteric
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: epi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_list
     docs:
       title: Estimate an amphoteric surfactant
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
-      - {}
+      - carbonChainLength: 8
   GET /api/ecosar/surfactant/anionic:
     name: epi_ecosar_surfactant_anionic
     file: R/epi_ecosar_surfactant_anionic.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: ecosar/surfactant/anionic
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: epi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_list
     docs:
       title: Estimate an anionic surfactant
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
-      - {}
+      - carbonChainLength: 1
   GET /api/ecosar/surfactant/cationic:
     name: epi_ecosar_surfactant_cationic
     file: R/epi_ecosar_surfactant_cationic.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: ecosar/surfactant/cationic
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: epi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_list
     docs:
       title: Estimate a cationic surfactant
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
-      - {}
+      - carbonChainLength: 1
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

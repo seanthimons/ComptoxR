@@ -14,39 +14,16 @@ operations:
   GET /api/services/layout:
     name: chemi_services_layout
     file: R/chemi_services_layout.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      smiles:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: services/layout
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            smiles:
-              from:
-              - params
-              - smiles
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Services Layout
       lifecycle: experimental
-      parameters:
-        smiles: Required parameter
-      return: Returns a tibble with results
+      return: Returns a list of results
       examples:
       - smiles: DTXSID7020182
       tags:
@@ -54,39 +31,16 @@ operations:
   GET /api/services/smirks2rxn:
     name: chemi_services_smirks2rxn
     file: R/chemi_services_smirks2rxn.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      smirks:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: services/smirks2rxn
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            smirks:
-              from:
-              - params
-              - smirks
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Services Smirks2rxn
       lifecycle: experimental
-      parameters:
-        smirks: Required parameter
-      return: Returns a tibble with results
+      return: Returns a list of results
       examples:
       - smirks: DTXSID7020182
       tags:

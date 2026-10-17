@@ -7,12 +7,12 @@
 chemi_arn_cats(smiles, model = "RF")
 }
 \arguments{
-\item{smiles}{SMILES to generate groups for}
+\item{smiles}{smiles}
 
-\item{model}{Model to use for group prediction. Options: RF, NN (default: RF)}
+\item{model}{model}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

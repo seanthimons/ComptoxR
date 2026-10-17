@@ -7,14 +7,14 @@
 chemi_toxprints(smiles, headers = FALSE, profile = NULL)
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{smiles}
 
-\item{headers}{Optional parameter (default: FALSE)}
+\item{headers}{headers}
 
-\item{profile}{Optional parameter}
+\item{profile}{profile}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

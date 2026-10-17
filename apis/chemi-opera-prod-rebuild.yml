@@ -13,62 +13,16 @@ operations:
   GET /api/opera:
     name: chemi_opera
     file: R/chemi_opera.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      smiles:
-        type: character
-        required: yes
-        description: SMILES to generate predictions for
-      format:
-        type: character
-        default: json
-        description: 'Format to return predictions in (json, csv, xlsx) (default:
-          json)'
-      standardize:
-        type: logical
-        default: no
-        description: 'Standardize chemical before calculating predictions (default:
-          FALSE)'
-    post_on_skip: no
-    post_state: parameters
-    request:
-      arguments:
-        endpoint:
-          value: opera
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            smiles:
-              from:
-              - params
-              - smiles
-            format:
-              from:
-              - params
-              - format
-            standardize:
-              from:
-              - params
-              - standardize
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Opera
       lifecycle: experimental
-      parameters:
-        smiles: SMILES to generate predictions for
-        format: 'Format to return predictions in (json, csv, xlsx) (default: json)'
-        standardize: 'Standardize chemical before calculating predictions (default:
-          FALSE)'
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
       - smiles: DTXSID7020182
       tags:
@@ -76,50 +30,19 @@ operations:
   GET /api/opera/report:
     name: chemi_opera_report
     file: R/chemi_opera_report.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: DSSTox substance identifier
-      modelId:
-        type: character
-        required: yes
-        description: Dashboard model ID for the OPERA endpoint
-    request:
-      arguments:
-        endpoint:
-          value: opera/report
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            dtxsid:
-              from:
-              - params
-              - dtxsid
-            modelId:
-              from:
-              - params
-              - modelId
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Generate a standalone OPERA calculation report
       lifecycle: experimental
-      parameters:
-        dtxsid: DSSTox substance identifier
-        modelId: Dashboard model ID for the OPERA endpoint
-      return: Returns a tibble with results
+      return: Returns a list of results
       examples:
       - dtxsid: DTXSID7020182
+        modelId: 1
       tags:
         apiStage: public
   POST /api/opera:

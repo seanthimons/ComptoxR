@@ -49,25 +49,22 @@ test_that("bulk predictions preserve both body shapes and reject ambiguous bodie
     tidy = FALSE, format = NULL, standardize = NULL))
 })
 
-test_that("prediction GET siblings keep query options and transport settings", {
+test_that("prediction GET siblings keep query options and positional model IDs", {
   captured <- NULL
-  testthat::local_mocked_bindings(
-    generic_request = function(...) {
-      captured <<- list(...)
-      list(result = "unchanged")
-    },
-    .package = "ComptoxR"
-  )
+  testthat::local_mocked_bindings(.ct_request = function(...) {
+    captured <<- list(...)
+    list(result = "unchanged")
+  }, .package = "ComptoxR")
   expect_identical(chemi_opera("CCO"), list(result = "unchanged"))
-  expect_identical(captured, list(endpoint = "opera", method = "GET", batch_limit = 0,
-    server = "chemi_burl", auth = FALSE, tidy = FALSE,
-    options = list(smiles = "CCO", format = "json", standardize = FALSE)))
+  expect_identical(captured$path, "/api/opera")
+  expect_identical(captured$query, list(smiles = "CCO", format = "json", standardize = FALSE))
+  expect_identical(captured$server_resolver$key, "chemi_burl")
+  expect_identical(captured$auth, list())
   expect_identical(chemi_predictor_models_predict(1065L, identifier = "DTXSID7020182"), list(result = "unchanged"))
-  expect_identical(captured, list(endpoint = "predictor_models/predict", method = "GET", batch_limit = 0,
-    server = "chemi_burl", auth = FALSE, tidy = FALSE,
-    options = list(identifier = "DTXSID7020182", model_id = 1065L, report_format = "json")))
+  expect_identical(captured$path, "/api/predictor_models/predict")
+  expect_identical(captured$query, list(model_id = 1065L, smiles = NULL, identifier = "DTXSID7020182", report_format = "json"))
   chemi_opera("CCO", format = NULL, standardize = NULL)
-  expect_identical(captured$options, list(smiles = "CCO"))
+  expect_identical(captured$query, list(smiles = "CCO", format = NULL, standardize = NULL))
   chemi_predictor_models_predict(1065L, report_format = NULL)
-  expect_identical(captured$options, list(model_id = 1065L))
+  expect_identical(captured$query, list(model_id = 1065L, smiles = NULL, identifier = NULL, report_format = NULL))
 })

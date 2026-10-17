@@ -3,9 +3,9 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param smiles SMILES to generate groups for
-#' @param model Model to use for group prediction. Options: RF, NN (default: RF)
-#' @return Returns a list with result object
+#' @param smiles smiles
+#' @param model model
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
 #' @examples
@@ -14,21 +14,32 @@
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_arn_cats <- function(smiles, model = "RF") {
+  if (base::is.null(smiles)) {
+    base::stop("Required input: smiles")
+  }
+  .api_validation$parameter_values(
+    base::list("smiles" = smiles, "model" = model),
+    list(smiles = list(type = "string"), model = list(default = "RF", enum = list("RF", "NN"), type = "string")),
+    .api_validation$body_value,
+    c(smiles = "query", model = "query")
+  )
   params <- base::list("smiles" = smiles, "model" = model)
-  result <- generic_request(
-    "endpoint" = "arn_cats",
-    "method" = "GET",
-    "batch_limit" = 0,
-    "server" = "chemi_burl",
-    "auth" = FALSE,
-    "tidy" = FALSE,
-    "options" = base::local({
-      .body <- base::Filter(
-        base::Negate(base::is.null),
-        base::list("smiles" = params[["smiles"]], "model" = params[["model"]])
-      )
-      if (base::length(.body)) .body else base::list()
-    })
+  if (base::is.character(params[["smiles"]]) && base::any(!base::nzchar(params[["smiles"]]))) {
+    base::stop("Empty query parameter: smiles")
+  }
+  if (base::is.character(params[["model"]]) && base::any(!base::nzchar(params[["model"]]))) {
+    base::stop("Empty query parameter: model")
+  }
+  result <- .ct_request(
+    method = "GET",
+    path = "/api/arn_cats",
+    path_params = base::list(),
+    query = base::list("smiles" = params[["smiles"]], "model" = params[["model"]]),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = ""),
+    auth = list()
   )
   result
 }

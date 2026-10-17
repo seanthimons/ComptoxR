@@ -12,39 +12,16 @@ operations:
   GET /api/amnb_nate:
     name: chemi_amnb_nate
     file: R/chemi_amnb_nate.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      smiles:
-        type: character
-        required: yes
-        description: SMILES to generate predictions for
-    request:
-      arguments:
-        endpoint:
-          value: amnb_nate
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            smiles:
-              from:
-              - params
-              - smiles
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Amnb Nate
       lifecycle: experimental
-      parameters:
-        smiles: SMILES to generate predictions for
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
       - smiles: DTXSID7020182
       tags:

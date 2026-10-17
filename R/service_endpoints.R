@@ -146,7 +146,14 @@
   body <- unwrap_collection_envelope(decode())
   single <- is.list(body) && !is.null(names(body))
   query <- if (single) if (length(context$query) == 1L) context$query else "_static_"
+  if (single && !length(body)) return(list(structure(body, query = query)))
   .ct_request_records(body, query = query, null_to_na = TRUE)
+}
+
+# Static endpoints keep their legacy attribution even with one URL query field.
+.ct_static_list <- function(response, context, decode) {
+  context$query <- NULL
+  .ct_list(response, context, decode)
 }
 
 # Specmill response policy for file endpoints: text (mol) as a string, images as magick objects.

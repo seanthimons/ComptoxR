@@ -12,70 +12,19 @@ operations:
   GET /api/predictor_models/predict:
     name: chemi_predictor_models_predict
     file: R/chemi_predictor_models_predict.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      model_id:
-        type: character
-        required: yes
-        description: Model ID to use
-      smiles:
-        type: character
-        default: ~
-        description: SMILES to generate predictions for
-      identifier:
-        type: character
-        default: ~
-        description: identifier to generate predictions for
-      report_format:
-        type: character
-        default: json
-        description: 'which format to return (default: json)'
-    post_on_skip: no
-    post_state: parameters
-    request:
-      arguments:
-        endpoint:
-          value: predictor_models/predict
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            smiles:
-              from:
-              - params
-              - smiles
-            identifier:
-              from:
-              - params
-              - identifier
-            model_id:
-              from:
-              - params
-              - model_id
-            report_format:
-              from:
-              - params
-              - report_format
+    parameter_order: [model_id, smiles, identifier, report_format]
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Predictor Models Predict
       lifecycle: experimental
-      parameters:
-        smiles: SMILES to generate predictions for
-        identifier: identifier to generate predictions for
-        model_id: Model ID to use
-        report_format: 'which format to return (default: json)'
-      return: Returns a tibble with results
+      return: Returns a list of results
       examples:
-      - smiles: DTXSID7020182
+      - model_id: 1
       tags:
         apiStage: public
   POST /api/predictor_models/predict:

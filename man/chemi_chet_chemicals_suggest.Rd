@@ -4,17 +4,17 @@
 \alias{chemi_chet_chemicals_suggest}
 \title{Suggest CheT chemicals for look-ahead search}
 \usage{
-chemi_chet_chemicals_suggest(query, limit = 8, only_in_reactions = "true")
+chemi_chet_chemicals_suggest(query, limit = 8L, only_in_reactions = "true")
 }
 \arguments{
-\item{query}{User-entered chemical name, DTXSID, CASRN, or resolver-supported identifier.}
+\item{query}{query}
 
-\item{limit}{Optional parameter (default: 8)}
+\item{limit}{limit}
 
-\item{only_in_reactions}{If true, only suggest chemicals that participate in at least one reaction. (default: true)}
+\item{only_in_reactions}{only_in_reactions}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

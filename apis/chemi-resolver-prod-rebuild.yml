@@ -23,39 +23,16 @@ operations:
   GET /api/resolver/ccte-list:
     name: chemi_resolver_ccte_list
     file: R/chemi_resolver_ccte_list.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      name:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: resolver/ccte-list
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            name:
-              from:
-              - params
-              - name
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Ccte List
       lifecycle: experimental
-      parameters:
-        name: Required parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
       - name: DTXSID7020182
       tags:
@@ -237,88 +214,34 @@ operations:
   GET /api/resolver/getannotation:
     name: chemi_resolver_getannotation
     file: R/chemi_resolver_getannotation.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      name:
-        type: character
-        required: yes
-        description: Required parameter
-      heading:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: resolver/getannotation
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            name:
-              from:
-              - params
-              - name
-            heading:
-              from:
-              - params
-              - heading
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Getannotation
       lifecycle: experimental
-      parameters:
-        name: Required parameter
-        heading: Required parameter
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
       - name: DTXSID7020182
+        heading: benzene
       tags:
         apiStage: public
   GET /api/resolver/getannotationslist:
     name: chemi_resolver_getannotationslist
     file: R/chemi_resolver_getannotationslist.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      name:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: resolver/getannotationslist
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            name:
-              from:
-              - params
-              - name
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Getannotationslist
       lifecycle: experimental
-      parameters:
-        name: Required parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
       - name: DTXSID7020182
       tags:
@@ -326,39 +249,16 @@ operations:
   GET /api/resolver/getsubstance:
     name: chemi_resolver_getsubstance
     file: R/chemi_resolver_getsubstance.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      name:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: resolver/getsubstance
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            name:
-              from:
-              - params
-              - name
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Getsubstance
       lifecycle: experimental
-      parameters:
-        name: Required parameter
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
       - name: DTXSID7020182
       tags:
@@ -366,39 +266,16 @@ operations:
   GET /api/resolver/ghs-list:
     name: chemi_resolver_ghs_list
     file: R/chemi_resolver_ghs_list.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      name:
-        type: character
-        required: yes
-        description: Required parameter
-    request:
-      arguments:
-        endpoint:
-          value: resolver/ghs-list
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            name:
-              from:
-              - params
-              - name
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Ghs List
       lifecycle: experimental
-      parameters:
-        name: Required parameter
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
       - name: DTXSID7020182
       tags:
@@ -406,61 +283,16 @@ operations:
   GET /api/resolver/links:
     name: chemi_resolver_links
     file: R/chemi_resolver_links.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Required parameter
-      idType:
-        type: character
-        default: AnyId
-        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
-          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-      fuzzy:
-        type: character
-        default: Not
-        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-    request:
-      arguments:
-        endpoint:
-          value: resolver/links
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            query:
-              from:
-              - params
-              - query
-            idType:
-              from:
-              - params
-              - idType
-            fuzzy:
-              from:
-              - params
-              - fuzzy
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Links
       lifecycle: experimental
-      parameters:
-        query: Required parameter
-        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
-          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
       - query: DTXSID7020182
       tags:
@@ -468,160 +300,48 @@ operations:
   GET /api/resolver/lookup:
     name: chemi_resolver_lookup
     file: R/chemi_resolver_lookup.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: resolver/lookup
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: yes
-        options:
-          compact_object:
-            idType:
-              from:
-              - params
-              - idType
-            fuzzy:
-              from:
-              - params
-              - fuzzy
-            mol:
-              from:
-              - params
-              - mol
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_tidy
     docs:
       title: Resolver Lookup
       lifecycle: stable
-      parameters:
-        query: Required parameter
-        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
-          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-        mol: 'Optional parameter (default: FALSE)'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
       - query: DTXSID7020182
-    parameters:
-      query query:
-        description: Required parameter
-      query idType:
-        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
-          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-      query fuzzy:
-        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-      query mol:
-        description: 'Optional parameter (default: FALSE)'
   GET /api/resolver/lookupCASRN:
     name: chemi_resolver_lookupCASRN
     file: R/chemi_resolver_lookupCASRN.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    request:
-      arguments:
-        endpoint:
-          value: resolver/lookupCASRN
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            query:
-              from:
-              - params
-              - query
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver lookupCASRN
       lifecycle: experimental
-      parameters:
-        query: Required parameter
-      return: Returns a list with result object
+      return: Returns a list of results
       examples:
       - query: DTXSID7020182
       tags:
         apiStage: public
-    parameters:
-      query query:
-        description: Required parameter
   GET /api/resolver/mesh:
     name: chemi_resolver_mesh
     file: R/chemi_resolver_mesh.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Required parameter
-      idType:
-        type: character
-        default: AnyId
-        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
-          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-      fuzzy:
-        type: character
-        default: Not
-        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-    request:
-      arguments:
-        endpoint:
-          value: resolver/mesh
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
-            query:
-              from:
-              - params
-              - query
-            idType:
-              from:
-              - params
-              - idType
-            fuzzy:
-              from:
-              - params
-              - fuzzy
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Resolver Mesh
       lifecycle: experimental
-      parameters:
-        query: Required parameter
-        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
-          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       examples:
       - query: DTXSID7020182
       tags:

@@ -4,17 +4,37 @@
 \alias{epi_ecosar_surfactant_amphoteric}
 \title{Estimate an amphoteric surfactant}
 \usage{
-epi_ecosar_surfactant_amphoteric()
+epi_ecosar_surfactant_amphoteric(
+  carbonChainLength,
+  ethoxylate = 0L,
+  waterSolubility = NULL,
+  cas = NULL,
+  chemicalName = NULL,
+  smiles = NULL
+)
+}
+\arguments{
+\item{carbonChainLength}{carbonChainLength}
+
+\item{ethoxylate}{ethoxylate}
+
+\item{waterSolubility}{waterSolubility}
+
+\item{cas}{cas}
+
+\item{chemicalName}{chemicalName}
+
+\item{smiles}{smiles}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_surfactant_amphoteric()
+epi_ecosar_surfactant_amphoteric(carbonChainLength = 8L)
 }
 }
 \section{API stage}{

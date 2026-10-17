@@ -3,7 +3,6 @@ testthat::test_that("chemi_chet_reaction_react_maps completes the fixed call seq
   contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[[
     "chemi_chet_reaction_react_maps"
   ]]
-  withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {
     force(name)
@@ -16,7 +15,7 @@ testthat::test_that("chemi_chet_reaction_react_maps completes the fixed call seq
       contract$calls[[position]]$response
     }
   }
-  testthat::local_mocked_bindings(generic_request = mock_for("generic_request"), .package = "ComptoxR")
+  testthat::local_mocked_bindings(.ct_request = mock_for(".ct_request"), .package = "ComptoxR")
   result <- do.call(ComptoxR::chemi_chet_reaction_react_maps, contract$inputs)
   testthat::expect_identical(captured, lapply(contract$calls, function(x) x[c('helper', 'arguments')]))
   testthat::expect_identical(result, contract$result)

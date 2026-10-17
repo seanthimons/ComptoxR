@@ -3,10 +3,10 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param smiles Required parameter
-#' @param exportSmiles Optional parameter
-#' @param exportMol Optional parameter
-#' @return Returns a tibble with results
+#' @param smiles smiles
+#' @param exportSmiles exportSmiles
+#' @param exportMol exportMol
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
 #' @examples
@@ -15,25 +15,39 @@
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_search_substructure <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
+  if (base::is.null(smiles)) {
+    base::stop("Required input: smiles")
+  }
+  .api_validation$parameter_values(
+    base::list("smiles" = smiles, "exportSmiles" = exportSmiles, "exportMol" = exportMol),
+    list(smiles = list(type = "string"), exportSmiles = list(type = "string"), exportMol = list(type = "string")),
+    .api_validation$body_value,
+    c(smiles = "query", exportSmiles = "query", exportMol = "query")
+  )
   params <- base::list("smiles" = smiles, "exportSmiles" = exportSmiles, "exportMol" = exportMol)
-  result <- generic_request(
-    "endpoint" = "search/substructure",
-    "method" = "GET",
-    "batch_limit" = 0,
-    "server" = "chemi_burl",
-    "auth" = FALSE,
-    "tidy" = FALSE,
-    "options" = base::local({
-      .body <- base::Filter(
-        base::Negate(base::is.null),
-        base::list(
-          "smiles" = params[["smiles"]],
-          "exportSmiles" = params[["exportSmiles"]],
-          "exportMol" = params[["exportMol"]]
-        )
-      )
-      if (base::length(.body)) .body else base::list()
-    })
+  if (base::is.character(params[["smiles"]]) && base::any(!base::nzchar(params[["smiles"]]))) {
+    base::stop("Empty query parameter: smiles")
+  }
+  if (base::is.character(params[["exportSmiles"]]) && base::any(!base::nzchar(params[["exportSmiles"]]))) {
+    base::stop("Empty query parameter: exportSmiles")
+  }
+  if (base::is.character(params[["exportMol"]]) && base::any(!base::nzchar(params[["exportMol"]]))) {
+    base::stop("Empty query parameter: exportMol")
+  }
+  result <- .ct_request(
+    method = "GET",
+    path = "/api/search/substructure",
+    path_params = base::list(),
+    query = base::list(
+      "smiles" = params[["smiles"]],
+      "exportSmiles" = params[["exportSmiles"]],
+      "exportMol" = params[["exportMol"]]
+    ),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list()
   )
   result
 }

@@ -7,21 +7,21 @@
 chemi_chet_reaction(query = NULL, searchType = NULL, substringTF = NULL)
 }
 \arguments{
-\item{query}{Optional parameter}
+\item{query}{query}
 
-\item{searchType}{Optional parameter}
+\item{searchType}{searchType}
 
-\item{substringTF}{Optional parameter}
+\item{substringTF}{substringTF}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction(query = "DTXSID7020182")
+chemi_chet_reaction()
 }
 }
 \section{API stage}{

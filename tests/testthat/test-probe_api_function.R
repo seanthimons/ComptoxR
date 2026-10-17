@@ -83,6 +83,12 @@ test_that("probe reports empty, non-200, redirected, and thrown results", {
     expect_match(result$error[[1]], case$message, fixed = TRUE)
   }
   testthat::local_mocked_bindings(req_perform = function(req) stop('request exploded'), .package = 'httr2')
+  expect_warning(errors <- probe_api_function('chemi_alerts_groups_by_id', id = 'group-42'), "failed")
+  expect_false(any(errors$valid))
+  expect_match(errors$error[[1]], "HTTP request failed before a response was received", fixed = TRUE)
+  expect_identical(errors$error[[1]], unname(attr(errors$result[[1]], "failed")[[1]]))
+  testthat::local_mocked_bindings(chemi_alerts_groups_by_id = function(...) stop("request exploded"),
+    .package = "ComptoxR")
   errors <- probe_api_function('chemi_alerts_groups_by_id', id = 'group-42')
   expect_true(all(errors$error == 'request exploded'))
 })
@@ -175,4 +181,16 @@ test_that("response observer sees batched and paginated helper responses", {
   )
   expect_identical(statuses, c(200L, 200L))
   expect_equal(nrow(result), 2L)
+})
+
+
+test_that("probe rejects partial native batches with unobserved request failures", {
+  testthat::local_mocked_bindings(req_perform = function(req, ...) {
+    if (endsWith(req$url, "/group-2")) stop("request exploded")
+    probe_json_response(req)
+  }, .package = "httr2")
+  expect_warning(result <- probe_api_function("chemi_alerts_groups_by_id", id = c("group-1", "group-2")), "failed")
+  expect_false(any(result$valid))
+  expect_identical(result$status_codes[[1]], 200L)
+  expect_match(result$error[[1]], "HTTP request failed before a response was received", fixed = TRUE)
 })

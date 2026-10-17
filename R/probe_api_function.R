@@ -93,6 +93,10 @@ probe_api_function <- function(function_name, ...) {
           NULL
         }
       )
+      request_errors <- attr(result, "failed", exact = TRUE)
+      if (is.null(call_error) && length(request_errors) && all(status_codes == 200L)) {
+        call_error <- paste(unlist(request_errors, use.names = FALSE), collapse = "; ")
+      }
       if (legacy_direct) {
         observed_urls <<- character()
         status_codes <<- integer()

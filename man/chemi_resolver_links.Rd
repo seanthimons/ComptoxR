@@ -7,14 +7,14 @@
 chemi_resolver_links(query, idType = "AnyId", fuzzy = "Not")
 }
 \arguments{
-\item{query}{Required parameter}
+\item{query}{query}
 
-\item{idType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
+\item{idType}{idType}
 
-\item{fuzzy}{Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)}
+\item{fuzzy}{fuzzy}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

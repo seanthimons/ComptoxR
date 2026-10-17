@@ -17,28 +17,16 @@ operations:
   GET /chemicals/database-old:
     name: chemi_chet_chemicals_database_old
     file: R/chemi_chet_chemicals_database_old.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chet/chemicals/database-old
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List all chemicals (legacy)
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -46,37 +34,19 @@ operations:
   GET /chemicals/verify/{dtxsid}:
     name: chemi_chet_chemicals_verify
     file: R/chemi_chet_chemicals_verify.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chet/chemicals/verify/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Verify a DTXSID against DSSTOX
       lifecycle: experimental
-      parameters:
-        dtxsid: 'Primary query parameter. Type: string'
-      return: Returns a list with result object
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -84,28 +54,16 @@ operations:
   GET /reaction/database_old:
     name: chemi_chet_reaction_database_old
     file: R/chemi_chet_reaction_database_old.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/database_old
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List all reactions (legacy)
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -113,28 +71,16 @@ operations:
   GET /reaction/dbcounts:
     name: chemi_chet_reaction_dbcounts
     file: R/chemi_chet_reaction_dbcounts.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/dbcounts
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Count chemicals and reactions
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -158,37 +104,19 @@ operations:
   GET /reaction/mappositions/{map_id}:
     name: chemi_chet_reaction_mappositions
     file: R/chemi_chet_reaction_mappositions.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      map_id:
-        type: character
-        required: yes
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - map_id
-        endpoint:
-          value: chet/reaction/mappositions/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: map_id
+      on_error: drop
     docs:
       title: Fetch stored reaction-map node positions
       lifecycle: experimental
-      parameters:
-        map_id: 'Primary query parameter. Type: string'
-      return: Returns a list with result object
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -196,28 +124,16 @@ operations:
   GET /reaction/maps:
     name: chemi_chet_reaction_maps
     file: R/chemi_chet_reaction_maps.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: chet/reaction/maps
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: List maps
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:

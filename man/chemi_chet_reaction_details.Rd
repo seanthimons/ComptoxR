@@ -7,17 +7,17 @@
 chemi_chet_reaction_details(lib_id = NULL)
 }
 \arguments{
-\item{lib_id}{Optional parameter}
+\item{lib_id}{lib_id}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_details(lib_id = "DTXSID7020182")
+chemi_chet_reaction_details()
 }
 }
 \section{API stage}{

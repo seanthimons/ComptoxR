@@ -3,44 +3,66 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param model_id Model ID to use
-#' @param smiles SMILES to generate predictions for
-#' @param identifier identifier to generate predictions for
-#' @param report_format which format to return (default: json)
-#' @return Returns a tibble with results
+#' @param model_id model_id
+#' @param smiles smiles
+#' @param identifier identifier
+#' @param report_format report_format
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
 #' @examples
 #' \dontrun{
-#' chemi_predictor_models_predict(smiles = "DTXSID7020182")
+#' chemi_predictor_models_predict(model_id = 1L)
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier = NULL, report_format = "json") {
+  if (base::is.null(model_id)) {
+    base::stop("Required input: model_id")
+  }
+  .api_validation$parameter_values(
+    base::list("model_id" = model_id, "smiles" = smiles, "identifier" = identifier, "report_format" = report_format),
+    list(
+      model_id = list(type = "integer"),
+      smiles = list(type = "string"),
+      identifier = list(type = "string"),
+      report_format = list(default = "json", type = "string")
+    ),
+    .api_validation$body_value,
+    c(model_id = "query", smiles = "query", identifier = "query", report_format = "query")
+  )
   params <- base::list(
     "model_id" = model_id,
     "smiles" = smiles,
     "identifier" = identifier,
     "report_format" = report_format
   )
-  result <- generic_request(
-    "endpoint" = "predictor_models/predict",
-    "method" = "GET",
-    "batch_limit" = 0,
-    "server" = "chemi_burl",
-    "auth" = FALSE,
-    "tidy" = FALSE,
-    "options" = base::local({
-      .body <- base::Filter(
-        base::Negate(base::is.null),
-        base::list(
-          "smiles" = params[["smiles"]],
-          "identifier" = params[["identifier"]],
-          "model_id" = params[["model_id"]],
-          "report_format" = params[["report_format"]]
-        )
-      )
-      if (base::length(.body)) .body else base::list()
-    })
+  if (base::is.character(params[["model_id"]]) && base::any(!base::nzchar(params[["model_id"]]))) {
+    base::stop("Empty query parameter: model_id")
+  }
+  if (base::is.character(params[["smiles"]]) && base::any(!base::nzchar(params[["smiles"]]))) {
+    base::stop("Empty query parameter: smiles")
+  }
+  if (base::is.character(params[["identifier"]]) && base::any(!base::nzchar(params[["identifier"]]))) {
+    base::stop("Empty query parameter: identifier")
+  }
+  if (base::is.character(params[["report_format"]]) && base::any(!base::nzchar(params[["report_format"]]))) {
+    base::stop("Empty query parameter: report_format")
+  }
+  result <- .ct_request(
+    method = "GET",
+    path = "/api/predictor_models/predict",
+    path_params = base::list(),
+    query = base::list(
+      "model_id" = params[["model_id"]],
+      "smiles" = params[["smiles"]],
+      "identifier" = params[["identifier"]],
+      "report_format" = params[["report_format"]]
+    ),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = ""),
+    auth = list()
   )
   result
 }

@@ -13,34 +13,19 @@ operations:
   GET /api/alerts/groups/{id}:
     name: chemi_alerts_groups_by_id
     file: R/chemi_alerts_groups_by_id.R
+    helper: .ct_request
     implementation: generated
-    inputs:
-      id:
-        required: yes
-        type: character
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - id
-        endpoint:
-          value: alerts/groups/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: id
+      on_error: drop
     docs:
       title: Alerts Groups
       lifecycle: experimental
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -48,26 +33,16 @@ operations:
   GET /api/alerts/alerts:
     name: chemi_alerts_alerts
     file: R/chemi_alerts_alerts.R
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: alerts/alerts
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Alerts Alerts
       lifecycle: experimental
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -75,26 +50,16 @@ operations:
   GET /api/alerts/operations:
     name: chemi_alerts_operations
     file: R/chemi_alerts_operations.R
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: alerts/operations
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
     docs:
       title: Alerts Operations
       lifecycle: experimental
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:

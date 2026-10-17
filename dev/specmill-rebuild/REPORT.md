@@ -889,3 +889,45 @@ wrapper that takes no arguments returned JSON, as did `batchsearch` and
 `searchcounts` (with `search_type`). The exceptions are `reaction/database_old`
 and `reaction/database-old/{page}/{term}`, which return upstream HTTP 500
 `application/problem+json`.
+
+
+## Native Chemi/EPI GET migration, 17 October 2026
+
+Eleven metadata GETs now use the native request helper. Their live results match
+all eleven legacy results, including attributes. Another 89 parameterized and
+static GETs move to native schema-derived transport, with explicit service
+resolution, response policies and per-input iteration where required. ChET uses
+the schema's `/api/chet` server prefix. Required and typed schema parameters
+replace incomplete legacy formals, including EPI solubility and chain-length
+inputs. Examples now supply the required schema inputs.
+
+All 89 fixed helper contracts and captured localhost requests passed. Wire
+checks cover paths, query parameters and defaults, empty GET bodies and decoded
+outputs. All 55 successful legacy live probes match the native result exactly
+after rechecking static record attribution, empty objects and resolver lookup's
+tibble policy. The remaining 34 legacy probes failed upstream or used invalid
+legacy inputs. Their native outcomes are recorded separately, including dropped
+per-input failures, rather than being counted as live parity passes.
+`wave-native-get.json` records each operation, input and live outcome.
+
+The production toolkit pin remains 0.1.18 for this batch. Isolated analytical-QC
+verification against Specmill commit `12e8a3a` passed exact live parity for
+DTXSID7020182, with 29 rows and 16 columns, captured API-key/path checks,
+unchanged archived schema and generation freshness. Its production wrapper
+waits for a validated release. Detail bulk wrappers remain retained after the
+0.1.21 body-order release because their call-time `batch_limit` contract requires
+[Specmill #128](https://github.com/seanthimons/specmill/issues/128).
+
+
+The predictor-model GET retains `model_id` as its first public argument through
+`parameter_order`; query wire mappings remain keyed by name. Existing helper
+mocks now exercise the native transport. `probe_api_function()` also recognizes
+native per-input failure attributes, including a failed request following a
+successful response, so it cannot report that partial batch as valid.
+
+Final validation for the 89-operation batch: the complete test suite passed with
+zero failures or warnings and two existing skips, for optional pROC and the
+explicit integration-only test. All 89 helper contracts and localhost request
+captures passed. Documentation was regenerated, and the final Specmill check
+passed. The four pager candidates are separate and remain retained pending
+[Specmill #129](https://github.com/seanthimons/specmill/issues/129).
