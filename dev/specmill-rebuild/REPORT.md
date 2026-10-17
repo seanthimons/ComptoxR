@@ -1136,3 +1136,40 @@ argument and default checks have no mismatches. Actual exported wrappers replay
 captured production responses identically; EPI submit and both standardizer GETs
 also retain exact legacy URLs and headers. Final generation freshness passes.
 `wave-static-chemi.json` records the live limitations and intact POST moves.
+
+## Released normalization adoption, v0.1.25
+
+Pinned Specmill v0.1.25 at source/tag
+`01fe162db735249a497ea9d30811b1d646733aa4`. The local source archive SHA256 is
+`4173d7e493c5055da72133360c9ffcf987245c4582f5101799eb2c017c08100a`.
+The released normalizer policy permits adoption of all 144 saved candidates,
+plus both detail bulk endpoints. Each uses the client-owned `.ct_legacy_query`
+policy before validation, preserving list flattening, duplicate removal, blank/NA
+cleanup and the early empty-input error. The 24 ordinary arrays and two detail
+arrays resolve `batch_limit` on each call with fallback 100 and split enabled.
+
+Eight endpoints with multiple path parameters bind a response callback that
+passes the primary input to the existing client formatter. Forty saved legacy
+response cases verify exact values and attributes for objects, arrays, keyed
+objects, empty arrays and JSON null. Callback closure arguments are tested through
+actual HTTP request construction and decoding instead of comparing serialized R
+environments in helper-call fixtures. The client list policy now retains JSON
+null as `list(NULL)`, matching the old formatter. Singleton JSON-array inputs
+also retain a scalar query column on object responses, rather than an unnamed
+list column. Both detail bulk wrappers have explicit regression coverage.
+
+The original held configurations and pre-release isolation evidence remain in
+`held-normalization.rds`; their status record now identifies the released
+adoption. The exact-search line endpoint, ToxPrint visibility, reviewed AMOS path
+and media/response declarations, resolver body omission and paging metadata
+policies retain their existing implementations pending their separate reviews
+or released fixes.
+
+Validation: the complete package test suite passes with no failures or warnings;
+two tests skip because pROC is absent and live integration is disabled. All 144
+normalization cases and 40 legacy attribution cases pass, with additional
+per-chunk attribution, singleton-object, binary-file and dynamic-limit checks.
+Code/documentation arguments and defaults have no mismatches. Official generation
+freshness passes at the released pin; existing warnings for retained descriptor
+routes remain tracked upstream. Archived schemas are unchanged and
+`git diff --check` is clean.

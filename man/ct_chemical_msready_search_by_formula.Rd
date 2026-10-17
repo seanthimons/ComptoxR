@@ -7,10 +7,10 @@
 ct_chemical_msready_search_by_formula(formula)
 }
 \arguments{
-\item{formula}{Chemical formula. Type: string}
+\item{formula}{formula Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

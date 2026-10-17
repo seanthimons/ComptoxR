@@ -3,8 +3,8 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param substring A name substring to search by.
-#' @return Returns a tibble with results
+#' @param substring A name substring to search by. Accepts a vector: one request is sent per element and the results are combined.
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
 #' @examples
@@ -13,15 +13,48 @@
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_amos_substring <- function(substring) {
-  params <- base::list("substring" = substring)
-  result <- generic_request(
-    "query" = params[["substring"]],
-    "endpoint" = "amos/substring_search/",
-    "method" = "GET",
-    "batch_limit" = 1,
-    "server" = "chemi_burl",
-    "auth" = FALSE,
-    "tidy" = FALSE
+  substring <- base::get(
+    ".ct_legacy_query",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = TRUE
+  )(substring)
+  if (base::is.null(substring)) {
+    base::stop("Required input: substring")
+  }
+  .api_validation$parameter_values(
+    base::list("substring" = substring),
+    list(
+      substring = list(
+        type = "array",
+        items = list(description = "A name substring to search by.", "in" = "path", name = "substring", type = "string")
+      )
+    ),
+    .api_validation$body_value,
+    c(substring = "path")
   )
-  result
+  params <- base::list("substring" = substring)
+  send <- function(params) {
+    result <- .ct_request(
+      method = "GET",
+      path = "/api/amos/substring_search/{substring}",
+      path_params = base::list("substring" = params[["substring"]]),
+      query = base::list(),
+      body = NULL,
+      response_policy = ".ct_list",
+      server = list(diagnostic = "Swagger host/scheme requires a recorded origin or explicit base URL override"),
+      server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+      auth = list()
+    )
+    result
+  }
+  .ct_request_each(
+    function(chunk) {
+      params["substring"] <- base::list(chunk)
+      send(params)
+    },
+    params[["substring"]],
+    1L,
+    on_error = "drop"
+  )
 }

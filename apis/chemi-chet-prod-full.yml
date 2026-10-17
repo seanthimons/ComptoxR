@@ -34,41 +34,25 @@ operations:
   GET /chemicals/verify/{dtxsid}:
     name: chemi_chet_chemicals_verify
     file: R/chemi_chet_chemicals_verify.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chet/chemicals/verify/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Verify a DTXSID against DSSTOX
       lifecycle: experimental
-      parameters:
-        dtxsid: 'Primary query parameter. Type: string'
-      return: Returns a list with result object
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
       - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
   GET /reaction/database_old:
     name: chemi_chet_reaction_database_old
     file: R/chemi_chet_reaction_database_old.R
@@ -122,41 +106,25 @@ operations:
   GET /reaction/mappositions/{map_id}:
     name: chemi_chet_reaction_mappositions
     file: R/chemi_chet_reaction_mappositions.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      map_id:
-        type: character
-        required: yes
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - map_id
-        endpoint:
-          value: chet/reaction/mappositions/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: map_id
+      on_error: drop
     docs:
       title: Fetch stored reaction-map node positions
       lifecycle: experimental
-      parameters:
-        map_id: 'Primary query parameter. Type: string'
-      return: Returns a list with result object
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
       - map_id: DTXSID7020182
+    normalize_inputs:
+      map_id: .ct_legacy_query
   GET /reaction/maps:
     name: chemi_chet_reaction_maps
     file: R/chemi_chet_reaction_maps.R

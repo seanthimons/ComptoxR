@@ -1,4 +1,16 @@
 # Development callbacks only. Client helpers retain runtime policy.
+primary_query_response <- function(operation) {
+  name <- regmatches(operation$path, regexpr("\\{[^}]+\\}", operation$path))
+  name <- substring(name, 2L, nchar(name) - 1L)
+  parameter <- Filter(function(parameter) identical(parameter$name, name), operation$parameters)
+  stopifnot(length(parameter) == 1L)
+  if (!is.null(parameter[[1L]]$public_name)) name <- parameter[[1L]]$public_name
+  substitute(function(response, context, decode) {
+    context$query <- params[[NAME]]
+    POLICY(response, context, decode)
+  }, list(NAME = name, POLICY = as.name(operation$response_policy)))
+}
+
 detail_batch_limit <- function(operation) {
   quote(as.numeric(Sys.getenv("batch_limit", "100")))
 }

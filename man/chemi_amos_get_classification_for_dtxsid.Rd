@@ -7,10 +7,10 @@
 chemi_amos_get_classification_for_dtxsid(dtxsid)
 }
 \arguments{
-\item{dtxsid}{The DTXSID for the substance of interest.}
+\item{dtxsid}{The DTXSID for the substance of interest. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

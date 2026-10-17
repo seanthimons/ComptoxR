@@ -7,10 +7,10 @@
 chemi_amos_substring(substring)
 }
 \arguments{
-\item{substring}{A name substring to search by.}
+\item{substring}{A name substring to search by. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

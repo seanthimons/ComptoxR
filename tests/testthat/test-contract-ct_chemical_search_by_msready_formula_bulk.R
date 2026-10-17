@@ -4,6 +4,7 @@ testthat::test_that("ct_chemical_search_by_msready_formula_bulk completes the fi
     "ct_chemical_search_by_msready_formula_bulk"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
+  names(contract$inputs)[names(contract$inputs) == "body"] <- "formula"
   captured <- list()
   mock_for <- function(name) {
     force(name)
@@ -16,7 +17,7 @@ testthat::test_that("ct_chemical_search_by_msready_formula_bulk completes the fi
       contract$calls[[position]]$response
     }
   }
-  testthat::local_mocked_bindings(generic_request = mock_for("generic_request"), .package = "ComptoxR")
+  testthat::local_mocked_bindings(.ct_request = mock_for(".ct_request"), .package = "ComptoxR")
   result <- do.call(ComptoxR::ct_chemical_search_by_msready_formula_bulk, contract$inputs)
   testthat::expect_identical(captured, lapply(contract$calls, function(x) x[c('helper', 'arguments')]))
   testthat::expect_identical(result, contract$result)

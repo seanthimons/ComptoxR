@@ -4,19 +4,19 @@
 \alias{ct_bioactivity_data_search_by_spid_bulk}
 \title{Get data for a batch of SPIDs}
 \usage{
-ct_bioactivity_data_search_by_spid_bulk(query)
+ct_bioactivity_data_search_by_spid_bulk(spid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{spid}{Sample identifiers. Inputs are sent in chunks using the configured call-time item limit and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_search_by_spid_bulk(query = "DTXSID1024122")
+ct_bioactivity_data_search_by_spid_bulk(spid = list("EPAPLT0232A03", "EPAPLT0232A04"))
 }
 }

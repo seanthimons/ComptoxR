@@ -2,7 +2,7 @@
   "issue": "https://github.com/seanthimons/specmill/issues/135",
   "upstream_pr": "https://github.com/seanthimons/specmill/pull/136",
   "verified_commit": "213dd7ee68dc1a643264db795d97aa83be5a98ef",
-  "status": "retained_until_release",
+  "status": "adopted_released_v0.1.25",
   "count": 144,
   "operations": {
     "chemi_alerts_groups_by_id": {
@@ -869,5 +869,7 @@
       "key": "POST /hazard/toxval/search/by-dtxsid/",
       "file": "R/ct_hazard_toxval_search.R"
     }
-  }
+  },
+  "released_version": "0.1.25",
+  "released_source_commit": "01fe162db735249a497ea9d30811b1d646733aa4"
 }

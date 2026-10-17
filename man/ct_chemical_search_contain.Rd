@@ -4,17 +4,17 @@
 \alias{ct_chemical_search_contain}
 \title{Get chemicals by substring value}
 \usage{
-ct_chemical_search_contain(word, top = 0, projection = "chemicalsearchall")
+ct_chemical_search_contain(word, top = 0L, projection = "chemicalsearchall")
 }
 \arguments{
-\item{word}{Substring of word to seach for. Values supplied as the 'word' parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN), or InChIKey.. Type: string}
+\item{word}{word Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{top}{Optional parameter (default: 0)}
+\item{top}{top}
 
-\item{projection}{Optional parameter (default: chemicalsearchall)}
+\item{projection}{projection}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

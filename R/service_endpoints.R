@@ -135,7 +135,7 @@
   # The API doesn't echo the input on single-object responses; name it in a query column.
   single <- is.list(body) && !is.null(names(body))
   .ct_request_table(
-    .ct_request_records(body, query = if (single && length(context$query) == 1L) context$query),
+    .ct_request_records(body, query = if (single && length(context$query) == 1L) context$query[[1L]]),
     build = safe_tidy_bind
   )
 }
@@ -144,8 +144,9 @@
 .ct_list <- function(response, context, decode) {
   observe_api_responses(list(response))
   body <- unwrap_collection_envelope(decode())
+  if (is.null(body)) return(list(NULL))
   single <- is.list(body) && !is.null(names(body))
-  query <- if (single) if (length(context$query) == 1L) context$query else "_static_"
+  query <- if (single) if (length(context$query) == 1L) context$query[[1L]] else "_static_"
   if (single && !length(body)) return(list(structure(body, query = query)))
   .ct_request_records(body, query = query, null_to_na = TRUE)
 }

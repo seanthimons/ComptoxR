@@ -7,12 +7,12 @@
 ct_chemical_list_search(dtxsid, projection = "chemicallistall")
 }
 \arguments{
-\item{dtxsid}{DSSTox Substance Identifier. Type: string}
+\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{projection}{Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)}
+\item{projection}{Projection options for chemical List APIs}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

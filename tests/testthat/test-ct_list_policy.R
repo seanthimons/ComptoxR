@@ -5,6 +5,7 @@ test_that("Chemi list policy preserves object, array, scalar and envelope record
     '{"results":[{"id":1}]}' = list(list(id = 1L)),
     '"release notes"' = list("release notes"),
     '{}' = list(structure(setNames(list(), character()), query = "_static_")),
+    'null' = list(NULL),
     '[]' = list()
   )
   for (body in names(cases)) {

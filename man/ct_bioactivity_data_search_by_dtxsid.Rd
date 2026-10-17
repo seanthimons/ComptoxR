@@ -7,12 +7,12 @@
 ct_bioactivity_data_search_by_dtxsid(dtxsid, projection = NULL)
 }
 \arguments{
-\item{dtxsid}{DSSTox Substance Identifier. Type: string}
+\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{projection}{Specifies if projection is used. Option: toxcast-summary-plot. If omitted, the default BioactivityDataAll data is returned.}
+\item{projection}{projection}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

@@ -47,123 +47,87 @@ operations:
   GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_analyticalqc_search
     file: R/ct_bioactivity_analyticalqc_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: bioactivity/analyticalqc/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    security_correction:
+      requirements:
+      - api_key: []
+      reason: Reviewed endpoint requires the declared API-key credential.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get analytical QC data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'Primary query parameter. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
   GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}:
     name: ct_bioactivity_aop_search_by_entrez_gene_id
     file: R/ct_bioactivity_aop_search_by_entrez_gene_id.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      entrezGeneId:
-        type: character
-        required: yes
-        description: 'Entrez Gene Id. Type: integer'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - entrezGeneId
-        endpoint:
-          value: bioactivity/aop/search/by-entrez-gene-id/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: entrezGeneId
+      on_error: drop
     docs:
       title: Get AOP data by Entrez Gene ID
       lifecycle: stable
-      parameters:
-        entrezGeneId: 'Entrez Gene Id. Type: integer'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
-      - entrezGeneId: '196'
+      - entrezGeneId: 196
+    normalize_inputs:
+      entrezGeneId: .ct_legacy_query
   GET /bioactivity/aop/search/by-event-number/{eventNumber}:
     name: ct_bioactivity_aop_search_by_event_number
     file: R/ct_bioactivity_aop_search_by_event_number.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      eventNumber:
-        type: character
-        required: yes
-        description: 'Key Event Number. Type: integer'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - eventNumber
-        endpoint:
-          value: bioactivity/aop/search/by-event-number/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: eventNumber
+      on_error: drop
     docs:
       title: Get AOP data by Key Event
       lifecycle: stable
-      parameters:
-        eventNumber: 'Key Event Number. Type: integer'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
-      - eventNumber: '18'
+      - eventNumber: 18
+    normalize_inputs:
+      eventNumber: .ct_legacy_query
   GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}:
     name: ct_bioactivity_aop_search_by_toxcast_aeid
     file: R/ct_bioactivity_aop_search_by_toxcast_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      toxcastAeid:
-        type: character
-        required: yes
-        description: 'ToxCast AEID. Type: integer'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - toxcastAeid
-        endpoint:
-          value: bioactivity/aop/search/by-toxcast-aeid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: toxcastAeid
+      on_error: drop
     docs:
       title: Get AOP data by ToxCast AEID
       lifecycle: stable
-      parameters:
-        toxcastAeid: 'ToxCast AEID. Type: integer'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
-      - toxcastAeid: '63'
+      - toxcastAeid: 63
+    normalize_inputs:
+      toxcastAeid: .ct_legacy_query
   GET /bioactivity/assay/:
     name: ct_bioactivity_assay
     file: R/ct_bioactivity_assay.R
@@ -182,42 +146,23 @@ operations:
   GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}:
     name: ct_bioactivity_assay_chemicals_search_by_aeid
     file: R/ct_bioactivity_assay_chemicals_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      aeid:
-        type: character
-        required: yes
-        description: 'ToxCast assay component endpoint ID. Type: integer'
-      projection:
-        type: character
-        default: dtxsidsonly
-        description: 'Optional parameter (default: dtxsidsonly)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - aeid
-        endpoint:
-          value: bioactivity/assay/chemicals/search/by-aeid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: aeid
+      on_error: drop
     docs:
       title: Get DTXSID list by AEID
       lifecycle: stable
-      parameters:
-        aeid: 'ToxCast assay component endpoint ID. Type: integer'
-        projection: 'Optional parameter (default: dtxsidsonly)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - aeid: '3032'
+      - aeid: 3032
+    normalize_inputs:
+      aeid: .ct_legacy_query
   GET /bioactivity/assay/count:
     name: ct_bioactivity_assay_count
     file: R/ct_bioactivity_assay_count.R
@@ -236,46 +181,23 @@ operations:
   GET /bioactivity/assay/search/by-aeid/{aeid}:
     name: ct_bioactivity_assay_search_by_aeid
     file: R/ct_bioactivity_assay_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      aeid:
-        type: character
-        required: yes
-        description: 'ToxCast assay component endpoint ID. Type: integer'
-      projection:
-        type: character
-        default: ~
-        description: 'Specifies which projection to use. Options: ccd-assay-annotation,
-          ccd-assay-gene, ccd-assay-citations, ccd-assay-tcpl, ccd-assay-reagents,
-          assay-all. If omitted, the full assay data is returned.'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - aeid
-        endpoint:
-          value: bioactivity/assay/search/by-aeid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: aeid
+      on_error: drop
     docs:
       title: Get assay annotations by AEID
       lifecycle: stable
-      parameters:
-        aeid: 'ToxCast assay component endpoint ID. Type: integer'
-        projection: 'Specifies which projection to use. Options: ccd-assay-annotation,
-          ccd-assay-gene, ccd-assay-citations, ccd-assay-tcpl, ccd-assay-reagents,
-          assay-all. If omitted, the full assay data is returned.'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - aeid: '3032'
+      - aeid: 3032
+    normalize_inputs:
+      aeid: .ct_legacy_query
   GET /bioactivity/assay/search/by-endpoint/:
     name: ct_bioactivity_assay_search_by_endpoint
     file: R/ct_bioactivity_assay_search_by_endpoint.R
@@ -294,293 +216,183 @@ operations:
   GET /bioactivity/assay/search/by-gene/{geneSymbol}:
     name: ct_bioactivity_assay_search_by_gene
     file: R/ct_bioactivity_assay_search_by_gene.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      geneSymbol:
-        type: character
-        required: yes
-        description: 'Gene Symbol. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - geneSymbol
-        endpoint:
-          value: bioactivity/assay/search/by-gene/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: geneSymbol
+      on_error: drop
     docs:
       title: Get assay summary by gene symbol
       lifecycle: stable
-      parameters:
-        geneSymbol: 'Gene Symbol. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - geneSymbol: TUBA1A
+    normalize_inputs:
+      geneSymbol: .ct_legacy_query
   GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}:
     name: ct_bioactivity_assay_single_conc_search_by_aeid
     file: R/ct_bioactivity_assay_single_conc_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      aeid:
-        type: character
-        required: yes
-        description: 'ToxCast assay component endpoint ID. Type: integer'
-      projection:
-        type: character
-        default: single-conc
-        description: 'Optional parameter (default: single-conc)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - aeid
-        endpoint:
-          value: bioactivity/assay/single-conc/search/by-aeid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: aeid
+      on_error: drop
     docs:
       title: Get single conc data by AEID
       lifecycle: stable
-      parameters:
-        aeid: 'ToxCast assay component endpoint ID. Type: integer'
-        projection: 'Optional parameter (default: single-conc)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - aeid: '3032'
+      - aeid: 3032
+    normalize_inputs:
+      aeid: .ct_legacy_query
   GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_data_aed_search
     file: R/ct_bioactivity_data_aed_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'Primary query parameter. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: bioactivity/data/aed/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get AED data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'Primary query parameter. Type: string'
-      return: Returns a list with result object
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID5021209
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
   GET /bioactivity/data/search/by-aeid/{aeid}:
     name: ct_bioactivity_data_search_by_aeid
     file: R/ct_bioactivity_data_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      aeid:
-        type: character
-        required: yes
-        description: 'ToxCast assay component endpoint ID (AEID). Type: integer'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - aeid
-        endpoint:
-          value: bioactivity/data/search/by-aeid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: aeid
+      on_error: drop
     docs:
       title: Get data by AEID
       lifecycle: stable
-      parameters:
-        aeid: 'ToxCast assay component endpoint ID (AEID). Type: integer'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
-      - aeid: '3032'
+      - aeid: 3032
+    normalize_inputs:
+      aeid: .ct_legacy_query
   GET /bioactivity/data/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_data_search_by_dtxsid
     file: R/ct_bioactivity_data_search_by_dtxsid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-      projection:
-        type: character
-        default: ~
-        description: 'Specifies if projection is used. Option: toxcast-summary-plot.
-          If omitted, the default BioactivityDataAll data is returned.'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: bioactivity/data/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        projection:
-          from:
-          - params
-          - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-        projection: 'Specifies if projection is used. Option: toxcast-summary-plot.
-          If omitted, the default BioactivityDataAll data is returned.'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
   GET /bioactivity/data/search/by-m4id/{m4id}:
     name: ct_bioactivity_data_search_by_m4id
     file: R/ct_bioactivity_data_search_by_m4id.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      m4id:
-        type: character
-        required: yes
-        description: 'M4ID. Type: integer'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - m4id
-        endpoint:
-          value: bioactivity/data/search/by-m4id/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: m4id
+      on_error: drop
     docs:
       title: Get data by M4ID
       lifecycle: stable
-      parameters:
-        m4id: 'M4ID. Type: integer'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - m4id: '7826737'
+      - m4id: 7826737
+    normalize_inputs:
+      m4id: .ct_legacy_query
   GET /bioactivity/data/search/by-spid/{spid}:
     name: ct_bioactivity_data_search_by_spid
     file: R/ct_bioactivity_data_search_by_spid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      spid:
-        type: character
-        required: yes
-        description: 'sample ID (SPID). Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - spid
-        endpoint:
-          value: bioactivity/data/search/by-spid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: spid
+      on_error: drop
     docs:
       title: Get data by SPID
       lifecycle: stable
-      parameters:
-        spid: 'sample ID (SPID). Type: string'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
       - spid: EPAPLT0232A03
+    normalize_inputs:
+      spid: .ct_legacy_query
   GET /bioactivity/data/summary/search/by-aeid/{aeid}:
     name: ct_bioactivity_data_summary_search_by_aeid
     file: R/ct_bioactivity_data_summary_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      aeid:
-        type: character
-        required: yes
-        description: 'ToxCast assay component endpoint ID (AEID). Type: integer'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - aeid
-        endpoint:
-          value: bioactivity/data/summary/search/by-aeid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: aeid
+      on_error: drop
     docs:
       title: Get summary data by AEID
       lifecycle: stable
-      parameters:
-        aeid: 'ToxCast assay component endpoint ID (AEID). Type: integer'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - aeid: '3032'
+      - aeid: 3032
+    normalize_inputs:
+      aeid: .ct_legacy_query
   GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_data_summary_search_by_dtxsid
     file: R/ct_bioactivity_data_summary_search_by_dtxsid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: bioactivity/data/summary/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get summary data by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID9026974
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
   GET /bioactivity/data/summary/search/by-tissue/:
     name: ct_bioactivity_data_search_by_tissue
     file: R/ct_bioactivity_data_search_by_tissue.R
@@ -614,325 +426,249 @@ operations:
   GET /bioactivity/models/search/by-dtxsid/{dtxsid}:
     name: ct_bioactivity_models_search_by_dtxsid
     file: R/ct_bioactivity_models_search_by_dtxsid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'dtxsid. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: bioactivity/models/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get predictions by DTXSID
       lifecycle: stable
-      parameters:
-        dtxsid: 'dtxsid. Type: string'
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
   GET /bioactivity/search/contain/{value}:
     name: ct_bioactivity_search_contain
     file: R/ct_bioactivity_search_contain.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      value:
-        type: character
-        required: yes
-        description: 'Substring of search word. Type: string'
-      top:
-        type: numeric
-        default: 0.0
-        description: 'Optional parameter (default: 0)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - value
-        endpoint:
-          value: bioactivity/search/contain/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        top:
-          from:
-          - params
-          - top
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: value
+      on_error: drop
     docs:
       title: Search by substring value
       lifecycle: stable
-      parameters:
-        value: 'Substring of search word. Type: string'
-        top: 'Optional parameter (default: 0)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - value: DTXSID7020182
+    normalize_inputs:
+      value: .ct_legacy_query
   GET /bioactivity/search/equal/{value}:
     name: ct_bioactivity_search_equal
     file: R/ct_bioactivity_search_equal.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      value:
-        type: character
-        required: yes
-        description: 'Exact match of search value. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - value
-        endpoint:
-          value: bioactivity/search/equal/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: value
+      on_error: drop
     docs:
       title: Search by exact value
       lifecycle: stable
-      parameters:
-        value: 'Exact match of search value. Type: string'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - value: DTXSID7020182
+    normalize_inputs:
+      value: .ct_legacy_query
   GET /bioactivity/search/start-with/{value}:
     name: ct_bioactivity_search_start_with
     file: R/ct_bioactivity_search_start_with.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      value:
-        type: character
-        required: yes
-        description: 'Starting characters for search value. Type: string'
-      top:
-        type: numeric
-        default: 500.0
-        description: 'Optional parameter (default: 500)'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - value
-        endpoint:
-          value: bioactivity/search/start-with/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        top:
-          from:
-          - params
-          - top
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: value
+      on_error: drop
     docs:
       title: Search by starting value
       lifecycle: stable
-      parameters:
-        value: 'Starting characters for search value. Type: string'
-        top: 'Optional parameter (default: 500)'
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
       - value: DTXSID7020182
+    normalize_inputs:
+      value: .ct_legacy_query
   POST /bioactivity/assay/search/by-aeid/:
     name: ct_bioactivity_assay_search_by_aeid_bulk
     file: R/ct_bioactivity_assay_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/assay/search/by-aeid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: aeid
+      description: Assay endpoint identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get assay annotations for a batch of AEIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - aeid:
+        - '3032'
+        - '3033'
+    normalize_inputs:
+      aeid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
   POST /bioactivity/data/aed/search/by-dtxsid/:
     name: ct_bioactivity_data_aed_search_bulk
     file: R/ct_bioactivity_data_aed_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/aed/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get AED data for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a tibble with results (array of objects)
+      return: Returns a tibble with results
       examples:
-      - query:
-        - DTXSID1024122
-        - DTXSID4020533
-        - DTXSID00205033
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
   POST /bioactivity/data/search/by-aeid/:
     name: ct_bioactivity_data_search_by_aeid_bulk
     file: R/ct_bioactivity_data_search_by_aeid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-aeid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: aeid
+      description: Assay endpoint identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data for a batch of AEIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - aeid:
+        - '3032'
+        - '3033'
+    normalize_inputs:
+      aeid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
   POST /bioactivity/data/search/by-dtxsid/:
     name: ct_bioactivity_data_search_bulk
     file: R/ct_bioactivity_data_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-dtxsid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get bioactivity data for a batch of DTXSIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query:
-        - DTXSID1024122
-        - DTXSID4020533
-        - DTXSID00205033
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
   POST /bioactivity/data/search/by-m4id/:
     name: ct_bioactivity_data_search_by_m4id_bulk
     file: R/ct_bioactivity_data_search_by_m4id.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-m4id/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: m4id
+      description: Level 4 model identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data for a batch of M4IDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - m4id:
+        - '7826737'
+        - '7826738'
+    normalize_inputs:
+      m4id: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
   POST /bioactivity/data/search/by-spid/:
     name: ct_bioactivity_data_search_by_spid_bulk
     file: R/ct_bioactivity_data_search_by_spid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of strings to send in request body
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: bioactivity/data/search/by-spid/
-        method:
-          value: POST
-        batch_limit:
-          callback: detail_batch_limit
+    body:
+      name: spid
+      description: Sample identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
     docs:
       title: Get data for a batch of SPIDs
       lifecycle: stable
-      parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a scalar value
+      return: Returns a tibble with results
       examples:
-      - query: DTXSID1024122
+      - spid:
+        - EPAPLT0232A03
+        - EPAPLT0232A04
+    normalize_inputs:
+      spid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

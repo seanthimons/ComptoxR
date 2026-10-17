@@ -10,18 +10,18 @@ ct_chemical_detail_search_by_dtxcid_bulk(
 )
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{query}{Request body. Inputs are sent in chunks using the configured call-time item limit and the results are combined.}
 
-\item{projection}{Projection options for chemical details APIs . Options: chemicaldetailstandard, chemicalidentifier, chemicalstructure, ntatoolkit, ccdchemicaldetails, ccdassaydetails, chemicaldetailall, compact (default: chemicaldetailall)}
+\item{projection}{Projection options for chemical details APIs}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_chemical_detail_search_by_dtxcid_bulk(query = "DTXSID1024122")
+ct_chemical_detail_search_by_dtxcid_bulk(query = list("DTXCID505", "DTXCID30182"))
 }
 }
