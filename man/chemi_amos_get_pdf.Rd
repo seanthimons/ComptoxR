@@ -22,3 +22,6 @@ Returns a list of results
 chemi_amos_get_pdf(record_type = "method", internal_id = "1")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}

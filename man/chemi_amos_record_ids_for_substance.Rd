@@ -22,3 +22,6 @@ Returns a list of results
 chemi_amos_record_ids_for_substance(dtxsid = "DTXSID7020182", record_type = "method")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}

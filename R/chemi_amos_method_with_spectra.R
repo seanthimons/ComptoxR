@@ -6,6 +6,7 @@
 #' @param search_type How to search the database.  Valid values are "spectrum" and "method". Accepts a vector: one request is sent per element and the results are combined.
 #' @param internal_id Unique ID of the spectrum or method of interest.
 #' @return Returns a list of results
+#' @apiStage public
 #' @export
 #' @examples
 #' \dontrun{

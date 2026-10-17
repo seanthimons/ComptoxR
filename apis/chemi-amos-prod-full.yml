@@ -44,6 +44,8 @@ operations:
       fan_out: dtxsid
       on_error: drop
     docs:
+      tags:
+        apiStage: public
       title: Returns a list of record IDs that are associated with the given DTXSID.  This
         is intended to help when filtering
       lifecycle: experimental
@@ -64,6 +66,8 @@ operations:
       fan_out: search_type
       on_error: drop
     docs:
+      tags:
+        apiStage: public
       title: Returns information about a method with linked spectra, given an ID for
         either a spectrum or a method.
       lifecycle: experimental
@@ -84,6 +88,8 @@ operations:
       fan_out: record_type
       on_error: drop
     docs:
+      tags:
+        apiStage: public
       title: Retrieves a PDF from the database by the internal ID and type of record.
       lifecycle: experimental
       return: Returns a list of results

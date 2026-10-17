@@ -6,6 +6,7 @@
 #' @param record_type A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'. Accepts a vector: one request is sent per element and the results are combined.
 #' @param internal_id Unique ID of the document of interest.
 #' @return Returns a list of results
+#' @apiStage public
 #' @export
 #' @examples
 #' \dontrun{

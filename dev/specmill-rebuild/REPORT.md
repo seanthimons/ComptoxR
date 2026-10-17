@@ -946,3 +946,25 @@ Dedicated tests cover encoded multi-parameter paths, CTX credential presence,
 range validation before HTTP and exact PDF bytes. The existing implementation
 mirrors are replaced by generated fixed contracts. Documentation was rebuilt,
 and the final generation freshness check passed. No archived schema changed.
+
+## Published Specmill 0.1.22 adoption, 17 October 2026
+
+The development toolkit is pinned to the published v0.1.22 source tag
+`d55f7fa8cbbc9ce797b45c35dd9d6f49cefbf445`, with a verified Git archive SHA256.
+The native helper was re-emitted through the existing reviewed adoption script.
+The runtime adds the released batching policy limit; generated text validation
+now preserves line inputs until per-chunk encoding. No archived schema changed.
+
+The adoption record preserves the original review and adds the current toolkit
+and helper hashes. Its verifier now checks the current record against the pin,
+including freshness, idempotence and protected-file ownership. The three new
+AMOS GET mappings also retain their public API-stage documentation tags.
+
+The two detail bulk wrappers and exact-search bulk remain retained pending the
+release of call-time batch bindings in Specmill #128. Analytical QC, reviewed
+AMOS path corrections, the bodyless resolver subset and the four native pagers
+also remain isolated until their respective fixes are released and pinned.
+
+Validation: the complete package test suite passed with zero failures or
+warnings and the same two existing optional/integration skips. The reviewed
+helper adoption verifier passed, including current pin and source provenance.

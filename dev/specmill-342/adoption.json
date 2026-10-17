@@ -76,5 +76,23 @@
       "chemi_chet_reaction_database": 5152
     },
     "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
+  },
+  "current_adoption": {
+    "reviewed_at": "2026-10-17",
+    "base_commit": "6fd078f2",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.22",
+      "source_commit": "d55f7fa8cbbc9ce797b45c35dd9d6f49cefbf445",
+      "source_archive_sha256": "765af47cf779e91f6f477a837fbe262877874955ecdac14cde0f775e08f6ceed",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "adopted_sha256": {
+      "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+      "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+      "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+    },
+    "review": "Re-emitted unchanged adoption transform from released toolkit; native delta adds published runtime batch-size lowering. Existing committed generic facade is unchanged. Original adoption evidence above is preserved."
   }
 }

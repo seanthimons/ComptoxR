@@ -6,6 +6,7 @@
 #' @param dtxsid The DTXSID for the substance of interest. Accepts a vector: one request is sent per element and the results are combined.
 #' @param record_type The record type of interest.
 #' @return Returns a list of results
+#' @apiStage public
 #' @export
 #' @examples
 #' \dontrun{

@@ -39,6 +39,10 @@ local({
 manifest <- jsonlite::read_json(file.path(root, '.specmill/manifest.json'))
 stopifnot(!any(c('R/z_generic_request.R', 'R/z_specmill_request.R') %in% names(manifest$files)))
 review <- jsonlite::read_json('dev/specmill-342/adoption.json')
+if (!is.null(review$current_adoption)) {
+  review <- review$current_adoption
+  stopifnot(identical(review$toolkit, jsonlite::read_json('dev/specmill-lock.json')))
+}
 for (file in c('R/z_generic_request.R', 'R/z_specmill_request.R')) {
   stopifnot(identical(digest::digest(file = file.path(root, file), algo = 'sha256'), review$adopted_sha256[[file]]))
 }

@@ -292,14 +292,19 @@ form_value <- function (value, schema, validate, allow_empty = TRUE)
     }
     value
 }
+text_input <- function (value) 
+{
+    if (!is.character(value) || is.object(value) || !is.null(dim(value)) || !is.null(names(value)) || anyNA(value)) {
+        stop("Text body must be a character value without missing values")
+    }
+    value
+}
 text_value <- function (value, encoding = "scalar", max_items = NULL) 
 {
     if (!is.character(encoding) || length(encoding) != 1L || is.na(encoding) || !encoding %in% c("scalar", "lines")) {
         stop("Text encoding must be scalar or lines")
     }
-    if (!is.character(value) || is.object(value) || !is.null(dim(value)) || !is.null(names(value)) || anyNA(value)) {
-        stop("Text body must be a character value without missing values")
-    }
+    value <- text_input(value)
     if (encoding == "scalar" && length(value) != 1L) {
         stop("Scalar text body must contain exactly one string")
     }
