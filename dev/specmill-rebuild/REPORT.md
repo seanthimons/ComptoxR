@@ -968,3 +968,25 @@ also remain isolated until their respective fixes are released and pinned.
 Validation: the complete package test suite passed with zero failures or
 warnings and the same two existing optional/integration skips. The reviewed
 helper adoption verifier passed, including current pin and source provenance.
+
+## Two native prediction POST wrappers, 17 October 2026
+
+OPERA bulk and predictor-model bulk now send their explicit bodies through the
+native transport. Their existing generation callback still selects exactly one
+of the `smiles` and `chemicals` shapes, retaining public argument order and
+non-NULL values such as FALSE, zero and empty lists. Request bindings preserve
+OPERA query options and the JSON Accept header. A client response policy retains
+raw JSON objects, missing fields and the legacy empty-list result.
+
+Localhost comparisons against the frozen legacy wrappers passed for both body
+shapes, nested chemical records, UTF-8 input, empty/FALSE/zero values and OPERA
+query options. Each comparison checked exact request body bytes, method, path,
+query and headers, plus identical decoded results. Ambiguous or absent shapes
+fail before HTTP. These checks establish transport parity; no live prediction
+POST was required or claimed.
+
+The updated native helper contracts and prediction-body test file passed with
+zero failures or warnings. Both GET siblings remain covered. The focused
+checks include raw JSON/NULL result shape and all previously reviewed input
+variants; the complete suite had already passed after the runtime pin update.
+Final generation freshness check passed for the two prediction POST wrappers.

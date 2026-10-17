@@ -80,13 +80,16 @@ chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier =
 #' @export
 #' @examples
 #' \dontrun{
-#' chemi_predictor_models_predict_bulk(model_id = "DTXSID1024122")
+#' chemi_predictor_models_predict_bulk(model_id = 1065L, smiles = c("CCO", "CCCC"))
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_predictor_models_predict_bulk <- function(model_id, smiles = NULL, chemicals = NULL) {
   params <- base::list("model_id" = model_id, "smiles" = smiles, "chemicals" = chemicals)
-  result <- generic_chemi_request(
-    "endpoint" = "predictor_models/predict",
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/predictor_models/predict",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = structure(list(), names = character(0)),
     "body" = base::local({
       if (
         sum(c(
@@ -102,7 +105,11 @@ chemi_predictor_models_predict_bulk <- function(model_id, smiles = NULL, chemica
         base::list(model_id = params[["model_id"]], smiles = params[["smiles"]], chemicals = params[["chemicals"]])
       )
     }),
-    "tidy" = FALSE
+    "headers" = list(Accept = "application/json"),
+    "server" = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = ""),
+    "auth" = list(),
+    "response_policy" = ".ct_prediction"
   )
   result
 }

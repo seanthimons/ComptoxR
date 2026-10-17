@@ -71,7 +71,7 @@ chemi_opera <- function(smiles, format = "json", standardize = FALSE) {
 #' @export
 #' @examples
 #' \dontrun{
-#' chemi_opera_bulk(cache_only = "DTXSID1024122")
+#' chemi_opera_bulk(smiles = c("CCO", "CCCC"), cache_only = TRUE)
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_opera_bulk <- function(
@@ -88,8 +88,11 @@ chemi_opera_bulk <- function(
     "format" = format,
     "standardize" = standardize
   )
-  result <- generic_chemi_request(
-    "endpoint" = "opera",
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/opera",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = base::list("format" = params[["format"]], "standardize" = params[["standardize"]]),
     "body" = base::local({
       if (
         sum(c(
@@ -105,9 +108,11 @@ chemi_opera_bulk <- function(
         base::list(cache_only = params[["cache_only"]], smiles = params[["smiles"]], chemicals = params[["chemicals"]])
       )
     }),
-    "tidy" = FALSE,
-    "format" = params[["format"]],
-    "standardize" = params[["standardize"]]
+    "headers" = list(Accept = "application/json"),
+    "server" = list(diagnostic = "Swagger host/scheme requires a recorded origin or explicit base URL override"),
+    "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    "auth" = list(),
+    "response_policy" = ".ct_prediction"
   )
   result
 }

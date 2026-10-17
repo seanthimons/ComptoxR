@@ -48,7 +48,7 @@ operations:
   POST /api/opera:
     name: chemi_opera_bulk
     file: R/chemi_opera.R
-    helper: generic_chemi_request
+    helper: .ct_request
     implementation: generated
     inputs:
       cache_only:
@@ -79,20 +79,40 @@ operations:
     post_state: parameters
     request:
       arguments:
-        endpoint:
-          value: opera
+        method:
+          value: POST
+        path:
+          value: /api/opera
+        path_params:
+          value: {}
+        query:
+          object:
+            format:
+              from:
+              - params
+              - format
+            standardize:
+              from:
+              - params
+              - standardize
         body:
           callback: prediction_body
-        tidy:
-          value: no
-        format:
-          from:
-          - params
-          - format
-        standardize:
-          from:
-          - params
-          - standardize
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Swagger host/scheme requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: .ct_prediction
     docs:
       title: Generate predictions for multiple molecules
       lifecycle: experimental
@@ -107,7 +127,13 @@ operations:
           FALSE)'
       return: Returns a list with result object
       examples:
-      - cache_only: DTXSID1024122
+      - smiles:
+        - CCO
+        - CCCC
+        cache_only: yes
       tags:
         apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

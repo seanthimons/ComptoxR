@@ -1,7 +1,7 @@
 test_that("bulk predictions preserve both body shapes and reject ambiguous bodies", {
   captured <- NULL
   testthat::local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       list(result = "unchanged")
     },
@@ -19,9 +19,9 @@ test_that("bulk predictions preserve both body shapes and reject ambiguous bodie
         supplied[setdiff(c("smiles", "chemicals"), shape)] <- list(NULL)
         expect_identical(do.call(fun, supplied), list(result = "unchanged"))
         expect_identical(captured$body, c(defaults, setNames(list(value), shape)))
-        expect_identical(captured$endpoint, if (name == "chemi_opera_bulk") "opera" else "predictor_models/predict")
-        expect_identical(captured$tidy, FALSE)
-        expect_null(captured$query)
+        expect_identical(captured$path, if (name == "chemi_opera_bulk") "/api/opera" else "/api/predictor_models/predict")
+        expect_identical(captured$response_policy, ".ct_prediction")
+        expect_identical(captured$query, if (name == "chemi_opera_bulk") list(format = "json", standardize = FALSE) else structure(list(), names = character()))
         expect_null(captured$options)
       }
     }
@@ -42,11 +42,12 @@ test_that("bulk predictions preserve both body shapes and reject ambiguous bodie
     expect_null(captured)
   }
   chemi_opera_bulk(smiles = "CCO", cache_only = TRUE, format = "csv", standardize = TRUE)
-  expect_identical(captured, list(endpoint = "opera", body = list(cache_only = TRUE, smiles = "CCO"),
-    tidy = FALSE, format = "csv", standardize = TRUE))
+  expect_identical(captured$body, list(cache_only = TRUE, smiles = "CCO"))
+  expect_identical(captured$query, list(format = "csv", standardize = TRUE))
+  expect_identical(captured$headers, list(Accept = "application/json"))
   chemi_opera_bulk(chemicals = chemicals, cache_only = NULL, format = NULL, standardize = NULL)
-  expect_identical(captured, list(endpoint = "opera", body = list(chemicals = chemicals),
-    tidy = FALSE, format = NULL, standardize = NULL))
+  expect_identical(captured$body, list(chemicals = chemicals))
+  expect_identical(captured$query, list(format = NULL, standardize = NULL))
 })
 
 test_that("prediction GET siblings keep query options and positional model IDs", {
@@ -67,4 +68,19 @@ test_that("prediction GET siblings keep query options and positional model IDs",
   expect_identical(captured$query, list(smiles = "CCO", format = NULL, standardize = NULL))
   chemi_predictor_models_predict(1065L, report_format = NULL)
   expect_identical(captured$query, list(model_id = 1065L, smiles = NULL, identifier = NULL, report_format = NULL))
+})
+
+test_that("prediction JSON responses retain their structure and empty result shape", {
+  decode <- function(text) {
+    response <- httr2::response(
+      status_code = 200L,
+      headers = list(`Content-Type` = "application/json"),
+      body = charToRaw(text)
+    )
+    ComptoxR:::.ct_prediction(response, list(), function() stop("Unexpected decoder"))
+  }
+  expect_identical(decode('{"predictions":[{"value":null}],"uncached":[]}'),
+    list(predictions = list(list(value = NULL)), uncached = list()))
+  expect_identical(decode("[]"), list())
+  expect_identical(decode("null"), list())
 })
