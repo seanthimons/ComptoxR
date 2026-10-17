@@ -274,62 +274,24 @@ operations:
   GET /exposure/mmdb/aggregate/by-medium:
     name: ct_exposure_mmdb_aggregate_by_medium
     file: R/ct_exposure_mmdb_aggregate_by_medium.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      medium:
-        type: character
-        required: yes
-        description: harmonized medium
-      pageNumber:
-        type: numeric
-        default: 1.0
-        description: 'Optional parameter (default: 1)'
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-      max_pages:
-        type: numeric
-        default: 100.0
-        description: Maximum number of pages to fetch when all_pages is TRUE.
-    request:
-      arguments:
-        endpoint:
-          value: exposure/mmdb/aggregate/by-medium
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        medium:
-          from:
-          - params
-          - medium
-        pageNumber:
-          from:
-          - params
-          - pageNumber
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          from:
-          - params
-          - max_pages
-        pagination_strategy:
-          value: page_number
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    # ponytail: 10,000-row pages take ~30 s; legacy had no timeout (specmill#110).
+    request_controls:
+      timeout: 300
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
     docs:
       title: Get Aggregate data by Medium
       lifecycle: experimental
-      parameters:
-        medium: harmonized medium
-        pageNumber: 'Optional parameter (default: 1)'
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:
@@ -374,62 +336,24 @@ operations:
   GET /exposure/mmdb/single-sample/by-medium:
     name: ct_exposure_mmdb_single_sample_by_medium
     file: R/ct_exposure_mmdb_single_sample_by_medium.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      medium:
-        type: character
-        required: yes
-        description: harmonized medium
-      pageNumber:
-        type: numeric
-        default: 1.0
-        description: 'Optional parameter (default: 1)'
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-      max_pages:
-        type: numeric
-        default: 100.0
-        description: Maximum number of pages to fetch when all_pages is TRUE.
-    request:
-      arguments:
-        endpoint:
-          value: exposure/mmdb/single-sample/by-medium
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        medium:
-          from:
-          - params
-          - medium
-        pageNumber:
-          from:
-          - params
-          - pageNumber
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          from:
-          - params
-          - max_pages
-        pagination_strategy:
-          value: page_number
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    # ponytail: 10,000-row pages take ~30 s; legacy had no timeout (specmill#110).
+    request_controls:
+      timeout: 300
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
     docs:
       title: Get Single Sample data by Medium
       lifecycle: experimental
-      parameters:
-        medium: harmonized medium
-        pageNumber: 'Optional parameter (default: 1)'
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
-      return: Returns a scalar value
+      return: Returns a tibble with results
       tags:
         apiStage: public
       examples:

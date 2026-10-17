@@ -758,7 +758,7 @@
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}"
     },
     "R/ct_exposure_mmdb_aggregate_by_medium.R": {
-      "hash": "d8f66c9b00149197a1ce7153c821c6aaa33e5eaa27c0d61cca331ed48e61adbf",
+      "hash": "8b12c544c085c4bd3be892827f7dd3f101c36003ddfab395916147385f7efff8",
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/aggregate/by-medium"
     },
     "R/ct_exposure_mmdb_mediums.R": {
@@ -770,7 +770,7 @@
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}"
     },
     "R/ct_exposure_mmdb_single_sample_by_medium.R": {
-      "hash": "be1214e6448033278f8d5df23b6595349e8c1c248e0410a0b8b6d737b5993465",
+      "hash": "cdbde88a23a01c12ed5ebafd187da702a8c6c8358c799b44ab89d406d70b64bf",
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/single-sample/by-medium"
     },
     "R/ct_exposure_product_data_puc.R": {
@@ -1814,7 +1814,7 @@
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_exposure_mmdb_aggregate_by_medium.R": {
-      "hash": "1ff2fe5b59fc1b11ecaf0d702eff69d7b2ff549b38942e8077f9db4bb7fce3e9",
+      "hash": "67f66034d23fdfb3054404408448772cc08e85223ce96d8857c2befcda5407e3",
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/aggregate/by-medium"
     },
     "tests/testthat/test-contract-ct_exposure_mmdb_mediums.R": {
@@ -1826,7 +1826,7 @@
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-ct_exposure_mmdb_single_sample_by_medium.R": {
-      "hash": "c06e5ee9b0e3bd593ac4bed408a8bba2338960aea64c93fd53933d73822a10b3",
+      "hash": "e938e2e99b005991ca8345d4ce98d74016ed5624babbdd927d578c7401a50b97",
       "operations": "ctx-exposure-prod-full GET /exposure/mmdb/single-sample/by-medium"
     },
     "tests/testthat/test-contract-ct_exposure_product_data_puc.R": {
@@ -2268,10 +2268,10 @@
     "R/ct_exposure_list_presence_search.R": "eeed89ddcd585b5bcea009cb80f6b507b165ff3e7ac9b0a6e8f435ff66cb4baa",
     "R/ct_exposure_list_presence_tags.R": "a90807b33fea80e181bf663fad8600bf60def4ef5276db06329cbbaf3e959bcc",
     "R/ct_exposure_mmdb_aggregate.R": "5bd5d5e4e4c9f568cfead8074a48f481002bcfd10b315188c01d68c48c744ba4",
-    "R/ct_exposure_mmdb_aggregate_by_medium.R": "d8f66c9b00149197a1ce7153c821c6aaa33e5eaa27c0d61cca331ed48e61adbf",
+    "R/ct_exposure_mmdb_aggregate_by_medium.R": "8b12c544c085c4bd3be892827f7dd3f101c36003ddfab395916147385f7efff8",
     "R/ct_exposure_mmdb_mediums.R": "c0903741f6a0f09a098c4a9ce5361a912ec5e8bb62e7772155a9c39c8dd23008",
     "R/ct_exposure_mmdb_single_sample.R": "5aaaa48cf215b928c5c11cd8ce049e470806c29dcad061f0fa7ad5708a03682c",
-    "R/ct_exposure_mmdb_single_sample_by_medium.R": "be1214e6448033278f8d5df23b6595349e8c1c248e0410a0b8b6d737b5993465",
+    "R/ct_exposure_mmdb_single_sample_by_medium.R": "cdbde88a23a01c12ed5ebafd187da702a8c6c8358c799b44ab89d406d70b64bf",
     "R/ct_exposure_product_data_puc.R": "a2d98fbef18d3f7cb6e408e6f93d61b44f546bce5a2367df39da19e9f348ae92",
     "R/ct_exposure_product_data_search.R": "edf442c9a55b53fb1dc2a7d37a3c2abbe7ddf2aad4a99e0f9009827ed982efa5",
     "R/ct_exposure_seem_demographic_search.R": "9179544f9c36221a77e084d42c82298095281a0fe4d7217d59183a3a377c92f5",
@@ -2341,7 +2341,7 @@
     "R/pubchem_synonyms.R": "d1aabf4b99913a1175663528576ceed7aba9cefefb0bb9f785c8ce7979840146",
     "R/roxy_apistage.R": "e69b42018b719976b8a8e06c7d7bdb3c1f73651c2038b2cc4deee809688ba788",
     "R/schema.R": "b966d2645ff5ba50545fffe64884e940e9765b19cc3b736be3e069ea49bb7a5c",
-    "R/service_endpoints.R": "3af0e166b51dfa4f11314451b5a3edc5cdff9100ff223e2c0a9a0d57ca627df7",
+    "R/service_endpoints.R": "dfffc60d81ea78b4c64f10457848a6b674eb7c5ce4afdbf8721e90677ce1c50b",
     "R/tox_connection.R": "bf409d84aa2a4ca3349fa566b24a2f1ed27bef6395cb02e0ac6ae105845d1ff5",
     "R/tox_functions.R": "394a5a9e18716dda8a438d667135fdfb39d24fc8415c582522d4ea79f2bf2658",
     "R/util_cas.R": "882d1e38b212775958ece2a7fe1b9f7ea8d09687a81ee8dd3700e787b3c1dd24",
@@ -2386,7 +2386,7 @@
     "apis/ctx-bioactivity-prod-rebuild.yml": "f8f65db1267721b1424393b4be0ee9ea0a44c25565135d7e6f1590baf1726e55",
     "apis/ctx-chemical-prod-full.yml": "4073568a9784dbe40caa38fed48502419c4a0f3fe0cf9689edb7d2d5be7dff4d",
     "apis/ctx-chemical-prod-rebuild.yml": "413da1dc95a335ca4bf17b424d6d123fc0004e2b66fbd8dbb5f78c8c0f1c1c95",
-    "apis/ctx-exposure-prod-full.yml": "74e891c0721a5bb4ef16e9624c69c84d55a0d9dd79842a6685365d1e6669cc6c",
+    "apis/ctx-exposure-prod-full.yml": "0b8c90293a5dccaade04d9e1c87d8863e08e49b5865c84a9eccaa21b0b77942b",
     "apis/ctx-exposure-prod-rebuild.yml": "ea8f48acf3314473fa468a3fb2538cfb993ac7f532ab09e89de9f78b5c5714fa",
     "apis/ctx-hazard-prod-rebuild.yml": "16ddfd19b28131f1912dcae1bc0d3a334239bd25a6ac90a4d8a60693d033db48",
     "apis/ctx-pilot.yml": "008550b2b74bee1b9cdeb6f69770d2556299eac31c69d84c62c0040903edc847",
@@ -2725,10 +2725,10 @@
     "man/ct_exposure_list_presence_search_bulk.Rd": "2b55364d75a41610b446e9ec9d1e1e1cacb4b6dde61a35ab389901dd2a956bba",
     "man/ct_exposure_list_presence_tags.Rd": "aa47957e1428f7ac2cc392718bbd481bd72b4308bdef052051d7984e6faca3a6",
     "man/ct_exposure_mmdb_aggregate.Rd": "470163707d2ac07107517fd3186f58a0233ba1324f553e833e6558dd2c0a61cb",
-    "man/ct_exposure_mmdb_aggregate_by_medium.Rd": "42502f0aa765aa6a0bdc80b2bcee58295d5e3cf151fa9b1c1519fbca13441ebc",
+    "man/ct_exposure_mmdb_aggregate_by_medium.Rd": "136a5fafeef43c0b6caeda1b159f5359c1e7a0ec42ca365158ae3d6a16f1f508",
     "man/ct_exposure_mmdb_mediums.Rd": "d9b51ed458208ed0b822db53d6eafeab0b9f7fe978118d9fb4ee6b754495ed73",
     "man/ct_exposure_mmdb_single_sample.Rd": "349cb74cedc3e608c742c4cbd1d3faf72266474c1dad4db6395bbb564f624e4d",
-    "man/ct_exposure_mmdb_single_sample_by_medium.Rd": "3dbebcdaa05723fa9bdc8ee663571e0cf3edf3d64883efff3b562053ff24ed21",
+    "man/ct_exposure_mmdb_single_sample_by_medium.Rd": "3fb068011190f42c28938c984dd3b9f495e9a3710de62c8994b92c4383685ef5",
     "man/ct_exposure_product_data_puc.Rd": "fe5e8ddcf0d2f7392760d7f5517e82bda944f24ccc381338b911ccb530877e07",
     "man/ct_exposure_product_data_search.Rd": "20ede7cc4d483fa996511aad53dfe3d41bab262d59bf013308100fe4fdc13db8",
     "man/ct_exposure_product_data_search_bulk.Rd": "6f665b4c1487623792e850143d51916f3d2b140b609b1fdf0b4656dd35d4a622",
@@ -2898,7 +2898,7 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "specmill.yml": "911106dc215d6fd52b5c416bc526c31930ff1f0176750aa6e6537b13da87ac09",
-    "tests/testthat/fixtures/specmill-full-contracts.rds": "01f369296ab3b73bb4b079dc892a3fa8f93cf16a92f8520fcc8ca9b156413937",
+    "tests/testthat/fixtures/specmill-full-contracts.rds": "4e4f1e0c3c06e0630b7fb5700886e5722222a5ede80aa731266058c69d0685a1",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
     "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "21f5a63bb3fec92caf5e00e7339b3321175ead7c012179f069ad5ba0f444b339"
   },
