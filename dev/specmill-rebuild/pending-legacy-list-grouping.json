@@ -1,0 +1,8 @@
+{
+  "status": "isolated_actual_generated_formatting_pass_pending_failure_policy_release",
+  "cases": 60,
+  "wrappers": ["chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"],
+  "scope": "Actual generated calls: single/multiple successful or failed HTTP responses, objects/arrays/null/[]/{}, numeric batch names, NULL placeholders. No transport parity claim.",
+  "blocked_by": ["https://github.com/seanthimons/specmill/issues/142", "https://github.com/seanthimons/specmill/issues/145"],
+  "archive": "dev/specmill-rebuild/pending-legacy-list-grouping.rds"
+}
