@@ -43,7 +43,7 @@ ct_exposure_mmdb_aggregate_by_medium <- function(medium, pageNumber = 1L, all_pa
       query = base::list("medium" = params[["medium"]], "pageNumber" = params[["pageNumber"]]),
       body = NULL,
       response_policy = ".ct_paged",
-      request_controls = list(timeout = 300L),
+      request_controls = list(timeout = Inf),
       server = list(url = "https://comptox.epa.gov/ctx-api"),
       server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
       auth = list(list(list(

@@ -280,9 +280,8 @@ operations:
       resolver: .ct_server_url
       key: ctx_burl
     response_policy: .ct_paged
-    # ponytail: 10,000-row pages take ~30 s; legacy had no timeout (specmill#110).
     request_controls:
-      timeout: 300
+      timeout: .inf
     pagination:
       mode: page
       parameter: pageNumber
@@ -342,9 +341,8 @@ operations:
       resolver: .ct_server_url
       key: ctx_burl
     response_policy: .ct_paged
-    # ponytail: 10,000-row pages take ~30 s; legacy had no timeout (specmill#110).
     request_controls:
-      timeout: 300
+      timeout: .inf
     pagination:
       mode: page
       parameter: pageNumber
