@@ -12,28 +12,16 @@ operations:
   GET /api/services/cim_component_info:
     name: chemi_services_cim_component_info
     file: R/chemi_services_cim_component_info.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: services/cim_component_info
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Services Cim Component Info
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -41,28 +29,16 @@ operations:
   GET /api/services/release_notes:
     name: chemi_services_release_notes
     file: R/chemi_services_release_notes.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: services/release_notes
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Services Release Notes
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:

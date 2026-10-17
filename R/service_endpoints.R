@@ -140,6 +140,15 @@
   )
 }
 
+# Preserve Chemi list records, including scalar responses and missing fields.
+.ct_list <- function(response, context, decode) {
+  observe_api_responses(list(response))
+  body <- unwrap_collection_envelope(decode())
+  single <- is.list(body) && !is.null(names(body))
+  query <- if (single) if (length(context$query) == 1L) context$query else "_static_"
+  .ct_request_records(body, query = query, null_to_na = TRUE)
+}
+
 # Specmill response policy for file endpoints: text (mol) as a string, images as magick objects.
 .ct_file <- function(response, context, decode) {
   observe_api_responses(list(response))

@@ -17,28 +17,16 @@ operations:
   GET /api/resolver/ccte-lists:
     name: chemi_resolver_ccte_lists
     file: R/chemi_resolver_ccte_lists.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/ccte-lists
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Ccte Lists
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -46,28 +34,16 @@ operations:
   GET /api/resolver/getallannotations:
     name: chemi_resolver_getallannotations
     file: R/chemi_resolver_getallannotations.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/getallannotations
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Getallannotations
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -75,28 +51,16 @@ operations:
   GET /api/resolver/getdatasources:
     name: chemi_resolver_getdatasources
     file: R/chemi_resolver_getdatasources.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/getdatasources
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Getdatasources
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -104,28 +68,16 @@ operations:
   GET /api/resolver/ghs/classes:
     name: chemi_resolver_ghs_classes
     file: R/chemi_resolver_ghs_classes.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/ghs/classes
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Ghs Classes
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -133,28 +85,16 @@ operations:
   GET /api/resolver/ghs/hcodes:
     name: chemi_resolver_ghs_hcodes
     file: R/chemi_resolver_ghs_hcodes.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/ghs/hcodes
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Ghs Hcodes
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -162,28 +102,16 @@ operations:
   GET /api/resolver/ghs/pcodes:
     name: chemi_resolver_ghs_pcodes
     file: R/chemi_resolver_ghs_pcodes.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/ghs/pcodes
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Ghs Pcodes
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -191,28 +119,16 @@ operations:
   GET /api/resolver/hcodes:
     name: chemi_resolver_hcodes
     file: R/chemi_resolver_hcodes.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: resolver/hcodes
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Resolver Hcodes
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results (array of objects)
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:

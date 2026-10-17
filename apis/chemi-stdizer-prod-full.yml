@@ -51,28 +51,16 @@ operations:
   GET /api/stdizer/operations:
     name: chemi_stdizer_operations
     file: R/chemi_stdizer_operations.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: stdizer/operations
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Stdizer Operations
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
@@ -80,28 +68,16 @@ operations:
   GET /api/stdizer/workflows:
     name: chemi_stdizer_workflows
     file: R/chemi_stdizer_workflows.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs: {}
-    request:
-      arguments:
-        endpoint:
-          value: stdizer/workflows
-        method:
-          value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
     docs:
       title: Stdizer Workflows
       lifecycle: experimental
-      parameters: {}
-      return: Returns a tibble with results
+      return: Returns a list of results
       tags:
         apiStage: public
       examples:
