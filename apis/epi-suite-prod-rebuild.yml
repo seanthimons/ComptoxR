@@ -11,7 +11,7 @@ operations:
   POST /api/submit/batch:
     name: epi_submit_batch
     file: R/epi_submit_batch.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
     inputs:
       modules:
@@ -318,308 +318,30 @@ operations:
     post_state: parameters
     request:
       arguments:
-        query:
-          value: ~
-        endpoint:
-          value: submit/batch
         method:
           value: POST
-        batch_limit:
-          callback: search_equal_batch_limit
+        path:
+          value: /api/submit/batch
+        path_params:
+          value: {}
+        query:
+          value: {}
         body:
-          compact_object:
-            modules:
-              from:
-              - params
-              - modules
-            advectionTimeAir:
-              from:
-              - params
-              - advectionTimeAir
-            advectionTimeSediment:
-              from:
-              - params
-              - advectionTimeSediment
-            advectionTimeSoil:
-              from:
-              - params
-              - advectionTimeSoil
-            advectionTimeWater:
-              from:
-              - params
-              - advectionTimeWater
-            amineNitrogens:
-              from:
-              - params
-              - amineNitrogens
-            aopRateConstant:
-              from:
-              - params
-              - aopRateConstant
-            averageMolecularWeight:
-              from:
-              - params
-              - averageMolecularWeight
-            averagingTimeDays:
-              from:
-              - params
-              - averagingTimeDays
-            biowin3:
-              from:
-              - params
-              - biowin3
-            biowin5:
-              from:
-              - params
-              - biowin5
-            biowinScore:
-              from:
-              - params
-              - biowinScore
-            bodyWeightKg:
-              from:
-              - params
-              - bodyWeightKg
-            boilingPointC:
-              from:
-              - params
-              - boilingPointC
-            branchedCarbons:
-              from:
-              - params
-              - branchedCarbons
-            branches:
-              from:
-              - params
-              - branches
-            carbonChainLength:
-              from:
-              - params
-              - carbonChainLength
-            cas:
-              from:
-              - params
-              - cas
-            cationAnionRatio:
-              from:
-              - params
-              - cationAnionRatio
-            chemicalName:
-              from:
-              - params
-              - chemicalName
-            daylightHours:
-              from:
-              - params
-              - daylightHours
-            emissionRateAir:
-              from:
-              - params
-              - emissionRateAir
-            emissionRateSediment:
-              from:
-              - params
-              - emissionRateSediment
-            emissionRateSoil:
-              from:
-              - params
-              - emissionRateSoil
-            emissionRateWater:
-              from:
-              - params
-              - emissionRateWater
-            ethoxylate:
-              from:
-              - params
-              - ethoxylate
-            eventDurationHours:
-              from:
-              - params
-              - eventDurationHours
-            eventFrequencyPerDay:
-              from:
-              - params
-              - eventFrequencyPerDay
-            exposureDurationYears:
-              from:
-              - params
-              - exposureDurationYears
-            exposureFrequencyDaysPerYear:
-              from:
-              - params
-              - exposureFrequencyDaysPerYear
-            fractionAbsorbed:
-              from:
-              - params
-              - fractionAbsorbed
-            halfLifeAir:
-              from:
-              - params
-              - halfLifeAir
-            halfLifeHoursAerationVessel:
-              from:
-              - params
-              - halfLifeHoursAerationVessel
-            halfLifeHoursPrimaryClarifier:
-              from:
-              - params
-              - halfLifeHoursPrimaryClarifier
-            halfLifeHoursSettlingTank:
-              from:
-              - params
-              - halfLifeHoursSettlingTank
-            halfLifeSediment:
-              from:
-              - params
-              - halfLifeSediment
-            halfLifeSoil:
-              from:
-              - params
-              - halfLifeSoil
-            halfLifeWater:
-              from:
-              - params
-              - halfLifeWater
-            henryAtmM3PerMol:
-              from:
-              - params
-              - henryAtmM3PerMol
-            koc:
-              from:
-              - params
-              - koc
-            lakeCurrentMPerSec:
-              from:
-              - params
-              - lakeCurrentMPerSec
-            lakeDepthMeters:
-              from:
-              - params
-              - lakeDepthMeters
-            lakeWindMPerSec:
-              from:
-              - params
-              - lakeWindMPerSec
-            logKoa:
-              from:
-              - params
-              - logKoa
-            logKow:
-              from:
-              - params
-              - logKow
-            mainCarbons:
-              from:
-              - params
-              - mainCarbons
-            meltingPointC:
-              from:
-              - params
-              - meltingPointC
-            molecularWeight:
-              from:
-              - params
-              - molecularWeight
-            mw1000Percentage:
-              from:
-              - params
-              - mw1000Percentage
-            mw500Percentage:
-              from:
-              - params
-              - mw500Percentage
-            ohConcentrationE6OhPerCm3:
-              from:
-              - params
-              - ohConcentrationE6OhPerCm3
-            ozoneConcentrationE11MolPerCm3:
-              from:
-              - params
-              - ozoneConcentrationE11MolPerCm3
-            polymerType:
-              from:
-              - params
-              - polymerType
-            propoxyGroups:
-              from:
-              - params
-              - propoxyGroups
-            removeMetals:
-              from:
-              - params
-              - removeMetals
-            riverCurrentMPerSec:
-              from:
-              - params
-              - riverCurrentMPerSec
-            riverDepthMeters:
-              from:
-              - params
-              - riverDepthMeters
-            riverWindMPerSec:
-              from:
-              - params
-              - riverWindMPerSec
-            skinSurfaceAreaCm2:
-              from:
-              - params
-              - skinSurfaceAreaCm2
-            smiles:
-              from:
-              - params
-              - smiles
-            solubilityType:
-              from:
-              - params
-              - solubilityType
-            subcooledVaporPressureMmHg:
-              from:
-              - params
-              - subcooledVaporPressureMmHg
-            theta:
-              from:
-              - params
-              - theta
-            tspUgPerM3:
-              from:
-              - params
-              - tspUgPerM3
-            useSmiles:
-              from:
-              - params
-              - useSmiles
-            userKpCmPerHour:
-              from:
-              - params
-              - userKpCmPerHour
-            vaporPressureMmHg:
-              from:
-              - params
-              - vaporPressureMmHg
-            vaporPressureTemperatureC:
-              from:
-              - params
-              - vaporPressureTemperatureC
-            waterConcentrationMgPerCm3:
-              from:
-              - params
-              - waterConcentrationMgPerCm3
-            waterConcentrationMgPerLiter:
-              from:
-              - params
-              - waterConcentrationMgPerLiter
-            waterSolubility:
-              from:
-              - params
-              - waterSolubility
-            waterSolubilityMgPerL:
-              from:
-              - params
-              - waterSolubilityMgPerL
-            waterSolubilityProvider:
-              from:
-              - params
-              - waterSolubilityProvider
+          callback: epi_batch_array
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value: []
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: epi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: .ct_static_tidy
     docs:
       title: Estimate an ordered batch of chemicals
       lifecycle: experimental
@@ -705,9 +427,15 @@ operations:
         waterSolubilityMgPerL: Optional resolved water solubility in mg/L. Its omission
           leaves structural HENRYWIN candidates available.
         waterSolubilityProvider: Optional parameter
-      return: Returns a list with result object
+      return: Returns a tibble with the batch response
       examples:
-      - modules: DTXSID1024122
+      - modules:
+        - logKow
+        smiles: CCO
       tags:
         apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_tidy
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

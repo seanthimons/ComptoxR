@@ -157,6 +157,12 @@
   .ct_list(response, context, decode)
 }
 
+# Structured calculation requests have no identifier to attach to response rows.
+.ct_static_tidy <- function(response, context, decode) {
+  context$query <- NULL
+  .ct_tidy(response, context, decode)
+}
+
 # Specmill response policy for file endpoints: text (mol) as a string, images as magick objects.
 .ct_file <- function(response, context, decode) {
   observe_api_responses(list(response))

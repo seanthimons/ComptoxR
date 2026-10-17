@@ -1173,3 +1173,35 @@ Code/documentation arguments and defaults have no mismatches. Official generatio
 freshness passes at the released pin; existing warnings for retained descriptor
 routes remain tracked upstream. Archived schemas are unchanged and
 `git diff --check` is clean.
+
+## EPI batch calculation facade
+
+`epi_submit_batch` now uses native transport while keeping all 73 public
+arguments, their order and exact defaults. Its existing flat estimate is
+projected into the declared one-item BatchEstimateRequest array; module values
+remain arrays even for a single module. This corrects the previous CTX origin,
+CTX credential requirement and object-shaped body. The request now targets EPI
+without CTX authentication. NULL fields are omitted; FALSE, zero and UTF-8 values
+are retained and the complete source body schema validates before HTTP.
+
+A reviewed read-safe production calculation for `modules = "logKow"` and
+`smiles = "CCO"` returned 200 JSON without a CTX key. The actual generated facade
+replays that captured response identically to the old formatter. A named client
+response policy excludes the scientific request object from identifier
+attribution. Tests cover body nesting, module singleton arrays, defaults,
+FALSE/zero, routing, authentication, invalid modules before HTTP and exact public
+formals. `wave-epi-batch.json` records source/release and response hashes.
+
+The separate exact-search line review identified upstream
+[Specmill #140](https://github.com/seanthimons/specmill/issues/140). Encoding lines
+mutates `params$query` into joined text before response callbacks, losing the
+original per-chunk entry boundaries. A mocked accepted 200 object then gains a
+query column for a multi-entry chunk, unlike the retained formatter. This is
+separate from the successful production array replay and makes no new production
+response-shape claim. The upstream agent owns triage, implementation and release;
+exact-search bulk remains retained without a local transport workaround.
+
+EPI batch validation: targeted native calculation/normalization/list-policy
+regressions and the generated fixed helper contract pass without failures,
+warnings or skips. Documentation signatures/defaults and final official
+generation freshness pass. No archived schema or transport helper changes.

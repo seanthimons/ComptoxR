@@ -1,7 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("epi_submit_batch completes the fixed call sequence", {
   contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["epi_submit_batch"]]
-  withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {
     force(name)
@@ -14,7 +13,7 @@ testthat::test_that("epi_submit_batch completes the fixed call sequence", {
       contract$calls[[position]]$response
     }
   }
-  testthat::local_mocked_bindings(generic_request = mock_for("generic_request"), .package = "ComptoxR")
+  testthat::local_mocked_bindings(.ct_request = mock_for(".ct_request"), .package = "ComptoxR")
   result <- do.call(ComptoxR::epi_submit_batch, contract$inputs)
   testthat::expect_identical(captured, lapply(contract$calls, function(x) x[c('helper', 'arguments')]))
   testthat::expect_identical(result, contract$result)

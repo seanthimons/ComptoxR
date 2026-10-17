@@ -228,14 +228,14 @@ epi_submit_batch(
 \item{waterSolubilityProvider}{Optional parameter}
 }
 \value{
-Returns a list with result object
+Returns a tibble with the batch response
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_submit_batch(modules = "DTXSID1024122")
+epi_submit_batch(modules = "logKow", smiles = "CCO")
 }
 }
 \section{API stage}{

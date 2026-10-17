@@ -1,4 +1,10 @@
 # Development callbacks only. Client helpers retain runtime policy.
+epi_batch_array <- function(operation) {
+  substitute(.api_validation$body_value(
+    base::list(base::Filter(base::Negate(base::is.null), params)), SCHEMA
+  ), list(SCHEMA = operation$schema_body))
+}
+
 primary_query_response <- function(operation) {
   name <- regmatches(operation$path, regexpr("\\{[^}]+\\}", operation$path))
   name <- substring(name, 2L, nchar(name) - 1L)
