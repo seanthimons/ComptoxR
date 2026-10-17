@@ -4,6 +4,11 @@ schemas:
   - schema/ctx-chemical-prod.json
 selection:
   include:
+  - GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}
+  - GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}
+  - GET /chemical/list/chemicals/search/start-with/{list}/{word}
+  - GET /chemical/list/chemicals/search/equal/{list}/{word}
+  - GET /chemical/list/chemicals/search/contain/{list}/{word}
   - GET /chemical/detail/search/by-dtxcid/{dtxcid}
   - GET /chemical/detail/search/by-smiles/
   - GET /chemical/fate/search/by-dtxsid/{dtxsid}
@@ -41,6 +46,103 @@ defaults:
     split: yes
     on_error: drop
 operations:
+  GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}:
+    name: ct_chemical_property_predicted_search_by_range
+    file: R/ct_chemical_property_predicted_search_by_range.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: propertyId
+      on_error: drop
+    docs:
+      title: Get predicted properties by property and range
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - propertyId: '1'
+        start: 0.0
+        end: 100.0
+  GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}:
+    name: ct_chemical_property_experimental_search_by_range
+    file: R/ct_chemical_property_experimental_search_by_range.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: propertyName
+      on_error: drop
+    docs:
+      title: Get experimental properties by property and range
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - propertyName: Melting Point
+        start: 0.0
+        end: 100.0
+  GET /chemical/list/chemicals/search/start-with/{list}/{word}:
+    name: ct_chemical_list_chemicals_search_start_with
+    file: R/ct_chemical_list_chemicals_search_start_with.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+    docs:
+      title: Get DTXSIDs for list and containing starting string in chemical name
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: TOXCAST
+        word: bisphenol
+  GET /chemical/list/chemicals/search/equal/{list}/{word}:
+    name: ct_chemical_list_chemicals_search_equal
+    file: R/ct_chemical_list_chemicals_search_equal.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+    docs:
+      title: Get DTXSIDs for list and containing exact string in chemical name
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: TOXCAST
+        word: bisphenol
+  GET /chemical/list/chemicals/search/contain/{list}/{word}:
+    name: ct_chemical_list_chemicals_search_contain
+    file: R/ct_chemical_list_chemicals_search_contain.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+    docs:
+      title: Get DTXSIDs for list and containing substring in chemical name
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: TOXCAST
+        word: bisphenol
   GET /chemical/detail/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_detail_search_by_dtxcid
     file: R/ct_chemical_detail_search_by_dtxcid.R

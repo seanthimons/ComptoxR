@@ -97,6 +97,10 @@
       "hash": "3d7a81396ce701030bb3e721ac58cb519d90d9237b3f519e50e63bb21d0e1b36",
       "operations": "chemi-amos-prod-full GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}"
     },
+    "R/chemi_amos_get_pdf.R": {
+      "hash": "3add07d58b7c84ae41fd7b984cb41acd385fa5d4466172c6236ca3d161777363",
+      "operations": "chemi-amos-prod-full GET /api/amos/get_pdf/{record_type}/{internal_id}"
+    },
     "R/chemi_amos_get_product_declaration_editor_info.R": {
       "hash": "e10d7f215000b442ba8eb30a17974172716ea6b49d29f1afe8fd3e0d160065af",
       "operations": "chemi-amos-prod-full GET /api/amos/get_product_declaration_editor_info/{internal_id}"
@@ -121,9 +125,17 @@
       "hash": "3ba1cffa32cde565e5f485c0378ae6b484574517b8d8fef9f94072711530153c",
       "operations": "chemi-amos-prod-full GET /api/amos/list_functional_classes"
     },
+    "R/chemi_amos_method_with_spectra.R": {
+      "hash": "ec08fdef9057924525f0b45710f9a6da5a6faa930d4db4d61cb47898e9c68c3e",
+      "operations": "chemi-amos-prod-full GET /api/amos/method_with_spectra/{search_type}/{internal_id}"
+    },
     "R/chemi_amos_record_id.R": {
       "hash": "1cb59b6608989b551642b470ddd071343a8837ec62bab56b46543435e1df51d5",
       "operations": "chemi-amos-prod-full GET /api/amos/record_id_search/{internal_id}"
+    },
+    "R/chemi_amos_record_ids_for_substance.R": {
+      "hash": "4ecb48a72de1038b528bdb4b396f5516cdd1d367051d7aa4fe03643074e4c24b",
+      "operations": "chemi-amos-prod-full GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}"
     },
     "R/chemi_amos_record_type_count.R": {
       "hash": "142f605810fb01f0c061f313d339c9a3492932a60e107e38318319c94b7a7da8",
@@ -621,6 +633,18 @@
       "hash": "2ef7f4ed897801a35a8227c13659333d35abdf26090a5d835a5748752a5b6cf4",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/by-listname/{list}"
     },
+    "R/ct_chemical_list_chemicals_search_contain.R": {
+      "hash": "c7b465b671e5b6c8d8145a28e0015972c2be4f4cddcd48539b1e8e28b80a0979",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/contain/{list}/{word}"
+    },
+    "R/ct_chemical_list_chemicals_search_equal.R": {
+      "hash": "d5325002b7903ba55294d35f698bb00ede46110ddcd6b020a2251b59940ba814",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/equal/{list}/{word}"
+    },
+    "R/ct_chemical_list_chemicals_search_start_with.R": {
+      "hash": "937244fc455f974091e2d6e2fa62f641af14be2ccecb2595fbf1fbb5af72d067",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/start-with/{list}/{word}"
+    },
     "R/ct_chemical_list_search.R": {
       "hash": "ea78a69bc1d7e43e7374ac77a3a661446dc52a9edbc2c2ecfa78c6b4cabd4336",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-dtxsid/{dtxsid}"
@@ -657,6 +681,10 @@
       "hash": "bddcb9c091ab1b8368c05ce9e8baaec7cc7dbd1da08f8a8fe1513a211a8723c2",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}"
     },
+    "R/ct_chemical_property_experimental_search_by_range.R": {
+      "hash": "f5da8990362d57c86ee8fbb6359164698a8a79f97671268cd2c35c6a96209d59",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}"
+    },
     "R/ct_chemical_property_predicted_name.R": {
       "hash": "1694431dae588f8bf53102b9ba6d46d6ea897106e89b8c2403a60e8cbab5bd0c",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/name"
@@ -668,6 +696,10 @@
     "R/ct_chemical_property_predicted_search_by_dtxsid.R": {
       "hash": "b1cbeb61378290ce831985e536ce919c14067f25481e8cd50d1f8d04728bd9df",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}"
+    },
+    "R/ct_chemical_property_predicted_search_by_range.R": {
+      "hash": "07faaaf6300fc435984268b86a6c8e67fd3b469c482cda1ac0ccb18fa21dde4f",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}"
     },
     "R/ct_chemical_property_summary_experimental_search.R": {
       "hash": "1fc8637118e227e5766f8ebeb01f80da7360b2efac97c8e4bc5fef99dd7fc5c0",
@@ -1009,6 +1041,10 @@
       "hash": "28f9316d8355ddd0ebf560435ab6a136df1e6e1a03d32b954b01db643517a383",
       "operations": "chemi-amos-prod-full GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}"
     },
+    "tests/testthat/test-contract-chemi_amos_get_pdf.R": {
+      "hash": "a2a2fbbfc6b0ef470ab94e7c520c51aee88339933ad7518ea3fcad3c53068338",
+      "operations": "chemi-amos-prod-full GET /api/amos/get_pdf/{record_type}/{internal_id}"
+    },
     "tests/testthat/test-contract-chemi_amos_get_product_declaration_editor_info.R": {
       "hash": "cc46f3d6b5a2b49c94296fd51f1214b17e28ed64206902c807bf61e605a0e35c",
       "operations": "chemi-amos-prod-full GET /api/amos/get_product_declaration_editor_info/{internal_id}"
@@ -1033,9 +1069,17 @@
       "hash": "1e5e36a85323f026972a3c7f86cd1877d8f3c7d23af58d2e4eb8317faf7af575",
       "operations": "chemi-amos-prod-full GET /api/amos/list_functional_classes"
     },
+    "tests/testthat/test-contract-chemi_amos_method_with_spectra.R": {
+      "hash": "0a102e973ae77ffcac9ccf3d05758020de96376f4181f005ef2975d00d3b21e4",
+      "operations": "chemi-amos-prod-full GET /api/amos/method_with_spectra/{search_type}/{internal_id}"
+    },
     "tests/testthat/test-contract-chemi_amos_record_id.R": {
       "hash": "62347947f2f0ef20b4baab4dab13c5052d6c80e01cbc4a73a0cfbd352009141f",
       "operations": "chemi-amos-prod-full GET /api/amos/record_id_search/{internal_id}"
+    },
+    "tests/testthat/test-contract-chemi_amos_record_ids_for_substance.R": {
+      "hash": "b3f52ec460f43ed1069523a1241b2cf8e4dac6549e6ca410adb70233c66a4b16",
+      "operations": "chemi-amos-prod-full GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}"
     },
     "tests/testthat/test-contract-chemi_amos_record_type_count.R": {
       "hash": "4615b48d331fcfacf3962da569b6882adf33232c8d76f5adfd76b06cad76ed41",
@@ -1645,6 +1689,18 @@
       "hash": "00ee793ee825c00f096c603b65f0bf2c6e8c7568e6812c70a52cf4a27f645eb9",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/by-listname/{list}"
     },
+    "tests/testthat/test-contract-ct_chemical_list_chemicals_search_contain.R": {
+      "hash": "24d1af8c673563bc9bee602a7df407da976ea538e3e4663ece470e88eb2b2310",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/contain/{list}/{word}"
+    },
+    "tests/testthat/test-contract-ct_chemical_list_chemicals_search_equal.R": {
+      "hash": "c33183eb14d3b807bb0f890a2ef5378f6e2fbbec6f8efdfbacf29bcd71e5ad69",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/equal/{list}/{word}"
+    },
+    "tests/testthat/test-contract-ct_chemical_list_chemicals_search_start_with.R": {
+      "hash": "c065900875585491cd52620910d796149952a7021f08366b94e893f9cd2ea12a",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/start-with/{list}/{word}"
+    },
     "tests/testthat/test-contract-ct_chemical_list_search.R": {
       "hash": "8a4666170e86e253a590125e8bf8381e222bd5d0a2b52ed2ad225ec89b7e0a91",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-dtxsid/{dtxsid}"
@@ -1689,6 +1745,10 @@
       "hash": "dfb9bdfe58518bcc1b2504feed19faf620815e143a5d6814c2d8c188cc62f396",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}"
     },
+    "tests/testthat/test-contract-ct_chemical_property_experimental_search_by_range.R": {
+      "hash": "7d1f330731a6e45a24f60ab9cb80b3146d8113291c2ba07d7490aa0297d8d6fc",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}"
+    },
     "tests/testthat/test-contract-ct_chemical_property_predicted_name.R": {
       "hash": "6d7195fc80d3df602f8b3cab689dba1033160ec6cca3bf9a4ea551ebde7cdc79",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/name"
@@ -1700,6 +1760,10 @@
     "tests/testthat/test-contract-ct_chemical_property_predicted_search_by_dtxsid.R": {
       "hash": "5a3f1c5b7df6e8854c4990dc8ec8106a77482ab33897e03781d7dada123f1fa9",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_chemical_property_predicted_search_by_range.R": {
+      "hash": "ffad5868ff2064b7c4ec450cd4cf09d0c271f21f7de78b26b1f0ceda480319a7",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}"
     },
     "tests/testthat/test-contract-ct_chemical_property_summary_experimental_search.R": {
       "hash": "27c196f99c1fcae56840fee0ce322b93db5d13b1e8668cabff5d3bb4bfecbc73",
@@ -2047,7 +2111,7 @@
     "R/chemi_amos_get_ms_ready_methods.R": "29420545aa4096db0ed0d8adc60874f7e36a4baec4a1c512328d4f242ef9e273",
     "R/chemi_amos_get_nmr_spectrum.R": "3639d4f566e8a3254aa7aaeab1c18535b730a96222cb372e6cc1a0cf40460dca",
     "R/chemi_amos_get_nmr_spectrum_editor_info.R": "3d7a81396ce701030bb3e721ac58cb519d90d9237b3f519e50e63bb21d0e1b36",
-    "R/chemi_amos_get_pdf.R": "24a303c561d3e3c91a2e99396dcab4c1a6ec00373ce1fb3f16d187a6283c1d97",
+    "R/chemi_amos_get_pdf.R": "3add07d58b7c84ae41fd7b984cb41acd385fa5d4466172c6236ca3d161777363",
     "R/chemi_amos_get_product_declaration_editor_info.R": "e10d7f215000b442ba8eb30a17974172716ea6b49d29f1afe8fd3e0d160065af",
     "R/chemi_amos_get_safety_data_sheet_editor_info.R": "1489a39989c04bd387f819f232e0596778b2a5ba9a2e405fbd0fa4a3c9361788",
     "R/chemi_amos_get_similar_structures.R": "877d2a6cdb92005ba25cacedcb8ec1a78ad5eba9342768adc27a7225a7d29eed",
@@ -2061,12 +2125,12 @@
     "R/chemi_amos_mass_spectrum_similarity.R": "cf7eb667f7663d06abfbe3efec8b2e9ccd8acf818cf44b4d479625ba583be7fe",
     "R/chemi_amos_max_similarity.R": "373a6a8704c79acc8805016bb56a59ae85ec889a20ab3ffe6639afda7b8515e8",
     "R/chemi_amos_method_keyset_pagination.R": "29ae45aa7112cd4f7bbab4c9eaa9e259da65bc27f4ee93750e9abd67731d0086",
-    "R/chemi_amos_method_with_spectra.R": "ac6f10de12f6cfc6ed298881bb4c530d905a6a21d4750c11f2b488cadc05b057",
+    "R/chemi_amos_method_with_spectra.R": "ec08fdef9057924525f0b45710f9a6da5a6faa930d4db4d61cb47898e9c68c3e",
     "R/chemi_amos_next_level_classification.R": "30d9669233d44f0f55fd24500d508605915c018f58097b0134e93b750ede932d",
     "R/chemi_amos_product_declaration_keyset_pagination.R": "4f1ff72ed961d8f21a13e235e48ff6ba7679894012893a66168eee8a804ee734",
     "R/chemi_amos_record_counts.R": "eb4ba43da3472b482a19dbffc27a75f32c75c403fce0754fb2074ae6ef1d5d55",
     "R/chemi_amos_record_id.R": "1cb59b6608989b551642b470ddd071343a8837ec62bab56b46543435e1df51d5",
-    "R/chemi_amos_record_ids_for_substance.R": "5f3633b6a386f0988bfee58c25c67c0cea90acaf99085951b160f09b99a540e1",
+    "R/chemi_amos_record_ids_for_substance.R": "4ecb48a72de1038b528bdb4b396f5516cdd1d367051d7aa4fe03643074e4c24b",
     "R/chemi_amos_record_type_count.R": "142f605810fb01f0c061f313d339c9a3492932a60e107e38318319c94b7a7da8",
     "R/chemi_amos_release_notes.R": "ea60fa3144add0038b37808b8b2134bbd1980f22e748f0fca88638167ef553ae",
     "R/chemi_amos_retrieve_fact_sheets.R": "879853abc1c9db11d69278d09aeae66304d9df4f325207fd4dd3eb27507f5125",
@@ -2231,9 +2295,9 @@
     "R/ct_chemical_file_mol_search_by_dtxcid.R": "76bf13b23527c0c628501365925a2d7696d704168d8bfc0840e45b5ed564cfa9",
     "R/ct_chemical_list_all.R": "6b0f62e2d1e2070a1ec409494986d102b8d9718be9164e8a5614c731fa3bc528",
     "R/ct_chemical_list_chemicals_search_by_listname.R": "2ef7f4ed897801a35a8227c13659333d35abdf26090a5d835a5748752a5b6cf4",
-    "R/ct_chemical_list_chemicals_search_contain.R": "3cf1312ea7c1573b8e39c4df4589c118fc5f471b659225548e0b542654a599b9",
-    "R/ct_chemical_list_chemicals_search_equal.R": "621305b9a57c6598af3c2eb1aad4b7bac286dbf4dbf8046ed9e9581a0b4552dd",
-    "R/ct_chemical_list_chemicals_search_start_with.R": "d81f739cdc76d36a9b7d8c8d44b166dfa4e6424bfdda4ed1ba9c4db2e354ad99",
+    "R/ct_chemical_list_chemicals_search_contain.R": "c7b465b671e5b6c8d8145a28e0015972c2be4f4cddcd48539b1e8e28b80a0979",
+    "R/ct_chemical_list_chemicals_search_equal.R": "d5325002b7903ba55294d35f698bb00ede46110ddcd6b020a2251b59940ba814",
+    "R/ct_chemical_list_chemicals_search_start_with.R": "937244fc455f974091e2d6e2fa62f641af14be2ccecb2595fbf1fbb5af72d067",
     "R/ct_chemical_list_search.R": "ea78a69bc1d7e43e7374ac77a3a661446dc52a9edbc2c2ecfa78c6b4cabd4336",
     "R/ct_chemical_list_search_by_name.R": "81376b91b6deaa28ca5c41b09c3861c4b9aceffaa67634a54d56ae12e3111b67",
     "R/ct_chemical_list_search_by_type.R": "f6391f7b59d9c98bb4cdeb09d8cb586ef80bcded374775ff804b36f3470f2506",
@@ -2244,11 +2308,11 @@
     "R/ct_chemical_property_experimental_name.R": "5653e75b67b8c0dba598b6ff695e309a594835d9272e8c9e5f1623cf9d44edd2",
     "R/ct_chemical_property_experimental_search.R": "2825e843eecab5d99fb3911a2ceabf7590b874ca72c32c255419c0e83b7b3688",
     "R/ct_chemical_property_experimental_search_by_dtxsid.R": "bddcb9c091ab1b8368c05ce9e8baaec7cc7dbd1da08f8a8fe1513a211a8723c2",
-    "R/ct_chemical_property_experimental_search_by_range.R": "881143879b1a7200584eeeb0b387d1ff48eb66e166d5661430a4e474d88572ec",
+    "R/ct_chemical_property_experimental_search_by_range.R": "f5da8990362d57c86ee8fbb6359164698a8a79f97671268cd2c35c6a96209d59",
     "R/ct_chemical_property_predicted_name.R": "1694431dae588f8bf53102b9ba6d46d6ea897106e89b8c2403a60e8cbab5bd0c",
     "R/ct_chemical_property_predicted_search.R": "d718709ac461402f21f143cb9f4f324162033368641ddb8ac37e0f51a362a4d7",
     "R/ct_chemical_property_predicted_search_by_dtxsid.R": "b1cbeb61378290ce831985e536ce919c14067f25481e8cd50d1f8d04728bd9df",
-    "R/ct_chemical_property_predicted_search_by_range.R": "0396e3e47ffb187ba28d3eb50a3023de0b2673c4b8b3fd1f9ae7fa0097433dbf",
+    "R/ct_chemical_property_predicted_search_by_range.R": "07faaaf6300fc435984268b86a6c8e67fd3b469c482cda1ac0ccb18fa21dde4f",
     "R/ct_chemical_property_summary_experimental_search.R": "1fc8637118e227e5766f8ebeb01f80da7360b2efac97c8e4bc5fef99dd7fc5c0",
     "R/ct_chemical_property_summary_predicted_search.R": "74bef9f2bd14628f06e1ec3f1df257b5622967e5e4a135d35c7b2ae41c0cb101",
     "R/ct_chemical_property_summary_search.R": "bb8c3bc8c120419275072e654b3260459821298654bd7ab29c094ec78e2a88d3",
@@ -2364,7 +2428,7 @@
     "apis/alerts-pilot.yml": "83f7437a6aca6b766542393e5527ad198f5111af7575671f9d39459da163d2a5",
     "apis/amos-pilot.yml": "26c784543391f3fae6b0708817c891605e091cdc186e9968a67f6b3d9b844200",
     "apis/chemi-amnb_nate-prod-rebuild.yml": "4e83512af93c26d20afc14974101be7d1570867c1ad5b8d71792464303f0f827",
-    "apis/chemi-amos-prod-full.yml": "a4e966d4c6b840d3f1e6fe36ee70484eb7267098afbe4a836bf9517c3ead713e",
+    "apis/chemi-amos-prod-full.yml": "7336b7076c19246ddbffc2cc6d68af0aa58367978b6959192a7a15a810f2959c",
     "apis/chemi-arn_cats-prod-rebuild.yml": "af793e8661b20230a08d266912e2d335a1b20d3d1ea605c04402060e5c8784c5",
     "apis/chemi-chet-prod-full.yml": "9125780064223315f564cf25fbadacba08eed4999eea1d604ec0dc199e05c936",
     "apis/chemi-chet-prod-rebuild.yml": "61c49fe8f7b1e9e2797faa12c2280d39eceb27545ba8372eb133e94c510baf43",
@@ -2390,7 +2454,7 @@
     "apis/chemi-webtest-prod-rebuild.yml": "c778b142f3b7092a4b633dbf9bdebe169c04f23acf18877b76abc18ebcf300e0",
     "apis/ctx-bioactivity-prod-rebuild.yml": "2855f04dd2683a679af219b68c5c334bca9702f8d8c3942810e14156a414e004",
     "apis/ctx-chemical-prod-full.yml": "c492bcd0321e3ea203d55a1443c1cd1c9135cd54a2d633467b8b6c9b6ddf6bcd",
-    "apis/ctx-chemical-prod-rebuild.yml": "fb8092f83e8576b2e0a1457b575b8ec878badf0c387efa2d1ee648dc3b2ef206",
+    "apis/ctx-chemical-prod-rebuild.yml": "b63e9ecb3aa6ca27f5b4f38dd67ee7a6131c428984e2d5a20155f1020c91577a",
     "apis/ctx-exposure-prod-full.yml": "6dbbb0ab730f0317ce092f922f67a2648959d3ccc4df5a6b5be38ec60aed9712",
     "apis/ctx-exposure-prod-rebuild.yml": "fba7b3e11e170d563e7600d909f528b2b5f3b1f8f5038063da00a100df192b6a",
     "apis/ctx-hazard-prod-rebuild.yml": "d2b99e09511cad1ffecb85b20350e81a4e0fcb13a5b235dc567de38d863a2ce1",
@@ -2466,7 +2530,7 @@
     "man/chemi_amos_get_ms_ready_methods.Rd": "45ec8302b6593f440fdc3d054c6a3549ec1374ba38e42b098d9f23a284ad8b1f",
     "man/chemi_amos_get_nmr_spectrum.Rd": "2bd1ef217e9dd0270e335a7effc74b84c024af0130cd98bcf663787c8881a378",
     "man/chemi_amos_get_nmr_spectrum_editor_info.Rd": "6ed0303da27849663ef030845921164ab380714573b493302c44685c00c87fb7",
-    "man/chemi_amos_get_pdf.Rd": "1ea0e907827723809426c2a46aa146d332df21f7f778723fa4cc2cc2bba9ce9c",
+    "man/chemi_amos_get_pdf.Rd": "ab7cb2670ee6b67b11b1a3799b3168fc5ef30dd8d6c0d5d001ea0b44644b7fa3",
     "man/chemi_amos_get_product_declaration_editor_info.Rd": "f9c707c8a7bfae2ceda0db6fcea21bf9fac3ace3baafa14705214cc6073f6c49",
     "man/chemi_amos_get_safety_data_sheet_editor_info.Rd": "aefd6bcc06b462306e86e08dcd2c3235ccc0421a85dd5a5efdc348c9a7d8f138",
     "man/chemi_amos_get_similar_structures.Rd": "910feb071be7b1b97a90770e231da4bcf554fc68c57e8d85ff630428bed5982e",
@@ -2481,13 +2545,13 @@
     "man/chemi_amos_max_similarity.Rd": "42ff8fe11f7c22122881bf74e2e63b627c71c54890787a4e79eb500d9877faae",
     "man/chemi_amos_method_keyset_pagination.Rd": "987aaf79b15cc85133873a7fdc81a12c3d1bd0e3e6085b03567759d22bf2e497",
     "man/chemi_amos_method_keyset_pagination_bulk.Rd": "11521a329008e2552c51b6a615e265345a497492f6dbcfb57ec7e46b780856f1",
-    "man/chemi_amos_method_with_spectra.Rd": "6ad0efed5cd0138602db7f0b3be604be7914d827dc93f399f36a3819127d7ad5",
+    "man/chemi_amos_method_with_spectra.Rd": "db71da4844197545d71df866feec9fe9ba887265279134613296ac3d0ca85305",
     "man/chemi_amos_next_level_classification.Rd": "0a42a08539fe046462f30e7709a2cf08e5e5cf66ee66d2a95446ce6e87903863",
     "man/chemi_amos_product_declaration_keyset_pagination.Rd": "bd2df9145fa137afd7da9e15bd6563f7e6f3be5ffc02ad7cf1f4d7cadcbe9653",
     "man/chemi_amos_product_declaration_keyset_pagination_bulk.Rd": "97b12a80e44381656a11d562699d9894c9f60b47bfd765d4709cf9a49b48f202",
     "man/chemi_amos_record_counts.Rd": "befdc1a5adece69748efa510b4d5ff4ea255a35ace5466cd8ae4688a8320355f",
     "man/chemi_amos_record_id.Rd": "6955375fe5acac95f8cb6d331dce0a9baea76e28182b4736aee59290d865633f",
-    "man/chemi_amos_record_ids_for_substance.Rd": "ec06df637e7498301af6fca753f9105e5616c4135e5b03bfb80aa4a709b70ad0",
+    "man/chemi_amos_record_ids_for_substance.Rd": "b07cd0855e42d49ba121071c1f9cdd8c1175a5ba662c2c5e2c716027130b1435",
     "man/chemi_amos_record_type_count.Rd": "825ab611e9dfb12634a2af27752ad82c64b99130ed9cc7b0c56e97a2f761dd9a",
     "man/chemi_amos_release_notes.Rd": "f9c22c5e97cd58a42109350c54a2804b160fbcaf605976f29605b5f8cb76d159",
     "man/chemi_amos_retrieve_fact_sheets.Rd": "9660a0860714d7bf341ed1121316043292cb2c5ae4be93d76604fd425476dae7",
@@ -2680,9 +2744,9 @@
     "man/ct_chemical_file_mol_search_by_dtxcid.Rd": "1b6da25f3c9634361efb0f1e8dcac167b8731cfb653c4d9b96077928408fe296",
     "man/ct_chemical_list_all.Rd": "3c454ba1cb22ad35ee4f910b2c5d511f88542dfec82286b97d83a24fbb5f0630",
     "man/ct_chemical_list_chemicals_search_by_listname.Rd": "7efb28f13543da43a2aad7a9f04b0cf9a5a6d927174eb0fd71532b60637779e1",
-    "man/ct_chemical_list_chemicals_search_contain.Rd": "bd163b1604b803add548c36637df481534c05caeb21bdff23fe876f0f3a6d2b9",
-    "man/ct_chemical_list_chemicals_search_equal.Rd": "f154f3f49ca1b8ac55bd22990812c5da95ff4184d191c7cb7608f60bc0bb0ba8",
-    "man/ct_chemical_list_chemicals_search_start_with.Rd": "8f4709604ef745e1a120108adf76690c9a41eb9eee2cd39df364efb198c3df2e",
+    "man/ct_chemical_list_chemicals_search_contain.Rd": "6325bc0b80418d9ea3ce5fb5891befa7e81b7420446447aa85ac8989225fb164",
+    "man/ct_chemical_list_chemicals_search_equal.Rd": "61339e2646ae2786cccdd7eeccd57d171d3079bc4fe6c71eb14682ec4b266917",
+    "man/ct_chemical_list_chemicals_search_start_with.Rd": "f008c9931b32f0db5b6e01c0e01b55cd4ff42ae7f9d83628dacde00c8ef83d49",
     "man/ct_chemical_list_search.Rd": "c17fe612f79f331d8df71f98a94b783dbe3e02a63da2810f708c33dc0bec161d",
     "man/ct_chemical_list_search_by_name.Rd": "5ef4cc316cc8217db50dc03d5148cde060d2252cda8846e269ed20b3e7591b75",
     "man/ct_chemical_list_search_by_type.Rd": "a961498e580cdfeba52abe257b3f2f4469e7ac2e5bfc9c0d0b46574f78c99d80",
@@ -2695,11 +2759,11 @@
     "man/ct_chemical_property_experimental_name.Rd": "9a9469054f4ccc6a196ad8292c1d723663a463cfdffa3e95cc756b9ad735db23",
     "man/ct_chemical_property_experimental_search_bulk.Rd": "318466d874b430bc7c3c1101c6ba6e498bdf52d58aad34e085bbfec2e1bc2e95",
     "man/ct_chemical_property_experimental_search_by_dtxsid.Rd": "35078c77541cdbee9946a121977b5e442bcb966d9b4b67f370d154dcc4008b53",
-    "man/ct_chemical_property_experimental_search_by_range.Rd": "478e157e047c777f8e0e9963daeb920a2b14671024432fd2beece9417b7aa507",
+    "man/ct_chemical_property_experimental_search_by_range.Rd": "6ad73f3fe67573fb2502e2e9bb9c698d03378e2786b837ec20d6a349172326d0",
     "man/ct_chemical_property_predicted_name.Rd": "62eccd7677c6ef580eb235bebf3d9aad6fb5eacf1cbd6eaf5086326fb3ebc435",
     "man/ct_chemical_property_predicted_search_bulk.Rd": "84d4c5ca3fb19cfad917f9bc6fca91a26800832a08e429d1162e17265b8e344a",
     "man/ct_chemical_property_predicted_search_by_dtxsid.Rd": "8a5fe1b3ceeb8fb78f45bfcb56006d63ce7b4618858e2c915eb7caeacb2abbf8",
-    "man/ct_chemical_property_predicted_search_by_range.Rd": "d13a3be6ba97c5662ea47205a626db6ccf4fcf437a11d73a24fc297bbe721a8a",
+    "man/ct_chemical_property_predicted_search_by_range.Rd": "6c4a364f28d588d2a150d366cda3537768548585ea7640aa6eb7653b8f8ef699",
     "man/ct_chemical_property_summary_experimental_search.Rd": "89759b7e142c54ed9168b47e1287c5c046a39db05f41ce10f22fb439aa0a4fb2",
     "man/ct_chemical_property_summary_predicted_search.Rd": "3c9ebeb572f6721687e1874cde2dccbe0f556bbee3b55d59e0a46b2fdcc882ba",
     "man/ct_chemical_property_summary_search.Rd": "58fcb325c2624aa4cb6bea1e61be675e81ad21a6467f7dd648926c178b71a89e",
@@ -2903,9 +2967,9 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "specmill.yml": "911106dc215d6fd52b5c416bc526c31930ff1f0176750aa6e6537b13da87ac09",
-    "tests/testthat/fixtures/specmill-full-contracts.rds": "b4db2a8eaf1f1442de4261ca12cfc35de7609fdec5b594e929ec619b08f9f406",
+    "tests/testthat/fixtures/specmill-full-contracts.rds": "8138ac28e0cd5de13f48d86f072cbf90181e7d15e6afc8d7c7dcfc829430e9fa",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "8937a9d78985aafc973242897537f878bb45be29d291a9170a299603e45a5a92",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "f889e0e1ad29c45d9230d6035abae71f3dd2e166291d2f11872e5ff7f7e1dfcb"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "150f061ac4146cf73334fc684dd28c56768e4a8fdd715e03ec3b0354870e206e"
   },
   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
   "formatter": {

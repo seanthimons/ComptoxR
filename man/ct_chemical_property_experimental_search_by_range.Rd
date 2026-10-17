@@ -5,27 +5,23 @@
 \alias{ct_chemical_property_experimental_search_by_range}
 \title{Get experimental properties by property and range}
 \usage{
-ct_chemical_property_experimental_search_by_range(
-  propertyName,
-  start = NULL,
-  end = NULL
-)
+ct_chemical_property_experimental_search_by_range(propertyName, start, end)
 }
 \arguments{
-\item{propertyName}{Primary query parameter. Type: string}
+\item{propertyName}{propertyName Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{start}{Optional parameter. Type: number}
+\item{start}{start}
 
-\item{end}{Optional parameter. Type: number}
+\item{end}{end}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_chemical_property_experimental_search_by_range(propertyName = "DTXSID7020182")
+ct_chemical_property_experimental_search_by_range(propertyName = "Melting Point", start = 0, end = 100)
 }
 }

@@ -931,3 +931,18 @@ explicit integration-only test. All 89 helper contracts and localhost request
 captures passed. Documentation was regenerated, and the final Specmill check
 passed. The four pager candidates are separate and remain retained pending
 [Specmill #129](https://github.com/seanthimons/specmill/issues/129).
+
+## Eight additional native GET routes, 17 October 2026
+
+Three AMOS routes now have explicit native mappings: PDF retrieval,
+method-with-spectra lookup and record IDs for a substance. Five CTX mappings
+cover list contain/equal/start-with searches and experimental/predicted property
+ranges. Required trailing path parameters and numeric range bounds now come
+from the archived schema. AMOS PDFs return binary bytes in a per-request list,
+consistent with the other native download wrappers.
+
+All eight fixed helper contracts and localhost request captures passed.
+Dedicated tests cover encoded multi-parameter paths, CTX credential presence,
+range validation before HTTP and exact PDF bytes. The existing implementation
+mirrors are replaced by generated fixed contracts. Documentation was rebuilt,
+and the final generation freshness check passed. No archived schema changed.

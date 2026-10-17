@@ -4,6 +4,9 @@ schemas:
   - schema/chemi-amos-prod.json
 selection:
   include:
+  - GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}
+  - GET /api/amos/method_with_spectra/{search_type}/{internal_id}
+  - GET /api/amos/get_pdf/{record_type}/{internal_id}
   - GET /api/amos/database_summary/
   - GET /api/amos/dtxsids_from_functional_use/{functional_use}
   - GET /api/amos/find_dtxsids/{internal_id}
@@ -28,6 +31,65 @@ selection:
 helper: generic_request
 documentation: yes
 operations:
+  GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}:
+    name: chemi_amos_record_ids_for_substance
+    file: R/chemi_amos_record_ids_for_substance.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+    docs:
+      title: Returns a list of record IDs that are associated with the given DTXSID.  This
+        is intended to help when filtering
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - dtxsid: DTXSID7020182
+        record_type: method
+  GET /api/amos/method_with_spectra/{search_type}/{internal_id}:
+    name: chemi_amos_method_with_spectra
+    file: R/chemi_amos_method_with_spectra.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    batch:
+      fan_out: search_type
+      on_error: drop
+    docs:
+      title: Returns information about a method with linked spectra, given an ID for
+        either a spectrum or a method.
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - search_type: method
+        internal_id: '1'
+  GET /api/amos/get_pdf/{record_type}/{internal_id}:
+    name: chemi_amos_get_pdf
+    file: R/chemi_amos_get_pdf.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: record_type
+      on_error: drop
+    docs:
+      title: Retrieves a PDF from the database by the internal ID and type of record.
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - record_type: method
+        internal_id: '1'
   GET /api/amos/database_summary/:
     name: chemi_amos_database
     file: R/chemi_amos_database.R
