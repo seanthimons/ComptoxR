@@ -140,6 +140,14 @@
   )
 }
 
+# Specmill response policy for file endpoints: text (mol) as a string, images as magick objects.
+.ct_file <- function(response, context, decode) {
+  observe_api_responses(list(response))
+  value <- decode()
+  if (!startsWith(context$media, 'image/') || context$media == 'image/svg+xml') return(value)
+  tryCatch(magick::image_read(value), error = function(e) value)
+}
+
 # Specmill response policy for paged CTX endpoints: each page is an envelope around `data`.
 .ct_paged <- function(response, context, decode) {
   observe_api_responses(list(response))

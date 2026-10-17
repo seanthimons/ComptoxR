@@ -118,33 +118,19 @@ operations:
   GET /chemical/file/image/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_file_image_search_by_dtxcid
     file: R/ct_chemical_file_image_search_by_dtxcid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxcid:
-        type: character
-        required: yes
-        description: 'DSSTox Compound Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxcid
-        endpoint:
-          value: chemical/file/image/search/by-dtxcid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        content_type:
-          value: image/png
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: dtxcid
+      on_error: drop
     docs:
       title: Get structure image by DTXCID
       lifecycle: experimental
-      parameters:
-        dtxcid: 'DSSTox Compound Identifier. Type: string'
-      return: Returns image data (raw bytes or magick image object)
+      return: Returns a list of structure images (magick objects), one per identifier
       tags:
         apiStage: public
       examples:
@@ -152,33 +138,19 @@ operations:
   GET /chemical/file/image/search/by-gsid/{gsid}:
     name: ct_chemical_file_image_search_by_gsid
     file: R/ct_chemical_file_image_search_by_gsid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      gsid:
-        type: character
-        required: yes
-        description: 'Generic Substance Id. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - gsid
-        endpoint:
-          value: chemical/file/image/search/by-gsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        content_type:
-          value: image/png
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: gsid
+      on_error: drop
     docs:
       title: Get structure image by GSID
       lifecycle: experimental
-      parameters:
-        gsid: 'Generic Substance Id. Type: string'
-      return: Returns image data (raw bytes or magick image object)
+      return: Returns a list of structure images (magick objects), one per identifier
       tags:
         apiStage: public
       examples:
@@ -186,33 +158,19 @@ operations:
   GET /chemical/file/image/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_file_image_search
     file: R/ct_chemical_file_image_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chemical/file/image/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
-        content_type:
-          value: image/png
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get structure image by DTXSID
       lifecycle: experimental
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns image data (raw bytes or magick image object)
+      return: Returns a list of structure images (magick objects), one per identifier
       tags:
         apiStage: public
       examples:
@@ -220,31 +178,19 @@ operations:
   GET /chemical/file/mol/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_file_mol_search_by_dtxcid
     file: R/ct_chemical_file_mol_search_by_dtxcid.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxcid:
-        type: character
-        required: yes
-        description: 'DSSTox Compound Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxcid
-        endpoint:
-          value: chemical/file/mol/search/by-dtxcid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: dtxcid
+      on_error: drop
     docs:
       title: Get mol file by DTXCID
       lifecycle: experimental
-      parameters:
-        dtxcid: 'DSSTox Compound Identifier. Type: string'
-      return: Returns a tibble with results
+      return: Returns a list of mol file strings, one per identifier
       tags:
         apiStage: public
       examples:
@@ -252,31 +198,19 @@ operations:
   GET /chemical/file/mol/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_file_mol_search
     file: R/ct_chemical_file_mol_search.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      dtxsid:
-        type: character
-        required: yes
-        description: 'DSSTox Substance Identifier. Type: string'
-    request:
-      arguments:
-        query:
-          from:
-          - params
-          - dtxsid
-        endpoint:
-          value: chemical/file/mol/search/by-dtxsid/
-        method:
-          value: GET
-        batch_limit:
-          value: 1.0
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: dtxsid
+      on_error: drop
     docs:
       title: Get mol file by DTXSID
       lifecycle: experimental
-      parameters:
-        dtxsid: 'DSSTox Substance Identifier. Type: string'
-      return: Returns a tibble with results
+      return: Returns a list of mol file strings, one per identifier
       tags:
         apiStage: public
       examples:
