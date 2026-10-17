@@ -2,6 +2,10 @@
 # Each entry maps a generated function name to its hooks and extra parameters.
 # Hooks execute in declared order. Extra params are injected into function signatures.
 
+chemi_classyfire:
+  post_combine:
+    - format_classyfire_result
+
 ct_chemical_list_all:
   extra_params:
     return_dtxsid:

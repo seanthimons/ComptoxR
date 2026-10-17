@@ -7,11 +7,10 @@
 chemi_classyfire(query)
 }
 \arguments{
-\item{query}{A character vector of DTXSIDs to query.}
+\item{query}{A character vector of DTXSIDs to query. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-A list of Classyfire classifications corresponding to the input DTXSIDs.
-Returns NA if the request fails for a given DTXSID.
+A tibble of Classyfire classifications corresponding to the input DTXSIDs.
 }
 \description{
 This function retrieves Classyfire classifications for a given DTXSID using the EPA's cheminformatics API.

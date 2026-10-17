@@ -1,0 +1,20 @@
+{
+  "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+  "wrapper": "chemi_classyfire",
+  "schema": "schema/chemi-amos-prod.json",
+  "schema_sha256": "1d0ef1fbd813e2381a1e6e841d69e5070ee438e588a01dc3298b984ba7ca5f35",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.25",
+    "source_commit": "01fe162db735249a497ea9d30811b1d646733aa4",
+    "source_archive_sha256": "4173d7e493c5055da72133360c9ffcf987245c4582f5101799eb2c017c08100a",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "public_formals": "function(query)",
+  "normalizer": ".ct_legacy_query",
+  "response_policy": ".ct_tidy",
+  "post_combine": "format_classyfire_result",
+  "legacy_http_cases": 12,
+  "live_claim": false
+}

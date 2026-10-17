@@ -253,6 +253,10 @@
       "hash": "9d2b3032987d48353af1373dacf3dfd8f8a7b5cafdd976c3d4d97303f36b3063",
       "operations": "chemi-chet-prod-rebuild GET /reaction/table"
     },
+    "R/chemi_classyfire.R": {
+      "hash": "f48f0cec03e4d46e6a749fa16355dc3463f7bdbc0f767b25682b9c76e2a29db0",
+      "operations": "chemi-amos-prod-full GET /api/amos/get_classification_for_dtxsid/{dtxsid}"
+    },
     "R/chemi_mordred.R": {
       "hash": "07621225c1073666cd712e3e2cdfa97cf3e07f342656a942341ab64c1e2c6da1",
       "operations": ["chemi-mordred-prod-rebuild GET /api/mordred", "chemi-mordred-prod-rebuild POST /api/mordred"]
@@ -1234,7 +1238,7 @@
       "operations": "chemi-chet-prod-rebuild GET /reaction/table"
     },
     "tests/testthat/test-contract-chemi_classyfire.R": {
-      "hash": "34fd0c88c9e491a185fd06cc0b7618893c949bc2af9a238ce1c17d9720f3202a",
+      "hash": "25637462d3060569636132cf3abc8ecdf0a6cf9b3aeec2b2e04495e3376cd842",
       "operations": "chemi-amos-prod-full GET /api/amos/get_classification_for_dtxsid/{dtxsid}"
     },
     "tests/testthat/test-contract-chemi_mordred.R": {
@@ -2232,7 +2236,7 @@
     "R/chemi_chet_reaction_searchcounts.R": "1121a60944794c637b7171e1a502f30fbdf983b2384a748870e124fe7993e072",
     "R/chemi_chet_reaction_singlereaction.R": "5e94ae58ba26a149f9c1c888ec59088c4e7307d9cf9ad2f5d10ceb91cfa5d98a",
     "R/chemi_chet_reaction_table.R": "9d2b3032987d48353af1373dacf3dfd8f8a7b5cafdd976c3d4d97303f36b3063",
-    "R/chemi_classyfire.R": "ed76f3dba77a60db89f2eeea1c3d30a40eeac31b3dc21c9cb465d9e0321615f7",
+    "R/chemi_classyfire.R": "f48f0cec03e4d46e6a749fa16355dc3463f7bdbc0f767b25682b9c76e2a29db0",
     "R/chemi_descriptors.R": "15f9fc5b946f820b2b86de9273af34f005735bc80a86610ed601aa1396d7c5e6",
     "R/chemi_functional_use.R": "a599d571068cb0734e54b805c88ac4097386897687f97a1d336c34e6399b4549",
     "R/chemi_hazard.R": "a8ba4a502b4ff0f392ee6eb109d9666814f11b4638358ee1b3f0978e704f5689",
@@ -2454,7 +2458,8 @@
     "R/genra_predict.R": "120462653371764e3db98f9febd743220e17563b6069841d19f1b0b2d1a22ee7",
     "R/genra_swa.R": "7079b0b25df9af186d17f650423a946d65122bb50e69ab01a60cbfe16d106c34",
     "R/genra_uncertainty.R": "ebe9d6358d32ecb70b7e9386dd8a2ba0bac1db0171cc1c966f5a581b761e08e3",
-    "R/hook_registry.R": "f577de0c17a2de9362312786e60231330243831ad173e23a2da789dbb7658149",
+    "R/hook_registry.R": "50648a4d4e5acd32f1356a7f1437f5fc0b6362c4f7ca9f90045f735a1a1b7048",
+    "R/hooks_classyfire.R": "c4de723661190d22865e2793afce1367e8e2348a4882c1e94ba1b570c119b6ba",
     "R/hooks_compound.R": "fec3358499d02497c72b72c94c11ecafb6ef0385e80d1d69290f2d19aeae3510",
     "R/hooks_descriptors.R": "6afcec005061ebbde8740ec757ba4e4eaf2140751a88b27272547865a03dbba3",
     "R/hooks_epi.R": "1c811e7353cd9a142685699d2b8e1953d4885595c03164df92a90e2e0477cdab",
@@ -2493,7 +2498,7 @@
     "apis/alerts-pilot.yml": "eaebcbc66d74400d3292f0c93f97eae0a3a74068227bce476d8b492d6c131e9c",
     "apis/amos-pilot.yml": "188b914d24a73693aad4c5c0089e5043ee4500476bf57ef53ae40dfd17d2ef78",
     "apis/chemi-amnb_nate-prod-rebuild.yml": "65f4b2ff7223f10466dea81c27d92ee94d0d4a3200f6b010a178721e900bde54",
-    "apis/chemi-amos-prod-full.yml": "0265469ce907e8d9f0c1221177e4390e7680b80811a1e9cad52952e1a2b7c569",
+    "apis/chemi-amos-prod-full.yml": "04ef666b01af2675ba871768de531ce00cb05e3a5284df426aca8db900dc9e56",
     "apis/chemi-arn_cats-prod-rebuild.yml": "22ba5936bfb3b6caa80b074e9ed298c13ae91470f4bb3890c801d1b3ecb18876",
     "apis/chemi-chet-prod-full.yml": "dea80b737874c7861693fed65b79f2473358c225db006a440b6c1cd5e35d9a33",
     "apis/chemi-chet-prod-rebuild.yml": "61c49fe8f7b1e9e2797faa12c2280d39eceb27545ba8372eb133e94c510baf43",
@@ -2545,7 +2550,7 @@
     "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
-    "inst/hook_config.yml": "fc260755d76a69d27b270b676eebb63fcfd934711874f2266985df940894e411",
+    "inst/hook_config.yml": "ebd5af15af1223fc55f43c61ce8146eac9dd8f5dfa2f102c7224e331fc772781",
     "inst/hook_config_generated.yml": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "inst/plumber/ctx/plumber.R": "40fa4dcaf1112fd0bdafd84816589f45931de5f6d34bd052bdabc0cd553a8504",
     "inst/plumber/ecotox/plumber.R": "f596a01091c3ce57c21b711edd306d6454fa7ff35e3fc202d61de1092022af2e",
@@ -2659,7 +2664,7 @@
     "man/chemi_chet_reaction_searchcounts.Rd": "e9715975450f40c59bb0adbb2b889017c9faabff5f805814fa7c5c3f82a970d8",
     "man/chemi_chet_reaction_singlereaction.Rd": "d8d85515c65ea61f0f8dfadd82e1c744c3b2f744a2ff6e7bb37da39b0c0a2075",
     "man/chemi_chet_reaction_table.Rd": "91e3e7688dd51f462164fcf44c0a0ac9090d83f338eeeb2f76933c8fc5e2278d",
-    "man/chemi_classyfire.Rd": "e92e59c17f9de533b4d6d231fff25ea6a5317bd3771a85fbdc67fd765c4503d0",
+    "man/chemi_classyfire.Rd": "b2369a98dc4363a37f1d72b35c4173b6367938ba3f7d0cc5175c51bbee6d2d75",
     "man/chemi_descriptors.Rd": "96d997f9f8a514ed7cef1eed306d4a1bfcdfff824406fe64b38db6c8ce69ec1b",
     "man/chemi_descriptors_bulk.Rd": "be2451d61cfecff05de1c4cd19ca8e15e67d8f385e6b2a6c57f0a0b42dc87230",
     "man/chemi_functional_use.Rd": "919a7bacce05ca2ae0efa14eb53071e2fa10d0f544d97728be6afd724b4695af",
@@ -3032,7 +3037,7 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "specmill.yml": "911106dc215d6fd52b5c416bc526c31930ff1f0176750aa6e6537b13da87ac09",
-    "tests/testthat/fixtures/specmill-full-contracts.rds": "acea7021796529b15aeae8e728b27e8a9bdbfb172ebecc4e25b44670e325591a",
+    "tests/testthat/fixtures/specmill-full-contracts.rds": "f1d8b2effc199f5690c5ab0bb8320bf70a6ee1d80d650651e1803cafe6370758",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "dbd8b2f185a8370b11f2ed14c71c0c94880807d61a82741803f3a7af3393c0ea",
     "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "ee96a8c59d3fb8fce9a9e66ecad5c9449c75d1cc267612c163a45d17df0733ad"
   },

@@ -609,29 +609,57 @@ operations:
   GET /api/amos/get_classification_for_dtxsid/{dtxsid}:
     name: chemi_classyfire
     file: R/chemi_classyfire.R
-    helper: generic_request
-    implementation: existing
-    inputs:
-      query:
-        type: character
-        required: yes
+    helper: .ct_request
+    implementation: generated
+    parameters:
+      path dtxsid:
+        name: query
+        description: A character vector of DTXSIDs to query.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_tidy
+    normalize_inputs:
+      query: .ct_legacy_query
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+    docs:
+      title: Get Classyfire classification for DTXSID
+      description: This function retrieves Classyfire classifications for a given
+        DTXSID using the EPA's cheminformatics API.
+      return: A tibble of Classyfire classifications corresponding to the input DTXSIDs.
+      examples:
+      - query: DTXSID7020182
     request:
       arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: amos/get_classification_for_dtxsid/
         method:
           value: GET
-        batch_limit:
-          value: 1.0
+        path:
+          value: /api/amos/get_classification_for_dtxsid/{dtxsid}
+        path_params:
+          object:
+            dtxsid:
+              from:
+              - params
+              - query
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
         server:
-          value: chemi_burl
+          value: []
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
         auth:
-          value: no
-    specialization: Retain nrow-gated dplyr::select with any_of aliases, exact classification
-      column order and unchanged empty results; no lifecycle badge. Pinned generation
-      without new hooks returns the untransformed helper response.
+          value: []
+        response_policy:
+          value: .ct_tidy
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds
+hook_config: inst/hook_config.yml

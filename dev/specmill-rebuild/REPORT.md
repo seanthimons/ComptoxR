@@ -1205,3 +1205,22 @@ EPI batch validation: targeted native calculation/normalization/list-policy
 regressions and the generated fixed helper contract pass without failures,
 warnings or skips. Documentation signatures/defaults and final official
 generation freshness pass. No archived schema or transport helper changes.
+
+## Native Classyfire classification facade
+
+`chemi_classyfire(query)` now uses the archived AMOS path with a reviewed public
+parameter rename, `.ct_legacy_query` cleanup and native fan-out. Its existing
+nrow-gated column selection runs once in a supported post-combine hook. The
+client hook executor now accepts that stage, returns the combined result when
+unconfigured, and preserves its usual error context. The transport helper is
+unchanged.
+
+Twelve actual old/native HTTP cases match exact result values/attributes and
+URLs, covering objects, arrays, identifier aliases, missing classification
+fields, empty arrays and null, with duplicate/blank/NA inputs. Separate tests
+verify one formatting call after fan-out, early empty rejection and post-combine
+error class/stage/parent details. Existing compound, hazard, webtest and server
+hook regressions pass, as does the preserved fixed helper contract. Documentation
+arguments/defaults match the code. No new live production claim is made for this
+facade. The old return documentation is corrected to describe its existing
+tibble result. `wave-classyfire.json` records the released source and schema hash.
