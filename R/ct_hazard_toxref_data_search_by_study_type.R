@@ -39,6 +39,7 @@ ct_hazard_toxref_data_search_by_study_type <- function(studyType, pageNumber = 1
       query = base::list("pageNumber" = params[["pageNumber"]]),
       body = NULL,
       response_policy = ".ct_paged",
+      request_controls = list(timeout = 300L),
       server = list(url = "https://comptox.epa.gov/ctx-api"),
       server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
       auth = list(list(list(
