@@ -7,10 +7,10 @@
 ct_chemical_file_mol_search_by_dtxcid(dtxcid)
 }
 \arguments{
-\item{dtxcid}{dtxcid Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxcid}{DSSTox Compound Identifier. Type: string}
 }
 \value{
-Returns a list of mol file strings, one per identifier
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

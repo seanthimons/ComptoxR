@@ -4,20 +4,20 @@
 \alias{ct_chemical_msready_search_by_dtxcid_bulk}
 \title{Get MS-ready chemicals for a batch of DTXCIDs}
 \usage{
-ct_chemical_msready_search_by_dtxcid_bulk(dtxcid)
+ct_chemical_msready_search_by_dtxcid_bulk(query)
 }
 \arguments{
-\item{dtxcid}{DSSTox compound identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_chemical_msready_search_by_dtxcid_bulk(dtxcid = list("DTXCID30182", "DTXCID505"))
+ct_chemical_msready_search_by_dtxcid_bulk(query = "DTXSID1024122")
 }
 }
 \section{API stage}{

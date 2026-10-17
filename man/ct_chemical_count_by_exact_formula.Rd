@@ -7,9 +7,9 @@
 ct_chemical_count_by_exact_formula(formula, projection = "count")
 }
 \arguments{
-\item{formula}{formula Accepts a vector: one request is sent per element and the results are combined.}
+\item{formula}{Chemical formula. Type: string}
 
-\item{projection}{projection}
+\item{projection}{Optional parameter (default: count)}
 }
 \value{
 Returns a tibble with results

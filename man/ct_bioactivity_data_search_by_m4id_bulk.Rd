@@ -4,19 +4,19 @@
 \alias{ct_bioactivity_data_search_by_m4id_bulk}
 \title{Get data for a batch of M4IDs}
 \usage{
-ct_bioactivity_data_search_by_m4id_bulk(m4id)
+ct_bioactivity_data_search_by_m4id_bulk(query)
 }
 \arguments{
-\item{m4id}{Level 4 model identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_search_by_m4id_bulk(m4id = list("7826737", "7826738"))
+ct_bioactivity_data_search_by_m4id_bulk(query = "DTXSID1024122")
 }
 }

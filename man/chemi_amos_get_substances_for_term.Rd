@@ -7,10 +7,10 @@
 chemi_amos_get_substances_for_term(search_term)
 }
 \arguments{
-\item{search_term}{A substance identifier.  If it cannot be parsed as an InChIKey, CASRN, or DTXSID, it is assumed to be a name. Accepts a vector: one request is sent per element and the results are combined.}
+\item{search_term}{A substance identifier.  If it cannot be parsed as an InChIKey, CASRN, or DTXSID, it is assumed to be a name.}
 }
 \value{
-Returns a list of results
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

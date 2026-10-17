@@ -7,16 +7,16 @@
 ct_hazard_toxref_search_by_study_id(studyId)
 }
 \arguments{
-\item{studyId}{studyId Accepts a vector: one request is sent per element and the results are combined.}
+\item{studyId}{Study ID. Type: integer}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_hazard_toxref_search_by_study_id(studyId = 63L)
+ct_hazard_toxref_search_by_study_id(studyId = "63")
 }
 }

@@ -4,21 +4,21 @@
 \alias{ct_chemical_list_chemicals_search_equal}
 \title{Get DTXSIDs for list and containing exact string in chemical name}
 \usage{
-ct_chemical_list_chemicals_search_equal(list, word)
+ct_chemical_list_chemicals_search_equal(list, word = NULL)
 }
 \arguments{
-\item{list}{list Accepts a vector: one request is sent per element and the results are combined.}
+\item{list}{List Name. Type: string}
 
-\item{word}{word}
+\item{word}{Chemical Name. Type: string}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_chemical_list_chemicals_search_equal(list = "TOXCAST", word = "bisphenol")
+ct_chemical_list_chemicals_search_equal(list = "40CFR1164")
 }
 }

@@ -7,10 +7,10 @@
 ct_bioactivity_data_aed_search(dtxsid)
 }
 \arguments{
-\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxsid}{Primary query parameter. Type: string}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

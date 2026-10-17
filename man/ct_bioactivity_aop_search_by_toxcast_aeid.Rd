@@ -7,16 +7,16 @@
 ct_bioactivity_aop_search_by_toxcast_aeid(toxcastAeid)
 }
 \arguments{
-\item{toxcastAeid}{toxcastAeid Accepts a vector: one request is sent per element and the results are combined.}
+\item{toxcastAeid}{ToxCast AEID. Type: integer}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_aop_search_by_toxcast_aeid(toxcastAeid = 63L)
+ct_bioactivity_aop_search_by_toxcast_aeid(toxcastAeid = "63")
 }
 }

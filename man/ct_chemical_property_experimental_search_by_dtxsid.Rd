@@ -8,10 +8,10 @@
 ct_chemical_property_experimental_search_by_dtxsid(dtxsid)
 }
 \arguments{
-\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

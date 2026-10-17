@@ -7,10 +7,10 @@
 chemi_amos_dtxsids_from_functional_use(functional_use)
 }
 \arguments{
-\item{functional_use}{Functional use classification to search for. Accepts a vector: one request is sent per element and the results are combined.}
+\item{functional_use}{Functional use classification to search for.}
 }
 \value{
-Returns a list of results
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

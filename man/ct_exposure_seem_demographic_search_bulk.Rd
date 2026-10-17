@@ -4,19 +4,19 @@
 \alias{ct_exposure_seem_demographic_search_bulk}
 \title{Get SEEM Demographic Exposure Prediction data for batch of DTXSIDs}
 \usage{
-ct_exposure_seem_demographic_search_bulk(dtxsid)
+ct_exposure_seem_demographic_search_bulk(query)
 }
 \arguments{
-\item{dtxsid}{DSSTox substance identifiers. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_exposure_seem_demographic_search_bulk(dtxsid = list("DTXSID7020182", "DTXSID2021315"))
+ct_exposure_seem_demographic_search_bulk(query = "DTXSID1024122")
 }
 }

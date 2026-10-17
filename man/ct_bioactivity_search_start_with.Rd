@@ -4,15 +4,15 @@
 \alias{ct_bioactivity_search_start_with}
 \title{Search by starting value}
 \usage{
-ct_bioactivity_search_start_with(value, top = 500L)
+ct_bioactivity_search_start_with(value, top = 500)
 }
 \arguments{
-\item{value}{value Accepts a vector: one request is sent per element and the results are combined.}
+\item{value}{Starting characters for search value. Type: string}
 
-\item{top}{top}
+\item{top}{Optional parameter (default: 500)}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

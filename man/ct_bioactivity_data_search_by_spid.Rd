@@ -7,10 +7,10 @@
 ct_bioactivity_data_search_by_spid(spid)
 }
 \arguments{
-\item{spid}{spid Accepts a vector: one request is sent per element and the results are combined.}
+\item{spid}{sample ID (SPID). Type: string}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

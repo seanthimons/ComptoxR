@@ -7,16 +7,16 @@
 ct_bioactivity_data_summary_search_by_aeid(aeid)
 }
 \arguments{
-\item{aeid}{aeid Accepts a vector: one request is sent per element and the results are combined.}
+\item{aeid}{ToxCast assay component endpoint ID (AEID). Type: integer}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_summary_search_by_aeid(aeid = 3032L)
+ct_bioactivity_data_summary_search_by_aeid(aeid = "3032")
 }
 }

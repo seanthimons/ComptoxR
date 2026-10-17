@@ -7,22 +7,19 @@
 \usage{
 ct_hazard_toxref_observations_search_by_study_type(
   studyType,
-  pageNumber = 1L,
-  all_pages = TRUE,
-  max_pages = 100L
+  pageNumber = 1,
+  all_pages = TRUE
 )
 }
 \arguments{
-\item{studyType}{studyType Accepts a vector: one request is sent per element and the results are combined.}
+\item{studyType}{Study Type. Type: string}
 
-\item{pageNumber}{pageNumber}
+\item{pageNumber}{Optional parameter (default: 1)}
 
-\item{all_pages}{TRUE (the default) requests page after page, starting at pageNumber, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in pageNumber.}
-
-\item{max_pages}{Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning, and it applies to each item or chunk.}
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

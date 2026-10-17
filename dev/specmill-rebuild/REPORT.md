@@ -1101,3 +1101,38 @@ Validation of the retained v0.1.24 state: complete CRAN-safe package suite passe
 local databases, optional pROC, external source-build paths or opt-in integration.
 Released-helper provenance/ownership checks and final client generation freshness
 pass. Native classifier and EPI-search request comparisons pass independently.
+
+## Seven additional native GET wrappers, 17 October 2026
+
+Three EPI calculation stubs now expose their archived source parameters: dye,
+nonionic polymer and nonionic surfactant. Polymer requires `solubilityType` and
+surfactant requires `mainCarbons`. Existing zero-argument HTTP requests returned
+400 for all three; valid declared inputs returned 200 JSON. Captured production
+responses replay identically through the old and native formatting paths, which
+use the existing result-unwrapping hook. `wave-epi-inputs.json` records requests,
+statuses, response hashes and the unchanged schema hash.
+
+`epi_submit` keeps all 73 arguments, their order and exact defaults. Captured
+requests match the legacy implementation for defaults, UTF-8/reserved characters,
+FALSE, zero and NULL. A read-safe production request returned 200 and its same
+response/URL replay matches exactly. The mapping preserves the scientific theta
+default `0.00010836`; YAML is written at full numeric precision.
+
+Alerts groups, standardizer groups and standardization also use native requests.
+Their reviewed bindings preserve the JSON Accept header and list formatting,
+including named objects, NULL values and empty responses. The neighboring POST
+functions move intact to separate files, with identical parsed bodies and
+formals. They retain their existing implementations. Standardizer list and
+calculation requests returned 200 JSON; the alerts group listing returned 502,
+so no successful live claim is made for that route.
+
+Generated documentation is refreshed for these wrappers and for the temporary
+normalization hold, keeping documented signatures aligned with retained code.
+
+Validation of this seven-GET wave: 817 targeted assertions pass with zero failures,
+warnings or skips, including all fixed client contracts, request-edge and hook
+checks, native calculation tests and the retained POST neighbors. Code/documentation
+argument and default checks have no mismatches. Actual exported wrappers replay
+captured production responses identically; EPI submit and both standardizer GETs
+also retain exact legacy URLs and headers. Final generation freshness passes.
+`wave-static-chemi.json` records the live limitations and intact POST moves.

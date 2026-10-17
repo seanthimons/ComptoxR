@@ -7,16 +7,16 @@
 ct_bioactivity_aop_search_by_entrez_gene_id(entrezGeneId)
 }
 \arguments{
-\item{entrezGeneId}{entrezGeneId Accepts a vector: one request is sent per element and the results are combined.}
+\item{entrezGeneId}{Entrez Gene Id. Type: integer}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_aop_search_by_entrez_gene_id(entrezGeneId = 196L)
+ct_bioactivity_aop_search_by_entrez_gene_id(entrezGeneId = "196")
 }
 }

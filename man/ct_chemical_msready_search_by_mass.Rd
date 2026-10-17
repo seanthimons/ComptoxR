@@ -4,22 +4,22 @@
 \alias{ct_chemical_msready_search_by_mass}
 \title{Get MS-ready chemicals using mass range}
 \usage{
-ct_chemical_msready_search_by_mass(start, end)
+ct_chemical_msready_search_by_mass(start, end = NULL)
 }
 \arguments{
-\item{start}{start Accepts a vector: one request is sent per element and the results are combined.}
+\item{start}{Starting mass value. Type: number}
 
-\item{end}{end}
+\item{end}{Ending mass value. Type: number}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_chemical_msready_search_by_mass(start = 200.9, end = 201)
+ct_chemical_msready_search_by_mass(start = "200.9")
 }
 }
 \section{API stage}{

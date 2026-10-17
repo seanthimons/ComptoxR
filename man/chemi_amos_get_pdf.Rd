@@ -4,22 +4,22 @@
 \alias{chemi_amos_get_pdf}
 \title{Retrieves a PDF from the database by the internal ID and type of record.}
 \usage{
-chemi_amos_get_pdf(record_type, internal_id)
+chemi_amos_get_pdf(record_type, internal_id = NULL)
 }
 \arguments{
-\item{record_type}{A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'. Accepts a vector: one request is sent per element and the results are combined.}
+\item{record_type}{A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'.}
 
 \item{internal_id}{Unique ID of the document of interest.}
 }
 \value{
-Returns a list of results
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_get_pdf(record_type = "method", internal_id = "1")
+chemi_amos_get_pdf(record_type = "DTXSID7020182")
 }
 }
 \section{API stage}{

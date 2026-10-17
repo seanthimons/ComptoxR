@@ -7,12 +7,12 @@
 ct_chemical_search_equal(word, projection = "chemicalsearchall")
 }
 \arguments{
-\item{word}{word Accepts a vector: one request is sent per element and the results are combined.}
+\item{word}{Exact string of word to search for. Values supplied as the 'word' parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN), or InChIKey.. Type: string}
 
-\item{projection}{projection}
+\item{projection}{Optional parameter (default: chemicalsearchall)}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

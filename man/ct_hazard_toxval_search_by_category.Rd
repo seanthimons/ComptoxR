@@ -7,18 +7,18 @@
 ct_hazard_toxval_search_by_category(dtxsid, category)
 }
 \arguments{
-\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 
-\item{category}{category}
+\item{category}{Required parameter}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_hazard_toxval_search_by_category(dtxsid = "DTXSID0021125", category = "Dose Response Summary Value")
+ct_hazard_toxval_search_by_category(dtxsid = "DTXSID0021125")
 }
 }

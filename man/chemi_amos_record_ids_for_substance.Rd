@@ -4,22 +4,22 @@
 \alias{chemi_amos_record_ids_for_substance}
 \title{Returns a list of record IDs that are associated with the given DTXSID.  This is intended to help when filtering}
 \usage{
-chemi_amos_record_ids_for_substance(dtxsid, record_type)
+chemi_amos_record_ids_for_substance(dtxsid, record_type = NULL)
 }
 \arguments{
-\item{dtxsid}{The DTXSID for the substance of interest. Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxsid}{The DTXSID for the substance of interest.}
 
 \item{record_type}{The record type of interest.}
 }
 \value{
-Returns a list of results
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_record_ids_for_substance(dtxsid = "DTXSID7020182", record_type = "method")
+chemi_amos_record_ids_for_substance(dtxsid = "DTXSID7020182")
 }
 }
 \section{API stage}{

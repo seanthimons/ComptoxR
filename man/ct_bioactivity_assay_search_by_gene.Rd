@@ -7,10 +7,10 @@
 ct_bioactivity_assay_search_by_gene(geneSymbol)
 }
 \arguments{
-\item{geneSymbol}{geneSymbol Accepts a vector: one request is sent per element and the results are combined.}
+\item{geneSymbol}{Gene Symbol. Type: string}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

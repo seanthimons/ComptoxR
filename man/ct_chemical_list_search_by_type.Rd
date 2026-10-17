@@ -7,12 +7,12 @@
 ct_chemical_list_search_by_type(type, projection = "chemicallistall")
 }
 \arguments{
-\item{type}{type Accepts a vector: one request is sent per element and the results are combined.}
+\item{type}{Chemical List Type. Type: string}
 
-\item{projection}{Projection options for chemical List APIs}
+\item{projection}{Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

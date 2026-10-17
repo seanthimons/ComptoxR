@@ -4,20 +4,20 @@
 \alias{ct_chemical_search_by_msready_formula_bulk}
 \title{Get chemicals for a batch of  MS-ready formulas}
 \usage{
-ct_chemical_search_by_msready_formula_bulk(formula)
+ct_chemical_search_by_msready_formula_bulk(query)
 }
 \arguments{
-\item{formula}{MS-ready molecular formulas. Arrays longer than 100 items are sent in chunks of that size and the results are combined.}
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_chemical_search_by_msready_formula_bulk(formula = list("C15H16O2", "C6H6"))
+ct_chemical_search_by_msready_formula_bulk(query = "DTXSID1024122")
 }
 }
 \section{API stage}{

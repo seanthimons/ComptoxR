@@ -7,10 +7,10 @@
 ct_chemical_file_image_search_by_dtxcid(dtxcid)
 }
 \arguments{
-\item{dtxcid}{dtxcid Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxcid}{DSSTox Compound Identifier. Type: string}
 }
 \value{
-Returns a list of structure images (magick objects), one per identifier
+Returns image data (raw bytes or magick image object)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

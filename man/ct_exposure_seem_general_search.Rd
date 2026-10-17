@@ -7,12 +7,12 @@
 ct_exposure_seem_general_search(dtxsid, projection = NULL)
 }
 \arguments{
-\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 
-\item{projection}{projection}
+\item{projection}{Specifies whether to use projection. Optional: ccd-general.}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

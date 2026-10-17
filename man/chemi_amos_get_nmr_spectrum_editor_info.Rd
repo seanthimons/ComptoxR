@@ -7,10 +7,10 @@
 chemi_amos_get_nmr_spectrum_editor_info(internal_id)
 }
 \arguments{
-\item{internal_id}{Unique ID of the NMR spectrum. Accepts a vector: one request is sent per element and the results are combined.}
+\item{internal_id}{Unique ID of the NMR spectrum.}
 }
 \value{
-Returns a list of results
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

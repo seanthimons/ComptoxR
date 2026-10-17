@@ -7,10 +7,10 @@
 chemi_amos_functional_uses_for_dtxsid(dtxsid)
 }
 \arguments{
-\item{dtxsid}{The DTXSID for the substance of interest. Accepts a vector: one request is sent per element and the results are combined.}
+\item{dtxsid}{The DTXSID for the substance of interest.}
 }
 \value{
-Returns a list of results
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

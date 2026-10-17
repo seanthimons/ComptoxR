@@ -7,6 +7,7 @@ selection:
   - GET /api/alerts/groups/{id}
   - GET /api/alerts/alerts
   - GET /api/alerts/operations
+  - GET /api/alerts/groups
 helper: generic_request
 documentation: yes
 operations:
@@ -79,4 +80,47 @@ operations:
         apiStage: public
       examples:
       - {}
+  GET /api/alerts/groups:
+    name: chemi_alerts_groups
+    file: R/chemi_alerts_groups.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Alerts Groups
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/alerts/groups
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: .ct_static_list
 contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds
