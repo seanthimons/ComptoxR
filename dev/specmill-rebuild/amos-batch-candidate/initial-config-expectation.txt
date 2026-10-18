@@ -1,5 +1,0 @@
-[1] TRUE
-Error in assert(inherits(error, "specmill_call_error")) : 
-  isTRUE(value) is not TRUE
-Calls: assert -> stopifnot
-Execution halted
