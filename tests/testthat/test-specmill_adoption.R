@@ -21,7 +21,7 @@ test_that("adopted decoder and paginator handle ChET responses on localhost", {
             body = '[{"id":1}]'
           ))
         }
-        if (request$PATH_INFO == "/chet/chemicals/1/image") {
+        if (request$PATH_INFO == "/api/chet/chemicals/1/image") {
           format <- query$format
           media <- switch(format, png = "image/png", svg = "image/svg+xml", pdf = "application/pdf")
           body <- switch(

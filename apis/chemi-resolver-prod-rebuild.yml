@@ -17,6 +17,8 @@ selection:
   - POST /api/resolver/lookup
   - POST /api/resolver/resolve
   - POST /api/resolver/getsimilaritymap
+  - GET /api/resolver/safety-flags
+  - GET /api/resolver/pubchem-section
 helper: generic_request
 documentation: yes
 operations:
@@ -361,8 +363,7 @@ operations:
         tidy: Logical; if TRUE (default), return a tibble. If FALSE, return a cleaned
           list.
       description: Performs bulk lookup of chemical identifiers via POST endpoint.
-    defer_inputs:
-    - tidy
+    defer_inputs: tidy
   POST /api/resolver/resolve:
     name: chemi_resolver_resolve
     file: R/chemi_resolver_resolve.R
@@ -440,5 +441,139 @@ operations:
       lowercase sort serialization and post-hook params excluding chemicals. Pinned
       generation captures only public inputs and cannot reproduce both exact hook
       states with existing bindings. No hook is added to force generation.
+  GET /api/resolver/safety-flags:
+    name: chemi_resolver_safety_flags
+    file: R/chemi_resolver_safety_flags_get.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+      idType:
+        type: character
+        default: AnyId
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/resolver/safety-flags
+        path_params:
+          value: {}
+        query:
+          object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: static_collected_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Resolver Safety Flags
+      lifecycle: experimental
+      return: A list of decoded response records.
+      tags:
+        apiStage: public
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      examples:
+      - query: DTXSID7020182
+    request_controls:
+      preserve_errors: yes
+  GET /api/resolver/pubchem-section:
+    name: chemi_resolver_pubchem_section
+    file: R/chemi_resolver_pubchem_section_get.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+      idType:
+        type: character
+        default: AnyId
+      section:
+        type: character
+        default: ~
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/resolver/pubchem-section
+        path_params:
+          value: {}
+        query:
+          object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            section:
+              from:
+              - params
+              - section
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: static_collected_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Resolver Pubchem Section
+      lifecycle: experimental
+      return: A list of decoded response records.
+      tags:
+        apiStage: public
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        section: Optional parameter
+      examples:
+      - query: DTXSID7020182
+    request_controls:
+      preserve_errors: yes
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
 hook_config: inst/hook_config.yml

@@ -1773,3 +1773,36 @@ normalization and pager checks pass. The response-error suite had one stale AMOS
 expectation: its reviewed final collector reports `purrr_error_indexed` at row 1,
 not `specmill_call_error`. This reproduces unchanged with the v0.1.38 helper;
 corrected that assertion and checked the simpleError parent explicitly.
+
+### Five static/media endpoints adopted on the released pin
+
+Adopted three static GETs (resolver safety flags, resolver PubChem section,
+ToxPrint calculation), ChET image retrieval and ChET batch search. Native source
+ownership is recorded by full public generation; public signatures and bulk
+siblings remain intact. Selected operations explicitly opt into released typed
+transport preservation. Pure response projections retain ordinary HTTP warning/
+NULL results, while native 401 remains a hard call failure. The image ID is one
+encoded path segment. No runtime helper/executor customization.
+
+`test-native_static_media.R` passes 311 assertions against frozen original public
+functions, plus explicit input/path and failure checks. Existing collection
+coverage passes 449 assertions; the localhost adoption check passes 20 after its
+remaining image fixture route was updated to `/api/chet/...`. Five obsolete legacy
+helper-mock suites were retired individually, verified unowned, and replaced by
+the registered behavior suite; no other test ownership was removed. Full generation
+and a fresh check pass with zero operation/mapping/drift diagnostics. The legacy
+wrapper inventory now reports 29; it is not an endpoint completion fraction.
+
+The PR progress ledger is reproduced by `Rscript dev/specmill-rebuild/progress.R`.
+It counts unique canonical schema HTTP operations with owned native wrapper hashes
+and committed behavior coverage, excluding held candidates and matching literal
+legacy callers. All source operations form the denominator, including unexposed
+routes; archived underscore-named CTX duplicates are excluded. This conservative
+ownership/test measure does not replace the remaining live/failure behavior audit.
+
+New read-only AMOS evidence: three retrieve-document routes return HTTP 200 JSON
+with empty result arrays; substances_for_ids returns an actual ZIP/Excel workbook
+with workbook and worksheet members. General/analytical batch exports return HTTP
+500 for both minimal and populated schema bodies. Those failures are recorded in
+`amos-remaining-live-review.rds` and `amos-full-body-live-review.rds`; no successful
+batch-export validation is claimed.

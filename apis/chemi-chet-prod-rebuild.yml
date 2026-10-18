@@ -21,6 +21,8 @@ selection:
   - GET /reaction/search
   - GET /reaction/singlereaction
   - GET /reaction/table
+  - GET /chemicals/{chemical_id}/image
+  - POST /reaction/batchsearch
 helper: generic_request
 documentation: yes
 operations:
@@ -507,5 +509,142 @@ operations:
       - {}
       tags:
         apiStage: public
+  GET /chemicals/{chemical_id}/image:
+    name: chemi_chet_chemicals_image
+    file: R/chemi_chet_chemicals_image.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      chemical_id:
+        type: any
+      width:
+        default: ~
+        type: any
+      height:
+        default: ~
+        type: any
+      format:
+        default: png
+        type: any
+    normalize_inputs:
+      chemical_id: .ct_single_path_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/chet/chemicals/{chemical_id}/image
+        path_params:
+          object:
+            chemical_id:
+              from:
+              - params
+              - chemical_id
+        query:
+          object:
+            width:
+              from:
+              - params
+              - width
+            height:
+              from:
+              - params
+              - height
+            format:
+              from:
+              - params
+              - format
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/pdf, image/png, image/svg+xml
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: chet_image_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Render a chemical structure image
+      lifecycle: experimental
+      return: A magick image for PNG or SVG, or raw bytes for PDF.
+      tags:
+        apiStage: public
+      examples:
+      - chemical_id: 1.0
+      parameters:
+        chemical_id: 'ChET chemical ID. Type: integer.'
+        width: Optional parameter
+        height: Optional parameter
+        format: 'Optional parameter. Options: png, svg, pdf (default: png)'
+    request_controls:
+      preserve_errors: yes
+  POST /reaction/batchsearch:
+    name: chemi_chet_reaction_batchsearch
+    file: R/chemi_chet_reaction_batchsearch.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      dtxsids:
+        type: any
+      search_level:
+        type: any
+    defer_inputs:
+    - dtxsids
+    - search_level
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/chet/reaction/batchsearch
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: chet_batch_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: chet_batch_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Batch search reactions and chemicals
+      lifecycle: experimental
+      return: A list of decoded response records.
+      parameters:
+        dtxsids: Required parameter
+        search_level: 'Required parameter. Options: chemical, reaction'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids: DTXSID7020182
+        search_level: chemical
+    request_controls:
+      preserve_errors: yes
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
 hook_config: inst/hook_config.yml

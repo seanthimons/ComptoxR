@@ -36,7 +36,7 @@
 
 format_legacy_list_result <- function(data) {
     inputs <- data$params[[1L]]
-    completed <- vapply(data$result, function(chunk) chunk$input, "")
+    completed <- vapply(data$result, function(chunk) as.character(chunk$input), "")
     parts <- purrr::map(inputs, function(input) {
         index <- match(input, completed)
         if (is.na(index))
@@ -78,7 +78,7 @@ format_legacy_list_result <- function(data) {
 
 format_image_results <- function(data) {
     inputs <- data$params[[1L]]
-    completed <- vapply(data$result, function(chunk) chunk$input, "")
+    completed <- vapply(data$result, function(chunk) as.character(chunk$input), "")
     result <- purrr::map(inputs, function(input) {
         index <- match(input, completed)
         if (is.na(index))
@@ -102,3 +102,24 @@ format_image_results <- function(data) {
     result
 }
 
+
+.ct_static_json_result <- function(response, context, decode, endpoint, input = "_static_") {
+    observe_api_responses(list(response))
+    if (context$status == 401L) decode()
+    format_legacy_list_result(list(params = list(input), result = list(list(
+        input = input, response = response, endpoint = endpoint))))
+}
+
+.ct_chet_image_result <- function(response, context, decode) {
+    if (context$status >= 400L) return(.ct_static_json_result(response, context, decode, "chet/chemicals", context$query[[1L]]))
+    if (!grepl("^(image/|text/|application/(pdf|csv))", context$media)) {
+        return(format_legacy_list_result(list(params = list(context$query[[1L]]),
+            result = .ct_collect_response(response, context, decode, 1L, "chet/chemicals"))))
+    }
+    observe_api_responses(list(response))
+    value <- .ct_response_delimited(response, context, decode)
+    if (startsWith(context$media, "image/")) {
+        return(tryCatch(magick::image_read(httr2::resp_body_raw(response)), error = function(e) value))
+    }
+    value
+}

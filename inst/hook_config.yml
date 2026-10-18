@@ -823,3 +823,18 @@ chemi_resolver_classyfire:
   bespoke_test: "tests/testthat/test-native_pagers.R"
   post_combine:
     - format_legacy_pager_result
+
+chemi_resolver_safety_flags:
+  bespoke_test: "tests/testthat/test-native_static_media.R"
+
+chemi_resolver_pubchem_section:
+  bespoke_test: "tests/testthat/test-native_static_media.R"
+
+chemi_toxprints_calculate:
+  bespoke_test: "tests/testthat/test-native_static_media.R"
+
+chemi_chet_chemicals_image:
+  bespoke_test: "tests/testthat/test-native_static_media.R"
+
+chemi_chet_reaction_batchsearch:
+  bespoke_test: "tests/testthat/test-native_static_media.R"

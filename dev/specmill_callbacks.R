@@ -180,3 +180,25 @@ collected_response <- function(operation) {
         .ct_collect_response(response, context, decode, length(INPUT), ENDPOINT)
     }, list(INPUT = as.name(public), ENDPOINT = endpoint))
 }
+
+static_collected_response <- function(operation) {
+    substitute(function(response, context, decode) {
+        .ct_static_json_result(response, context, decode, ENDPOINT)
+    }, list(ENDPOINT = sub("^/api/", "", operation$path)))
+}
+
+chet_image_response <- function(operation) quote(function(response, context, decode) {
+    context$query <- params[["chemical_id"]]
+    .ct_chet_image_result(response, context, decode)
+})
+
+chet_batch_body <- function(operation) quote(base::local({
+    level <- params[["search_level"]]()
+    ids <- .ct_toxprint_query(params[["dtxsids"]]())
+    c(list(dtxsids = I(ids)), Filter(Negate(is.null), list(search_level = level)))
+}))
+
+chet_batch_response <- function(operation) quote(function(response, context, decode) {
+    context$endpoint <- "chet/reaction/batchsearch"
+    .ct_chemi_result(response, context, decode, tidy = FALSE)
+})

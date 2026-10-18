@@ -3,49 +3,6 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query Required parameter
-#' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
-#' @param section Optional parameter
-#' @return Returns a tibble with results (array of objects)
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_resolver_pubchem_section(query = "DTXSID7020182")
-#' }
-chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
-  if (!is.null(section)) {
-    options[['section']] <- section
-  }
-  result <- generic_request(
-    endpoint = "resolver/pubchem-section",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Resolver Pubchem Section
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #' then sends the resolved Chemical objects to the API endpoint.
 #'

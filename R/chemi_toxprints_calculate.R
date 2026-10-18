@@ -3,49 +3,6 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param labels Optional parameter (default: FALSE)
-#' @param profile Optional parameter
-#' @return Returns a list with result object
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_toxprints_calculate(smiles = "DTXSID7020182")
-#' }
-chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(labels)) {
-    options[['labels']] <- labels
-  }
-  if (!is.null(profile)) {
-    options[['profile']] <- profile
-  }
-  result <- generic_request(
-    endpoint = "toxprints/calculate",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Toxprints Calculate
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
 #' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #' then sends the resolved Chemical objects to the API endpoint.
 #'

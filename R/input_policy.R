@@ -28,3 +28,9 @@
     c(list(ids = as.list(params$ids)), params[c("idsType", "fuzzy", "mol")], Filter(Negate(is.null),
         params[c("filters", "format")]))
 }
+
+.ct_single_path_query <- function(query) {
+    query <- .ct_legacy_query(query)
+    if (length(query) > 1L) cli::cli_abort("Cannot use path_params with batching. Path parameter endpoints do not support batch queries.")
+    query
+}
