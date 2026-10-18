@@ -82,9 +82,9 @@
     "base_commit": "49f60add",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.30",
-      "source_commit": "f4efdbcf23f879553e5de50325d637ab46625ed3",
-      "source_archive_sha256": "ab58e0ac90980be0bd7f86195976c495666f0694d7a9cfc3ac3688eb62473053",
+      "version": "0.1.31",
+      "source_commit": "d572fcc50f739387a689289efdaa9ee8b1338908",
+      "source_archive_sha256": "85578ef0bd2da908a813f851651e423c253a12d7c7832f1503e887128f72ef97",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
       "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
     },
-    "review": "Released 0.1.30 reviewed toxprint helper-return visibility and early normalization adoption. Runtime helper hashes are explicitly reviewed; archived schemas are preserved."
+    "review": "Released 0.1.31 validator-source whitespace emission fix. Helper regeneration uses the released generator; validator expressions must remain identical and archived schemas remain unchanged."
   },
   "adoption_history": [
     {
@@ -239,6 +239,24 @@
         "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
       },
       "review": "Released 0.1.29 reviewed missing JSON media and empty response declarations for individually evidenced AMOS read operations. Runtime helper hashes remain explicitly reviewed; archived schemas are preserved."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.30",
+        "source_commit": "f4efdbcf23f879553e5de50325d637ab46625ed3",
+        "source_archive_sha256": "ab58e0ac90980be0bd7f86195976c495666f0694d7a9cfc3ac3688eb62473053",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.30 reviewed toxprint helper-return visibility and early normalization adoption. Runtime helper hashes are explicitly reviewed; archived schemas are preserved."
     }
   ]
 }

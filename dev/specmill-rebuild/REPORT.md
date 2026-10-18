@@ -1283,3 +1283,12 @@ The old existing owned helper-only contract is explicitly retired through
 `specmill::apply_files()` after selection of its native replacement suite.
 Missing historical ownership entries remain for the separately released #152 fix.
 No live service POST or full package test run is claimed. No ComptoxR push.
+
+## Released validator whitespace fix, 18 October 2026
+
+Specmill v0.1.31, source `d572fcc50f739387a689289efdaa9ee8b1338908`,
+regenerates `R/api_validation.R` without trailing whitespace. The change comes
+from upstream PR139 through ordinary generation. The old and new parsed
+expressions are identical, and trimming only the old trailing whitespace
+produces the new source exactly. Both transport helpers and archived schemas
+are unchanged. No wrapper policy or endpoint adoption changes in this wave.
