@@ -12,7 +12,7 @@ Completed root gates:
 - Public apply and maintenance freshness completed, result canonical-holds-audit/root-fresh.rds. All 31 selected sources pass validation.
 - Final broad safe suite completed successfully: 13,031 passing assertions, 50 expected skips, zero failures/errors/warnings. Pinned R_LIBS42, keys blank, external proxy denied, localhost allowed. Full evidence canonical-holds-audit/broad-safe-tests.rds/csv/log.gz and broad-safe-summary.json. Do not repeat broad DB testing without new changes or unresolved concerns.
 - Installed package replay completed128 assertions, no failures/errors/warnings/skips. Source corrective replay132 is clean.
-- No active delegated tasks. All terminal results were read.
+- Active isolated task: amos-batch-candidate-positive-20261018-1, taskId suffix delegate-task%3Aamos-batch-candidate-positive-20261018-1. Exact bodies and fresh workbook evidence are committed at b80b886c under canonical-holds-audit/amos-batch-recheck. Parent asked user whether to explicitly repair the two old generic-envelope/JSON-return contracts while preserving public formals; answer pending. Child may prepare a candidate but root adoption remains held. Read task_status when completion arrives; do not duplicate the job.
 
 The preceding broad 498 run completed 12,942 passing assertions / 50 expected skips / 2 errors, zero failed expectations/warnings. It is NOT a clean full pass. Saved in v42-11-integration/broad-two-errors.rds and log.gz. Two fixes now pass focused 132 assertions: restore the exact unchanged native GET assay fixture accidentally removed with the eight migrations, and Connection:close for WebTEST localhost replies across204/malformedJSON. Runtime transport unchanged. Focused132 includes GET 2, WebTEST 85 and new preflight 45. Do not delete the owned GET contract test. WIP fixture restores its exact parent entry.
 
@@ -26,7 +26,7 @@ Review: Standards 0 findings; Spec 1 P2 hook-discovery finding resolved. dev/che
 
 ## Next concrete work
 
-1. Continue the remaining 49 held identities when verified upstream releases or service/source evidence arrives. The current 499/548 progress and exact disposition ledger are committed. Do not adopt private candidates.
+1. Complete the isolated AMOS batch candidate and resolve the pending user contract choice. Fresh controls returned production analytical200/four atrazine AQC rows, staging analytical200/five rows, staging general200/816 rows, but production general500. Old all-500 service observation is superseded, not the public wrapper contract. New evidence posted Specmill27 comment6255839472. Continue other held identities when verified releases or source evidence arrives; current499/548 remains unchanged.
 2. The final broad result is clean and recorded, and PR345 progress comment6255254919 includes its verified totals. No push. Hook validation, retained inventory, public-boundary checks and all13 workflow YAML parses pass locally; remote CI has not run.
 3. Keep native401/config hard and explicit preserve_errors controls for complete request mappings. No source guessing, aliases or validation bypasses.
 
