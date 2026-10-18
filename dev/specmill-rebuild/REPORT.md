@@ -1937,3 +1937,14 @@ bespoke registration, and retired only those unowned stale files. Their actual
 request/cursor/result/failure coverage remains in `test-native_pagers.R`.
 `retired-amos-legacy-pager-tests.rds` records the exact paths. The broad suite is
 being rerun with external HTTP blocked and localhost permitted.
+
+The broad replay also found two handwritten similarity-map suites still mocking
+the old helper. Updated those collaborators and expected payload locations to
+the reviewed native mapping, retaining resolver arguments, option/sort coercion,
+exact pre/post states, skip/retry behavior and formatter/error assertions; all
+82 assertions pass. Three older owned image fixed-call snapshots similarly
+predated the released image formatter. Registered the existing collection/media
+suite, retired those exact tests via public `apply_files`, and archived their
+fixture entries in `retired-image-fixed-contracts.rds`. The collection and
+normalization regression suites pass; no runtime change was needed for these
+test corrections.

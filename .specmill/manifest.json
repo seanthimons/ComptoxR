@@ -1817,18 +1817,6 @@
       "hash": "75e2614c572fb0f42c3f8b4675b00e2f050c8430eb1380dbefa7e54ce9954957",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}"
     },
-    "tests/testthat/test-contract-ct_chemical_file_image_search.R": {
-      "hash": "4391348456d321da7e5b7b77bdfd072c10240dee08f74b33452c21cef29e8931",
-      "operations": "ctx-chemical-prod-full GET /chemical/file/image/search/by-dtxsid/{dtxsid}"
-    },
-    "tests/testthat/test-contract-ct_chemical_file_image_search_by_dtxcid.R": {
-      "hash": "b528a92b02872d0ea7a1f54d630dfcb0e2a096081794c66cd2a3f05ee3696e76",
-      "operations": "ctx-chemical-prod-full GET /chemical/file/image/search/by-dtxcid/{dtxcid}"
-    },
-    "tests/testthat/test-contract-ct_chemical_file_image_search_by_gsid.R": {
-      "hash": "f03592e7090b17d44f56b9551d4100c9243c4c1e879099d7ab0fc7de99700321",
-      "operations": "ctx-chemical-prod-full GET /chemical/file/image/search/by-gsid/{gsid}"
-    },
     "tests/testthat/test-contract-ct_chemical_file_mol_search.R": {
       "hash": "50eb3d03c65bf4e82f5841155ad83f7debff5cd47e478c7f2af3eb05d260356d",
       "operations": "ctx-chemical-prod-full GET /chemical/file/mol/search/by-dtxsid/{dtxsid}"

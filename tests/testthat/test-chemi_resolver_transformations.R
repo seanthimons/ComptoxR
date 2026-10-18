@@ -1,4 +1,4 @@
-# Frozen behavior of the three retained #337 wrappers. All collaborators are mocked.
+# Native similarity-map and retained RQ-code client behavior. All collaborators are mocked.
 if (!exists("generated_contract_ensure_package", mode = "function")) {
   source(file.path("tests", "testthat", "helper-generated-contracts.R"))
 }
@@ -23,27 +23,36 @@ test_that("similarity map keeps resolver arguments, flat chemicals, omitted opti
         list(result = "FOUND", chemical = list(sid = "B", smiles = "CC"))
       )
     },
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       calls[[length(calls) + 1L]] <<- list(...)
       map_response()
     },
     .package = "ComptoxR"
   )
   expected_chemicals <- list(
-    list(sid = "A", smiles = "C", casrn = NULL, inchi = NULL, inchiKey = NULL, name = "first"),
+    list(
+      sid = "A",
+      smiles = "C",
+      casrn = NULL,
+      inchi = NULL,
+      inchiKey = NULL,
+      name = "first",
+      chemId = "A",
+      canonicalSmiles = "C"
+    ),
     list(sid = "B", smiles = "CC", casrn = NULL, inchi = NULL, inchiKey = NULL, name = NULL)
   )
   result <- chemi_resolver_getsimilaritymap(c("one", "two"))
   expect_identical(lookup, list(ids = c("one", "two"), idsType = "AnyId", tidy = FALSE))
   expect_identical(
-    calls[[1]],
+    calls[[1]][c("method", "path", "query", "body", "headers", "request_controls")],
     list(
-      query = NULL,
-      endpoint = "resolver/getsimilaritymap",
-      options = list(),
-      tidy = FALSE,
-      chemicals = expected_chemicals,
-      sort = "false"
+      method = "POST",
+      path = "/api/resolver/getsimilaritymap",
+      query = list(sort = "false"),
+      body = list(chemicals = expected_chemicals),
+      headers = list(Accept = "application/json"),
+      request_controls = list(preserve_errors = TRUE)
     )
   )
   expect_identical(names(result), c("mol_names", "similarity", "hc"))
@@ -53,9 +62,9 @@ test_that("similarity map keeps resolver arguments, flat chemicals, omitted opti
     chemi_resolver_getsimilaritymap("one", idType = value, section = value, sort = value, format = "raw")
     expect_identical(lookup$idsType, if (is.null(value)) "AnyId" else value)
     call <- calls[[length(calls)]]
-    expect_identical(call$options, if (is.null(value)) list() else list(section = value))
-    expect_identical(call$sort, if (is.null(value)) NULL else tolower(as.character(value)))
-    expect_identical(call$chemicals, expected_chemicals)
+    expect_identical(call$body$section, value)
+    expect_identical(call$query$sort, if (is.null(value)) NULL else tolower(as.character(value)))
+    expect_identical(call$body$chemicals, expected_chemicals)
   }
   for (query in list(NULL, FALSE, 0, character())) {
     chemi_resolver_getsimilaritymap(query, format = "raw")
@@ -91,7 +100,7 @@ test_that("similarity map preserves exact pre/post states, partial updates and s
       }
       list(params = list(section = 0, query = NULL, chemicals = list(list(sid = "resolved")), format = "raw"))
     },
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       calls[[length(calls) + 1L]] <<- list(...)
       "response"
     },
@@ -113,14 +122,12 @@ test_that("similarity map preserves exact pre/post states, partial updates and s
     )
   )
   expect_identical(
-    calls[[1]],
+    calls[[1]][c("method", "path", "query", "body")],
     list(
-      query = NULL,
-      endpoint = "resolver/getsimilaritymap",
-      options = list(section = 0),
-      tidy = FALSE,
-      chemicals = list(list(sid = "resolved")),
-      sort = "false"
+      method = "POST",
+      path = "/api/resolver/getsimilaritymap",
+      query = list(sort = "false"),
+      body = list(chemicals = list(list(sid = "resolved")), section = 0)
     )
   )
   expect_identical(
@@ -154,7 +161,7 @@ test_that("similarity map skips unresolved inputs and wraps hook errors, not tra
       }
       response
     },
-    generic_chemi_request = function(...) stop("transport sentinel"),
+    .ct_request = function(...) stop("transport sentinel"),
     .package = "ComptoxR"
   )
   expect_warning(
@@ -232,7 +239,7 @@ test_that("similarity map retries resolution without idType and preserves real e
       }
       list(list(result = "FOUND", chemical = list(sid = "A")))
     },
-    generic_chemi_request = function(...) "raw result",
+    .ct_request = function(...) "raw result",
     .package = "ComptoxR"
   )
   expect_identical(chemi_resolver_getsimilaritymap("one", idType = "CAS", format = "raw"), "raw result")

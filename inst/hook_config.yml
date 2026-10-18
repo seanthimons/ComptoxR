@@ -861,3 +861,12 @@ chemi_amos_retrieve_safety_data_sheets:
 
 chemi_amos_for_document_ids:
   bespoke_test: "tests/testthat/test-native_amos_remaining.R"
+
+ct_chemical_file_image_search:
+  bespoke_test: tests/testthat/test-native_collection_responses.R
+
+ct_chemical_file_image_search_by_dtxcid:
+  bespoke_test: tests/testthat/test-native_collection_responses.R
+
+ct_chemical_file_image_search_by_gsid:
+  bespoke_test: tests/testthat/test-native_collection_responses.R
