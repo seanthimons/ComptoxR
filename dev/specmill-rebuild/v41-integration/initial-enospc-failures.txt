@@ -1,0 +1,113 @@
+Freshness check:
+Verified specmill 0.1.41 at /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/toolkit-library/specmill
+Source revision: 05862bee1804806cea157ff1962300d741516301
+Source archive SHA256: 70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc
+Verified specmill 0.1.41 at /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/toolkit-library/specmill
+Source revision: 05862bee1804806cea157ff1962300d741516301
+Source archive SHA256: 70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc
+Error in writeLines(lines, tcon, useBytes = TRUE) : 
+  Error writing to connection:  No space left on device
+Calls: <Anonymous> -> document_output -> <Anonymous> -> writeLines
+In addition: Warning messages:
+1: chemi-mordred-prod-rebuild GET /api/mordred: hook-bound endpoint or method has no declared routes 
+2: chemi-mordred-prod-rebuild POST /api/mordred: hook-bound endpoint or method has no declared routes 
+3: chemi-webtest-prod-rebuild GET /api/webtest/predict: hook-bound endpoint or method has no declared routes 
+4: chemi-webtest-prod-rebuild POST /api/webtest/predict: hook-bound endpoint or method has no declared routes 
+Execution halted
+
+Full safe suite tail:
+contract-chemi_stdizer_operations: ..
+contract-chemi_stdizer_records: ..
+contract-chemi_stdizer_workflows: ..
+contract-chemi_stdizer: ..
+contract-chemi_toxprints_assays_bulk: ..
+contract-chemi_toxprints_assays_by_name: ..
+contract-chemi_toxprints_assays_check: ..
+contract-chemi_toxprints_assays: ..
+contract-chemi_toxprints_bulk: ..
+contract-chemi_toxprints_chemicals_categories: ..
+contract-chemi_toxprints_enrichments: ..
+contract-chemi_toxprints_global_assays: ..
+contract-chemi_toxprints_global_toxprints: ..
+contract-chemi_toxprints_toxprints_categories: ..
+contract-chemi_toxprints_toxprints: ..
+contract-chemi_toxprints: ..
+contract-chemi_webtest_predict_bulk: ..
+contract-chemi_webtest_predict: ..
+contract-ct_bioactivity_analyticalqc_search: ..
+contract-ct_bioactivity_aop_search_by_entrez_gene_id: ..
+contract-ct_bioactivity_aop_search_by_event_number: ..
+contract-ct_bioactivity_aop_search_by_toxcast_aeid: ..
+contract-ct_bioactivity_assay_chemicals_search_by_aeid: ..
+contract-ct_bioactivity_assay_count: ..
+contract-ct_bioactivity_assay_search_by_aeid_bulk: ..
+contract-ct_bioactivity_assay_search_by_aeid: ..
+contract-ct_bioactivity_assay_search_by_endpoint: ..
+contract-ct_bioactivity_assay_search_by_gene: ..
+contract-ct_bioactivity_assay_single_conc_search_by_aeid: ..
+contract-ct_bioactivity_assay: ..
+contract-ct_bioactivity_data_aed_search_bulk: ..
+contract-ct_bioactivity_data_aed_search: ..
+contract-ct_bioactivity_data_search_bulk: ..
+contract-ct_bioactivity_data_search_by_aeid_bulk: ..
+contract-ct_bioactivity_data_search_by_aeid: ..
+contract-ct_bioactivity_data_search_by_dtxsid: ..
+contract-ct_bioactivity_data_search_by_m4id_bulk: ..
+contract-ct_bioactivity_data_search_by_m4id: ..
+contract-ct_bioactivity_data_search_by_spid_bulk: ..
+contract-ct_bioactivity_data_search_by_spid: ..
+contract-ct_bioactivity_data_search_by_tissue: ..
+contract-ct_bioactivity_data_summary_search_by_aeid: ..
+contract-ct_bioactivity_data_summary_search_by_dtxsid: ..
+contract-ct_bioactivity_models_search_by_dtxsid: ..
+contract-ct_bioactivity_models_search: ..
+contract-ct_bioactivity_search_contain: ..
+contract-ct_bioactivity_search_equal: ..
+contract-ct_bioactivity_search_start_with: ..
+contract-ct_chemical_count_by_exact_formula: ..
+contract-ct_chemical_count_by_msready_formula: ..
+contract-ct_chemical_detail_search_by_smiles: ..
+contract-ct_chemical_detail_search: ..
+
+Error:
+! testthat subprocess exited in file
+  'test-contract-ct_chemical_detail_search.R'.
+Caused by error:
+! callr subprocess failed: could not read result from callr
+Backtrace:
+     ▆
+  1. └─devtools::test(".", reporter = "summary", stop_on_failure = FALSE)
+  2.   └─testthat::test_local(...)
+  3.     └─testthat::test_dir(...)
+  4.       └─testthat:::test_files(...)
+  5.         └─testthat:::test_files_parallel(...)
+  6.           ├─withr::with_dir(...)
+  7.           │ └─base::force(code)
+  8.           ├─testthat::with_reporter(...)
+  9.           │ └─base::tryCatch(...)
+ 10.           │   └─base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 11.           │     └─base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 12.           │       └─base (local) doTryCatch(return(expr), name, parentenv, handler)
+ 13.           └─testthat:::parallel_event_loop_chunky(queue, reporters, ".")
+ 14.             └─queue$poll(Inf)
+ 15.               └─base::lapply(...)
+ 16.                 └─testthat (local) FUN(X[[i]], ...)
+ 17.                   └─private$handle_error(msg, i)
+ 18.                     └─cli::cli_abort(...)
+ 19.                       └─rlang::abort(...)
+Error in `queue_teardown()`:
+! At least one parallel worker failed to run teardown
+Caused by error:
+! callr subprocess failed: could not start R, exited with non-zero status, has crashed or was killed
+Backtrace:
+    ▆
+ 1. └─devtools::test(".", reporter = "summary", stop_on_failure = FALSE)
+ 2.   └─testthat::test_local(...)
+ 3.     └─testthat::test_dir(...)
+ 4.       └─testthat:::test_files(...)
+ 5.         └─testthat:::test_files_parallel(...)
+ 6.           ├─withr (local) `<fn>`()
+ 7.           └─testthat:::queue_teardown(queue)
+ 8.             └─cli::cli_abort(...)
+ 9.               └─rlang::abort(...)
+Execution halted

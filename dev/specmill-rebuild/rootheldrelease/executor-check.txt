@@ -1,0 +1,1 @@
+PASS: real sequential responses are unnamed; prior lapply mock preserves names.

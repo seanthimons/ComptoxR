@@ -1,0 +1,90 @@
+id: ctx-list-name
+schemas:
+  files:
+  - schema/ctx-chemical-prod.json
+selection:
+  include:
+  - GET /chemical/list/search/by-name/{listName}
+helper: .ct_request
+hook_config: inst/hook_config.yml
+documentation: yes
+operations:
+  GET /chemical/list/search/by-name/{listName}:
+    name: ct_chemical_list_search_by_name
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: listName
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/list/search/by-name/{listName}
+        path_params:
+          object:
+            listName:
+              from:
+              - params
+              - listName
+        query:
+          object:
+            projection:
+              from:
+              - params
+              - projection
+        body:
+          value: ~
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        response_policy:
+          callback: collected_response
+        headers:
+          value:
+            Accept: application/json
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        request_controls:
+          value:
+            preserve_errors: yes
+    extra_parameters:
+      extract_dtxsids:
+        type: logical
+        default: no
+        description: Extract DTXSIDs from results into character vector (requires
+          projection = 'chemicallistwithdtxsids')
+    post_response_scope: combined
+    post_params_source: original
+    normalize_inputs:
+      listName: .ct_legacy_query
+    result_formatter: format_legacy_tidy_result
+    file: R/ct_chemical_list_search_by_name.R
+    docs:
+      title: Get lists by name
+      lifecycle: stable
+      return: Returns a scalar value
+      tags:
+        apiStage: public
+      examples:
+      - listName: 40CFR1164
+    request_controls:
+      preserve_errors: yes

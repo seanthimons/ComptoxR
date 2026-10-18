@@ -1,0 +1,1 @@
+PASS: exact scalar/blank-suffix/malformed-space/preflight parity; exact multi-result values and attributes; typed single failures, zero-HTTP preflight, normalized full params, original validator conditions, ignored return, multiple drop/count/warnings, hard 401/config.

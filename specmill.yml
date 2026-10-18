@@ -47,5 +47,8 @@ services:
 - apis/chemi-toxprint-prod-rebuild.yml
 - apis/chemi-amos-reviewed-reads.yml
 - apis/chemi-hazard-prod-rebuild.yml
+- apis/ctx-list-name.yml
+- apis/chemi-chet-direct-reads.yml
+- apis/chemi-service-info.yml
 callback_files:
 - dev/specmill_callbacks.R

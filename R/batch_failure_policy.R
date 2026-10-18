@@ -123,3 +123,7 @@ format_image_results <- function(data) {
     }
     value
 }
+
+format_legacy_tidy_result <- function(data) {
+    safe_tidy_bind(format_legacy_list_result(data))
+}

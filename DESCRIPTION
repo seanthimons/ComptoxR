@@ -29,6 +29,7 @@ Imports:
     curl,
     DBI,
     dbplyr,
+    digest,
     dplyr (>= 1.1.4),
     duckdb,
     glue,

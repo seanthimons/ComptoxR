@@ -1,3 +1,10 @@
+# Keep the hook-only helper tests on frozen baseline facades. Native integration
+# and complete hook-state parity are covered by test-native_calculation.R.
+baseline_calculation <- readRDS(test_path("fixtures/native-calculation-contracts.rds"))
+for (name in names(baseline_calculation)) {
+  assign(name, eval(baseline_calculation[[name]][[3L]], asNamespace("ComptoxR")))
+}
+
 descriptor_public_signatures <- list(
   chemi_descriptors = c("smiles", "type", "headers", "format", "timeout", "output"),
   chemi_descriptors_bulk = c(

@@ -1,0 +1,20 @@
+[1] TRUE
+[1] TRUE
+There were 20 warnings (use warnings() to see them)
+$cache_error
+[1] "PubChem: unknown field cache"
+
+$adopted_operations
+[1] 0
+
+[[1]]
+[[1]]$file
+[1] ".specmill/manifest.json"
+
+[[1]]$path
+[1] "/home/sxthi/.t3/worktrees/ComptoxR/t3-9d86aa91/.specmill/manifest.json"
+
+[[1]]$action
+[1] "write"
+
+

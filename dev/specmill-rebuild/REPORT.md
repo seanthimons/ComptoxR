@@ -1948,3 +1948,42 @@ suite, retired those exact tests via public `apply_files`, and archived their
 fixture entries in `retired-image-fixed-contracts.rds`. The collection and
 normalization regression suites pass; no runtime change was needed for these
 test corrections.
+
+## Released v0.1.41 integration: 53 operations
+
+The root now selects released v0.1.41 and adopts the list-name facade, six dedicated
+descriptor GET/POST bindings, two EPI reads, forty service metadata/version GETs
+and four CheT direct reads. Canonical source files are unchanged. The native
+helper matches the official scaffold and provenance byte for byte. Its existing
+pagination companion calls digest, so DESCRIPTION now declares that runtime
+dependency. Specmill itself remains development-only.
+
+Validated full generation and the independent fresh check pass. All 590 owned
+output hashes match; the final apply changes no output. Operation, mapping,
+retained-output and drift diagnostics are empty. Warnings for the four retained
+Mordred/WebTEST prediction routes remain visible. The schema ledger advances
+from 308/548 to 361/548 and the remaining legacy generated-test inventory is 16.
+
+The focused root replay passed 1,607 assertions. Two subsequent registration
+assertions initially ran before their fixture helper was defined; that test-only
+ordering error was fixed and the entire CheT suite then passed 150 assertions.
+The broad safe run finished 7,781 passing assertions, zero failed expectations,
+zero warnings, 50 expected optional-data skips and that one subsequently corrected
+error. It is not labeled a clean single full-suite pass. Root retained PubChem
+and search/safety suites additionally passed 77 and 58 assertions. The package
+build/check gate finished 0 errors, 0 warnings, 0 notes with tests, examples,
+vignettes and manual generation excluded; tests ran separately.
+
+Initial gates failed when the shared /tmp tmpfs filled during R's source-tree
+copy. Their evidence is preserved. Retries use persistent TMPDIR and a minimal
+package source snapshot, without copying development artifacts or modifying
+active libraries. Portable results and reproduction are in
+[v41-integration](v41-integration/README.md).
+
+Live results remain explicitly scoped: all 40 service-info routes returned
+meaningful production bodies; all six descriptor calculations returned values;
+EPI /api returned 14 paths. The JAR is covered by controlled byte-preservation
+tests, not a production download. CheT temporary chemical detail returns 500.
+Production hazard/alerts remain unavailable, with staging and rejected-control
+evidence retained from the preceding wave. Newly completed reviewed download
+and management candidates are excluded until the next root integration.

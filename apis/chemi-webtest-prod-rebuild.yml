@@ -14,7 +14,7 @@ operations:
   GET /api/webtest:
     name: chemi_webtest
     file: R/chemi_webtest.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
     inputs:
       smiles:
@@ -35,37 +35,43 @@ operations:
     post_state: hook_state
     request:
       arguments:
-        endpoint:
+        method:
+          value: GET
+        path:
           from:
           - hook_state
           - request
           - endpoint
-        method:
-          from:
-          - hook_state
-          - request
-          - method
-        batch_limit:
-          value: 0.0
-        server:
-          from:
-          - hook_state
-          - request
-          - server
-        auth:
-          value: no
-        tidy:
-          value: no
-        content_type:
-          from:
-          - hook_state
-          - request
-          - content_type
-        options:
+        path_params:
+          value: {}
+        query:
           from:
           - hook_state
           - request
           - options
+        body:
+          value: ~
+        headers:
+          object:
+            Accept:
+              from:
+              - hook_state
+              - request
+              - content_type
+        server:
+          object:
+            url:
+              from:
+              - hook_state
+              - request
+              - server
+        auth:
+          value: []
+        response_policy:
+          callback: descriptor_get_response
+        request_controls:
+          value:
+            preserve_errors: yes
     docs:
       title: Webtest
       lifecycle: experimental
@@ -78,6 +84,11 @@ operations:
       - smiles: DTXSID7020182
       tags:
         apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
   GET /api/webtest/predict:
     name: chemi_webtest_predict
     file: R/chemi_webtest_predict.R
@@ -153,7 +164,7 @@ operations:
   POST /api/webtest:
     name: chemi_webtest_bulk
     file: R/chemi_webtest.R
-    helper: generic_chemi_request
+    helper: .ct_request
     implementation: generated
     inputs:
       query:
@@ -184,30 +195,43 @@ operations:
     post_state: hook_state
     request:
       arguments:
-        endpoint:
+        method:
+          value: POST
+        path:
           from:
           - hook_state
           - request
           - endpoint
-        server:
-          from:
-          - hook_state
-          - request
-          - server
-        auth:
-          value: no
-        tidy:
-          value: no
+        path_params:
+          value: {}
+        query:
+          value: {}
         body:
           from:
           - hook_state
           - request
           - body
-        content_type:
-          from:
-          - hook_state
-          - request
-          - content_type
+        headers:
+          object:
+            Accept:
+              from:
+              - hook_state
+              - request
+              - content_type
+        server:
+          object:
+            url:
+              from:
+              - hook_state
+              - request
+              - server
+        auth:
+          value: []
+        response_policy:
+          callback: descriptor_post_response
+        request_controls:
+          value:
+            preserve_errors: yes
     docs:
       title: Webtest
       lifecycle: experimental
@@ -224,6 +248,11 @@ operations:
       - query: DTXSID1024122
       tags:
         apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
   POST /api/webtest/predict:
     name: chemi_webtest_predict_bulk
     file: R/chemi_webtest_predict.R

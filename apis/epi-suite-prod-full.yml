@@ -14,6 +14,8 @@ selection:
   - GET /api/ecosar/polymer/nonionic
   - GET /api/ecosar/surfactant/nonionic
   - GET /api/submit
+  - GET /api
+  - GET /api/download
 helper: generic_request
 documentation: yes
 operations:
@@ -825,5 +827,33 @@ operations:
           value: ~
         response_policy:
           value: .ct_static_list
+  GET /api:
+    name: epi_api
+    file: R/epi_api.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    docs:
+      title: Retrieve the EPI API specification and health
+      lifecycle: experimental
+      return: A list containing the API specification and runtime health extensions.
+      tags:
+        apiStage: public
+  GET /api/download:
+    name: epi_download
+    file: R/epi_download.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    docs:
+      title: Download the running EPI application JAR
+      lifecycle: experimental
+      return: The exact JAR bytes as a raw vector.
+      tags:
+        apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds
 hook_config: inst/hook_config.yml

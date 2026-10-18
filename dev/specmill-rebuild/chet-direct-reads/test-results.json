@@ -1,0 +1,72 @@
+[
+  {
+    "file": "test-native_chet_direct_reads.R",
+    "context": "",
+    "test": "new CheT reads send exact schema requests and decode real localhost responses",
+    "nb": 129,
+    "failed": 0,
+    "skipped": false,
+    "error": false,
+    "warning": 0,
+    "user": 0.041,
+    "system": 0,
+    "real": 0.181,
+    "passed": 129
+  },
+  {
+    "file": "test-native_chet_direct_reads.R",
+    "context": "",
+    "test": "new CheT input contracts reject invalid values before transport",
+    "nb": 15,
+    "failed": 0,
+    "skipped": false,
+    "error": false,
+    "warning": 0,
+    "user": 0.011,
+    "system": 0,
+    "real": 0.038,
+    "passed": 15
+  },
+  {
+    "file": "test-native_chet_direct_reads.R",
+    "context": "",
+    "test": "new CheT reads preserve transport condition identity",
+    "nb": 4,
+    "failed": 0,
+    "skipped": false,
+    "error": false,
+    "warning": 0,
+    "user": 0.001,
+    "system": 0,
+    "real": 0.001,
+    "passed": 4
+  },
+  {
+    "file": "test-native_received_http.R",
+    "context": "",
+    "test": "adopted static and AMOS wrappers preserve real received HTTP status conditions",
+    "nb": 81,
+    "failed": 0,
+    "skipped": false,
+    "error": false,
+    "warning": 0,
+    "user": 0.017,
+    "system": 0.005,
+    "real": 0.096,
+    "passed": 81
+  },
+  {
+    "file": "test-specmill_adoption.R",
+    "context": "",
+    "test": "adopted decoder and paginator handle ChET responses on localhost",
+    "nb": 20,
+    "failed": 0,
+    "skipped": false,
+    "error": false,
+    "warning": 0,
+    "user": 0.006,
+    "system": 0,
+    "real": 0.023,
+    "passed": 20
+  }
+]

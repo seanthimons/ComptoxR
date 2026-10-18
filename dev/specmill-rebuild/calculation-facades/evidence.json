@@ -1,0 +1,78 @@
+{
+  "baseline": "2b88f70f",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.40",
+    "source_commit": "8fa120e84fe8d0267c11e515e6fd1f387ff4a36f",
+    "source_archive_sha256": "e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "adopted": {
+    "paths": [
+      "GET /api/padel",
+      "POST /api/padel",
+      "GET /api/rdkit",
+      "POST /api/rdkit",
+      "GET /api/webtest",
+      "POST /api/webtest"
+    ],
+    "names": [
+      "chemi_padel",
+      "chemi_padel_bulk",
+      "chemi_rdkit",
+      "chemi_rdkit_bulk",
+      "chemi_webtest",
+      "chemi_webtest_bulk"
+    ]
+  },
+  "retained": {
+    "descriptors": "GET/POST cross-schema fallback declaration rejects unresolved source server records, even with the same configured resolver.",
+    "mordred": "GET/POST production payload contains one chemical but NULL descriptor slots collapse the unchanged wide formatter to zero rows.",
+    "webtest_predict": "GET/POST production payload includes endpoint records without IDs and unchanged post-hook rejects the response."
+  },
+  "upstream": [
+    "https://github.com/seanthimons/specmill/issues/61#issuecomment-6252954521",
+    "https://github.com/seanthimons/ComptoxR/issues/341#issuecomment-6252956303",
+    "https://github.com/seanthimons/specmill/issues/170"
+  ],
+  "validation": {
+    "native_assertions": 433,
+    "hook_assertions": 202,
+    "native_failures": 0,
+    "hook_failures": 0,
+    "hook_contract": {
+      "functions": 6,
+      "hooks": 42,
+      "parameters": 16,
+      "valid": true
+    },
+    "live": {
+      "status": 200,
+      "rows": 1,
+      "row_status": "ok",
+      "descriptor_counts": {
+        "padel": 1444,
+        "rdkit": 1024,
+        "webtest": 797
+      },
+      "artifact": "live-six.rds"
+    },
+    "source_defects": "source-defect-replay.rds: frozen original and held native definitions have identical failures for all four retained wrappers.",
+    "route_repro": "Rscript dev/specmill-rebuild/calculation-facades/verify-route-declaration.R",
+    "native_command": "Rscript -e 'devtools::test(filter=\"^native_calculation$\",stop_on_failure=TRUE)'",
+    "generation_command": "Rscript dev/generate_specmill.R --check",
+    "generation_check": "passed after restoring baseline ownership; 539 owned output hashes match",
+    "broader_hook_check": "dev/check_hook_config.R failed with missing selected wrappers and hook-discovery failures outside this scope; the six-function namespace-based validation passes.",
+    "whole_package_check": "not run",
+    "ownership_artifact": "ownership.rds"
+  },
+  "constraints": {
+    "push": false,
+    "production_writes_or_uploads": false,
+    "ctx_key_used": false,
+    "shared_progress_or_PR_checkpoint_updated": false,
+    "pin_changed": false
+  },
+  "integration": "Parent must regenerate and replay the candidate on its released v0.1.41 pin; no lock change is included."
+}
