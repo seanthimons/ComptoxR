@@ -1,7 +1,9 @@
 # Check the current source, an expanded source package, or a rendered site.
 check_public_api <- function(root = '.') {
   root <- normalizePath(root, winslash = '/', mustWork = TRUE)
-  files <- if (file.exists(file.path(root, '.git'))) {
+  source_checkout <- file.exists(file.path(root, '.git')) &&
+    file.exists(file.path(root, 'DESCRIPTION'))
+  files <- if (source_checkout) {
     paths <- system2('git', c('-C', shQuote(root), 'ls-files'), stdout = TRUE)
     stopifnot(is.null(attr(paths, 'status')))
     file.path(root, paths)
@@ -9,6 +11,11 @@ check_public_api <- function(root = '.') {
     list.files(root, recursive = TRUE, full.names = TRUE, all.files = TRUE)
   }
   files <- files[file.exists(files) & !dir.exists(files)]
+  if (source_checkout) {
+    # Approved maintainer evidence is excluded from package and site outputs.
+    relative <- substring(files, nchar(root) + 2L)
+    files <- files[!grepl('^(dev/|[.]planning/)', relative)]
+  }
   text_files <- files[grepl('[.](R|Rd|md|Rmd|json|ya?ml|html|xml|txt|csv|js)$', files)]
   forbidden_host <- paste0(
     'ctx-api-(stg|dev)[.]|comptoxstaging[.]|',

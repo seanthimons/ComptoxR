@@ -12,7 +12,7 @@ permissions:
 jobs:
   specmill-maintenance:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     env:
       R_KEEP_PKG_SOURCE: yes
       COMPTOXR_CRAN_SAFE_TESTS: "true"
@@ -46,6 +46,8 @@ jobs:
           stopifnot(grepl("^[0-9a-f]{40}$", pin$source_commit))
           cat(paste0("revision=", pin$source_commit, "\n"),
               file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          cat(paste0("R_LIBS=", file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", pin$version), "\n"),
+              file = Sys.getenv("GITHUB_ENV"), append = TRUE)
 
       - name: Check out pinned specmill source
         uses: actions/checkout@v7
@@ -66,12 +68,14 @@ jobs:
       - name: Check generated wrappers and tests
         run: |
           Rscript -e 'source("dev/check_public_api.R"); check_public_api()'
+          Rscript dev/check_hook_config.R
           Rscript dev/specmill-342/verify.R
           Rscript dev/generate_specmill.R --check
+          Rscript dev/generate_tests.R --check
 
-      - name: Run fixed contracts and client policy tests
+      - name: Run native behavior, fixed contracts and client policy tests
         run: |
-          Rscript -e 'testthat::test_local(filter = "^(contract-.*|generic_request|generic_request_edge|generic_chemi_request|pubchem_offline|hooks_stage_server|chemi_search|ct_chemical_list_all_hooks|specmill_adoption)$", stop_on_failure = TRUE)'
+          Rscript -e 'testthat::test_local(filter = "^(contract-.*|native_.*|generic_request|generic_request_edge|generic_chemi_request|pubchem_offline|hooks_stage_server|chemi_search|ct_chemical_list_all_hooks|specmill_adoption)$", stop_on_failure = TRUE)'
 
       - name: Verify regeneration changes no files
         run: |

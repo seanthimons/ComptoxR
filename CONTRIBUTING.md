@@ -28,7 +28,7 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
-The 105-operation specmill migration has a separate pinned development library.
+The Specmill migration uses a separate pinned development library.
 Use Air 0.11.0 for specmill, then run:
 
 ```bash
@@ -39,13 +39,13 @@ Rscript dev/generate_specmill.R --check
 
 Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
 matching output; do not reuse initial adoption hashes. See the
-[current migration report](dev/specmill-full/REPORT.md) for localhost verification,
+[current migration handoff](dev/specmill-rebuild/HANDOFF.md) for localhost verification,
 retained implementations, offline reproduction and rollback. The legacy
-commands below continue to maintain operations outside that slice.
+commands below continue to maintain retained operations.
 
-The **Specmill Maintenance** workflow checks this slice on every pull request,
+The **Specmill Maintenance** workflow checks the generated client on every pull request,
 including changes to CI and documentation. It installs the locked source revision,
-runs the fixed contracts and client policy tests, and checks that regeneration
+runs native behavior suites, fixed contracts and client policy tests, and checks that regeneration
 leaves no changed or new files. Its Air 0.11.0 installation runs in a separate job
 from the legacy generator's Air 0.9.0 installation.
 
