@@ -1,6 +1,6 @@
 {
   "status": "migration_failure_parity_review_in_progress",
-  "production_pin": "0.1.32",
+  "production_pin": "0.1.33",
   "batch_empty_constructor": ".ct_empty_table",
   "batch_metadata": {
     "issue": "https://github.com/seanthimons/specmill/issues/142",
@@ -14,8 +14,12 @@
       "ct_chemical_detail_search_by_dtxcid",
       "chemi_classyfire"
     ],
-    "result": "Exact all/partial HTTP failure values and attributes, Classyfire post-combine, and final whole-client freshness pass; adoption awaits release.",
-    "coverage_correction": "Expanded the original 24 cases to include the actual DTXCID bulk POST as well as the GET sharing its source file; all 32 cases and final freshness pass."
+    "result": "Metadata opt-out is released; combined production failure-policy adoption remains held until PR146 request-count and warning policies are released. Prior isolated comparison evidence is preserved.",
+    "coverage_correction": "Expanded the original 24 cases to include the actual DTXCID bulk POST as well as the GET sharing its source file; all 32 cases and final freshness pass.",
+    "release": {
+      "version": "0.1.33",
+      "source_commit": "28b8e4516013c078baa977460453418b0c760e3f"
+    }
   },
   "unbatched_policy": {
     "issue": "https://github.com/seanthimons/specmill/issues/143",
@@ -94,6 +98,33 @@
         "production_pin_changed": false,
         "production_wrapper_changed": false,
         "comptoxr_push": false
+      },
+      "final_head_recheck": {
+        "status": "isolated_pass_release_pending",
+        "source_commit": "104372855c3072cd64e59a9b9748dbe03bc3fe8b",
+        "source_archive_sha256": "9aadc8ab63cd31a01e5b97fe4e05f641b5b0baa49077a37afa669cbf582e91c0",
+        "toolkit": {
+          "package": "specmill",
+          "version": "0.1.33",
+          "source_commit": "104372855c3072cd64e59a9b9748dbe03bc3fe8b",
+          "source_archive_sha256": "9aadc8ab63cd31a01e5b97fe4e05f641b5b0baa49077a37afa669cbf582e91c0",
+          "source_repository": "https://github.com/seanthimons/specmill",
+          "archive_format": "git archive --format=tar <source_commit>"
+        },
+        "verification": {
+          "prior_batch_cases": 107,
+          "real_localhost_line_successes": 126,
+          "real_localhost_line_failures": 56,
+          "native_credential_hard_cases": 6,
+          "malformed_success_body_hard_cases": 7,
+          "exact_warning_strings": true,
+          "full_attributes_no_exclusions": true,
+          "whole_client_validation_freshness": true,
+          "credential_scope": "Native401 remains hard; legacy multi401 is not an equivalence claim.",
+          "production_pin": "0.1.33",
+          "production_wrapper_changed": false,
+          "formatter_send_collision": "Covered upstream; actual wrappers exercise their reviewed named client formatter."
+        }
       }
     }
   }

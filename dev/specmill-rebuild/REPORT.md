@@ -1341,3 +1341,31 @@ and captured cases are archived under `warning_combined` in both pending batch
 and line RDS records. `verify-combined-line-failures.R` independently repeats the
 real HTTP line checks against a candidate checkout. These remain isolated,
 release-pending results; no full package test rerun or ComptoxR push.
+
+## Released metadata policy pin, 18 October 2026
+
+Pinned official Specmill v0.1.33, source
+`28b8e4516013c078baa977460453418b0c760e3f`. The official release archive
+passes its published SHA256SUMS; our independently archived source SHA256 is
+`c7e8530dee23fc4bf689355029016b09e2c71160c3503b146a91b5bba76ce3f8`.
+Reviewed helper regeneration is byte-identical. Whole-client validated generation
+changes only the manifest toolkit version; wrapper configurations and archived
+schemas remain unchanged. Focused normalization, failure-empty, response-error
+and list-all tests pass. Final official freshness passes with the existing
+retained descriptor-origin warnings.
+
+The released batch metadata opt-out is available, but the complete line and
+failure-policy adoption remains held for PR146's released request-count and
+warning policies. The previously accepted combined evidence remains isolated;
+401 stays hard and legacy multi401 equivalence is not claimed. No ComptoxR push.
+
+PR146 final-head isolation at `104372855c3072cd64e59a9b9748dbe03bc3fe8b`
+also passes all107 prior batch-failure comparisons,126 actual localhost line
+success comparisons,56 actual localhost HTTP failure comparisons, six native401
+hard-error cases and seven malformed-success-body hard-error checks. Complete
+attributes, warning strings and wire bytes are preserved; whole-client validated
+generation and final official freshness pass. The exact independently archived
+source SHA256 is `9aadc8ab63cd31a01e5b97fe4e05f641b5b0baa49077a37afa669cbf582e91c0`.
+The existing combined evidence records now include this final-head recheck.
+The formatter-name collision regression remains upstream coverage; actual wrappers
+exercise their reviewed named client formatter. No production wrapper adoption.
