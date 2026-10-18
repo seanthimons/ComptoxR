@@ -199,16 +199,17 @@
       "source_location": "#/paths/~1api~1amos~1analytical_qc_batch_search/post",
       "operation_sha256": "7229d444841e75575be5d919a37338861fcbe241890b3428ad4d384d9e3a5874",
       "disposition": "service_contract_hold",
-      "blocker": "Corrected OAS3 staging body exists, but archived minimal and populated production controls returned HTTP500. Existing facade uses incompatible generic Chemi payload/gate.",
+      "blocker": "Fresh production/staging service examples now return meaningful atrazine/AQC workbooks. Existing public wrapper instead sends a generic Chemical envelope and expects JSON; explicit contract-repair disposition under #311 is pending.",
       "links": [
         "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651"
       ],
       "evidence": [
         "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json",
         "dev/specmill-rebuild/amos-remaining-live-review.rds",
-        "dev/specmill-rebuild/amos-full-body-live-review.rds"
+        "dev/specmill-rebuild/amos-full-body-live-review.rds",
+        "dev/specmill-rebuild/canonical-holds-audit/amos-batch-recheck/README.md"
       ],
-      "next_step": "Obtain a positive meaningful workbook using a declared request, then preserve public formals via a separately reviewed OAS3 subset. No raw alias or dialect splice.",
+      "next_step": "Resolve the explicit public contract repair, retain names/defaults, derive the reviewed OAS3 subset, and verify exact request and binary return before adoption.",
       "existing_public_wrappers": [
         {
           "name": "chemi_amos_analytical_qc_batch",
@@ -223,16 +224,17 @@
       "source_location": "#/paths/~1api~1amos~1batch_search/post",
       "operation_sha256": "357406b2c8c8efff070b89d256e31dceec51d496f4981605e206b478ac434b21",
       "disposition": "service_contract_hold",
-      "blocker": "Corrected OAS3 staging body exists, but archived minimal and populated production controls returned HTTP500. Existing facade uses incompatible generic Chemi payload/gate.",
+      "blocker": "Fresh staging service example returns a meaningful 816-record atrazine workbook; production remains HTTP500. Existing public wrapper sends a generic Chemical envelope and expects JSON; explicit contract-repair disposition under #311 is pending.",
       "links": [
         "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651"
       ],
       "evidence": [
         "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json",
         "dev/specmill-rebuild/amos-remaining-live-review.rds",
-        "dev/specmill-rebuild/amos-full-body-live-review.rds"
+        "dev/specmill-rebuild/amos-full-body-live-review.rds",
+        "dev/specmill-rebuild/canonical-holds-audit/amos-batch-recheck/README.md"
       ],
-      "next_step": "Obtain a positive meaningful workbook using a declared request, then preserve public formals via a separately reviewed OAS3 subset. No raw alias or dialect splice.",
+      "next_step": "Resolve explicit public contract repair, retain names/defaults, derive reviewed OAS3 source and replay generated wrapper against staging; preserve typed production500 and document service difference.",
       "existing_public_wrappers": [
         {
           "name": "chemi_amos_batch",
