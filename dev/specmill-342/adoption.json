@@ -78,13 +78,13 @@
     "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
   },
   "current_adoption": {
-    "reviewed_at": "2026-10-17",
+    "reviewed_at": "2026-10-18",
     "base_commit": "49f60add",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.26",
-      "source_commit": "3206891c579f4a8464c8bf137ee533bbb39a5f38",
-      "source_archive_sha256": "8800b06f0f8e95d5788b476a62fb0667eb67446c8dfc9d94e43487610ddc9250",
+      "version": "0.1.27",
+      "source_commit": "6eb0d557b92603862180d170079068db53a124b5",
+      "source_archive_sha256": "3cdcc95937b0d7645d39673aa7b35ba54234a3597fc2e892d6eee636a689c62f",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
       "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
     },
-    "review": "Released 0.1.26 reviewed AMOS path declaration adoption. Re-emitted native and generic helpers are byte-identical to the previously reviewed release; prior adoption records preserved."
+    "review": "Released 0.1.27 reviewed optional bodyless GET subset adoption. Native and generic runtime helpers remain byte-identical to the previous reviewed release; archived source request-body semantics outside the selected subset are not asserted."
   },
   "adoption_history": [
     {
@@ -167,6 +167,24 @@
         "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
       },
       "review": "Released 0.1.23 security-correction adoption. Re-emitted native runtime matches the previous released helper exactly; prior adoption records preserved."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.26",
+        "source_commit": "3206891c579f4a8464c8bf137ee533bbb39a5f38",
+        "source_archive_sha256": "8800b06f0f8e95d5788b476a62fb0667eb67446c8dfc9d94e43487610ddc9250",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.26 reviewed AMOS path declaration adoption. Re-emitted native and generic helpers are byte-identical to the previously reviewed release; prior adoption records preserved."
     }
   ]
 }

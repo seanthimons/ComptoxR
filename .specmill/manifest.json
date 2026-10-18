@@ -345,6 +345,10 @@
       "hash": "6ff8f3fd6db40d3820ccf6d466a16a061a7247e869fc7c546360d2403541c140",
       "operations": "chemi-resolver-prod-rebuild GET /api/resolver/ghs-list"
     },
+    "R/chemi_resolver_ghs_list_count.R": {
+      "hash": "31aa36001c867ab25c0dceaecb635143e97dbd60a4fb5e394cd5e126900940c2",
+      "operations": "chemi-resolver-prod-full GET /api/resolver/ghs-list-count"
+    },
     "R/chemi_resolver_ghs_pcodes.R": {
       "hash": "4b13bd4ba954bfe6f771fc14556edf4a3239535be1484f48b53959351defa7ac",
       "operations": "chemi-resolver-prod-full GET /api/resolver/ghs/pcodes"
@@ -2146,7 +2150,7 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.26",
+  "toolkit_version": "0.1.27",
   "inputs": {
     "DESCRIPTION": "322f66842378549c105d35b49ead1b12637786d5d080c0b59b7c7161185fcdae",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -2276,7 +2280,7 @@
     "R/chemi_resolver_ghs_classes.R": "7019197f1bdca723e1b722c6eeb3b3b0adce254335b9d522f482f6e149a3b032",
     "R/chemi_resolver_ghs_hcodes.R": "045589d7b08b97251d30b971db336d53ec5af473b5553b2d20eea99cfc0ebcf1",
     "R/chemi_resolver_ghs_list.R": "6ff8f3fd6db40d3820ccf6d466a16a061a7247e869fc7c546360d2403541c140",
-    "R/chemi_resolver_ghs_list_count.R": "c1a78406ff2390049da674fa74e119da8183aa227deda7df2552de812f0efdea",
+    "R/chemi_resolver_ghs_list_count.R": "31aa36001c867ab25c0dceaecb635143e97dbd60a4fb5e394cd5e126900940c2",
     "R/chemi_resolver_ghs_pcodes.R": "4b13bd4ba954bfe6f771fc14556edf4a3239535be1484f48b53959351defa7ac",
     "R/chemi_resolver_hcodes.R": "2eb9152363605fda1f10f81ab9b40cd75e7bdd843a109cdc6b39afeba36b9f3c",
     "R/chemi_resolver_links.R": "29cb9318cebb866cbd1a28f89b1ce9399a8acd9841dc16aa60d7de20037ef8d8",
@@ -2492,7 +2496,7 @@
     "R/pubchem_synonyms.R": "d1aabf4b99913a1175663528576ceed7aba9cefefb0bb9f785c8ce7979840146",
     "R/roxy_apistage.R": "e69b42018b719976b8a8e06c7d7bdb3c1f73651c2038b2cc4deee809688ba788",
     "R/schema.R": "b966d2645ff5ba50545fffe64884e940e9765b19cc3b736be3e069ea49bb7a5c",
-    "R/service_endpoints.R": "8e00ed4c35f830c6efef07f1952df24bb297d5a073e02325c75b7b514800a83f",
+    "R/service_endpoints.R": "1768aa53f5f51a1ad3b13334ad94c6ed5eeb31ae053e2e3e3b97a09b02961785",
     "R/tox_connection.R": "bf409d84aa2a4ca3349fa566b24a2f1ed27bef6395cb02e0ac6ae105845d1ff5",
     "R/tox_functions.R": "394a5a9e18716dda8a438d667135fdfb39d24fc8415c582522d4ea79f2bf2658",
     "R/util_cas.R": "882d1e38b212775958ece2a7fe1b9f7ea8d09687a81ee8dd3700e787b3c1dd24",
@@ -2522,7 +2526,7 @@
     "apis/chemi-pfas_cats-prod-rebuild.yml": "7d5445f353bc7bf05f6557c88c52a5f8fbef4d0484f70bb8db26a68d42295bc8",
     "apis/chemi-predictor_models-prod-rebuild.yml": "f7f628f32c38c5968e55496524ad222b9f4a4ce909e2c9c82d93a4c9f895140d",
     "apis/chemi-rdkit-prod-rebuild.yml": "355e1d2edd354f838244c2911878f39366ed9a73087eb3f43ccfb4df6c413cf3",
-    "apis/chemi-resolver-prod-full.yml": "ccd9d3a65f66086f38a6fab47db6c80f5cc230b932edf96ac5b124c008c54780",
+    "apis/chemi-resolver-prod-full.yml": "4f05aa84449e309c26befe4afa2ab1ef6efd16e5e3f9a171c3db585c9c1ce0d2",
     "apis/chemi-resolver-prod-rebuild.yml": "6eefac05807631f8841d18bf317f445aafcef2d8d668fce9dfa0ff9f5dc3fb0f",
     "apis/chemi-safety-prod-rebuild.yml": "36af1ba2d39891d32c2a47c9ea54423089a5b00112cbe4e31ed2d2a42be75f4c",
     "apis/chemi-search-prod-rebuild.yml": "8e1cf56e1dcfca715bf54f4f97285b4ff90e24a23163ebf7610f12d82a6f039b",
@@ -2714,7 +2718,7 @@
     "man/chemi_resolver_ghs_classes.Rd": "b5b0d774e8896432a465d8a68aed44c611ac2c9454e8f69f6b0cc841b65ae9af",
     "man/chemi_resolver_ghs_hcodes.Rd": "d987eca6ff85b82e523da9021469757375f535c9b44ca8d7f139d8891b91d6f9",
     "man/chemi_resolver_ghs_list.Rd": "3161c47887d977546a49367dee6b6d1869650686b383f52b6766a448efb69c53",
-    "man/chemi_resolver_ghs_list_count.Rd": "4a6e334018c5111cdecb74b746669f5cb10dc17baaba5c0c8c11900741c722c3",
+    "man/chemi_resolver_ghs_list_count.Rd": "f186bdc42712f8d78e3e8e13814a2be1fc29a441683e644a660183c3f130a75b",
     "man/chemi_resolver_ghs_pcodes.Rd": "43962346fa81de791d4cfcb5756c2843563b92ebc46dd7491a550aaf0a0b5ef7",
     "man/chemi_resolver_hcodes.Rd": "fc63556c519148628e4f3effe52996f7e3ac94f1280c169377ba0427fb21c1c4",
     "man/chemi_resolver_links.Rd": "697c05d4e3bab69caba3775617622a29719166eacf287bf99af70e0d0de8ecb9",

@@ -209,3 +209,21 @@
   context$query <- "_static_"
   .ct_tidy(response, context, function() body)
 }
+
+# This bodyless subset retains the old static list result for received HTTP failures.
+.ct_ghs_count_response <- function(response, context, decode) {
+  if (context$status < 200L || context$status >= 300L) {
+    observe_api_responses(list(response))
+    if (context$status == 401L) decode()
+    endpoint <- "resolver/ghs-list-count"
+    cli::cli_warn("API request to {.val {endpoint}} failed for {.val {'_static_'}} with status {context$status}")
+    return(list(NULL))
+  }
+  body <- decode()
+  records <- unwrap_collection_envelope(body)
+  if (is.list(records) && is.null(names(records)) && !length(records)) {
+    endpoint <- "resolver/ghs-list-count"
+    cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+  }
+  .ct_static_list(response, context, function() body)
+}
