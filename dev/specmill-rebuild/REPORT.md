@@ -1681,3 +1681,32 @@ candidates were loaded; those three entries have no legacy helper call. It is an
 implementation aid, not a completion count. Root wrappers remain on the released
 implementation. Candidate work continues in isolated local checkouts. No
 ComptoxR push, merge or release; no write/upload production probes.
+
+### Exact upstream fix verification and released-baseline test repair
+
+PR159 exact `e77e862da77c7e2f35dc49e6085715ed6863f1bb` passes all
+180 held MOL comparisons with explicit preserve_errors controls and authentic
+httr2 received-HTTP conditions. Its superseding
+`da88138c0b2b25d7dda1a0ce45f668ba51ace20e` also passes the 180 comparisons
+through the actual private client using the updated official decoder companion.
+The private emitter takes scaffold$code directly and retains noRd, whitespace,
+protection and provenance checks. Eight independent decoder status/control cases
+and a standalone policy/context/decode case pass. Root remains v0.1.38 until the
+upstream release. The JSON/tidy MOL candidate is a parity/typed-error proof;
+restoring legacy JSON parsing is not evidence of correct text-server handling.
+
+Broader private checks exposed one normalization mock needing collected responses
+for the held MOL projection, and four stale ChET assertions. The four ChET
+assertions reproduce unchanged on released root `48c4de6e`: expected paths omit
+`/api`, and manual counts expect unwrapped data while the adopted manual pager
+preserves its envelope. Corrected those exact test expectations. The localhost
+adoption suite now passes all 20 assertions. No pager implementation changed.
+
+PR160 exact `c93a8c96f0818c8d1e74bfc5d74ac971e7f20f88` passes 42
+getsimilaritymap native-versus-frozen comparisons plus exact public formals.
+Checks include complete initial and final hook states, private NULL/flat chemical
+updates, skip ordering, partial/NULL/unknown updates, optional section and lowercase
+sort, actual body/URL/Accept, return values, warnings and early errors. A private
+native state suite replaces its old fixed-helper test fixture for verification;
+root facade remains retained. Existing supported prepare callback preserves the
+literal vector default without changes to other resolver wrapper outputs.

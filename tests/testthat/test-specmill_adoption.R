@@ -69,9 +69,9 @@ test_that("adopted decoder and paginator handle ChET responses on localhost", {
     ComptoxR.run_verbose = FALSE
   ))
   wrappers <- list(
-    "/chet/chemicals/counts" = chemi_chet_chemicals_counts,
-    "/chet/chemicals/database" = chemi_chet_chemicals_database,
-    "/chet/reaction/database" = chemi_chet_reaction_database
+    "/api/chet/chemicals/counts" = chemi_chet_chemicals_counts,
+    "/api/chet/chemicals/database" = chemi_chet_chemicals_database,
+    "/api/chet/reaction/database" = chemi_chet_reaction_database
   )
   for (path in names(wrappers)) {
     wrapper <- wrappers[[path]]
@@ -81,7 +81,7 @@ test_that("adopted decoder and paginator handle ChET responses on localhost", {
     expect_identical(vapply(calls, `[[`, character(1), "path"), rep(path, 3L))
     expect_identical(vapply(calls, function(x) x$query$page, character(1)), as.character(1:3))
     manual <- wrapper(page = 2, size = 2, all_pages = FALSE)
-    rows <- if (identical(wrapper, chemi_chet_chemicals_counts)) manual else manual[[1L]]$data
+    rows <- manual[[1L]]$data
     expect_identical(rows, list(list(id = 3L), list(id = 4L)))
   }
   for (format in c("png", "svg", "pdf")) {
