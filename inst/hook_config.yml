@@ -752,3 +752,8 @@ ct_chemical_search_equal_bulk:
 
 ct_chemical_detail_search_by_dtxcid:
   bespoke_test: "tests/testthat/test-native_failure_empty.R"
+
+chemi_resolver_lookup_bulk:
+  bespoke_test: "tests/testthat/test-chemi_resolver_chemical_resolution.R"
+  pre_request:
+    - prepare_lookup_request

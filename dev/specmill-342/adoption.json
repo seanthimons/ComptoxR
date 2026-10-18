@@ -82,9 +82,9 @@
     "base_commit": "49f60add",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.34",
-      "source_commit": "4cace56d03e34470d962a845f77d8c5ba9b9e2c8",
-      "source_archive_sha256": "132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28",
+      "version": "0.1.35",
+      "source_commit": "a4a7e5249c98e9cfe7c596f2ff995c6a00a44412",
+      "source_archive_sha256": "f63b07c8d5be06262658659135925c920311d7a2bbaacecc6c5c59ca06e23020",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "0b15af0a40579410b82e3be1599490419e7b37e19c075dfbeba6cc0a8b625d45",
       "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
     },
-    "review": "Released 0.1.34 request-count and warning policies with metadata opt-out and logical line callbacks. Adopt only the seven reviewed wrappers; credentials remain hard."
+    "review": "Released 0.1.35 deferred client inputs. Adopt the reviewed resolver lookup cleanup/body projection and response-only tidy thunk; pagers remain held."
   },
   "adoption_history": [
     {
@@ -311,6 +311,24 @@
         "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
       },
       "review": "Released 0.1.33 batch metadata opt-out support. Regenerated helper defaults remain reviewed; line and combined failure-policy wrapper adoption remains held for released PR146."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.34",
+        "source_commit": "4cace56d03e34470d962a845f77d8c5ba9b9e2c8",
+        "source_archive_sha256": "132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "0b15af0a40579410b82e3be1599490419e7b37e19c075dfbeba6cc0a8b625d45",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.34 request-count and warning policies with metadata opt-out and logical line callbacks. Adopt only the seven reviewed wrappers; credentials remain hard."
     }
   ]
 }

@@ -14,3 +14,25 @@
   if (!is.null(query) && length(query) > 0 && nrow(result) == length(query) && !"dtxsid" %in% names(result)) result <- dplyr::bind_cols(dtxsid = query, result)
   result
 }
+
+ .ct_chemi_result <- function(response, context, decode, tidy = TRUE) {
+    observe_api_responses(list(response))
+    if (context$status < 200L || context$status >= 300L) {
+        if (context$status == 401L)
+            decode()
+        cli::cli_abort("Chemi API request to {.val {context$endpoint}} failed with status {context$status}")
+    }
+    body <- .ct_response_json(response)
+    if (!length(body))
+        return(if (tidy) tibble::tibble() else list())
+    if (!tidy)
+        return(body)
+    if (!is.null(names(body)) && !is.data.frame(body)) {
+        return(safe_tidy_bind(body, names_to = "query_id"))
+    }
+    result <- safe_tidy_bind(body)
+    if (length(context$query) && nrow(result) == length(context$query) && !"dtxsid" %in% names(result)) {
+        result <- dplyr::bind_cols(dtxsid = context$query, result)
+    }
+    result
+}

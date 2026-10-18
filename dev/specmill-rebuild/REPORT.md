@@ -1409,3 +1409,32 @@ check rerun and no ComptoxR push.
 Final validated whole-client generation and official freshness pass on the adopted
 release, with only the existing retained descriptor-origin warnings. Schemas and
 the exact-search GET sibling remain unchanged.
+
+## Released deferred lookup adoption, 18 October 2026
+
+Pinned official Specmill v0.1.35 at
+`a4a7e5249c98e9cfe7c596f2ff995c6a00a44412`. Official archive checksum,
+DESCRIPTION version and final PR148 ancestry pass. Independent source archive
+SHA256: `f63b07c8d5be06262658659135925c920311d7a2bbaacecc6c5c59ca06e23020`.
+
+`chemi_resolver_lookup_bulk` now uses native generation for POST
+`/api/resolver/lookup`. Reviewed client policies preserve the initial ids guard,
+body-option capture, cleanup-only pre-request hook and complete JSON projection.
+`defer_inputs: [tidy]` and the response callback's thunk preserve response-only
+formatting evaluation. The public signature and parameter descriptions remain
+intact. The shared request helpers and archived schemas are unchanged.
+
+All56 frozen old/native full-result and exact request-projection comparisons pass
+on the released pin. Initial/blank guards, option precedence, no HTTP on invalid
+ids, transport before tidy, memoized tidy evaluation and NULL/FALSE/zero/nested
+formatting pass. All four archived production NULL-body captures replay equally;
+no new live calls were made. The native lookup suite preserves coercion, NULL
+option slots and unbatched behavior, and the shared resolver caller tests pass.
+Existing native toxprint regression, legacy test inventory, documentation
+signatures, validated whole-client generation and final official freshness pass.
+The existing obsolete helper-call suite was explicitly retired through the public
+ownership API after native handwritten coverage was selected. The usual retained
+descriptor-origin warnings remain unchanged.
+
+Fourteen pagers remain held for PR151's final integrated verification and released
+pin. No full package check rerun or ComptoxR push; migration remains incomplete.

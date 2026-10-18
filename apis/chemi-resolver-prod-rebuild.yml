@@ -349,8 +349,8 @@ operations:
   POST /api/resolver/lookup:
     name: chemi_resolver_lookup_bulk
     file: R/chemi_resolver_lookup_bulk.R
-    helper: generic_chemi_request
-    implementation: existing
+    helper: .ct_request
+    implementation: generated
     inputs:
       ids:
         type: character
@@ -375,12 +375,57 @@ operations:
         default: yes
     request:
       arguments:
-        endpoint:
-          value: resolver/lookup
-    specialization: Retain the original pre-helper NULL/empty ids guard, as.character
-      coercion, evaluation order, mandatory options with explicit NULL values, optional
-      filters/format omission, and array_payload transport. Computed helper arguments
-      remain owned by the source; the frozen calls in contracts_file verify them.
+        method:
+          value: POST
+        path:
+          value: /api/resolver/lookup
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: lookup_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: lookup_response
+    normalize_inputs:
+      ids: .ct_lookup_ids
+    docs:
+      title: Resolver Lookup (Bulk)
+      lifecycle: stable
+      return: A tibble when tidy is TRUE, otherwise the decoded JSON response.
+      examples:
+      - ids:
+        - DTXSID7020182
+        - 50-00-0
+      parameters:
+        ids: Character vector of chemical identifiers to look up. All identifiers
+          must be of the same type or type should be AnyId.
+        idsType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Fuzzy lookup setting. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+        mol: 'If TRUE, MOL is requested as a result (default: FALSE)'
+        filters: Optional filters object
+        format: 'Optional format specification. Options: UNKNOWN, SDF, SMI, MOL, CSV,
+          TSV, JSON, XLSX, PDF, HTML, XML, DOCX'
+        tidy: Logical; if TRUE (default), return a tibble. If FALSE, return a cleaned
+          list.
+      description: Performs bulk lookup of chemical identifiers via POST endpoint.
+    defer_inputs:
+    - tidy
   POST /api/resolver/resolve:
     name: chemi_resolver_resolve
     file: R/chemi_resolver_resolve.R
@@ -459,3 +504,4 @@ operations:
       generation captures only public inputs and cannot reproduce both exact hook
       states with existing bindings. No hook is added to force generation.
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml

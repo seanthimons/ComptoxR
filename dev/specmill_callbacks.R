@@ -126,3 +126,15 @@ toxprint_response <- function(operation) quote(function(response, context, decod
     context$query <- params[["query"]]
     .ct_http_policy_ct_chemical_search_equal_bulk(response, context, decode)
 })
+
+ lookup_body <- function(operation) {
+    quote(.ct_lookup_body(params))
+}
+
+ lookup_response <- function(operation) {
+    quote(function(response, context, decode) {
+        context$query <- params[["ids"]]
+        context$endpoint <- "resolver/lookup"
+        .ct_chemi_result(response, context, decode, tidy = params[["tidy"]]())
+    })
+}
