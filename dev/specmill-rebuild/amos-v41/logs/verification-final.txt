@@ -1,0 +1,72 @@
+Verified specmill 0.1.41 at /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/toolkit-library/specmill
+Source revision: 05862bee1804806cea157ff1962300d741516301
+Source archive SHA256: 70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc
+Writing 'NAMESPACE'
+ℹ Loading ComptoxR
+Writing 'chemi_amos_analytical_qc_keyset_pagination.Rd'
+Writing 'chemi_amos_analytical_qc_keyset_pagination_bulk.Rd'
+Writing 'chemi_amos_fact_sheet_keyset_pagination.Rd'
+Writing 'chemi_amos_fact_sheet_keyset_pagination_bulk.Rd'
+Writing 'chemi_amos_for_document_ids.Rd'
+Writing 'chemi_amos_method_keyset_pagination.Rd'
+Writing 'chemi_amos_method_keyset_pagination_bulk.Rd'
+Writing 'chemi_amos_product_declaration_keyset_pagination.Rd'
+Writing 'chemi_amos_product_declaration_keyset_pagination_bulk.Rd'
+Writing 'chemi_amos_retrieve_fact_sheets.Rd'
+Writing 'chemi_amos_retrieve_product_declarations.Rd'
+Writing 'chemi_amos_retrieve_safety_data_sheets.Rd'
+Writing 'chemi_amos_safety_data_sheet_keyset_pagination.Rd'
+Writing 'chemi_amos_safety_data_sheet_keyset_pagination_bulk.Rd'
+Writing 'chemi_amos_substances_for_ids.Rd'
+Writing 'chemi_chet_chemicals_counts.Rd'
+Writing 'chemi_chet_chemicals_database.Rd'
+Writing 'chemi_chet_reaction_batchsearch.Rd'
+Writing 'chemi_chet_reaction_database.Rd'
+Writing 'chemi_resolver_classyfire.Rd'
+Writing 'chemi_resolver_lookup_bulk.Rd'
+Writing 'chemi_resolver_pubchem_section.Rd'
+Writing 'chemi_resolver_safety_flags.Rd'
+Writing 'chemi_toxprints_calculate.Rd'
+Writing 'ct_chemical_search_equal_bulk.Rd'
+Starting 1 test process.
+chemi_amos_analytical_qc_batch: .........
+chemi_amos_batch: .........
+contract-chemi_amos_by_text: ..
+contract-chemi_amos_database: ..
+contract-chemi_amos_dtxsids_from_functional_use: ..
+contract-chemi_amos_find_dtxsids: ..
+contract-chemi_amos_formula: ..
+contract-chemi_amos_functional_class: ..
+contract-chemi_amos_functional_uses_for_dtxsid: ..
+contract-chemi_amos_get_classification_for_dtxsid: ..
+contract-chemi_amos_get_data_source_info: ..
+contract-chemi_amos_get_fact_sheet_editor_info: ..
+contract-chemi_amos_get_ir_spectrum: ..
+contract-chemi_amos_get_mass_spectrum: ..
+contract-chemi_amos_get_method_editor_info: ..
+contract-chemi_amos_get_ms_ready_methods: ..
+contract-chemi_amos_get_nmr_spectrum_editor_info: ..
+contract-chemi_amos_get_nmr_spectrum: ..
+contract-chemi_amos_get_pdf: ..
+contract-chemi_amos_get_product_declaration_editor_info: ..
+contract-chemi_amos_get_safety_data_sheet_editor_info: ..
+contract-chemi_amos_get_substances_for_term: ..
+contract-chemi_amos_inchikey_first_block: ..
+contract-chemi_amos_list_fact_sheet_types: ..
+contract-chemi_amos_list_functional_classes: ..
+contract-chemi_amos_record_id: ..
+contract-chemi_amos_record_type_count: ..
+contract-chemi_amos_release_notes: ..
+contract-chemi_amos_substring: ..
+contract-chemi_amos: ..
+native_amos_direct_reads: ....................................................................................................................................................................................................................................
+native_amos_dtxsids: ......
+native_amos_read: ...........................................................................................................................................
+native_amos_remaining: ..............................................................................................................
+native_amos_reviewed_paths: ............
+native_classyfire: ..............................................
+native_pagers: ..........................................................................................................................................................................................................................................
+native_service_info: ..........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+native_static_media: .......................................................................................................................................................................................................................................................................................
+
+══ DONE ════════════════════════════════════════════════════════════════════════

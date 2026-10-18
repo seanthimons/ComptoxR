@@ -19,7 +19,8 @@ owned <- function(path) {
 }
 review_files <- c('dev/specmill-rebuild/amos-reviewed-source.json',
   'dev/specmill-rebuild/chet-chemical-dl/provenance.json',
-  'dev/search-services/provenance.json')
+  'dev/search-services/provenance.json',
+  'dev/specmill-rebuild/amos-v41/provenance.json')
 reviews <- lapply(review_files[file.exists(review_files)], function(file) {
   review <- jsonlite::read_json(file)
   if (is.null(review$output)) review$output <- review$reviewed

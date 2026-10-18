@@ -1,0 +1,340 @@
+id: chemi-stdizer-unbound
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - POST /api/stdizer/groups/preflight
+  - DELETE /api/stdizer/groups/{id}
+  - PUT /api/stdizer/groups/{id}
+  - PUT /api/stdizer/groups/{id}/acl
+  - POST /api/stdizer/groups/{id}/add
+  - PATCH /api/stdizer/groups/{id}/freeze
+  - POST /api/stdizer/groups/{id}/replace
+  - POST /api/stdizer/protocol/export
+  - GET /api/stdizer/protocols
+  - POST /api/stdizer/protocols
+  - GET /api/stdizer/protocols/check
+  - DELETE /api/stdizer/protocols/{id}
+  - GET /api/stdizer/protocols/{id}
+  - PATCH /api/stdizer/protocols/{id}
+  - POST /api/stdizer/protocols/{id}
+  - PUT /api/stdizer/protocols/{id}
+  - PUT /api/stdizer/protocols/{id}/acl
+  - GET /api/stdizer/protocols/{id}/changes
+  - POST /api/stdizer/protocols/{id}/export
+  - GET /api/stdizer/protocols/{id}/issues
+  - POST /api/stdizer/records
+  - GET /api/stdizer/render
+helper: .ct_request
+documentation: yes
+operations:
+  POST /api/stdizer/groups/preflight:
+    name: chemi_stdizer_groups_preflight_post
+    file: R/chemi_stdizer_groups_preflight_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupCreatePostMultipartPreflight
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  DELETE /api/stdizer/groups/{id}:
+    name: chemi_stdizer_groups_by_id_delete
+    file: R/chemi_stdizer_groups_by_id_delete.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupDelete
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/stdizer/groups/{id}:
+    name: chemi_stdizer_groups_by_id_put
+    file: R/chemi_stdizer_groups_by_id_put.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupUpdatePut
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/stdizer/groups/{id}/acl:
+    name: chemi_stdizer_groups_by_id_acl_put
+    file: R/chemi_stdizer_groups_by_id_acl_put.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolAclUpdatePut_1
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/groups/{id}/add:
+    name: chemi_stdizer_groups_by_id_add_post
+    file: R/chemi_stdizer_groups_by_id_add_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupAddPostMultipart
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PATCH /api/stdizer/groups/{id}/freeze:
+    name: chemi_stdizer_groups_by_id_freeze_patch
+    file: R/chemi_stdizer_groups_by_id_freeze_patch.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupFreezePatch
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/groups/{id}/replace:
+    name: chemi_stdizer_groups_by_id_replace_post
+    file: R/chemi_stdizer_groups_by_id_replace_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupReplacePostMultipart
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/protocol/export:
+    name: chemi_stdizer_protocol_export_post
+    file: R/chemi_stdizer_protocol_export_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolExportPost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols:
+    name: chemi_stdizer_protocols
+    file: R/chemi_stdizer_protocols.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolsGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/protocols:
+    name: chemi_stdizer_protocols_post
+    file: R/chemi_stdizer_protocols_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolCreatePost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/check:
+    name: chemi_stdizer_protocols_check
+    file: R/chemi_stdizer_protocols_check.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolCheckGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  DELETE /api/stdizer/protocols/{id}:
+    name: chemi_stdizer_protocols_by_id_delete
+    file: R/chemi_stdizer_protocols_by_id_delete.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolDelete
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/{id}:
+    name: chemi_stdizer_protocols_by_id
+    file: R/chemi_stdizer_protocols_by_id.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PATCH /api/stdizer/protocols/{id}:
+    name: chemi_stdizer_protocols_by_id_patch
+    file: R/chemi_stdizer_protocols_by_id_patch.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolCuratePatch
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/protocols/{id}:
+    name: chemi_stdizer_protocols_by_id_post
+    file: R/chemi_stdizer_protocols_by_id_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolPost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/stdizer/protocols/{id}:
+    name: chemi_stdizer_protocols_by_id_put
+    file: R/chemi_stdizer_protocols_by_id_put.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolUpdatePut
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/stdizer/protocols/{id}/acl:
+    name: chemi_stdizer_protocols_by_id_acl_put
+    file: R/chemi_stdizer_protocols_by_id_acl_put.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolAclUpdatePut
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/{id}/changes:
+    name: chemi_stdizer_protocols_by_id_changes
+    file: R/chemi_stdizer_protocols_by_id_changes.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolChangesGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/protocols/{id}/export:
+    name: chemi_stdizer_protocols_by_id_export_post
+    file: R/chemi_stdizer_protocols_by_id_export_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolExportByIdPost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/{id}/issues:
+    name: chemi_stdizer_protocols_by_id_issues
+    file: R/chemi_stdizer_protocols_by_id_issues.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolIssuesGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/records:
+    name: chemi_stdizer_records_post_native
+    file: R/chemi_stdizer_records_post_native.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer stdizeRecordsPost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/render:
+    name: chemi_stdizer_render
+    file: R/chemi_stdizer_render.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer render
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+hook_config: inst/hook_config.yml

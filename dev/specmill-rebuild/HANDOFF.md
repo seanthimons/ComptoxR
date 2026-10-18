@@ -4,7 +4,15 @@ Updated 18 October 2026. Branch `feat/specmill-migration-pilot`, PR345.
 Inspect HEAD and working-tree status before using this checkpoint. Local commits
 are authorized; ComptoxR pushes, merges and releases remain held.
 
-## Current 465/548 checkpoint
+## Current 487/548 checkpoint
+
+Official v0.1.42 is root-adopted in its versioned private library. The 22-operation batch adds AMOS3, CheT OPTIONS2, small families2 and standardizer15. All 704 ownership hashes, unchanged identities/hashes for the prior682 outputs, all30 source validations and fresh generation pass. Package gate0/0/0 excludes tests/examples/vignettes/manual and relaxes optional Suggests. Initial focused readiness failures are preserved; affected155-assertion replay and installed-package579-assertion probe pass. No new clean full broad-suite pass is claimed. See [integration evidence](v42-22-integration/README.md).
+
+Official v43 is verified available for unbatched formatting where needed, but is not yet root-adopted. Active delegated tasks: adopt-v42-held-facades-20261018-1 and replay-pr179-round2-20261018-1. PR176 private replay has just completed; read task_status. WebTEST exports/safety ownership task failed at provider capacity without edits; root must finish its scope. PR179 revised exact1c3e8a34 is under independent replay, still unreleased. PR180 independent492-assertion proof passes, still unreleased.
+
+User supplied #352 candidate1bc3e8ebb94a11a36d5bf2360feab0704a558ebd at /tmp/ComptoxR-352. Review/integrate query=NULL SID contract and existing resolver preprocessing next. User chose this input correction; historical defer notes below are superseded. No push/PR by candidate owner. Preserve resolver availability dependency and live evidence. Do not merge its old global manifest; regenerate officially.
+
+## Historical 465/548 checkpoint
 
 Root adopts 39 further operations (14 CheT admin/auth, 12 resolver, 13 search/services). All 682 owner hashes and fresh validated official v41 generation pass; the four new suites pass 1,506 assertions. Package gate is0/0/0 with optional suggests relaxed and tests/examples/vignettes/manual excluded. Full safe run: 11,804 passing assertions,50 expected skips, zero errors/warnings, one missing CRAN-tarball guard; guard fixed and affected123-assertion replay passes. Preserve that full-run failure; do not describe it as a single clean full pass. Evidence: [39-operation integration](v41-39-integration/README.md).
 

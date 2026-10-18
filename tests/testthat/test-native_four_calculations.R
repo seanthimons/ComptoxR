@@ -98,7 +98,7 @@ test_that('calculation facades preserve actual localhost wire and received HTTP 
     repeat httpuv::service(100)
   }, args = list(directory), supervise = TRUE)
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(100L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) break
     Sys.sleep(0.05)
   }

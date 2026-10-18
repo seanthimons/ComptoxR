@@ -1,0 +1,168 @@
+Verified specmill 0.1.41 at /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/toolkit-library/specmill
+Source revision: 05862bee1804806cea157ff1962300d741516301
+Source archive SHA256: 70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc
+Schema validation
+  chemi-amos-reviewed-native.json: passed
+Selected operations (59)
+  amos-pilot: GET /api/amos/release_notes -> chemi_amos_release_notes
+  amos-pilot: GET /api/amos/get_data_source_info/ -> chemi_amos_get_data_source_info
+  amos-pilot: GET /api/amos/get_ir_spectrum/{internal_id} -> chemi_amos_get_ir_spectrum
+  amos-pilot: GET /api/amos/get_nmr_spectrum/{internal_id} -> chemi_amos_get_nmr_spectrum
+  amos-pilot: GET /api/amos/get_mass_spectrum/{internal_id} -> chemi_amos_get_mass_spectrum
+  amos-pilot: GET /api/amos/get_info_by_id/{internal_id} -> chemi_amos_get_info_by_id
+  amos-pilot: GET /api/amos/get_classification_for_dtxsid/{dtxsid} -> chemi_amos_get_classification_for_dtxsid
+  amos-pilot: GET /api/amos/search_by_text/{substr} -> chemi_amos_by_text
+  chemi-amos-prod-full: GET /api/amos/get_classification_for_dtxsid/{dtxsid} -> chemi_classyfire
+  chemi-amos-prod-full: GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type} -> chemi_amos_record_ids_for_substance
+  chemi-amos-prod-full: GET /api/amos/method_with_spectra/{search_type}/{internal_id} -> chemi_amos_method_with_spectra
+  chemi-amos-prod-full: GET /api/amos/get_pdf/{record_type}/{internal_id} -> chemi_amos_get_pdf
+  chemi-amos-prod-full: GET /api/amos/database_summary/ -> chemi_amos_database
+  chemi-amos-prod-full: GET /api/amos/dtxsids_from_functional_use/{functional_use} -> chemi_amos_dtxsids_from_functional_use
+  chemi-amos-prod-full: GET /api/amos/find_dtxsids/{internal_id} -> chemi_amos_find_dtxsids
+  chemi-amos-prod-full: GET /api/amos/formula_search/{formula} -> chemi_amos_formula
+  chemi-amos-prod-full: GET /api/amos/functional_class_search/{functional_class} -> chemi_amos_functional_class
+  chemi-amos-prod-full: GET /api/amos/functional_uses_for_dtxsid/{dtxsid} -> chemi_amos_functional_uses_for_dtxsid
+  chemi-amos-prod-full: GET /api/amos/get_fact_sheet_editor_info/{internal_id} -> chemi_amos_get_fact_sheet_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_method_editor_info/{internal_id} -> chemi_amos_get_method_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_ms_ready_methods/{inchikey} -> chemi_amos_get_ms_ready_methods
+  chemi-amos-prod-full: GET /api/amos/get_nmr_spectrum_editor_info/{internal_id} -> chemi_amos_get_nmr_spectrum_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_product_declaration_editor_info/{internal_id} -> chemi_amos_get_product_declaration_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_safety_data_sheet_editor_info/{internal_id} -> chemi_amos_get_safety_data_sheet_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_substances_for_search_term/{search_term} -> chemi_amos_get_substances_for_term
+  chemi-amos-prod-full: GET /api/amos/inchikey_first_block_search/{first_block} -> chemi_amos_inchikey_first_block
+  chemi-amos-prod-full: GET /api/amos/list_fact_sheet_types/ -> chemi_amos_list_fact_sheet_types
+  chemi-amos-prod-full: GET /api/amos/list_functional_classes -> chemi_amos_list_functional_classes
+  chemi-amos-prod-full: GET /api/amos/record_id_search/{internal_id} -> chemi_amos_record_id
+  chemi-amos-prod-full: GET /api/amos/record_type_count/{record_type} -> chemi_amos_record_type_count
+  chemi-amos-prod-full: GET /api/amos/substring_search/{substring} -> chemi_amos_substring
+  chemi-amos-prod-full: GET /api/amos/search/{dtxsid} -> chemi_amos
+  chemi-amos-prod-full: GET /api/amos/get_similar_structures/{identifier_type}/{identifier} -> chemi_amos_get_similar_structures
+  chemi-amos-prod-full: GET /api/amos/list_sources_by_record_type/{record_type} -> chemi_amos_list_sources_by_record_type
+  chemi-amos-prod-full: POST /api/amos/spectral_entropy/ -> chemi_amos_spectral_entropy
+  chemi-amos-prod-full: POST /api/amos/entropy_similarity/ -> chemi_amos_entropy_similarity
+  chemi-amos-prod-full: POST /api/amos/spectrum_count_for_methodology/ -> chemi_amos_spectrum_count_for_methodology
+  chemi-amos-prod-full: POST /api/amos/mass_range_search/ -> chemi_amos_mass_range
+  chemi-amos-prod-full: POST /api/amos/next_level_classification/ -> chemi_amos_next_level_classification
+  chemi-amos-prod-full: POST /api/amos/substances_for_classification/ -> chemi_amos_substances_for_classification
+  chemi-amos-prod-full: POST /api/amos/all_similarities_by_dtxsid/ -> chemi_amos_all_similarities
+  chemi-amos-prod-full: POST /api/amos/max_similarity_by_dtxsid/ -> chemi_amos_max_similarity
+  chemi-amos-prod-full: POST /api/amos/mass_spectrum_similarity_search/ -> chemi_amos_mass_spectrum_similarity
+  chemi-amos-prod-full: POST /api/amos/record_counts_by_dtxsid/ -> chemi_amos_record_counts
+  chemi-amos-prod-full: POST /api/amos/mass_spectra_for_substances/ -> chemi_amos_mass_spectra_for_substances
+  chemi-amos-prod-full: POST /api/amos/count_substances_in_ids/ -> chemi_amos_count_substances_in_ids
+  chemi-amos-prod-full: GET /api/amos/analytical_qc_keyset_pagination/{limit} -> chemi_amos_analytical_qc_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/analytical_qc_keyset_pagination/{limit} -> chemi_amos_analytical_qc_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/fact_sheet_keyset_pagination/{limit} -> chemi_amos_fact_sheet_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/fact_sheet_keyset_pagination/{limit} -> chemi_amos_fact_sheet_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/method_keyset_pagination/{limit} -> chemi_amos_method_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/method_keyset_pagination/{limit} -> chemi_amos_method_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/product_declaration_keyset_pagination/{limit} -> chemi_amos_product_declaration_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/product_declaration_keyset_pagination/{limit} -> chemi_amos_product_declaration_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/safety_data_sheet_keyset_pagination/{limit} -> chemi_amos_safety_data_sheet_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/safety_data_sheet_keyset_pagination/{limit} -> chemi_amos_safety_data_sheet_keyset_pagination_bulk
+  chemi-amos-direct-reads: GET /api/amos/additional_sources_for_substance/{dtxsid} -> chemi_amos_additional_sources_for_substance
+  chemi-amos-direct-reads: GET /api/amos/get_pdf_metadata/{record_type}/{internal_id} -> chemi_amos_get_pdf_metadata
+  chemi-amos-direct-reads: GET /api/amos/get_substance_file_for_record/{internal_id} -> chemi_amos_get_substance_file_for_record
+
+Excluded operations (0)
+
+Files to remove
+Server selection requires an explicit override at runtime:
+  GET /api/amos/release_notes: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_data_source_info/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_ir_spectrum/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_nmr_spectrum/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_mass_spectrum/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_info_by_id/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/search_by_text/{substr}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/method_with_spectra/{search_type}/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_pdf/{record_type}/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/database_summary/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/dtxsids_from_functional_use/{functional_use}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/find_dtxsids/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/formula_search/{formula}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/functional_class_search/{functional_class}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/functional_uses_for_dtxsid/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_fact_sheet_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_method_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_ms_ready_methods/{inchikey}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_product_declaration_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_substances_for_search_term/{search_term}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/inchikey_first_block_search/{first_block}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/list_fact_sheet_types/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/list_functional_classes: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/record_id_search/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/record_type_count/{record_type}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/substring_search/{substring}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/search/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_similar_structures/{identifier_type}/{identifier}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/list_sources_by_record_type/{record_type}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/spectral_entropy/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/entropy_similarity/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/spectrum_count_for_methodology/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/mass_range_search/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/next_level_classification/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/substances_for_classification/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/all_similarities_by_dtxsid/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/max_similarity_by_dtxsid/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/mass_spectrum_similarity_search/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/record_counts_by_dtxsid/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/mass_spectra_for_substances/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/count_substances_in_ids/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/analytical_qc_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/analytical_qc_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/fact_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/fact_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/method_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/method_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/product_declaration_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/product_declaration_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/safety_data_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/safety_data_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/additional_sources_for_substance/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_substance_file_for_record/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+
+Diagnostics
+  [review_required] chemi-amos-prod-full: POST /api/amos/dtxsids/ - Response correction requires an explicitly empty responses object
+    /home/sxthi/.cache/comptoxr-amos-v41/project/schema/chemi-amos-reviewed-native.json #/paths/~1api~1amos~1dtxsids~1/post/responses
+    Review the source and configuration at this location; this diagnostic does not establish schema validity.
+[[1]]
+[[1]]$id
+[1] "chemi-amos-prod-full POST /api/amos/dtxsids/"
+
+[[1]]$service
+[1] "chemi-amos-prod-full"
+
+[[1]]$key
+[1] "POST /api/amos/dtxsids/"
+
+[[1]]$source
+[1] "/home/sxthi/.cache/comptoxr-amos-v41/project/schema/chemi-amos-reviewed-native.json"
+
+[[1]]$status
+[1] "unsupported"
+
+[[1]]$reason
+[1] "Response correction requires an explicitly empty responses object"
+
+[[1]]$classification
+[1] "review_required"
+
+[[1]]$code
+[1] "response_correction"
+
+[[1]]$source_location
+[1] "#/paths/~1api~1amos~1dtxsids~1/post/responses"
+
+[[1]]$guidance
+[1] "Review the source and configuration at this location; this diagnostic does not establish schema validity."
+
+
+list()
+list()

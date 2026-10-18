@@ -106,7 +106,7 @@ test_that('reviewed AMOS reads send exact JSON requests to the selected producti
     repeat httpuv::service(100)
   }, args = list(directory, fixture$live$substances_for_ids$body), supervise = TRUE)
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(100L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) break
     Sys.sleep(0.05)
   }

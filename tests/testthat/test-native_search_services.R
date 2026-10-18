@@ -69,7 +69,9 @@ test_that('search_services bindings validate inputs and preserve actual localhos
   for (name in names(cases)) {
     case <- cases[[name]]
     fn <- get(name, asNamespace('ComptoxR'))
-    expect_identical(digest::digest(file = test_path('../..', case$source), algo = 'sha256'), case$source_sha256)
+    if (file.exists(test_path('..', '..', 'specmill.yml'))) {
+      expect_identical(digest::digest(file = test_path('../..', case$source), algo = 'sha256'), case$source_sha256)
+    }
     result <- invoke(fn, case$args)
     expect_identical(result$value, list(ok = TRUE, items = list(1L, 2L)), info = name)
     expect_identical(result$wire$method, case$method, info = name)

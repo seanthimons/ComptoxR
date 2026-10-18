@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "files": {
+    "NAMESPACE": {
+      "hash": "ac91518c47ba61365e794afed903706f3e9002a66adb8851d869a3107805e83b",
+      "operations": [
+        "chemi-stdizer-unbound DELETE /api/stdizer/groups/{id}",
+        "chemi-stdizer-unbound PUT /api/stdizer/groups/{id}",
+        "chemi-stdizer-unbound PUT /api/stdizer/groups/{id}/acl",
+        "chemi-stdizer-unbound POST /api/stdizer/protocol/export",
+        "chemi-stdizer-unbound GET /api/stdizer/protocols",
+        "chemi-stdizer-unbound POST /api/stdizer/protocols",
+        "chemi-stdizer-unbound GET /api/stdizer/protocols/check",
+        "chemi-stdizer-unbound DELETE /api/stdizer/protocols/{id}",
+        "chemi-stdizer-unbound PATCH /api/stdizer/protocols/{id}",
+        "chemi-stdizer-unbound PUT /api/stdizer/protocols/{id}",
+        "chemi-stdizer-unbound PUT /api/stdizer/protocols/{id}/acl",
+        "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/changes",
+        "chemi-stdizer-unbound POST /api/stdizer/protocols/{id}/export",
+        "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/issues",
+        "chemi-stdizer-unbound POST /api/stdizer/records",
+        "chemi-stdizer-unbound GET /api/stdizer/render",
+        "specmill authentication",
+        "specmill validation"
+      ]
+    },
+    "R/api_auth.R": {
+      "hash": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
+      "operations": "specmill authentication"
+    },
+    "R/api_validation.R": {
+      "hash": "352228ccc06493822652fc694d772b387f38852449b224feee3312e446116e21",
+      "operations": "specmill validation"
+    },
+    "R/chemi_stdizer_groups_by_id_acl_put.R": {
+      "hash": "269a594c86ceebf114cb483356007638be6d68b74f8a63440f26e862a1d11a5c",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/groups/{id}/acl"
+    },
+    "R/chemi_stdizer_groups_by_id_delete.R": {
+      "hash": "1561944216b2adde20dfee727c68eb3ecdd74db6a682fc82fba3a25b2d157c41",
+      "operations": "chemi-stdizer-unbound DELETE /api/stdizer/groups/{id}"
+    },
+    "R/chemi_stdizer_groups_by_id_put.R": {
+      "hash": "3a48cc85c691163b22ec7c4956b9948d68d268260972c3f71ecbae407cfc7c9b",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/groups/{id}"
+    },
+    "R/chemi_stdizer_protocol_export_post.R": {
+      "hash": "95ed1842d9215b062fdffe46d731d874205f9d2a21ad4d1970af28f53bfab2fd",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/protocol/export"
+    },
+    "R/chemi_stdizer_protocols.R": {
+      "hash": "a85a0b9a5bcb0711deb306b4b4a72154207c058d3233253c15954a5f1603b9f3",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols"
+    },
+    "R/chemi_stdizer_protocols_by_id_acl_put.R": {
+      "hash": "b84d0f863492f9b741d85d421d2304bd15924b566d587b2dd8781c503fc4c9f1",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/protocols/{id}/acl"
+    },
+    "R/chemi_stdizer_protocols_by_id_changes.R": {
+      "hash": "2c92f3f26e682abf18c91b2317e762c46485bdbc435668c8afe99f17cc69e095",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/changes"
+    },
+    "R/chemi_stdizer_protocols_by_id_delete.R": {
+      "hash": "432b0b75218c85c21f0b17505bae4a9abc0490bdc4e4f59c58e28e9aab57a33a",
+      "operations": "chemi-stdizer-unbound DELETE /api/stdizer/protocols/{id}"
+    },
+    "R/chemi_stdizer_protocols_by_id_export_post.R": {
+      "hash": "973893e69cde32d86521f3aeae46f6086d0b1c0e47dda87ed73bbe80e20a7418",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/protocols/{id}/export"
+    },
+    "R/chemi_stdizer_protocols_by_id_issues.R": {
+      "hash": "4eded62e01a1dbddab32ad918f535ba66c69bf992ea860a23852bf57e22ddb65",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/issues"
+    },
+    "R/chemi_stdizer_protocols_by_id_patch.R": {
+      "hash": "2e0ad0179f82449612e1fc9fa95962d690ff92bbb0ce40c3240c804db794d55d",
+      "operations": "chemi-stdizer-unbound PATCH /api/stdizer/protocols/{id}"
+    },
+    "R/chemi_stdizer_protocols_by_id_put.R": {
+      "hash": "b156a53fdb908cbfa5067b740103c0df647f40d229eb5a10b2727f81372d66c6",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/protocols/{id}"
+    },
+    "R/chemi_stdizer_protocols_check.R": {
+      "hash": "9c29ce1ddf164de32062e6ff3598bf3e8c5c0835a9287c690554a074b21d725c",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/check"
+    },
+    "R/chemi_stdizer_protocols_post.R": {
+      "hash": "d76a6a43aab61b3531c17be9f0a357d03848cad308828746fb46f8c7dbe05ad3",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/protocols"
+    },
+    "R/chemi_stdizer_records_post_native.R": {
+      "hash": "b60f4eaa7dbb9cdf8826c73c2cf36a65457d32b57abe643e55a11279726090e8",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/records"
+    },
+    "R/chemi_stdizer_render.R": {
+      "hash": "9cfd039e397d15fc3f6e20ed0162872d4001cfd9a8efcf9334c9b612ef8961ac",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/render"
+    },
+    "man/api_token.Rd": {
+      "hash": "dd649257b1016e3ef31a27d8bb9b2c7c95d1ee69f3b383f798d6735ed06dd883",
+      "operations": "specmill authentication"
+    },
+    "man/chemi_stdizer_groups_by_id_acl_put.Rd": {
+      "hash": "57a46a0d74ed92802fe9d108da697a83114086758a4f1aad5e8776da7b05e633",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/groups/{id}/acl"
+    },
+    "man/chemi_stdizer_groups_by_id_delete.Rd": {
+      "hash": "2f8ea8bc12208c29f7f3c86d6cc0c69c2a336e15b1c9566c12c2934466b24c26",
+      "operations": "chemi-stdizer-unbound DELETE /api/stdizer/groups/{id}"
+    },
+    "man/chemi_stdizer_groups_by_id_put.Rd": {
+      "hash": "317fcbdd7984c4d3ae009e7f271b7a9d8863cc59c81cdf7e8785e028ca4cd14d",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/groups/{id}"
+    },
+    "man/chemi_stdizer_protocol_export_post.Rd": {
+      "hash": "a4688cebe275cfcc55498ad72a71b0711d36ae3df172e503a5acdd15403ba4ba",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/protocol/export"
+    },
+    "man/chemi_stdizer_protocols.Rd": {
+      "hash": "5f1153bb9b9f3347af91d38341fbbf276cebc253ccaf7baf33e227a730f5bbe9",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols"
+    },
+    "man/chemi_stdizer_protocols_by_id_acl_put.Rd": {
+      "hash": "ebc05551f0a007ba1ebca6ce8c85b2ec96eb62d169163acaceb994e86c65fafe",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/protocols/{id}/acl"
+    },
+    "man/chemi_stdizer_protocols_by_id_changes.Rd": {
+      "hash": "d70b7be1ce7e2b89aee3d5749f6c4d740ea1f19ac9e82bacf0de14b91c7c55ce",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/changes"
+    },
+    "man/chemi_stdizer_protocols_by_id_delete.Rd": {
+      "hash": "a120e0cda973f842efc13d8b9c8499e4cfbdf114b9fb34aa783effed75a27212",
+      "operations": "chemi-stdizer-unbound DELETE /api/stdizer/protocols/{id}"
+    },
+    "man/chemi_stdizer_protocols_by_id_export_post.Rd": {
+      "hash": "363ac9bd9c5500d81f5f897b9067194b86ae102941894b0750763946664e9f20",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/protocols/{id}/export"
+    },
+    "man/chemi_stdizer_protocols_by_id_issues.Rd": {
+      "hash": "21e92c64f258907c60ec40502532574f23184820f3317c4646e95e587b8367dc",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/issues"
+    },
+    "man/chemi_stdizer_protocols_by_id_patch.Rd": {
+      "hash": "b4947beb5a1f6679dfb04bc53267ba7e15fbc9cc99dcc0b3dec62e8f685ccdaa",
+      "operations": "chemi-stdizer-unbound PATCH /api/stdizer/protocols/{id}"
+    },
+    "man/chemi_stdizer_protocols_by_id_put.Rd": {
+      "hash": "0c015b4d2bbfe75e8a7c95fc2304f2044c213e874f42bea91385232d54fa40b5",
+      "operations": "chemi-stdizer-unbound PUT /api/stdizer/protocols/{id}"
+    },
+    "man/chemi_stdizer_protocols_check.Rd": {
+      "hash": "196705ce0fbeb44f6b7e493d73c6699f8034447c009da97ff3459f3cc4119a7d",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/check"
+    },
+    "man/chemi_stdizer_protocols_post.Rd": {
+      "hash": "5acfd1007ca32aed8f8cf8c3c5ed7beec8eee41c9e36a5efc55f18687317e364",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/protocols"
+    },
+    "man/chemi_stdizer_records_post_native.Rd": {
+      "hash": "a8f40b814435f7e918b770553a460c6889219326d818f34b12f9cb5c4a22a150",
+      "operations": "chemi-stdizer-unbound POST /api/stdizer/records"
+    },
+    "man/chemi_stdizer_render.Rd": {
+      "hash": "e789124941494a8ea23de3b2d30c4347c387b57999e4eb924a1b59f9d118cf6a",
+      "operations": "chemi-stdizer-unbound GET /api/stdizer/render"
+    },
+    "man/set_api_token.Rd": {
+      "hash": "273799f43da33a4e86255f19d30f281d9703be8044fad6df58a576b374fbc099",
+      "operations": "specmill authentication"
+    }
+  },
+  "toolkit_version": "0.1.41",
+  "inputs": {
+    "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
+    "NAMESPACE": "ac91518c47ba61365e794afed903706f3e9002a66adb8851d869a3107805e83b",
+    "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
+    "R/api_validation.R": "352228ccc06493822652fc694d772b387f38852449b224feee3312e446116e21",
+    "R/chemi_stdizer_groups_by_id_acl_put.R": "269a594c86ceebf114cb483356007638be6d68b74f8a63440f26e862a1d11a5c",
+    "R/chemi_stdizer_groups_by_id_delete.R": "1561944216b2adde20dfee727c68eb3ecdd74db6a682fc82fba3a25b2d157c41",
+    "R/chemi_stdizer_groups_by_id_put.R": "3a48cc85c691163b22ec7c4956b9948d68d268260972c3f71ecbae407cfc7c9b",
+    "R/chemi_stdizer_protocol_export_post.R": "95ed1842d9215b062fdffe46d731d874205f9d2a21ad4d1970af28f53bfab2fd",
+    "R/chemi_stdizer_protocols.R": "a85a0b9a5bcb0711deb306b4b4a72154207c058d3233253c15954a5f1603b9f3",
+    "R/chemi_stdizer_protocols_by_id_acl_put.R": "b84d0f863492f9b741d85d421d2304bd15924b566d587b2dd8781c503fc4c9f1",
+    "R/chemi_stdizer_protocols_by_id_changes.R": "2c92f3f26e682abf18c91b2317e762c46485bdbc435668c8afe99f17cc69e095",
+    "R/chemi_stdizer_protocols_by_id_delete.R": "432b0b75218c85c21f0b17505bae4a9abc0490bdc4e4f59c58e28e9aab57a33a",
+    "R/chemi_stdizer_protocols_by_id_export_post.R": "973893e69cde32d86521f3aeae46f6086d0b1c0e47dda87ed73bbe80e20a7418",
+    "R/chemi_stdizer_protocols_by_id_issues.R": "4eded62e01a1dbddab32ad918f535ba66c69bf992ea860a23852bf57e22ddb65",
+    "R/chemi_stdizer_protocols_by_id_patch.R": "2e0ad0179f82449612e1fc9fa95962d690ff92bbb0ce40c3240c804db794d55d",
+    "R/chemi_stdizer_protocols_by_id_put.R": "b156a53fdb908cbfa5067b740103c0df647f40d229eb5a10b2727f81372d66c6",
+    "R/chemi_stdizer_protocols_check.R": "9c29ce1ddf164de32062e6ff3598bf3e8c5c0835a9287c690554a074b21d725c",
+    "R/chemi_stdizer_protocols_post.R": "d76a6a43aab61b3531c17be9f0a357d03848cad308828746fb46f8c7dbe05ad3",
+    "R/chemi_stdizer_records_post_native.R": "b60f4eaa7dbb9cdf8826c73c2cf36a65457d32b57abe643e55a11279726090e8",
+    "R/chemi_stdizer_render.R": "9cfd039e397d15fc3f6e20ed0162872d4001cfd9a8efcf9334c9b612ef8961ac",
+    "R/service_endpoints.R": "d6a87e9cab5a9cf7f85e081e5742866a668acc5b3f207997843a6551be15d620",
+    "R/z_specmill_request.R": "493ba93c877d9c4b782761dc0be61f9995514f239164f15d7ecfb2466e3c1db2",
+    "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
+    "apis/chemi-stdizer-unbound.yml": "cdc43b8f1b314d4a183b21728f7757ad3dc6b7b74f2025e8b874ed3ffb85dd9c",
+    "inst/hook_config.yml": "7f0792302e7e91b5c73c795c9539c61f9f3c0243b8f62cb0584a8b90ffe4c1ba",
+    "man/api_token.Rd": "dd649257b1016e3ef31a27d8bb9b2c7c95d1ee69f3b383f798d6735ed06dd883",
+    "man/chemi_stdizer_groups_by_id_acl_put.Rd": "57a46a0d74ed92802fe9d108da697a83114086758a4f1aad5e8776da7b05e633",
+    "man/chemi_stdizer_groups_by_id_delete.Rd": "2f8ea8bc12208c29f7f3c86d6cc0c69c2a336e15b1c9566c12c2934466b24c26",
+    "man/chemi_stdizer_groups_by_id_put.Rd": "317fcbdd7984c4d3ae009e7f271b7a9d8863cc59c81cdf7e8785e028ca4cd14d",
+    "man/chemi_stdizer_protocol_export_post.Rd": "a4688cebe275cfcc55498ad72a71b0711d36ae3df172e503a5acdd15403ba4ba",
+    "man/chemi_stdizer_protocols.Rd": "5f1153bb9b9f3347af91d38341fbbf276cebc253ccaf7baf33e227a730f5bbe9",
+    "man/chemi_stdizer_protocols_by_id_acl_put.Rd": "ebc05551f0a007ba1ebca6ce8c85b2ec96eb62d169163acaceb994e86c65fafe",
+    "man/chemi_stdizer_protocols_by_id_changes.Rd": "d70b7be1ce7e2b89aee3d5749f6c4d740ea1f19ac9e82bacf0de14b91c7c55ce",
+    "man/chemi_stdizer_protocols_by_id_delete.Rd": "a120e0cda973f842efc13d8b9c8499e4cfbdf114b9fb34aa783effed75a27212",
+    "man/chemi_stdizer_protocols_by_id_export_post.Rd": "363ac9bd9c5500d81f5f897b9067194b86ae102941894b0750763946664e9f20",
+    "man/chemi_stdizer_protocols_by_id_issues.Rd": "21e92c64f258907c60ec40502532574f23184820f3317c4646e95e587b8367dc",
+    "man/chemi_stdizer_protocols_by_id_patch.Rd": "b4947beb5a1f6679dfb04bc53267ba7e15fbc9cc99dcc0b3dec62e8f685ccdaa",
+    "man/chemi_stdizer_protocols_by_id_put.Rd": "0c015b4d2bbfe75e8a7c95fc2304f2044c213e874f42bea91385232d54fa40b5",
+    "man/chemi_stdizer_protocols_check.Rd": "196705ce0fbeb44f6b7e493d73c6699f8034447c009da97ff3459f3cc4119a7d",
+    "man/chemi_stdizer_protocols_post.Rd": "5acfd1007ca32aed8f8cf8c3c5ed7beec8eee41c9e36a5efc55f18687317e364",
+    "man/chemi_stdizer_records_post_native.Rd": "a8f40b814435f7e918b770553a460c6889219326d818f34b12f9cb5c4a22a150",
+    "man/chemi_stdizer_render.Rd": "e789124941494a8ea23de3b2d30c4347c387b57999e4eb924a1b59f9d118cf6a",
+    "man/set_api_token.Rd": "273799f43da33a4e86255f19d30f281d9703be8044fad6df58a576b374fbc099",
+    "schema/chemi-stdizer-prod.json": "ba0b33f97722645015547f86999a67a71bdaec3c97e6fedf2631dd6c90aeb93f",
+    "specmill.yml": "cc8de338a9c5d471d2f7d3c5852ee7131c97df4928cce43b4c2d68a82c1adcd6"
+  },
+  "callbacks": "28df520b992b4a4bead0a7a527ee2f4fc64fbcc2892ab364f676113761cbeefc",
+  "formatter": {
+    "name": "air",
+    "version": "0.11.0"
+  }
+}

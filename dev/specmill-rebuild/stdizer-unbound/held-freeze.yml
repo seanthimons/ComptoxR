@@ -1,0 +1,25 @@
+id: stdizer-held-freeze
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - PATCH /api/stdizer/groups/{id}/freeze
+helper: .ct_request
+documentation: yes
+operations:
+  PATCH /api/stdizer/groups/{id}/freeze:
+    name: chemi_stdizer_groups_by_id_freeze_patch
+    file: R/chemi_stdizer_groups_by_id_freeze_patch.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer groupFreezePatch
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+hook_config: inst/hook_config.yml

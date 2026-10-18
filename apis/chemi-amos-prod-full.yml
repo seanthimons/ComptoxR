@@ -1,7 +1,7 @@
 id: chemi-amos-prod-full
 schemas:
   files:
-  - schema/chemi-amos-prod.json
+  - schema/chemi-amos-reviewed-native.json
 selection:
   include:
   - GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}
@@ -1440,11 +1440,6 @@ operations:
       examples:
       - dtxsids:
         - DTXSID7020182
-    response_correction:
-      status: '200'
-      media_type: application/json
-      description: Substance information for supplied DTXSIDs.
-      reason: Reviewed staging response and captured production 200 JSON.
   POST /api/amos/record_counts_by_dtxsid/:
     name: chemi_amos_record_counts
     file: R/chemi_amos_record_counts.R

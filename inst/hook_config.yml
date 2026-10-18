@@ -1300,3 +1300,84 @@ chemi_resolver_render:
 
 chemi_resolver_universalharvest_cart:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_amos_additional_sources_for_substance:
+  bespoke_test: "tests/testthat/test-native_amos_direct_reads.R"
+
+chemi_amos_get_pdf_metadata:
+  bespoke_test: "tests/testthat/test-native_amos_direct_reads.R"
+
+chemi_amos_get_substance_file_for_record:
+  bespoke_test: "tests/testthat/test-native_amos_direct_reads.R"
+
+chemi_predictor_models_model_file:
+  bespoke_test: tests/testthat/test-native_small_families.R
+
+chemi_webtest_report:
+  bespoke_test: tests/testthat/test-native_small_families.R
+
+chemi_stdizer_groups_by_id_delete:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_groups_by_id_put:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_groups_by_id_acl_put:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocol_export_post:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_post:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_check:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_delete:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_patch:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_put:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_acl_put:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_changes:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_export_post:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_protocols_by_id_issues:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_stdizer_render:
+  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
+  reason: Native standardizer route with real localhost wire and error coverage.
+
+chemi_chet_reaction_batchsearch_options:
+  bespoke_test: tests/testthat/test-native_chet_options.R
+
+chemi_chet_reaction_map_dl_options:
+  bespoke_test: tests/testthat/test-native_chet_options.R

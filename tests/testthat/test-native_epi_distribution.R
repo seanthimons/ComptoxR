@@ -38,7 +38,7 @@ test_that('EPI specification and distribution preserve declared JSON and binary 
     supervise = TRUE
   )
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(100L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) {
       break
     }

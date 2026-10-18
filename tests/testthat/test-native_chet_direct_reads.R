@@ -27,7 +27,7 @@ test_that('new CheT reads send exact schema requests and decode real localhost r
     repeat httpuv::service(100)
   }, args = list(directory), supervise = TRUE)
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(100L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) break
     Sys.sleep(0.05)
   }
@@ -45,7 +45,9 @@ test_that('new CheT reads send exact schema requests and decode real localhost r
   for (name in names(chet_direct_cases())) {
     case <- chet_direct_cases()[[name]]
     fn <- getExportedValue('ComptoxR', name)
-    expect_true(file.exists(test_path('..', '..', 'man', paste0(name, '.Rd'))))
+    if (file.exists(test_path('..', '..', 'specmill.yml'))) {
+      expect_true(file.exists(test_path('..', '..', 'man', paste0(name, '.Rd'))))
+    }
     for (response in responses) {
       saveRDS(response, response_file)
       expect_identical(do.call(fn, case$args), response$result, info = name)

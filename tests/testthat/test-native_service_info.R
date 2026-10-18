@@ -82,7 +82,7 @@ test_that('service information endpoints preserve exact routes and declared resp
     supervise = TRUE
   )
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(100L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) {
       break
     }

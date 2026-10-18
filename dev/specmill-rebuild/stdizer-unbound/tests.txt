@@ -1,0 +1,16 @@
+Verified specmill 0.1.41 at /home/sxthi/.t3/worktrees/ComptoxR/t3-89e78e8b/dev/specmill-pilot/artifacts/toolkit-library/specmill
+Source revision: 05862bee1804806cea157ff1962300d741516301
+Source archive SHA256: 70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc
+Starting 1 test process.
+chemi_stdizer_bulk: .......
+chemi_stdizer_groups_bulk: .........
+chemi_stdizer_groups_recursive: ..........
+contract-chemi_stdizer_groups_by_id: ..
+contract-chemi_stdizer_groups: ..
+contract-chemi_stdizer_operations: ..
+contract-chemi_stdizer_records: ..
+contract-chemi_stdizer_workflows: ..
+contract-chemi_stdizer: ..
+native_stdizer_unbound: ..................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -57,6 +57,10 @@ services:
 - apis/chemi-search-services-native.yml
 - apis/chemi-chet-admin-auth.yml
 - apis/chemi-resolver-extra.yml
+- apis/chemi-amos-direct-reads.yml
+- apis/chemi-small-families.yml
+- apis/chemi-stdizer-unbound.yml
+- apis/chemi-chet-options.yml
 callback_files:
 - dev/specmill_callbacks.R
 - dev/specmill-rebuild/remaining-facades/callbacks.R

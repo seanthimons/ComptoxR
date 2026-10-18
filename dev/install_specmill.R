@@ -1,9 +1,10 @@
 # Development-only toolkit; use committed source, never the source working tree.
 verify_specmill <- function(
-  lib = 'dev/specmill-pilot/artifacts/toolkit-library',
+  lib = NULL,
   lock = 'dev/specmill-lock.json'
 ) {
   pin <- jsonlite::read_json(lock)
+  if (is.null(lib)) lib <- file.path('dev/specmill-pilot/artifacts/toolkit-library', pin$version)
   lib <- normalizePath(lib, mustWork = TRUE)
   expected <- normalizePath(file.path(lib, pin$package), mustWork = TRUE)
   namespace <- loadNamespace(pin$package, lib.loc = lib)
@@ -33,11 +34,12 @@ verify_specmill <- function(
 }
 
 install_specmill <- function(
-  lib = 'dev/specmill-pilot/artifacts/toolkit-library',
+  lib = NULL,
   source_repo = Sys.getenv('SPECMILL_SOURCE_REPO', '../specmill'),
   lock = 'dev/specmill-lock.json'
 ) {
   pin <- jsonlite::read_json(lock)
+  if (is.null(lib)) lib <- file.path('dev/specmill-pilot/artifacts/toolkit-library', pin$version)
   if ('specmill' %in% loadedNamespaces()) {
     stop('Install specmill in a fresh R process so namespace verification is reliable.')
   }

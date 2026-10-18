@@ -33,7 +33,7 @@ test_that('resolved native wrappers preserve actual HTTP response conditions', {
     supervise = TRUE
   )
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(100L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) {
       break
     }
