@@ -82,9 +82,9 @@
     "base_commit": "49f60add",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.36",
-      "source_commit": "0e3ed64ddc48b0104c00fb541678d5f75935afe3",
-      "source_archive_sha256": "9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673",
+      "version": "0.1.37",
+      "source_commit": "ac1fa3389dbce30d22236bdf470105647fe69ca8",
+      "source_archive_sha256": "b238b68c18909484245de4dc1f475d50e548abae5574c6fb305709e9da9be536",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
       "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
     },
-    "review": "Released 0.1.36 cursor/page policies and client callback lookup. Adopt the fourteen reviewed pagers with paired generated helper and pagination companion; credentials remain hard."
+    "review": "Released 0.1.37 supports reviewed explicit retirement of already-missing owned outputs. Preserve unrelated ownership; retire only listed suites with selected native replacement coverage."
   },
   "adoption_history": [
     {
@@ -347,6 +347,24 @@
         "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
       },
       "review": "Released 0.1.35 deferred client inputs. Adopt the reviewed resolver lookup cleanup/body projection and response-only tidy thunk; pagers remain held."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.36",
+        "source_commit": "0e3ed64ddc48b0104c00fb541678d5f75935afe3",
+        "source_archive_sha256": "9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.36 cursor/page policies and client callback lookup. Adopt the fourteen reviewed pagers with paired generated helper and pagination companion; credentials remain hard."
     }
   ]
 }

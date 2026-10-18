@@ -1197,17 +1197,9 @@
       "hash": "1e5e36a85323f026972a3c7f86cd1877d8f3c7d23af58d2e4eb8317faf7af575",
       "operations": "chemi-amos-prod-full GET /api/amos/list_functional_classes"
     },
-    "tests/testthat/test-contract-chemi_amos_method_with_spectra.R": {
-      "hash": "53e032f8b5aa4feb717c8802622d069b92ca7930ba17b1a809b488d5dd85a99d",
-      "operations": "chemi-amos-prod-full GET /api/amos/method_with_spectra/{search_type}/{internal_id}"
-    },
     "tests/testthat/test-contract-chemi_amos_record_id.R": {
       "hash": "62347947f2f0ef20b4baab4dab13c5052d6c80e01cbc4a73a0cfbd352009141f",
       "operations": "chemi-amos-prod-full GET /api/amos/record_id_search/{internal_id}"
-    },
-    "tests/testthat/test-contract-chemi_amos_record_ids_for_substance.R": {
-      "hash": "7b7bdbcf7d32dfd708b5a3d3c4af53dd00cdb21b76b180cdc5723e768fbee5a0",
-      "operations": "chemi-amos-prod-full GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}"
     },
     "tests/testthat/test-contract-chemi_amos_record_type_count.R": {
       "hash": "4615b48d331fcfacf3962da569b6882adf33232c8d76f5adfd76b06cad76ed41",
@@ -1721,14 +1713,6 @@
       "hash": "6dbb20a36669775af04e87a595a22b864659dce6de472433d6e5a8b236cf58f1",
       "operations": "ctx-pilot GET /chemical/detail/search/by-dtxsid/{dtxsid}"
     },
-    "tests/testthat/test-contract-ct_chemical_detail_search_bulk.R": {
-      "hash": "669e4ffd2a028d0db9bcfbf2e40f578f2c395b20da97e54c48850d556dbdd80b",
-      "operations": "ctx-pilot POST /chemical/detail/search/by-dtxsid/"
-    },
-    "tests/testthat/test-contract-ct_chemical_detail_search_by_dtxcid_bulk.R": {
-      "hash": "ad637e9be4ebb16e7044ea8e00031b0dc6e41af165fac3677106b3fad64c0f34",
-      "operations": "ctx-chemical-prod-rebuild POST /chemical/detail/search/by-dtxcid/"
-    },
     "tests/testthat/test-contract-ct_chemical_detail_search_by_smiles.R": {
       "hash": "6c30a82a46f487981d9762af020aab45559d063ac4613b540e1ffb47762b4ff5",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/detail/search/by-smiles/"
@@ -1785,25 +1769,9 @@
       "hash": "7018f285664fbb9c3b39bbb48e331c31628affd0ea42080b190f4c020792d40b",
       "operations": "ctx-chemical-prod-full GET /chemical/file/mol/search/by-dtxcid/{dtxcid}"
     },
-    "tests/testthat/test-contract-ct_chemical_list_all.R": {
-      "hash": "918184ccd1851eba1105a8de2986eea1f925b2b9591304cf24c6a68faa7ebc5c",
-      "operations": "ctx-pilot GET /chemical/list/all"
-    },
     "tests/testthat/test-contract-ct_chemical_list_chemicals_search_by_listname.R": {
       "hash": "00ee793ee825c00f096c603b65f0bf2c6e8c7568e6812c70a52cf4a27f645eb9",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/by-listname/{list}"
-    },
-    "tests/testthat/test-contract-ct_chemical_list_chemicals_search_contain.R": {
-      "hash": "3a100d2918a159ee3b9c4b4f4feeca6ee8e4088dcec08da5789b9c5574cdb3a0",
-      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/contain/{list}/{word}"
-    },
-    "tests/testthat/test-contract-ct_chemical_list_chemicals_search_equal.R": {
-      "hash": "91f9d9e39997b979e577d84a30fc21b3189248be5f56c61eee7f6b56eab0aee5",
-      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/equal/{list}/{word}"
-    },
-    "tests/testthat/test-contract-ct_chemical_list_chemicals_search_start_with.R": {
-      "hash": "e5300aeae0bb1f3131ba4db1aced9b8ecad4e7f3b43adf4a35c1026daa38275a",
-      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/start-with/{list}/{word}"
     },
     "tests/testthat/test-contract-ct_chemical_list_search.R": {
       "hash": "8a4666170e86e253a590125e8bf8381e222bd5d0a2b52ed2ad225ec89b7e0a91",
@@ -1829,10 +1797,6 @@
       "hash": "5de70790324781449265229a2efe477bf7003d456581b88ce3165aee4b73c214",
       "operations": "ctx-chemical-prod-full GET /chemical/msready/search/by-formula/{formula}"
     },
-    "tests/testthat/test-contract-ct_chemical_msready_search_by_mass.R": {
-      "hash": "0cd04d561eff810070b9147a56bf011970fbbf154262560d20d1c9f71e5b85e2",
-      "operations": "ctx-chemical-prod-rebuild GET /chemical/msready/search/by-mass/{start}/{end}"
-    },
     "tests/testthat/test-contract-ct_chemical_msready_search_by_mass_bulk.R": {
       "hash": "dba13b51c4afd8214a47409c569ccfd399e08d089049c0f5e9964c7b5bf83940",
       "operations": "ctx-chemical-prod-rebuild POST /chemical/msready/search/by-mass/"
@@ -1849,10 +1813,6 @@
       "hash": "dfb9bdfe58518bcc1b2504feed19faf620815e143a5d6814c2d8c188cc62f396",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}"
     },
-    "tests/testthat/test-contract-ct_chemical_property_experimental_search_by_range.R": {
-      "hash": "a4a6fba488a9ccdc0468fb698db1c7f54ec240515c4582d5b7e3cc721c7db1ed",
-      "operations": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}"
-    },
     "tests/testthat/test-contract-ct_chemical_property_predicted_name.R": {
       "hash": "6d7195fc80d3df602f8b3cab689dba1033160ec6cca3bf9a4ea551ebde7cdc79",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/name"
@@ -1864,10 +1824,6 @@
     "tests/testthat/test-contract-ct_chemical_property_predicted_search_by_dtxsid.R": {
       "hash": "5a3f1c5b7df6e8854c4990dc8ec8106a77482ab33897e03781d7dada123f1fa9",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}"
-    },
-    "tests/testthat/test-contract-ct_chemical_property_predicted_search_by_range.R": {
-      "hash": "e9607945523c9acafdd72c33178c256cb53a84597d7b564ec1c253a2ca9e30d8",
-      "operations": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}"
     },
     "tests/testthat/test-contract-ct_chemical_property_summary_experimental_search.R": {
       "hash": "27c196f99c1fcae56840fee0ce322b93db5d13b1e8668cabff5d3bb4bfecbc73",
@@ -2186,7 +2142,7 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.36",
+  "toolkit_version": "0.1.37",
   "inputs": {
     "DESCRIPTION": "322f66842378549c105d35b49ead1b12637786d5d080c0b59b7c7161185fcdae",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",

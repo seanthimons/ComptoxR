@@ -1502,3 +1502,25 @@ retirement remains held for released PR153. Native401 remains hard; credential
 cases are simulated, not production401 reports. No new live calls, full package
 check rerun or ComptoxR push. Other vector/list/file contracts remain under review;
 migration is incomplete.
+
+## Released explicit ownership retirement, 18 October 2026
+
+Pinned official Specmill v0.1.37 at
+`ac1fa3389dbce30d22236bdf470105647fe69ca8`; official archive checksum passes.
+Independent source archive SHA256:
+`b238b68c18909484245de4dc1f475d50e548abae5574c6fb305709e9da9be536`.
+The shared generated helpers are unchanged.
+
+Individually selected eleven already-missing owned helper-call suites for explicit
+public-API retirement. Each wrapper has a configured, existing native replacement
+suite; the complete wrapper/path/replacement mapping is retained in
+`reviewed-test-retirements.json`. Plan is read-only, apply removes only those
+ownership records, unrelated records remain identical and a second apply is
+idempotent. No blanket cleanup or ownership inference is used. The corresponding
+normalization, list-all, additional-path/range and special mass/array suites pass,
+as do legacy test-inventory and final generated-client freshness checks. Complete
+failure-policy review remains separate from replacement test selection.
+
+All queued upstream fixes are now released. Independent vector/list/file review
+continues; this is not full migration completion. No full package check rerun,
+new production calls or ComptoxR push.

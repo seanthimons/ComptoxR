@@ -1,6 +1,6 @@
 {
   "status": "migration_failure_parity_review_in_progress",
-  "production_pin": "0.1.36",
+  "production_pin": "0.1.37",
   "batch_empty_constructor": ".ct_empty_table",
   "batch_metadata": {
     "issue": "https://github.com/seanthimons/specmill/issues/142",
@@ -249,5 +249,10 @@
         "tests/testthat/test-contract-ct_chemical_search_equal_bulk.R"
       ]
     }
+  },
+  "ownership_retirement": {
+    "status": "eleven_reviewed_missing_suites_retired",
+    "review": "dev/specmill-rebuild/reviewed-test-retirements.json",
+    "unrelated_ownership_preserved": true
   }
 }
