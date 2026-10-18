@@ -17,8 +17,23 @@ owned <- function(path) {
     digest::digest(enc2utf8(gsub('\r\n?', '\n', paste(readLines(path, warn = FALSE), collapse = '\n'))),
       algo = 'sha256', serialize = FALSE))
 }
-review_file <- 'dev/specmill-rebuild/amos-reviewed-source.json'
-review <- if (file.exists(review_file)) jsonlite::read_json(review_file) else NULL
+review_files <- c('dev/specmill-rebuild/amos-reviewed-source.json',
+  'dev/specmill-rebuild/chet-chemical-dl/provenance.json')
+reviews <- lapply(review_files[file.exists(review_files)], function(file) {
+  review <- jsonlite::read_json(file)
+  if (is.null(review$output)) review$output <- review$reviewed
+  if (is.null(review$output_sha256)) review$output_sha256 <- review$reviewed_sha256
+  if (is.list(review$derivation)) {
+    review$operations <- unlist(review$derivation$operations)
+  } else {
+    paths <- jsonlite::read_json(review$output)$paths
+    review$operations <- unlist(lapply(names(paths), function(route) {
+      paste(toupper(intersect(names(paths[[route]]), methods)), route)
+    }), use.names = FALSE)
+  }
+  review
+})
+names(reviews) <- vapply(reviews, `[[`, '', 'output')
 completed <- stats::setNames(rep(list(character()), length(schemas)), schemas)
 records <- list()
 for (file in config$services) {
@@ -36,10 +51,11 @@ for (file in config$services) {
       any(grepl(operation$name, readLines(suite, warn = FALSE), fixed = TRUE)))
     for (schema in service$schemas$files) {
       binding_schema <- schema
-      if (!is.null(review) && identical(schema, review$output)) {
+      review <- reviews[[schema]]
+      if (!is.null(review)) {
         stopifnot(identical(digest::digest(file = schema, algo = 'sha256'), review$output_sha256),
           identical(digest::digest(file = review$canonical, algo = 'sha256'), review$canonical_sha256),
-          key %in% unlist(review$derivation$operations))
+          key %in% review$operations)
         schema <- review$canonical
       }
       if (!schema %in% schemas || !key %in% keys[[schema]]) next

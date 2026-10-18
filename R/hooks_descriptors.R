@@ -840,6 +840,7 @@ format_descriptor_result <- function(data) {
     descriptors <- if (!is.null(record) && is.na(row_error)) record$descriptors else NULL
     for (j in seq_along(headers)) {
       value <- if (is.null(descriptors)) NA else descriptors[[j]]
+      if (is.null(value)) value <- NA
       columns[[10L + j]][[i]] <- value
     }
   }

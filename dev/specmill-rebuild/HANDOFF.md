@@ -4,6 +4,14 @@ Updated 18 October 2026. Branch `feat/specmill-migration-pilot`, PR345.
 Inspect HEAD and working-tree status before using this checkpoint. Local commits
 are authorized; ComptoxR pushes, merges and releases remain held.
 
+## Latest verified checkpoint
+
+The 65-operation root batch is complete: 24 management, one reviewed CheT GET download, 35 CheT extra, four calculations and safety-flags. All 648 owner hashes and fresh official generation pass; 2,654 focused assertions pass without failures/errors/warnings/skips. See [root integration evidence](v41-65-integration/README.md). The progress ledger is 426/548. Broad safe-suite and package gates below describe the earlier 361 checkpoint and need repeating after further integrations.
+
+Ready children awaiting root integration: search/services `0e68f8a5` (13), CheT admin/auth `819222cb` (14), resolver extra `0d0f7a6d` (12). Child manifests must not merge; emit root wrappers officially. New active delegated tasks cover AMOS source/remaining routes, standardizer remainder, and small residual families. All R processes must use persistent TMPDIR under `/home/sxthi/.cache`; `/tmp` tmpfs filled during an earlier build.
+
+Safety rqcodes is explicitly deferred by the user under [ComptoxR #352](https://github.com/seanthimons/ComptoxR/issues/352); keep its zero-argument signature unchanged and exclude it from completion. CheT form additionalProperties gap is [Specmill #178](https://github.com/seanthimons/specmill/issues/178). PR176 latest exact a656ce446fd2f4fe28184e3cad69da02e209ef26 fixes throttle and scalar query booleans but is unreleased; root adoption remains held. The #171 reviewed download is now root-adopted; older pending notes below are historical.
+
 ## Next steps
 
 1. Read [AGENTS.md](../../AGENTS.md), the current [progress ledger](progress.md)

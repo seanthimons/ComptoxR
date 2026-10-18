@@ -1,0 +1,606 @@
+id: chemi-chet-extra
+schemas:
+  files:
+  - schema/chemi-chet-prod.json
+selection:
+  include:
+  - POST /chemicals/chemdelete
+  - POST /chemicals/chemical_DL
+  - POST /chemicals/newchemfile
+  - POST /chemicals/newchemical
+  - POST /chemicals/template_DL
+  - POST /curators/change-password
+  - GET /curators/detail-sets
+  - POST /curators/details
+  - POST /curators/libraries
+  - GET /curators/libraries/detail-options
+  - GET /curators/libraries/{lib_id}
+  - PUT /curators/libraries/{lib_id}
+  - POST /curators/login
+  - POST /curators/logout
+  - GET /curators/units
+  - POST /curators/units
+  - GET /reaction/download_DB_backup
+  - POST /reaction/editor/check-existing
+  - POST /reaction/editor/check-existing-map
+  - GET /reaction/editor/library-details
+  - POST /reaction/editor/load-map
+  - POST /reaction/editor/load-reactions
+  - POST /reaction/editor/save-scheme
+  - GET /reaction/editor/{reaction_id}
+  - POST /reaction/editor/{reaction_id}
+  - POST /reaction/map_DL
+  - POST /reaction/mapfix/{map_id}
+  - DELETE /reaction/mappositions/{map_id}
+  - POST /reaction/newlibrary
+  - POST /reaction/newreactfile
+  - POST /reaction/newreaction
+  - POST /reaction/reaction_dl
+  - POST /reaction/reactiondelete
+  - POST /reaction/template_DL
+  - POST /reaction/visibility
+helper: .ct_request
+documentation: true
+operations:
+  POST /chemicals/chemdelete:
+    name: chemi_chet_chemicals_chemdelete
+    file: R/chemi_chet_chemicals_chemdelete.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Delete a chemical (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /chemicals/chemical_DL:
+    name: chemi_chet_chemicals_chemical_dl_post
+    file: R/chemi_chet_chemicals_chemical_dl_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Download chemical list (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /chemicals/newchemfile:
+    name: chemi_chet_chemicals_newchemfile
+    file: R/chemi_chet_chemicals_newchemfile.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Add chemicals from a file
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /chemicals/newchemical:
+    name: chemi_chet_chemicals_newchemical
+    file: R/chemi_chet_chemicals_newchemical.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Add a new chemical
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /chemicals/template_DL:
+    name: chemi_chet_chemicals_template_dl
+    file: R/chemi_chet_chemicals_template_dl.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Download chemical template
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /curators/change-password:
+    name: chemi_chet_curators_change_password
+    file: R/chemi_chet_curators_change_password.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Change the logged-in curator password
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /curators/detail-sets:
+    name: chemi_chet_curators_detail_sets
+    file: R/chemi_chet_curators_detail_sets.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: List reusable detail sets with their detail definitions
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /curators/details:
+    name: chemi_chet_curators_details
+    file: R/chemi_chet_curators_details.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Create a reusable detail definition and optionally attach it to library
+        default detail sets
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /curators/libraries:
+    name: chemi_chet_curators_libraries
+    file: R/chemi_chet_curators_libraries.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Create a reaction library from curator mode
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /curators/libraries/detail-options:
+    name: chemi_chet_curators_libraries_detail_options
+    file: R/chemi_chet_curators_libraries_detail_options.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: List deduplicated detail definitions available to curator library editor
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /curators/libraries/{lib_id}:
+    name: chemi_chet_curators_libraries_by_lib_id
+    file: R/chemi_chet_curators_libraries_by_lib_id.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Return one library and its editable details
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  PUT /curators/libraries/{lib_id}:
+    name: chemi_chet_curators_libraries_by_lib_id_update
+    file: R/chemi_chet_curators_libraries_by_lib_id_update.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Update one library and its detail definitions
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /curators/login:
+    name: chemi_chet_curators_login
+    file: R/chemi_chet_curators_login.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Login curator user
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /curators/logout:
+    name: chemi_chet_curators_logout
+    file: R/chemi_chet_curators_logout.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Logout curator user
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /curators/units:
+    name: chemi_chet_curators_units
+    file: R/chemi_chet_curators_units.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: List reusable unit definitions for curator editors
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /curators/units:
+    name: chemi_chet_curators_units_create
+    file: R/chemi_chet_curators_units_create.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Create or update a reusable unit definition
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /reaction/download_DB_backup:
+    name: chemi_chet_reaction_download_db_backup
+    file: R/chemi_chet_reaction_download_db_backup.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Download DB backup
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/editor/check-existing:
+    name: chemi_chet_reaction_editor_check_existing
+    file: R/chemi_chet_reaction_editor_check_existing.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Check whether a ChemReg canvas connection already exists in CheT
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/editor/check-existing-map:
+    name: chemi_chet_reaction_editor_check_existing_map
+    file: R/chemi_chet_reaction_editor_check_existing_map.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Check whether a set of reactions already exists as a CheT reaction map
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /reaction/editor/library-details:
+    name: chemi_chet_reaction_editor_library_details
+    file: R/chemi_chet_reaction_editor_library_details.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Return details attached to a library through detail sets for ChemReg
+        reaction editor
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/editor/load-map:
+    name: chemi_chet_reaction_editor_load_map
+    file: R/chemi_chet_reaction_editor_load_map.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Load an existing CheT reaction map into the ChemReg reaction editor
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/editor/load-reactions:
+    name: chemi_chet_reaction_editor_load_reactions
+    file: R/chemi_chet_reaction_editor_load_reactions.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Load existing CheT reactions into the ChemReg reaction editor
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/editor/save-scheme:
+    name: chemi_chet_reaction_editor_save_scheme
+    file: R/chemi_chet_reaction_editor_save_scheme.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Save a full ChemReg reaction scheme map to CheT
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /reaction/editor/{reaction_id}:
+    name: chemi_chet_reaction_editor_by_reaction_id
+    file: R/chemi_chet_reaction_editor_by_reaction_id.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Fetch curator reaction editor payload
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/editor/{reaction_id}:
+    name: chemi_chet_reaction_editor_by_reaction_id_create
+    file: R/chemi_chet_reaction_editor_by_reaction_id_create.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Save curator reaction editor changes
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/map_DL:
+    name: chemi_chet_reaction_map_dl
+    file: R/chemi_chet_reaction_map_dl.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Download map reaction list
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/mapfix/{map_id}:
+    name: chemi_chet_reaction_mapfix_by_map_id
+    file: R/chemi_chet_reaction_mapfix_by_map_id.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Store map element positions
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  DELETE /reaction/mappositions/{map_id}:
+    name: chemi_chet_reaction_mappositions_by_map_id
+    file: R/chemi_chet_reaction_mappositions_by_map_id.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Delete stored reaction-map node positions
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/newlibrary:
+    name: chemi_chet_reaction_newlibrary
+    file: R/chemi_chet_reaction_newlibrary.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Add a new reaction library
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/newreactfile:
+    name: chemi_chet_reaction_newreactfile
+    file: R/chemi_chet_reaction_newreactfile.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Add reactions from a file
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/newreaction:
+    name: chemi_chet_reaction_newreaction
+    file: R/chemi_chet_reaction_newreaction.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Add a new reaction
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/reaction_dl:
+    name: chemi_chet_reaction_reaction_dl
+    file: R/chemi_chet_reaction_reaction_dl.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Download reaction list
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/reactiondelete:
+    name: chemi_chet_reaction_reactiondelete
+    file: R/chemi_chet_reaction_reactiondelete.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Delete a reaction
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/template_DL:
+    name: chemi_chet_reaction_template_dl
+    file: R/chemi_chet_reaction_template_dl.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Download reaction template
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /reaction/visibility:
+    name: chemi_chet_reaction_visibility
+    file: R/chemi_chet_reaction_visibility.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Update curator-editable reaction visibility
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public

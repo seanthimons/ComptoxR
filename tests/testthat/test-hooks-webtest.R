@@ -1,3 +1,9 @@
+# Hook-only baseline facades; native wire and hook-state parity are tested separately.
+four_baseline <- readRDS(test_path("fixtures/native-four-calculations-contracts.rds"))
+for (name in c("chemi_webtest_predict", "chemi_webtest_predict_bulk")) {
+  assign(name, eval(four_baseline[[name]][[3L]], asNamespace("ComptoxR")))
+}
+
 webtest_prediction_result <- function(
   chemicals = list(webtest_contract_prediction())
 ) {

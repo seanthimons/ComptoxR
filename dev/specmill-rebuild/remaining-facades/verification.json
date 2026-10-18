@@ -1,0 +1,59 @@
+{
+  "base_commit": "341b8526",
+  "verification_toolkit": {
+    "version": "0.1.41",
+    "source_commit": "05862bee1804806cea157ff1962300d741516301",
+    "archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc"
+  },
+  "root_pin_unchanged": {
+    "package": "specmill",
+    "version": "0.1.40",
+    "source_commit": "8fa120e84fe8d0267c11e515e6fd1f387ff4a36f",
+    "source_archive_sha256": "e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "candidate_endpoint_delta": 1,
+  "selected_endpoint": "POST /api/resolver/safety-flags",
+  "held_exports": 5,
+  "isolated_candidate_count": {
+    "migrated": 309,
+    "total": 548
+  },
+  "tests": {
+    "passed": 574,
+    "failed": 0,
+    "warnings": 0,
+    "skipped": 0
+  },
+  "generation_validation": true,
+  "generation_diagnostics": [0, 0, 0, 0],
+  "freshness_diagnostics": [0, 0, 0, 0],
+  "freshness_actions": {
+    "unchanged": 550
+  },
+  "schema_validation_status": {
+    "invalid": 1,
+    "passed": 26
+  },
+  "ownership": {
+    "owned_files": 551,
+    "ownership_mismatches": [],
+    "held_bytes": 5,
+    "canonical_schemas": 3,
+    "candidate_hash": "e26735ec381d91f7ac23344b4104e3e06ec4fe66fe1d3b28fb4a4929ed967742",
+    "manifest": {
+      "hash": "e26735ec381d91f7ac23344b4104e3e06ec4fe66fe1d3b28fb4a4929ed967742",
+      "operations": "remaining-resolver-facade POST /api/resolver/safety-flags"
+    },
+    "protected_scope_unchanged": true
+  },
+  "native_live": {
+    "wrapper_file_sha256": "8e031e480c8a7f411dde820c19327327fe5e22a2ceb49ed0cd7c30a538d5d443",
+    "production_nonempty_flags": true,
+    "staging_nonempty_flags": true
+  },
+  "legacy_generated_tests_current": true,
+  "no_push": true,
+  "broad_package_check": "parent-owned; not rerun here"
+}

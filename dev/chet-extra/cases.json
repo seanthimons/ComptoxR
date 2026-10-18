@@ -1,0 +1,623 @@
+[
+  {
+    "key": "POST /chemicals/chemdelete",
+    "name": "chemi_chet_chemicals_chemdelete",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /chemicals/chemical_DL",
+    "name": "chemi_chet_chemicals_chemical_dl_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /chemicals/newchemfile",
+    "name": "chemi_chet_chemicals_newchemfile",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "properties": {
+              "chemfile": {
+                "format": "binary",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /chemicals/newchemical",
+    "name": "chemi_chet_chemicals_newchemical",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /chemicals/template_DL",
+    "name": "chemi_chet_chemicals_template_dl",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /curators/change-password",
+    "name": "chemi_chet_curators_change_password",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "current_password": {
+                "format": "password",
+                "type": "string"
+              },
+              "new_password": {
+                "format": "password",
+                "type": "string"
+              }
+            },
+            "required": [
+              "current_password",
+              "new_password"
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "GET /curators/detail-sets",
+    "name": "chemi_chet_curators_detail_sets",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /curators/details",
+    "name": "chemi_chet_curators_details",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /curators/libraries",
+    "name": "chemi_chet_curators_libraries",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "GET /curators/libraries/detail-options",
+    "name": "chemi_chet_curators_libraries_detail_options",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "lib_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "GET /curators/libraries/{lib_id}",
+    "name": "chemi_chet_curators_libraries_by_lib_id",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lib_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "PUT /curators/libraries/{lib_id}",
+    "name": "chemi_chet_curators_libraries_by_lib_id_update",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lib_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /curators/login",
+    "name": "chemi_chet_curators_login",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "password": {
+                "format": "password",
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "username",
+              "password"
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /curators/logout",
+    "name": "chemi_chet_curators_logout",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "GET /curators/units",
+    "name": "chemi_chet_curators_units",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /curators/units",
+    "name": "chemi_chet_curators_units_create",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "GET /reaction/download_DB_backup",
+    "name": "chemi_chet_reaction_download_db_backup",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /reaction/editor/check-existing",
+    "name": "chemi_chet_reaction_editor_check_existing",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/editor/check-existing-map",
+    "name": "chemi_chet_reaction_editor_check_existing_map",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "GET /reaction/editor/library-details",
+    "name": "chemi_chet_reaction_editor_library_details",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "lib_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "POST /reaction/editor/load-map",
+    "name": "chemi_chet_reaction_editor_load_map",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/editor/load-reactions",
+    "name": "chemi_chet_reaction_editor_load_reactions",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/editor/save-scheme",
+    "name": "chemi_chet_reaction_editor_save_scheme",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "GET /reaction/editor/{reaction_id}",
+    "name": "chemi_chet_reaction_editor_by_reaction_id",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "reaction_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "lib_id",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "POST /reaction/editor/{reaction_id}",
+    "name": "chemi_chet_reaction_editor_by_reaction_id_create",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "reaction_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/map_DL",
+    "name": "chemi_chet_reaction_map_dl",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/mapfix/{map_id}",
+    "name": "chemi_chet_reaction_mapfix_by_map_id",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "map_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "DELETE /reaction/mappositions/{map_id}",
+    "name": "chemi_chet_reaction_mappositions_by_map_id",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "map_id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "POST /reaction/newlibrary",
+    "name": "chemi_chet_reaction_newlibrary",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/newreactfile",
+    "name": "chemi_chet_reaction_newreactfile",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "properties": {
+              "reactionfile": {
+                "format": "binary",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/newreaction",
+    "name": "chemi_chet_reaction_newreaction",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/reaction_dl",
+    "name": "chemi_chet_reaction_reaction_dl",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/reactiondelete",
+    "name": "chemi_chet_reaction_reactiondelete",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/template_DL",
+    "name": "chemi_chet_reaction_template_dl",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /reaction/visibility",
+    "name": "chemi_chet_reaction_visibility",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "internal_only": {
+                "type": "boolean"
+              },
+              "reaction_id": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "reaction_id",
+              "internal_only"
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  }
+]

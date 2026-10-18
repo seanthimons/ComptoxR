@@ -1,0 +1,395 @@
+id: chemi-management
+schemas:
+  files:
+  - schema/chemi-alerts-prod.json
+  - schema/chemi-hazard-prod.json
+  - schema/chemi-toxprints-prod.json
+selection:
+  include:
+  - POST /api/alerts/export
+  - POST /api/alerts/export-append
+  - DELETE /api/alerts/groups/{id}
+  - PUT /api/alerts/groups/{id}
+  - GET /api/alerts/render
+  - GET /api/hazard/download
+  - POST /api/hazard/report/export
+  - POST /api/hazard/report/export-append
+  - POST /api/hazard/report/export2
+  - GET /api/hazard/reports
+  - POST /api/hazard/reports
+  - GET /api/hazard/reports/check
+  - DELETE /api/hazard/reports/{id}
+  - GET /api/hazard/reports/{id}
+  - PUT /api/hazard/reports/{id}
+  - PUT /api/hazard/reports/{id}/acl
+  - POST /api/hazard/reports/{id}/export
+  - DELETE /api/toxprints/assays/{id}
+  - PUT /api/toxprints/assays/{id}
+  - PUT /api/toxprints/assays/{id}/acl
+  - GET /api/toxprints/download
+  - POST /api/toxprints/export
+  - POST /api/toxprints/export_global
+  - GET /api/toxprints/render
+helper: .ct_request
+documentation: true
+operations:
+  POST /api/alerts/export:
+    name: chemi_alerts_export
+    file: R/chemi_alerts_export.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Export an alerts report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/alerts/export-append:
+    name: chemi_alerts_export_append
+    file: R/chemi_alerts_export_append.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Append alerts results to an uploaded report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  DELETE /api/alerts/groups/{id}:
+    name: chemi_alerts_groups_delete_by_id
+    file: R/chemi_alerts_groups_delete_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Delete an alerts group
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/alerts/groups/{id}:
+    name: chemi_alerts_groups_update_by_id
+    file: R/chemi_alerts_groups_update_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Update an alerts group
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/alerts/render:
+    name: chemi_alerts_render
+    file: R/chemi_alerts_render.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Render an alerts chemical or reaction
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/hazard/download:
+    name: chemi_hazard_download
+    file: R/chemi_hazard_download.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Download a hazard report file
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/hazard/report/export:
+    name: chemi_hazard_report_export
+    file: R/chemi_hazard_report_export.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Export a hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/hazard/report/export-append:
+    name: chemi_hazard_report_export_append
+    file: R/chemi_hazard_report_export_append.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Append hazard results to an uploaded report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/hazard/report/export2:
+    name: chemi_hazard_report_export2
+    file: R/chemi_hazard_report_export2.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Export a hazard report with the alternate exporter
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/hazard/reports:
+    name: chemi_hazard_reports
+    file: R/chemi_hazard_reports.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: List hazard report protocols
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/hazard/reports:
+    name: chemi_hazard_reports_create
+    file: R/chemi_hazard_reports_create.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Create a hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/hazard/reports/check:
+    name: chemi_hazard_reports_check
+    file: R/chemi_hazard_reports_check.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Check a hazard report name
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  DELETE /api/hazard/reports/{id}:
+    name: chemi_hazard_reports_delete_by_id
+    file: R/chemi_hazard_reports_delete_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Delete a hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/hazard/reports/{id}:
+    name: chemi_hazard_reports_by_id
+    file: R/chemi_hazard_reports_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Get a hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/hazard/reports/{id}:
+    name: chemi_hazard_reports_update_by_id
+    file: R/chemi_hazard_reports_update_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Update a hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/hazard/reports/{id}/acl:
+    name: chemi_hazard_reports_acl_update_by_id
+    file: R/chemi_hazard_reports_acl_update_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Update access to a hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/hazard/reports/{id}/export:
+    name: chemi_hazard_reports_export_by_id
+    file: R/chemi_hazard_reports_export_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Export a saved hazard report
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  DELETE /api/toxprints/assays/{id}:
+    name: chemi_toxprints_assays_delete_by_id
+    file: R/chemi_toxprints_assays_delete_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Delete a ToxPrints assay
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/toxprints/assays/{id}:
+    name: chemi_toxprints_assays_update_by_id
+    file: R/chemi_toxprints_assays_update_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Update a ToxPrints assay
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  PUT /api/toxprints/assays/{id}/acl:
+    name: chemi_toxprints_assays_acl_update_by_id
+    file: R/chemi_toxprints_assays_acl_update_by_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Update access to a ToxPrints assay
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/toxprints/download:
+    name: chemi_toxprints_download
+    file: R/chemi_toxprints_download.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Download a ToxPrints file
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/toxprints/export:
+    name: chemi_toxprints_export
+    file: R/chemi_toxprints_export.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Export a ToxPrints assay
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/toxprints/export_global:
+    name: chemi_toxprints_export_global
+    file: R/chemi_toxprints_export_global.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Export global ToxPrints assays
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/toxprints/render:
+    name: chemi_toxprints_render
+    file: R/chemi_toxprints_render.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Render a ToxPrints chemical
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public

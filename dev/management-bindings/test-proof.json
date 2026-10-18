@@ -1,0 +1,13 @@
+{
+  "operations": 24,
+  "localhost_only": true,
+  "tests": 1,
+  "expectations": 688,
+  "failures": 0,
+  "errors": 0,
+  "warnings": 0,
+  "scope": "24 management bindings",
+  "hooks_valid": true,
+  "bespoke_registration_valid": true,
+  "fixture_sha256": "0e39173120b5ab1dcb31c4ced4687476849838c875332a0a722a7e755bd3269f"
+}

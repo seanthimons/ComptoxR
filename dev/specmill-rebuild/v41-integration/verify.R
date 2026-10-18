@@ -4,7 +4,7 @@ verify_specmill()
 source('dev/specmill-342/emit.R')
 emit_issue342(mode = 'check')
 callbacks <- new.env(parent = baseenv())
-sys.source('dev/specmill_callbacks.R', callbacks)
+for (file in yaml::read_yaml('specmill.yml')$callback_files) sys.source(file, callbacks)
 plan <- specmill::generate_client(root = '.', config = 'specmill.yml',
   callbacks = callbacks, mode = 'check', artifacts = c('wrappers', 'tests'),
   validation = TRUE)

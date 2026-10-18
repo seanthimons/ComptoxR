@@ -1,3 +1,9 @@
+# Hook-only baseline facades; native wire and hook-state parity are tested separately.
+four_baseline <- readRDS(test_path("fixtures/native-four-calculations-contracts.rds"))
+for (name in c("chemi_mordred", "chemi_mordred_bulk")) {
+  assign(name, eval(four_baseline[[name]][[3L]], asNamespace("ComptoxR")))
+}
+
 # Keep the hook-only helper tests on frozen baseline facades. Native integration
 # and complete hook-state parity are covered by test-native_calculation.R.
 baseline_calculation <- readRDS(test_path("fixtures/native-calculation-contracts.rds"))

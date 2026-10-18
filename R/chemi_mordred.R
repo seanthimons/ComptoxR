@@ -23,15 +23,19 @@ chemi_mordred <- function(smiles, headers = NULL, inchi = NULL, output = c("wide
   if (base::isTRUE(state$skip_request)) {
     result <- state$result
   } else {
-    result <- generic_request(
-      "endpoint" = state[["request"]][["endpoint"]],
-      "method" = state[["request"]][["method"]],
-      "batch_limit" = 0,
-      "server" = state[["request"]][["server"]],
-      "auth" = FALSE,
-      "tidy" = FALSE,
-      "content_type" = state[["request"]][["content_type"]],
-      "options" = state[["request"]][["options"]]
+    result <- .ct_request(
+      "method" = "GET",
+      "path" = state[["request"]][["endpoint"]],
+      "path_params" = structure(list(), names = character(0)),
+      "query" = state[["request"]][["options"]],
+      "body" = NULL,
+      "headers" = base::list("Accept" = state[["request"]][["content_type"]]),
+      "server" = base::list("url" = state[["request"]][["server"]]),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        .ct_static_json_result(response, context, decode, state$request$endpoint)
+      },
+      "request_controls" = list(preserve_errors = TRUE)
     )
   }
   state["result"] <- base::list(result)
@@ -71,13 +75,32 @@ chemi_mordred_bulk <- function(chemicals, options = NULL, headers = NULL, inchi 
   if (base::isTRUE(state$skip_request)) {
     result <- state$result
   } else {
-    result <- generic_chemi_request(
-      "endpoint" = state[["request"]][["endpoint"]],
-      "server" = state[["request"]][["server"]],
-      "auth" = FALSE,
-      "tidy" = FALSE,
+    result <- .ct_request(
+      "method" = "POST",
+      "path" = state[["request"]][["endpoint"]],
+      "path_params" = structure(list(), names = character(0)),
+      "query" = structure(list(), names = character(0)),
       "body" = state[["request"]][["body"]],
-      "content_type" = state[["request"]][["content_type"]]
+      "headers" = base::list("Accept" = state[["request"]][["content_type"]]),
+      "server" = base::list("url" = state[["request"]][["server"]]),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        if (context$status >= 400L) {
+          decode()
+        }
+        if (
+          context$status >= 200L &&
+            context$status < 300L &&
+            grepl("^text/(csv|tab-separated-values|tsv)", state$request$content_type, ignore.case = TRUE)
+        ) {
+          observe_api_responses(list(response))
+          value <- .ct_response_delimited(response, context, decode)
+          return(if (!length(value)) list() else value)
+        }
+        context$endpoint <- state$request$endpoint
+        .ct_chemi_result(response, context, decode, tidy = FALSE)
+      },
+      "request_controls" = list(preserve_errors = TRUE)
     )
   }
   state["result"] <- base::list(result)

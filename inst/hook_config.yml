@@ -459,67 +459,85 @@ chemi_rdkit_bulk:
       body: "req_data$request$body"
 
 chemi_mordred:
-  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  bespoke_test: tests/testthat/test-native_four_calculations.R
   extra_params:
     output:
-      default: 'c("wide", "raw")'
-      type: "character"
-      description: "Output contract: validated wide tibble or raw payload"
+      default: c("wide", "raw")
+      type: character
+      description: 'Output contract: validated wide tibble or raw payload'
       order: 4
   parameter_overrides:
     smiles:
       required: true
-      description: "One SMILES string or resolvable chemical identifier"
+      description: One SMILES string or resolvable chemical identifier
       order: 1
     headers:
       default: null
-      description: "Request upstream descriptor headers"
+      description: Request upstream descriptor headers
       order: 2
     inchi:
       default: null
-      description: "Include InChI identifiers"
+      description: Include InChI identifiers
       order: 3
   pre_request:
-    - validate_descriptor_request
-    - resolve_descriptor_inputs
-    - prepare_mordred_descriptor_request
-  post_response: *descriptor_post
-  request_template: *descriptor_get_request
-
+  - validate_descriptor_request
+  - resolve_descriptor_inputs
+  - prepare_mordred_descriptor_request
+  post_response:
+  - validate_descriptor_response
+  - recover_descriptor_rows
+  - add_descriptor_provenance
+  - format_descriptor_result
+  request_template:
+    helper: .ct_request
+    post_on_skip: true
+    args:
+      method: '"GET"'
+      path: req_data$request$endpoint
+      query: req_data$request$options
 chemi_mordred_bulk:
-  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  bespoke_test: tests/testthat/test-native_four_calculations.R
   extra_params:
     headers:
-      default: "NULL"
-      type: "logical"
-      description: "Request descriptor headers"
+      default: 'NULL'
+      type: logical
+      description: Request descriptor headers
       order: 3
     inchi:
-      default: "NULL"
-      type: "logical"
-      description: "Include InChI identifiers"
+      default: 'NULL'
+      type: logical
+      description: Include InChI identifiers
       order: 4
     output:
-      default: 'c("wide", "raw")'
-      type: "character"
-      description: "Output contract: validated wide tibble or raw payload"
+      default: c("wide", "raw")
+      type: character
+      description: 'Output contract: validated wide tibble or raw payload'
       order: 5
   parameter_overrides:
     chemicals:
       required: true
-      description: "Chemical structures or resolvable identifiers"
+      description: Chemical structures or resolvable identifiers
       order: 1
     options:
       default: null
-      description: "Named list of additional dedicated Mordred options"
+      description: Named list of additional dedicated Mordred options
       order: 2
   pre_request:
-    - validate_descriptor_request
-    - resolve_descriptor_inputs
-    - prepare_mordred_descriptor_request
-  post_response: *descriptor_post
-  request_template: *descriptor_post_request
-
+  - validate_descriptor_request
+  - resolve_descriptor_inputs
+  - prepare_mordred_descriptor_request
+  post_response:
+  - validate_descriptor_response
+  - recover_descriptor_rows
+  - add_descriptor_provenance
+  - format_descriptor_result
+  request_template:
+    helper: .ct_request
+    post_on_skip: true
+    args:
+      method: '"POST"'
+      path: req_data$request$endpoint
+      body: req_data$request$body
 chemi_webtest:
   bespoke_test: "tests/testthat/test-native_calculation.R"
   extra_params:
@@ -599,12 +617,12 @@ chemi_webtest_bulk:
       body: "req_data$request$body"
 
 chemi_webtest_predict:
-  bespoke_test: "tests/testthat/test-hooks-webtest.R"
+  bespoke_test: tests/testthat/test-native_four_calculations.R
   extra_params:
     output:
-      default: 'c("wide", "raw")'
-      type: "character"
-      description: "Output contract: normalized wide tibble or raw PredictionResult"
+      default: c("wide", "raw")
+      type: character
+      description: 'Output contract: normalized wide tibble or raw PredictionResult'
       order: 5
   signature_overrides:
     endpoint:
@@ -612,32 +630,27 @@ chemi_webtest_predict:
     format:
       default: '"JSON"'
   hook_missing_params:
-    - endpoint
-  pre_request: &prediction_pre
-    - validate_webtest_prediction_request
-    - resolve_webtest_prediction_inputs
-    - prepare_webtest_prediction_request
-  post_response: &prediction_post
-    - filter_webtest_prediction_result
+  - endpoint
+  pre_request:
+  - validate_webtest_prediction_request
+  - resolve_webtest_prediction_inputs
+  - prepare_webtest_prediction_request
+  post_response:
+  - filter_webtest_prediction_result
   request_template:
-    helper: generic_request
+    helper: .ct_request
     post_on_skip: true
     args:
-      endpoint: "req_data$request$endpoint"
       method: '"GET"'
-      batch_limit: "0"
-      server: "req_data$request$server"
-      auth: "FALSE"
-      tidy: "FALSE"
-      options: "req_data$request$options"
-
+      path: req_data$request$endpoint
+      query: req_data$request$options
 chemi_webtest_predict_bulk:
-  bespoke_test: "tests/testthat/test-hooks-webtest.R"
+  bespoke_test: tests/testthat/test-native_four_calculations.R
   extra_params:
     output:
-      default: 'c("wide", "raw")'
-      type: "character"
-      description: "Output contract: normalized wide tibble or raw PredictionResult"
+      default: c("wide", "raw")
+      type: character
+      description: 'Output contract: normalized wide tibble or raw PredictionResult'
       order: 5
   parameter_overrides:
     chemicals:
@@ -650,25 +663,26 @@ chemi_webtest_predict_bulk:
     format:
       default: '"JSON"'
   signature_order:
-    - structures
-    - endpoints
-    - methods
-    - format
-    - output
+  - structures
+  - endpoints
+  - methods
+  - format
+  - output
   hook_missing_params:
-    - endpoints
-  pre_request: *prediction_pre
-  post_response: *prediction_post
+  - endpoints
+  pre_request:
+  - validate_webtest_prediction_request
+  - resolve_webtest_prediction_inputs
+  - prepare_webtest_prediction_request
+  post_response:
+  - filter_webtest_prediction_result
   request_template:
-    helper: generic_chemi_request
+    helper: .ct_request
     post_on_skip: true
     args:
-      endpoint: "req_data$request$endpoint"
-      server: "req_data$request$server"
-      auth: "FALSE"
-      tidy: "FALSE"
-      body: "req_data$request$body"
-
+      method: '"POST"'
+      path: req_data$request$endpoint
+      body: req_data$request$body
 # EPI Suite (epi_*) response shaping. epi_* wrappers return the raw list
 # (generic_request tidy = FALSE); these hooks unwrap the static-endpoint
 # envelope and give each endpoint its expected shape.
@@ -1045,3 +1059,127 @@ chemi_chet_curators_me:
 
 chemi_chet_chemicals_chemtemp:
   bespoke_test: tests/testthat/test-native_chet_direct_reads.R
+
+chemi_chet_chemicals_chemical_dl:
+  bespoke_test: tests/testthat/test-native_chet_chemical_dl.R
+chemi_alerts_export:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_alerts_export_append:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_alerts_groups_delete_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_alerts_groups_update_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_alerts_render:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_download:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_report_export:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_report_export_append:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_report_export2:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_create:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_check:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_delete_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_update_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_acl_update_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_hazard_reports_export_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_assays_delete_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_assays_update_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_assays_acl_update_by_id:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_download:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_export:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_export_global:
+  bespoke_test: tests/testthat/test-native_management.R
+chemi_toxprints_render:
+  bespoke_test: tests/testthat/test-native_management.R
+
+chemi_chet_chemicals_chemdelete:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_chemicals_chemical_dl_post:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_chemicals_newchemfile:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_chemicals_newchemical:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_chemicals_template_dl:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_change_password:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_detail_sets:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_details:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_libraries:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_libraries_detail_options:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_libraries_by_lib_id:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_libraries_by_lib_id_update:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_login:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_logout:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_units:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_curators_units_create:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_download_db_backup:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_check_existing:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_check_existing_map:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_library_details:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_load_map:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_load_reactions:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_save_scheme:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_by_reaction_id:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_editor_by_reaction_id_create:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_map_dl:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_mapfix_by_map_id:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_mappositions_by_map_id:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_newlibrary:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_newreactfile:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_newreaction:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_reaction_dl:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_reactiondelete:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_template_dl:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_chet_reaction_visibility:
+  bespoke_test: tests/testthat/test-native_chet_extra.R
+chemi_resolver_safety_flags_bulk:
+  bespoke_test: tests/testthat/test-native_remaining_facades.R

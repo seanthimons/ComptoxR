@@ -1,0 +1,28 @@
+id: chemi-chet-chemical-dl-reviewed
+schemas:
+  files:
+  - schema/chemi-chet-chemical-dl-reviewed.json
+selection:
+  include:
+  - GET /chemicals/chemical_DL
+helper: .ct_request
+documentation: yes
+operations:
+  GET /chemicals/chemical_DL:
+    name: chemi_chet_chemicals_chemical_dl
+    file: R/chemi_chet_chemicals_chemical_dl.R
+    implementation: generated
+    body_media: application/json
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Download the CheT chemical list
+      lifecycle: experimental
+      return: CSV text for text/csv responses, or raw bytes for application/octet-stream.
+      description: Required JSON object body. Use stats::setNames(list(), character()) for an empty object. GET bodies have undefined interoperability semantics in OpenAPI 3.1 and may be rejected by intermediaries.
+      tags:
+        apiStage: public
+hook_config: inst/hook_config.yml

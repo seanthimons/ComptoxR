@@ -33,14 +33,19 @@ chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format
   if (base::isTRUE(state$skip_request)) {
     result <- state$result
   } else {
-    result <- generic_request(
-      "endpoint" = state[["request"]][["endpoint"]],
+    result <- .ct_request(
       "method" = "GET",
-      "batch_limit" = 0,
-      "server" = state[["request"]][["server"]],
-      "auth" = FALSE,
-      "tidy" = FALSE,
-      "options" = state[["request"]][["options"]]
+      "path" = state[["request"]][["endpoint"]],
+      "path_params" = structure(list(), names = character(0)),
+      "query" = state[["request"]][["options"]],
+      "body" = NULL,
+      "headers" = list(Accept = "application/json"),
+      "server" = base::list("url" = state[["request"]][["server"]]),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        .ct_static_json_result(response, context, decode, state$request$endpoint)
+      },
+      "request_controls" = list(preserve_errors = TRUE)
     )
   }
   state["result"] <- base::list(result)
@@ -89,12 +94,23 @@ chemi_webtest_predict_bulk <- function(
   if (base::isTRUE(state$skip_request)) {
     result <- state$result
   } else {
-    result <- generic_chemi_request(
-      "endpoint" = state[["request"]][["endpoint"]],
-      "server" = state[["request"]][["server"]],
-      "auth" = FALSE,
-      "tidy" = FALSE,
-      "body" = state[["request"]][["body"]]
+    result <- .ct_request(
+      "method" = "POST",
+      "path" = state[["request"]][["endpoint"]],
+      "path_params" = structure(list(), names = character(0)),
+      "query" = structure(list(), names = character(0)),
+      "body" = state[["request"]][["body"]],
+      "headers" = list(Accept = "application/json"),
+      "server" = base::list("url" = state[["request"]][["server"]]),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        if (context$status >= 400L) {
+          decode()
+        }
+        context$endpoint <- "webtest/predict"
+        .ct_chemi_result(response, context, decode, tidy = FALSE)
+      },
+      "request_controls" = list(preserve_errors = TRUE)
     )
   }
   state["result"] <- base::list(result)

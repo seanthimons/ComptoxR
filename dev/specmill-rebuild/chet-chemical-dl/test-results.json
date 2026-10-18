@@ -1,0 +1,10 @@
+[
+  {
+    "test": "CheT chemical download validates before HTTP and preserves GET JSON on the wire",
+    "failed": 0,
+    "error": false,
+    "skipped": false,
+    "passed": 18,
+    "warning": 0
+  }
+]

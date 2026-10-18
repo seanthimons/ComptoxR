@@ -1,0 +1,6 @@
+{
+  "path": "tests/testthat/test-chemi_resolver_safety_flags_bulk.R",
+  "sha256": "dd01f6b82b30142e39e30af2a91a31c573200ce0986bb7ec7ba34cf92cc61552",
+  "source_commit": "c7fd7c80^",
+  "replacement": "tests/testthat/test-native_remaining_facades.R"
+}
