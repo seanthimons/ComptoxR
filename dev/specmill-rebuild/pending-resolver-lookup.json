@@ -1,0 +1,55 @@
+{
+  "status": "retained_deferred_input_capture_pending",
+  "wrapper": "chemi_resolver_lookup_bulk",
+  "operation": "POST /api/resolver/lookup",
+  "schema": "schema/chemi-resolver-prod.json",
+  "schema_sha256": "e979709d6eb80598e86fcd7dacee37b9d7a63a14f9cad9be6935bae1996f80d2",
+  "blocked_by": "https://github.com/seanthimons/specmill/issues/147",
+  "positive_comparison_cases": 56,
+  "wire_comparison": ["method", "url", "Accept", "exact JSON"],
+  "formals_preserved": true,
+  "guard_capture_parity": false,
+  "live_read_only_captures": [
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "baseline",
+      "request_sha256": "f9d4403a29d63cda605a299b914fb6c7be007e74d288a1e0f2ca6736cf8d4335",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    },
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "idsType",
+      "request_sha256": "65d521d021efab48f1490c47ffca20c2b09460195f94eccd0b565d01deb813e0",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    },
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "fuzzy",
+      "request_sha256": "40fef6cda485f56fe29172bfc2502e4dafe3efaa88e784fb85159cb4b2ff57e7",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    },
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "mol",
+      "request_sha256": "8594817b20460c53223863c1a6d1bc3473d83cfe70a74ce7fbccbfb81afbb6e0",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    }
+  ],
+  "archive": "dev/specmill-rebuild/pending-resolver-lookup.rds"
+}
