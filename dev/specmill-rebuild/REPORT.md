@@ -1560,3 +1560,37 @@ archived in pending-file-list-projections.rds/json. The two MOL routes and PDF
 facade still require separate file review. Pin37 and the eleven scoped ownership
 retirements remain complete. No new production calls or ComptoxR push; migration
 is not complete.
+
+## Independent PR155 final-format verification, 18 October 2026
+
+Verified exact unreleased Specmill `2cadcc9e2ed0e01a21d97717242215d12704b365`
+from an independent archive/private installation against the five-wrapper
+candidate frozen at `fa93f64b`. Source archive SHA256 is
+`d9211a11294b4fa3ee80478119708b20c36dce631f3d047d667471ef1a7a5ea6`.
+Operation `result_formatter` replaces only each selected archived post_combine
+formatter. Both list and image client projections retain purrr::map to preserve
+indexed conditions. The image projection's remaining lapply was independently
+reproduced as a condition-class difference for empty200JSON and corrected in the
+isolated candidate. No shared helper, client executor or generator patch.
+
+Passing proof includes320 actual localhost list cases and180 image cases,
+including final-format error classes, exact values/attributes/warnings/wire,
+list parse index/parent classes and all-three-requests-before-formatting timing.
+Successful object/array/nested HTTP fixtures now contain valid JSON, correcting
+previous over-escaping. Ten simulated native401 checks remain hard; old multi401
+parity is excluded and no production401 claim is made. Five typed formatter
+sentinels remain catchable after both requests. Public formals/defaults match;
+the shared request helper is byte-identical to root v37.
+
+The420-case collection suite, failure/empty/additional suites and final824
+normalization assertions pass. The isolated test updates remove stale numeric
+response names and supply raw response records to the five new final formatters
+in normalization mocks. Initial harness failures and the successful rerun are
+retained in the evidence. Earlier735 image value/warning/wire cases also pass.
+Final validated whole-client freshness and the34-wrapper legacy test inventory
+pass. Full configs, pure client projections, corrected tests/scripts and captured
+cases are under issue154_validation in pending-file-list-projections.rds/json.
+
+PR155: https://github.com/seanthimons/specmill/pull/155 . Root pin and all five
+wrappers remain unchanged pending a verified release. No production calls, full
+ComptoxR package check or push; migration remains incomplete.
