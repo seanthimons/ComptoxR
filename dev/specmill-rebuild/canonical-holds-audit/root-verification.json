@@ -18,6 +18,19 @@
   "hooks": 123,
   "extra_params": 34,
   "deployed_uploads": false,
-  "broad_safe_suite": "running; result will be recorded separately",
+  "broad_safe_suite": {
+    "failed": 0,
+    "warning": 0,
+    "passed": 13031,
+    "error": 0,
+    "skipped": 50,
+    "test_cases": 807,
+    "test_files": 367,
+    "specmill_version": "0.1.42",
+    "external_http_blocked": true,
+    "api_keys_blank": true,
+    "localhost_allowed": true,
+    "exit_code": 0
+  },
   "prior_broad_run": "12942 passed,50 expected skips,2 errors; corrected and retained separately"
 }

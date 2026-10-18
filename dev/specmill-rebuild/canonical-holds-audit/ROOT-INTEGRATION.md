@@ -8,7 +8,7 @@ production-current.json and production-retrieval.json record a fresh 200 downloa
 
 current-dispositions.json filters the historical 61-row audit against the adopted 499/548 ledger. It records 49 remaining identities: 32 source-contract holds, 9 release gates, 3 service-contract holds, 3 ownership-route holds, 1 combined PubChem source/release hold and1 chunking generator gap. These are unresolved; no private candidate is counted. The three additional PubChem wrappers/six operations remain outside the canonical 548 denominator.
 
-The broad safe rerun is in progress using the pinned library. Earlier full-run errors are preserved in ../v42-11-integration; no clean broad pass is claimed here until that result is added.
+The broad safe rerun passes on pinned v0.1.42: 13,031 assertions, zero failures/errors/warnings, and 50 expected skips. API keys were blank, external HTTP blocked, and localhost allowed. broad-safe-summary.json and broad-safe-tests.rds/csv/log.gz retain the complete result. Earlier full-run errors remain preserved in ../v42-11-integration. This broad test suite is separate from the restricted package gate described below.
 
 Installed-package replay passes128 assertions from the actual installed namespace, with source schemas/dev files absent. Source corrective replay132 and strict hook validation272 functions/123 hooks/34 extra parameters also pass. The earlier restricted package gate remains qualified to its recorded snapshot; the new endpoint is additionally installed/byte-compiled/loaded and exercised here.
 

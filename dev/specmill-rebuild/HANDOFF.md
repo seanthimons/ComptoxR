@@ -4,13 +4,13 @@ Updated 18 October 2026. Branch feat/specmill-migration-pilot, PR345. Local comm
 
 ## Current root state
 
-Committed checkpoint 499/548, feature 3a3fd61a and versioned-library caller fix7b0e5263. HEAD is e6cf6cd1 or later, fixing hook discovery. Root uses official Specmill 0.1.42, source b17a0856263e0179a164a9673399f221168cda6d, versioned private library dev/specmill-pilot/artifacts/toolkit-library/0.1.42. All generation is wrappers/tests scope with validationTRUE, official helper scaffold. No runtime helper/executor/generic_request patches.
+Committed checkpoint 499/548. Endpoint addition b53685bd, hook discovery e6cf6cd1, and CI/public-artifact checks a7986f98 are committed locally. Root uses official Specmill 0.1.42, source b17a0856263e0179a164a9673399f221168cda6d, versioned private library dev/specmill-pilot/artifacts/toolkit-library/0.1.42. All generation is wrappers/tests scope with validationTRUE, official helper scaffold. No runtime helper/executor/generic_request patches.
 
 Latest iteration adds reviewed standardizer POST /api/stdizer/groups/preflight from audit655886bc. Import script has ALREADY run; do not rerun it. New native R file is officially emitted, all 705 ownership hashes match and all 704 preceding owner records are unchanged. New schema/provenance/config/export/Rd/registered test are present. Current production api-docs retrieval is parsed-identical to canonical; canonical raw bytes unchanged. Public freshness/all31 source reports pass; progress and current49-identity dispositions are regenerated.
 
-Active root runs:
-- session 10885, /tmp/specmill-finish/root-stdizer-preflight-generate.R/log. Apply and public maintenance freshness complete, result canonical-holds-audit/root-fresh.rds; close/read session if needed.
-- session 38082, /tmp/specmill-finish/full-v42-12-final-tests.R/log/rds/csv. Broad safe suite explicitly uses pinned R_LIBS42, keys blank, external proxy denied, localhost allowed. This is the required new full run. Do not start another broad DB suite.
+Completed root gates:
+- Public apply and maintenance freshness completed, result canonical-holds-audit/root-fresh.rds. All 31 selected sources pass validation.
+- Final broad safe suite completed successfully: 13,031 passing assertions, 50 expected skips, zero failures/errors/warnings. Pinned R_LIBS42, keys blank, external proxy denied, localhost allowed. Full evidence canonical-holds-audit/broad-safe-tests.rds/csv/log.gz and broad-safe-summary.json. Do not repeat broad DB testing without new changes or unresolved concerns.
 - Installed package replay completed128 assertions, no failures/errors/warnings/skips. Source corrective replay132 is clean.
 - No active delegated tasks. All terminal results were read.
 
@@ -26,10 +26,9 @@ Review: Standards 0 findings; Spec 1 P2 hook-discovery finding resolved. dev/che
 
 ## Next concrete work
 
-1. Read completion of session 10885 and final broad38082. Preserve every failure. The new full run has its own filenames; do not overwrite previous failure evidence.
-2. After freshness, regenerate progress.R, expected 499/548. Build current dispositions from canonical-holds-audit/dispositions.json historical 61 rows by filtering actual migrated operation identities. Update safety render's formerly active-child row to confirmed61 hold. Expect 49 remaining. Register actual source provenance in progress alias list, already done. Do not count any private candidate.
-3. Commit the new endpoint/corrections/evidence and final broad result only with accurate qualified gates. Post per-schema fractions to PR345 after iteration closes, no push. Run current legacy inventory and strict hook CLI as needed; five workflows now derive R_LIBS from pinned version, no unversioned fallback. Public generate_specmill loads all configured callback files and forces full source validation.
-4. Continue on released upstream fixes when notified. No remaining source guessing, aliases or validation bypasses. Keep native401/config hard and explicit preserve_errors controls for complete request mappings.
+1. Continue the remaining 49 held identities when verified upstream releases or service/source evidence arrives. The current 499/548 progress and exact disposition ledger are committed. Do not adopt private candidates.
+2. The final broad result is clean and recorded, and PR345 progress comment6255254919 includes its verified totals. No push. Hook validation, retained inventory, public-boundary checks and all13 workflow YAML parses pass locally; remote CI has not run.
+3. Keep native401/config hard and explicit preserve_errors controls for complete request mappings. No source guessing, aliases or validation bypasses.
 
 ## Holds and released-only adoption
 
