@@ -1,5 +1,5 @@
 {
-  "status": "isolated_pass_release_pending",
+  "status": "released36_adopted",
   "issue": "https://github.com/seanthimons/specmill/issues/149",
   "schema": "schema/chemi-amos-prod.json",
   "wrappers": [
@@ -78,5 +78,51 @@
       "root_pin_or_wrapper_adoption": false
     },
     "credential_scope": "Simulated responses only; native credential errors stay hard, with no production401 claim."
+  },
+  "adoption": {
+    "status": "released36_adopted",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.36",
+      "source_commit": "0e3ed64ddc48b0104c00fb541678d5f75935afe3",
+      "source_archive_sha256": "9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "verification": {
+      "captured_keyset_cases": 20,
+      "options_cases": 30,
+      "keyset_failure_cases": 160,
+      "keyset_safety_cases": 40,
+      "empty_continuation_cases": 2,
+      "page_success_cases": 8,
+      "page_failure_cases": 64,
+      "keyset_examples": 10,
+      "page_examples": 4,
+      "total_cases": 338,
+      "full_attributes": true,
+      "exact_warning_strings": true,
+      "request_contracts": true,
+      "request_error_policy_honored": true,
+      "normal_callback_names": true,
+      "whole_client_validated_generation": true,
+      "final_freshness": true,
+      "schemas_unchanged": true,
+      "new_live_calls": false,
+      "root_pin_or_wrapper_adoption": true
+    },
+    "regressions": {
+      "native_pager_suite": true,
+      "lookup_list_batch_regressions": true,
+      "existing_native_pager_contracts": 5,
+      "legacy_test_inventory": 34,
+      "documentation_signatures": true,
+      "cursor_defaults_exact": true,
+      "whole_client_validated_generation": true,
+      "final_validated_freshness": true
+    },
+    "scope": "Ten keyset GET/POST wrappers and four page pagers. Complete cursor/filter/sort/manual defaults, explicit empty continuation, partial errors/warnings and metadata policies. Native401 remains hard; simulated tests only.",
+    "ownership_cleanup": "Only four existing replaced Specmill suites explicitly retired; ten old local-generator suites retired through its supported regeneration. Unrelated missing ownership remains held for released PR153.",
+    "wrappers": ["chemi_amos_analytical_qc_keyset_pagination", "chemi_amos_analytical_qc_keyset_pagination_bulk", "chemi_amos_fact_sheet_keyset_pagination", "chemi_amos_fact_sheet_keyset_pagination_bulk", "chemi_amos_method_keyset_pagination", "chemi_amos_method_keyset_pagination_bulk", "chemi_amos_product_declaration_keyset_pagination", "chemi_amos_product_declaration_keyset_pagination_bulk", "chemi_amos_safety_data_sheet_keyset_pagination", "chemi_amos_safety_data_sheet_keyset_pagination_bulk"]
   }
 }

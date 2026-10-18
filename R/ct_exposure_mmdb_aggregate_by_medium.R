@@ -70,7 +70,12 @@ ct_exposure_mmdb_aggregate_by_medium <- function(medium, pageNumber = 1L, all_pa
     "pageNumber",
     params[["pageNumber"]],
     max_pages,
-    completed = .ct_last_page
+    completed = base::get(
+      ".ct_last_page",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    )
   )
   if (base::inherits(result, "httr2_request")) {
     base::return(result)

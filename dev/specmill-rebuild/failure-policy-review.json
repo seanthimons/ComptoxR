@@ -1,6 +1,6 @@
 {
   "status": "migration_failure_parity_review_in_progress",
-  "production_pin": "0.1.35",
+  "production_pin": "0.1.36",
   "batch_empty_constructor": ".ct_empty_table",
   "batch_metadata": {
     "issue": "https://github.com/seanthimons/specmill/issues/142",
@@ -61,7 +61,7 @@
     "verification": "Actual malformed-JSON fan-out wrappers, direct decode and formatter errors, unchanged ordinary HTTP classification, normalization, Classyfire, empty failures and bodyless resolver tests pass."
   },
   "page_pagers": {
-    "status": "isolated_pass_release_pending",
+    "status": "released36_adopted",
     "pull_request": "https://github.com/seanthimons/specmill/pull/151",
     "wrappers": [
       "chemi_chet_chemicals_counts",
@@ -72,7 +72,7 @@
     "released_metadata_policy": "0.1.28",
     "gap": "Legacy httr2 request failures retain earlier successful pages; emitted page runner still defaults to hard stop. PR151 exposes an explicit partial policy for review.",
     "isolated_source": "c5df6a9f61b1bd24e8261a32cc6b93b5ca29122a",
-    "verification": "8 normal +64 failure/empty/parsing cases and final whole-client freshness pass on combined PR151/134; root wrappers remain retained.",
+    "verification": "All338 accepted comparisons pass on released36; native suite, five existing pager contracts, inventory/codoc and final freshness pass.",
     "final_head_recheck": {
       "status": "isolated_pass_release_pending",
       "source_commit": "d8ef8bab73df161c720e328ac301c0c1d7f64516",
@@ -109,6 +109,51 @@
         "root_pin_or_wrapper_adoption": false
       },
       "credential_scope": "Simulated responses only; native credential errors stay hard, with no production401 claim."
+    },
+    "adoption": {
+      "status": "released36_adopted",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.36",
+        "source_commit": "0e3ed64ddc48b0104c00fb541678d5f75935afe3",
+        "source_archive_sha256": "9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "verification": {
+        "captured_keyset_cases": 20,
+        "options_cases": 30,
+        "keyset_failure_cases": 160,
+        "keyset_safety_cases": 40,
+        "empty_continuation_cases": 2,
+        "page_success_cases": 8,
+        "page_failure_cases": 64,
+        "keyset_examples": 10,
+        "page_examples": 4,
+        "total_cases": 338,
+        "full_attributes": true,
+        "exact_warning_strings": true,
+        "request_contracts": true,
+        "request_error_policy_honored": true,
+        "normal_callback_names": true,
+        "whole_client_validated_generation": true,
+        "final_freshness": true,
+        "schemas_unchanged": true,
+        "new_live_calls": false,
+        "root_pin_or_wrapper_adoption": true
+      },
+      "regressions": {
+        "native_pager_suite": true,
+        "lookup_list_batch_regressions": true,
+        "existing_native_pager_contracts": 5,
+        "legacy_test_inventory": 34,
+        "documentation_signatures": true,
+        "cursor_defaults_exact": true,
+        "whole_client_validated_generation": true,
+        "final_validated_freshness": true
+      },
+      "scope": "Ten keyset GET/POST wrappers and four page pagers. Complete cursor/filter/sort/manual defaults, explicit empty continuation, partial errors/warnings and metadata policies. Native401 remains hard; simulated tests only.",
+      "ownership_cleanup": "Only four existing replaced Specmill suites explicitly retired; ten old local-generator suites retired through its supported regeneration. Unrelated missing ownership remains held for released PR153."
     }
   },
   "exact_search_line_hold": {

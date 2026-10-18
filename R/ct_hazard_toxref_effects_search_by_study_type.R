@@ -81,7 +81,12 @@ ct_hazard_toxref_effects_search_by_study_type <- function(
       "pageNumber",
       params[["pageNumber"]],
       max_pages,
-      completed = .ct_last_page
+      completed = base::get(
+        ".ct_last_page",
+        envir = base::environment(.ct_request_pages),
+        mode = "function",
+        inherits = FALSE
+      )
     )
   }
   .ct_request_each(

@@ -138,3 +138,31 @@ toxprint_response <- function(operation) quote(function(response, context, decod
         .ct_chemi_result(response, context, decode, tidy = params[["tidy"]]())
     })
 }
+
+ page_response_policy <- function(operation) {
+    endpoint <- if (grepl("chet", operation$service))
+        paste0("chet", operation$path)
+    else sub("^/api/", "", operation$path)
+    substitute(function(response, context, decode) {
+        context$endpoint <- ENDPOINT
+        if (all_pages) return(.ct_chemi_page(response, context, decode))
+        context$query <- "_static_"
+        .ct_keyset_manual(response, context, decode)
+    }, list(ENDPOINT = endpoint))
+}
+
+ keyset_response <- function(operation) {
+    manual_query <- if (operation$method == "GET")
+        quote(params[["limit"]])
+    else quote(NULL)
+    substitute(function(response, context, decode) {
+        context$endpoint <- ENDPOINT
+        context$query <- QUERY
+        if (all_pages) return(.ct_keyset_page(response, context, decode))
+        .ct_keyset_manual(response, context, decode)
+    }, list(QUERY = manual_query, ENDPOINT = sub("^/api/", "", sub("/{limit}", "/", operation$path, fixed = TRUE))))
+}
+
+ keyset_body <- function(operation) {
+    quote(base::Filter(base::Negate(base::is.null), params[base::setdiff(base::names(params), "limit")]))
+}

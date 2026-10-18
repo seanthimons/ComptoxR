@@ -757,3 +757,73 @@ chemi_resolver_lookup_bulk:
   bespoke_test: "tests/testthat/test-chemi_resolver_chemical_resolution.R"
   pre_request:
     - prepare_lookup_request
+
+chemi_amos_analytical_qc_keyset_pagination:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_analytical_qc_keyset_pagination_bulk:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_fact_sheet_keyset_pagination:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_fact_sheet_keyset_pagination_bulk:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_method_keyset_pagination:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_method_keyset_pagination_bulk:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_product_declaration_keyset_pagination:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_product_declaration_keyset_pagination_bulk:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_safety_data_sheet_keyset_pagination:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_amos_safety_data_sheet_keyset_pagination_bulk:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_chet_chemicals_counts:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_chet_chemicals_database:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_chet_reaction_database:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result
+
+chemi_resolver_classyfire:
+  bespoke_test: "tests/testthat/test-native_pagers.R"
+  post_combine:
+    - format_legacy_pager_result

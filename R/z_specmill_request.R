@@ -455,31 +455,33 @@
   result
 }
 
-# Runs one request per page for a wrapper with pagination.mode: page. `send` takes the page argument as a named
+# Runs one request per page for a wrapper with page or cursor pagination. `send` takes the page argument as a named
 # list and returns that page's result; <helper>_paginated() decides when to stop. The pages are combined like a
 # batched wrapper's, so tables are typed once. Every control the pagination option could change is fixed here,
 # so the shape of a wrapper's result never depends on it. A dry run returns its first prepared request.
-.ct_request_pages <- function(send, parameter, start, max_pages, completed = NULL) {
+.ct_request_pages <- function(send, parameter, start, max_pages, completed = NULL, mode = 'page', next_cursor = NULL, items = NULL, error_policy = 'stop', warn_limits = TRUE, warn_errors = TRUE, stop_on_empty = TRUE, on_limit = NULL) {
+  for (callback in base::list(completed, next_cursor, items, on_limit)) if (!base::is.null(callback) && !base::is.function(callback)) base::stop('Pagination callbacks must be functions', call. = FALSE)
   pages <- base::list()
   prepared <- NULL
   fetch <- function(...) {
     outer <- .ct_request_batch_state$active
     .ct_request_batch_state$active <- TRUE
     base::on.exit(.ct_request_batch_state$active <- outer, add = TRUE)
-    # The engine adds a double step; send whole page numbers as integers so they never print as 1e+05.
     page <- send(base::lapply(base::list(...), function(x) if (base::is.numeric(x) && base::length(x) == 1L && !base::is.na(x) && x == base::trunc(x) && base::abs(x) <= base::.Machine$integer.max) base::as.integer(x) else x))
     if (base::inherits(page, 'httr2_request')) {
       prepared <<- page
-      return(base::list())
+      return(base::list(response = NULL, items = base::list()))
     }
-    pages[base::length(pages) + 1L] <<- base::list(page)
-    page
+    selected <- if (base::is.null(items)) page else base::tryCatch(items(page), error = function(e) { base::class(e) <- base::unique(base::c('pagination_security_error', base::class(e))); base::stop(e) })
+    pages[base::length(pages) + 1L] <<- base::list(selected)
+    base::list(response = page, items = selected)
   }
-  # The engine ships with the pagination companion, so look it up rather than name it: a client without the companion must still check clean.
   paginate <- base::get0('.ct_request_paginated', mode = 'function')
   if (base::is.null(paginate)) base::stop('Paging needs the pagination companion (.ct_request_paginated) in the client helper', call. = FALSE)
-  paged <- paginate(fetch, mode = 'page', parameter = parameter, start = start, size_parameter = NULL, page_size = NULL, items = function(x) if (base::is.null(x)) base::list() else x, completed = completed, max_pages = max_pages, max_items = NULL, advance = NULL, format = NULL, stop_on_short = FALSE, error_policy = 'stop', warn_limits = TRUE)
+  paged <- paginate(fetch, mode = mode, parameter = parameter, start = start, size_parameter = NULL, page_size = NULL, items = function(x) if (base::is.null(x$items)) base::list() else x$items, completed = if (base::is.null(completed)) NULL else function(x, state) completed(x$response, state), next_cursor = if (base::is.null(next_cursor)) NULL else function(x) next_cursor(x$response), max_pages = max_pages, max_items = NULL, advance = NULL, format = NULL, stop_on_short = FALSE, error_policy = error_policy, warn_limits = warn_limits && base::is.null(on_limit), warn_errors = warn_errors, stop_on_empty = stop_on_empty, policy = base::list())
   if (!base::is.null(prepared)) base::return(prepared)
+  if (paged$stop_reason == 'request_error' && error_policy == 'empty') pages <- base::list()
+  if (warn_limits && !base::is.null(on_limit) && base::length(pages) >= max_pages) on_limit(paged, max_pages)
   result <- .ct_request_combine(pages)
   base::attr(result, 'pagination') <- base::list(requests = base::as.integer(paged$requests), item_count = base::as.integer(paged$item_count), stop_reason = paged$stop_reason)
   result
@@ -614,12 +616,15 @@
 #' @param warn_limits Whether truncation warns, default TRUE in emitted companions.
 #' @param format Optional final-result formatter, applied after iteration consumes metadata.
 #' @param policy Named list of explicit shared client choices; individual pagination arguments override it.
+#' @param warn_errors NA
+#' @param stop_on_empty NA
 #' @noRd
 .ct_request_paginated <- function(fn, ..., mode, parameter, size_parameter = NULL,
     page_size = NULL, start = NULL, items, max_pages = 100, max_items = NULL, next_cursor = NULL,
     completed = NULL, advance = NULL, stop_on_short = FALSE, error_policy = "stop",
     warn_limits = TRUE, format = NULL, policy = base::getOption(base::paste0(base::tolower(base::sub("_DRY_RUN$",
-        "", "COMPTOXR_NATIVE_DRY_RUN")), ".ct_request.pagination"), base::list())) {
+        "", "COMPTOXR_NATIVE_DRY_RUN")), ".ct_request.pagination"), base::list()), warn_errors = TRUE,
+    stop_on_empty = TRUE) {
     allowed <- base::setdiff(base::names(base::formals(base::sys.function())), base::c("fn",
         "...", "policy"))
     if (!base::is.list(policy) || (base::length(policy) && (base::is.null(base::names(policy)) ||
@@ -637,7 +642,7 @@
             base::stop("Pagination callbacks must be functions")
         }
     }
-    for (value in base::list(stop_on_short, warn_limits)) {
+    for (value in base::list(stop_on_short, warn_limits, warn_errors, stop_on_empty)) {
         if (!base::is.logical(value) || base::length(value) != 1L || base::is.na(value)) {
             base::stop("Pagination flags must be logical")
         }
@@ -763,14 +768,17 @@
         }
         requests <- requests + 1
         response <- base::tryCatch(base::do.call(fn, args), error = function(e) {
-            if (error_policy == "stop" || base::inherits(e, "pagination_security_error")) {
+            if (error_policy == "stop" || base::inherits(e, base::c("pagination_security_error",
+                "specmill_call_error"))) {
                 base::stop(e)
             }
             e
         })
         if (base::inherits(response, "error")) {
-            base::warning("Pagination request failed; returning ", error_policy,
-                " results", call. = FALSE)
+            if (warn_errors) {
+                base::warning("Pagination request failed; returning ", error_policy,
+                  " results", call. = FALSE)
+            }
             if (error_policy == "empty") {
                 pages <- base::list()
                 count <- 0
@@ -786,7 +794,7 @@
         n <- if (base::is.data.frame(page))
             base::nrow(page)
         else base::length(page)
-        if (!n) {
+        if (!n && stop_on_empty) {
             reason <- "empty_page"
             break
         }

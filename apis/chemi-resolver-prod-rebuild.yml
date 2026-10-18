@@ -40,88 +40,44 @@ operations:
   GET /api/resolver/classyfire:
     name: chemi_resolver_classyfire
     file: R/chemi_resolver_classyfire.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        default: ~
-        description: Optional parameter
-      idType:
-        type: character
-        default: AnyId
-        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
-          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-      fuzzy:
-        type: character
-        default: Not
-        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-      kingdom:
-        type: character
-        default: ~
-        description: Optional parameter
-      superklass:
-        type: character
-        default: ~
-        description: Optional parameter
-      klass:
-        type: character
-        default: ~
-        description: Optional parameter
-      subklass:
-        type: character
-        default: ~
-        description: Optional parameter
-      directParent:
-        type: character
-        default: ~
-        description: Optional parameter
-      geometricDescriptor:
-        type: character
-        default: ~
-        description: Optional parameter
-      alternativeParent:
-        type: character
-        default: ~
-        description: Optional parameter
-      substituent:
-        type: character
-        default: ~
-        description: Optional parameter
-      page:
-        type: numeric
-        default: 0.0
-        description: 'Optional parameter (default: 0)'
-      size:
-        type: numeric
-        default: 1000.0
-        description: 'Optional parameter (default: 1000)'
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-      max_pages:
-        type: numeric
-        default: 100.0
-        description: Maximum number of pages to fetch when all_pages is TRUE.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_chemi_page
+    pagination:
+      mode: page
+      parameter: page
+      start: 0
+      completed: .ct_chemi_done
+      max_pages: 100
+      metadata: no
+      error_policy: partial
+      warn_errors: no
+      warn_limits: yes
+      on_limit: .ct_keyset_limit_warning
+      stop_on_empty: no
+    docs:
+      title: Resolver Classyfire
+      lifecycle: experimental
+      return: A list of records.
+      examples:
+      - query: DTXSID7020182
+        all_pages: no
+        max_pages: 2
+      tags:
+        apiStage: public
     request:
       arguments:
-        endpoint:
-          value: resolver/classyfire
         method:
           value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
+        path:
+          value: /api/resolver/classyfire
+        path_params:
+          value: []
+        query:
+          object:
             query:
               from:
               - params
@@ -174,43 +130,24 @@ operations:
               from:
               - params
               - size
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          from:
-          - params
-          - max_pages
-        pagination_strategy:
-          value: page_size
-    docs:
-      title: Resolver Classyfire
-      lifecycle: experimental
-      parameters:
-        query: Optional parameter
-        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
-          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
-          CloseSemantic (default: Not)'
-        kingdom: Optional parameter
-        superklass: Optional parameter
-        klass: Optional parameter
-        subklass: Optional parameter
-        directParent: Optional parameter
-        geometricDescriptor: Optional parameter
-        alternativeParent: Optional parameter
-        substituent: Optional parameter
-        page: 'Optional parameter (default: 0)'
-        size: 'Optional parameter (default: 1000)'
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
-      return: Returns a list with result object
-      examples:
-      - query: DTXSID7020182
-      tags:
-        apiStage: public
+        body:
+          value: ~
+        response_policy:
+          callback: page_response_policy
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        headers:
+          value:
+            Accept: application/json
   GET /api/resolver/getannotation:
     name: chemi_resolver_getannotation
     file: R/chemi_resolver_getannotation.R

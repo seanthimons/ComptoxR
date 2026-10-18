@@ -1467,3 +1467,38 @@ scope, replay/setup scripts and frozen original page-wrapper definitions.
 This is isolated verification only. Root remains on released v0.1.35; no root
 helper, wrapper, API configuration or toolkit pin adoption. All14 pagers stay
 retained until PR151 is released. No full package check rerun or ComptoxR push.
+
+## Released fourteen-pager adoption, 18 October 2026
+
+Pinned official Specmill v0.1.36 at
+`0e3ed64ddc48b0104c00fb541678d5f75935afe3`. Official archive checksum,
+DESCRIPTION version and final PR151 ancestry pass. Independent source archive
+SHA256: `9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673`.
+Adopted the ten reviewed AMOS keyset GET/POST wrappers and four page pagers using
+the archived configs/callbacks and official paired helper/pagination companion.
+The existing reviewed decoder adapter is unchanged; no new helper patch is used.
+
+All338 accepted cases pass again on the released pin, including all14 generated
+examples, complete result attributes, warning strings and request contracts.
+GET cursor defaults remain NULL and POST cursor defaults remain empty strings;
+filters/sort, manual controls, empty continuation and partial-error/metadata
+policies are retained. Numeric page/size defaults are emitted as schema integers
+with their original values. The new native suite checks all14 signatures/default
+values, captured contracts, partial failures, credential hard errors and empty
+continuation. It compares full warning strings to frozen legacy functions under
+the same CLI environment rather than fixing a platform-dependent glyph.
+
+The five existing native page-wrapper contract suites pass after regeneration of
+the upstream callback-environment lookup bindings. Lookup, list-all and batch
+failure regressions also pass. The local legacy generator retired its ten replaced
+generated suites; four existing Specmill helper-call suites were explicitly
+retired via its public ownership API after native coverage was selected. The
+legacy inventory now passes with34 remaining generated wrappers. Documentation
+signatures, validated whole-client generation and final validated freshness pass;
+archived schemas remain unchanged. Existing retained origin warnings are unchanged.
+
+No unrelated missing ownership entries were removed: explicit missing-file
+retirement remains held for released PR153. Native401 remains hard; credential
+cases are simulated, not production401 reports. No new live calls, full package
+check rerun or ComptoxR push. Other vector/list/file contracts remain under review;
+migration is incomplete.

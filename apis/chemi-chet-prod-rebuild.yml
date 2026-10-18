@@ -61,42 +61,44 @@ operations:
   GET /chemicals/counts:
     name: chemi_chet_chemicals_counts
     file: R/chemi_chet_chemicals_counts.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      page:
-        type: numeric
-        default: 1.0
-        description: Optional parameter
-      size:
-        type: character
-        default: ~
-        description: Optional parameter
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-      max_pages:
-        type: numeric
-        default: 100.0
-        description: Maximum number of pages to fetch when all_pages is TRUE.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_chemi_page
+    pagination:
+      mode: page
+      parameter: page
+      start: 1
+      completed: .ct_chemi_done
+      max_pages: 100
+      metadata: no
+      error_policy: partial
+      warn_errors: no
+      warn_limits: yes
+      on_limit: .ct_keyset_limit_warning
+      stop_on_empty: no
+    docs:
+      title: Chemical counts by library
+      lifecycle: experimental
+      return: A list of records.
+      examples:
+      - page: 1
+        all_pages: no
+        max_pages: 2
+      tags:
+        apiStage: public
     request:
       arguments:
-        endpoint:
-          value: chet/chemicals/counts
         method:
           value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
+        path:
+          value: /chemicals/counts
+        path_params:
+          value: []
+        query:
+          object:
             page:
               from:
               - params
@@ -105,85 +107,65 @@ operations:
               from:
               - params
               - size
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          from:
-          - params
-          - max_pages
-        pagination_strategy:
-          value: chet_page
-    docs:
-      title: Chemical counts by library
-      lifecycle: experimental
-      parameters:
-        page: Optional parameter
-        size: Optional parameter
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
-      return: Returns a tibble with results (array of objects)
-      examples:
-      - page: DTXSID7020182
-      tags:
-        apiStage: public
+        body:
+          value: ~
+        response_policy:
+          callback: page_response_policy
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /api/chet
+        auth:
+          value: []
+        headers:
+          value:
+            Accept: application/json
   GET /chemicals/database:
     name: chemi_chet_chemicals_database
     file: R/chemi_chet_chemicals_database.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      page:
-        type: numeric
-        default: 1.0
-        description: Optional parameter
-      size:
-        type: character
-        default: ~
-        description: Optional parameter
-      query:
-        type: character
-        default: ~
-        description: Optional parameter
-      exact_search:
-        type: character
-        default: ~
-        description: Optional parameter
-      lib_name:
-        type: character
-        default: ~
-        description: Optional parameter
-      only_in_reactions:
-        type: character
-        default: ~
-        description: Optional parameter
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-      max_pages:
-        type: numeric
-        default: 100.0
-        description: Maximum number of pages to fetch when all_pages is TRUE.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_chemi_page
+    pagination:
+      mode: page
+      parameter: page
+      start: 1
+      completed: .ct_chemi_done
+      max_pages: 100
+      metadata: no
+      error_policy: partial
+      warn_errors: no
+      warn_limits: yes
+      on_limit: .ct_keyset_limit_warning
+      stop_on_empty: no
+    docs:
+      title: Search chemicals
+      lifecycle: experimental
+      return: A list of records.
+      examples:
+      - page: 1
+        all_pages: no
+        max_pages: 2
+      tags:
+        apiStage: public
     request:
       arguments:
-        endpoint:
-          value: chet/chemicals/database
         method:
           value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
+        path:
+          value: /chemicals/database
+        path_params:
+          value: []
+        query:
+          object:
             page:
               from:
               - params
@@ -208,34 +190,24 @@ operations:
               from:
               - params
               - only_in_reactions
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          from:
-          - params
-          - max_pages
-        pagination_strategy:
-          value: chet_page
-    docs:
-      title: Search chemicals
-      lifecycle: experimental
-      parameters:
-        page: Optional parameter
-        size: Optional parameter
-        query: Optional parameter
-        exact_search: Optional parameter
-        lib_name: Optional parameter
-        only_in_reactions: Optional parameter
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
-      return: Returns a list with result object
-      examples:
-      - page: DTXSID7020182
-      tags:
-        apiStage: public
+        body:
+          value: ~
+        response_policy:
+          callback: page_response_policy
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /api/chet
+        auth:
+          value: []
+        headers:
+          value:
+            Accept: application/json
   GET /chemicals/database/stats:
     name: chemi_chet_chemicals_database_stats
     file: R/chemi_chet_chemicals_database_stats.R
@@ -307,70 +279,44 @@ operations:
   GET /reaction/database:
     name: chemi_chet_reaction_database
     file: R/chemi_chet_reaction_database.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      page:
-        type: numeric
-        default: 1.0
-        description: Optional parameter
-      size:
-        type: character
-        default: ~
-        description: Optional parameter
-      query:
-        type: character
-        default: ~
-        description: Optional parameter
-      lib_name:
-        type: character
-        default: ~
-        description: Optional parameter
-      reaction_process:
-        type: character
-        default: ~
-        description: Optional parameter
-      reaction_type:
-        type: character
-        default: ~
-        description: Optional parameter
-      reaction_scheme:
-        type: character
-        default: ~
-        description: Optional parameter
-      reaction_phase:
-        type: character
-        default: ~
-        description: Optional parameter
-      craccm_id:
-        type: character
-        default: ~
-        description: Optional parameter
-      all_pages:
-        type: logical
-        default: yes
-        description: Logical; if TRUE (default), automatically fetches all pages.
-          If FALSE, returns a single page using manual pagination parameters.
-      max_pages:
-        type: numeric
-        default: 100.0
-        description: Maximum number of pages to fetch when all_pages is TRUE.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_chemi_page
+    pagination:
+      mode: page
+      parameter: page
+      start: 1
+      completed: .ct_chemi_done
+      max_pages: 100
+      metadata: no
+      error_policy: partial
+      warn_errors: no
+      warn_limits: yes
+      on_limit: .ct_keyset_limit_warning
+      stop_on_empty: no
+    docs:
+      title: Search reactions
+      lifecycle: experimental
+      return: A list of records.
+      examples:
+      - page: 1
+        all_pages: no
+        max_pages: 2
+      tags:
+        apiStage: public
     request:
       arguments:
-        endpoint:
-          value: chet/reaction/database
         method:
           value: GET
-        batch_limit:
-          value: 0.0
-        server:
-          value: chemi_burl
-        auth:
-          value: no
-        tidy:
-          value: no
-        options:
-          compact_object:
+        path:
+          value: /reaction/database
+        path_params:
+          value: []
+        query:
+          object:
             page:
               from:
               - params
@@ -407,37 +353,24 @@ operations:
               from:
               - params
               - craccm_id
-        paginate:
-          from:
-          - params
-          - all_pages
-        max_pages:
-          from:
-          - params
-          - max_pages
-        pagination_strategy:
-          value: chet_page
-    docs:
-      title: Search reactions
-      lifecycle: experimental
-      parameters:
-        page: Optional parameter
-        size: Optional parameter
-        query: Optional parameter
-        lib_name: Optional parameter
-        reaction_process: Optional parameter
-        reaction_type: Optional parameter
-        reaction_scheme: Optional parameter
-        reaction_phase: Optional parameter
-        craccm_id: Optional parameter
-        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
-          FALSE, returns a single page using manual pagination parameters.
-        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
-      return: Returns a list with result object
-      examples:
-      - page: DTXSID7020182
-      tags:
-        apiStage: public
+        body:
+          value: ~
+        response_policy:
+          callback: page_response_policy
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /api/chet
+        auth:
+          value: []
+        headers:
+          value:
+            Accept: application/json
   GET /reaction/database/stats:
     name: chemi_chet_reaction_database_stats
     file: R/chemi_chet_reaction_database_stats.R
@@ -575,3 +508,4 @@ operations:
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
