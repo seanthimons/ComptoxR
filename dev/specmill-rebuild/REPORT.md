@@ -1524,3 +1524,39 @@ failure-policy review remains separate from replacement test selection.
 All queued upstream fixes are now released. Independent vector/list/file review
 continues; this is not full migration completion. No full package check rerun,
 new production calls or ComptoxR push.
+
+## Independent file/list review and new blocker154, 18 October 2026
+
+The reviewed candidate corrects three image routes and the two AMOS/alerts list
+facades through supported client collection/projection callbacks on released37.
+It preserves PNG Accept headers, single-image unwrapping, raw fallback/image
+attributes/info/pixels, missing positions, late JSON parsing and HTTP warning
+order. Mocked response tests retain httr2's real sequential executor.
+
+Important correction: earlier mocks used lapply on named request lists and
+incorrectly kept numeric response names. Real httr2::req_perform_sequential returns
+unnamed responses. Prior numeric-name parity claims for these list facades and
+files are superseded. Corrected107 batch comparisons pass with the real executor
+and the isolated candidate;735 image cases,180 actual localhost image cases,
+224 actual localhost list cases and ten simulated native401 hard cases pass
+within value/attribute/warning/request and hard-error timing scopes. Image object
+comparison checks attributes/info/pixels, not external-pointer identity or
+non-deterministic re-encoding timestamps.
+
+The candidate is NOT adopted. Final-format error propagation differs: for two
+malformed200JSON responses, the original list wrapper sends both requests then
+raises purrr_error_indexed; the generated collector plus post_combine hook sends
+both requests but raises comptoxr_post_combine_hook_error. Per-response formatting
+runs too early. This unsupported final-format condition contract is filed as
+https://github.com/seanthimons/specmill/issues/154 and tasked to the upstream agent
+for implementation/release or proof of an existing supported declarative seam.
+No client hook-executor/runtime workaround is used. Original error classes are
+explicitly outside the candidate's passing scope.
+
+All five affected root wrappers/configs/client policies remain on their previous
+implementation pending a released fix. The complete isolated candidate, replay
+scripts, captured cases, regression source and exact condition reproduction are
+archived in pending-file-list-projections.rds/json. The two MOL routes and PDF
+facade still require separate file review. Pin37 and the eleven scoped ownership
+retirements remain complete. No new production calls or ComptoxR push; migration
+is not complete.

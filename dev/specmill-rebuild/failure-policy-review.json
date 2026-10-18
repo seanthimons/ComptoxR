@@ -53,7 +53,8 @@
     "comparisons": 107,
     "attributes_excluded": false,
     "verification": "Both true bulk POSTs, DTXCID GET, Classyfire, two list wrappers; single/multiple transport, all/partial HTTP failures, normalization, effective/session sizing, overrides, credential hard errors and final whole-client freshness pass.",
-    "real_http_policy_review": "PASS: all 107 cases rechecked with automatic httr2 HTTP error policy and sequential continuation honored. Single failed requests abort; non-error multi-request results retain exact values/attributes. No attributes excluded. Final whole-client freshness passes. Earlier mock-only HTTP claims superseded."
+    "real_http_policy_review": "PASS: all 107 cases rechecked with automatic httr2 HTTP error policy and sequential continuation honored. Single failed requests abort; non-error multi-request results retain exact values/attributes. No attributes excluded. Final whole-client freshness passes. Earlier mock-only HTTP claims superseded.",
+    "corrected_scope": "The old sequential-mock numeric-name claim is superseded. Corrected107 proof passes with real executor and isolated client collector, but adoption held by154finalconditionpropagation."
   },
   "successful_response_errors": {
     "status": "client_policy_adopted",
@@ -254,5 +255,41 @@
     "status": "eleven_reviewed_missing_suites_retired",
     "review": "dev/specmill-rebuild/reviewed-test-retirements.json",
     "unrelated_ownership_preserved": true
+  },
+  "sequential_executor_correction": {
+    "status": "blocked_specmill154",
+    "issue": "https://github.com/seanthimons/specmill/issues/154",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.37",
+      "source_commit": "ac1fa3389dbce30d22236bdf470105647fe69ca8",
+      "source_archive_sha256": "b238b68c18909484245de4dc1f475d50e548abae5574c6fb305709e9da9be536",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "verification": {
+      "corrected_prior_batch_cases": 107,
+      "image_mock_cases_real_sequential_executor": 735,
+      "actual_image_http_cases": 180,
+      "actual_list_http_cases": 224,
+      "native_simulated_credential_cases": 10,
+      "regression_cases": 420,
+      "values_attributes_warnings_requests": true,
+      "hard_failure_timing": true,
+      "original_final_error_classes": false,
+      "no_live_production_calls": true,
+      "root_wrapper_adoption": false
+    },
+    "sequential_correction": "Previous lapply(reqs) mocks retained names unlike actual httr2 sequential execution. New harnesses use real req_perform_sequential and typed httr2 transport conditions. Prior numeric-name claims for these list facades and files are superseded.",
+    "image_comparison": "Container attributes, raw fallback bytes and image attributes/info/pixels; external-pointer identity and re-encoding timestamps are not comparable.",
+    "remaining_file_review": ["ct_chemical_file_mol_search", "ct_chemical_file_mol_search_by_dtxcid", "chemi_amos_get_pdf"],
+    "wrappers": ["ct_chemical_file_image_search", "ct_chemical_file_image_search_by_dtxcid", "ct_chemical_file_image_search_by_gsid", "chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"],
+    "archive": "dev/specmill-rebuild/pending-file-list-projections.rds",
+    "condition_difference": {
+      "old": ["purrr_error_indexed", "rlang_error", "error", "condition"],
+      "native": ["comptoxr_post_combine_hook_error", "rlang_error", "error", "condition"],
+      "old_requests": 2,
+      "native_requests": 2
+    }
   }
 }
