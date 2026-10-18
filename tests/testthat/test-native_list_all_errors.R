@@ -1,4 +1,4 @@
-test_that("list-all HTTP failures preserve empty results and post hooks", {
+test_that("list-all HTTP failures remain hard and skip post-response formatting", {
   withr::local_envvar(ctx_api_key = "local-policy-key")
   for (status in c(404L, 500L)) {
     local_mocked_bindings(req_perform = function(req, ...) {
@@ -8,21 +8,8 @@ test_that("list-all HTTP failures preserve empty results and post hooks", {
     }, .package = "httr2")
     for (args in list(list(), list(return_dtxsid = TRUE),
         list(return_dtxsid = TRUE, coerce = TRUE))) {
-      warnings <- character()
-      value <- withCallingHandlers(suppressMessages(do.call(ct_chemical_list_all, args)),
-        warning = function(w) {
-          warnings <<- c(warnings, conditionMessage(w))
-          invokeRestart("muffleWarning")
-        })
-      if (isTRUE(args$coerce)) {
-        expect_identical(value, structure(list(), names = character()))
-        expect_length(warnings, 2L)
-        expect_match(warnings[[2L]], "listName")
-      } else {
-        expect_identical(value, tibble::tibble())
-        expect_length(warnings, 1L)
-      }
-      expect_match(warnings[[1L]], paste("status", status))
+      expect_error(suppressMessages(do.call(ct_chemical_list_all, args)),
+        paste("HTTP", status))
     }
   }
 })
@@ -49,6 +36,6 @@ test_that("list-all failed responses still reach the API status observer", {
     httr2::response(status_code = 500L,
       headers = list(`Content-Type` = "application/json"), body = charToRaw('{}'))
   }, .package = "httr2")
-  suppressWarnings(suppressMessages(ct_chemical_list_all()))
+  expect_error(ct_chemical_list_all(), "HTTP 500")
   expect_identical(statuses, 500L)
 })

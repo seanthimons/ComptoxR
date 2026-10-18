@@ -204,13 +204,11 @@
   isTRUE(paging$pageNumber >= paging$totalPages)
 }
 
-# Preserve list-all static attribution, warnings and ordinary HTTP failure results.
+# Preserve list-all attribution and warnings after successful responses.
 .ct_list_all <- function(response, context, decode) {
-  if (context$status >= 400L && context$status != 401L) {
+  if (context$status >= 400L) {
     observe_api_responses(list(response))
-    endpoint <- "chemical/list/all"
-    cli::cli_warn("API request to {.val {endpoint}} failed for {.val {'_static_'}} with status {context$status}")
-    return(tibble::tibble())
+    decode()
   }
   body <- decode()
   records <- unwrap_collection_envelope(body)
@@ -222,14 +220,11 @@
   .ct_tidy(response, context, function() body)
 }
 
-# This bodyless subset retains the old static list result for received HTTP failures.
+# This reviewed bodyless subset keeps ordinary HTTP failures hard.
 .ct_ghs_count_response <- function(response, context, decode) {
-  if (context$status < 200L || context$status >= 300L) {
+  if (context$status >= 400L) {
     observe_api_responses(list(response))
-    if (context$status == 401L) decode()
-    endpoint <- "resolver/ghs-list-count"
-    cli::cli_warn("API request to {.val {endpoint}} failed for {.val {'_static_'}} with status {context$status}")
-    return(list(NULL))
+    decode()
   }
   body <- decode()
   records <- unwrap_collection_envelope(body)

@@ -31,7 +31,7 @@ test_that("reviewed bodyless resolver preserves static list results and requests
   }
 })
 
-test_that("bodyless resolver keeps received HTTP failures separate from hard errors", {
+test_that("bodyless resolver keeps HTTP, credential and transport failures hard", {
   status <- 404L
   local_mocked_bindings(req_perform = function(...) {
     httr2::response(status_code = status,
@@ -39,9 +39,7 @@ test_that("bodyless resolver keeps received HTTP failures separate from hard err
   }, .package = "httr2")
   for (code in c(404L, 500L)) {
     status <- code
-    expect_warning(result <- chemi_resolver_ghs_list_count(),
-      paste0("failed for.*_static_.*status ", code))
-    expect_identical(result, list(NULL))
+    expect_error(chemi_resolver_ghs_list_count(), paste("HTTP", code))
   }
   status <- 401L
   expect_error(chemi_resolver_ghs_list_count(), class = "specmill_call_error")

@@ -15,5 +15,6 @@
   },
   "review": "https://github.com/seanthimons/specmill/pull/132",
   "contract": "Reviewed optional bodyless subset; no supplied-body semantics asserted.",
-  "verification": "Exact old/native values, attributes and warnings for five JSON shapes and 79-record production response; GET path, Accept JSON, zero body, no CTX authentication, zero public formals, 404/500 ordinary list results, credential and transport hard errors."
+  "verification": "Exact old/native values, attributes and warnings for five JSON shapes and 79-record production response; GET path, Accept JSON, zero body, no CTX authentication and zero public formals. Real localhost HTTP500 and native 404/500, credential and transport checks preserve hard errors.",
+  "verification_correction": "Earlier received-response mocks bypassed httr2 automatic HTTP errors and incorrectly treated static 404/500 as empty results. Corrected client policy after a real localhost comparison; no helper/template changes."
 }

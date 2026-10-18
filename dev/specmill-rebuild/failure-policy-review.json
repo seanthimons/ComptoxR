@@ -1,6 +1,6 @@
 {
   "status": "migration_failure_parity_review_in_progress",
-  "production_pin": "0.1.27",
+  "production_pin": "0.1.28",
   "batch_empty_constructor": ".ct_empty_table",
   "batch_metadata": {
     "issue": "https://github.com/seanthimons/specmill/issues/142",
@@ -19,8 +19,8 @@
   },
   "unbatched_policy": {
     "issue": "https://github.com/seanthimons/specmill/issues/143",
-    "status": "actual_list_all_existing_seam_pass",
-    "result": "Exact old/new 404/500 values, attributes, warning and hooks pass; 401/transport remain hard errors. No upstream mechanism required."
+    "status": "corrected_real_http_hard_error_parity",
+    "result": "Real localhost HTTP500 confirms original single calls fail hard. Client policies now preserve hard failures; prior received-response mocks bypassed automatic httr2 errors. Success shapes/hooks remain unchanged."
   },
   "remaining_review": [
     "Legacy multi-input list results preserve numeric batch names and NULL placeholders; status-before-decode plus metadata suppression alone does not reproduce the complete contract.",
@@ -48,11 +48,24 @@
     "status": "combined_isolated_pass_release_pending",
     "comparisons": 107,
     "attributes_excluded": false,
-    "verification": "Both true bulk POSTs, DTXCID GET, Classyfire, two list wrappers; single/multiple transport, all/partial HTTP failures, normalization, effective/session sizing, overrides, credential hard errors and final whole-client freshness pass."
+    "verification": "Both true bulk POSTs, DTXCID GET, Classyfire, two list wrappers; single/multiple transport, all/partial HTTP failures, normalization, effective/session sizing, overrides, credential hard errors and final whole-client freshness pass.",
+    "real_http_policy_review": "Received-response mocks previously bypassed automatic httr2 errors. Retesting single/multiple HTTP failures with request error policy honored and removing unnecessary empty-response policy projections; prior transport/metadata evidence remains valid."
   },
   "successful_response_errors": {
     "status": "client_policy_adopted",
     "mechanism": "Reviewed response policies mark successful-response parsing or formatting errors as specmill_call_error, preserving legacy call-level failure while leaving non-success HTTP handling unchanged.",
     "verification": "Actual malformed-JSON fan-out wrappers, direct decode and formatter errors, unchanged ordinary HTTP classification, normalization, Classyfire, empty failures and bodyless resolver tests pass."
+  },
+  "page_pagers": {
+    "status": "retained_failure_policy_release_pending",
+    "pull_request": "https://github.com/seanthimons/specmill/pull/151",
+    "wrappers": [
+      "chemi_chet_chemicals_counts",
+      "chemi_chet_chemicals_database",
+      "chemi_chet_reaction_database",
+      "chemi_resolver_classyfire"
+    ],
+    "released_metadata_policy": "0.1.28",
+    "gap": "Legacy httr2 request failures retain earlier successful pages; emitted page runner still defaults to hard stop. PR151 exposes an explicit partial policy for review."
   }
 }

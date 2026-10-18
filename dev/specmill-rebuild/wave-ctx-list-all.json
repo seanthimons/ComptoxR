@@ -20,13 +20,10 @@
   "fixture": "tests/testthat/fixtures/native-ctx-list-all.rds",
   "live_claim": false,
   "http_failure_review": {
-    "cases": 6,
+    "status": "corrected_after_real_localhost_verification",
     "statuses": [404, 500],
-    "exact": ["results", "attributes", "warnings"],
-    "hook_replacement": true,
-    "credential_401_hard_error": true,
-    "transport_hard_error": true,
-    "mechanism": "Existing response_policy checks context$status before decode().",
-    "upstream_evidence": "https://github.com/seanthimons/specmill/issues/143#issuecomment-6243310301"
+    "result": "HTTP failures remain hard and skip success formatting; credentials/transport remain hard; failed responses reach the status observer.",
+    "verification_correction": "Earlier received-response mocks bypassed httr2 automatic HTTP errors. Twenty successful response/option golden cases remain valid.",
+    "mechanism": "Client policy observes HTTP errors and invokes decode rather than returning an empty table. No upstream mechanism or helper patch required."
   }
 }

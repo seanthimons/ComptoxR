@@ -1,0 +1,17 @@
+{
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.28",
+    "source_commit": "69656feb96241a1a8b45cc66909e260f931df224",
+    "source_archive_sha256": "5e41db1d0583c17fa17e3967fd1be13c9a13946aba6d790913473447e6cad851",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "status": "normal_metadata_parity_pass_failure_policy_release_pending",
+  "wrappers": ["chemi_chet_chemicals_counts", "chemi_chet_chemicals_database", "chemi_chet_reaction_database", "chemi_resolver_classyfire"],
+  "normal_cases": 8,
+  "failure_cases": 8,
+  "verification": "Released v28 metadata:false preserves exact results/attributes, request method/path/query/Accept/body/no CTX auth for manual and automatic modes. Real httr2-class transport failures and received HTTP500 after a successful page return earlier pages in legacy but abort native. PR151 explicit partial policy is under isolation; no local helper patch.",
+  "archive": "dev/specmill-rebuild/pending-page-pagers.rds",
+  "blocked_by": "https://github.com/seanthimons/specmill/pull/151"
+}
