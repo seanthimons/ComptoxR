@@ -12,18 +12,6 @@ emit_issue342 <- function(root = '.', mode = c('check', 'apply'), adopt = NULL) 
     companions = c('batching', 'pagination')
   )
   code <- scaffold$code
-  start <- regexpr('  status <- httr2::resp_status(response)', code, fixed = TRUE)[[1L]]
-  end <- regexpr('\n}\n\n# Select once', code, fixed = TRUE)[[1L]]
-  stopifnot(start > 0L, end > start)
-  decoder <- substring(code, start, end - 1L)
-  code <- paste0(
-    substring(code, 1L, start - 1L),
-    '  .ct_request_decode(response, method, response_policy, policy_query)\n}',
-    '\n\n.ct_request_decode <- function(response, method = "GET", response_policy = NULL, policy_query = NULL) {\n',
-    # The caller owns logging; it is already handled in native transport.
-    sub('  if (verbose) base::message(\'HTTP \', status)\n', '', decoder, fixed = TRUE),
-    substring(code, end)
-  )
   # These companions are internal implementation details, not new public APIs.
   code <- gsub("#' @export", "#' @noRd", code, fixed = TRUE)
   code <- paste(sub('[ \t]+$', '', strsplit(code, '\n', fixed = TRUE)[[1L]]), collapse = '\n')

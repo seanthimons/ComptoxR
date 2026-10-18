@@ -1750,3 +1750,26 @@ search returned HTTP 200 JSON. `pending-chet-media-batch.rds` and
 `pending-typed-errors-private-state.rds` preserve held candidate contracts.
 No evidence file constitutes a completion count or permission to pin unreleased
 Specmill in root.
+
+### Released 0.1.39 helper adoption
+
+Root now pins official v0.1.39 source/tag
+`01a6142e1c8b9aef736664627063efa5d1849416`, with independently verified PR159
+ancestry. Downloaded release package matches SHA256SUMS
+`0cc81496e10e0d2d6f5f6ca6f56c2e7214233e3095fd65cdb38ebfa1cc86fa43`;
+the separately reproducible git-archive checksum recorded in the lock is
+`5c6941c4a1d8e4de0c5eb54206ca2ec487b89be1aec11c1099fb6da25664c3f6`.
+The adopter now consumes the official scaffold directly, removing the old
+substring decoder extraction while retaining noRd, whitespace normalization,
+whole-file protection and provenance. No handwritten runtime change.
+Helper freshness/idempotence/provenance/protection checks pass. Seventeen new
+assertions verify original transport condition identity, typed received 404/500
+with original response, unchanged defaults, hard 401 and invalid controls,
+plus standalone policy context/decode. Existing failure/media/localhost adoption
+suites pass 85 assertions. Operation-specific adoption continues separately;
+private-state/combined-hook candidates remain held until released.
+Full released generation apply and a fresh check pass. Broader collection,
+normalization and pager checks pass. The response-error suite had one stale AMOS
+expectation: its reviewed final collector reports `purrr_error_indexed` at row 1,
+not `specmill_call_error`. This reproduces unchanged with the v0.1.38 helper;
+corrected that assertion and checked the simpleError parent explicitly.

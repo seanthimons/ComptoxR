@@ -2142,7 +2142,7 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.38",
+  "toolkit_version": "0.1.39",
   "inputs": {
     "DESCRIPTION": "322f66842378549c105d35b49ead1b12637786d5d080c0b59b7c7161185fcdae",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -2504,7 +2504,7 @@
     "R/z_db_download.R": "9a268696141778e16af30ed29e09dbb082865ab72f322660140d1af7b1fda635",
     "R/z_db_version.R": "9e4e15ea5311098c605f0c13dd20df6acd635514435c26fa1da99c551559bc7e",
     "R/z_generic_request.R": "32ca68e0bdd87ace101b6205377c9116a6374643ee464a88f8dfbcbfb6a2c64e",
-    "R/z_specmill_request.R": "335a1cf411d2ecaaac53860765fec1d7caa59a5ad7beeac5f2ffb6ccf730b5d1",
+    "R/z_specmill_request.R": "493ba93c877d9c4b782761dc0be61f9995514f239164f15d7ecfb2466e3c1db2",
     "R/zzz.R": "58e56802939bd0b227bb0945e8049bda43e447199e0c9442dcdbd73528d4f7c2",
     "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
     "apis/alerts-pilot.yml": "07668b956de362ef9cadf055ef74c2b527e63c79be5f9435e80573845f85b8d6",

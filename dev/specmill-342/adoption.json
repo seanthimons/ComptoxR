@@ -79,21 +79,21 @@
   },
   "current_adoption": {
     "reviewed_at": "2026-10-18",
-    "base_commit": "49f60add",
+    "base_commit": "03a6f88b",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.38",
-      "source_commit": "f0adbc08f35142cd2f85b1a1b60606b58e9d749e",
-      "source_archive_sha256": "d79169d631d528ed2754fee19002f84667a84416097dfcba55b64f5e688f0373",
+      "version": "0.1.39",
+      "source_commit": "01a6142e1c8b9aef736664627063efa5d1849416",
+      "source_archive_sha256": "5c6941c4a1d8e4de0c5eb54206ca2ec487b89be1aec11c1099fb6da25664c3f6",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
     "adopted_sha256": {
       "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
-      "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
-      "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+      "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
     },
-    "review": "Released v0.1.38 final result_formatter supports reviewed list/image final projection outside hooks and batch drop, retaining client purrr indexed conditions. Shared runtime regenerated through existing provenance workflow."
+    "review": "Released 0.1.39 official standalone decoder companion; direct scaffold emission removes substring extraction. Preserve defaults; typed condition control available only on explicitly selected operations."
   },
   "adoption_history": [
     {
@@ -383,6 +383,24 @@
         "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
       },
       "review": "Released 0.1.37 supports reviewed explicit retirement of already-missing owned outputs. Preserve unrelated ownership; retire only listed suites with selected native replacement coverage."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.38",
+        "source_commit": "f0adbc08f35142cd2f85b1a1b60606b58e9d749e",
+        "source_archive_sha256": "d79169d631d528ed2754fee19002f84667a84416097dfcba55b64f5e688f0373",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released v0.1.38 final result_formatter supports reviewed list/image final projection outside hooks and batch drop, retaining client purrr indexed conditions. Shared runtime regenerated through existing provenance workflow."
     }
   ]
 }

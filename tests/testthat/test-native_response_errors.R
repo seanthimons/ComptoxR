@@ -4,10 +4,14 @@ test_that("received successful responses keep parsing and formatting errors hard
       headers = list(`Content-Type` = "application/json"), body = charToRaw('{broken'))
   }, .package = "httr2")
   withr::local_envvar(ctx_api_key = "local-response-error-key")
-  for (fn in list(chemi_classyfire, chemi_amos_get_info_by_id,
-    ct_chemical_detail_search_by_dtxcid)) {
+  for (fn in list(chemi_classyfire, ct_chemical_detail_search_by_dtxcid)) {
     expect_error(fn(c("one", "two")), class = "specmill_call_error")
   }
+  # The reviewed AMOS collector parses after combination and keeps purrr's index.
+  error <- tryCatch(chemi_amos_get_info_by_id(c("one", "two")), error = identity)
+  expect_s3_class(error, "purrr_error_indexed")
+  expect_identical(error$location, 1L)
+  expect_s3_class(error$parent, "simpleError")
   expect_error(ComptoxR:::.ct_tidy(NULL, list(status = 200L),
     function() stop("decode sentinel")), "decode sentinel", class = "specmill_call_error")
   local_mocked_bindings(safe_tidy_bind = function(...) stop("formatter sentinel"))
