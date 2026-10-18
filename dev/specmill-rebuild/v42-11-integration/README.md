@@ -19,3 +19,7 @@ Reproduce generation freshness with check.R after installing the pinned developm
 Both public maintenance entrypoints pass with pinned v42. Package gate: zero errors/warnings/notes, with the exclusions above. The existing GET-body interoperability warning and raw pre-override relative-server inventory diagnostics remain visible; all thirty selected source-validation reports pass and no generation change is proposed. The full broad safe suite is still running.
 
 Independent standards/spec review is recorded separately in REVIEW.md. The one discovered hook-validator integration gap is resolved in tooling, with unchanged runtime bodies and strict rejection self-checks. No generator feature is bypassed.
+
+## Completed broad run and corrections
+
+The completed broad run has12,942 passing assertions,50 expected skips, zero failed expectations/warnings and2 errors. It is not a clean broad pass. The unchanged native GET assay fixture was inadvertently removed with selected migrated names; that exact entry is restored from the frozen parent, preserving its owned contract test. The WebTEST localhost fixture reused a connection across its204 and malformed-JSON replies; Connection:close isolates responses, matching other real wire fixtures. Runtime transport is unchanged. Both raw errors and the complete result are retained. The next broad run includes the additional reviewed standardizer preflight and explicitly selects the pinned toolkit library.

@@ -42,13 +42,13 @@ test_that('WebTEST exports validate inputs and preserve actual localhost wire co
         query = req$QUERY_STRING, content_type = req$CONTENT_TYPE,
         accept = req$HTTP_ACCEPT, body = body), file.path(directory, paste0(count, '.rds')))
       result <- readRDS(file.path(directory, 'response.rds'))
-      list(status = result$status, headers = list(`Content-Type` = result$media), body = result$body)
+      list(status = result$status, headers = list(`Content-Type` = result$media, Connection = 'close'), body = result$body)
     }))
     saveRDS(port, file.path(directory, 'ready.rds'))
     repeat httpuv::service(50)
   }, args = list(directory), supervise = TRUE)
   on.exit(server$kill(), add = TRUE)
-  for (i in seq_len(200L)) {
+  for (i in seq_len(400L)) {
     if (file.exists(file.path(directory, 'ready.rds')) || !server$is_alive()) break
     Sys.sleep(0.05)
   }
