@@ -1710,3 +1710,43 @@ sort, actual body/URL/Accept, return values, warnings and early errors. A privat
 native state suite replaces its old fixed-helper test fixture for verification;
 root facade remains retained. Existing supported prepare callback preserves the
 literal vector default without changes to other resolver wrapper outputs.
+
+### Combined list hook and resolved payload review
+
+Specmill #162 documented the list-name migration blocker: applying the extraction
+hook inside each request preserved duplicate SID rows, while the original wrapper
+applied it once to the combined tidy result. PR163 exact
+`b79412fd330ddad452ff1a31c22917ba6fa543eb` resolves this with
+`post_response_scope: combined` and `post_params_source: original`.
+Independent archive SHA256 is
+`6fec334c6f930fe26ed3eb581c5a210406a2091a0f091ebdf2d26dd6999b27ad`.
+The native collector/final tidy formatter and unchanged real hook pass 30 exact
+comparisons: normal/single/duplicate/blank/NA/empty inputs, extraction on/off,
+duplicate SID payloads, missing SID hook failures and malformed JSON. Values,
+requests, warnings and hook traces match; errors also match class/message/parent
+class. Evidence: `pending-list-name-pr163-replay.rds`; upstream verification:
+https://github.com/seanthimons/specmill/pull/163#issuecomment-6252180259.
+Root adoption remains held for serialized releases and full checks.
+
+Seven resolved-chemical candidates initially matched the old wrappers in 70
+comparisons, but payload review found the old generic envelope itself violated
+several declared request schemas. `pending-resolved-chemical-candidates.rds`
+records that **old-shape parity experiment, not an adoption-ready payload**.
+The subsequent candidate uses Chemical versus ChemicalRecord/ResolvedChemical
+items as declared, and places schema fields directly in the request object.
+Resolving a chemical must preserve its complete fields rather than retaining only
+SID/SMILES. A live ToxPrint experiment also established that omitting optional
+`options` produces HTTP 500, while an explicit empty object succeeds with total=1
+and one returned chemical (`toxprints-native-flat-live-review.rds`). The corrected
+private candidate now reproduces that positive result through the real wrapper.
+These client body/data projections use supported callbacks; no transport helper
+or executor was patched. Other targets still need successful live validation:
+PubChem section returned 500; standardizer's default request returned an empty
+result in the old shape and a configuration error in the flat control.
+
+`resolved-live-review.rds`, `resolved-shapes-live-review.rds` and
+`chet-batch-live-review.rds` retain credential-free read-only evidence. ChET batch
+search returned HTTP 200 JSON. `pending-chet-media-batch.rds` and
+`pending-typed-errors-private-state.rds` preserve held candidate contracts.
+No evidence file constitutes a completion count or permission to pin unreleased
+Specmill in root.
