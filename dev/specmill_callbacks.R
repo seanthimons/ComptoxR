@@ -81,3 +81,29 @@ classifier_body <- function(operation) {
     if (WRAP) base::list(chemicals = chemicals, options = options) else chemicals
   }), list(OPTIONS = options, WRAP = !grepl('/ncc_cats$', operation$key)))
 }
+
+ amos_read_body <- function(operation) {
+    primary <- operation$parameters[[1L]]$public_name
+    if (is.null(primary))
+        primary <- operation$parameters[[1L]]$name
+    substitute(base::local({
+        value <- params[[PRIMARY]]
+        if (base::is.null(value) || !base::length(value)) cli::cli_abort("Either query or chemicals parameter must be provided.")
+        if (base::is.atomic(value) && base::all(base::is.na(value) | value == "")) cli::cli_abort("Either query or chemicals parameter must be provided.")
+        body <- base::Filter(base::Negate(base::is.null), params)
+        .api_validation$body_value(body, SCHEMA)
+    }), list(PRIMARY = primary, SCHEMA = operation$schema_body))
+}
+amos_read_response <- function(operation) {
+    substitute(function(response, context, decode) {
+        context$endpoint <- ENDPOINT
+        .ct_amos_read_json(response, context, decode)
+    }, list(ENDPOINT = sub("^/api/", "", operation$path)))
+}
+
+ amos_dtxsids_body <- function(operation) quote(base::local({
+    ids <- unique(as.vector(params[["dtxsids"]]))
+    ids <- ids[!is.na(ids) & ids != ""]
+    if (!length(ids)) cli::cli_abort("Supply at least one DTXSID.")
+    base::list(dtxsids = base::I(ids))
+}))

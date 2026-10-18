@@ -10,14 +10,14 @@ chemi_amos_dtxsids(dtxsids = NULL)
 \item{dtxsids}{Array of DTXSIDs as strings.}
 }
 \value{
-Returns a tibble with results
+Returns the decoded JSON result
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_dtxsids(dtxsids = "DTXSID1024122")
+chemi_amos_dtxsids(dtxsids = "DTXSID7020182")
 }
 }
 \section{API stage}{

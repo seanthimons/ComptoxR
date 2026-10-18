@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_all_similarities.R
 \name{chemi_amos_all_similarities}
 \alias{chemi_amos_all_similarities}
-\title{Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.}
+\title{chemi amos all similarities}
 \usage{
 chemi_amos_all_similarities(
   da_window = NULL,
@@ -27,14 +27,14 @@ chemi_amos_all_similarities(
 \item{spectra}{A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.  Maximum intensity should be scaled to 100.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_all_similarities(da_window = "DTXSID1024122")
+chemi_amos_all_similarities(da_window = 0.1, dtxsids = list("DTXSID9020112", "DTXSID3022401"), min_intensity = 0, ms_level = 2L, ppm_window = 5, spectra = list(list(list(10L, 20L), list(23L, 100L)), list(list(15L, 30L), list(24.5, 100L), list(33L, 9L))))
 }
 }
 \section{API stage}{

@@ -1,0 +1,24 @@
+{
+  "status": "adopted_released",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.29",
+    "source_commit": "0f436277450801c9640e27725b0805561fd91984",
+    "source_archive_sha256": "4e97ae11f80cd248800a51689c5b795732b016c64fd068fa25fc65f3f2b87b8b",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "wrappers": ["chemi_amos_spectral_entropy", "chemi_amos_entropy_similarity", "chemi_amos_spectrum_count_for_methodology", "chemi_amos_mass_range", "chemi_amos_next_level_classification", "chemi_amos_substances_for_classification", "chemi_amos_all_similarities", "chemi_amos_max_similarity", "chemi_amos_mass_spectrum_similarity", "chemi_amos_dtxsids"],
+  "operations": ["POST /api/amos/spectral_entropy/", "POST /api/amos/entropy_similarity/", "POST /api/amos/spectrum_count_for_methodology/", "POST /api/amos/mass_range_search/", "POST /api/amos/next_level_classification/", "POST /api/amos/substances_for_classification/", "POST /api/amos/all_similarities_by_dtxsid/", "POST /api/amos/max_similarity_by_dtxsid/", "POST /api/amos/mass_spectrum_similarity_search/", "POST /api/amos/dtxsids/"],
+  "schema": "schema/chemi-amos-prod.json",
+  "schema_sha256": "1d0ef1fbd813e2381a1e6e841d69e5070ee438e588a01dc3298b984ba7ca5f35",
+  "request_policy": "Complete reviewed POST JSON bindings; no authentication inferred; server origin resolved via chemi_burl.",
+  "response_policy": ".ct_amos_read_json",
+  "captures": "dev/specmill-rebuild/artifacts/amos-read",
+  "persistent_tests": ["tests/testthat/test-native_amos_read.R", "tests/testthat/test-native_amos_dtxsids.R"],
+  "localhost_verification": "dev/specmill-rebuild/verify-amos-dtxsids-http.R",
+  "legacy_test_generation": "Broader existing native inventory/stale-manifest suite validation fails; referred to Specmill agent for triage. Ten obsolete generic-helper-only tests replaced by persistent native contracts.",
+  "excluded_contracts": ["substances_for_ids Excel binary", "analytical_qc_batch_search and batch_search 500 HTML", "cursor pagers pending released PR151"],
+  "runtime_helper_change": false,
+  "archive_schema_change": false
+}

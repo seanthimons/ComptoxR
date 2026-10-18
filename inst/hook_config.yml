@@ -652,3 +652,33 @@ epi_ecosar_polymer_nonionic:
 epi_ecosar_dye:
   post_response:
     - unwrap_epi_result
+
+chemi_amos_spectral_entropy:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_entropy_similarity:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_spectrum_count_for_methodology:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_mass_range:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_next_level_classification:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_substances_for_classification:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_all_similarities:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_max_similarity:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_mass_spectrum_similarity:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_dtxsids:
+  bespoke_test: "tests/testthat/test-native_amos_dtxsids.R"

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_max_similarity.R
 \name{chemi_amos_max_similarity}
 \alias{chemi_amos_max_similarity}
-\title{Given a list of DTXSIDs and a list of mass spectra, return the highest similarity score for each combination of}
+\title{chemi amos max similarity}
 \usage{
 chemi_amos_max_similarity(
   da_window = NULL,
@@ -24,14 +24,14 @@ chemi_amos_max_similarity(
 \item{spectra}{A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_max_similarity(da_window = "DTXSID1024122")
+chemi_amos_max_similarity(da_window = 0.1, dtxsids = list("DTXSID0020232", "DTXSID70199859"), ms_level = 2L, ppm_window = 5, spectra = list(list(list(217.0696, 100L), list(218.0721, 10.2292))))
 }
 }
 \section{API stage}{

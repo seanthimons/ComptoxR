@@ -30,6 +30,16 @@ selection:
   - GET /api/amos/get_classification_for_dtxsid/{dtxsid}
   - GET /api/amos/get_similar_structures/{identifier_type}/{identifier}
   - GET /api/amos/list_sources_by_record_type/{record_type}
+  - POST /api/amos/spectral_entropy/
+  - POST /api/amos/entropy_similarity/
+  - POST /api/amos/spectrum_count_for_methodology/
+  - POST /api/amos/mass_range_search/
+  - POST /api/amos/next_level_classification/
+  - POST /api/amos/substances_for_classification/
+  - POST /api/amos/all_similarities_by_dtxsid/
+  - POST /api/amos/max_similarity_by_dtxsid/
+  - POST /api/amos/mass_spectrum_similarity_search/
+  - POST /api/amos/dtxsids/
 helper: generic_request
 documentation: yes
 operations:
@@ -721,5 +731,701 @@ operations:
       - record_type: method
     normalize_inputs:
       record_type: .ct_legacy_query
+  POST /api/amos/spectral_entropy/:
+    name: chemi_amos_spectral_entropy
+    file: R/chemi_amos_spectral_entropy.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      spectrum:
+        default: ~
+        type: list
+        description: Array of m/z intensity pairs.  Should be formatted as an array
+          of two-element arrays, each of which has the m/z value and the intensity
+          value (in that order).  Peaks should be sorted in increasing order of m/z
+          values.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/spectral_entropy/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos spectral entropy
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - spectrum:
+        - - 10.5
+          - 20
+        - - 20
+          - 100
+        - - 50
+          - 1
+  POST /api/amos/entropy_similarity/:
+    name: chemi_amos_entropy_similarity
+    file: R/chemi_amos_entropy_similarity.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      spectrum_1:
+        default: ~
+        type: list
+        description: Array of m/z intensity pairs.  Should be formatted as an array
+          of two-element arrays, each of which has the m/z value and the intensity
+          value (in that order).  Peaks should be sorted in increasing order of m/z
+          values.
+      spectrum_2:
+        default: ~
+        type: list
+        description: Array of m/z intensity pairs.  Should be formatted as an array
+          of two-element arrays, each of which has the m/z value and the intensity
+          value (in that order).  Peaks should be sorted in increasing order of m/z
+          values.
+      type:
+        default: ~
+        type: character
+        description: Type of mass window to use.  Should be either "da" or "ppm".
+      window:
+        default: ~
+        type: numeric
+        description: Size of the mass window to use.  Will be in units of the 'type'
+          argument.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/entropy_similarity/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos entropy similarity
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - spectrum_1:
+        - - 10.5
+          - 20
+        - - 20
+          - 100
+        - - 50
+          - 1
+        spectrum_2:
+        - - 10.5
+          - 20
+        - - 22
+          - 100
+        - - 50
+          - 1.5
+        type: da
+        window: 0.10000000000000001
+  POST /api/amos/spectrum_count_for_methodology/:
+    name: chemi_amos_spectrum_count_for_methodology
+    file: R/chemi_amos_spectrum_count_for_methodology.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        default: ~
+        type: character
+        description: DTXSID for the substance of interest.
+      spectrum_type:
+        default: ~
+        type: character
+        description: Analytical methodology to search for.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/spectrum_count_for_methodology/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos spectrum count for methodology
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID9020112
+        spectrum_type: GC/MS
+  POST /api/amos/mass_range_search/:
+    name: chemi_amos_mass_range
+    file: R/chemi_amos_mass_range.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      lower_mass_limit:
+        default: ~
+        type: numeric
+        description: Lower limit of the mass range to search for.
+      upper_mass_limit:
+        default: ~
+        type: numeric
+        description: Upper limit of the mass range to search for.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/mass_range_search/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos mass range
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - lower_mass_limit: 194.09999999999999432
+        upper_mass_limit: 194.19999999999998863
+  POST /api/amos/next_level_classification/:
+    name: chemi_amos_next_level_classification
+    file: R/chemi_amos_next_level_classification.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      kingdom:
+        default: ~
+        type: character
+        description: Kingdom-level (highest) classification of a substance.  Always
+          required.
+      klass:
+        default: ~
+        type: character
+        description: Class-level (third-highest) classification of a substance.  Required
+          if requesting a list of subclasses.
+      superklass:
+        default: ~
+        type: character
+        description: Superclass-level (second-highest) classification of a substance.  Required
+          if requesting a list of classes or subclasses.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/next_level_classification/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos next level classification
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - kingdom: Organic compounds
+        klass: Organic metal salts
+        superklass: Organic salts
+  POST /api/amos/substances_for_classification/:
+    name: chemi_amos_substances_for_classification
+    file: R/chemi_amos_substances_for_classification.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      kingdom:
+        default: ~
+        type: character
+        description: Kingdom-level (highest) classification of a substance.
+      klass:
+        default: ~
+        type: character
+        description: Class-level (third-highest) classification of a substance.
+      subklass:
+        default: ~
+        type: character
+        description: Subclass-level (fourth-highest) classification of a substance.
+      superklass:
+        default: ~
+        type: character
+        description: Superclass-level (second-highest) classification of a substance.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/substances_for_classification/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos substances for classification
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - kingdom: Organic compounds
+        klass: Organic metal salts
+        subklass: Organic calcium salts
+        superklass: Organic salts
+  POST /api/amos/all_similarities_by_dtxsid/:
+    name: chemi_amos_all_similarities
+    file: R/chemi_amos_all_similarities.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      da_window:
+        default: ~
+        type: numeric
+        description: Mass window in units of daltons.  If not null, this will be used
+          for similarity calculations, regardless of whether ppm_window is supplied.
+      dtxsids:
+        default: ~
+        type: list
+        description: List of DTXSIDs to search for.
+      min_intensity:
+        default: ~
+        type: numeric
+        description: Minimum intensity level for peaks in both the user and database
+          spectra to consider.  All database spectra are scaled to have a maximum
+          intensity of 100, and all user spectra are assumed to be scaled the same.
+      ms_level:
+        default: ~
+        type: character
+        description: Level of mass spectrometry; if supplied, then only spectra at
+          the specified level will be returned.  Valid values are from 1 to 5.
+      ppm_window:
+        default: ~
+        type: numeric
+        description: Mass window in units of parts per million.  Will only be used
+          if da_window is null or not passed and ppm_window is not null.
+      spectra:
+        default: ~
+        type: list
+        description: A list of spectra, where each spectrum is an array of m/z-intensity
+          pairs formatted as two-element arrays.  Maximum intensity should be scaled
+          to 100.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/all_similarities_by_dtxsid/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos all similarities
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - da_window: 0.10000000000000001
+        dtxsids:
+        - DTXSID9020112
+        - DTXSID3022401
+        min_intensity: 0
+        ms_level: 2
+        ppm_window: 5
+        spectra:
+        - - - 10
+            - 20
+          - - 23
+            - 100
+        - - - 15
+            - 30
+          - - 24.5
+            - 100
+          - - 33
+            - 9
+  POST /api/amos/max_similarity_by_dtxsid/:
+    name: chemi_amos_max_similarity
+    file: R/chemi_amos_max_similarity.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      da_window:
+        default: ~
+        type: numeric
+        description: Mass window in units of daltons.  If not null, this will be used
+          for similarity calculations, regardless of whether ppm_window is supplied.
+      dtxsids:
+        default: ~
+        type: list
+        description: List of DTXSIDs to search for.
+      ms_level:
+        default: ~
+        type: character
+        description: Level of mass spectrometry; if supplied, then only spectra at
+          the specified level will be returned.  Valid values are from 1 to 5.
+      ppm_window:
+        default: ~
+        type: numeric
+        description: Mass window in units of parts per million.  Will only be used
+          if da_window is null or not passed and ppm_window is not null.
+      spectra:
+        default: ~
+        type: list
+        description: A list of spectra, where each spectrum is an array of m/z-intensity
+          pairs formatted as two-element arrays.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/max_similarity_by_dtxsid/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos max similarity
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - da_window: 0.10000000000000001
+        dtxsids:
+        - DTXSID0020232
+        - DTXSID70199859
+        ms_level: 2
+        ppm_window: 5
+        spectra:
+        - - - 217.06960000000000832
+            - 100
+          - - 218.07210000000000605
+            - 10.22920000000000051
+  POST /api/amos/mass_spectrum_similarity_search/:
+    name: chemi_amos_mass_spectrum_similarity
+    file: R/chemi_amos_mass_spectrum_similarity.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      lower_mass_limit:
+        default: ~
+        type: numeric
+        description: Lower limit of the mass range to search for.
+      methodology:
+        default: ~
+        type: character
+        description: Analytical methodology to search for.  Values aside from "GC/MS"
+          and "LC/MS" are highly unlikely to produce results.
+      spectrum:
+        default: ~
+        type: list
+        description: Array of two-element numeric arrays.  The two-element arrays
+          represent a single peak in the spectrum, in the format [m/z, intensity].  Peaks
+          should be sorted in ascending order of m/z values.
+      type:
+        default: ~
+        type: character
+        description: Type of mass window to use for entropy similarity calculations.  Can
+          be either "da" or "ppm".
+      upper_mass_limit:
+        default: ~
+        type: numeric
+        description: Upper limit of the mass range to search for.
+      window:
+        default: ~
+        type: numeric
+        description: Size of mass window.  Is in units of `type`.
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/mass_spectrum_similarity_search/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_read_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Reviewed AMOS production origin.
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request examples and current read-only production
+        200 JSON capture.
+    docs:
+      title: chemi amos mass spectrum similarity
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read or calculation operation.
+      tags:
+        apiStage: public
+      examples:
+      - lower_mass_limit: 194.09999999999999432
+        methodology: LC/MS
+        spectrum:
+        - - 217.06960000000000832
+          - 100
+        - - 218.07210000000000605
+          - 10.22920000000000051
+        type: da
+        upper_mass_limit: 194.19999999999998863
+        window: 0.05
+  POST /api/amos/dtxsids/:
+    name: chemi_amos_dtxsids
+    file: R/chemi_amos_dtxsids.R
+    helper: .ct_request
+    implementation: generated
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed staging declaration and production JSON capture.
+    inputs:
+      dtxsids:
+        type: character
+        default: ~
+        description: Array of DTXSIDs as strings.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/dtxsids/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_dtxsids_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Swagger host/scheme requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    docs:
+      title: Returns substance information and record counts for a list of DTXSIDs.
+      lifecycle: experimental
+      return: Returns the decoded JSON result
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids: DTXSID7020182
+    response_correction:
+      status: '200'
+      media_type: application/json
+      description: Substance information for supplied DTXSIDs.
+      reason: Reviewed staging response and captured production 200 JSON.
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds
 hook_config: inst/hook_config.yml

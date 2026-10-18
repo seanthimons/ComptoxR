@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_mass_spectrum_similarity.R
 \name{chemi_amos_mass_spectrum_similarity}
 \alias{chemi_amos_mass_spectrum_similarity}
-\title{Takes a mass range, methodology, and mass spectrum, and returns all spectra that match the mass and methodology, with entropy similarities between the database spectra and the user-supplied one.}
+\title{chemi amos mass spectrum similarity}
 \usage{
 chemi_amos_mass_spectrum_similarity(
   lower_mass_limit = NULL,
@@ -27,14 +27,14 @@ chemi_amos_mass_spectrum_similarity(
 \item{window}{Size of mass window.  Is in units of \code{type}.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID1024122")
+chemi_amos_mass_spectrum_similarity(lower_mass_limit = 194.1, methodology = "LC/MS", spectrum = list(list(217.0696, 100L), list(218.0721, 10.2292)), type = "da", upper_mass_limit = 194.2, window = 0.05)
 }
 }
 \section{API stage}{

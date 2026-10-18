@@ -1224,3 +1224,26 @@ hook regressions pass, as does the preserved fixed helper contract. Documentatio
 arguments/defaults match the code. No new live production claim is made for this
 facade. The old return documentation is corrected to describe its existing
 tibble result. `wave-classyfire.json` records the released source and schema hash.
+
+## Reviewed AMOS JSON reads, 18 October 2026
+
+Released Specmill v0.1.29, source
+`0f436277450801c9640e27725b0805561fd91984`, enables ten additional
+native AMOS POST wrappers. Nine read/calculation routes use reviewed missing
+JSON media declarations and complete client request projections. DTXSID lookup
+also uses the reviewed declaration for its originally empty response map.
+The original schema bytes and raw validation findings remain archived.
+
+Captured production JSON responses and exact request projections pass for the
+nine read/calculation routes, including scientific nested arrays, optional
+fields, positional/named calls and hard HTTP/credential errors. DTXSID lookup
+preserves its captured decoded result, duplicate/blank/NA cleanup and singleton
+JSON arrays. A persistent localhost check verifies its actual UTF-8 request
+bytes, preflight rejection and HTTP 404/500/401 failures. These are reviewed API
+request projections; the old generic query facades are not asserted to have
+sent equivalent valid JSON bodies.
+
+The Excel substances-for-IDs route, two routes whose archived example requests
+returned 500 HTML, and the separately verified cursor pagers remain retained.
+No binary, upload or write semantics are inferred. The native and generic
+transport helper bytes are unchanged. ComptoxR remains local only.

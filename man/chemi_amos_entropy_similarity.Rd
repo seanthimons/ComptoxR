@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_entropy_similarity.R
 \name{chemi_amos_entropy_similarity}
 \alias{chemi_amos_entropy_similarity}
-\title{Calculates the entropy similarity for two spectra.}
+\title{chemi amos entropy similarity}
 \usage{
 chemi_amos_entropy_similarity(
   spectrum_1 = NULL,
@@ -21,14 +21,14 @@ chemi_amos_entropy_similarity(
 \item{window}{Size of the mass window to use.  Will be in units of the 'type' argument.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_entropy_similarity(spectrum_1 = "DTXSID1024122")
+chemi_amos_entropy_similarity(spectrum_1 = list(list(10.5, 20L), list(20L, 100L), list(50L, 1L)), spectrum_2 = list(list(10.5, 20L), list(22L, 100L), list(50L, 1.5)), type = "da", window = 0.1)
 }
 }
 \section{API stage}{
