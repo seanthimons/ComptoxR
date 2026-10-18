@@ -63,7 +63,7 @@ ct_chemical_detail_search_bulk <- function(query, projection = "chemicaldetailal
       path_params = base::list(),
       query = base::list("projection" = params[["projection"]]),
       body = params[["query"]],
-      response_policy = ".ct_tidy",
+      response_policy = ".ct_http_policy_ct_chemical_detail_search_bulk",
       server = list(url = "https://comptox.epa.gov/ctx-api"),
       server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
       auth = list(list(list(
@@ -77,14 +77,22 @@ ct_chemical_detail_search_bulk <- function(query, projection = "chemicaldetailal
     )
     result
   }
-  .ct_request_each(
+  result <- .ct_request_each(
     function(chunk) {
       params["query"] <- base::list(chunk)
       send(params)
     },
     params[["query"]],
     .batch_limit,
-    on_error = "drop",
-    empty = .ct_empty_table
+    on_error = list(single = "stop", multiple = "drop"),
+    empty = .ct_empty_table,
+    warning = base::get(
+      ".ct_batch_http_warning",
+      envir = base::parent.env(base::environment()),
+      mode = "function",
+      inherits = FALSE
+    )
   )
+  base::attr(result, "failed") <- NULL
+  result
 }

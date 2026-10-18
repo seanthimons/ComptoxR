@@ -16,7 +16,9 @@ test_that("native vector wrappers normalize once before validation and iteration
         },
         .ct_request = function(...) {
           calls[[length(calls) + 1L]] <<- list(...)
-          case$response
+          if (name %in% c("chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"))
+            list(list(input = unlist(list(...)$path_params, use.names = FALSE),
+                      records = case$response)) else case$response
         },
         .package = "ComptoxR"
       )

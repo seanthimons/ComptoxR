@@ -1,17 +1,17 @@
-test_that("exact-search bulk preserves its batch-limit fallback and override", {
-  captured <- NULL
-  testthat::local_mocked_bindings(
-    generic_request = function(...) {
-      captured <<- list(...)
-      NULL
-    },
-    .package = "ComptoxR"
-  )
-  withr::local_envvar(batch_limit = NA_character_)
-  ct_chemical_search_equal_bulk("50-00-0")
-  expect_identical(captured$batch_limit, 1000)
-  expect_identical(captured$body_type, "raw_text")
+test_that("exact-search bulk preserves its fallback, override and wire cap", {
+  captured <- list()
+  local_mocked_bindings(.ct_request = function(...) {
+    captured[[length(captured) + 1L]] <<- list(...)
+    tibble::tibble()
+  }, .package = "ComptoxR")
+  withr::local_envvar(batch_limit = NA_character_, ctx_api_key = "local-line-key")
+  ct_chemical_search_equal_bulk(as.character(seq_len(201L)))
+  expect_length(captured, 2L)
+  expect_identical(captured[[1L]]$body, paste(seq_len(200L), collapse = "\n"))
+  expect_identical(captured[[2L]]$body, "201")
+  expect_identical(captured[[1L]]$body_media, "text/plain")
   Sys.setenv(batch_limit = "2")
-  ct_chemical_search_equal_bulk("50-00-0")
-  expect_identical(captured$batch_limit, 2)
+  captured <- list()
+  ct_chemical_search_equal_bulk(c("one", "two", "three"))
+  expect_identical(lapply(captured, `[[`, "body"), list("one\ntwo", "three"))
 })

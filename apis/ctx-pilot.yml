@@ -46,7 +46,7 @@ operations:
     server:
       resolver: .ct_server_url
       key: ctx_burl
-    response_policy: .ct_tidy
+    response_policy: .ct_http_policy_ct_chemical_detail_search_bulk
     normalize_inputs:
       query: .ct_legacy_query
     batch:
@@ -54,8 +54,12 @@ operations:
         env: batch_limit
         default: 100
       split: yes
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
       empty: .ct_empty_table
+      metadata: no
+      warning: .ct_batch_http_warning
     docs:
       title: Get chemical details in bulk
       lifecycle: stable

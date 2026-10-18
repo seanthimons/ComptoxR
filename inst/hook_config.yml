@@ -3,6 +3,7 @@
 # Hooks execute in declared order. Extra params are injected into function signatures.
 
 chemi_classyfire:
+  bespoke_test: "tests/testthat/test-native_classyfire.R"
   post_combine:
     - format_classyfire_result
 
@@ -735,3 +736,19 @@ chemi_resolver_ghs_list_count:
 
 chemi_toxprint:
   bespoke_test: "tests/testthat/test-native_toxprint.R"
+
+chemi_amos_get_info_by_id:
+  bespoke_test: "tests/testthat/test-native_failure_empty.R"
+  post_combine:
+    - format_legacy_list_result
+
+chemi_alerts_groups_by_id:
+  bespoke_test: "tests/testthat/test-native_failure_empty.R"
+  post_combine:
+    - format_legacy_list_result
+
+ct_chemical_search_equal_bulk:
+  bespoke_test: "tests/testthat/test-native_failure_empty.R"
+
+ct_chemical_detail_search_by_dtxcid:
+  bespoke_test: "tests/testthat/test-native_failure_empty.R"

@@ -121,3 +121,8 @@ toxprint_response <- function(operation) quote(function(response, context, decod
     context$query <- params[["query"]]
     .ct_chemi_tidy(response, context, decode)
 })
+
+ reviewed_batch_response <- function(operation) quote(function(response, context, decode) {
+    context$query <- params[["query"]]
+    .ct_http_policy_ct_chemical_search_equal_bulk(response, context, decode)
+})

@@ -1,8 +1,8 @@
 {
   "package": "specmill",
-  "version": "0.1.33",
-  "source_commit": "28b8e4516013c078baa977460453418b0c760e3f",
-  "source_archive_sha256": "c7e8530dee23fc4bf689355029016b09e2c71160c3503b146a91b5bba76ce3f8",
+  "version": "0.1.34",
+  "source_commit": "4cace56d03e34470d962a845f77d8c5ba9b9e2c8",
+  "source_archive_sha256": "132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28",
   "source_repository": "https://github.com/seanthimons/specmill",
   "archive_format": "git archive --format=tar <source_commit>"
 }

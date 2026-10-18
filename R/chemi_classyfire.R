@@ -49,7 +49,7 @@ chemi_classyfire <- function(query) {
       "server" = list(),
       "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
       "auth" = list(),
-      "response_policy" = ".ct_tidy"
+      "response_policy" = ".ct_http_policy_chemi_classyfire"
     )
     result
   }
@@ -60,9 +60,16 @@ chemi_classyfire <- function(query) {
     },
     params[["query"]],
     1L,
-    on_error = "drop",
-    empty = .ct_empty_table
+    on_error = list(single = "stop", multiple = "drop"),
+    empty = .ct_empty_table,
+    warning = base::get(
+      ".ct_batch_http_warning",
+      envir = base::parent.env(base::environment()),
+      mode = "function",
+      inherits = FALSE
+    )
   )
+  base::attr(result, "failed") <- NULL
   kept <- base::attr(result, "failed", exact = TRUE)
   result <- run_hook("chemi_classyfire", "post_combine", base::list(result = result, params = params))
   if (!base::is.null(kept) && !base::is.null(result) && base::is.null(base::attr(result, "failed", exact = TRUE))) {

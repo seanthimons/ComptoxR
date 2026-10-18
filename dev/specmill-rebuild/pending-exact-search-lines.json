@@ -1,5 +1,5 @@
 {
-  "status": "released32_line_fix_verified_wrapper_retained",
+  "status": "released34_adopted",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.32",
@@ -76,5 +76,30 @@
         "formatter_send_collision": "Covered upstream; actual wrappers exercise their reviewed named client formatter."
       }
     }
+  },
+  "adoption": {
+    "status": "released34_adopted",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.34",
+      "source_commit": "4cace56d03e34470d962a845f77d8c5ba9b9e2c8",
+      "source_archive_sha256": "132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "wrappers": ["chemi_alerts_groups_by_id", "chemi_amos_get_info_by_id", "ct_chemical_detail_search_bulk", "chemi_classyfire", "ct_chemical_detail_search_by_dtxcid", "ct_chemical_detail_search_by_dtxcid_bulk", "ct_chemical_search_equal_bulk"],
+    "verification": {
+      "prior_batch_cases": 107,
+      "line_successes": 126,
+      "line_http_failures": 56,
+      "native_simulated_401_cases": 6,
+      "malformed_success_body_hard_cases": 7,
+      "exact_warnings": true,
+      "complete_attributes": true,
+      "whole_client_validation_freshness": true,
+      "credential_scope": "Simulated tests only; native401 remains hard; legacy multi401 equivalence is not claimed."
+    },
+    "scope": "Seven reviewed wrappers only. Request-count errors, explicit empty constructors, list grouping, structured HTTP warning formatting, metadata:false and logical line callback inputs.",
+    "retired_tests": ["tests/testthat/test-contract-chemi_alerts_groups_by_id.R", "tests/testthat/test-contract-chemi_amos_get_info_by_id.R", "tests/testthat/test-contract-chemi_classyfire.R", "tests/testthat/test-contract-ct_chemical_detail_search_by_dtxcid.R", "tests/testthat/test-contract-ct_chemical_search_equal_bulk.R"]
   }
 }

@@ -633,13 +633,17 @@ operations:
     server:
       resolver: .ct_server_url
       key: chemi_burl
-    response_policy: .ct_tidy
+    response_policy: .ct_http_policy_chemi_classyfire
     normalize_inputs:
       query: .ct_legacy_query
     batch:
       fan_out: dtxsid
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
       empty: .ct_empty_table
+      metadata: no
+      warning: .ct_batch_http_warning
     docs:
       title: Get Classyfire classification for DTXSID
       description: This function retrieves Classyfire classifications for a given
@@ -676,7 +680,7 @@ operations:
         auth:
           value: []
         response_policy:
-          value: .ct_tidy
+          value: .ct_http_policy_chemi_classyfire
   GET /api/amos/get_similar_structures/{identifier_type}/{identifier}:
     name: chemi_amos_get_similar_structures
     file: R/chemi_amos_get_similar_structures.R
@@ -1424,7 +1428,8 @@ operations:
       tags:
         apiStage: public
       examples:
-      - dtxsids: DTXSID7020182
+      - dtxsids:
+        - DTXSID7020182
     response_correction:
       status: '200'
       media_type: application/json

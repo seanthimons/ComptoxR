@@ -1369,3 +1369,43 @@ source SHA256 is `9aadc8ab63cd31a01e5b97fe4e05f641b5b0baa49077a37afa669cbf582e91
 The existing combined evidence records now include this final-head recheck.
 The formatter-name collision regression remains upstream coverage; actual wrappers
 exercise their reviewed named client formatter. No production wrapper adoption.
+
+## Released request-count and warning adoption, 18 October 2026
+
+Pinned official Specmill v0.1.34 at
+`4cace56d03e34470d962a845f77d8c5ba9b9e2c8`. Official archive checksum,
+DESCRIPTION version and PR146 ancestry pass. Independently archived source SHA256:
+`132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28`.
+The shared helper is regenerated from the released source through the existing
+reviewed decoder adapter; no local runtime patch is added.
+
+Adopted native `ct_chemical_search_equal_bulk` and the reviewed complete failure
+policies for `ct_chemical_detail_search_bulk`,
+`ct_chemical_detail_search_by_dtxcid`, `ct_chemical_detail_search_by_dtxcid_bulk`,
+`chemi_classyfire`, `chemi_amos_get_info_by_id` and `chemi_alerts_groups_by_id`.
+Single effective requests stop on ordinary failures; multiple requests continue
+with reviewed structured HTTP warnings and suppressed transport warnings. Tables
+use the original empty tibble constructor. List facades preserve numeric names,
+successful attribution and NULL positions. Failure metadata is explicitly disabled.
+Line callbacks retain logical entries separately from encoded LF body bytes.
+
+All302 accepted comparisons pass again on this released production pin:107 prior
+batch cases,126 actual localhost line success comparisons,56 actual localhost
+HTTP404/500 failure comparisons, six native localhost401 hard-error cases and
+seven malformed-success-body hard-error cases. Values, complete attributes,
+warning strings and captured wire bytes are compared. All seven public signatures
+match frozen legacy definitions. Focused Classyfire, normalization, response-error,
+line-limit and failure-contract tests pass, as do legacy test-inventory freshness
+and documentation signature checks. Five existing obsolete helper-call suites
+were explicitly retired through the public ownership API after replacement
+coverage was selected; unrelated missing ownership entries remain untouched.
+
+401 tests are simulated; they are not production authentication failure reports.
+Native401 remains hard, and old multi401 equivalence is explicitly excluded.
+Fourteen pagers and deferred lookup remain held for their releases. Other vector,
+list and file-response contracts still need individual review. No full package
+check rerun and no ComptoxR push.
+
+Final validated whole-client generation and official freshness pass on the adopted
+release, with only the existing retained descriptor-origin warnings. Schemas and
+the exact-search GET sibling remain unchanged.

@@ -124,10 +124,14 @@ operations:
     server:
       resolver: .ct_server_url
       key: chemi_burl
-    response_policy: .ct_list
+    response_policy: .ct_http_policy_chemi_amos_get_info_by_id
     batch:
       fan_out: internal_id
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: .ct_batch_http_warning
     docs:
       title: Returns general information about a record by ID.
       lifecycle: experimental
@@ -185,3 +189,4 @@ operations:
     normalize_inputs:
       substr: .ct_legacy_query
 contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds
+hook_config: inst/hook_config.yml

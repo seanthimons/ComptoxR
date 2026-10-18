@@ -354,11 +354,15 @@ operations:
     server:
       resolver: .ct_server_url
       key: ctx_burl
-    response_policy: .ct_tidy
+    response_policy: .ct_http_policy_ct_chemical_detail_search_by_dtxcid
     batch:
       fan_out: dtxcid
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
       empty: .ct_empty_table
+      metadata: no
+      warning: .ct_batch_http_warning
     docs:
       title: Get data by DTXCID
       lifecycle: stable
@@ -781,7 +785,7 @@ operations:
     server:
       resolver: .ct_server_url
       key: ctx_burl
-    response_policy: .ct_tidy
+    response_policy: .ct_http_policy_ct_chemical_detail_search_by_dtxcid_bulk
     normalize_inputs:
       query: .ct_legacy_query
     batch:
@@ -789,8 +793,12 @@ operations:
         env: batch_limit
         default: 100
       split: yes
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
       empty: .ct_empty_table
+      metadata: no
+      warning: .ct_batch_http_warning
     docs:
       title: Get data for a batch of DTXCIDs
       lifecycle: stable
@@ -914,34 +922,74 @@ operations:
   POST /chemical/search/equal/:
     name: ct_chemical_search_equal_bulk
     file: R/ct_chemical_search_equal.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Character vector of values to search for
-    post_on_skip: no
-    post_state: parameters
+    body:
+      name: query
+      description: Character vector of values to search for
+    parameter_order:
+    - query
+    body_media_correction:
+      from: application/json
+      to: text/plain
+      reason: Reviewed endpoint accepts newline-delimited UTF-8 identifiers.
+    text_encoding: lines
+    normalize_inputs:
+      query: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 1000
+        cap: 200
+      split: yes
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      empty: .ct_empty_table
+      warning: .ct_batch_http_warning
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_http_policy_ct_chemical_search_equal_bulk
     request:
       arguments:
+        method:
+          value: POST
+        path:
+          value: /chemical/search/equal/
+        path_params:
+          value: []
         query:
+          value: []
+        body:
           from:
           - params
           - query
-        endpoint:
-          value: chemical/search/equal/
-        method:
-          value: POST
-        batch_limit:
-          callback: search_equal_batch_limit
-        body_type:
-          value: raw_text
+        headers:
+          value:
+            Accept: application/json
+        body_media:
+          value: text/plain
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: reviewed_batch_response
     docs:
       title: Get chemicals for a batch of exact values
       lifecycle: stable
-      parameters:
-        query: Character vector of values to search for
       return: A tibble with search results
       examples:
       - query:
