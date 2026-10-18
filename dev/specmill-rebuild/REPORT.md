@@ -1784,9 +1784,9 @@ transport preservation. Pure response projections retain ordinary HTTP warning/
 NULL results, while native 401 remains a hard call failure. The image ID is one
 encoded path segment. No runtime helper/executor customization.
 
-`test-native_static_media.R` passes 311 assertions against frozen original public
+`test-native_static_media.R` passes 279 assertions against frozen original public
 functions, plus explicit input/path and failure checks. Existing collection
-coverage passes 449 assertions; the localhost adoption check passes 20 after its
+coverage passes 441 assertions; the localhost adoption check passes 20 after its
 remaining image fixture route was updated to `/api/chet/...`. Five obsolete legacy
 helper-mock suites were retired individually, verified unowned, and replaced by
 the registered behavior suite; no other test ownership was removed. Full generation
@@ -1806,3 +1806,37 @@ with workbook and worksheet members. General/analytical batch exports return HTT
 500 for both minimal and populated schema bodies. Those failures are recorded in
 `amos-remaining-live-review.rds` and `amos-full-body-live-review.rds`; no successful
 batch-export validation is claimed.
+
+### Five production-verified AMOS reads adopted
+
+Adopted the three retrieve-document reads, substances_for_ids and document-ID
+search. Positive calls through the final root wrappers return one expected record
+per retrieve operation, the expected FS-10313 document search ID, and a populated
+Excel workbook containing DTXSID7020182. The old generic Chemi payload/gate did
+not send these valid flat request objects. Public names, files and formals remain
+unchanged; Excel responses are returned as raw bytes.
+
+The archived production Swagger2 snapshot is unchanged. A separately named,
+self-contained OAS3.0.3 subset derives only the five confirmed POST operations
+from the preserved staging source and explicitly selects production. Source URL,
+retrieval time, full source/output/canonical hashes, unchanged operation objects,
+transitive local components and exact semantic removals/server replacement are
+recorded in `amos-reviewed-source.json`; `bundle_amos_reads.R` reproduces it.
+The bundle passes `validate_schema`. Full generation with validation enabled,
+zero operation/mapping/retained/drift diagnostics, and a fresh root check pass.
+No query-type bypass, dialect splice, helper patch or snapshot rewrite.
+
+The new AMOS suite passes 110 assertions, including actual localhost POST paths,
+JSON content type and serialized array/object bodies, Excel bytes, signatures,
+ordinary HTTP errors, transport identity, parse failures, hard401 and early
+validation. The combined AMOS/static/localhost run passes 566 assertions. Five
+specific unowned legacy helper-mock suites were replaced by that registered suite.
+Production evidence is in `amos-root-live-review.rds`; the latest ChET image
+live check also succeeds for PNG, SVG and PDF (`chet-image-live-review.rds`).
+
+Updated schema progress is 300/548 under the ledger's stated criteria; legacy
+wrapper inventory is 24. General and analytical batch exports remain retained
+with recorded server500 controls; no successful behavior claim for those routes.
+The earlier static/media and collection expectation counts were corrected to
+279 and441 from their reporter output; all passed, and endpoint fractions were
+unaffected. The earlier PR progress comment was corrected in place.

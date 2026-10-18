@@ -1,5 +1,4 @@
 # Reproduce the PR progress ledger from canonical schemas and owned outputs.
-root <- normalizePath('.')
 manifest <- jsonlite::read_json('.specmill/manifest.json')$files
 hooks <- yaml::read_yaml('inst/hook_config.yml')
 config <- yaml::read_yaml('specmill.yml')
@@ -18,6 +17,8 @@ owned <- function(path) {
     digest::digest(enc2utf8(gsub('\r\n?', '\n', paste(readLines(path, warn = FALSE), collapse = '\n'))),
       algo = 'sha256', serialize = FALSE))
 }
+review_file <- 'dev/specmill-rebuild/amos-reviewed-source.json'
+review <- if (file.exists(review_file)) jsonlite::read_json(review_file) else NULL
 completed <- stats::setNames(rep(list(character()), length(schemas)), schemas)
 records <- list()
 for (file in config$services) {
@@ -34,9 +35,16 @@ for (file in config$services) {
     stopifnot(!is.null(suite), file.exists(suite),
       any(grepl(operation$name, readLines(suite, warn = FALSE), fixed = TRUE)))
     for (schema in service$schemas$files) {
+      binding_schema <- schema
+      if (!is.null(review) && identical(schema, review$output)) {
+        stopifnot(identical(digest::digest(file = schema, algo = 'sha256'), review$output_sha256),
+          identical(digest::digest(file = review$canonical, algo = 'sha256'), review$canonical_sha256),
+          key %in% unlist(review$derivation$operations))
+        schema <- review$canonical
+      }
       if (!schema %in% schemas || !key %in% keys[[schema]]) next
       completed[[schema]] <- union(completed[[schema]], key)
-      records[[length(records) + 1L]] <- list(schema = schema, operation = key,
+      records[[length(records) + 1L]] <- list(schema = schema, binding_schema = binding_schema, operation = key,
         wrapper = operation$name, file = path, suite = suite)
     }
   }
@@ -74,6 +82,10 @@ for (schema in schemas) for (key in completed[[schema]]) {
     completed[[schema]] <- setdiff(completed[[schema]], key)
   }
 }
+records <- lapply(records, function(record) {
+  record$migrated <- record$operation %in% completed[[record$schema]]
+  record
+})
 rows <- lapply(schemas, function(schema) list(schema = sub('[.]json$', '', basename(schema)),
   migrated = length(completed[[schema]]), total = length(unique(keys[[schema]])),
   remaining = length(setdiff(keys[[schema]], completed[[schema]]))))

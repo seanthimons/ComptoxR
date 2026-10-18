@@ -1,0 +1,525 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AMOS API",
+    "version": "1.0.0",
+    "description": "API for Analytical Methods & Open Spectra (AMOS). JSON operations require Content-Type: application/json; uploads require multipart/form-data with a real file part. Use POST for searches with request bodies. A browser address-bar request uses GET and cannot invoke a POST operation. Path examples illustrate identifier syntax and do not guarantee that a record exists in the selected deployment. Pagination cursors are opaque tokens returned by the server; omit the cursor for the first page. Metadata PUT operations write data and may clear omitted metadata or substance associations: fetch the editor information and submit the intended complete values. File ingestion performs PDF processing/OCR and indexing synchronously; a client timeout does not prove that an upload failed. Check for the created record before retrying. All error responses use application/problem+json with type, title, status, detail, and request_id. Legacy error/ issues fields are retained for client errors. Every response includes X-Request-ID. Server errors omit internal exception details. Failed requests roll back uncommitted database work; an already committed upload cannot be undone by a later processing failure. Do not automatically retry writes after a timeout or connection loss."
+  },
+  "servers": [
+    {
+      "url": "https://hcd.rtpnc.epa.gov"
+    }
+  ],
+  "paths": {
+    "/api/amos/retrieve_fact_sheets/": {
+      "post": {
+        "tags": [
+          "Lists"
+        ],
+        "operationId": "app_list_pages.retrieve_fact_sheets",
+        "summary": "Returns information on a batch of fact sheets specified by internal ID.",
+        "responses": {
+          "400": {
+            "description": "Invalid request fields, cursor, or document type. Returns application/problem+json with request_id; legacy error and issues fields are retained when present."
+          },
+          "200": {
+            "description": "A list of information on the submitted batch of fact sheets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "JSON response. The exact fields depend on the selected record type and data source.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "204": {
+            "description": "No internal IDs were selected. Empty response body."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "internal_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "internal_ids"
+                ]
+              },
+              "example": {
+                "internal_ids": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/amos/retrieve_product_declarations/": {
+      "post": {
+        "tags": [
+          "Lists"
+        ],
+        "operationId": "app_list_pages.retrieve_product_declarations",
+        "summary": "Returns information on a batch of product declarations specified by internal ID.",
+        "responses": {
+          "400": {
+            "description": "Invalid request fields, cursor, or document type. Returns application/problem+json with request_id; legacy error and issues fields are retained when present."
+          },
+          "200": {
+            "description": "A list of information on the submitted batch of product declarations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "JSON response. The exact fields depend on the selected record type and data source.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "204": {
+            "description": "No internal IDs were selected. Empty response body."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "internal_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "internal_ids"
+                ]
+              },
+              "example": {
+                "internal_ids": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/amos/retrieve_safety_data_sheets/": {
+      "post": {
+        "tags": [
+          "Lists"
+        ],
+        "operationId": "app_list_pages.retrieve_safety_data_sheets",
+        "summary": "Returns information on a batch of safety data sheets specified by internal ID.",
+        "responses": {
+          "400": {
+            "description": "Invalid request fields, cursor, or document type. Returns application/problem+json with request_id; legacy error and issues fields are retained when present."
+          },
+          "200": {
+            "description": "A list of information on the submitted batch of safety data sheets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "JSON response. The exact fields depend on the selected record type and data source.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "204": {
+            "description": "No internal IDs were selected. Empty response body."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "internal_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "internal_ids"
+                ]
+              },
+              "example": {
+                "internal_ids": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/amos/substances_for_ids/": {
+      "post": {
+        "tags": [
+          "Documents and utilities"
+        ],
+        "operationId": "app_other.substances_for_ids",
+        "summary": "Returns an Excel file containing a deduplicated list of substances that appear in a given set of database record IDs.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "internal_id_list": {
+                    "description": "Array of record IDs.",
+                    "example": [
+                      "GJ-004",
+                      "FS-26369",
+                      "1CGr7ZTsFv4"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "internal_id_list"
+                ]
+              },
+              "example": {
+                "internal_id_list": [
+                  "GJ-004",
+                  "FS-26369",
+                  "1CGr7ZTsFv4"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Excel workbook.",
+            "content": {
+              "application/vnd.ms-excel": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request rejected. Check required fields, JSON shape, and parameter values. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        }
+      }
+    },
+    "/api/amos/search_for_document_ids/{record_type}": {
+      "post": {
+        "tags": [
+          "Lists"
+        ],
+        "operationId": "app_list_pages.search_for_document_ids",
+        "summary": "Runs a search for document IDs that pass a list of submitted filters, including document metadata, substance",
+        "description": "matches, and document text.<br/>",
+        "parameters": [
+          {
+            "name": "record_type",
+            "in": "path",
+            "description": "Record type to filter by.  Should be either 'Fact Sheet', 'Method', 'Product Declaration', or 'Safety Data Sheet' (capitalization included).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Fact Sheet",
+                "Method",
+                "Product Declaration",
+                "Safety Data Sheet"
+              ]
+            },
+            "example": "Method"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "JSON response. The exact fields depend on the selected record type and data source.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "type": "array",
+                      "items": {}
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request rejected. Check required fields, JSON shape, and parameter values. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "search_info": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "exact": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "properties": {
+                      "dtxsid": {
+                        "type": "string"
+                      },
+                      "document_text": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "record_info_fields": {
+                    "oneOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {},
+                        "additionalProperties": true
+                      }
+                    ],
+                    "description": "Names of fields to filter using values in search_info. A legacy object whose keys are field names is also accepted.",
+                    "example": [
+                      "source"
+                    ]
+                  },
+                  "table_fields": {
+                    "oneOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {},
+                        "additionalProperties": true
+                      }
+                    ],
+                    "description": "Names of fields to filter using values in search_info. A legacy object whose keys are field names is also accepted.",
+                    "example": [
+                      "analyte"
+                    ]
+                  }
+                },
+                "required": [
+                  "search_info"
+                ],
+                "example": {
+                  "search_info": {
+                    "analyte": {
+                      "value": "benzene",
+                      "exact": false
+                    }
+                  },
+                  "table_fields": [
+                    "analyte"
+                  ],
+                  "record_info_fields": []
+                }
+              },
+              "example": {
+                "search_info": {
+                  "analyte": {
+                    "value": "benzene",
+                    "exact": false
+                  }
+                },
+                "table_fields": [
+                  "analyte"
+                ],
+                "record_info_fields": []
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

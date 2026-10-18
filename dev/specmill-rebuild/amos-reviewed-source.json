@@ -1,0 +1,40 @@
+{
+  "source_url": "https://cim.sciencedataexperts.com/api/amos/swagger.json",
+  "retrieved_utc": "2026-10-18 16:43:19 UTC",
+  "source_file": "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json",
+  "source_sha256": "627d6cb4ec4aab1448163b578a6b857476c817a93404369cddfe87a4dd54c401",
+  "output": "schema/chemi-amos-reviewed-reads.json",
+  "output_sha256": "d742312adf390ef3761fe78eb79a68aab5de23ace567e996406656fe7fd7a8d9",
+  "canonical": "schema/chemi-amos-prod.json",
+  "canonical_sha256": "1d0ef1fbd813e2381a1e6e841d69e5070ee438e588a01dc3298b984ba7ca5f35",
+  "derivation": {
+    "operations": ["POST /api/amos/retrieve_fact_sheets/", "POST /api/amos/retrieve_product_declarations/", "POST /api/amos/retrieve_safety_data_sheets/", "POST /api/amos/substances_for_ids/", "POST /api/amos/search_for_document_ids/{record_type}"],
+    "copied": "openapi/info, selected POST objects, transitive local components",
+    "changed": "servers replaced by explicit production origin; unselected paths/components omitted",
+    "operation_objects_unchanged": true
+  },
+  "diff": {
+    "removed_top_level_fields": ["tags", "components"],
+    "removed_paths": ["/api/amos/additional_sources_for_substance/{dtxsid}", "/api/amos/all_similarities_by_dtxsid/", "/api/amos/analytical_qc_batch_search", "/api/amos/analytical_qc_by_sample_keyset_pagination/{limit}", "/api/amos/analytical_qc_keyset_pagination/{limit}", "/api/amos/batch_search", "/api/amos/check_if_similar_smiles/{identifier}", "/api/amos/count_substances_in_ids/", "/api/amos/coversheet_by_internal_id/{internal_id}", "/api/amos/database_summary/", "/api/amos/dtxsids/", "/api/amos/dtxsids_from_functional_use/{functional_use}", "/api/amos/entropy_similarity/", "/api/amos/fact_sheet_keyset_pagination/{limit}", "/api/amos/find_dtxsids/{internal_id}", "/api/amos/find_matches/{record_type}/{internal_id}/{substr}", "/api/amos/formula_search/{formula}", "/api/amos/functional_class_search/{functional_class}", "/api/amos/functional_uses_for_dtxsid/{dtxsid}", "/api/amos/get_classification_for_dtxsid/{dtxsid}", "/api/amos/get_data_source_info/", "/api/amos/get_info_by_id/{internal_id}", "/api/amos/get_ir_spectrum/{internal_id}", "/api/amos/get_mass_spectrum/{internal_id}", "/api/amos/get_ms_ready_methods/{inchikey}", "/api/amos/get_nmr_spectrum/{internal_id}", "/api/amos/get_pdf/{record_type}/{internal_id}", "/api/amos/get_pdf_metadata/{record_type}/{internal_id}", "/api/amos/get_similar_structures/{identifier_type}/{identifier}", "/api/amos/get_substance_file_for_record/{internal_id}", "/api/amos/get_substances_for_search_term/{search_term}", "/api/amos/inchikey_first_block_search/{first_block}", "/api/amos/list_fact_sheet_types/", "/api/amos/list_functional_classes", "/api/amos/list_sources_by_record_type/{record_type}", "/api/amos/mass_range_search/", "/api/amos/mass_spectra_for_substances/", "/api/amos/mass_spectrum_similarity_search/", "/api/amos/max_similarity_by_dtxsid/", "/api/amos/metadata", "/api/amos/method_keyset_pagination/{limit}", "/api/amos/method_with_spectra/{search_type}/{internal_id}", "/api/amos/next_level_classification/", "/api/amos/product_declaration_keyset_pagination/{limit}", "/api/amos/record_counts_by_dtxsid/", "/api/amos/record_id_search/{internal_id}", "/api/amos/record_ids_for_substance/{dtxsid}/{record_type}", "/api/amos/record_type_count/{record_type}", "/api/amos/release_notes", "/api/amos/safety_data_sheet_keyset_pagination/{limit}", "/api/amos/search/{dtxsid}", "/api/amos/search_bar_resolver/{identifier}", "/api/amos/search_by_text/{substr}", "/api/amos/spectral_entropy/", "/api/amos/spectrum_count_for_methodology/", "/api/amos/substances_for_classification/", "/api/amos/substring_search/{substring}", "/api/amos/version"],
+    "removed_selected_path_fields": {
+      "/api/amos/retrieve_fact_sheets/": [],
+      "/api/amos/retrieve_product_declarations/": [],
+      "/api/amos/retrieve_safety_data_sheets/": [],
+      "/api/amos/substances_for_ids/": [],
+      "/api/amos/search_for_document_ids/{record_type}": []
+    },
+    "removed_component_keys": ["schemas/AnalyticalQCFilteredListRequest", "schemas/BatchSearchAdditionalMassSpectrumInfo", "schemas/BatchSearchAdditionalRecordInfo", "schemas/BatchSearchGeneralRequest", "schemas/ClassyFireClassificationRequest", "schemas/ClassyFireLevelRequest", "schemas/DocumentSearchRequest", "schemas/ErrorResponse", "schemas/FactSheetFilteredListRequest", "schemas/InternalIdsRequest", "schemas/JsonValue", "schemas/MassRangeSubstanceSearchRequest", "schemas/Metadata", "schemas/MethodFilteredListRequest", "schemas/ProductDeclarationFilteredListRequest", "schemas/RecordCountsByDTXSIDRequest", "schemas/SafetyDataSheetFilteredListRequest", "schemas/VersionInfo", "schemas/all_similarity_by_dtxsid_request", "schemas/analytical_qc_batch_search_request", "schemas/count_substances_in_ids_request", "schemas/dtxsids_search_schema", "schemas/entropy_similarity_request", "schemas/mass_spectra_for_substances_request", "schemas/mass_spectrum_similarity_search_request", "schemas/max_similarity_by_dtxsid_request", "schemas/spectral_entropy_request", "schemas/spectrum_count_for_methodology_request", "schemas/substances_for_ids_request", "schemas/MassSpectrum", "schemas/EntropySpectrum", "schemas/FactSheetUpdateRequest", "schemas/MethodUpdateRequest", "schemas/ProductDeclarationUpdateRequest", "schemas/SafetyDataSheetUpdateRequest", "schemas/AnalyticalQCUpdateRequest", "schemas/NMRUpdateRequest", "schemas/DocumentMetadataFields", "responses/InvalidRequest", "responses/UnsupportedMediaType", "responses/InternalError", "responses/UpstreamFailure", "responses/DatabaseUnavailable", "responses/UpstreamTimeout", "responses/RecordNotFound"],
+    "servers_from": [
+      {
+        "url": ""
+      }
+    ],
+    "servers_to": [
+      {
+        "url": "https://hcd.rtpnc.epa.gov"
+      }
+    ]
+  },
+  "production_evidence": ["dev/specmill-rebuild/amos-positive-native-live-review.rds", "dev/specmill-rebuild/amos-document-search-live-review.rds"],
+  "issue": "https://github.com/seanthimons/specmill/issues/27#issuecomment-6252444438"
+}

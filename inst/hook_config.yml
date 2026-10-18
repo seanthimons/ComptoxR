@@ -838,3 +838,18 @@ chemi_chet_chemicals_image:
 
 chemi_chet_reaction_batchsearch:
   bespoke_test: "tests/testthat/test-native_static_media.R"
+
+chemi_amos_substances_for_ids:
+  bespoke_test: "tests/testthat/test-native_amos_remaining.R"
+
+chemi_amos_retrieve_fact_sheets:
+  bespoke_test: "tests/testthat/test-native_amos_remaining.R"
+
+chemi_amos_retrieve_product_declarations:
+  bespoke_test: "tests/testthat/test-native_amos_remaining.R"
+
+chemi_amos_retrieve_safety_data_sheets:
+  bespoke_test: "tests/testthat/test-native_amos_remaining.R"
+
+chemi_amos_for_document_ids:
+  bespoke_test: "tests/testthat/test-native_amos_remaining.R"

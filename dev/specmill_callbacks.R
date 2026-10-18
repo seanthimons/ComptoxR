@@ -202,3 +202,39 @@ chet_batch_response <- function(operation) quote(function(response, context, dec
     context$endpoint <- "chet/reaction/batchsearch"
     .ct_chemi_result(response, context, decode, tidy = FALSE)
 })
+
+amos_remaining_body <- function (operation)
+{
+    primary <- if (grepl("batch_search$", operation$path))
+        "ids"
+    else if (grepl("substances_for_ids", operation$path))
+        "internal_id_list"
+    else if (grepl("retrieve_", operation$path))
+        "internal_ids"
+    else NULL
+    check <- if (is.null(primary))
+        quote(NULL)
+    else substitute(if (!length(params[[PRIMARY]])) cli::cli_abort("Supply at least one identifier."),
+        list(PRIMARY = primary))
+    validation <- if (is.null(operation$schema_body))
+        quote(body)
+    else substitute(.api_validation$body_value(body, SCHEMA), list(SCHEMA = operation$schema_body))
+    substitute(base::local({
+        CHECK
+        body <- Filter(Negate(is.null), params[setdiff(names(params), "record_type")])
+        for (field in intersect(names(body), c("ids", "internal_ids", "internal_id_list", "record_info_fields", "table_fields"))) body[[field]] <- as.list(body[[field]])
+        body <- VALIDATE
+        for (field in intersect(names(body), c("ids", "internal_ids", "internal_id_list", "record_info_fields",
+            "table_fields"))) body[[field]] <- I(body[[field]])
+        body
+    }), list(CHECK = check, VALIDATE = validation))
+}
+
+amos_remaining_response <- function (operation)
+substitute(function(response, context, decode) {
+    context$endpoint <- ENDPOINT
+    if (context$status < 200L || context$status >= 300L || grepl("(/json|\\+json)$", context$media)) return(.ct_chemi_result(response,
+        context, decode, tidy = FALSE))
+    observe_api_responses(list(response))
+    decode()
+}, list(ENDPOINT = sub("^/api/", "", operation$path)))

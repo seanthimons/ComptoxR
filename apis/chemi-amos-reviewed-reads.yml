@@ -1,0 +1,285 @@
+id: chemi-amos-reviewed-reads
+schemas:
+  files:
+  - schema/chemi-amos-reviewed-reads.json
+selection:
+  include:
+  - POST /api/amos/substances_for_ids/
+  - POST /api/amos/retrieve_fact_sheets/
+  - POST /api/amos/retrieve_product_declarations/
+  - POST /api/amos/retrieve_safety_data_sheets/
+  - POST /api/amos/search_for_document_ids/{record_type}
+helper: .ct_request
+documentation: yes
+operations:
+  POST /api/amos/substances_for_ids/:
+    name: chemi_amos_substances_for_ids
+    file: R/chemi_amos_substances_for_ids.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      internal_id_list:
+        type: any
+        default: ~
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Returns an Excel file containing a deduplicated list of substances that
+        appear in a given set of database record IDs.
+      lifecycle: experimental
+      return: Decoded JSON records or raw Excel workbook bytes.
+      parameters:
+        internal_id_list: Array of record IDs.
+      tags:
+        apiStage: public
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/substances_for_ids/
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          callback: amos_remaining_body
+        headers:
+          value:
+            Accept: application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_remaining_response
+        request_controls:
+          value:
+            preserve_errors: yes
+  POST /api/amos/retrieve_fact_sheets/:
+    name: chemi_amos_retrieve_fact_sheets
+    file: R/chemi_amos_retrieve_fact_sheets.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      internal_ids:
+        type: any
+        default: ~
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Returns information on a batch of fact sheets specified by internal ID.
+      lifecycle: experimental
+      return: Decoded JSON records or raw Excel workbook bytes.
+      parameters:
+        internal_ids: List of fact sheet IDs to return information on.
+      tags:
+        apiStage: public
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/retrieve_fact_sheets/
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          callback: amos_remaining_body
+        headers:
+          value:
+            Accept: application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_remaining_response
+        request_controls:
+          value:
+            preserve_errors: yes
+  POST /api/amos/retrieve_product_declarations/:
+    name: chemi_amos_retrieve_product_declarations
+    file: R/chemi_amos_retrieve_product_declarations.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      internal_ids:
+        type: any
+        default: ~
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Returns information on a batch of product declarations specified by internal
+        ID.
+      lifecycle: experimental
+      return: Decoded JSON records or raw Excel workbook bytes.
+      parameters:
+        internal_ids: List of product declaration IDs to return information on.
+      tags:
+        apiStage: public
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/retrieve_product_declarations/
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          callback: amos_remaining_body
+        headers:
+          value:
+            Accept: application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_remaining_response
+        request_controls:
+          value:
+            preserve_errors: yes
+  POST /api/amos/retrieve_safety_data_sheets/:
+    name: chemi_amos_retrieve_safety_data_sheets
+    file: R/chemi_amos_retrieve_safety_data_sheets.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      internal_ids:
+        type: any
+        default: ~
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Returns information on a batch of safety data sheets specified by internal
+        ID.
+      lifecycle: experimental
+      return: Decoded JSON records or raw Excel workbook bytes.
+      parameters:
+        internal_ids: List of safety data sheet IDs to return information on.
+      tags:
+        apiStage: public
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/retrieve_safety_data_sheets/
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          callback: amos_remaining_body
+        headers:
+          value:
+            Accept: application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_remaining_response
+        request_controls:
+          value:
+            preserve_errors: yes
+  POST /api/amos/search_for_document_ids/{record_type}:
+    name: chemi_amos_for_document_ids
+    file: R/chemi_amos_for_document_ids.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      record_type:
+        type: any
+      search_info:
+        type: any
+        default: ~
+      record_info_fields:
+        type: any
+        default: ~
+      table_fields:
+        type: any
+        default: ~
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Runs a search for document IDs that pass a list of submitted filters,
+        including document metadata, substance
+      lifecycle: experimental
+      return: Decoded JSON records or raw Excel workbook bytes.
+      parameters:
+        record_type: Record type to filter by.  Should be either 'Fact Sheet', 'Method',
+          'Product Declaration', or 'Safety Data Sheet' (capitalization included).
+        search_info: Search query parameters.  Exact parameters are still in flux,
+          but generally consist of database field names with values and flags for
+          whether to perform exact matches or not.
+        record_info_fields: List of field names in search_info that are fields in
+          the record_info table in PostgreSQL.
+        table_fields: List of field names in search_info that are fields in the fact_sheets
+          table in PostgreSQL.
+      tags:
+        apiStage: public
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/search_for_document_ids/{record_type}
+        path_params:
+          object:
+            record_type:
+              from:
+              - params
+              - record_type
+        query:
+          value: []
+        body:
+          callback: amos_remaining_body
+        headers:
+          value:
+            Accept: application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_remaining_response
+        request_controls:
+          value:
+            preserve_errors: yes
+hook_config: inst/hook_config.yml
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

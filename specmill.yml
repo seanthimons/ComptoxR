@@ -45,5 +45,6 @@ services:
 - apis/epi-suite-prod-rebuild.yml
 - apis/chemi-safety-prod-rebuild.yml
 - apis/chemi-toxprint-prod-rebuild.yml
+- apis/chemi-amos-reviewed-reads.yml
 callback_files:
 - dev/specmill_callbacks.R
