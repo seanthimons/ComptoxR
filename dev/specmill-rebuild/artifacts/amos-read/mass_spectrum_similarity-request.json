@@ -1,0 +1,17 @@
+{
+  "lower_mass_limit": 194.1,
+  "methodology": "LC/MS",
+  "spectrum": [
+    [
+      217.0696,
+      100
+    ],
+    [
+      218.0721,
+      10.2292
+    ]
+  ],
+  "type": "da",
+  "upper_mass_limit": 194.1,
+  "window": 0.05
+}
