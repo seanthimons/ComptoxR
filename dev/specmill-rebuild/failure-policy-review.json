@@ -72,7 +72,44 @@
     "released_metadata_policy": "0.1.28",
     "gap": "Legacy httr2 request failures retain earlier successful pages; emitted page runner still defaults to hard stop. PR151 exposes an explicit partial policy for review.",
     "isolated_source": "c5df6a9f61b1bd24e8261a32cc6b93b5ca29122a",
-    "verification": "8 normal +64 failure/empty/parsing cases and final whole-client freshness pass on combined PR151/134; root wrappers remain retained."
+    "verification": "8 normal +64 failure/empty/parsing cases and final whole-client freshness pass on combined PR151/134; root wrappers remain retained.",
+    "final_head_recheck": {
+      "status": "isolated_pass_release_pending",
+      "source_commit": "d8ef8bab73df161c720e328ac301c0c1d7f64516",
+      "source_archive_sha256": "59ed90ddc74539e7ef5aa50d714232bfde0631e82850c4155c056a57933a8eed",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.35",
+        "source_commit": "d8ef8bab73df161c720e328ac301c0c1d7f64516",
+        "source_archive_sha256": "59ed90ddc74539e7ef5aa50d714232bfde0631e82850c4155c056a57933a8eed",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "client_base_commit": "9ade2e9e",
+      "verification": {
+        "captured_keyset_cases": 20,
+        "options_cases": 30,
+        "keyset_failure_cases": 160,
+        "keyset_safety_cases": 40,
+        "empty_continuation_cases": 2,
+        "page_success_cases": 8,
+        "page_failure_cases": 64,
+        "keyset_examples": 10,
+        "page_examples": 4,
+        "total_cases": 338,
+        "full_attributes": true,
+        "exact_warning_strings": true,
+        "request_contracts": true,
+        "request_error_policy_honored": true,
+        "normal_callback_names": true,
+        "whole_client_validated_generation": true,
+        "final_freshness": true,
+        "schemas_unchanged": true,
+        "new_live_calls": false,
+        "root_pin_or_wrapper_adoption": false
+      },
+      "credential_scope": "Simulated responses only; native credential errors stay hard, with no production401 claim."
+    }
   },
   "exact_search_line_hold": {
     "version": "0.1.32",

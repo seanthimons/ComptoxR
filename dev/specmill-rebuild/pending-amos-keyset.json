@@ -41,5 +41,42 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "policy": "Explicit cursor, next/completed/items functions, partial request errors with default hard client/credential errors, metadata:false and stop_on_empty:false. Client projections preserve manual GET query attribution, manual POST absence of query attribution, original final warnings and complete body/filter/sort inputs.",
-  "validation_scope": "Whole-client check with validation=TRUE passes selected operations; raw source reports and unrelated findings remain visible. No global clean-schema assertion, archive rewrite, helper patch or production development pin."
+  "validation_scope": "Whole-client check with validation=TRUE passes selected operations; raw source reports and unrelated findings remain visible. No global clean-schema assertion, archive rewrite, helper patch or production development pin.",
+  "final_head_recheck": {
+    "status": "isolated_pass_release_pending",
+    "source_commit": "d8ef8bab73df161c720e328ac301c0c1d7f64516",
+    "source_archive_sha256": "59ed90ddc74539e7ef5aa50d714232bfde0631e82850c4155c056a57933a8eed",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.35",
+      "source_commit": "d8ef8bab73df161c720e328ac301c0c1d7f64516",
+      "source_archive_sha256": "59ed90ddc74539e7ef5aa50d714232bfde0631e82850c4155c056a57933a8eed",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "client_base_commit": "9ade2e9e",
+    "verification": {
+      "captured_keyset_cases": 20,
+      "options_cases": 30,
+      "keyset_failure_cases": 160,
+      "keyset_safety_cases": 40,
+      "empty_continuation_cases": 2,
+      "page_success_cases": 8,
+      "page_failure_cases": 64,
+      "keyset_examples": 10,
+      "page_examples": 4,
+      "total_cases": 338,
+      "full_attributes": true,
+      "exact_warning_strings": true,
+      "request_contracts": true,
+      "request_error_policy_honored": true,
+      "normal_callback_names": true,
+      "whole_client_validated_generation": true,
+      "final_freshness": true,
+      "schemas_unchanged": true,
+      "new_live_calls": false,
+      "root_pin_or_wrapper_adoption": false
+    },
+    "credential_scope": "Simulated responses only; native credential errors stay hard, with no production401 claim."
+  }
 }

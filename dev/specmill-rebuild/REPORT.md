@@ -1438,3 +1438,32 @@ descriptor-origin warnings remain unchanged.
 
 Fourteen pagers remain held for PR151's final integrated verification and released
 pin. No full package check rerun or ComptoxR push; migration remains incomplete.
+
+## Final integrated fourteen-pager isolation, 18 October 2026
+
+Verified exact PR151 head `d8ef8bab73df161c720e328ac301c0c1d7f64516`,
+including released v0.1.35 main, from a fresh checkout of ComptoxR `9ade2e9e`.
+No duplicate active pager job was present before starting. The independently
+archived Specmill source SHA256 is
+`59ed90ddc74539e7ef5aa50d714232bfde0631e82850c4155c056a57933a8eed`.
+A private install regenerated the reviewed helper and pagination companion plus
+all14 archived operations using their original client callback names.
+
+All338 checks pass:20 captured manual/automatic keyset replays,30 advanced
+cursor/filter/sort projections,160 keyset failure/empty/parsing cases,40 cursor
+and credential safety cases, two GET/POST empty-page continuation cases, eight
+page-pager success cases,64 page-pager failure cases and all14 generated examples.
+Complete result attributes, warnings, request contracts and HTTP error-policy
+behavior are checked against the original wrappers. Tests use mocked responses
+and archived captures; simulated401 cases are not production authentication
+failure reports. No new live calls were made.
+
+Whole-client validated generation and final validated freshness pass with zero
+selected-operation diagnostics/mapping diagnostics/drift; the usual retained
+schema-origin warnings remain visible. Archived schemas are unchanged. Both
+pending pager RDS records now retain the final source identity, verification
+scope, replay/setup scripts and frozen original page-wrapper definitions.
+
+This is isolated verification only. Root remains on released v0.1.35; no root
+helper, wrapper, API configuration or toolkit pin adoption. All14 pagers stay
+retained until PR151 is released. No full package check rerun or ComptoxR push.
