@@ -63,6 +63,8 @@ jobs:
           stopifnot(grepl("^[0-9a-f]{40}$", pin$source_commit))
           cat(paste0("revision=", pin$source_commit, "\n"),
               file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          cat(paste0("R_LIBS=", file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", pin$version), "\n"),
+              file = Sys.getenv("GITHUB_ENV"), append = TRUE)
 
       - name: Check out pinned specmill source
         uses: actions/checkout@v7
@@ -75,9 +77,7 @@ jobs:
       - name: Install and verify pinned specmill
         env:
           SPECMILL_SOURCE_REPO: dev/specmill-pilot/artifacts/toolkit-source
-        run: |
-          Rscript dev/install_specmill.R
-          echo "R_LIBS=$PWD/dev/specmill-pilot/artifacts/toolkit-library" >> "$GITHUB_ENV"
+        run: Rscript dev/install_specmill.R
 
       - name: Save old schemas for diff
         run: |

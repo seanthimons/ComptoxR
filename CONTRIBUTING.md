@@ -53,8 +53,8 @@ Install the reviewed development toolkit before running schema commands:
 
 ```r
 source("dev/install_specmill.R")
-install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
-.libPaths(c("dev/specmill-pilot/artifacts/toolkit-library", .libPaths()))
+lib <- install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
+.libPaths(c(lib, .libPaths()))
 ```
 
 The specmill revision and source-archive SHA-256 are pinned in
@@ -63,8 +63,11 @@ specmill checkout (default `../specmill`). Specmill is not a runtime dependency.
 version with this repository's `air.toml`. Public generation uses approved production
 schemas only. Keep other schemas and generated clients outside this checkout.
 Regenerate a promoted operation from its approved production schema.
+Export the pinned library in the shell so each development command and its child
+R processes can find it:
 
 ```bash
+export R_LIBS="$(Rscript -e 'cat(file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", jsonlite::read_json("dev/specmill-lock.json")$version))')"
 Rscript dev/generate_specmill.R --apply
 Rscript dev/generate_tests.R --generate
 Rscript dev/generate_specmill.R --check

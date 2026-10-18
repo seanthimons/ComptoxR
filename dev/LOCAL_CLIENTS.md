@@ -1,7 +1,8 @@
 # Local schema clients
 
 Install the pinned specmill revision recorded in `dev/specmill-lock.json`
-(`Rscript dev/install_specmill.R`).
+(`Rscript dev/install_specmill.R`) and export its versioned library as `R_LIBS`
+using the [development setup](../CONTRIBUTING.md#before-you-open-a-pr).
 Keep local schema snapshots and clients outside every ComptoxR checkout.
 The command takes six explicit positional arguments:
 
