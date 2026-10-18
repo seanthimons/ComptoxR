@@ -1292,3 +1292,21 @@ from upstream PR139 through ordinary generation. The old and new parsed
 expressions are identical, and trimming only the old trailing whitespace
 produces the new source exactly. Both transport helpers and archived schemas
 are unchanged. No wrapper policy or endpoint adoption changes in this wave.
+
+## Released logical line inputs, 18 October 2026
+
+Specmill v0.1.32, source `daa69c84d7076e10385508eb54279548b149d849`,
+is pinned. The actual exact-search bulk candidate passes all126 prior localhost
+success comparisons on this release, preserving logical per-chunk callback inputs
+separately from LF wire bytes. Runtime limits, cap and normalization checks pass.
+The production `ct_chemical_search_equal_bulk` wrapper remains retained.
+
+Nine real HTTP failure cases expose pending failure-policy adoption requirements:
+single404/500 currently drops instead of throwing; failed multi-chunk results gain
+`failed` metadata; all-failed results need the original empty tibble constructor.
+Warning wording also differs and is recorded on open PR146 for supported-seam or
+upstream triage. The old multi-chunk401 path drops while native aborts; this is
+recorded separately for credential-policy review, not as a request to weaken
+native hard errors. PR144/146 comments and complete evidence are linked from
+`pending-exact-search-lines.json`. No helper workaround or production wrapper
+change was made. Schemas and transport helpers are unchanged; no ComptoxR push.

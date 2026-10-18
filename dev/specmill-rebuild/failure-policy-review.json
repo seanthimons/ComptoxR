@@ -1,6 +1,6 @@
 {
   "status": "migration_failure_parity_review_in_progress",
-  "production_pin": "0.1.31",
+  "production_pin": "0.1.32",
   "batch_empty_constructor": ".ct_empty_table",
   "batch_metadata": {
     "issue": "https://github.com/seanthimons/specmill/issues/142",
@@ -69,5 +69,12 @@
     "gap": "Legacy httr2 request failures retain earlier successful pages; emitted page runner still defaults to hard stop. PR151 exposes an explicit partial policy for review.",
     "isolated_source": "c5df6a9f61b1bd24e8261a32cc6b93b5ca29122a",
     "verification": "8 normal +64 failure/empty/parsing cases and final whole-client freshness pass on combined PR151/134; root wrappers remain retained."
+  },
+  "exact_search_line_hold": {
+    "version": "0.1.32",
+    "operation": "POST /chemical/search/equal/",
+    "request_count": "https://github.com/seanthimons/specmill/pull/146#issuecomment-6245020750",
+    "metadata": "https://github.com/seanthimons/specmill/pull/144#issuecomment-6245020895",
+    "credential_review": "Old multi-chunk401 drops; native hard abort. Single401 hard in both."
   }
 }
