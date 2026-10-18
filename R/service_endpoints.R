@@ -130,28 +130,40 @@
 # All-failed batches need the same table container as successful tidy responses.
 .ct_empty_table <- function() tibble::tibble()
 
+# Legacy response parsing and formatting fail the call after transport completes.
+.ct_response_error <- function(error, context) {
+  if (context$status >= 200L && context$status < 300L) {
+    class(error) <- unique(c('specmill_call_error', class(error)))
+  }
+  stop(error)
+}
+
 # Specmill response policy: the same tibble output as generic_request(tidy = TRUE).
 .ct_tidy <- function(response, context, decode) {
-  # probe_api_function() reads HTTP statuses through this observer.
-  observe_api_responses(list(response))
-  body <- unwrap_collection_envelope(decode())
-  # The API doesn't echo the input on single-object responses; name it in a query column.
-  single <- is.list(body) && !is.null(names(body))
-  .ct_request_table(
-    .ct_request_records(body, query = if (single && length(context$query) == 1L) context$query[[1L]]),
-    build = safe_tidy_bind
-  )
+  tryCatch({
+    # probe_api_function() reads HTTP statuses through this observer.
+    observe_api_responses(list(response))
+    body <- unwrap_collection_envelope(decode())
+    # The API doesn't echo the input on single-object responses; name it in a query column.
+    single <- is.list(body) && !is.null(names(body))
+    .ct_request_table(
+      .ct_request_records(body, query = if (single && length(context$query) == 1L) context$query[[1L]]),
+      build = safe_tidy_bind
+    )
+  }, error = function(error) .ct_response_error(error, context))
 }
 
 # Preserve Chemi list records, including scalar responses and missing fields.
 .ct_list <- function(response, context, decode) {
-  observe_api_responses(list(response))
-  body <- unwrap_collection_envelope(decode())
-  if (is.null(body)) return(list(NULL))
-  single <- is.list(body) && !is.null(names(body))
-  query <- if (single) if (length(context$query) == 1L) context$query[[1L]] else "_static_"
-  if (single && !length(body)) return(list(structure(body, query = query)))
-  .ct_request_records(body, query = query, null_to_na = TRUE)
+  tryCatch({
+    observe_api_responses(list(response))
+    body <- unwrap_collection_envelope(decode())
+    if (is.null(body)) return(list(NULL))
+    single <- is.list(body) && !is.null(names(body))
+    query <- if (single) if (length(context$query) == 1L) context$query[[1L]] else "_static_"
+    if (single && !length(body)) return(list(structure(body, query = query)))
+    .ct_request_records(body, query = query, null_to_na = TRUE)
+  }, error = function(error) .ct_response_error(error, context))
 }
 
 # Static endpoints keep their legacy attribution even with one URL query field.

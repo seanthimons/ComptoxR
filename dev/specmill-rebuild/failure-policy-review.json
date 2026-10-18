@@ -28,7 +28,7 @@
   ],
   "single_request_transport": {
     "issue": "https://github.com/seanthimons/specmill/issues/145",
-    "status": "isolated_pass_combined_metadata_and_release_pending",
+    "status": "combined_isolated_pass_release_pending",
     "wrapper": "chemi_classyfire",
     "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
     "schema": "schema/chemi-amos-prod.json",
@@ -41,5 +41,18 @@
     "verification": "https://github.com/seanthimons/specmill/pull/146#issuecomment-6243534898",
     "cases": 75,
     "archive": "dev/specmill-rebuild/pending-request-count-policy.rds"
+  },
+  "combined_batch_failure_review": {
+    "source_commit": "863d123adcf79471361ed18f6c0ae0927884a175",
+    "source_archive_sha256": "59e2ac4bbe8282df37ec618625730576759ecbd7a615119f30d5fcb0299a43fb",
+    "status": "combined_isolated_pass_release_pending",
+    "comparisons": 107,
+    "attributes_excluded": false,
+    "verification": "Both true bulk POSTs, DTXCID GET, Classyfire, two list wrappers; single/multiple transport, all/partial HTTP failures, normalization, effective/session sizing, overrides, credential hard errors and final whole-client freshness pass."
+  },
+  "successful_response_errors": {
+    "status": "client_policy_adopted",
+    "mechanism": "Reviewed response policies mark successful-response parsing or formatting errors as specmill_call_error, preserving legacy call-level failure while leaving non-success HTTP handling unchanged.",
+    "verification": "Actual malformed-JSON fan-out wrappers, direct decode and formatter errors, unchanged ordinary HTTP classification, normalization, Classyfire, empty failures and bodyless resolver tests pass."
   }
 }
