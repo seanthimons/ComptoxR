@@ -1,0 +1,4 @@
+[1] TRUE
+Error in assert(inherits(error, "cli_error")) : isTRUE(value) is not TRUE
+Calls: assert -> stopifnot
+Execution halted

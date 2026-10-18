@@ -1,0 +1,122 @@
+#' Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs
+#'
+#' @md
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' @param base_url base_url
+#' @param ids ids
+#' @param include_classyfire include_classyfire
+#' @param include_functional_uses include_functional_uses
+#' @param include_source_counts include_source_counts
+#' @param methodologies methodologies
+#' @return Raw Excel workbook bytes. Errors retain typed HTTP or transport conditions.
+#' @apiStage public
+#' @export
+# Generated with specmill; do not edit by hand.
+chemi_amos_analytical_qc_batch <- function(
+  base_url = NULL,
+  ids = NULL,
+  include_classyfire = NULL,
+  include_functional_uses = NULL,
+  include_source_counts = NULL,
+  methodologies = NULL
+) {
+  params <- base::list(
+    "base_url" = base_url,
+    "ids" = ids,
+    "include_classyfire" = include_classyfire,
+    "include_functional_uses" = include_functional_uses,
+    "include_source_counts" = include_source_counts,
+    "methodologies" = methodologies
+  )
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/amos/analytical_qc_batch_search",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = structure(list(), names = character(0)),
+    "body" = base::local({
+      body <- base::Filter(base::Negate(base::is.null), params)
+      body$identifiers <- base::as.list(body$ids)
+      body$ids <- NULL
+      if (FALSE) {
+        body$exclude_analytical_qc <- FALSE
+      }
+      body <- .api_validation$body_value(
+        body,
+        list(
+          required = list(
+            "base_url",
+            "identifiers",
+            "include_classyfire",
+            "include_functional_uses",
+            "include_source_counts",
+            "methodologies"
+          ),
+          properties = list(
+            base_url = list(
+              description = "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
+              type = "string",
+              minLength = 1L,
+              example = "https://amos.example.org"
+            ),
+            include_classyfire = list(
+              description = "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
+              type = "boolean"
+            ),
+            include_functional_uses = list(
+              description = "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
+              type = "boolean"
+            ),
+            include_source_counts = list(
+              description = "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
+              type = "boolean"
+            ),
+            methodologies = list(
+              additionalProperties = list(type = "boolean"),
+              required = list(
+                "all"
+              ),
+              properties = list(all = list(type = "boolean")),
+              description = "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
+              example = list(
+                `GC/MS` = TRUE,
+                `LC/MS` = TRUE,
+                NMR = FALSE,
+                all = FALSE
+              ),
+              type = "object"
+            ),
+            identifiers = list(
+              minItems = 1L,
+              description = "List of DTXSIDs or other identifiers to search for.",
+              example = list("DTXSID9020112", "DTXSID3022401", "benzene"),
+              items = list(type = "string"),
+              type = "array"
+            )
+          ),
+          type = "object",
+          example = list(
+            base_url = "https://amos.example.org",
+            include_classyfire = FALSE,
+            include_functional_uses = FALSE,
+            include_source_counts = FALSE,
+            methodologies = list(all = TRUE),
+            identifiers = list("DTXSID9020112")
+          )
+        )
+      )
+      body$identifiers <- base::I(body$identifiers)
+      body
+    }),
+    "headers" = list(Accept = "application/vnd.ms-excel"),
+    "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+    "server_resolver" = list(
+      name = ".ct_server_url",
+      key = "chemi_burl",
+      relative = "/"
+    ),
+    "auth" = list(),
+    "request_controls" = list(preserve_errors = TRUE)
+  )
+  result
+}

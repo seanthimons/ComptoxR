@@ -1,0 +1,393 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AMOS API",
+    "version": "1.0.0",
+    "description": "API for Analytical Methods & Open Spectra (AMOS). JSON operations require Content-Type: application/json; uploads require multipart/form-data with a real file part. Use POST for searches with request bodies. A browser address-bar request uses GET and cannot invoke a POST operation. Path examples illustrate identifier syntax and do not guarantee that a record exists in the selected deployment. Pagination cursors are opaque tokens returned by the server; omit the cursor for the first page. Metadata PUT operations write data and may clear omitted metadata or substance associations: fetch the editor information and submit the intended complete values. File ingestion performs PDF processing/OCR and indexing synchronously; a client timeout does not prove that an upload failed. Check for the created record before retrying. All error responses use application/problem+json with type, title, status, detail, and request_id. Legacy error/ issues fields are retained for client errors. Every response includes X-Request-ID. Server errors omit internal exception details. Failed requests roll back uncommitted database work; an already committed upload cannot be undone by a later processing failure. Do not automatically retry writes after a timeout or connection loss."
+  },
+  "tags": [
+    {
+      "name": "Batch search"
+    },
+    {
+      "name": "Metadata"
+    },
+    {
+      "name": "Lists"
+    },
+    {
+      "name": "Documents and utilities"
+    },
+    {
+      "name": "Search"
+    },
+    {
+      "name": "Spectra"
+    }
+  ],
+  "paths": {
+    "/api/amos/batch_search": {
+      "post": {
+        "tags": [
+          "Batch search"
+        ],
+        "operationId": "app_batch_search.batch_search",
+        "summary": "Generates an Excel workbook which lists all records in the database that contain a given set of DTXSIDs.",
+        "description": "<br/>There are a number of options for either filtering records from the database or incorporating additional information<br/><br/>If a record contains more than one of the searched DTXSIDs, then that record will appear once for each searched substance it contains.<br/>",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "base_url",
+                  "identifiers",
+                  "include_classyfire",
+                  "include_functional_uses",
+                  "include_source_counts",
+                  "methodologies",
+                  "additional_record_info",
+                  "include_external_links",
+                  "exclude_analytical_qc",
+                  "record_types"
+                ],
+                "properties": {
+                  "exclude_analytical_qc": {
+                    "type": "boolean"
+                  },
+                  "additional_record_info": {
+                    "required": [
+                      "ms"
+                    ],
+                    "properties": {
+                      "ms": {
+                        "properties": {
+                          "all": {
+                            "description": "Legacy UI flag. Set the individual metadata flags explicitly; the server does not expand this flag.",
+                            "type": "boolean"
+                          },
+                          "ionization_mode": {
+                            "description": "Include whether the spectrum was collected in a positive or negative mode experiment.  Not always available.",
+                            "type": "boolean"
+                          },
+                          "num_peaks": {
+                            "description": "Include the number of peaks in the spectrum.",
+                            "type": "boolean"
+                          },
+                          "rating": {
+                            "description": "Include a clean/noisy rating for the spectrum, based on the spectral and normalized entropy scores.",
+                            "type": "boolean"
+                          },
+                          "spectral_entropy": {
+                            "description": "Include the spectral entropy score for a given spectrum.  Will be missing for spectra with only one peak.",
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "always_download_file": {
+                    "description": "Legacy UI field retained for compatibility. The current handler returns a workbook even when no records match.",
+                    "type": "boolean"
+                  },
+                  "base_url": {
+                    "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "https://amos.example.org"
+                  },
+                  "include_classyfire": {
+                    "description": "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
+                    "example": true,
+                    "type": "boolean"
+                  },
+                  "include_external_links": {
+                    "description": "Flag for whether to include database records that are purely external links (e.g., spectra that we can link to but cannot store directly in the database).",
+                    "type": "boolean"
+                  },
+                  "include_functional_uses": {
+                    "description": "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
+                    "type": "boolean"
+                  },
+                  "include_source_counts": {
+                    "description": "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
+                    "type": "boolean"
+                  },
+                  "methodologies": {
+                    "additionalProperties": {
+                      "type": "boolean"
+                    },
+                    "required": [
+                      "all"
+                    ],
+                    "properties": {
+                      "all": {
+                        "type": "boolean"
+                      }
+                    },
+                    "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
+                    "example": {
+                      "GC/MS": true,
+                      "LC/MS": true,
+                      "NMR": false,
+                      "all": false
+                    },
+                    "type": "object"
+                  },
+                  "record_types": {
+                    "additionalProperties": {
+                      "type": "boolean"
+                    },
+                    "description": "Filters returned results by record type.  This argument should be a dictionary with three keys with boolean values -- \"Fact Sheet\", \"Method\", and \"Spectrum\".  Note that the \"Spectrum\" flag will return spectra of all types -- mass, NMR, etc.",
+                    "example": {
+                      "Fact Sheet": false,
+                      "Method": true,
+                      "Spectrum": true
+                    },
+                    "type": "object"
+                  },
+                  "identifiers": {
+                    "minItems": 1,
+                    "description": "List of DTXSIDs or other identifiers to search for.",
+                    "example": [
+                      "DTXSID9020112",
+                      "DTXSID3022401",
+                      "benzene"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object",
+                "example": {
+                  "exclude_analytical_qc": false,
+                  "additional_record_info": {
+                    "ms": {}
+                  },
+                  "base_url": "https://amos.example.org",
+                  "include_classyfire": true,
+                  "include_external_links": false,
+                  "include_functional_uses": false,
+                  "include_source_counts": false,
+                  "methodologies": {
+                    "all": true
+                  },
+                  "record_types": {
+                    "Fact Sheet": true,
+                    "Method": true,
+                    "Spectrum": true
+                  },
+                  "identifiers": [
+                    "DTXSID9020112"
+                  ]
+                }
+              },
+              "example": {
+                "exclude_analytical_qc": false,
+                "additional_record_info": {
+                  "ms": {}
+                },
+                "base_url": "https://amos.example.org",
+                "include_classyfire": true,
+                "include_external_links": false,
+                "include_functional_uses": false,
+                "include_source_counts": false,
+                "methodologies": {
+                  "all": true
+                },
+                "record_types": {
+                  "Fact Sheet": true,
+                  "Method": true,
+                  "Spectrum": true
+                },
+                "identifiers": [
+                  "DTXSID9020112"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Invalid request fields, cursor, or document type. Returns application/problem+json with request_id; legacy error and issues fields are retained when present."
+          },
+          "200": {
+            "description": "Excel workbook.",
+            "content": {
+              "application/vnd.ms-excel": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        }
+      }
+    },
+    "/api/amos/analytical_qc_batch_search": {
+      "post": {
+        "tags": [
+          "Batch search"
+        ],
+        "operationId": "app_batch_search.analytical_qc_batch_search",
+        "summary": "Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs",
+        "description": "or other identifiers.<br/><br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.<br/>Analytical QC data can be found in the general batch search, but will lack some domain-specific information that<br/>this search supplies.<br/>",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "base_url",
+                  "identifiers",
+                  "include_classyfire",
+                  "include_functional_uses",
+                  "include_source_counts",
+                  "methodologies"
+                ],
+                "properties": {
+                  "base_url": {
+                    "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "https://amos.example.org"
+                  },
+                  "include_classyfire": {
+                    "description": "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
+                    "type": "boolean"
+                  },
+                  "include_functional_uses": {
+                    "description": "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
+                    "type": "boolean"
+                  },
+                  "include_source_counts": {
+                    "description": "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
+                    "type": "boolean"
+                  },
+                  "methodologies": {
+                    "additionalProperties": {
+                      "type": "boolean"
+                    },
+                    "required": [
+                      "all"
+                    ],
+                    "properties": {
+                      "all": {
+                        "type": "boolean"
+                      }
+                    },
+                    "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
+                    "example": {
+                      "GC/MS": true,
+                      "LC/MS": true,
+                      "NMR": false,
+                      "all": false
+                    },
+                    "type": "object"
+                  },
+                  "identifiers": {
+                    "minItems": 1,
+                    "description": "List of DTXSIDs or other identifiers to search for.",
+                    "example": [
+                      "DTXSID9020112",
+                      "DTXSID3022401",
+                      "benzene"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object",
+                "example": {
+                  "base_url": "https://amos.example.org",
+                  "include_classyfire": false,
+                  "include_functional_uses": false,
+                  "include_source_counts": false,
+                  "methodologies": {
+                    "all": true
+                  },
+                  "identifiers": [
+                    "DTXSID9020112"
+                  ]
+                }
+              },
+              "example": {
+                "base_url": "https://amos.example.org",
+                "include_classyfire": false,
+                "include_functional_uses": false,
+                "include_source_counts": false,
+                "methodologies": {
+                  "all": true
+                },
+                "identifiers": [
+                  "DTXSID9020112"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Invalid request fields, cursor, or document type. Returns application/problem+json with request_id; legacy error and issues fields are retained when present."
+          },
+          "200": {
+            "description": "Excel workbook.",
+            "content": {
+              "application/vnd.ms-excel": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Request rejected. Use the documented Content-Type. Returns application/problem+json with type, title, status, detail, and request_id; legacy error and issues fields are preserved."
+          },
+          "500": {
+            "description": "An unexpected server error occurred. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "502": {
+            "description": "An upstream HTTP/search service failed or returned an unusable response. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "503": {
+            "description": "The database connection or transaction is temporarily unavailable or busy. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          },
+          "504": {
+            "description": "An upstream service exceeded its connection or read timeout. Returns application/problem+json with type, title, status, detail, and request_id. X-Request-ID identifies the corresponding server log entry."
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://hcd.rtpnc.epa.gov"
+    }
+  ]
+}
