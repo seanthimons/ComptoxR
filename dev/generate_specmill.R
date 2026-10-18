@@ -4,19 +4,24 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
   source("dev/install_specmill.R", local = TRUE)
   verify_specmill()
   callbacks <- new.env(parent = baseenv())
-  sys.source("dev/specmill_callbacks.R", envir = callbacks)
+  for (file in yaml::read_yaml("specmill.yml")$callback_files) {
+    sys.source(file, envir = callbacks)
+  }
   args <- list(
     root = ".",
     config = "specmill.yml",
     callbacks = callbacks,
     mode = "plan",
-    artifacts = c("wrappers", "tests")
+    artifacts = c("wrappers", "tests"),
+    validation = TRUE
   )
   if (!is.null(adopt)) {
     args$adopt <- adopt
   }
   plan <- do.call(specmill::generate_client, args)
   print(plan)
+  stopifnot(length(plan$validation) > 0L,
+    all(vapply(plan$validation, function(report) identical(report$status, "passed"), FALSE)))
   # Reviewed retained ToxPrint facade, not an assertion about server schema validity.
   # Any change to source, schema, mapping or diagnostics requires a new review.
   retained <- plan$retained_diagnostics

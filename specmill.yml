@@ -61,6 +61,11 @@ services:
 - apis/chemi-small-families.yml
 - apis/chemi-stdizer-unbound.yml
 - apis/chemi-chet-options.yml
+- apis/chemi-released-chet-facades.yml
+- apis/chemi-released-recursive-facades.yml
+- apis/chemi-webtest-exports.yml
 callback_files:
 - dev/specmill_callbacks.R
 - dev/specmill-rebuild/remaining-facades/callbacks.R
+- dev/specmill-rebuild/rootheldrelease/callbacks.R
+- dev/specmill-rebuild/released-facades-v42/callbacks.R

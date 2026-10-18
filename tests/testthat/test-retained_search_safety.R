@@ -36,32 +36,6 @@ test_that('search transport uses original all_pages and preserves partial return
   expect_identical(post, state)
 })
 
-test_that('safety retains its zero-input error before HTTP and formatter conditions', {
-  calls <- 0L
-  local_mocked_bindings(req_perform = function(...) { calls <<- calls + 1L; stop('unexpected HTTP') }, .package = 'httr2')
-  expect_identical(formals(chemi_safety_rqcodes), NULL)
-  expect_error(chemi_safety_rqcodes(), 'Either query or chemicals parameter must be provided', class = 'rlang_error')
-  expect_identical(calls, 0L)
-  payload <- list(list(rqCode = list(sid = 'one', rq = '1,000 (454)', category = 'A')))
-  helper_calls <- 0L
-  local_mocked_bindings(generic_chemi_request = function(...) {
-    helper_calls <<- helper_calls + 1L
-    expect_identical(list(...), list(query = NULL, endpoint = 'safety/rqcodes', tidy = FALSE))
-    payload
-  })
-  expect_identical(chemi_safety_rqcodes(), tibble::tibble(sid = 'one', rq_lbs = 1000,
-    rq_kgs = 454, category = 'A'))
-  payload <- list(list(chemical = list(sid = 'one')), list(rqCode = NULL))
-  expect_null(chemi_safety_rqcodes())
-  payload <- list(list(rqCode = list(rq = 'bad units extra')))
-  expect_error(chemi_safety_rqcodes(), class = 'rlang_error')
-  payload <- list(list(rqCode = list(rq = 'bad (bad)')))
-  expect_warning(value <- chemi_safety_rqcodes(), 'NAs introduced by coercion')
-  expect_true(all(is.na(value$rq_lbs)))
-  expect_identical(helper_calls, 4L)
-  expect_identical(calls, 0L)
-})
-
 test_that('search localhost requests preserve paging, partial failures and condition stages', {
   skip_if_not_installed('httpuv'); skip_if_not_installed('callr')
   directory <- tempfile('search-facade-'); dir.create(directory)

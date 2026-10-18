@@ -4,7 +4,22 @@ Updated 18 October 2026. Branch `feat/specmill-migration-pilot`, PR345.
 Inspect HEAD and working-tree status before using this checkpoint. Local commits
 are authorized; ComptoxR pushes, merges and releases remain held.
 
-## Current 487/548 checkpoint
+## Current 498/548 checkpoint
+
+Root eleven-operation integration is fully emitted: approved #352 SID query/resolver preprocessing, eight original facade migrations fromb9674e5a and WebTEST exports2 from5e497b94. All704 owner hashes, all30 selected source validations, unchanged freshness and current retained-test inventory PASS. Root focused616 assertions PASS; root WebTEST bytes exactly match child276-assertion proof. Root actual RQ+resolver live controls PASS staging/production. See [integration evidence](v42-11-integration/README.md). Historical notes below are superseded where they describe missing R files or active generation.
+
+Active gates: final broad safe suite session44698/log /tmp/specmill-finish/full-v42-11-final-tests.log; package gate session65305/log root-v42-package-check-11.log; public CLI check session89328/log root-v42-11-public-entrypoint.log. Original broad run stopped on three obsolete unowned manual helper tests; frozen baseline files explicitly retired, new behavior suite already passes. The restarted broad run is separate. Package snapshot core bytes match but still contains those three excluded tests; tests disabled for that gate.
+
+Active child tasks: audit-final-source-service-holds-20261018-1 and finish-versioned-toolkit-ci-callers-20261018-1. Parent owns dev/generate_specmill.R callback-loader/validation fix, with actual CLI check running. CI child owns stale R_LIBS/default-library references in active workflows/docs. No push. Private PR176/179/180 proofs remain held for released pin adoption; source/service holds remain real.
+
+## Historical 487/548 checkpoint
+
+Current local HEAD is at least84d5c05c, which records held PR176/179/180 private proofs. Root has a dirty nine-endpoint integration: #352 and eight released facade candidatesb9674e5a. Current official full apply runs via /tmp/specmill-finish/root-v42-facades-emit.R, log same basename.log, active exec session66796. Selected baseline R files are intentionally removed only after frozen HEAD/hash checks so official emission can replace them. Do not restore or edit generation inputs while it runs. Initial config duplicate and obsolete full-contract fixture failures are preserved under /tmp/specmill-finish/root-v42-facades-*.txt; both root merge mistakes were corrected, no upstream patch. The retry retires selected old helper contracts from both fixture files.
+
+#352 official root emission passes704 hashes; actual generated wrapper+resolver positive staging/production controls pass. Root focused248 assertions pass, not the isolated268 count. Native resolved_chemical_response preserves hard401, an explicit difference from candidate1bc3e8e. Evidence is underissue-352/root-*. After eight-facade emission run root-v42-facades-fresh.R and root-v42-facades-tests.R, then stable final broad safe suite and package gate. Expected total496/548 before WebTEST/safety ownership task.
+
+Only active child is finish-webtest-exports-safety-ownership-retry-20261018-2, based3ea6140c. Original task failed at model capacity, no edits. PR179 revised exact1c3e8a34 replay3d9369e7 now passes227 assertions; root evidence committed. PR176 exacta656ce4 proof13801f14 passes210 groups/65localhost requests. PR180 exactd9c6f9 passes492 assertions. All remain unreleased/held. User verified officialv44 source496c91e1eb7365f8f73f9c063f6c78b0c98aa1ee, tarSHA7fdc088cbd3660fab74a7da2c22b67293601dfb0c5fbaf3fc4b93bbb9ee7e478, releasing172 ownership reconciliation. Root stays42 during active run. v43/v44 are available; adopt when required, never a moving branch. PR176 release is next per overwatch.
+
 
 Official v0.1.42 is root-adopted in its versioned private library. The 22-operation batch adds AMOS3, CheT OPTIONS2, small families2 and standardizer15. All 704 ownership hashes, unchanged identities/hashes for the prior682 outputs, all30 source validations and fresh generation pass. Package gate0/0/0 excludes tests/examples/vignettes/manual and relaxes optional Suggests. Initial focused readiness failures are preserved; affected155-assertion replay and installed-package579-assertion probe pass. No new clean full broad-suite pass is claimed. See [integration evidence](v42-22-integration/README.md).
 

@@ -154,99 +154,81 @@ operations:
   POST /api/toxprints/assays:
     name: chemi_toxprints_assays_bulk
     file: R/chemi_toxprints_assays.R
-    helper: generic_chemi_request
+    helper: .ct_request
     implementation: generated
     inputs:
       acl:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       actives:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       category:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       chemicals:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       id:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       labels:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       metrics:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       name:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       options:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
       total:
-        type: character
-        default: ~
+        type: any
+        default: null
         description: Optional parameter
-    post_on_skip: no
+    post_on_skip: false
     post_state: parameters
     request:
       arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints/assays
+        path_params:
+          value: {}
         query:
-          from:
-          - params
-          - acl
-        endpoint:
-          value: toxprints/assays
-        options:
-          compact_object:
-            actives:
-              from:
-              - params
-              - actives
-            category:
-              from:
-              - params
-              - category
-            chemicals:
-              from:
-              - params
-              - chemicals
-            id:
-              from:
-              - params
-              - id
-            labels:
-              from:
-              - params
-              - labels
-            metrics:
-              from:
-              - params
-              - metrics
-            name:
-              from:
-              - params
-              - name
-            options:
-              from:
-              - params
-              - options
-            total:
-              from:
-              - params
-              - total
-        tidy:
-          value: no
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
     docs:
       title: Toxprints Assays
       lifecycle: experimental
@@ -266,6 +248,8 @@ operations:
       - acl: DTXSID1024122
       tags:
         apiStage: public
+    request_controls:
+      preserve_errors: true
   GET /api/toxprints/calculate:
     name: chemi_toxprints_calculate
     file: R/chemi_toxprints_calculate_get.R

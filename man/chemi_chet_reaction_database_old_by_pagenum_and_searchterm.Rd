@@ -11,20 +11,15 @@ chemi_chet_reaction_database_old_by_pagenum_and_searchterm(
 )
 }
 \arguments{
-\item{pagenum}{Primary query parameter. Type: integer}
+\item{pagenum}{pagenum Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{searchterm}{Optional parameter. Type: string}
+\item{searchterm}{searchterm}
 }
 \value{
 Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\examples{
-\dontrun{
-chemi_chet_reaction_database_old_by_pagenum_and_searchterm(pagenum = "DTXSID7020182")
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

@@ -1,31 +1,77 @@
 #' Search reactions (legacy)
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param pagenum Primary query parameter. Type: integer
-#' @param searchterm Optional parameter. Type: string
+#' @param pagenum pagenum Accepts a vector: one request is sent per element and the results are combined.
+#' @param searchterm searchterm
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_chet_reaction_database_old_by_pagenum_and_searchterm(pagenum = "DTXSID7020182")
-#' }
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_database_old_by_pagenum_and_searchterm <- function(pagenum, searchterm = NULL) {
-  result <- generic_request(
-    query = pagenum,
-    endpoint = "chet/reaction/database-old/",
-    method = "GET",
-    batch_limit = 1,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    path_params = c(searchterm = searchterm)
+  pagenum <- base::get(
+    ".ct_legacy_query",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = TRUE
+  )(pagenum)
+  base::get(
+    ".chet_validate_inputs",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = FALSE
+  )(base::list("pagenum" = pagenum, "searchterm" = searchterm))
+  params <- base::list("pagenum" = pagenum, "searchterm" = searchterm)
+  send <- function(params) {
+    result <- .ct_request(
+      "method" = "GET",
+      "path" = base::local({
+        req <- httr2::request(paste0(
+          "https://projection.invalid/api/chet",
+          "/reaction/database-old",
+          "/{",
+          "pagenum",
+          "}"
+        ))
+        for (pp in c(params[["searchterm"]])) {
+          req <- httr2::req_url_path_append(req, as.character(pp))
+        }
+        substring(req$url, nchar("https://projection.invalid") + 1L)
+      }),
+      "path_params" = base::list("pagenum" = params[["pagenum"]]),
+      "query" = structure(list(), names = character(0)),
+      "body" = NULL,
+      "headers" = list(Accept = "application/json"),
+      "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+      "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        .ct_collect_response(response, context, decode, length(pagenum), "chet/reaction/database-old/")
+      },
+      "request_controls" = list(preserve_errors = TRUE)
+    )
+    result
+  }
+  result <- .ct_request_each(
+    function(chunk) {
+      params["pagenum"] <- base::list(chunk)
+      send(params)
+    },
+    params[["pagenum"]],
+    1L,
+    on_error = list(single = "stop", multiple = "drop"),
+    warning = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  base::attr(result, "failed") <- NULL
+  result
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  base::get(
+    "format_legacy_list_result",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = FALSE
+  )(base::list(result = result, params = params))
 }

@@ -1,0 +1,359 @@
+id: released-legacy-chemi-facades
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+  - schema/chemi-toxprints-prod.json
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - POST /api/resolver/resolve
+  - POST /api/toxprints/assays
+  - POST /api/toxprints/chemicals_categories
+  - POST /api/toxprints/toxprints_categories
+  - POST /api/stdizer/records
+  - GET /api/toxprints/assays
+helper: .ct_request
+documentation: true
+operations:
+  POST /api/resolver/resolve:
+    name: chemi_resolver_resolve
+    file: R/chemi_resolver_resolve.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      mol:
+        type: any
+        default: null
+        description: Optional parameter
+      queries:
+        type: any
+        default: null
+        description: Optional parameter
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/resolver/resolve
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Resolver Resolve
+      lifecycle: experimental
+      parameters:
+        mol: Optional parameter
+        queries: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - mol: DTXSID1024122
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: true
+  POST /api/toxprints/assays:
+    name: chemi_toxprints_assays_bulk
+    file: R/chemi_toxprints_assays.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      acl:
+        type: any
+        default: null
+        description: Optional parameter
+      actives:
+        type: any
+        default: null
+        description: Optional parameter
+      category:
+        type: any
+        default: null
+        description: Optional parameter
+      chemicals:
+        type: any
+        default: null
+        description: Optional parameter
+      id:
+        type: any
+        default: null
+        description: Optional parameter
+      labels:
+        type: any
+        default: null
+        description: Optional parameter
+      metrics:
+        type: any
+        default: null
+        description: Optional parameter
+      name:
+        type: any
+        default: null
+        description: Optional parameter
+      options:
+        type: any
+        default: null
+        description: Optional parameter
+      total:
+        type: any
+        default: null
+        description: Optional parameter
+    post_on_skip: false
+    post_state: parameters
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints/assays
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      parameters:
+        acl: Optional parameter
+        actives: Optional parameter
+        category: Optional parameter
+        chemicals: Optional parameter
+        id: Optional parameter
+        labels: Optional parameter
+        metrics: Optional parameter
+        name: Optional parameter
+        options: Optional parameter
+        total: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - acl: DTXSID1024122
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: true
+  POST /api/toxprints/chemicals_categories:
+    name: chemi_toxprints_chemicals_categories
+    file: R/chemi_toxprints_chemicals_categories.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: any
+        default: null
+        description: Optional parameter
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints/chemicals_categories
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Toxprints Chemicals Categories
+      lifecycle: experimental
+      parameters:
+        chemicals: Optional parameter
+      return: Returns a list with result object
+      tags:
+        apiStage: public
+      examples:
+      - chemicals: DTXSID1024122
+    request_controls:
+      preserve_errors: true
+  POST /api/toxprints/toxprints_categories:
+    name: chemi_toxprints_toxprints_categories
+    file: R/chemi_toxprints_toxprints_categories.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      chemical:
+        type: any
+        default: null
+        description: Optional parameter
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints/toxprints_categories
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Toxprints Toxprints Categories
+      lifecycle: experimental
+      parameters:
+        chemical: Optional parameter
+      return: Returns a list with result object
+      tags:
+        apiStage: public
+      examples:
+      - chemical: DTXSID1024122
+    request_controls:
+      preserve_errors: true
+  POST /api/stdizer/records:
+    name: chemi_stdizer_records
+    file: R/chemi_stdizer_records.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      full:
+        type: any
+        default: null
+        description: Optional parameter
+      options:
+        type: any
+        default: null
+        description: Optional parameter
+      records:
+        type: any
+        default: null
+        description: Optional parameter
+    post_on_skip: false
+    post_state: parameters
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/stdizer/records
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Stdizer Records
+      lifecycle: experimental
+      parameters:
+        full: Optional parameter
+        options: Optional parameter
+        records: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - full: DTXSID1024122
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: true
+  GET /api/toxprints/assays:
+    name: chemi_toxprints_assays
+    file: R/chemi_toxprints_assays.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+hook_config: dev/specmill-rebuild/released-facades-v42/hooks.yml

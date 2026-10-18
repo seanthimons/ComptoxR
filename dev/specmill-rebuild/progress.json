@@ -1,5 +1,5 @@
 {
-  "commit": "cd34efb464a0d370c5c30dcd9db2886737adc317",
+  "commit": "84d5c05c8ba056b40b9080d7e1096927564760ce",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -17,16 +17,6 @@
       "route": "amos/batch_search"
     },
     {
-      "wrapper": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
-      "method": "GET",
-      "route": "chet/reaction/database-old"
-    },
-    {
-      "wrapper": "chemi_chet_reaction_searchcounts",
-      "method": "GET",
-      "route": "chet/reaction/searchcounts"
-    },
-    {
       "wrapper": "chemi_resolver_getpubchemlist",
       "method": "POST",
       "route": "resolver/getpubchemlist"
@@ -35,16 +25,6 @@
       "wrapper": "chemi_resolver_getsimilaritylist",
       "method": "POST",
       "route": "resolver/getsimilaritylist"
-    },
-    {
-      "wrapper": "chemi_resolver_resolve",
-      "method": "POST",
-      "route": "resolver/resolve"
-    },
-    {
-      "wrapper": "chemi_safety_rqcodes",
-      "method": "POST",
-      "route": "safety/rqcodes"
     },
     {
       "wrapper": "chemi_search",
@@ -60,31 +40,6 @@
       "wrapper": "chemi_stdizer_groups_bulk",
       "method": "POST",
       "route": "stdizer/groups"
-    },
-    {
-      "wrapper": "chemi_stdizer_groups_recursive",
-      "method": "GET",
-      "route": "stdizer/groups/recursive"
-    },
-    {
-      "wrapper": "chemi_stdizer_records",
-      "method": "POST",
-      "route": "stdizer/records"
-    },
-    {
-      "wrapper": "chemi_toxprints_assays_bulk",
-      "method": "POST",
-      "route": "toxprints/assays"
-    },
-    {
-      "wrapper": "chemi_toxprints_chemicals_categories",
-      "method": "POST",
-      "route": "toxprints/chemicals_categories"
-    },
-    {
-      "wrapper": "chemi_toxprints_toxprints_categories",
-      "method": "POST",
-      "route": "toxprints/toxprints_categories"
     },
     {
       "wrapper": "chemi_toxprints_bulk",
@@ -137,9 +92,9 @@
     },
     {
       "schema": "chemi-chet-prod",
-      "migrated": 82,
+      "migrated": 84,
       "total": 95,
-      "remaining": 13
+      "remaining": 11
     },
     {
       "schema": "chemi-descriptors-prod",
@@ -203,15 +158,15 @@
     },
     {
       "schema": "chemi-resolver-prod",
-      "migrated": 39,
+      "migrated": 40,
       "total": 46,
-      "remaining": 7
+      "remaining": 6
     },
     {
       "schema": "chemi-safety-prod",
-      "migrated": 2,
+      "migrated": 3,
       "total": 4,
-      "remaining": 2
+      "remaining": 1
     },
     {
       "schema": "chemi-search-prod",
@@ -227,21 +182,21 @@
     },
     {
       "schema": "chemi-stdizer-prod",
-      "migrated": 23,
+      "migrated": 25,
       "total": 33,
-      "remaining": 10
+      "remaining": 8
     },
     {
       "schema": "chemi-toxprints-prod",
-      "migrated": 19,
+      "migrated": 22,
       "total": 23,
-      "remaining": 4
+      "remaining": 1
     },
     {
       "schema": "chemi-webtest-prod",
-      "migrated": 7,
+      "migrated": 9,
       "total": 9,
-      "remaining": 2
+      "remaining": 0
     },
     {
       "schema": "ctx-bioactivity-prod",
@@ -1079,10 +1034,28 @@
     {
       "schema": "schema/chemi-toxprints-prod.json",
       "binding_schema": "schema/chemi-toxprints-prod.json",
+      "operation": "POST /api/toxprints/chemicals_categories",
+      "wrapper": "chemi_toxprints_chemicals_categories",
+      "file": "R/chemi_toxprints_chemicals_categories.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-toxprints-prod.json",
+      "binding_schema": "schema/chemi-toxprints-prod.json",
       "operation": "GET /api/toxprints/enrichments",
       "wrapper": "chemi_toxprints_enrichments",
       "file": "R/chemi_toxprints_enrichments.R",
       "suite": "tests/testthat/test-contract-chemi_toxprints_enrichments.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-toxprints-prod.json",
+      "binding_schema": "schema/chemi-toxprints-prod.json",
+      "operation": "POST /api/toxprints/toxprints_categories",
+      "wrapper": "chemi_toxprints_toxprints_categories",
+      "file": "R/chemi_toxprints_toxprints_categories.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
       "migrated": true
     },
     {
@@ -2807,6 +2780,15 @@
     {
       "schema": "schema/chemi-resolver-prod.json",
       "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/resolve",
+      "wrapper": "chemi_resolver_resolve",
+      "file": "R/chemi_resolver_resolve.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
       "operation": "POST /api/resolver/getsimilaritymap",
       "wrapper": "chemi_resolver_getsimilaritymap",
       "file": "R/chemi_resolver_getsimilaritymap.R",
@@ -2936,7 +2918,7 @@
       "operation": "GET /api/toxprints/assays",
       "wrapper": "chemi_toxprints_assays",
       "file": "R/chemi_toxprints_assays.R",
-      "suite": "tests/testthat/test-contract-chemi_toxprints_assays.R",
+      "suite": "tests/testthat/test-chemi_public_options.R",
       "migrated": true
     },
     {
@@ -2973,6 +2955,15 @@
       "wrapper": "chemi_toxprints_toxprints",
       "file": "R/chemi_toxprints_toxprints.R",
       "suite": "tests/testthat/test-contract-chemi_toxprints_toxprints.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-toxprints-prod.json",
+      "binding_schema": "schema/chemi-toxprints-prod.json",
+      "operation": "POST /api/toxprints/assays",
+      "wrapper": "chemi_toxprints_assays_bulk",
+      "file": "R/chemi_toxprints_assays.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
       "migrated": true
     },
     {
@@ -3086,6 +3077,15 @@
     {
       "schema": "schema/chemi-stdizer-prod.json",
       "binding_schema": "schema/chemi-stdizer-prod.json",
+      "operation": "POST /api/stdizer/records",
+      "wrapper": "chemi_stdizer_records",
+      "file": "R/chemi_stdizer_records.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "binding_schema": "schema/chemi-stdizer-prod.json",
       "operation": "POST /api/stdizer/chemicals",
       "wrapper": "chemi_stdizer_chemicals",
       "file": "R/chemi_stdizer_chemicals.R",
@@ -3117,6 +3117,15 @@
       "wrapper": "epi_submit_batch",
       "file": "R/epi_submit_batch.R",
       "suite": "tests/testthat/test-contract-epi_submit_batch.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-safety-prod.json",
+      "binding_schema": "schema/chemi-safety-prod.json",
+      "operation": "POST /api/safety/rqcodes",
+      "wrapper": "chemi_safety_rqcodes",
+      "file": "R/chemi_safety_rqcodes.R",
+      "suite": "tests/testthat/test-native_safety_rqcodes.R",
       "migrated": true
     },
     {
@@ -4674,6 +4683,51 @@
       "wrapper": "chemi_chet_reaction_map_dl_options",
       "file": "R/chemi_chet_reaction_map_dl_options.R",
       "suite": "tests/testthat/test-native_chet_options.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /reaction/searchcounts/{search_input}/{search_type}",
+      "wrapper": "chemi_chet_reaction_searchcounts",
+      "file": "R/chemi_chet_reaction_searchcounts.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /reaction/database-old/{pagenum}/{searchterm}",
+      "wrapper": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
+      "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "binding_schema": "schema/chemi-stdizer-prod.json",
+      "operation": "GET /api/stdizer/groups/{id}/recursive",
+      "wrapper": "chemi_stdizer_groups_recursive",
+      "file": "R/chemi_stdizer_groups_recursive.R",
+      "suite": "tests/testthat/test-native_released_facades_v42.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-webtest-prod.json",
+      "binding_schema": "schema/chemi-webtest-prod.json",
+      "operation": "POST /api/webtest/predict/export",
+      "wrapper": "chemi_webtest_predict_export",
+      "file": "R/chemi_webtest_predict_export.R",
+      "suite": "tests/testthat/test-native_webtest_exports.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-webtest-prod.json",
+      "binding_schema": "schema/chemi-webtest-prod.json",
+      "operation": "POST /api/webtest/export-append",
+      "wrapper": "chemi_webtest_export_append",
+      "file": "R/chemi_webtest_export_append.R",
+      "suite": "tests/testthat/test-native_webtest_exports.R",
       "migrated": true
     }
   ]

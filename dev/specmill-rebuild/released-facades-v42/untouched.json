@@ -1,0 +1,20 @@
+{
+  "base": "cd34efb4",
+  "untouched": {
+    "schema/chemi-chet-prod.json": "df83f5d3fd7b59d23f556332526c330e579763d8a8858d222836931fe6321700",
+    "schema/chemi-resolver-prod.json": "e979709d6eb80598e86fcd7dacee37b9d7a63a14f9cad9be6935bae1996f80d2",
+    "schema/chemi-toxprints-prod.json": "f1ebc2f1bf1581c3eea75de7c4e6d5e6c7b4bd41c585f52bba14b3d2ee5d6447",
+    "schema/chemi-stdizer-prod.json": "178680219fccf31ecd6778532e69deff196e3767e3f8b6b3558d1cc3256f12ec",
+    "specmill.yml": "08b8f7452e47005fec1645cdefec8b0380afffbc4a379f9a6108102bfd4d0be5",
+    "inst/hook_config.yml": "0573a166ccb199206f47f353e671179c9737e1c1b61a66a99dc2194590b1fc2e",
+    "NAMESPACE": "fa7d60000d8fd359fc25e7160569244affbdc2b739ce6ba1570be85560c073fc",
+    ".specmill/manifest.json": "097fb5b0ecd061ad39a718ddbd9b914e3173a1dd406aea04eaf9d34e098b59b5",
+    "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+    "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+    "dev/install_specmill.R": "b96469e0a80e6eb0cac387a52c2dcb75e30faeec502e6b39974ee57a56e26758",
+    "dev/specmill-lock.json": "ac029babdd3c885bc862f8dff3b313582f56f9970380e4ec2bb28d8732076e0a",
+    "dev/specmill_callbacks.R": "08a8c3850e89954ed5d312738c1548f728e9c57df9f5dc7073cf9f2e3ffe3e3d",
+    "dev/specmill-rebuild/progress.md": "eafeff803f5e421d5473861d5397ec695d0d62f205465bb392e24667e6dd848c",
+    "dev/specmill-rebuild/HANDOFF.md": "727b19f59c6d13c3d8850b1d38fd324ca0457700122d220bf32fc509de48f126"
+  }
+}

@@ -175,57 +175,6 @@ test_that("similarity map skips unresolved inputs and wraps hook errors, not tra
   expect_error(chemi_resolver_getsimilaritymap("one"), "transport sentinel", fixed = TRUE)
 })
 
-test_that("RQ codes preserves mocked transformations, NULL results and parsing errors", {
-  response <- NULL
-  call <- NULL
-  local_mocked_bindings(
-    generic_chemi_request = function(...) {
-      call <<- list(...)
-      response
-    },
-    run_hook = function(...) stop("no hooks in this wrapper"),
-    .package = "ComptoxR"
-  )
-  for (empty in list(NULL, list(), list(list(rqCode = NULL)), list(list(other = FALSE)))) {
-    response <- empty
-    expect_null(chemi_safety_rqcodes())
-    expect_identical(call, list(query = NULL, endpoint = "safety/rqcodes", tidy = FALSE))
-  }
-  response <- list(
-    list(rqCode = list(code = "A", rq = "1,000 (454)", flag = FALSE, count = 0)),
-    list(rqCode = NULL),
-    list(rqCode = list(code = "B", rq = "0 (0)", flag = FALSE, count = 0))
-  )
-  expect_identical(
-    chemi_safety_rqcodes(),
-    tibble::tibble(code = c("A", "B"), rq_lbs = c(1000, 0), rq_kgs = c(454, 0), flag = c(FALSE, FALSE), count = c(0, 0))
-  )
-  for (rq in list("invalid", "1 2 3", NULL)) {
-    response <- list(list(rqCode = list(code = "A", rq = rq)))
-    expect_error(chemi_safety_rqcodes())
-  }
-  response <- list(list(rqCode = list(rq = "bad (bad)")))
-  expect_warning(result <- chemi_safety_rqcodes(), "NAs introduced by coercion")
-  expect_true(all(is.na(result)))
-  expect_error(chemi_safety_rqcodes(NULL), "unused argument")
-})
-
-test_that("RQ codes retains its empty-query rejection and propagates helper errors", {
-  withr::local_envvar(c(chemi_burl = "http://127.0.0.1:1", run_debug = "FALSE"))
-  local_mocked_bindings(.endpoint_url = function(...) "http://127.0.0.1:1", .package = "ComptoxR")
-  expect_error(
-    chemi_safety_rqcodes(),
-    "Either query or chemicals parameter must be provided.",
-    fixed = TRUE,
-    class = "rlang_error"
-  )
-  local_mocked_bindings(
-    generic_chemi_request = function(...) stop("request sentinel"),
-    .package = "ComptoxR"
-  )
-  expect_error(chemi_safety_rqcodes(), "request sentinel", fixed = TRUE)
-})
-
 test_that("similarity map retries resolution without idType and preserves real empty-input errors", {
   for (query in list(NULL, character(), list())) {
     expect_error(chemi_resolver_getsimilaritymap(query), class = "comptoxr_pre_request_hook_error")

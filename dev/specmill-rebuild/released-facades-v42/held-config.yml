@@ -1,0 +1,4 @@
+config_version: 1
+package: ComptoxR
+services:
+- dev/specmill-rebuild/released-facades-v42/held-bulk.yml

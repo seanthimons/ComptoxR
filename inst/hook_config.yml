@@ -1381,3 +1381,36 @@ chemi_chet_reaction_batchsearch_options:
 
 chemi_chet_reaction_map_dl_options:
   bespoke_test: tests/testthat/test-native_chet_options.R
+
+chemi_safety_rqcodes:
+  bespoke_test: tests/testthat/test-native_safety_rqcodes.R
+  pre_request:
+    - resolve_query_to_chemical_records
+    - flatten_similarity_map_chemicals
+  post_response:
+    - format_safety_rqcodes_result
+
+chemi_chet_reaction_searchcounts:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_chet_reaction_database_old_by_pagenum_and_searchterm:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_stdizer_groups_recursive:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_resolver_resolve:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_toxprints_assays_bulk:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_toxprints_chemicals_categories:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_toxprints_toxprints_categories:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_stdizer_records:
+  bespoke_test: tests/testthat/test-native_released_facades_v42.R
+chemi_toxprints_assays:
+  bespoke_test: tests/testthat/test-chemi_public_options.R
+
+chemi_webtest_export_append:
+  bespoke_test: tests/testthat/test-native_webtest_exports.R
+
+chemi_webtest_predict_export:
+  bespoke_test: tests/testthat/test-native_webtest_exports.R

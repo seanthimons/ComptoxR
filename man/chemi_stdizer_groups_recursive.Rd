@@ -7,18 +7,13 @@
 chemi_stdizer_groups_recursive(id)
 }
 \arguments{
-\item{id}{Primary query parameter. Type: string}
+\item{id}{id Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\examples{
-\dontrun{
-chemi_stdizer_groups_recursive(id = "DTXSID7020182")
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
