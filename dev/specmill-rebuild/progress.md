@@ -6,13 +6,13 @@ Denominator: all HTTP operations in each canonical `schema/*-prod.json`, includi
 
 ```
 Endpoints migrated (adopted / source schema total):
-chemi-alerts-prod: 4/16
+chemi-alerts-prod: 5/16
 chemi-amnb_nate-prod: 2/4
 chemi-amos-prod: 61/77
 chemi-arn_cats-prod: 2/4
 chemi-chet-prod: 26/95
 chemi-descriptors-prod: 0/4
-chemi-hazard-prod: 0/16
+chemi-hazard-prod: 2/16
 chemi-mordred-prod: 0/4
 chemi-ncc_cats-prod: 2/4
 chemi-opera-prod: 3/6
@@ -21,12 +21,12 @@ chemi-pfas_atlas-prod: 2/4
 chemi-pfas_cats-prod: 2/4
 chemi-predictor_models-prod: 2/5
 chemi-rdkit-prod: 0/4
-chemi-resolver-prod: 21/46
+chemi-resolver-prod: 24/46
 chemi-safety-prod: 0/4
 chemi-search-prod: 4/14
 chemi-services-prod: 4/14
-chemi-stdizer-prod: 5/33
-chemi-toxprints-prod: 9/23
+chemi-stdizer-prod: 6/33
+chemi-toxprints-prod: 10/23
 chemi-webtest-prod: 0/9
 ctx-bioactivity-prod: 30/30
 ctx-chemical-prod: 54/55
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28
 epi-suite-prod: 12/14
 ```
 
-Total: 300/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 308/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.

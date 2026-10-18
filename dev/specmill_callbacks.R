@@ -240,3 +240,45 @@ substitute(function(response, context, decode) {
     observe_api_responses(list(response))
     decode()
 }, list(ENDPOINT = sub("^/api/", "", operation$path)))
+
+resolved_chemical_body <- function(operation) {
+    schema <- operation$schema_body
+    kind <- attr(schema$properties$chemicals$items, "specmill_id")
+    stopifnot(kind %in% c("#/components/schemas/Chemical", "#/components/schemas/ChemicalRecord", "#/components/schemas/ResolvedChemical"))
+    flat <- identical(kind, "#/components/schemas/Chemical")
+    fields <- intersect(names(schema$properties), vapply(operation$parameters, function(p) if (is.null(p$public_name))
+        p$name
+    else p$public_name, ""))
+    fields <- setdiff(fields, "chemicals")
+    extra <- as.call(c(list(quote(base::list)), stats::setNames(lapply(fields, function(name) {
+        value <- call("[[", as.name("params"), name)
+        if (name != "options") return(value)
+        substitute(base::local({
+            options <- VALUE
+            if (is.null(options)) options <- structure(list(), names = character())
+            .api_validation$body_value(options, SCHEMA)
+        }), list(VALUE = value, SCHEMA = schema$properties$options))
+    }), fields)))
+    chemicals <- if (flat)
+        quote(lapply(chemicals, function(record) if (is.list(record) && !is.null(record$chemical)) record$chemical else record))
+    else quote(chemicals)
+    build <- if (flat)
+        quote(function(id) list(sid = id))
+    else quote(function(id) list(chemical = list(sid = id)))
+    substitute(base::local({
+        chemicals <- params[["chemicals"]]
+        if (!is.list(chemicals) || !length(chemicals)) chemicals <- lapply(.ct_toxprint_query(params[["query"]]),
+            BUILD)
+        c(list(chemicals = CHEMICALS), Filter(Negate(is.null), EXTRA))
+    }), list(CHEMICALS = chemicals, BUILD = build, EXTRA = extra))
+}
+
+resolved_chemical_response <- function(operation) {
+    substitute(function(response, context, decode) {
+        if (context$status >= 400L) decode()
+        context$endpoint <- ENDPOINT
+        .ct_chemi_result(response, context, decode, tidy = FALSE)
+    }, list(ENDPOINT = sub("^/api/", "", operation$path)))
+}
+
+similaritymap_query <- function(operation) quote(list(sort = if (!is.null(params[["sort"]])) tolower(as.character(params[["sort"]])) else NULL))

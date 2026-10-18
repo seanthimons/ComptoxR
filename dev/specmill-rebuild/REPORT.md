@@ -1868,3 +1868,72 @@ reproducible git-archive checksum is
 Official helper emission/provenance/protection, full generation and fresh check
 pass. Private-state operation adoption follows separately; the combined-hook
 candidate remains held for its serialized release. No ComptoxR push.
+
+## Released private-state adoption and source/service review (18 October 2026)
+
+The v0.1.40 candidate uses the released `private_params` and `post_params`
+settings for resolver similarity map, alerts, hazard POST, similarity ordering,
+PubChem section POST, standardizer chemicals and ToxPrint calculate POST; hazard
+GET preserves its existing formatting hook. All eight retain public formals.
+The initial private chemicals slot, partial hook updates, skip-before-post,
+and original public post-hook state have independent replacement tests.
+
+Request bodies follow the declared endpoint schema: Chemical arrays are flat,
+ResolvedChemical/ChemicalRecord arrays remain nested, and body fields such as
+section and similarity settings are top-level. Empty options serialize as an
+object; declared option arrays are normalized/validated by the generated body
+validator. The resolver projection keeps its original six nullable fields and
+retains additional chemical fields, including mol/cid, which working calculation
+requests need. This is an intentional request correction, not byte parity with
+legacy nested option bodies. Shared retained resolution callers remain tested.
+
+Root replay passed 655 assertions across the chemical-resolution, compound-hook,
+hazard-GET, resolved HTTP/payload and similarity-map state suites. This includes
+actual localhost JSON bodies, typed received 404/500 responses and hard native
+401 behavior, malformed-success conditions and unresolved skips. The exact old
+owned map contract was removed using released `specmill::apply_files`; its
+fixture entry was retired and bespoke coverage registered. Seven obsolete
+unowned legacy helper-boundary files were replaced. The inventory reports 17
+remaining legacy suites; that number is not an endpoint denominator.
+
+Five final production read/calculation probes returned positive data: ToxPrint
+(total 1), similarity ordering, similarity map, PubChem section, and standardizer
+chemicals with `options = list(workflow = "ms-ready")`. Similarity ordering needs
+an explicit main reference Chemical; missing workflow/reference defaults remain
+unchanged and the service rejects them. Hazard GET/POST and alerts returned 502;
+controlled successes and schema checks do not establish positive production
+behavior for those three.
+
+Resolver `chemi_resolver_getsimilaritylist`, POST `/api/resolver/getsimilaritylist`
+in `chemi-resolver-prod.json`, remains on its existing implementation. Fresh
+production schema still declares `get_chemicals`, but an otherwise complete
+minimal declared request fails HTTP500 because that getter is null. An
+undocumented `_chemicals` control plus main returns only an empty array, so it
+was rejected as a correction. Filed [Specmill #165](https://github.com/seanthimons/specmill/issues/165)
+and linked it from PR345. Portable request/response evidence, originals and
+explicit production limits are in `wave-resolved-chemical-evidence.rds`.
+
+Staging follow-up requested by the user: the same generated hazard GET and POST
+returned HTTP200 with a nonempty `hazardChemicals` array on
+`https://cim.sciencedataexperts.com`. Alerts default options received an explicit
+400 requiring 1–1000 `options.alerts` entries; GET `/api/alerts/groups` advertised
+57 groups. Retrying the generated alerts wrapper with the advertised Ashby group
+name (`ashby`) returned HTTP200 with nonempty alertFlags and no application errors. The advertised ID returned a group-not-found application error and was rejected. These are staging proofs,
+not claims that production 502 availability has recovered. Public defaults stay
+unchanged; callers must select alert groups. The initial source/service limits
+above are superseded only for these positive staging controls.
+
+Whole-client generation with `validation = TRUE` passed with zero operation,
+mapping, retained diagnostics and drift; a fresh whole-client check passed.
+Archived invalid sources remain visible in validation reporting for retained
+operations, without a bypass. Scoped Rd files were regenerated from the final
+native definitions. Reproduced endpoint checkpoint: **308/548**; all canonical
+schema fractions are in `progress.md`/`progress.json`. No ComptoxR push.
+
+The first broad CRAN-safe run exposed ten obsolete AMOS keyset test files that
+still mocked `generic_request` after the earlier native pager adoption. Stopped
+that run, verified each file's generated banner and existing native pager
+bespoke registration, and retired only those unowned stale files. Their actual
+request/cursor/result/failure coverage remains in `test-native_pagers.R`.
+`retired-amos-legacy-pager-tests.rds` records the exact paths. The broad suite is
+being rerun with external HTTP blocked and localhost permitted.

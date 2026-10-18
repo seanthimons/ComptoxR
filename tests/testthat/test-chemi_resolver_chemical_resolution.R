@@ -113,15 +113,8 @@ test_that("bulk resolver preserves coercion, NULL option slots and unbatched pro
 
 # Endpoint each wrapper must POST to after resolution.
 resolver_cluster <- list(
-  chemi_alerts = "alerts",
-  chemi_hazard_bulk = "hazard",
-  chemi_resolver_orderBySimilarity = "resolver/orderBySimilarity",
   chemi_resolver_getsimilaritylist = "resolver/getsimilaritylist",
-  chemi_resolver_getsimilaritymap = "resolver/getsimilaritymap",
-  chemi_resolver_pubchem_section_bulk = "resolver/pubchem-section",
-  chemi_resolver_getpubchemlist = "resolver/getpubchemlist",
-  chemi_stdizer_chemicals = "stdizer/chemicals",
-  chemi_toxprints_calculate_bulk = "toxprints/calculate"
+  chemi_resolver_getpubchemlist = "resolver/getpubchemlist"
 )
 
 # A FOUND-shaped lookup record whose chemical carries the canonical chemId key.

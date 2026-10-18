@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_stdizer_chemicals.R
 \name{chemi_stdizer_chemicals}
 \alias{chemi_stdizer_chemicals}
-\title{Stdizer Chemicals}
+\title{chemi stdizer chemicals}
 \usage{
 chemi_stdizer_chemicals(query, idType = "AnyId", full = NULL, options = NULL)
 }
@@ -13,21 +13,13 @@ chemi_stdizer_chemicals(query, idType = "AnyId", full = NULL, options = NULL)
 
 \item{full}{Optional parameter}
 
-\item{options}{Optional parameter}
+\item{options}{Standardizer options. Select a workflow explicitly, for example list(workflow = "ms-ready"). The service rejects a missing workflow.}
 }
 \value{
-Returns a tibble with results
+Decoded response records, with the configured client formatting.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
-then sends the resolved Chemical objects to the API endpoint.
-}
-\examples{
-\dontrun{
-chemi_stdizer_chemicals(query = c("50-00-0", "DTXSID7020182"))
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

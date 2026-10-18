@@ -75,10 +75,12 @@ ct_chemical_property_predicted_bulk:
     - coerce_by_property_id
 
 chemi_alerts:
+  bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   pre_request:
     - resolve_query_to_chemical_records
 
 chemi_hazard:
+  bespoke_test: "tests/testthat/test-native_hazard_get.R"
   extra_params:
     format:
       default: 'c("compact", "tidy", "raw")'
@@ -88,6 +90,7 @@ chemi_hazard:
     - format_chemi_hazard_result
 
 chemi_hazard_bulk:
+  bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   extra_params:
     format:
       default: 'c("compact", "tidy", "raw")'
@@ -125,6 +128,7 @@ chemi_resolver_getsimilaritylist:
     - resolve_query_to_chemical_records
 
 chemi_resolver_getsimilaritymap:
+  bespoke_test: "tests/testthat/test-native_similaritymap_state.R"
   return_description: "A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by `format`"
   extra_params:
     hclust_method:
@@ -147,18 +151,22 @@ chemi_resolver_getsimilaritymap:
     - format_similarity_map_result
 
 chemi_resolver_orderBySimilarity:
+  bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   pre_request:
     - resolve_query_to_chemical_records
 
 chemi_resolver_pubchem_section_bulk:
+  bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   pre_request:
     - resolve_query_to_chemical_records
 
 chemi_stdizer_chemicals:
+  bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   pre_request:
     - resolve_query_to_chemical_records
 
 chemi_toxprints_calculate_bulk:
+  bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   pre_request:
     - resolve_query_to_chemical_records
 

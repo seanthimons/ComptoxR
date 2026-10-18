@@ -19,6 +19,8 @@ selection:
   - POST /api/resolver/getsimilaritymap
   - GET /api/resolver/safety-flags
   - GET /api/resolver/pubchem-section
+  - POST /api/resolver/orderBySimilarity
+  - POST /api/resolver/pubchem-section
 helper: generic_request
 documentation: yes
 operations:
@@ -408,8 +410,8 @@ operations:
   POST /api/resolver/getsimilaritymap:
     name: chemi_resolver_getsimilaritymap
     file: R/chemi_resolver_getsimilaritymap.R
-    helper: generic_chemi_request
-    implementation: existing
+    helper: .ct_request
+    implementation: generated
     inputs:
       query:
         type: character
@@ -434,13 +436,45 @@ operations:
         - raw
     request:
       arguments:
-        endpoint:
-          value: resolver/getsimilaritymap
-    specialization: Retain initial chemicals=NULL in pre-hook params, partial parameter
-      updates, flat resolved chemicals, skip before post hooks, optional section omission,
-      lowercase sort serialization and post-hook params excluding chemicals. Pinned
-      generation captures only public inputs and cannot reproduce both exact hook
-      states with existing bindings. No hook is added to force generation.
+        method:
+          value: POST
+        path:
+          value: /api/resolver/getsimilaritymap
+        path_params:
+          value: {}
+        query:
+          callback: similaritymap_query
+        body:
+          callback: resolved_chemical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: resolved_chemical_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    private_params:
+      chemicals: ~
+    post_params:
+    - query
+    - idType
+    - section
+    - sort
+    - hclust_method
+    - format
+    request_controls:
+      preserve_errors: yes
   GET /api/resolver/safety-flags:
     name: chemi_resolver_safety_flags
     file: R/chemi_resolver_safety_flags_get.R
@@ -575,5 +609,171 @@ operations:
       - query: DTXSID7020182
     request_controls:
       preserve_errors: yes
+  POST /api/resolver/orderBySimilarity:
+    name: chemi_resolver_orderBySimilarity
+    file: R/chemi_resolver_orderBySimilarity.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: any
+      idType:
+        type: any
+        default: AnyId
+      fingerprintName:
+        type: any
+        default: ~
+      get_chemicals:
+        type: any
+        default: ~
+      main:
+        type: any
+        default: ~
+      padelCompute2D:
+        type: any
+        default: ~
+      padelCompute3D:
+        type: any
+        default: ~
+      padelComputeFingerprints:
+        type: any
+        default: ~
+      rdkitBits:
+        type: any
+        default: ~
+      rdkitRadius:
+        type: any
+        default: ~
+      rdkitType:
+        type: any
+        default: ~
+      scoreName:
+        type: any
+        default: ~
+      toxprintsProfile:
+        type: any
+        default: ~
+      tverskyI:
+        type: any
+        default: ~
+    private_params:
+      chemicals: ~
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/resolver/orderBySimilarity
+        path_params:
+          value: {}
+        query:
+          object: {}
+        body:
+          callback: resolved_chemical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: resolved_chemical_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: chemi resolver orderBySimilarity
+      lifecycle: experimental
+      return: Decoded response records, with the configured client formatting.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        fingerprintName: Optional parameter
+        get_chemicals: Optional parameter
+        main: Reference Chemical object for similarity ordering; supply sid and smiles.
+          The service requires this reference.
+        padelCompute2D: Optional parameter
+        padelCompute3D: Optional parameter
+        padelComputeFingerprints: Optional parameter
+        rdkitBits: Optional parameter
+        rdkitRadius: Optional parameter
+        rdkitType: Optional parameter
+        scoreName: Optional parameter
+        toxprintsProfile: Optional parameter
+        tverskyI: Optional parameter
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: yes
+  POST /api/resolver/pubchem-section:
+    name: chemi_resolver_pubchem_section_bulk
+    file: R/chemi_resolver_pubchem_section.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: any
+      idType:
+        type: any
+        default: AnyId
+      section:
+        type: any
+        default: ~
+    private_params:
+      chemicals: ~
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/resolver/pubchem-section
+        path_params:
+          value: {}
+        query:
+          object: {}
+        body:
+          callback: resolved_chemical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: resolved_chemical_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: chemi resolver pubchem section bulk
+      lifecycle: experimental
+      return: Decoded response records, with the configured client formatting.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        section: Optional parameter
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: yes
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
 hook_config: inst/hook_config.yml
+prepare: preserve_choice_defaults

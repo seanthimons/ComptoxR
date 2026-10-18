@@ -5,6 +5,7 @@ schemas:
 selection:
   include:
   - POST /api/stdizer/records
+  - POST /api/stdizer/chemicals
 helper: generic_request
 documentation: yes
 operations:
@@ -60,4 +61,71 @@ operations:
       - full: DTXSID1024122
       tags:
         apiStage: public
+  POST /api/stdizer/chemicals:
+    name: chemi_stdizer_chemicals
+    file: R/chemi_stdizer_chemicals.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: any
+      idType:
+        type: any
+        default: AnyId
+      full:
+        type: any
+        default: ~
+      options:
+        type: any
+        default: ~
+    private_params:
+      chemicals: ~
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/stdizer/chemicals
+        path_params:
+          value: {}
+        query:
+          object: {}
+        body:
+          callback: resolved_chemical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: resolved_chemical_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: chemi stdizer chemicals
+      lifecycle: experimental
+      return: Decoded response records, with the configured client formatting.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        full: Optional parameter
+        options: Standardizer options. Select a workflow explicitly, for example list(workflow
+          = "ms-ready"). The service rejects a missing workflow.
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: yes
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
+prepare: preserve_choice_defaults
