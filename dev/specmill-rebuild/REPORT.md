@@ -1633,3 +1633,51 @@ replacing historical evidence. The five-wrapper release hold is cleared.
 MOL/PDF and other individual vector/list/file contracts remain separate work.
 No production calls, full package check or ComptoxR push. This is not a complete
 migration claim.
+
+## 18 October 2026 resumed file and static review, unreleased blockers
+
+Baseline `83a96ec7`, Specmill v0.1.38. No wrapper adoption in this checkpoint.
+Read-only production probes used the authorized CTX key without recording the
+credential or request auth headers. Captures in `file-static-live-review.rds`
+contain only URL, status, media and body. Both MOL routes returned 200 text/plain;
+AMOS get_pdf/method/1 returned 204 with no body; resolver safety-flags,
+pubchem-section, and toxprints/calculate GETs returned 200 JSON. The 204 is not
+proof of a successful PDF download. Captured MOL bodies replay through the native
+wrappers in `test-native_file_media.R`; together with `native_additional_gets`,
+22 assertions pass. Native MOL text decoding works on those actual bodies. The
+old JSON Accept/tidy projection and its text parsing failures are a separate
+compatibility question, not evidence that the server returns JSON.
+
+`pending-mol-contracts.rds` records a held JSON/tidy parity candidate, frozen
+original definitions and the 180-case mocked real-sequential comparison. 156
+cases match values, attributes, warnings, wire requests and final indexed parse
+condition classes/location/parent. The remaining 24 are single-request
+transport/HTTP condition class differences. Specmill #156 was filed and linked
+from PR345; upstream PR159 now offers opt-in preserve_errors. Adoption remains
+held until a release, pin update and independent exact-client verification.
+Original HTTP mocks used a synthetic httr2_http condition; follow-up verification
+must use httr2::resp_check_status or localhost for authentic status subclasses.
+
+`pending-static-final-formatters.rds` retains three GET candidates and a corrected
+supported direct-response-policy variant. An initial report, Specmill #157,
+correctly identified that result_formatter rejects unbatched calls, but overstated
+the consequence. The generated decoder invokes response policies without
+wrapping, allowing the existing pure list projection at that seam. Correction
+posted upstream and sent to overwatch. Direct policy proof matches all 54
+scalar/NULL cases, including malformed JSON indexed conditions. Eighteen invalid
+vector-query cases are rejected before HTTP by both implementations but differ
+in condition indexing. This is not full failure parity; transport remains held
+on #156. Candidate GETs preserve bulk siblings in their existing source files.
+
+Specmill #158 records the separately confirmed private-state blocker for
+getsimilaritymap and similar resolved-chemical facades: pre-hook state contains
+private chemicals=NULL; partial updates may set it; post-hook params exclude it;
+public formals and skip-before-post ordering must remain unchanged. Overwatch
+owns implementation and release. No artificial client hooks added.
+
+`remaining-legacy-contracts.rds` freezes the current legacy inventory's public
+formals, helper calls and sources. It was collected while the three static GET
+candidates were loaded; those three entries have no legacy helper call. It is an
+implementation aid, not a completion count. Root wrappers remain on the released
+implementation. Candidate work continues in isolated local checkouts. No
+ComptoxR push, merge or release; no write/upload production probes.
