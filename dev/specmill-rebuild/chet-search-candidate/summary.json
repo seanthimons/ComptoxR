@@ -1,0 +1,43 @@
+{
+  "status": "held; neither public facade adopted",
+  "baseline": "2b88f70f",
+  "upstream_issue": "https://github.com/seanthimons/specmill/issues/166",
+  "root_pin": {
+    "package": "specmill",
+    "version": "0.1.40",
+    "source_commit": "8fa120e84fe8d0267c11e515e6fd1f387ff4a36f",
+    "source_archive_sha256": "e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "additionally_verified_release": {
+    "package": "specmill",
+    "version": "0.1.41",
+    "source_commit": "05862bee1804806cea157ff1962300d741516301",
+    "source_archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "comparisons": 490,
+  "exact_matches": 161,
+  "interpretation": "Diagnostic matrix includes intended native hard401 differences and blocking input/preflight regressions; not a test-pass count.",
+  "root_generation_check": "passed unchanged full generation freshness check",
+  "candidate_generation": "v0.1.40 and v0.1.41 schema-typed mappings generate; zero operation/mapping/drift diagnostics",
+  "permissive_candidate": "v0.1.40 and v0.1.41 reject explicit client fan_out",
+  "assertions": "positive scalar output/wire parity, typed404/500, transport parity, held preflight/type regressions, hard401 and hard config",
+  "files_sha256": {
+    "callbacks.R": "14d91faaada40459a5bc2d27e75dc4a41be011d701760115dde648debd33f94a",
+    "check.R": "1ef48de8580b68faceb379f7b9e1f51c756dc6fcdef15a0ace059e51794b59c3",
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R": "8f4dfa2ca493b93e32ceb627b9878aed65e8a49569578e9189d318f83e08c9ff",
+    "chemi_chet_reaction_searchcounts.R": "e1bf9d36d712415f43eeae2041bb4b9a48580e976b2609f6fafedc8e1d315dff",
+    "generate.R": "ad642d6a51dd81904806ccc4f004057625b46487bf8852c86efa9124200f6050",
+    "live-read.json": "a515e8f71721e36a4b793ddb010ad98c6f594cc1eb5e0cf19218ed0e5afe69af",
+    "originals.rds": "2c6b418a13a67dbe94ad7e9de7b5466348b4f551e73455fc2c8467ab80d8f802",
+    "README.txt": "19f6f309990e2d05530baaee21d8a04f4e55764764dca0a039de6bfb7bb36126",
+    "rejected-any.yml": "be5bd7cc57f9a073e0c3d716dcd1b750c948c5f4d175494c49da5bc5d5a14841",
+    "results.rds": "c22c81e7b3e01d083c1951ee04bfd84a6dec6b5d40cf1446a6862e303a68ebb2",
+    "service.yml": "ad4bfbca89536077f296becd5d221b8a212fa43e9027a173a5060fe4efbb87d1",
+    "specmill.yml": "a280f597b71ad2644e4262d55cb29515817f0a0bae6a92b9a8d7800c4181d6d7",
+    "verify.R": "8bc25dceafd1135fd52852a720020e6eb302b883a21c0eab2342ac6ce0463c76"
+  }
+}

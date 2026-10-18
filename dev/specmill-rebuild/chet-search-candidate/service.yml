@@ -1,0 +1,121 @@
+id: chet-search-candidate
+schemas:
+  files:
+  - schema/chemi-chet-prod.json
+selection:
+  include:
+  - GET /reaction/searchcounts/{search_input}/{search_type}
+  - GET /reaction/database-old/{pagenum}/{searchterm}
+documentation: false
+operations:
+  GET /reaction/searchcounts/{search_input}/{search_type}:
+    name: chemi_chet_reaction_searchcounts
+    file: R/chemi_chet_reaction_searchcounts.R
+    helper: .ct_request
+    implementation: generated
+    normalize_inputs:
+      search_input: .ct_legacy_query
+    batch:
+      fan_out: search_input
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: false
+      warning: false
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          callback: chet_search_path
+        path_params:
+          object:
+            search_input:
+              from:
+              - params
+              - search_input
+        query:
+          value: {}
+        body:
+          value: null
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: chet_search_response
+        request_controls:
+          value:
+            preserve_errors: true
+    request_controls:
+      preserve_errors: true
+    result_formatter: format_legacy_list_result
+    parameters:
+      path search_type:
+        required: false
+        default: null
+  GET /reaction/database-old/{pagenum}/{searchterm}:
+    name: chemi_chet_reaction_database_old_by_pagenum_and_searchterm
+    file: R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R
+    helper: .ct_request
+    implementation: generated
+    normalize_inputs:
+      pagenum: .ct_legacy_query
+    batch:
+      fan_out: pagenum
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: false
+      warning: false
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          callback: chet_search_path
+        path_params:
+          object:
+            pagenum:
+              from:
+              - params
+              - pagenum
+        query:
+          value: {}
+        body:
+          value: null
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: chet_search_response
+        request_controls:
+          value:
+            preserve_errors: true
+    request_controls:
+      preserve_errors: true
+    result_formatter: format_legacy_list_result
+    parameters:
+      path searchterm:
+        required: false
+        default: null
+helper: .ct_request
