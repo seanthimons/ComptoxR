@@ -58,3 +58,31 @@ test_that("AMOS read HTTP, credential and transport errors remain hard", {
   expect_error(chemi_amos_spectral_entropy(list(c(100, 1))),
     "HTTP request failed before a response")
 })
+
+# chemi_amos_record_counts
+
+# chemi_amos_mass_spectra_for_substances
+
+# chemi_amos_count_substances_in_ids
+
+test_that("AMOS identifier reads clean inputs before body encoding", {
+  requests <- list()
+  local_mocked_bindings(req_perform = function(req, ...) {
+    requests[[length(requests) + 1L]] <<- req
+    httr2::response(status_code = 200L,
+      headers = list(`Content-Type` = "application/json"), body = charToRaw('{}'))
+  }, .package = "httr2")
+  for (fn in list(chemi_amos_record_counts, chemi_amos_mass_spectra_for_substances,
+    chemi_amos_count_substances_in_ids)) {
+    suppressMessages(fn(c("one", "one", "", NA_character_, "café")))
+    request <- tail(requests, 1L)[[1L]]
+    expect_identical(unname(request$body$data[[1L]]), list("one", "café"))
+    suppressMessages(fn(list("one", "one", "café")))
+    expect_identical(tail(requests, 1L)[[1L]]$body$data, request$body$data)
+    before <- length(requests)
+    expect_error(fn(), "Either query or chemicals parameter must be provided")
+    expect_error(fn(c("", NA_character_)), "Either query or chemicals parameter must be provided")
+    expect_error(fn(42))
+    expect_length(requests, before)
+  }
+})

@@ -7,6 +7,7 @@ chemi_classyfire:
     - format_classyfire_result
 
 ct_chemical_list_all:
+  bespoke_test: "tests/testthat/test-native_ctx_list_all.R"
   extra_params:
     return_dtxsid:
       default: "FALSE"
@@ -682,3 +683,52 @@ chemi_amos_mass_spectrum_similarity:
 
 chemi_amos_dtxsids:
   bespoke_test: "tests/testthat/test-native_amos_dtxsids.R"
+
+chemi_amos_record_counts:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_mass_spectra_for_substances:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+chemi_amos_count_substances_in_ids:
+  bespoke_test: "tests/testthat/test-native_amos_read.R"
+
+
+chemi_amos_method_with_spectra:
+  bespoke_test: "tests/testthat/test-native_normalization.R"
+
+chemi_amos_record_ids_for_substance:
+  bespoke_test: "tests/testthat/test-native_normalization.R"
+
+ct_chemical_detail_search_bulk:
+  bespoke_test: "tests/testthat/test-native_normalization.R"
+
+ct_chemical_detail_search_by_dtxcid_bulk:
+  bespoke_test: "tests/testthat/test-native_normalization.R"
+
+ct_chemical_list_chemicals_search_equal:
+  bespoke_test: "tests/testthat/test-native_normalization.R"
+
+ct_chemical_list_chemicals_search_start_with:
+  bespoke_test: "tests/testthat/test-native_normalization.R"
+
+ct_chemical_list_chemicals_search_contain:
+  bespoke_test: "tests/testthat/test-native_additional_gets.R"
+
+ct_chemical_property_experimental_search_by_range:
+  bespoke_test: "tests/testthat/test-native_additional_gets.R"
+
+ct_chemical_property_predicted_search_by_range:
+  bespoke_test: "tests/testthat/test-native_additional_gets.R"
+
+ct_chemical_msready_search_by_mass:
+  bespoke_test: "tests/testthat/test-ctx_native_special_requests.R"
+
+chemi_amos_get_similar_structures:
+  bespoke_test: "tests/testthat/test-native_amos_reviewed_paths.R"
+
+chemi_amos_list_sources_by_record_type:
+  bespoke_test: "tests/testthat/test-native_amos_reviewed_paths.R"
+
+chemi_resolver_ghs_list_count:
+  bespoke_test: "tests/testthat/test-native_resolver_bodyless.R"

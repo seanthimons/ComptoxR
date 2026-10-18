@@ -1,3 +1,5 @@
+# Fixtures also exercise chemi_amos_method_with_spectra and
+# ct_chemical_list_chemicals_search_start_with as native wrappers.
 test_that("native vector wrappers normalize once before validation and iteration", {
   cases <- readRDS(test_path("fixtures/native-normalization.rds"))
   original <- .ct_legacy_query

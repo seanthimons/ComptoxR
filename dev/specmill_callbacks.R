@@ -107,3 +107,11 @@ amos_read_response <- function(operation) {
     if (!length(ids)) cli::cli_abort("Supply at least one DTXSID.")
     base::list(dtxsids = base::I(ids))
 }))
+
+amos_identifier_body <- function(operation) {
+  field <- operation$parameters[[1L]]$public_name
+  if (is.null(field)) field <- operation$parameters[[1L]]$name
+  substitute(.api_validation$body_value(
+    stats::setNames(base::list(params[[FIELD]]), FIELD), SCHEMA),
+    list(FIELD = field, SCHEMA = operation$schema_body))
+}

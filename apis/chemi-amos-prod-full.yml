@@ -40,6 +40,9 @@ selection:
   - POST /api/amos/max_similarity_by_dtxsid/
   - POST /api/amos/mass_spectrum_similarity_search/
   - POST /api/amos/dtxsids/
+  - POST /api/amos/record_counts_by_dtxsid/
+  - POST /api/amos/mass_spectra_for_substances/
+  - POST /api/amos/count_substances_in_ids/
 helper: generic_request
 documentation: yes
 operations:
@@ -1427,5 +1430,177 @@ operations:
       media_type: application/json
       description: Substance information for supplied DTXSIDs.
       reason: Reviewed staging response and captured production 200 JSON.
+  POST /api/amos/record_counts_by_dtxsid/:
+    name: chemi_amos_record_counts
+    file: R/chemi_amos_record_counts.R
+    helper: .ct_request
+    implementation: generated
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request declaration and captured production 200 JSON
+        read.
+    inputs:
+      dtxsids:
+        type: character
+        default: ~
+        description: List of DTXSIDs to search for.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/record_counts_by_dtxsid/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_identifier_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Swagger host/scheme requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    docs:
+      title: Returns a dictionary containing the counts of record types that are present
+        in the database for each supplied DTXSID.
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read operation.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids:
+        - DTXSID7020182
+    normalize_inputs:
+      dtxsids: .ct_amos_identifier_query
+  POST /api/amos/mass_spectra_for_substances/:
+    name: chemi_amos_mass_spectra_for_substances
+    file: R/chemi_amos_mass_spectra_for_substances.R
+    helper: .ct_request
+    implementation: generated
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request declaration and captured production 200 JSON
+        read.
+    inputs:
+      dtxsids:
+        type: character
+        default: ~
+        description: List of DTXSIDs to search for.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/mass_spectra_for_substances/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_identifier_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Swagger host/scheme requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    docs:
+      title: Given a list of DTXSIDs, return all mass spectra for those substances.
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read operation.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids:
+        - DTXSID7020182
+    normalize_inputs:
+      dtxsids: .ct_amos_identifier_query
+  POST /api/amos/count_substances_in_ids/:
+    name: chemi_amos_count_substances_in_ids
+    file: R/chemi_amos_count_substances_in_ids.R
+    helper: .ct_request
+    implementation: generated
+    body_media_correction:
+      from: ~
+      to: application/json
+      reason: Reviewed archived request declaration and captured production 200 JSON
+        read.
+    inputs:
+      internal_id_list:
+        type: character
+        default: ~
+        description: Array of record IDs.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amos/count_substances_in_ids/
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: amos_identifier_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Swagger host/scheme requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: amos_read_response
+    docs:
+      title: Counts the number of unique substances seen in a set of records.
+      lifecycle: experimental
+      return: The decoded JSON result from the AMOS read operation.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id_list:
+        - NO_SUCH_INTERNAL_ID
+    normalize_inputs:
+      internal_id_list: .ct_amos_identifier_query
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds
 hook_config: inst/hook_config.yml

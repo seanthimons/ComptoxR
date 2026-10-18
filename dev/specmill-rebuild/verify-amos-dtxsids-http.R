@@ -47,6 +47,15 @@ local({
     result <- tryCatch(chemi_amos_dtxsids(input), error = identity)
     stopifnot(inherits(result, 'error'), length(captures()) == before)
   }
+  for (name in c('chemi_amos_record_counts', 'chemi_amos_mass_spectra_for_substances',
+    'chemi_amos_count_substances_in_ids')) {
+    fn <- get(name, asNamespace('ComptoxR'))
+    field <- names(formals(fn))[[1L]]
+    fn('one')
+    request <- tail(captures(), 1L)[[1L]]
+    expected <- paste0('{"', field, '":["one"]}')
+    stopifnot(identical(request$body, charToRaw(expected)), request$method == 'POST')
+  }
   for (status in c(404L, 500L, 401L)) {
     writeLines(as.character(status), status_file)
     result <- tryCatch(chemi_amos_dtxsids('one'), error = identity)

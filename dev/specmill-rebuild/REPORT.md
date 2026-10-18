@@ -1247,3 +1247,17 @@ The Excel substances-for-IDs route, two routes whose archived example requests
 returned 500 HTML, and the separately verified cursor pagers remain retained.
 No binary, upload or write semantics are inferred. The native and generic
 transport helper bytes are unchanged. ComptoxR remains local only.
+
+Three additional AMOS identifier read routes use the same released media policy:
+`record_counts_by_dtxsid`, `mass_spectra_for_substances` and
+`count_substances_in_ids`. Their captured production 200 JSON values and exact
+array projections are preserved. The count capture establishes the zero result
+for an unknown record ID; it does not establish nonempty record contents.
+Reviewed normalization runs before capture, body schema validation and encoding.
+Tests cover duplicate/blank/NA cleanup, character-list inputs, early empty
+rejection and singleton JSON array bytes over actual localhost HTTP.
+
+The legacy test inventory now explicitly recognizes `.ct_request` and selects
+replacement suites for the eleven reviewed missing generated test paths. No
+missing suite is ignored and no manifest ownership entry is manually purged.
+Specmill #152/PR153 provides explicit ownership retirement after release.

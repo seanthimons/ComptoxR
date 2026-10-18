@@ -1,0 +1,18 @@
+{
+  "name": "record_counts_by_dtxsid",
+  "url": "https://hcd.rtpnc.epa.gov/api/amos/record_counts_by_dtxsid/",
+  "method": "POST",
+  "request_sha256": "95ceb8b487a7f1eef821c6b318334c9a6164c44ff50c31ecf247197c4cd07798",
+  "time": "2026-10-17T22:05:01.313329+00:00",
+  "status": 200,
+  "headers": {
+    "Date": "Sat, 17 Oct 2026 22:05:01 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "112",
+    "Connection": "close",
+    "Access-Control-Allow-Origin": "*",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains"
+  },
+  "response_sha256": "e885daa6caac38f991927577a2940631a9c296d65e642aebbb531c0909b7268d",
+  "bytes": 112
+}

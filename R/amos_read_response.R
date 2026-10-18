@@ -10,3 +10,11 @@
         body
     else list()
 }
+
+.ct_amos_identifier_query <- function(query) {
+  if (is.list(query) && !is.data.frame(query)) query <- unlist(query, use.names = FALSE)
+  query <- unique(as.vector(query))
+  query <- query[!is.na(query) & query != ""]
+  if (!length(query)) cli::cli_abort("Either query or chemicals parameter must be provided.")
+  query
+}

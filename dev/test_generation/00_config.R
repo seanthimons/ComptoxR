@@ -8,7 +8,8 @@ tg_config <- list(
   helper_names = c(
     "generic_request",
     "generic_chemi_request",
-    "generic_pubchem_request"
+    "generic_pubchem_request",
+    ".ct_request"
   ),
   resolver_helper_names = c(
     "chemi_resolver_lookup",
