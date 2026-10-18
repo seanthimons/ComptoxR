@@ -298,3 +298,8 @@ resolved_chemical_response <- function(operation) {
 }
 
 similaritymap_query <- function(operation) quote(list(sort = if (!is.null(params[["sort"]])) tolower(as.character(params[["sort"]])) else NULL))
+
+# Pure body projection, with the exact source schema embedded by official generation.
+services_body <- function(operation) {
+  substitute(.ct_services_body(params, SCHEMA), list(SCHEMA = operation$schema_body))
+}

@@ -1183,3 +1183,120 @@ chemi_chet_reaction_visibility:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_resolver_safety_flags_bulk:
   bespoke_test: tests/testthat/test-native_remaining_facades.R
+
+chemi_search_download:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_search_download_mol:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_search_download_mol_by_smiles:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_search_download_properties:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_search_download_sdf:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_search_render_png:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_search_render_svg:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_services_export:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_services_export_json_report:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_services_preflight:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_services_universalpreflight:
+  bespoke_test: tests/testthat/test-native_search_services.R
+
+chemi_services_convert:
+  bespoke_test: tests/testthat/test-native_services_legacy.R
+
+chemi_services_collated_report:
+  bespoke_test: tests/testthat/test-native_services_legacy.R
+
+chemi_chet_admin_database:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_admin_errorreport_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_admin_login_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_admin_register_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_admin_resolve_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_errorpage:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_errorpage_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_errorpage_complete_idnum:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_errorpage_complete_idnum_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_errorpage_showhide:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_errorpage_showhide_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_logout:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_testpage:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_testpage_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_resolver_export:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_export_post:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_export_append:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_export_records:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_export_section:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_export_section_post:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_export_classyfire:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_exportpubchemlist:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_getintegrityreports:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_ghs_list_count_post:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_render:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R
+
+chemi_resolver_universalharvest_cart:
+  bespoke_test: tests/testthat/test-native_resolver_extra.R

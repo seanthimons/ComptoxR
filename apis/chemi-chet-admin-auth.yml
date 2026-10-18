@@ -1,0 +1,275 @@
+id: chemi-chet-admin-auth
+schemas:
+  files:
+  - schema/chemi-chet-prod.json
+selection:
+  include:
+  - GET /admin/database
+  - POST /admin/errorreport
+  - POST /admin/login
+  - POST /admin/register
+  - POST /admin/resolve
+  - GET /auth/errorpage
+  - POST /auth/errorpage
+  - GET /auth/errorpage/complete/{idnum}
+  - POST /auth/errorpage/complete/{idnum}
+  - GET /auth/errorpage/{showhide}
+  - POST /auth/errorpage/{showhide}
+  - GET /auth/logout
+  - GET /auth/testpage
+  - POST /auth/testpage
+helper: .ct_request
+documentation: true
+operations:
+  GET /admin/database:
+    name: chemi_chet_admin_database
+    file: R/chemi_chet_admin_database.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: List admin error records
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /admin/errorreport:
+    name: chemi_chet_admin_errorreport_post
+    file: R/chemi_chet_admin_errorreport_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Create an error report (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /admin/login:
+    name: chemi_chet_admin_login_post
+    file: R/chemi_chet_admin_login_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Login admin user (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /admin/register:
+    name: chemi_chet_admin_register_post
+    file: R/chemi_chet_admin_register_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Register a new admin user (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /admin/resolve:
+    name: chemi_chet_admin_resolve_post
+    file: R/chemi_chet_admin_resolve_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Resolve a reported error (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /auth/errorpage:
+    name: chemi_chet_auth_errorpage
+    file: R/chemi_chet_auth_errorpage.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: View error page (GET)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/errorpage:
+    name: chemi_chet_auth_errorpage_post
+    file: R/chemi_chet_auth_errorpage_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: View error page (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /auth/errorpage/complete/{idnum}:
+    name: chemi_chet_auth_errorpage_complete_idnum
+    file: R/chemi_chet_auth_errorpage_complete_idnum.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Complete error report (GET)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/errorpage/complete/{idnum}:
+    name: chemi_chet_auth_errorpage_complete_idnum_post
+    file: R/chemi_chet_auth_errorpage_complete_idnum_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Complete error report (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /auth/errorpage/{showhide}:
+    name: chemi_chet_auth_errorpage_showhide
+    file: R/chemi_chet_auth_errorpage_showhide.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: View error page with filter (GET)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/errorpage/{showhide}:
+    name: chemi_chet_auth_errorpage_showhide_post
+    file: R/chemi_chet_auth_errorpage_showhide_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: View error page with filter (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /auth/logout:
+    name: chemi_chet_auth_logout
+    file: R/chemi_chet_auth_logout.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Logout user
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /auth/testpage:
+    name: chemi_chet_auth_testpage
+    file: R/chemi_chet_auth_testpage.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Run test page (GET)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/testpage:
+    name: chemi_chet_auth_testpage_post
+    file: R/chemi_chet_auth_testpage_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Run test page (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public

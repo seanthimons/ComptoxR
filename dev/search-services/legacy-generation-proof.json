@@ -1,0 +1,147 @@
+{
+  "operations": 2,
+  "version": "0.1.41",
+  "source_commit": "05862bee1804806cea157ff1962300d741516301",
+  "fresh": true,
+  "validation": {
+    "schema/chemi-services-prod.json": {
+      "source": "schema/chemi-services-prod.json",
+      "source_sha256": "e8cc0a082162d0e00fbaf61388e24cea0a6b3cfe1b17ec986e2d8f6c083b26ad",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "POST /api/services/caspreflight",
+          "method": "POST",
+          "path": "/api/services/caspreflight",
+          "source_location": "#/paths/~1api~1services~1caspreflight/post"
+        },
+        {
+          "key": "GET /api/services/cim_component_info",
+          "method": "GET",
+          "path": "/api/services/cim_component_info",
+          "source_location": "#/paths/~1api~1services~1cim_component_info/get"
+        },
+        {
+          "key": "POST /api/services/collated_report",
+          "method": "POST",
+          "path": "/api/services/collated_report",
+          "source_location": "#/paths/~1api~1services~1collated_report/post"
+        },
+        {
+          "key": "POST /api/services/convert",
+          "method": "POST",
+          "path": "/api/services/convert",
+          "source_location": "#/paths/~1api~1services~1convert/post"
+        },
+        {
+          "key": "POST /api/services/export",
+          "method": "POST",
+          "path": "/api/services/export",
+          "source_location": "#/paths/~1api~1services~1export/post"
+        },
+        {
+          "key": "POST /api/services/export_json_report",
+          "method": "POST",
+          "path": "/api/services/export_json_report",
+          "source_location": "#/paths/~1api~1services~1export_json_report/post"
+        },
+        {
+          "key": "POST /api/services/files",
+          "method": "POST",
+          "path": "/api/services/files",
+          "source_location": "#/paths/~1api~1services~1files/post"
+        },
+        {
+          "key": "GET /api/services/layout",
+          "method": "GET",
+          "path": "/api/services/layout",
+          "source_location": "#/paths/~1api~1services~1layout/get"
+        },
+        {
+          "key": "GET /api/services/metadata",
+          "method": "GET",
+          "path": "/api/services/metadata",
+          "source_location": "#/paths/~1api~1services~1metadata/get"
+        },
+        {
+          "key": "POST /api/services/preflight",
+          "method": "POST",
+          "path": "/api/services/preflight",
+          "source_location": "#/paths/~1api~1services~1preflight/post"
+        },
+        {
+          "key": "GET /api/services/release_notes",
+          "method": "GET",
+          "path": "/api/services/release_notes",
+          "source_location": "#/paths/~1api~1services~1release_notes/get"
+        },
+        {
+          "key": "GET /api/services/smirks2rxn",
+          "method": "GET",
+          "path": "/api/services/smirks2rxn",
+          "source_location": "#/paths/~1api~1services~1smirks2rxn/get"
+        },
+        {
+          "key": "POST /api/services/universalpreflight",
+          "method": "POST",
+          "path": "/api/services/universalpreflight",
+          "source_location": "#/paths/~1api~1services~1universalpreflight/post"
+        },
+        {
+          "key": "GET /api/services/version",
+          "method": "GET",
+          "path": "/api/services/version",
+          "source_location": "#/paths/~1api~1services~1version/get"
+        }
+      ],
+      "findings": []
+    }
+  },
+  "old_owners": {
+    "R/chemi_services_collated_report.R": {
+      "hash": "e3745e881f28dfd4e5a8da11dfd66eea64c63bcdfa6b5eb9870cdd35c64ab973",
+      "operations": "chemi-services-prod-rebuild POST /api/services/collated_report"
+    },
+    "R/chemi_services_convert.R": {
+      "hash": "8b8cb5798ccc8824e761ff617462a873d42a421c603dfe70ff32ec680eac19fd",
+      "operations": "chemi-services-prod-rebuild POST /api/services/convert"
+    }
+  },
+  "owners": {
+    "NAMESPACE": {
+      "hash": "94105d7e941c189381b23f3620250da1ee07b665597a4df1ec215de4bb1fc65c",
+      "operations": [
+        "chemi-services-prod-rebuild POST /api/services/collated_report",
+        "chemi-services-prod-rebuild POST /api/services/convert"
+      ]
+    },
+    "R/chemi_services_collated_report.R": {
+      "hash": "8995f19d234500bd3ca2d6993d6f789dfceacdaece29a36920453016206326ef",
+      "operations": "chemi-services-prod-rebuild POST /api/services/collated_report"
+    },
+    "R/chemi_services_convert.R": {
+      "hash": "7d325f0fe4d25a105c411fc60bbc45596685be62baeb99ef3aeef424129e0ea3",
+      "operations": "chemi-services-prod-rebuild POST /api/services/convert"
+    },
+    "man/chemi_services_collated_report.Rd": {
+      "hash": "6aea2b494341f58671e39a331d5e81e17179f81b4b644657195bb523ef6bcd8d",
+      "operations": "chemi-services-prod-rebuild POST /api/services/collated_report"
+    },
+    "man/chemi_services_convert.Rd": {
+      "hash": "dca8e1526a4226045bf14896bc39d8c146076c4fb2ddf0fb418a8726dbd08a77",
+      "operations": "chemi-services-prod-rebuild POST /api/services/convert"
+    },
+    "man/generic_chemi_request.Rd": {
+      "hash": "cd615a45a79cb259f8caae6f98d02a6f1269843af48bdb4ac75417c7a39a2abc"
+    },
+    "man/generic_request.Rd": {
+      "hash": "91e4c5cf9c6c61929c769a1e5ec0159905086b42d36396642d459b62d965b26a"
+    },
+    "man/generic_search_request.Rd": {
+      "hash": "d4cdae6912d763ac6f39ae9de7463d3e98fedebcae2e581d86f7dc339ab4c8ad"
+    }
+  }
+}

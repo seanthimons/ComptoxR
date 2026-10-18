@@ -1,0 +1,213 @@
+id: chemi-resolver-extra
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  include:
+  - GET /api/resolver/export
+  - POST /api/resolver/export
+  - POST /api/resolver/export-append
+  - POST /api/resolver/export-records
+  - GET /api/resolver/export-section
+  - POST /api/resolver/export-section
+  - POST /api/resolver/export_classyfire
+  - POST /api/resolver/exportpubchemlist
+  - GET /api/resolver/getintegrityreports
+  - POST /api/resolver/ghs-list-count
+  - GET /api/resolver/render
+  - POST /api/resolver/universalharvest_cart
+helper: .ct_request
+documentation: true
+operations:
+  GET /api/resolver/export:
+    name: chemi_resolver_export
+    file: R/chemi_resolver_export.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export (GET)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/export:
+    name: chemi_resolver_export_post
+    file: R/chemi_resolver_export_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/export-append:
+    name: chemi_resolver_export_append
+    file: R/chemi_resolver_export_append.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export append (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/export-records:
+    name: chemi_resolver_export_records
+    file: R/chemi_resolver_export_records.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export records (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/resolver/export-section:
+    name: chemi_resolver_export_section
+    file: R/chemi_resolver_export_section.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export section (GET)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/export-section:
+    name: chemi_resolver_export_section_post
+    file: R/chemi_resolver_export_section_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export section (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/export_classyfire:
+    name: chemi_resolver_export_classyfire
+    file: R/chemi_resolver_export_classyfire.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: export classyfire (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/exportpubchemlist:
+    name: chemi_resolver_exportpubchemlist
+    file: R/chemi_resolver_exportpubchemlist.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: exportpubchemlist (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/resolver/getintegrityreports:
+    name: chemi_resolver_getintegrityreports
+    file: R/chemi_resolver_getintegrityreports.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: getintegrityreports (GET)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/ghs-list-count:
+    name: chemi_resolver_ghs_list_count_post
+    file: R/chemi_resolver_ghs_list_count_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: ghs list count (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/resolver/render:
+    name: chemi_resolver_render
+    file: R/chemi_resolver_render.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: render (GET)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/resolver/universalharvest_cart:
+    name: chemi_resolver_universalharvest_cart
+    file: R/chemi_resolver_universalharvest_cart.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: universalharvest cart (POST)
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public

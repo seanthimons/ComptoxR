@@ -1,5 +1,5 @@
 {
-  "commit": "0935bb802321aca8631ab5a4fbdd78fb95871f67",
+  "commit": "810d688fcec26f9e8ba4f0901452c227743eb93c",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -50,16 +50,6 @@
       "wrapper": "chemi_search",
       "method": "POST",
       "route": "search"
-    },
-    {
-      "wrapper": "chemi_services_collated_report",
-      "method": "POST",
-      "route": "services/collated_report"
-    },
-    {
-      "wrapper": "chemi_services_convert",
-      "method": "POST",
-      "route": "services/convert"
     },
     {
       "wrapper": "chemi_stdizer_bulk",
@@ -147,9 +137,9 @@
     },
     {
       "schema": "chemi-chet-prod",
-      "migrated": 66,
+      "migrated": 80,
       "total": 95,
-      "remaining": 29
+      "remaining": 15
     },
     {
       "schema": "chemi-descriptors-prod",
@@ -213,9 +203,9 @@
     },
     {
       "schema": "chemi-resolver-prod",
-      "migrated": 27,
+      "migrated": 39,
       "total": 46,
-      "remaining": 19
+      "remaining": 7
     },
     {
       "schema": "chemi-safety-prod",
@@ -225,15 +215,15 @@
     },
     {
       "schema": "chemi-search-prod",
-      "migrated": 6,
+      "migrated": 13,
       "total": 14,
-      "remaining": 8
+      "remaining": 1
     },
     {
       "schema": "chemi-services-prod",
-      "migrated": 6,
+      "migrated": 12,
       "total": 14,
-      "remaining": 8
+      "remaining": 2
     },
     {
       "schema": "chemi-stdizer-prod",
@@ -2914,6 +2904,24 @@
       "migrated": true
     },
     {
+      "schema": "schema/chemi-services-prod.json",
+      "binding_schema": "schema/chemi-services-prod.json",
+      "operation": "POST /api/services/collated_report",
+      "wrapper": "chemi_services_collated_report",
+      "file": "R/chemi_services_collated_report.R",
+      "suite": "tests/testthat/test-native_services_legacy.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "binding_schema": "schema/chemi-services-prod.json",
+      "operation": "POST /api/services/convert",
+      "wrapper": "chemi_services_convert",
+      "file": "R/chemi_services_convert.R",
+      "suite": "tests/testthat/test-native_services_legacy.R",
+      "migrated": true
+    },
+    {
       "schema": "schema/chemi-toxprints-prod.json",
       "binding_schema": "schema/chemi-toxprints-prod.json",
       "operation": "GET /api/toxprints",
@@ -4135,6 +4143,339 @@
       "wrapper": "chemi_resolver_safety_flags_bulk",
       "file": "R/chemi_resolver_safety_flags.R",
       "suite": "tests/testthat/test-native_remaining_facades.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "POST /api/search/download",
+      "wrapper": "chemi_search_download",
+      "file": "R/chemi_search_download.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "GET /api/search/download/mol",
+      "wrapper": "chemi_search_download_mol",
+      "file": "R/chemi_search_download_mol.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "GET /api/search/download/mol-by-smiles",
+      "wrapper": "chemi_search_download_mol_by_smiles",
+      "file": "R/chemi_search_download_mol_by_smiles.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "POST /api/search/download/properties",
+      "wrapper": "chemi_search_download_properties",
+      "file": "R/chemi_search_download_properties.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "POST /api/search/download/search-result-as-sdf",
+      "wrapper": "chemi_search_download_sdf",
+      "file": "R/chemi_search_download_sdf.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "GET /api/search/render/png",
+      "wrapper": "chemi_search_render_png",
+      "file": "R/chemi_search_render_png.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "GET /api/search/render/svg",
+      "wrapper": "chemi_search_render_svg",
+      "file": "R/chemi_search_render_svg.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
+      "operation": "POST /api/services/export",
+      "wrapper": "chemi_services_export",
+      "file": "R/chemi_services_export.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
+      "operation": "POST /api/services/export_json_report",
+      "wrapper": "chemi_services_export_json_report",
+      "file": "R/chemi_services_export_json_report.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
+      "operation": "POST /api/services/preflight",
+      "wrapper": "chemi_services_preflight",
+      "file": "R/chemi_services_preflight.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
+      "operation": "POST /api/services/universalpreflight",
+      "wrapper": "chemi_services_universalpreflight",
+      "file": "R/chemi_services_universalpreflight.R",
+      "suite": "tests/testthat/test-native_search_services.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /admin/database",
+      "wrapper": "chemi_chet_admin_database",
+      "file": "R/chemi_chet_admin_database.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /admin/errorreport",
+      "wrapper": "chemi_chet_admin_errorreport_post",
+      "file": "R/chemi_chet_admin_errorreport_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /admin/login",
+      "wrapper": "chemi_chet_admin_login_post",
+      "file": "R/chemi_chet_admin_login_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /admin/register",
+      "wrapper": "chemi_chet_admin_register_post",
+      "file": "R/chemi_chet_admin_register_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /admin/resolve",
+      "wrapper": "chemi_chet_admin_resolve_post",
+      "file": "R/chemi_chet_admin_resolve_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/errorpage",
+      "wrapper": "chemi_chet_auth_errorpage",
+      "file": "R/chemi_chet_auth_errorpage.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/errorpage",
+      "wrapper": "chemi_chet_auth_errorpage_post",
+      "file": "R/chemi_chet_auth_errorpage_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/errorpage/complete/{idnum}",
+      "wrapper": "chemi_chet_auth_errorpage_complete_idnum",
+      "file": "R/chemi_chet_auth_errorpage_complete_idnum.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/errorpage/complete/{idnum}",
+      "wrapper": "chemi_chet_auth_errorpage_complete_idnum_post",
+      "file": "R/chemi_chet_auth_errorpage_complete_idnum_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/errorpage/{showhide}",
+      "wrapper": "chemi_chet_auth_errorpage_showhide",
+      "file": "R/chemi_chet_auth_errorpage_showhide.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/errorpage/{showhide}",
+      "wrapper": "chemi_chet_auth_errorpage_showhide_post",
+      "file": "R/chemi_chet_auth_errorpage_showhide_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/logout",
+      "wrapper": "chemi_chet_auth_logout",
+      "file": "R/chemi_chet_auth_logout.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/testpage",
+      "wrapper": "chemi_chet_auth_testpage",
+      "file": "R/chemi_chet_auth_testpage.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/testpage",
+      "wrapper": "chemi_chet_auth_testpage_post",
+      "file": "R/chemi_chet_auth_testpage_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "GET /api/resolver/export",
+      "wrapper": "chemi_resolver_export",
+      "file": "R/chemi_resolver_export.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/export",
+      "wrapper": "chemi_resolver_export_post",
+      "file": "R/chemi_resolver_export_post.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/export-append",
+      "wrapper": "chemi_resolver_export_append",
+      "file": "R/chemi_resolver_export_append.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/export-records",
+      "wrapper": "chemi_resolver_export_records",
+      "file": "R/chemi_resolver_export_records.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "GET /api/resolver/export-section",
+      "wrapper": "chemi_resolver_export_section",
+      "file": "R/chemi_resolver_export_section.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/export-section",
+      "wrapper": "chemi_resolver_export_section_post",
+      "file": "R/chemi_resolver_export_section_post.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/export_classyfire",
+      "wrapper": "chemi_resolver_export_classyfire",
+      "file": "R/chemi_resolver_export_classyfire.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/exportpubchemlist",
+      "wrapper": "chemi_resolver_exportpubchemlist",
+      "file": "R/chemi_resolver_exportpubchemlist.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "GET /api/resolver/getintegrityreports",
+      "wrapper": "chemi_resolver_getintegrityreports",
+      "file": "R/chemi_resolver_getintegrityreports.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/ghs-list-count",
+      "wrapper": "chemi_resolver_ghs_list_count_post",
+      "file": "R/chemi_resolver_ghs_list_count_post.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "GET /api/resolver/render",
+      "wrapper": "chemi_resolver_render",
+      "file": "R/chemi_resolver_render.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/universalharvest_cart",
+      "wrapper": "chemi_resolver_universalharvest_cart",
+      "file": "R/chemi_resolver_universalharvest_cart.R",
+      "suite": "tests/testthat/test-native_resolver_extra.R",
       "migrated": true
     }
   ]

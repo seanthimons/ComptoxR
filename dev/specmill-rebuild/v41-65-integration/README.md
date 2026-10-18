@@ -2,7 +2,7 @@
 
 This checkpoint adds 24 management bindings, the reviewed CheT chemical download GET, 35 chemical/curator/reaction bindings, four calculation facades and the existing safety-flags facade. All wrappers were emitted from root configuration using the pinned official Specmill v0.1.41; child manifests and desired wrapper bytes were not copied over owned outputs.
 
-Full generation with validation=TRUE and a subsequent check passed, with zero generation/mapping/retained diagnostics or signature drift. All 648 root owner hashes match. The existing reviewed-document policy for the archived invalid AMOS source remains unchanged; the reviewed CheT GET body retains its interoperability warning.
+Full generation with validation=TRUE and a subsequent check passed, with zero generation/mapping/retained diagnostics or signature drift. All 647 root owner hashes match. The existing reviewed-document policy for the archived invalid AMOS source remains unchanged; the reviewed CheT GET body retains its interoperability warning.
 
 The focused root run passed 2,654 assertions across 41 tests, with zero failures, errors, warnings or skips. It covers management, CheT download and extra routes, four calculations, descriptor null cells and hooks, and the safety-flags facade. These are localhost/controlled tests except the separately archived live evidence. No deployed mutation, upload or session operation was executed.
 

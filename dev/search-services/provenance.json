@@ -1,0 +1,8 @@
+{
+  "canonical": "schema/chemi-services-prod.json",
+  "canonical_sha256": "e8cc0a082162d0e00fbaf61388e24cea0a6b3cfe1b17ec986e2d8f6c083b26ad",
+  "output": "schema/chemi-services-reviewed-preflight.json",
+  "output_sha256": "71c77ba14aa1b2cbabdee586e58c3bbc7d7bd67eeafbbdc1fa441611c94c6fb0",
+  "semantic_diff": "dev/search-services/upload-semantic-diff.json",
+  "source_evidence": "dev/search-services/deployed-source.json"
+}

@@ -17,35 +17,27 @@ chemi_services_collated_report(
 )
 }
 \arguments{
-\item{alertRequest}{Optional parameter}
+\item{alertRequest}{JSON string for the report field.}
 
-\item{chemicals}{Optional parameter}
+\item{chemicals}{JSON string for the report field.}
 
-\item{exportAlerts}{Optional parameter}
+\item{exportAlerts}{Logical export flag.}
 
-\item{exportHazard}{Optional parameter}
+\item{exportHazard}{Logical export flag.}
 
-\item{exportHazard2}{Optional parameter}
+\item{exportHazard2}{Logical export flag.}
 
-\item{exportPrediction}{Optional parameter}
+\item{exportPrediction}{Logical export flag.}
 
-\item{exportSafety}{Optional parameter}
+\item{exportSafety}{Logical export flag.}
 
-\item{hazardRequest}{Optional parameter}
+\item{hazardRequest}{JSON string for the report field.}
 
-\item{predictionRequest}{Optional parameter}
+\item{predictionRequest}{JSON string for the report field.}
 }
 \value{
-Returns a tibble with results
+Decoded JSON, text, or raw report bytes according to the response content type.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\examples{
-\dontrun{
-chemi_services_collated_report(alertRequest = "DTXSID1024122")
-}
-}
-\section{API stage}{
-  This wrapper was generated from the \strong{public} API schema.
 }

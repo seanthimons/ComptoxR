@@ -4,9 +4,19 @@ Updated 18 October 2026. Branch `feat/specmill-migration-pilot`, PR345.
 Inspect HEAD and working-tree status before using this checkpoint. Local commits
 are authorized; ComptoxR pushes, merges and releases remain held.
 
+## Current 465/548 checkpoint
+
+Root adopts 39 further operations (14 CheT admin/auth, 12 resolver, 13 search/services). All 682 owner hashes and fresh validated official v41 generation pass; the four new suites pass 1,506 assertions. Package gate is0/0/0 with optional suggests relaxed and tests/examples/vignettes/manual excluded. Full safe run: 11,804 passing assertions,50 expected skips, zero errors/warnings, one missing CRAN-tarball guard; guard fixed and affected123-assertion replay passes. Preserve that full-run failure; do not describe it as a single clean full pass. Evidence: [39-operation integration](v41-39-integration/README.md).
+
+Verified v42 is available (source b17a0856263e0179a164a9673399f221168cda6d); official release SHA2560d1be547b950fb807b1a8d027199651304fb74e30fdde9e487a3a99a10e37aa8. Git archive SHA256dbd15b2509171431f00a193a648f426a02873aee5e16a73de740d30b56792351. Private install underway at dev/specmill-pilot/artifacts/toolkit-library/0.1.42 using temporary lock /home/sxthi/.cache/comptoxr-specmill-finish/v42-release/specmill-lock.json. Root pin/helper/default installer are still v41 at this checkpoint. Adopt released #166 next; no private PR179/180 adoption.
+
+Ready next: AMOS3/source-validity fix23b550b9 and small-family2 bindings1fa29328. Isolated OPTIONS2 generation/freshness plus40 localhost assertions passed; source/proof under /home/sxthi/.cache/comptoxr-chet-options and /tmp/specmill-finish/chet-options-*.R. Neither is root-adopted. Fresh AMOS production source retrieval/provenance is under /home/sxthi/.cache/comptoxr-specmill-finish/source-provenance; all operation objects match canonical, only two example decimals differ.
+
+PR179 exact replay c200d751 reports105 passing assertions that reproduce remaining all_pages overwrite, NULL result-key and dynamic max_pages blockers; comment https://github.com/seanthimons/specmill/pull/179#issuecomment-6254290135. Root adoption held. Inspect that report and relay to overwatch; do not reimplement the seam.
+
 ## Latest verified checkpoint
 
-The 65-operation root batch is complete: 24 management, one reviewed CheT GET download, 35 CheT extra, four calculations and safety-flags. All 648 owner hashes and fresh official generation pass; 2,654 focused assertions pass without failures/errors/warnings/skips. See [root integration evidence](v41-65-integration/README.md). The progress ledger is 426/548. Broad safe-suite and package gates below describe the earlier 361 checkpoint and need repeating after further integrations.
+The 65-operation root batch is complete: 24 management, one reviewed CheT GET download, 35 CheT extra, four calculations and safety-flags. All 647 owner hashes and fresh official generation pass; 2,654 focused assertions pass without failures/errors/warnings/skips. See [root integration evidence](v41-65-integration/README.md). The progress ledger is 426/548. Broad safe-suite and package gates below describe the earlier 361 checkpoint and need repeating after further integrations.
 
 Ready children awaiting root integration: search/services `0e68f8a5` (13), CheT admin/auth `819222cb` (14), resolver extra `0d0f7a6d` (12). Child manifests must not merge; emit root wrappers officially. New active delegated tasks cover AMOS source/remaining routes, standardizer remainder, and small residual families. All R processes must use persistent TMPDIR under `/home/sxthi/.cache`; `/tmp` tmpfs filled during an earlier build.
 

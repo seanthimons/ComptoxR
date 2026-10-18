@@ -18,7 +18,8 @@ owned <- function(path) {
       algo = 'sha256', serialize = FALSE))
 }
 review_files <- c('dev/specmill-rebuild/amos-reviewed-source.json',
-  'dev/specmill-rebuild/chet-chemical-dl/provenance.json')
+  'dev/specmill-rebuild/chet-chemical-dl/provenance.json',
+  'dev/search-services/provenance.json')
 reviews <- lapply(review_files[file.exists(review_files)], function(file) {
   review <- jsonlite::read_json(file)
   if (is.null(review$output)) review$output <- review$reviewed
@@ -53,6 +54,7 @@ for (file in config$services) {
       binding_schema <- schema
       review <- reviews[[schema]]
       if (!is.null(review)) {
+        if (!key %in% review$operations) next
         stopifnot(identical(digest::digest(file = schema, algo = 'sha256'), review$output_sha256),
           identical(digest::digest(file = review$canonical, algo = 'sha256'), review$canonical_sha256),
           key %in% review$operations)

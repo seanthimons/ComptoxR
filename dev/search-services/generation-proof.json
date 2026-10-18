@@ -1,0 +1,317 @@
+{
+  "version": "0.1.41",
+  "source_commit": "05862bee1804806cea157ff1962300d741516301",
+  "archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc",
+  "validation": {
+    "schema/chemi-search-prod.json": {
+      "source": "schema/chemi-search-prod.json",
+      "source_sha256": "6ad41bc28903f3fa2f94dda015552ffcb925c07080012885a648a21373646640",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "POST /api/search",
+          "method": "POST",
+          "path": "/api/search",
+          "source_location": "#/paths/~1api~1search/post"
+        },
+        {
+          "key": "POST /api/search/download",
+          "method": "POST",
+          "path": "/api/search/download",
+          "source_location": "#/paths/~1api~1search~1download/post"
+        },
+        {
+          "key": "GET /api/search/download/mol",
+          "method": "GET",
+          "path": "/api/search/download/mol",
+          "source_location": "#/paths/~1api~1search~1download~1mol/get"
+        },
+        {
+          "key": "GET /api/search/download/mol-by-smiles",
+          "method": "GET",
+          "path": "/api/search/download/mol-by-smiles",
+          "source_location": "#/paths/~1api~1search~1download~1mol-by-smiles/get"
+        },
+        {
+          "key": "POST /api/search/download/properties",
+          "method": "POST",
+          "path": "/api/search/download/properties",
+          "source_location": "#/paths/~1api~1search~1download~1properties/post"
+        },
+        {
+          "key": "POST /api/search/download/search-result-as-sdf",
+          "method": "POST",
+          "path": "/api/search/download/search-result-as-sdf",
+          "source_location": "#/paths/~1api~1search~1download~1search-result-as-sdf/post"
+        },
+        {
+          "key": "GET /api/search/exact",
+          "method": "GET",
+          "path": "/api/search/exact",
+          "source_location": "#/paths/~1api~1search~1exact/get"
+        },
+        {
+          "key": "GET /api/search/gethazard",
+          "method": "GET",
+          "path": "/api/search/gethazard",
+          "source_location": "#/paths/~1api~1search~1gethazard/get"
+        },
+        {
+          "key": "GET /api/search/metadata",
+          "method": "GET",
+          "path": "/api/search/metadata",
+          "source_location": "#/paths/~1api~1search~1metadata/get"
+        },
+        {
+          "key": "GET /api/search/render/png",
+          "method": "GET",
+          "path": "/api/search/render/png",
+          "source_location": "#/paths/~1api~1search~1render~1png/get"
+        },
+        {
+          "key": "GET /api/search/render/svg",
+          "method": "GET",
+          "path": "/api/search/render/svg",
+          "source_location": "#/paths/~1api~1search~1render~1svg/get"
+        },
+        {
+          "key": "GET /api/search/similar",
+          "method": "GET",
+          "path": "/api/search/similar",
+          "source_location": "#/paths/~1api~1search~1similar/get"
+        },
+        {
+          "key": "GET /api/search/substructure",
+          "method": "GET",
+          "path": "/api/search/substructure",
+          "source_location": "#/paths/~1api~1search~1substructure/get"
+        },
+        {
+          "key": "GET /api/search/version",
+          "method": "GET",
+          "path": "/api/search/version",
+          "source_location": "#/paths/~1api~1search~1version/get"
+        }
+      ],
+      "findings": []
+    },
+    "schema/chemi-services-reviewed-preflight.json": {
+      "source": "schema/chemi-services-reviewed-preflight.json",
+      "source_sha256": "71c77ba14aa1b2cbabdee586e58c3bbc7d7bd67eeafbbdc1fa441611c94c6fb0",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "POST /api/services/caspreflight",
+          "method": "POST",
+          "path": "/api/services/caspreflight",
+          "source_location": "#/paths/~1api~1services~1caspreflight/post"
+        },
+        {
+          "key": "GET /api/services/cim_component_info",
+          "method": "GET",
+          "path": "/api/services/cim_component_info",
+          "source_location": "#/paths/~1api~1services~1cim_component_info/get"
+        },
+        {
+          "key": "POST /api/services/collated_report",
+          "method": "POST",
+          "path": "/api/services/collated_report",
+          "source_location": "#/paths/~1api~1services~1collated_report/post"
+        },
+        {
+          "key": "POST /api/services/convert",
+          "method": "POST",
+          "path": "/api/services/convert",
+          "source_location": "#/paths/~1api~1services~1convert/post"
+        },
+        {
+          "key": "POST /api/services/export",
+          "method": "POST",
+          "path": "/api/services/export",
+          "source_location": "#/paths/~1api~1services~1export/post"
+        },
+        {
+          "key": "POST /api/services/export_json_report",
+          "method": "POST",
+          "path": "/api/services/export_json_report",
+          "source_location": "#/paths/~1api~1services~1export_json_report/post"
+        },
+        {
+          "key": "POST /api/services/files",
+          "method": "POST",
+          "path": "/api/services/files",
+          "source_location": "#/paths/~1api~1services~1files/post"
+        },
+        {
+          "key": "GET /api/services/layout",
+          "method": "GET",
+          "path": "/api/services/layout",
+          "source_location": "#/paths/~1api~1services~1layout/get"
+        },
+        {
+          "key": "GET /api/services/metadata",
+          "method": "GET",
+          "path": "/api/services/metadata",
+          "source_location": "#/paths/~1api~1services~1metadata/get"
+        },
+        {
+          "key": "POST /api/services/preflight",
+          "method": "POST",
+          "path": "/api/services/preflight",
+          "source_location": "#/paths/~1api~1services~1preflight/post"
+        },
+        {
+          "key": "GET /api/services/release_notes",
+          "method": "GET",
+          "path": "/api/services/release_notes",
+          "source_location": "#/paths/~1api~1services~1release_notes/get"
+        },
+        {
+          "key": "GET /api/services/smirks2rxn",
+          "method": "GET",
+          "path": "/api/services/smirks2rxn",
+          "source_location": "#/paths/~1api~1services~1smirks2rxn/get"
+        },
+        {
+          "key": "POST /api/services/universalpreflight",
+          "method": "POST",
+          "path": "/api/services/universalpreflight",
+          "source_location": "#/paths/~1api~1services~1universalpreflight/post"
+        },
+        {
+          "key": "GET /api/services/version",
+          "method": "GET",
+          "path": "/api/services/version",
+          "source_location": "#/paths/~1api~1services~1version/get"
+        }
+      ],
+      "findings": []
+    }
+  },
+  "helper_matches_v41_scaffold": true,
+  "helper_sha256": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+  "validator_matches_worktree": true,
+  "operations": 11,
+  "owners": {
+    "NAMESPACE": {
+      "hash": "36158fe1eeb9730d8ad34e941966c0c4ce940d05e76791b8f9715a045934d7c1",
+      "operations": [
+        "chemi-search-services-native POST /api/search/download",
+        "chemi-search-services-native GET /api/search/download/mol",
+        "chemi-search-services-native GET /api/search/download/mol-by-smiles",
+        "chemi-search-services-native POST /api/search/download/properties",
+        "chemi-search-services-native POST /api/search/download/search-result-as-sdf",
+        "chemi-search-services-native GET /api/search/render/png",
+        "chemi-search-services-native GET /api/search/render/svg",
+        "chemi-search-services-native POST /api/services/export",
+        "chemi-search-services-native POST /api/services/export_json_report",
+        "chemi-search-services-native POST /api/services/preflight",
+        "chemi-search-services-native POST /api/services/universalpreflight",
+        "specmill validation"
+      ]
+    },
+    "R/api_validation.R": {
+      "hash": "352228ccc06493822652fc694d772b387f38852449b224feee3312e446116e21",
+      "operations": "specmill validation"
+    },
+    "R/chemi_search_download.R": {
+      "hash": "36329b17b5bf4aac1bfae7e01082ceb72ecc918c9f2f7fe205a163b9cdc2edd0",
+      "operations": "chemi-search-services-native POST /api/search/download"
+    },
+    "R/chemi_search_download_mol.R": {
+      "hash": "2b4b2937771b0190a1ad47571c98ddf7e15b4b84af7e1b3fe40c72a4a8ff201c",
+      "operations": "chemi-search-services-native GET /api/search/download/mol"
+    },
+    "R/chemi_search_download_mol_by_smiles.R": {
+      "hash": "dd26fef6a300d20c7ecd02776e2f22eaff5421e5910859ddee849a6b870567ba",
+      "operations": "chemi-search-services-native GET /api/search/download/mol-by-smiles"
+    },
+    "R/chemi_search_download_properties.R": {
+      "hash": "858d7aadd5ccb480fbf0503d2614f7e4c3a079cdcc32c84e2f90dd851f40b9b4",
+      "operations": "chemi-search-services-native POST /api/search/download/properties"
+    },
+    "R/chemi_search_download_sdf.R": {
+      "hash": "461d0555af5ebe676512c7f1343b8b496f68b1578f808e51ee0868890df16690",
+      "operations": "chemi-search-services-native POST /api/search/download/search-result-as-sdf"
+    },
+    "R/chemi_search_render_png.R": {
+      "hash": "6256c2ef0276ba5d248ea88e614eb124eb593838cb4db17ae4e0b96cdb4dcb8c",
+      "operations": "chemi-search-services-native GET /api/search/render/png"
+    },
+    "R/chemi_search_render_svg.R": {
+      "hash": "96fe7e54138f778cb0e407f7d391d0244dbce54a16abbe36433590346f00a922",
+      "operations": "chemi-search-services-native GET /api/search/render/svg"
+    },
+    "R/chemi_services_export.R": {
+      "hash": "033c8860e65e7ee11cc7ba51e2fde3c927e7cbc99e2de94e9101cf23c50777aa",
+      "operations": "chemi-search-services-native POST /api/services/export"
+    },
+    "R/chemi_services_export_json_report.R": {
+      "hash": "2e2f420793753263b3fcbfff4ffa227845a8920176ef1e71812526bd6a831557",
+      "operations": "chemi-search-services-native POST /api/services/export_json_report"
+    },
+    "R/chemi_services_preflight.R": {
+      "hash": "19223c7d2e756c4c9d5eb0e451344c832b4aa8fb185cbc6476e2dcf7542e9998",
+      "operations": "chemi-search-services-native POST /api/services/preflight"
+    },
+    "R/chemi_services_universalpreflight.R": {
+      "hash": "4f33c43ac3ee2342e2e248e172439db86c445e6397d2657dd9116a2aa6695b06",
+      "operations": "chemi-search-services-native POST /api/services/universalpreflight"
+    },
+    "man/chemi_search_download.Rd": {
+      "hash": "82ab90af7bae00d2cc89a234b74733f886efefbe89115c9cba72de19b22fd58d",
+      "operations": "chemi-search-services-native POST /api/search/download"
+    },
+    "man/chemi_search_download_mol.Rd": {
+      "hash": "25e2715965e7702e1f050dd67a494cf7c686885613b3bda0d066113734df790b",
+      "operations": "chemi-search-services-native GET /api/search/download/mol"
+    },
+    "man/chemi_search_download_mol_by_smiles.Rd": {
+      "hash": "538154ada0f7950faa33343815da9bf1f2a9aeffa008e51779678e897b6cb12b",
+      "operations": "chemi-search-services-native GET /api/search/download/mol-by-smiles"
+    },
+    "man/chemi_search_download_properties.Rd": {
+      "hash": "afc249810e8812777e7ba405ef5222cbad06d3b3653ce82fe7172cca91e6c225",
+      "operations": "chemi-search-services-native POST /api/search/download/properties"
+    },
+    "man/chemi_search_download_sdf.Rd": {
+      "hash": "c2b64d6459c233e421fa2a4c23fd982cba5603fba6f93f9cdb910c1456f77b26",
+      "operations": "chemi-search-services-native POST /api/search/download/search-result-as-sdf"
+    },
+    "man/chemi_search_render_png.Rd": {
+      "hash": "41c9686791f8472a7d48f26b1232cdfa2a2d471acb5b53d6b62bbecee9bb20a3",
+      "operations": "chemi-search-services-native GET /api/search/render/png"
+    },
+    "man/chemi_search_render_svg.Rd": {
+      "hash": "9210e66ede90b4ecb72f39addcf3ef1e1f6b0048aa9613a0c9c0fe1d460ef5d6",
+      "operations": "chemi-search-services-native GET /api/search/render/svg"
+    },
+    "man/chemi_services_export.Rd": {
+      "hash": "16af8ead514aba0eaf36a5b9f2fd8136d4fdbd9e295de0909eb5252e366b72fc",
+      "operations": "chemi-search-services-native POST /api/services/export"
+    },
+    "man/chemi_services_export_json_report.Rd": {
+      "hash": "82e264825b6064ddc3ad1dbb79e518c4c0a0093d607cd35a4e16a3b0abfb09d4",
+      "operations": "chemi-search-services-native POST /api/services/export_json_report"
+    },
+    "man/chemi_services_preflight.Rd": {
+      "hash": "1948c0ea09896ee12b233fd46fab3f738603905f777ef3c8a099e755af7d39af",
+      "operations": "chemi-search-services-native POST /api/services/preflight"
+    },
+    "man/chemi_services_universalpreflight.Rd": {
+      "hash": "ff33a9b7393a7ffbdb6d844cb3d24a4e055b4bfe58060b202df4e0d64c76d9de",
+      "operations": "chemi-search-services-native POST /api/services/universalpreflight"
+    }
+  },
+  "fresh": true,
+  "source_sha256": {
+    "schema/chemi-search-prod.json": "6ad41bc28903f3fa2f94dda015552ffcb925c07080012885a648a21373646640",
+    "schema/chemi-services-reviewed-preflight.json": "71c77ba14aa1b2cbabdee586e58c3bbc7d7bd67eeafbbdc1fa441611c94c6fb0"
+  }
+}
