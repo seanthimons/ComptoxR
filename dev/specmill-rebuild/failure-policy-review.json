@@ -7,13 +7,10 @@
     "pull_request": "https://github.com/seanthimons/specmill/pull/144",
     "isolated_commit": "03a8523b1098f1a5ee22db161ccfc03e64b8cb56",
     "verification": "https://github.com/seanthimons/specmill/pull/144#issuecomment-6243273907",
-    "cases": 24,
-    "actual_wrappers": [
-      "ct_chemical_detail_search_bulk",
-      "ct_chemical_detail_search_by_dtxcid",
-      "chemi_classyfire"
-    ],
-    "result": "Exact all/partial HTTP failure values and attributes, Classyfire post-combine, and final whole-client freshness pass; adoption awaits release."
+    "cases": 32,
+    "actual_wrappers": ["ct_chemical_detail_search_bulk", "ct_chemical_detail_search_by_dtxcid_bulk", "ct_chemical_detail_search_by_dtxcid", "chemi_classyfire"],
+    "result": "Exact all/partial HTTP failure values and attributes, Classyfire post-combine, and final whole-client freshness pass; adoption awaits release.",
+    "coverage_correction": "Expanded the original 24 cases to include the actual DTXCID bulk POST as well as the GET sharing its source file; all 32 cases and final freshness pass."
   },
   "unbatched_policy": {
     "issue": "https://github.com/seanthimons/specmill/issues/143",

@@ -5,7 +5,8 @@ test_that("dropped HTTP failures retain table shape before client formatting", {
       headers = list(`Content-Type` = "application/json"),
       body = charToRaw('{"error":"not found"}'))
   }, .package = "httr2")
-  for (fn in list(ct_chemical_detail_search_bulk, ct_chemical_detail_search_by_dtxcid, chemi_classyfire)) {
+  for (fn in list(ct_chemical_detail_search_bulk, ct_chemical_detail_search_by_dtxcid,
+      ct_chemical_detail_search_by_dtxcid_bulk, chemi_classyfire)) {
     expect_warning(result <- fn("bad"), "failed")
     expect_s3_class(result, "tbl_df")
     expect_identical(nrow(result), 0L)
