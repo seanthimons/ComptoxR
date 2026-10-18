@@ -739,13 +739,9 @@ chemi_toxprint:
 
 chemi_amos_get_info_by_id:
   bespoke_test: "tests/testthat/test-native_failure_empty.R"
-  post_combine:
-    - format_legacy_list_result
 
 chemi_alerts_groups_by_id:
   bespoke_test: "tests/testthat/test-native_failure_empty.R"
-  post_combine:
-    - format_legacy_list_result
 
 ct_chemical_search_equal_bulk:
   bespoke_test: "tests/testthat/test-native_failure_empty.R"

@@ -1594,3 +1594,42 @@ cases are under issue154_validation in pending-file-list-projections.rds/json.
 PR155: https://github.com/seanthimons/specmill/pull/155 . Root pin and all five
 wrappers remain unchanged pending a verified release. No production calls, full
 ComptoxR package check or push; migration remains incomplete.
+
+## Released v0.1.38 five-wrapper adoption, 18 October 2026
+
+Independently downloaded the official release archive and SHA256SUMS: archive
+`ba38500be990f8a478f14e8a7809ca0afb08459ed7ffbbca7efd10cdc0670403`
+and DESCRIPTION0.1.38 pass. The tag resolves to
+`f0adbc08f35142cd2f85b1a1b60606b58e9d749e` and contains final PR155
+`2cadcc9e2ed0e01a21d97717242215d12704b365`. Development pin uses an
+independently archived source with SHA256
+`d79169d631d528ed2754fee19002f84667a84416097dfcba55b64f5e688f0373`.
+
+Adopted the reviewed AMOS get_info_by_id and alerts groups-by-id final list
+projections plus all three CTX chemical-image routes. Operation result_formatter
+runs the original client purrr projection after transport/combination, outside
+hook wrapping and drop policy. Only the selected list post_combine formatter
+hooks were removed. Three obsolete list response-policy functions are removed;
+all remaining callers are generated native operations. Shared request helper and
+compatibility executor are unchanged, with no new runtime dependency.
+
+Released-pin checks pass:320 actual localhost list and180 image comparisons,
+five typed formatter catches after both requests, ten simulated native hard401
+cases, and1332 regular assertions with zero failures/warnings. List malformed
+successes retain indexed classes/locations/parent classes after all requests;
+values/attributes/warnings/wire and image pixels/raw fallback remain reviewed.
+Native multi401 deliberately does not claim old parity or production evidence.
+Corrected real-executor numeric-name assertions, normalization response mocks
+and valid JSON fixtures are included. Image documentation now describes the
+unnamed multi-input list. Original public formals/defaults are unchanged.
+
+Final validated whole-client freshness, helper/pin provenance and34-wrapper
+legacy generated-test inventory pass. Documentation check matches the baseline,
+including its existing pipe.Rd %>% note. Complete released cases/logs/provenance
+are archived as release38_adoption in pending-file-list-projections.rds/json;
+failure-policy and pending batch/line records link this adoption without
+replacing historical evidence. The five-wrapper release hold is cleared.
+
+MOL/PDF and other individual vector/list/file contracts remain separate work.
+No production calls, full package check or ComptoxR push. This is not a complete
+migration claim.

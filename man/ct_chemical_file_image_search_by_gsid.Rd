@@ -10,7 +10,7 @@ ct_chemical_file_image_search_by_gsid(gsid)
 \item{gsid}{gsid Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a list of structure images (magick objects), one per identifier
+An image object or raw bytes for one identifier, or an unnamed list for multiple identifiers.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

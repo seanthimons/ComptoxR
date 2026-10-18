@@ -166,3 +166,17 @@ toxprint_response <- function(operation) quote(function(response, context, decod
  keyset_body <- function(operation) {
     quote(base::Filter(base::Negate(base::is.null), params[base::setdiff(base::names(params), "limit")]))
 }
+
+collected_response <- function(operation) {
+    name <- regmatches(operation$path, regexpr("\\{[^}]+\\}", operation$path))
+    name <- substring(name, 2L, nchar(name) - 1L)
+    parameter <- Filter(function(parameter) identical(parameter$name, name), operation$parameters)
+    stopifnot(length(parameter) == 1L)
+    public <- if (is.null(parameter[[1L]]$public_name))
+        name
+    else parameter[[1L]]$public_name
+    endpoint <- sub(paste0("{", name, "}"), "", sub("^/", "", sub("^/api/", "", operation$path)), fixed = TRUE)
+    substitute(function(response, context, decode) {
+        .ct_collect_response(response, context, decode, length(INPUT), ENDPOINT)
+    }, list(INPUT = as.name(public), ENDPOINT = endpoint))
+}

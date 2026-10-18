@@ -4,7 +4,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #' @param dtxsid dtxsid Accepts a vector: one request is sent per element and the results are combined.
-#' @return Returns a list of structure images (magick objects), one per identifier
+#' @return An image object or raw bytes for one identifier, or an unnamed list for multiple identifiers.
 #' @apiStage public
 #' @export
 #' @examples
@@ -31,31 +31,46 @@ ct_chemical_file_image_search <- function(dtxsid) {
   params <- base::list("dtxsid" = dtxsid)
   send <- function(params) {
     result <- .ct_request(
-      method = "GET",
-      path = "/chemical/file/image/search/by-dtxsid/{dtxsid}",
-      path_params = base::list("dtxsid" = params[["dtxsid"]]),
-      query = base::list(),
-      body = NULL,
-      response_policy = ".ct_file",
-      server = list(url = "https://comptox.epa.gov/ctx-api"),
-      server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
-      auth = list(list(list(
+      "method" = "GET",
+      "path" = "/chemical/file/image/search/by-dtxsid/{dtxsid}",
+      "path_params" = base::list("dtxsid" = params[["dtxsid"]]),
+      "query" = structure(list(), names = character(0)),
+      "body" = NULL,
+      "headers" = list(Accept = "image/png"),
+      "server" = list(url = "https://comptox.epa.gov/ctx-api"),
+      "server_resolver" = list(name = ".ct_server_url", key = "ctx_burl"),
+      "auth" = list(list(list(
         scheme = "ctx",
         type = "apiKey",
         location = "header",
         name = "x-api-key",
         envvar = "ctx_api_key"
-      )))
+      ))),
+      "response_policy" = function(response, context, decode) {
+        .ct_collect_response(response, context, decode, length(dtxsid), "chemical/file/image/search/by-dtxsid/")
+      }
     )
     result
   }
-  .ct_request_each(
+  result <- .ct_request_each(
     function(chunk) {
       params["dtxsid"] <- base::list(chunk)
       send(params)
     },
     params[["dtxsid"]],
     1L,
-    on_error = "drop"
+    on_error = list(single = "stop", multiple = "drop"),
+    warning = FALSE
   )
+  base::attr(result, "failed") <- NULL
+  result
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  base::get(
+    "format_image_results",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = FALSE
+  )(base::list(result = result, params = params))
 }

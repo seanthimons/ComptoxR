@@ -124,14 +124,13 @@ operations:
     server:
       resolver: .ct_server_url
       key: chemi_burl
-    response_policy: .ct_http_policy_chemi_amos_get_info_by_id
     batch:
       fan_out: internal_id
       on_error:
         single: stop
         multiple: drop
       metadata: no
-      warning: .ct_batch_http_warning
+      warning: no
     docs:
       title: Returns general information about a record by ID.
       lifecycle: experimental
@@ -142,6 +141,38 @@ operations:
       - internal_id: DTXSID7020182
     normalize_inputs:
       internal_id: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/amos/get_info_by_id/{internal_id}
+        path_params:
+          object:
+            internal_id:
+              from:
+              - params
+              - internal_id
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: collected_response
+    result_formatter: format_legacy_list_result
   GET /api/amos/get_classification_for_dtxsid/{dtxsid}:
     name: chemi_amos_get_classification_for_dtxsid
     file: R/chemi_amos_get_classification_for_dtxsid.R

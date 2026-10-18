@@ -141,20 +141,60 @@ operations:
     server:
       resolver: .ct_server_url
       key: ctx_burl
-    response_policy: .ct_file
     batch:
       fan_out: dtxcid
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
     docs:
       title: Get structure image by DTXCID
       lifecycle: experimental
-      return: Returns a list of structure images (magick objects), one per identifier
+      return: An image object or raw bytes for one identifier, or an unnamed list for
+        multiple identifiers.
       tags:
         apiStage: public
       examples:
       - dtxcid: DTXCID505
     normalize_inputs:
       dtxcid: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/file/image/search/by-dtxcid/{dtxcid}
+        path_params:
+          object:
+            dtxcid:
+              from:
+              - params
+              - dtxcid
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: image/png
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: collected_response
+    result_formatter: format_image_results
   GET /chemical/file/image/search/by-gsid/{gsid}:
     name: ct_chemical_file_image_search_by_gsid
     file: R/ct_chemical_file_image_search_by_gsid.R
@@ -163,20 +203,60 @@ operations:
     server:
       resolver: .ct_server_url
       key: ctx_burl
-    response_policy: .ct_file
     batch:
       fan_out: gsid
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
     docs:
       title: Get structure image by GSID
       lifecycle: experimental
-      return: Returns a list of structure images (magick objects), one per identifier
+      return: An image object or raw bytes for one identifier, or an unnamed list for
+        multiple identifiers.
       tags:
         apiStage: public
       examples:
       - gsid: '20182'
     normalize_inputs:
       gsid: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/file/image/search/by-gsid/{gsid}
+        path_params:
+          object:
+            gsid:
+              from:
+              - params
+              - gsid
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: image/png
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: collected_response
+    result_formatter: format_image_results
   GET /chemical/file/image/search/by-dtxsid/{dtxsid}:
     name: ct_chemical_file_image_search
     file: R/ct_chemical_file_image_search.R
@@ -185,20 +265,60 @@ operations:
     server:
       resolver: .ct_server_url
       key: ctx_burl
-    response_policy: .ct_file
     batch:
       fan_out: dtxsid
-      on_error: drop
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
     docs:
       title: Get structure image by DTXSID
       lifecycle: experimental
-      return: Returns a list of structure images (magick objects), one per identifier
+      return: An image object or raw bytes for one identifier, or an unnamed list for
+        multiple identifiers.
       tags:
         apiStage: public
       examples:
       - dtxsid: DTXSID7020182
     normalize_inputs:
       dtxsid: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/file/image/search/by-dtxsid/{dtxsid}
+        path_params:
+          object:
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: image/png
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: collected_response
+    result_formatter: format_image_results
   GET /chemical/file/mol/search/by-dtxcid/{dtxcid}:
     name: ct_chemical_file_mol_search_by_dtxcid
     file: R/ct_chemical_file_mol_search_by_dtxcid.R

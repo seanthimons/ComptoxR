@@ -31,15 +31,18 @@ chemi_alerts_groups_by_id <- function(id) {
   params <- base::list("id" = id)
   send <- function(params) {
     result <- .ct_request(
-      method = "GET",
-      path = "/api/alerts/groups/{id}",
-      path_params = base::list("id" = params[["id"]]),
-      query = base::list(),
-      body = NULL,
-      response_policy = ".ct_http_policy_chemi_alerts_groups_by_id",
-      server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
-      server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
-      auth = list()
+      "method" = "GET",
+      "path" = "/api/alerts/groups/{id}",
+      "path_params" = base::list("id" = params[["id"]]),
+      "query" = structure(list(), names = character(0)),
+      "body" = NULL,
+      "headers" = list(Accept = "application/json"),
+      "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+      "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        .ct_collect_response(response, context, decode, length(id), "alerts/groups/")
+      }
     )
     result
   }
@@ -51,18 +54,17 @@ chemi_alerts_groups_by_id <- function(id) {
     params[["id"]],
     1L,
     on_error = list(single = "stop", multiple = "drop"),
-    warning = base::get(
-      ".ct_batch_http_warning",
-      envir = base::parent.env(base::environment()),
-      mode = "function",
-      inherits = FALSE
-    )
+    warning = FALSE
   )
   base::attr(result, "failed") <- NULL
-  kept <- base::attr(result, "failed", exact = TRUE)
-  result <- run_hook("chemi_alerts_groups_by_id", "post_combine", base::list(result = result, params = params))
-  if (!base::is.null(kept) && !base::is.null(result) && base::is.null(base::attr(result, "failed", exact = TRUE))) {
-    base::attr(result, "failed") <- kept
-  }
   result
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  base::get(
+    "format_legacy_list_result",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = FALSE
+  )(base::list(result = result, params = params))
 }

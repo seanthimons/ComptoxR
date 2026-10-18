@@ -19,14 +19,13 @@ operations:
     server:
       resolver: .ct_server_url
       key: chemi_burl
-    response_policy: .ct_http_policy_chemi_alerts_groups_by_id
     batch:
       fan_out: id
       on_error:
         single: stop
         multiple: drop
       metadata: no
-      warning: .ct_batch_http_warning
+      warning: no
     docs:
       title: Alerts Groups
       lifecycle: experimental
@@ -37,6 +36,38 @@ operations:
       - id: DTXSID7020182
     normalize_inputs:
       id: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/alerts/groups/{id}
+        path_params:
+          object:
+            id:
+              from:
+              - params
+              - id
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: collected_response
+    result_formatter: format_legacy_list_result
   GET /api/alerts/alerts:
     name: chemi_alerts_alerts
     file: R/chemi_alerts_alerts.R

@@ -282,14 +282,71 @@
     },
     "sequential_correction": "Previous lapply(reqs) mocks retained names unlike actual httr2 sequential execution. New harnesses use real req_perform_sequential and typed httr2 transport conditions. Prior numeric-name claims for these list facades and files are superseded.",
     "image_comparison": "Container attributes, raw fallback bytes and image attributes/info/pixels; external-pointer identity and re-encoding timestamps are not comparable.",
-    "remaining_file_review": ["ct_chemical_file_mol_search", "ct_chemical_file_mol_search_by_dtxcid", "chemi_amos_get_pdf"],
-    "wrappers": ["ct_chemical_file_image_search", "ct_chemical_file_image_search_by_dtxcid", "ct_chemical_file_image_search_by_gsid", "chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"],
+    "remaining_file_review": [
+      "ct_chemical_file_mol_search",
+      "ct_chemical_file_mol_search_by_dtxcid",
+      "chemi_amos_get_pdf"
+    ],
+    "wrappers": [
+      "ct_chemical_file_image_search",
+      "ct_chemical_file_image_search_by_dtxcid",
+      "ct_chemical_file_image_search_by_gsid",
+      "chemi_amos_get_info_by_id",
+      "chemi_alerts_groups_by_id"
+    ],
     "archive": "dev/specmill-rebuild/pending-file-list-projections.rds",
     "condition_difference": {
-      "old": ["purrr_error_indexed", "rlang_error", "error", "condition"],
-      "native": ["comptoxr_post_combine_hook_error", "rlang_error", "error", "condition"],
+      "old": [
+        "purrr_error_indexed",
+        "rlang_error",
+        "error",
+        "condition"
+      ],
+      "native": [
+        "comptoxr_post_combine_hook_error",
+        "rlang_error",
+        "error",
+        "condition"
+      ],
       "old_requests": 2,
       "native_requests": 2
     }
+  },
+  "released_file_list_adoption": {
+    "status": "adopted_released_v0.1.38",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.38",
+      "source_commit": "f0adbc08f35142cd2f85b1a1b60606b58e9d749e",
+      "source_archive_sha256": "d79169d631d528ed2754fee19002f84667a84416097dfcba55b64f5e688f0373",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "official_release": "https://github.com/seanthimons/specmill/releases/tag/v0.1.38",
+    "official_archive_sha256": "ba38500be990f8a478f14e8a7809ca0afb08459ed7ffbbca7efd10cdc0670403",
+    "official_checksum_verified": true,
+    "official_version_verified": true,
+    "fix_ancestry_verified": true,
+    "verification": {
+      "actual_list_http_cases": 320,
+      "actual_image_http_cases": 180,
+      "native_simulated_credential_cases": 10,
+      "typed_formatter_catches": 5,
+      "regular_assertions": 1332,
+      "regular_failures": 0,
+      "regular_warnings": 0,
+      "original_public_formals": true,
+      "final_format_error_classes": true,
+      "list_final_error_index_and_parent_classes": true,
+      "root_wrapper_adoption": true,
+      "validated_whole_client_freshness": true,
+      "legacy_inventory_wrappers": 34,
+      "shared_request_helper_unchanged": true,
+      "compatibility_executor_unchanged": true,
+      "no_production_calls": true,
+      "no_full_package_check": true,
+      "no_push": true
+    },
+    "notes": ["Both final client projections retain purrr indexed conditions; real sequential executor remains in tests.", "Successful JSON fixtures and numeric-name/normalization mocks corrected as independently reviewed.", "Image Rd/config return docs describe unnamed multi-input lists.", "codoc reports only the existing pipe.Rd %>% note, identical to the baseline.", "Native 401 stays hard; old multi-request 401 parity excluded, simulated scope only."]
   }
 }

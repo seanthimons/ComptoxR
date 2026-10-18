@@ -16,9 +16,9 @@ test_that("native vector wrappers normalize once before validation and iteration
         },
         .ct_request = function(...) {
           calls[[length(calls) + 1L]] <<- list(...)
-          if (name %in% c("chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"))
+          if (name %in% c("chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id") || startsWith(name, "ct_chemical_file_image_search"))
             list(list(input = unlist(list(...)$path_params, use.names = FALSE),
-                      records = case$response)) else case$response
+                      response = httr2::response(status_code = 200L, headers = list(`Content-Type` = "application/json"), body = charToRaw(jsonlite::toJSON(case$response, auto_unbox = TRUE))), endpoint = "reviewed/")) else case$response
         },
         .package = "ComptoxR"
       )

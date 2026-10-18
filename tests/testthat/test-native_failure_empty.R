@@ -29,7 +29,7 @@ test_that("reviewed HTTP failures stop once and preserve empty results across re
       ), "")
       expect_identical(warnings, unname(expected), info = name)
       empty <- if (name %in% c("chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"))
-        list(`1` = NULL, `2` = NULL) else tibble::tibble()
+        list(NULL, NULL) else tibble::tibble()
       expect_identical(result, empty, info = name)
     }
   })
@@ -68,7 +68,7 @@ test_that("list facades retain successful attribution and missing input position
       headers = list(`Content-Type` = "application/json"),
       body = charToRaw('{"kingdom":"Organic"}'))
   }, .package = "httr2")
-  expected <- list(`1` = structure(list(kingdom = "Organic"), query = "good"), `2` = NULL)
+  expected <- list(structure(list(kingdom = "Organic"), query = "good"), NULL)
   for (fn in list(chemi_amos_get_info_by_id, chemi_alerts_groups_by_id)) {
     expect_warning(result <- fn(c("good", "bad")), "failed")
     expect_identical(result, expected)
