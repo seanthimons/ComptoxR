@@ -25,7 +25,7 @@ chemi-resolver-prod: 40/46
 chemi-safety-prod: 3/4
 chemi-search-prod: 13/14
 chemi-services-prod: 12/14
-chemi-stdizer-prod: 25/33
+chemi-stdizer-prod: 26/33
 chemi-toxprints-prod: 22/23
 chemi-webtest-prod: 9/9
 ctx-bioactivity-prod: 30/30
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28
 epi-suite-prod: 14/14
 ```
 
-Total: 498/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 499/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.

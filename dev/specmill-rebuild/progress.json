@@ -1,5 +1,5 @@
 {
-  "commit": "84d5c05c8ba056b40b9080d7e1096927564760ce",
+  "commit": "e6cf6cd190bc0a2350f5fbee811c90df2aeaceb4",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -182,9 +182,9 @@
     },
     {
       "schema": "chemi-stdizer-prod",
-      "migrated": 25,
+      "migrated": 26,
       "total": 33,
-      "remaining": 8
+      "remaining": 7
     },
     {
       "schema": "chemi-toxprints-prod",
@@ -4728,6 +4728,15 @@
       "wrapper": "chemi_webtest_export_append",
       "file": "R/chemi_webtest_export_append.R",
       "suite": "tests/testthat/test-native_webtest_exports.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "binding_schema": "schema/chemi-stdizer-reviewed-preflight.json",
+      "operation": "POST /api/stdizer/groups/preflight",
+      "wrapper": "chemi_stdizer_groups_preflight_post",
+      "file": "R/chemi_stdizer_groups_preflight_post.R",
+      "suite": "tests/testthat/test-native_stdizer_preflight.R",
       "migrated": true
     }
   ]

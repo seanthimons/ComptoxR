@@ -1,0 +1,98 @@
+{
+  "canonical": "schema/chemi-stdizer-prod.json",
+  "canonical_sha256": "178680219fccf31ecd6778532e69deff196e3767e3f8b6b3558d1cc3256f12ec",
+  "reviewed": "chemi-stdizer-reviewed-preflight.json",
+  "reviewed_sha256": "d4027eb8164a9a3dde36991037cf6f961c3cd53366f6ba37e10b93377c04ded9",
+  "operation": "POST /api/stdizer/groups/preflight",
+  "canonical_operation": {
+    "operationId": "groupCreatePostMultipartPreflight",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "files[]",
+        "required": true,
+        "schema": {
+          "items": {
+            "format": "binary",
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "items": {
+                "$ref": "#/components/schemas/LibraryGroupInfo"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "tags": [
+      "library-controller"
+    ]
+  },
+  "operation_patch": [
+    {
+      "op": "remove",
+      "path": "/parameters",
+      "old": [
+        {
+          "in": "query",
+          "name": "files[]",
+          "required": true,
+          "schema": {
+            "items": {
+              "format": "binary",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/requestBody",
+      "value": {
+        "required": true,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files[]"
+              ],
+              "properties": {
+                "files[]": {
+                  "items": {
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "omitted": "All unselected paths, top-level tags and unreferenced components.",
+  "unchanged": "Dialect, info, relative servers, operation ID, tags, responses and transitive components.",
+  "local_ref_closure": [
+    "#/components/schemas/ACL",
+    "#/components/schemas/LibraryGroupInfo"
+  ],
+  "server": "Preserved canonical relative server; .ct_server_url chemi_burl resolves production by default.",
+  "evidence": "frontend-evidence.json",
+  "issue": "https://github.com/seanthimons/specmill/issues/28#issuecomment-6254768750",
+  "deployed_upload_tested": false
+}

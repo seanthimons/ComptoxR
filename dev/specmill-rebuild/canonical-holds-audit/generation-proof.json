@@ -1,0 +1,50 @@
+{
+  "version": "0.1.42",
+  "source_commit": "b17a0856263e0179a164a9673399f221168cda6d",
+  "validation_requested": true,
+  "validation": {
+    "/home/sxthi/.cache/comptoxr-specmill-finish/canonical-holds-candidate/schema/chemi-stdizer-reviewed-preflight.json": {
+      "source": "/home/sxthi/.cache/comptoxr-specmill-finish/canonical-holds-candidate/schema/chemi-stdizer-reviewed-preflight.json",
+      "source_sha256": "d4027eb8164a9a3dde36991037cf6f961c3cd53366f6ba37e10b93377c04ded9",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "POST /api/stdizer/groups/preflight",
+          "method": "POST",
+          "path": "/api/stdizer/groups/preflight",
+          "source_location": "#/paths/~1api~1stdizer~1groups~1preflight/post"
+        }
+      ],
+      "findings": []
+    }
+  },
+  "operations": 1,
+  "owners": {
+    "NAMESPACE": {
+      "hash": "58fe440059de5fba2afb6607fc87caaa74cb6f0fd4eb9d042208ac301955c08e",
+      "operations": [
+        "chemi-stdizer-reviewed-preflight POST /api/stdizer/groups/preflight",
+        "specmill validation"
+      ]
+    },
+    "R/api_validation.R": {
+      "hash": "352228ccc06493822652fc694d772b387f38852449b224feee3312e446116e21",
+      "operations": "specmill validation"
+    },
+    "R/chemi_stdizer_groups_preflight_post.R": {
+      "hash": "57fcbb7a6269bc3dd08c694d7ee8183a02f026cb370533c15976e7c58aaf436e",
+      "operations": "chemi-stdizer-reviewed-preflight POST /api/stdizer/groups/preflight"
+    },
+    "man/chemi_stdizer_groups_preflight_post.Rd": {
+      "hash": "fe69b2476cb869ef5a3ca2d6362fd4eaa30dec053890d4986c2b67d0784c5c1c",
+      "operations": "chemi-stdizer-reviewed-preflight POST /api/stdizer/groups/preflight"
+    }
+  },
+  "freshness": true,
+  "helper_matches_official_scaffold": true,
+  "root_runtime_adopted": false,
+  "generated_project": "/home/sxthi/.cache/comptoxr-specmill-finish/canonical-holds-candidate"
+}

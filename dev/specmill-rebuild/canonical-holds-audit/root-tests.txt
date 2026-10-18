@@ -1,0 +1,8 @@
+Starting 1 test process.
+contract-chemi_toxprints_assays: ..
+native_stdizer_preflight: .............................................
+native_webtest_exports: .....................................................................................
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+ failed   error warning  passed skipped
+      0       0       0     132       0

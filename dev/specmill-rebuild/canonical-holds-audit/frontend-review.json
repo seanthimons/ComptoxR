@@ -1,0 +1,66 @@
+{
+  "source": "frontend-evidence.json",
+  "observations": {
+    "casharvest": {
+      "byte_offset": -1,
+      "found": false
+    },
+    "caspreflight": {
+      "byte_offset": -1,
+      "found": false
+    },
+    "chemdelete": {
+      "byte_offset": -1,
+      "found": false
+    },
+    "add_aqc_spectrum": {
+      "byte_offset": -1,
+      "found": false
+    },
+    "add_new_fact_sheet": {
+      "byte_offset": -1,
+      "found": false
+    },
+    "getpubchemlist": {
+      "byte_offset": 691814,
+      "found": true,
+      "excerpt": "rPage:t}){this.loading=!0,this.$axios.post(`${FP}/getpubchemlist?page=${e}&itemsPerPage=${t}&search=${this.searchText}&linkBy=${this.linkBy}&report=${this.reportName?this.reportName:\"\"}`,{chemicals:this.getCheckedStructures}).then(e=>{this.serverItems=e.data.items,this.totalItems=e.data.total}).catch(e=>{J(e)}).finally(()=>{this.loading=!1})},loadItems(){const{sortBy:e,sortDesc:t,page:i,itemsPerPage:a}=this.options;this.getItems({page:i,itemsPerPage:a})}},mounted(){this.loading=!0,this.$axios.get(`${FP}/getintegrityreports`).then(e=>{this.reports=e.data}).catch(e=>{J(e)}).finally(()=>{this.loading=!1})}},lA=sA;var oA=(0,I.A)(lA,YS,ZS,!1,null,null,null);const rA=oA.exports;var nA=function(){var e=this,t=e._self._c;return t(d.A,{staticClass:\""
+    },
+    "getsimilaritylist": {
+      "byte_offset": 709907,
+      "found": true,
+      "excerpt": ".loading=!0,this.error=\"\",this.$axios.post(`${FP}/getsimilaritylist`,{main:this.selection,_chemicals:this.getCheckedStructures,fingerprintName:this.fingerprintName,scoreName:this.scoreName,tverskyI:this.tverskyI,rdkitType:this.rdkitType,rdkitRadius:this.rdkitRadius,rdkitBits:this.rdkitBits,padelCompute2D:this.padelCompute2D,padelCompute3D:this.padelCompute3D,padelComputeFingerprints:this.padelComputeFingerprints,toxprintsProfile:this.toxprintsProfile}).then(e=>{e.data.forEach(e=>{e.chemical.checked=!0,this.selectedStructures.push(e.chemical)}),this.similarity=e.data,this.loading=!1}).catch(e=>{this.loading=!1,this.error=aM(e)})},getSimByChemId(e){return this.similarity.find(t=>e===t.chemical.chemId).similarity.sim},onStructureCheckboxClick("
+    },
+    "/protocols/${this.protocolId}?page=": {
+      "byte_offset": 431088,
+      "found": true,
+      "excerpt": "olId){this.loading=!0,this.maxKey=0;const e=`${UP}/protocols/${this.protocolId}?page=${this.filters.page}&size=${this.filters.size}`;this.$axios.post(e,{hidden:this.filters.hidden,components:this.filters.components,changed:this.filters.changed,passed:this.filters.passed,failed:this.filters.failed,issue:this.issue,change:this.change,query:this.search}).then(e=>{0===this.protocol.records.length&&this.protocol.filteredNumber>0&&this.filters.page>0&&(this.page=Math.floor(this.protocol.filteredNumber/this.filters.size)),e.data.records.forEach(e=>{e.key=this.maxKey++,e.ordinal=this.maxKey,e.ordinal+=this.filters.page*this.filters.size}),this.protocol=e.data,this.loading=!1}).catch(()=>{this.loading=!1})}},getIssues(){this.issuesLoading=!0,this.$a"
+    },
+    "e.append(\"request\",JSON.stringify({info:t}))": {
+      "byte_offset": 445794,
+      "found": true,
+      "excerpt": "is.useCommonchemistry,deepSearch:this.deepSearch};e.append(\"request\",JSON.stringify({info:t})),this.$axios.post(this.getCheckedStructures.length?this.uploadUrl+\"_cart\":this.uploadUrl,this.getCheckedStructures.length?{info:t,chemicals:this.getCheckedStructures}:e,{responseType:\"blob\"}).then(e=>{this.uploading=!1,this.dialog=!1;let t=\"xlsx\",i=\"chemcart_universalharvest.\"+t;if(!this.getCheckedStructures.length){console.log(this.filesHeaders[0]);let e=this.filesHeaders[0].fileName.lastIndexOf(\".\");t=this.filesHeaders[0].fileName.substring(e+1),\"txt\"!==t&&\"csv\"!==t||(t=\"xlsx\"),i=this.filesHeaders[0].fileName.substring(0,e)+\"_universalharvest.\"+t,console.log(i)}iM(i,e.data,t)}).catch(e=>{this.uploading=!1,this.message=aM(e)})}}}},gf=ff;var _f=(0,"
+    },
+    "e.append(\"request\",JSON.stringify({filesInfo:": {
+      "byte_offset": 103324,
+      "found": true,
+      "excerpt": "(let t of this.files)e.append(\"files[]\",t,t.name);e.append(\"request\",JSON.stringify({filesInfo:this.filesHeaders.map(e=>({fileName:e.fileName,idField:e.idField,strField:e.strField,actField:e.actField,fillAdditionalProps:e.fillAdditionalProps})),operationType:this.operationType,severity:this.severity,action:this.action,replace:this.replace,options:this.options})),this.$axios.post(this.uploadUrl,e).then(e=>{this.uploading=!1,this.closeDialog(),this.$emit(\"uploaded\",e.data)}).catch(e=>{this.uploading=!1,this.message=aM(e)})}}}},xs=As;var Cs=(0,I.A)(xs,ns,cs,!1,null,\"5c9ad9f2\",null);const ws=Cs.exports,ks=(0,l.defineComponent)({__name:\"AddChemicals\",props:{inline:{type:Boolean,default:!1},vBtnProps:{default:()=>({})}},setup(e){var t;const i=nul"
+    },
+    "\"upload-url\":`${e.RESOLVER_URL}/universalharvest`": {
+      "byte_offset": 436537,
+      "found": true,
+      "excerpt": "light-url\":`${e.SERVICES_URL}/universalpreflight`,\"upload-url\":`${e.RESOLVER_URL}/universalharvest`,workflows:e.workflows,\"button-title\":\"mdi-file-arrow-up-down\",title:\"Universal Harvest\"}}),t(\"ExportMenu\",{attrs:{\"export-url\":`${e.RESOLVER_URL}/export_classyfire`,\"ignore-formats\":[\"SMI\"],\"selected-structures\":e.getCheckedStructures,\"show-images\":e.showImage,\"icon-name\":\"mdi-fire\",title:\"Export ClassyFire\",\"file-name\":\"ClassyFire\",\"activator-btn-props\":{class:\"flat-button border\"}},model:{value:e.downloading,callback:function(t){e.downloading=t},expression:\"downloading\"}})],1)]},proxy:!0}])})]},proxy:!0}])})},pf=[],hf=function(){var e,t=this,i=t._self._c;return i(M.A,{attrs:{\"max-width\":t.maxWidth},scopedSlots:t._u([{key:\"activator\",fn:func"
+    },
+    "\"upload-url\":`${t.STDIZER_URL}/groups/${this.groupId}/replace`": {
+      "byte_offset": 468784,
+      "found": true,
+      "excerpt": "ill replace content of this group. Are you sure?\",\"upload-url\":`${t.STDIZER_URL}/groups/${this.groupId}/replace`},on:{uploaded:t.onFileUploaded}}):t._e(),t.group&&!t.group.frozen?i(\"FileUploadDialog\",{attrs:{\"button-title\":\"mdi-file-upload-outline\",title:\"Add operations from SDF, RDF, XLSX or CSV file\",\"show-operations\":\"\",\"preflight-url\":`${t.SERVICES_URL}/preflight`,\"upload-url\":`${t.STDIZER_URL}/groups/${this.groupId}/add`},on:{uploaded:t.onFileUploaded}}):t._e(),t.group&&!t.group.frozen?i(\"PromptDialog\",{attrs:{visible:!1,text:t.editingItem?t.editingItem.value:null,title:\"Do you want to copy?\"},on:{confirmed:t.copyItem},model:{value:t.visibleCopy,callback:function(e){t.visibleCopy=e},expression:\"visibleCopy\"}}):t._e(),t.group&&!t.group."
+    },
+    "\"upload-url\":`${e.ALERTS_URL}/groups/${this.groupId}/replace`": {
+      "byte_offset": 601226,
+      "found": true,
+      "excerpt": "oup&&!e.group.frozen?t(\"FileUploadDialog\",{attrs:{\"upload-url\":`${e.ALERTS_URL}/groups/${this.groupId}/replace`,\"button-title\":\"mdi-file-replace-outline\",label:\"JSON file\",title:\"Replace from JSON file\",warning:\"This will replace content of this group. Are you sure?\"},on:{uploaded:e.onFileUploaded}}):e._e(),e.group&&!e.group.frozen?t(\"FileUploadDialog\",{attrs:{\"preflight-url\":`${e.SERVICES_URL}/preflight`,\"upload-url\":`${e.ALERTS_URL}/groups/${this.groupId}/add`,\"button-title\":\"mdi-file-upload-outline\",\"show-operations\":\"\",title:\"Add operations from SDF, RDF, XLSX or CSV file\"},on:{uploaded:e.onFileUploaded}}):e._e(),e.group&&!e.group.frozen?t(\"PromptDialog\",{attrs:{text:e.editingItem?e.editingItem.value:null,visible:!1,title:\"Do you want t"
+    }
+  },
+  "limit": "No-match means absent in this archived bundle only. Callers do not prove backend acceptance or complete omitted sort/metadata contracts."
+}

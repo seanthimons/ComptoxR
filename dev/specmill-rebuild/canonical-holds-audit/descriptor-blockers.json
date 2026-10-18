@@ -1,0 +1,70 @@
+{
+  "version": "0.1.42",
+  "source_commit": "b17a0856263e0179a164a9673399f221168cda6d",
+  "results": {
+    "GET /api/descriptors": {
+      "message": "calculation-route-repro: route chemi-rdkit-prod.json GET /api/rdkit disagrees with GET /api/descriptors server",
+      "service": {
+        "id": "calculation-route-repro",
+        "schemas": {
+          "files": [
+            "schema/chemi-descriptors-prod.json",
+            "schema/chemi-rdkit-prod.json"
+          ]
+        },
+        "selection": {
+          "include": [
+            "GET /api/descriptors"
+          ]
+        },
+        "helper": ".ct_request",
+        "defaults": {
+          "server": {
+            "resolver": ".ct_server_url",
+            "key": "chemi_burl"
+          }
+        },
+        "operations": {
+          "GET /api/descriptors": {
+            "name": "chemi_descriptors",
+            "routes": [
+              "chemi-rdkit-prod.json GET /api/rdkit"
+            ]
+          }
+        }
+      }
+    },
+    "POST /api/descriptors": {
+      "message": "calculation-route-repro: route chemi-rdkit-prod.json POST /api/rdkit disagrees with POST /api/descriptors server",
+      "service": {
+        "id": "calculation-route-repro",
+        "schemas": {
+          "files": [
+            "schema/chemi-descriptors-prod.json",
+            "schema/chemi-rdkit-prod.json"
+          ]
+        },
+        "selection": {
+          "include": [
+            "POST /api/descriptors"
+          ]
+        },
+        "helper": ".ct_request",
+        "defaults": {
+          "server": {
+            "resolver": ".ct_server_url",
+            "key": "chemi_burl"
+          }
+        },
+        "operations": {
+          "POST /api/descriptors": {
+            "name": "chemi_descriptors_bulk",
+            "routes": [
+              "chemi-rdkit-prod.json POST /api/rdkit"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

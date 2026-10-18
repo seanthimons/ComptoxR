@@ -1,0 +1,23 @@
+{
+  "minimum_specmill": "0.1.42",
+  "new_canonical_operation": "POST /api/stdizer/groups/preflight",
+  "canonical_migrated": 499,
+  "canonical_total": 548,
+  "owned_hashes": 705,
+  "preceding_owner_records_unchanged": 704,
+  "validated_selected_sources": 31,
+  "public_generation_fresh": true,
+  "focused_corrections_assertions": 132,
+  "new_preflight_assertions": 45,
+  "installed_package_assertions": 128,
+  "focused_failures": 0,
+  "focused_errors": 0,
+  "focused_warnings": 0,
+  "focused_skips": 0,
+  "hook_functions": 272,
+  "hooks": 123,
+  "extra_params": 34,
+  "deployed_uploads": false,
+  "broad_safe_suite": "running; result will be recorded separately",
+  "prior_broad_run": "12942 passed,50 expected skips,2 errors; corrected and retained separately"
+}

@@ -1373,3 +1373,6 @@ chemi_webtest_export_append:
 
 chemi_webtest_predict_export:
   bespoke_test: tests/testthat/test-native_webtest_exports.R
+
+chemi_stdizer_groups_preflight_post:
+  bespoke_test: tests/testthat/test-native_stdizer_preflight.R

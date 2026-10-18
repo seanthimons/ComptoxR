@@ -64,6 +64,7 @@ services:
 - apis/chemi-released-chet-facades.yml
 - apis/chemi-released-recursive-facades.yml
 - apis/chemi-webtest-exports.yml
+- apis/chemi-stdizer-reviewed-preflight.yml
 callback_files:
 - dev/specmill_callbacks.R
 - dev/specmill-rebuild/remaining-facades/callbacks.R
