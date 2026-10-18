@@ -49,6 +49,9 @@ chemi_amos_retrieve_safety_data_sheets <- function(internal_ids = NULL) {
     "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
     "auth" = list(),
     "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
       context$endpoint <- "amos/retrieve_safety_data_sheets/"
       if (context$status < 200L || context$status >= 300L || grepl("(/json|\\+json)$", context$media)) {
         return(.ct_chemi_result(response, context, decode, tidy = FALSE))

@@ -30,6 +30,9 @@ chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
     "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
     "auth" = list(),
     "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
       context$endpoint <- "chet/reaction/batchsearch"
       .ct_chemi_result(response, context, decode, tidy = FALSE)
     },

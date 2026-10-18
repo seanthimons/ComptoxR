@@ -61,8 +61,10 @@ test_that('AMOS transport, received HTTP, malformed JSON and hard call failures 
   response <- NULL
   original <- structure(list(message = 'transport sentinel', call = NULL, resp = NULL),
     class = c('httr2_failure', 'httr2_error', 'rlang_error', 'error', 'condition'))
-  local_mocked_bindings(req_perform = function(...) {
+  local_mocked_bindings(req_perform = function(req, ...) {
     if (is.null(response)) stop(original)
+    policy <- req$policies$error_is_error
+    if (httr2::resp_status(response) >= 400L && (is.null(policy) || isTRUE(policy(response)))) httr2::resp_check_status(response)
     response
   }, .package = 'httr2')
   for (name in names(amos_remaining_cases)) {
@@ -72,7 +74,7 @@ test_that('AMOS transport, received HTTP, malformed JSON and hard call failures 
     for (status in c(404L, 500L, 401L)) {
       response <- httr2::response(status_code = status, headers = list(`Content-Type` = 'text/html'), body = charToRaw('failure'))
       if (status == 401L) expect_error(do.call(fn, args), class = 'specmill_call_error')
-      else expect_error(do.call(fn, args), paste('failed with status', status))
+      else expect_error(do.call(fn, args), class = paste0('httr2_http_', status))
     }
     response <- httr2::response(status_code = 200L, headers = list(`Content-Type` = 'application/json'), body = charToRaw('{'))
     expect_error(do.call(fn, args), class = 'simpleError')

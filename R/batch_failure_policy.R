@@ -104,8 +104,8 @@ format_image_results <- function(data) {
 
 
 .ct_static_json_result <- function(response, context, decode, endpoint, input = "_static_") {
+    if (context$status >= 400L) decode()
     observe_api_responses(list(response))
-    if (context$status == 401L) decode()
     format_legacy_list_result(list(params = list(input), result = list(list(
         input = input, response = response, endpoint = endpoint))))
 }

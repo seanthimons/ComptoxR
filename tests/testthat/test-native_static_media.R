@@ -95,7 +95,10 @@ test_that('static and ChET requests preserve transport and ordinary HTTP failure
         class = c('httr2_failure', 'httr2_error', 'rlang_error', 'error', 'condition'))
       local_mocked_bindings(req_perform = function(req, ...) {
         if (mode == 'transport') stop(original)
-        httr2::response(status_code = as.integer(mode), headers = list(`Content-Type` = 'application/json'), body = charToRaw('{"error":"failed"}'))
+        response <- httr2::response(status_code = as.integer(mode), headers = list(`Content-Type` = 'application/json'), body = charToRaw('{"error":"failed"}'))
+        policy <- req$policies$error_is_error
+        if (is.null(policy) || isTRUE(policy(response))) httr2::resp_check_status(response)
+        response
       }, .package = 'httr2')
       args <- if (name == 'chemi_chet_reaction_batchsearch') list('one', 'chemical') else list('one')
       native <- get(name, asNamespace('ComptoxR'))

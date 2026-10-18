@@ -199,6 +199,7 @@ chet_batch_body <- function(operation) quote(base::local({
 }))
 
 chet_batch_response <- function(operation) quote(function(response, context, decode) {
+    if (context$status >= 400L) decode()
     context$endpoint <- "chet/reaction/batchsearch"
     .ct_chemi_result(response, context, decode, tidy = FALSE)
 })
@@ -232,6 +233,7 @@ amos_remaining_body <- function (operation)
 
 amos_remaining_response <- function (operation)
 substitute(function(response, context, decode) {
+    if (context$status >= 400L) decode()
     context$endpoint <- ENDPOINT
     if (context$status < 200L || context$status >= 300L || grepl("(/json|\\+json)$", context$media)) return(.ct_chemi_result(response,
         context, decode, tidy = FALSE))

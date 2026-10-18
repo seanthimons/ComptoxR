@@ -1840,3 +1840,31 @@ with recorded server500 controls; no successful behavior claim for those routes.
 The earlier static/media and collection expectation counts were corrected to
 279 and441 from their reporter output; all passed, and endpoint fractions were
 unaffected. The earlier PR progress comment was corrected in place.
+
+### Authentic received-error correction and released 0.1.40 baseline
+
+The first new static/AMOS failure mocks returned error responses directly instead
+of applying the request's httr2 error predicate. They therefore asserted an
+unreachable ordinary-status projection for legacy single requests. Corrected the
+mocks to honor `request$policies$error_is_error` and `resp_check_status`; corrected
+the supported client response policies to invoke the preserved decoder on 4xx/5xx
+before projecting success data. No generator helper/executor patch was made.
+
+The permanent real-localhost suite `test-native_received_http.R` now passes 81
+assertions for all ten newly adopted wrappers: received404/500 retain httr2 status
+classes and original response/body; five frozen old wrappers independently raise
+the same typed statuses; native401 remains hard. The corrected static/media279,
+AMOS110 and decoder/control17 suites also pass (487 assertions across these four
+suites). Successful production read checks are independently recorded above.
+Earlier ordinary HTTP warning/NULL claims for these new single-request wrappers
+are superseded by this correction. Endpoint counts remain300/548.
+
+Root now independently verifies and pins official Specmill v0.1.40 source/tag
+`8fa120e84fe8d0267c11e515e6fd1f387ff4a36f`, including final PR160 ancestry.
+Downloaded release checksum matches SHA256SUMS
+`9201d10a2d2ce620f8fcae9725003f56b82fa3140aa49df5a5bac81f23acdf28`;
+reproducible git-archive checksum is
+`e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175`.
+Official helper emission/provenance/protection, full generation and fresh check
+pass. Private-state operation adoption follows separately; the combined-hook
+candidate remains held for its serialized release. No ComptoxR push.

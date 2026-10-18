@@ -56,6 +56,9 @@ chemi_amos_substances_for_ids <- function(internal_id_list = NULL) {
     "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
     "auth" = list(),
     "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
       context$endpoint <- "amos/substances_for_ids/"
       if (context$status < 200L || context$status >= 300L || grepl("(/json|\\+json)$", context$media)) {
         return(.ct_chemi_result(response, context, decode, tidy = FALSE))

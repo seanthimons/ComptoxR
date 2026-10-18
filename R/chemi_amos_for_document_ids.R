@@ -90,6 +90,9 @@ chemi_amos_for_document_ids <- function(
     "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
     "auth" = list(),
     "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
       context$endpoint <- "amos/search_for_document_ids/{record_type}"
       if (context$status < 200L || context$status >= 300L || grepl("(/json|\\+json)$", context$media)) {
         return(.ct_chemi_result(response, context, decode, tidy = FALSE))

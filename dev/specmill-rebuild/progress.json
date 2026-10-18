@@ -1,5 +1,5 @@
 {
-  "commit": "4ee0293e7b291f9c4088acba5063636eb81fe2a7",
+  "commit": "981cb10d62cc7932d301bc07163f72a77c84ad45",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -164,9 +164,9 @@
   ],
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.39",
-    "source_commit": "01a6142e1c8b9aef736664627063efa5d1849416",
-    "source_archive_sha256": "5c6941c4a1d8e4de0c5eb54206ca2ec487b89be1aec11c1099fb6da25664c3f6",
+    "version": "0.1.40",
+    "source_commit": "8fa120e84fe8d0267c11e515e6fd1f387ff4a36f",
+    "source_archive_sha256": "e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
