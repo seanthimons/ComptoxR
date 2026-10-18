@@ -1,0 +1,98 @@
+id: proof-pubchem
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  include:
+  - POST /api/resolver/getpubchemlist
+helper: .ct_request
+documentation: no
+operations:
+  POST /api/resolver/getpubchemlist:
+    name: chemi_resolver_getpubchemlist
+    file: R/chemi_resolver_getpubchemlist.R
+    implementation: generated
+    exclude_parameters:
+    - page
+    - itemsPerPage
+    - search
+    - linkBy
+    - report
+    inputs:
+      query:
+        type: any
+      idType:
+        type: any
+        default: AnyId
+      section:
+        type: any
+        default: ~
+      all_pages:
+        type: any
+        default: yes
+      max_pages:
+        type: any
+        default: 100.0
+    private_params:
+      chemicals: ~
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /resolver/getpubchemlist
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          callback: proof_pubchem_body
+        body_media:
+          value: application/json
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: http://127.0.0.1:9
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: proof_page_response
+        request_controls:
+          value:
+            preserve_errors: yes
+      pagination:
+        mode: offset
+        when:
+          callback: proof_pubchem_paging
+        parameter:
+        - body
+        - offset
+        size_parameter:
+        - body
+        - options
+        - limit
+        page_size:
+          value: 100.0
+        start:
+          value: 0.0
+        max_pages: 100.0
+        items: proof_page_items
+        completed: proof_page_done
+        advance: proof_page_advance
+        metadata: no
+        error_policy: partial
+        warn_limits: no
+        warn_errors: no
+        stop_on_empty: no
+    result_formatter: proof_pubchem_result
+hooks:
+  chemi_resolver_getpubchemlist:
+    pre_request:
+    - resolve_query_to_chemical_records

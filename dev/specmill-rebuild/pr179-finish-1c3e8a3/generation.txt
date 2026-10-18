@@ -1,0 +1,30 @@
+[1] TRUE TRUE TRUE TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+Schema validation
+  chemi-search-prod.json: passed
+  chemi-resolver-prod.json: passed
+Selected operations (2)
+  search-pilot: POST /api/search -> chemi_search
+  proof-pubchem: POST /api/resolver/getpubchemlist -> chemi_resolver_getpubchemlist
+
+Excluded operations (0)
+
+Files to remove
+Server selection requires an explicit override at runtime:
+  POST /api/search: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/getpubchemlist: Relative server URL requires a recorded origin or explicit base URL override
+Schema validation
+  chemi-search-prod.json: passed
+  chemi-resolver-prod.json: passed
+Selected operations (2)
+  search-pilot: POST /api/search -> chemi_search
+  proof-pubchem: POST /api/resolver/getpubchemlist -> chemi_resolver_getpubchemlist
+
+Excluded operations (0)
+
+Files to remove
+Server selection requires an explicit override at runtime:
+  POST /api/search: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/getpubchemlist: Relative server URL requires a recorded origin or explicit base URL override

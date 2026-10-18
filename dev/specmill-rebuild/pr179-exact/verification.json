@@ -1,0 +1,30 @@
+{
+  "source_sha": "5566da87ae5acc7a95e10eaa209dbc18a290f498",
+  "archive_sha256": "96a72b802a7f2466ac0014fb0e86032a64944ecafaeea46eb3342cdc9e3b64fe",
+  "installed_library": "/home/sxthi/.cache/comptoxr-pr179/library",
+  "installed_version": "0.1.41",
+  "owners": 2,
+  "owner_hashes": {
+    "R/chemi_resolver_getpubchemlist.R": {
+      "hash": "eb33d5226cf989e69835e71c88457a7a19c862575b9e91bc0f23aaf79fc9a121",
+      "operations": "proof-pubchem POST /api/resolver/getpubchemlist"
+    },
+    "R/chemi_search.R": {
+      "hash": "ceeda8dae00c60f1ef0742c18592b84fdf2ac3663d98105a263f4581ae344c14",
+      "operations": "search-pilot POST /api/search"
+    }
+  },
+  "helper_sha256": "d93e29d1fc9f6e64e437a179c693ba50d122cac934a37b2874a0e6fe761a63b0",
+  "production_hashes_unchanged": true,
+  "helper_exact_official_code": true,
+  "schemas": {
+    "/home/sxthi/.cache/comptoxr-pr179/project/schema/chemi-search-prod.json": {
+      "source": "chemi-search-prod.json",
+      "status": "passed"
+    },
+    "/home/sxthi/.cache/comptoxr-pr179/project/schema/chemi-resolver-prod.json": {
+      "source": "chemi-resolver-prod.json",
+      "status": "passed"
+    }
+  }
+}

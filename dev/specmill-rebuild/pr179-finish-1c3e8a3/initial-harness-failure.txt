@@ -1,0 +1,120 @@
+proof: ..................................................................................................................................................................1..2..3..4.....5......6......7......8......9......a......b.......
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-proof.R:215:7'): reference and callback caps honor original
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`actual` is length 1
+`expected` is length 2
+
+`class(actual)` is absent
+`class(expected)` is a character vector ('simpleError', 'error', 'condition')
+
+`names(actual)` is absent
+`names(expected)` is a character vector ('message', 'call')
+
+`actual[[1]]` is a list
+`expected[[1]]` is a character vector ('object \'proof_pubchem_result\' of mode \'function\' was not found')
+
+`actual[[2]]` is absent
+`expected[[2]]` is a call
+
+
+── 2. Failure ('test-proof.R:224:7'): reference and callback caps honor original
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`actual` is length 1
+`expected` is length 2
+
+`class(actual)` is absent
+`class(expected)` is a character vector ('simpleError', 'error', 'condition')
+
+`names(actual)` is absent
+`names(expected)` is a character vector ('message', 'call')
+
+`actual[[1]]` is a list
+`expected[[1]]` is a character vector ('object \'proof_pubchem_result\' of mode \'function\' was not found')
+
+`actual[[2]]` is absent
+`expected[[2]]` is a call
+
+
+── 3. Failure ('test-proof.R:215:7'): reference and callback caps honor original
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`class(actual)` is absent
+`class(expected)` is a character vector ('simpleError', 'error', 'condition')
+
+`names(actual)` is absent
+`names(expected)` is a character vector ('message', 'call')
+
+`actual[[1]]` is a list
+`expected[[1]]` is a character vector ('object \'proof_pubchem_result\' of mode \'function\' was not found')
+
+`actual[[2]]` is a list
+`expected[[2]]` is a call
+
+
+── 4. Failure ('test-proof.R:224:7'): reference and callback caps honor original
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`class(actual)` is absent
+`class(expected)` is a character vector ('simpleError', 'error', 'condition')
+
+`names(actual)` is absent
+`names(expected)` is a character vector ('message', 'call')
+
+`actual[[1]]` is a list
+`expected[[1]]` is a character vector ('object \'proof_pubchem_result\' of mode \'function\' was not found')
+
+`actual[[2]]` is a list
+`expected[[2]]` is a call
+
+
+── 5. Failure ('test-proof.R:236:7'): reference and callback caps honor original
+Expected `inherits(b$value, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+── 6. Failure ('test-proof.R:236:7'): reference and callback caps honor original
+Expected `inherits(b$value, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+── 7. Failure ('test-proof.R:236:7'): reference and callback caps honor original
+Expected `inherits(b$value, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+── 8. Failure ('test-proof.R:236:7'): reference and callback caps honor original
+Expected `inherits(b$value, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+── 9. Failure ('test-proof.R:236:7'): reference and callback caps honor original
+Expected `inherits(b$value, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+
+── 10. Failure ('test-proof.R:236:7'): reference and callback caps honor origina
+Expected `inherits(b$value, "error")` to be FALSE.
+Differences:
+`actual`:   TRUE 
+`expected`: FALSE
+
+  ... and 1 more
+
+
+Maximum number of 10 failures reached, some test results may be missing.
+
+══ DONE ════════════════════════════════════════════════════════════════════════

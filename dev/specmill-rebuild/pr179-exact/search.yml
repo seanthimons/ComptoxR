@@ -1,0 +1,180 @@
+id: search-pilot
+schemas:
+  files:
+  - schema/chemi-search-prod.json
+selection:
+  include:
+  - POST /api/search
+helper: .ct_request
+prepare: preserve_choice_defaults
+documentation: no
+operations:
+  POST /api/search:
+    name: chemi_search
+    file: R/chemi_search.R
+    implementation: generated
+    inputs:
+      query:
+        default: ~
+        type: character
+      search_type:
+        default:
+        - exact
+        - substructure
+        - similar
+        - mass
+        - hazard
+        - features
+        type: character
+      similarity_type:
+        default:
+        - tanimoto
+        - euclid
+        - tversky
+        type: character
+      min_similarity:
+        default: 0.85
+        type: numeric
+      hazard_name:
+        default: ~
+        type: character
+      min_toxicity:
+        default:
+        - VH
+        - H
+        - M
+        - L
+        - A
+        type: character
+      min_authority:
+        default:
+        - auth
+        - screen
+        - qsar
+        type: character
+      mass_type:
+        default:
+        - mono
+        - mw
+        - abu
+        type: character
+      min_mass:
+        default: ~
+        type: character
+      max_mass:
+        default: ~
+        type: character
+      filter_features:
+        default: no
+        type: logical
+      feature_filters:
+        default: ~
+        type: character
+      element_include:
+        default: ~
+        type: character
+      element_exclude:
+        default: ~
+        type: character
+      exclude_all_others:
+        default: no
+        type: logical
+      limit:
+        default: 50.0
+        type: numeric
+      all_pages:
+        default: no
+        type: logical
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /search
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        body_media:
+          value: application/json
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: http://127.0.0.1:9
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: proof_page_response
+        request_controls:
+          value:
+            preserve_errors: yes
+      pagination:
+        mode: offset
+        when:
+          callback: proof_paging
+        parameter:
+        - body
+        - offset
+        size_parameter:
+        - body
+        - params
+        - limit
+        page_size:
+          from:
+          - hook_state
+          - request
+          - options
+          - limit
+        start:
+          value: 0.0
+        max_pages: 100.0
+        items: proof_page_items
+        completed: proof_page_done
+        advance: proof_page_advance
+        metadata: no
+        error_policy: partial
+        warn_limits: no
+        warn_errors: no
+        stop_on_empty: no
+    post_on_skip: yes
+    post_state: hook_state
+    helper: .ct_request
+    defer_inputs:
+    - all_pages
+    pre_params:
+    - query
+    - search_type
+    - similarity_type
+    - min_similarity
+    - hazard_name
+    - min_toxicity
+    - min_authority
+    - mass_type
+    - min_mass
+    - max_mass
+    - filter_features
+    - feature_filters
+    - element_include
+    - element_exclude
+    - exclude_all_others
+    - limit
+    post_response_scope: combined
+    result_formatter: proof_search_result
+hooks:
+  chemi_search:
+    pre_request:
+    - chemi_search_pre_request
+    post_response:
+    - chemi_search_post_response
