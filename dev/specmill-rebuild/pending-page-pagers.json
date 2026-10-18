@@ -7,11 +7,24 @@
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
-  "status": "normal_metadata_parity_pass_failure_policy_release_pending",
-  "wrappers": ["chemi_chet_chemicals_counts", "chemi_chet_chemicals_database", "chemi_chet_reaction_database", "chemi_resolver_classyfire"],
+  "status": "isolated_pass_release_pending",
+  "wrappers": [
+    "chemi_chet_chemicals_counts",
+    "chemi_chet_chemicals_database",
+    "chemi_chet_reaction_database",
+    "chemi_resolver_classyfire"
+  ],
   "normal_cases": 8,
   "failure_cases": 8,
-  "verification": "Released v28 metadata:false preserves exact results/attributes, request method/path/query/Accept/body/no CTX auth for manual and automatic modes. Real httr2-class transport failures and received HTTP500 after a successful page return earlier pages in legacy but abort native. PR151 explicit partial policy is under isolation; no local helper patch.",
+  "verification": "Eight full success/request comparisons and 64 manual/automatic request-failure/empty/parsing comparisons pass. Explicit partial errors, metadata suppression, empty-page control and client completion/formatting preserve original results, warnings and hard failures. Final whole-client freshness passes; wrappers retained until released PR151.",
   "archive": "dev/specmill-rebuild/pending-page-pagers.rds",
-  "blocked_by": "https://github.com/seanthimons/specmill/pull/151"
+  "blocked_by": "https://github.com/seanthimons/specmill/pull/151",
+  "isolated_toolkit": {
+    "package": "specmill",
+    "version": "0.1.28",
+    "source_commit": "c5df6a9f61b1bd24e8261a32cc6b93b5ca29122a",
+    "source_archive_sha256": "1287e3a4b2f9fd7fb3dca8f7c8230a0e4d80cd85c29d1b2de4c8081e8c9d05cf",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  }
 }

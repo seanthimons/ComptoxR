@@ -1,9 +1,45 @@
 {
-  "status": "retained_cursor_emitter_pending",
+  "status": "isolated_pass_release_pending",
   "issue": "https://github.com/seanthimons/specmill/issues/149",
   "schema": "schema/chemi-amos-prod.json",
-  "wrappers": ["chemi_amos_analytical_qc_keyset_pagination", "chemi_amos_analytical_qc_keyset_pagination_bulk", "chemi_amos_fact_sheet_keyset_pagination", "chemi_amos_fact_sheet_keyset_pagination_bulk", "chemi_amos_method_keyset_pagination", "chemi_amos_method_keyset_pagination_bulk", "chemi_amos_product_declaration_keyset_pagination", "chemi_amos_product_declaration_keyset_pagination_bulk", "chemi_amos_safety_data_sheet_keyset_pagination", "chemi_amos_safety_data_sheet_keyset_pagination_bulk"],
+  "wrappers": [
+    "chemi_amos_analytical_qc_keyset_pagination",
+    "chemi_amos_analytical_qc_keyset_pagination_bulk",
+    "chemi_amos_fact_sheet_keyset_pagination",
+    "chemi_amos_fact_sheet_keyset_pagination_bulk",
+    "chemi_amos_method_keyset_pagination",
+    "chemi_amos_method_keyset_pagination_bulk",
+    "chemi_amos_product_declaration_keyset_pagination",
+    "chemi_amos_product_declaration_keyset_pagination_bulk",
+    "chemi_amos_safety_data_sheet_keyset_pagination",
+    "chemi_amos_safety_data_sheet_keyset_pagination_bulk"
+  ],
   "captures": "dev/specmill-rebuild/artifacts/amos-keyset",
   "archive": "dev/specmill-rebuild/pending-amos-keyset.rds",
-  "verification": "All ten first-page and ten opaque-cursor second-page read-only production calls returned 200 JSON. Twenty frozen legacy manual/two-page cases captured exact results, attributes, warnings and requests. Released v0.1.27 operation cursor mode is rejected before generation. No local wrapper/helper workaround."
+  "verification": {
+    "captured_cases": 20,
+    "options_cases": 30,
+    "empty_continuation": 2,
+    "keyset_failure_cases": 160,
+    "keyset_safety_cases": 40,
+    "page_success_cases": 8,
+    "page_failure_cases": 64,
+    "actual_examples": 10,
+    "full_attributes": true,
+    "request_error_policy_honored": true,
+    "whole_client_freshness": true,
+    "source_archives_unchanged": true
+  },
+  "pull_request": "https://github.com/seanthimons/specmill/pull/151",
+  "media_pull_request": "https://github.com/seanthimons/specmill/pull/134",
+  "isolated_toolkit": {
+    "package": "specmill",
+    "version": "0.1.28",
+    "source_commit": "c5df6a9f61b1bd24e8261a32cc6b93b5ca29122a",
+    "source_archive_sha256": "1287e3a4b2f9fd7fb3dca8f7c8230a0e4d80cd85c29d1b2de4c8081e8c9d05cf",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "policy": "Explicit cursor, next/completed/items functions, partial request errors with default hard client/credential errors, metadata:false and stop_on_empty:false. Client projections preserve manual GET query attribution, manual POST absence of query attribution, original final warnings and complete body/filter/sort inputs.",
+  "validation_scope": "Whole-client check with validation=TRUE passes selected operations; raw source reports and unrelated findings remain visible. No global clean-schema assertion, archive rewrite, helper patch or production development pin."
 }
