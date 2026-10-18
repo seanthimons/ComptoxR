@@ -115,3 +115,9 @@ amos_identifier_body <- function(operation) {
     stats::setNames(base::list(params[[FIELD]]), FIELD), SCHEMA),
     list(FIELD = field, SCHEMA = operation$schema_body))
 }
+
+ toxprint_chemicals <- function(operation) quote(lapply(params[["query"]], function(id) base::list(sid = id)))
+toxprint_response <- function(operation) quote(function(response, context, decode) {
+    context$query <- params[["query"]]
+    .ct_chemi_tidy(response, context, decode)
+})

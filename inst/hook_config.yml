@@ -732,3 +732,6 @@ chemi_amos_list_sources_by_record_type:
 
 chemi_resolver_ghs_list_count:
   bespoke_test: "tests/testthat/test-native_resolver_bodyless.R"
+
+chemi_toxprint:
+  bespoke_test: "tests/testthat/test-native_toxprint.R"

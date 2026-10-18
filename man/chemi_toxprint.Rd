@@ -16,7 +16,7 @@ chemi_toxprint(query, odds_ratio = 3L, p_val = 0.05, true_pos = 3)
 \item{true_pos}{numeric}
 }
 \value{
-A dataframe
+A dataframe.
 }
 \description{
 ToxPrint Chemotyper

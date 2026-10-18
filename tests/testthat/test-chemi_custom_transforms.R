@@ -11,7 +11,7 @@ custom_safety_json <- '{"swr":[{"section":{"Section":[{"TOCHeading":"Hazards","I
 test_that('ToxPrint keeps ordered NULL options, defaults, falsy values and helper visibility', {
   call <- NULL
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       call <<- list(...)
       invisible(list(score = 0, flag = FALSE))
     },
@@ -22,12 +22,12 @@ test_that('ToxPrint keeps ordered NULL options, defaults, falsy values and helpe
   expect_false(value$visible)
   expect_identical(value$value, list(score = 0, flag = FALSE))
   expect_identical(
-    call,
-    list(query = 'one', endpoint = 'toxprints/calculate', options = list(OR = 3L, PV1 = .05, TP = 3))
+    call$body,
+    list(chemicals = list(list(sid = 'one')), options = list(OR = 3L, PV1 = .05, TP = 3))
   )
   for (x in list(NULL, FALSE, 0, list(), 'unknown')) {
-    chemi_toxprint(x, odds_ratio = x, p_val = x, true_pos = x)
-    expect_identical(call, list(query = x, endpoint = 'toxprints/calculate', options = list(OR = x, PV1 = x, TP = x)))
+    chemi_toxprint('one', odds_ratio = x, p_val = x, true_pos = x)
+    expect_identical(call$body$options, list(OR = x, PV1 = x, TP = x))
   }
   expect_error(chemi_toxprint(), 'argument "query" is missing', fixed = TRUE)
 })
@@ -48,7 +48,7 @@ test_that('ToxPrint rejects queries before forcing options and propagates helper
     expect_error(eval(as.call(c(list(as.name('chemi_toxprint')), args))),
       'argument "query" is missing', fixed = TRUE)
   }
-  local_mocked_bindings(generic_chemi_request = function(...) stop('transport sentinel'), .package = 'ComptoxR')
+  local_mocked_bindings(.ct_request = function(...) stop('transport sentinel'), .package = 'ComptoxR')
   expect_error(chemi_toxprint('one'), 'transport sentinel', fixed = TRUE)
 })
 
@@ -208,9 +208,9 @@ test_that('ToxPrint freezes formals, option forcing order, warnings and response
   forced <- character()
   mark <- function(name, value) { forced <<- c(forced, name); value }
   response <- structure(list(flag = FALSE, count = 0, absent = NULL), class = 'original_toxprint')
-  local_mocked_bindings(generic_chemi_request = function(query, endpoint, options) {
-    force(query)
-    expect_identical(options, list(OR = NULL, PV1 = FALSE, TP = 0))
+  local_mocked_bindings(.ct_request = function(...) {
+    call <- list(...)
+    expect_identical(call$body$options, list(OR = NULL, PV1 = FALSE, TP = 0))
     warning('helper warning')
     invisible(response)
   }, .package = 'ComptoxR')

@@ -1261,3 +1261,25 @@ The legacy test inventory now explicitly recognizes `.ct_request` and selects
 replacement suites for the eleven reviewed missing generated test paths. No
 missing suite is ignored and no manifest ownership entry is manually purged.
 Specmill #152/PR153 provides explicit ownership retirement after release.
+
+## Native reviewed JSON toxprint, 18 October 2026
+
+Specmill v0.1.30, released source
+`f4efdbcf23f879553e5de50325d637ab46625ed3`, now generates `chemi_toxprint`
+for POST `/api/toxprints/calculate`. The reviewed JSON subset excludes `files[]`
+and `request`, normalizes query before eager option capture, and forwards final
+helper visibility. It has no hooks, batching or pagination. The client formatter
+retains the existing `dtxsid`/`query_id` projections; no upload behavior is claimed.
+
+Thirty-five actual localhost comparisons preserve exact original request bytes,
+method/path/headers, decoded results and visibility for named/positional calls,
+normalization, UTF-8 and original NULL/FALSE/zero/nested options. Empty queries
+fail before option expressions are forced or HTTP occurs. Invisible helper
+NULL/FALSE/zero/nested returns propagate unchanged. The native and existing
+ToxPrint contract suites pass 356 assertions; documentation signatures and legacy
+test freshness pass. Schemas and both transport helpers are byte-identical.
+
+The old existing owned helper-only contract is explicitly retired through
+`specmill::apply_files()` after selection of its native replacement suite.
+Missing historical ownership entries remain for the separately released #152 fix.
+No live service POST or full package test run is claimed. No ComptoxR push.
