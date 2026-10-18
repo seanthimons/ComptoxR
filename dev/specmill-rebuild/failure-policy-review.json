@@ -49,7 +49,7 @@
     "comparisons": 107,
     "attributes_excluded": false,
     "verification": "Both true bulk POSTs, DTXCID GET, Classyfire, two list wrappers; single/multiple transport, all/partial HTTP failures, normalization, effective/session sizing, overrides, credential hard errors and final whole-client freshness pass.",
-    "real_http_policy_review": "Received-response mocks previously bypassed automatic httr2 errors. Retesting single/multiple HTTP failures with request error policy honored and removing unnecessary empty-response policy projections; prior transport/metadata evidence remains valid."
+    "real_http_policy_review": "PASS: all 107 cases rechecked with automatic httr2 HTTP error policy and sequential continuation honored. Single failed requests abort; non-error multi-request results retain exact values/attributes. No attributes excluded. Final whole-client freshness passes. Earlier mock-only HTTP claims superseded."
   },
   "successful_response_errors": {
     "status": "client_policy_adopted",
@@ -57,7 +57,7 @@
     "verification": "Actual malformed-JSON fan-out wrappers, direct decode and formatter errors, unchanged ordinary HTTP classification, normalization, Classyfire, empty failures and bodyless resolver tests pass."
   },
   "page_pagers": {
-    "status": "retained_failure_policy_release_pending",
+    "status": "isolated_pass_release_pending",
     "pull_request": "https://github.com/seanthimons/specmill/pull/151",
     "wrappers": [
       "chemi_chet_chemicals_counts",
@@ -66,6 +66,8 @@
       "chemi_resolver_classyfire"
     ],
     "released_metadata_policy": "0.1.28",
-    "gap": "Legacy httr2 request failures retain earlier successful pages; emitted page runner still defaults to hard stop. PR151 exposes an explicit partial policy for review."
+    "gap": "Legacy httr2 request failures retain earlier successful pages; emitted page runner still defaults to hard stop. PR151 exposes an explicit partial policy for review.",
+    "isolated_source": "c5df6a9f61b1bd24e8261a32cc6b93b5ca29122a",
+    "verification": "8 normal +64 failure/empty/parsing cases and final whole-client freshness pass on combined PR151/134; root wrappers remain retained."
   }
 }
