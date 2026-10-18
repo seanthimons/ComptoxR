@@ -23,6 +23,7 @@ check_hook_config <- function(root = '.') {
       }
     }
   }
+  list2env(wrappers, envir = hooks)
   result <- specmill::validate_hooks(config, wrappers, hooks)
   if (!result$valid) {
     stop(paste(result$errors, collapse = '\n'), call. = FALSE)

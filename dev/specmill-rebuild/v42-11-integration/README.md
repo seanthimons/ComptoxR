@@ -13,3 +13,9 @@ Initial root merge mistakes and incomplete retirement of unowned manual helper t
 The broad safe suite, package gate and public maintenance CLI check are in progress at this checkpoint. Results will be added separately; this checkpoint does not claim they passed. The package gate excludes tests/examples/vignettes/manual and relaxes optional Suggests. It checks the same runtime/metadata bytes; the source snapshot still contains the three now-retired tests, which are excluded by --no-tests. The final broad suite uses the current registered tests.
 
 Reproduce generation freshness with check.R after installing the pinned development toolkit. The public dev/generate_specmill.R entrypoint now loads every callback file declared by specmill.yml and requires full source validation. The existing GET-body interoperability warning remains visible.
+
+## Maintenance gates and review follow-up
+
+Both public maintenance entrypoints pass with pinned v42. Package gate: zero errors/warnings/notes, with the exclusions above. The existing GET-body interoperability warning and raw pre-override relative-server inventory diagnostics remain visible; all thirty selected source-validation reports pass and no generation change is proposed. The full broad safe suite is still running.
+
+Independent standards/spec review is recorded separately in REVIEW.md. The one discovered hook-validator integration gap is resolved in tooling, with unchanged runtime bodies and strict rejection self-checks. No generator feature is bypassed.
