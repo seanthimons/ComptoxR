@@ -25,8 +25,29 @@
   },
   "expected": "Single ordinary HTTP failure stays hard; multiple failures yield original plain tibble results/empty constructor and warnings.",
   "actual": "Current candidate drops single404/500, adds failed metadata, defaults all-failed to list and changes warning text.",
-  "credential_review": "Single401 hard in both; old multi-chunk401 dropped vs native hard abort. Not a request to weaken native credential errors.",
+  "credential_review": "Native401 remains hard as directed and bypasses warning/drop. Legacy multi-chunk401 dropping remains an explicit credential-policy difference, not a parity claim.",
   "reproduction": "Rscript dev/specmill-rebuild/verify-release32-line-failures.R /tmp/comptoxr-release32-verify",
   "production_wrapper_changed": false,
-  "comptoxr_push": false
+  "comptoxr_push": false,
+  "warning_combined": {
+    "status": "isolated_pass_release_pending",
+    "source_commit": "ba8c060fff8b9d1b647e4e70265f2546e4fc609e",
+    "source_archive_sha256": "4c9cb0b160670995fd79348a6bd541b7c69d41d5ab9926f980256a80d537fb90",
+    "verification": {
+      "prior_batch_cases": 107,
+      "exact_warning_strings": true,
+      "full_attributes_no_exclusions": true,
+      "real_localhost_line_failures": 56,
+      "real_localhost_line_successes": 126,
+      "native_credential_hard_cases": 6,
+      "credential_scope": "Native401 remains hard and bypasses formatter/drop. Legacy multi401 is explicitly not an equivalence claim.",
+      "malformed_success_body_hard_cases": 7,
+      "existing_error_classifier": ".ct_response_error; applied to list formatting errors in the reviewed client response policy.",
+      "whole_client_validation_freshness": true,
+      "production_pin_changed": false,
+      "production_wrapper_changed": false,
+      "comptoxr_push": false
+    },
+    "reproduction": "Rscript dev/specmill-rebuild/verify-combined-line-failures.R /tmp/comptoxr-line-warning-combined"
+  }
 }

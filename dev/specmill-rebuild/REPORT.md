@@ -1310,3 +1310,34 @@ recorded separately for credential-policy review, not as a request to weaken
 native hard errors. PR144/146 comments and complete evidence are linked from
 `pending-exact-search-lines.json`. No helper workaround or production wrapper
 change was made. Schemas and transport helpers are unchanged; no ComptoxR push.
+
+## Combined line and batch warning verification, 18 October 2026
+
+Validation-only Specmill source `ba8c060fff8b9d1b647e4e70265f2546e4fc609e`
+combines the released line fix with PR144 metadata opt-out and PR146 request-count
+and warning policies. Its independently archived source SHA256 is
+`4c9cb0b160670995fd79348a6bd541b7c69d41d5ab9926f980256a80d537fb90`.
+The production toolkit pin and wrappers are unchanged.
+
+All107 prior ordinary failure cases pass with exact warning strings and complete
+result attributes, without exclusions. The line wrapper additionally passes126
+actual localhost success comparisons and56 actual404/500 single/all/partial
+comparisons with exact wire bytes, result attributes and warning strings. Native
+401 remains hard without formatted warnings in six actual HTTP cases; the legacy
+multi401 behavior is explicitly not claimed equivalent. All seven selected
+wrappers keep malformed200 JSON hard. The two list-facade policies reuse the
+existing client error classifier for that last requirement.
+
+Reviewed client response policies attach structured status and endpoint fields to
+ordinary received HTTP errors. A client formatter uses CLI formatting to return
+the original complete warning string; transport errors return no warning, matching
+the old multiple-request behavior. No error-message parsing or transport helper
+patch is used. The line wrapper selects its empty tibble constructor and plain
+failure metadata, while existing list post-combine grouping remains intact.
+
+Whole-client validated generation and final official freshness pass on the exact
+combined source, with no schema edits. Configurations, callbacks, client functions
+and captured cases are archived under `warning_combined` in both pending batch
+and line RDS records. `verify-combined-line-failures.R` independently repeats the
+real HTTP line checks against a candidate checkout. These remain isolated,
+release-pending results; no full package test rerun or ComptoxR push.
