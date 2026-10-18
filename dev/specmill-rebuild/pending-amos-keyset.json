@@ -1,0 +1,9 @@
+{
+  "status": "retained_cursor_emitter_pending",
+  "issue": "https://github.com/seanthimons/specmill/issues/149",
+  "schema": "schema/chemi-amos-prod.json",
+  "wrappers": ["chemi_amos_analytical_qc_keyset_pagination", "chemi_amos_analytical_qc_keyset_pagination_bulk", "chemi_amos_fact_sheet_keyset_pagination", "chemi_amos_fact_sheet_keyset_pagination_bulk", "chemi_amos_method_keyset_pagination", "chemi_amos_method_keyset_pagination_bulk", "chemi_amos_product_declaration_keyset_pagination", "chemi_amos_product_declaration_keyset_pagination_bulk", "chemi_amos_safety_data_sheet_keyset_pagination", "chemi_amos_safety_data_sheet_keyset_pagination_bulk"],
+  "captures": "dev/specmill-rebuild/artifacts/amos-keyset",
+  "archive": "dev/specmill-rebuild/pending-amos-keyset.rds",
+  "verification": "All ten first-page and ten opaque-cursor second-page read-only production calls returned 200 JSON. Twenty frozen legacy manual/two-page cases captured exact results, attributes, warnings and requests. Released v0.1.27 operation cursor mode is rejected before generation. No local wrapper/helper workaround."
+}
