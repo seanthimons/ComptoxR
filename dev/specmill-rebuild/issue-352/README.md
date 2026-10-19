@@ -1,5 +1,30 @@
 # SID input trial for ComptoxR #352
 
+## Current branch verification, 19 October 2026
+
+The implementation was already integrated in `3a3fd61a`. Rechecked at
+`3b49067d530b905b8779eddad2476b0a1d4db019` with official Specmill 0.1.51.
+No wrapper, hook, schema, mapping, signature or runtime change was needed.
+
+- Four focused suites pass 245 assertions with zero failures, errors, warnings
+  or skips. See `current-tests.json` and `current-tests.rds`.
+- Public validated generation freshness passes all 34 selected sources with
+  zero operation diagnostics, mapping diagnostics or signature drift. All 660
+  owned outputs are unchanged and their hashes match. See
+  `current-generation.json` and `current-freshness.rds`. The existing OAS 3.1
+  GET-body interoperability warning remains unrelated to this POST operation.
+- Fresh actual-wrapper calls through the resolver pass on staging and
+  production. Benzyl chloride returns 100 lb/45.4 kg, disulfoton returns
+  1 lb/0.454 kg, and ethylene oxide is omitted. See `current-live.json`.
+
+The agreed interface is `chemi_safety_rqcodes(query = NULL)` with validated
+DTXSID vectors. No arguments still fail before HTTP. This resolves the input
+contract and migration work in #352. The resolver remains an availability
+dependency. No full package suite, installed-package replay or remote CI was
+rerun for this verification, and nothing was pushed or merged.
+
+## Original trial and integration evidence
+
 Worktree branch: `fix/352-sid-rqcodes`, based on `810d688f`.
 
 The generated `chemi_safety_rqcodes(query = NULL)` accepts a vector of DTXSIDs.
