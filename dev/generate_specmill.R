@@ -25,7 +25,7 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
     root = ".",
     config = "specmill.yml",
     callbacks = callbacks,
-    mode = "plan",
+    mode = if (mode == "check") "check" else "plan",
     artifacts = c("wrappers", "tests"),
     validation = TRUE
   )

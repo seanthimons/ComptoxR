@@ -113,6 +113,8 @@ request, pushes to `main` and `integration`, and manual dispatch.
 - Uses Air 0.11.0 in its own job, leaving legacy generation on Air 0.9.0.
 - Checks wrapper and test freshness, runs fixed contracts and client policy
   tests, and requires regeneration to leave no modified or untracked files.
+- Wrapper checks report local schema changes, added/removed endpoints, and
+  previously configured functions affected by removals before rejecting stale output.
 - Needs no API credentials or sibling repository checkout on the runner.
 
 ### `schema-check.yml`

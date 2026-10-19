@@ -27,6 +27,12 @@ Install the pinned toolkit and export its library as `R_LIBS` using the
 [development setup](../CONTRIBUTING.md#before-you-open-a-pr) before these commands.
 
 ```bash
+# Check local schemas and generated wrappers without rebuilding them
+Rscript dev/generate_specmill.R --check
+Rscript dev/generate_specmill.R --plan
+# After reviewing the plan, regenerate and record the new baseline
+Rscript dev/generate_specmill.R --apply
+
 # Regenerate offline generated wrapper contract tests
 Rscript dev/generate_tests.R --generate
 Rscript dev/generate_tests.R --check
@@ -53,6 +59,14 @@ Rscript dev/rerecord_cassettes.R --record-live --failures
 ```
 
 ## Generated Wrapper Tests
+
+The wrapper check reports changed schema hashes, added and removed endpoints,
+and previously configured functions affected by removals. Added endpoints outside
+reviewed selection are marked as not selected. This uses local schema files and
+the last applied manifest; it does not fetch schemas or call live APIs. Removed
+endpoints do not authorize deleting client functions. A manifest with only hashes
+needs one reviewed apply to record the endpoint inventory before endpoint diffs
+are available. Parameter and response compatibility still require review.
 
 `dev/generate_tests.R` is the only active generated-test entrypoint. It builds offline mocked contract tests from exported wrapper functions in `R/*.R` and `NAMESPACE`.
 
