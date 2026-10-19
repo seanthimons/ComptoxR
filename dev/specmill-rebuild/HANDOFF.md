@@ -12,6 +12,10 @@ Evidence is `released-v51/`. The initial root runner completed and saved freshne
 
 The **35** remaining canonical identities are **30 source contracts, four service contracts, one client contract #353**. Both AMOS XLSX endpoints remain user-deferred. The #186 ownership hold alone is removed; all other disposition rows remain unchanged. No other endpoint set has an evidence-backed contract ready for migration. Keep current implementations until source/service/client decisions are reviewed; do not silently repair behavior under migration #311. Progress is recorded in `progress.md/json` and `canonical-holds-audit/current-dispositions.json`. Local code/evidence commit `64943f52` closes this iteration. Per-schema PR345 progress comment: https://github.com/seanthimons/ComptoxR/pull/345#issuecomment-6259860322. Inspect actual HEAD/status; nothing was pushed. No root checks remain active after closure.
 
+## Dedicated remaining-contract trackers
+
+The user requested one dedicated ComptoxR issue per remaining blocker group. Created #354 for 11 AMOS source contracts, #355 for eight CheT GET bodies, #356 for 11 upload/metadata contracts, #357 for two deferred AMOS XLSX endpoints and #358 for two resolver service contracts. Existing #353 covers the Toxprints endpoint. Every issue lists affected schema/method/path identities and links prior Specmill dependencies; no duplicate upstream issue was opened. All 35 disposition rows link their dedicated tracker. Machine-readable index: `canonical-holds-audit/blocker-issues.json`. These are contract-decision trackers, not new generator implementation promises. Counts remain 513/548; implementations are unchanged. Issue index posted on PR345: https://github.com/seanthimons/ComptoxR/pull/345#issuecomment-6270665821.
+
 ## Historical v50 checkpoint
 
 Code commit `dbaafea2` adopts official Specmill 0.1.50 and the descriptor/PubChem clients. A following local commit records the final tests, ledgers and test-only corrections. Inspect actual HEAD/status. Nothing has been pushed, merged or released from ComptoxR. No new production requests are authorized or performed.
