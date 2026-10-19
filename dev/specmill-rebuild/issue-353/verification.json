@@ -1,0 +1,42 @@
+{
+  "toolkit": "official Specmill 0.1.51",
+  "public_formals": "query",
+  "canonical_schema_unchanged": true,
+  "GET_ownership_operation_unchanged": true,
+  "changed_owned_outputs": [
+    "R/chemi_toxprints.R",
+    "tests/testthat/test-contract-chemi_toxprints_bulk.R"
+  ],
+  "package_install": "passed",
+  "tests": {
+    "passed": 21,
+    "failed": 0,
+    "warnings": 0,
+    "skipped": 0
+  },
+  "live": "installed development/production: 2+1 chunks, cleanup, typed descriptor vectors; production DTXSID; development typed400 and partial result",
+  "localhost": "not used",
+  "progress": {
+    "migrated": 464,
+    "banned": 84,
+    "remaining": 0,
+    "total": 548
+  },
+  "full_package_check": "not run",
+  "freshness": "Final Rscript dev/generate_specmill.R --check passed after GET documentation update",
+  "response_contract": "Explicitly selected by user: one row per chemical, numeric descriptor vector list-column; preserve metadata in info list-column",
+  "GET_implementation_unchanged": true,
+  "GET_documentation_changed": true,
+  "GET_audit": {
+    "raw_controls": 6,
+    "installed_live_calls": 4,
+    "environments": [
+      "development",
+      "production"
+    ],
+    "headers": 729,
+    "profile": "toxprint_V2_0_r711",
+    "final_implementation_matches_installed": true,
+    "result": "existing generated request/response implementation is correct; documentation corrected"
+  }
+}

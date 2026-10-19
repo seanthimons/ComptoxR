@@ -26,7 +26,7 @@ chemi-safety-prod: 3/4 (1 banned; 0 remaining)
 chemi-search-prod: 14/14 (0 banned; 0 remaining)
 chemi-services-prod: 12/14 (2 banned; 0 remaining)
 chemi-stdizer-prod: 17/33 (16 banned; 0 remaining)
-chemi-toxprints-prod: 19/23 (3 banned; 1 remaining)
+chemi-toxprints-prod: 20/23 (3 banned; 0 remaining)
 chemi-webtest-prod: 9/9 (0 banned; 0 remaining)
 ctx-bioactivity-prod: 30/30 (0 banned; 0 remaining)
 ctx-chemical-prod: 55/55 (0 banned; 0 remaining)
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28 (0 banned; 0 remaining)
 epi-suite-prod: 14/14 (0 banned; 0 remaining)
 ```
 
-Total: 463/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 464/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.

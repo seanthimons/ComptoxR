@@ -1,11 +1,6 @@
 {
-  "commit": "019cff5043ee2b72c833112308cab0a74edfe597",
+  "commit": "e2efc04a96ba08f1479093c5465fd90749d77a4f",
   "legacy_callers": [
-    {
-      "wrapper": "chemi_toxprints_bulk",
-      "method": "POST",
-      "route": "toxprints"
-    },
     {
       "wrapper": "ct_related",
       "method": "GET",
@@ -168,10 +163,10 @@
     },
     {
       "schema": "chemi-toxprints-prod",
-      "migrated": 19,
+      "migrated": 20,
       "total": 23,
       "banned": 3,
-      "remaining": 1
+      "remaining": 0
     },
     {
       "schema": "chemi-webtest-prod",
@@ -2926,6 +2921,15 @@
       "wrapper": "chemi_toxprints_toxprints",
       "file": "R/chemi_toxprints_toxprints.R",
       "suite": "tests/testthat/test-contract-chemi_toxprints_toxprints.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-toxprints-prod.json",
+      "binding_schema": "schema/chemi-toxprints-prod.json",
+      "operation": "POST /api/toxprints",
+      "wrapper": "chemi_toxprints_bulk",
+      "file": "R/chemi_toxprints.R",
+      "suite": "tests/testthat/test-toxprints_bulk.R",
       "migrated": true
     },
     {

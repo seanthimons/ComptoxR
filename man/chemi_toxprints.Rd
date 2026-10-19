@@ -7,21 +7,23 @@
 chemi_toxprints(smiles, headers = FALSE, profile = NULL)
 }
 \arguments{
-\item{smiles}{smiles}
+\item{smiles}{One SMILES string. DTXSID acceptance depends on the service deployment.}
 
-\item{headers}{headers}
+\item{headers}{Include descriptor names in the response; defaults to FALSE.}
 
-\item{profile}{profile}
+\item{profile}{Optional profile name; NULL uses the service default.}
 }
 \value{
-Returns a list of results
+A list containing the API response envelope with service metadata, chemicals and optional descriptor headers.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Calculates ToxPrint descriptors for one structure and preserves the API response envelope. Use chemi_toxprints_bulk for a row-per-chemical table.
 }
 \examples{
 \dontrun{
-chemi_toxprints(smiles = "DTXSID7020182")
+chemi_toxprints(smiles = "CCO")
 }
 }
 \section{API stage}{

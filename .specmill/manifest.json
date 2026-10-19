@@ -1148,7 +1148,7 @@
       "operations": "chemi-toxprint-prod-rebuild POST /api/toxprints/calculate"
     },
     "R/chemi_toxprints.R": {
-      "hash": "e67749181952bbba0d0197d439205218bb54debe8818aeb1e33f8a48cdee5785",
+      "hash": "910fd45882e0b7b4b2d432d07cff7ef50910a3e10306baddf0cf737d33ec5dcb",
       "operations": ["chemi-toxprints-prod-rebuild GET /api/toxprints", "chemi-toxprints-prod-rebuild POST /api/toxprints"]
     },
     "R/chemi_toxprints_assays.R": {
@@ -2151,10 +2151,6 @@
       "hash": "63927f82da13905d3009e7d9de2df42edae1efbce861aa689e7f65006e4de643",
       "operations": "chemi-toxprints-prod-rebuild GET /api/toxprints/assays/check"
     },
-    "tests/testthat/test-contract-chemi_toxprints_bulk.R": {
-      "hash": "a0aab0a6bd6459852e4e01732048c1d220234b40909390b8744201e6daf67f47",
-      "operations": "chemi-toxprints-prod-rebuild POST /api/toxprints"
-    },
     "tests/testthat/test-contract-chemi_toxprints_enrichments.R": {
       "hash": "f4c071bcbe5c63bf3cfbbdc457995163f43e94cb2c01e2e5e4b62e02a07ed91a",
       "operations": "chemi-toxprints-prod-full GET /api/toxprints/enrichments"
@@ -3002,7 +2998,7 @@
     "R/chemi_stdizer_version.R": "18ab4e59beed3ef8ac67d9b3d9218d4717912aa8fe4915ce51f8aaf74aa25e96",
     "R/chemi_stdizer_workflows.R": "7a08f8d504b581ed709620e31d9c72b69fa935fc8abc0163f2e011f9bbc0085d",
     "R/chemi_toxprint.R": "b53403a1920d47b862a294dda8b744275363d23e0543207ac5312181f8bbcb27",
-    "R/chemi_toxprints.R": "e67749181952bbba0d0197d439205218bb54debe8818aeb1e33f8a48cdee5785",
+    "R/chemi_toxprints.R": "910fd45882e0b7b4b2d432d07cff7ef50910a3e10306baddf0cf737d33ec5dcb",
     "R/chemi_toxprints_assays.R": "6933801f3a9685ac9bbb70ab9b995cdc27c5fac22ce0b5ad9451b34246336fe4",
     "R/chemi_toxprints_assays_by_name.R": "cdd1ad2aa502795c830fccfe2c41d0019b8b1ca053e276f882c722b83196e84d",
     "R/chemi_toxprints_assays_check.R": "a9ee3dd523d0c94ac3d8ae904f18e8b7aaa430e4bdfeb190371f532dca2cafde",
@@ -3258,7 +3254,7 @@
     "apis/chemi-stdizer-unbound.yml": "5b11a866cd03c9bc41b9ea97ea502718273afe471b13ad4d30336a8d2a5f1640",
     "apis/chemi-toxprint-prod-rebuild.yml": "a5245e2e2162fa79e4c4ed97725e8458d7b02e51a7e83595f2fd9eb5e5d54022",
     "apis/chemi-toxprints-prod-full.yml": "5fbc59451675b0ef94a35718f9698d99cc7b1b98cf74862c318acf4ed330a434",
-    "apis/chemi-toxprints-prod-rebuild.yml": "821e3dba033833ec7a303981b1e231956c17fb8211438edc973e5a54a4267535",
+    "apis/chemi-toxprints-prod-rebuild.yml": "f4a68b1df06b352d52e70d35154643c7ae5e9fd5deca8a2489a24910a1671c18",
     "apis/chemi-webtest-exports.yml": "d513574529fb59b12fd12075d8d6afd687ab414fbc467d6f2d9cc0b907452c0d",
     "apis/chemi-webtest-prod-rebuild.yml": "f9f1aac4f1b0fca5b5d7201a2f5399bf1505408599888091ad9c10d0768b5dfa",
     "apis/ctx-bioactivity-prod-rebuild.yml": "0bcd9d35ef9dd134d9148472027220d96449c1fd24528e1b750f89300dd6e2f7",
@@ -3290,12 +3286,12 @@
     "dev/specmill-rebuild/released-facades-v42/callbacks.R": "a0b57fc327d0e7a075ca1d77cb14faf6d998172a304464c67015d1e82f0aae9d",
     "dev/specmill-rebuild/remaining-facades/callbacks.R": "7ef49143d04265a41fbbc5eb96c255a043fc4fc35a6352ad9e4118a9c481d41f",
     "dev/specmill-rebuild/rootheldrelease/callbacks.R": "79d6d1aa570944af649cde36429069c6aa8d3970979bdb8be2167c0e8f87907a",
-    "dev/specmill_callbacks.R": "add7cf1d4a3437b6385e19fca0d0609f6802504b0189131cf4761af09bc62217",
+    "dev/specmill_callbacks.R": "6dc05e809db423f2ff5340bf633eaec51478f0fc669175d11b3758dc7f91df77",
     "dev/specmill_pubchem_callbacks.R": "5a2f97f019896740ddccd254c079960048bee3c62b9db8883a6851007ba225a2",
     "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
-    "inst/hook_config.yml": "a1120ac6cee40181272bc783f09a7c0e6798a4c71dbfdf9dead531264d624cfc",
+    "inst/hook_config.yml": "5bbe1612671b0526d6e582e6e7c89fee227270ee838b810823f215f26220ee58",
     "inst/hook_config_generated.yml": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "inst/plumber/ctx/plumber.R": "40fa4dcaf1112fd0bdafd84816589f45931de5f6d34bd052bdabc0cd553a8504",
     "inst/plumber/ecotox/plumber.R": "f596a01091c3ce57c21b711edd306d6454fa7ff35e3fc202d61de1092022af2e",
@@ -3596,12 +3592,12 @@
     "man/chemi_stdizer_version.Rd": "cac06aa8d952fc81a8998a0787935d26c77d3b2c7cab6befe24a411bb5b52458",
     "man/chemi_stdizer_workflows.Rd": "80c0cd6554a8a2dae8de5d6a9b6ad4d8901977c33480a2990b92e1fcc13f79bc",
     "man/chemi_toxprint.Rd": "593747dfda0dd71699f858037c9687176e8b22cc02637b8b6e414e3253889913",
-    "man/chemi_toxprints.Rd": "ecc96b3d286e4375e600e5077fb6db6cc5c58a8e5bd9c92ae0d11c0e83d4d7b8",
+    "man/chemi_toxprints.Rd": "2f8d9b0471f3540e1cb1f4ecdfd74da2937878f36bbb515666c2bb3f8ff8fc65",
     "man/chemi_toxprints_assays.Rd": "b1c98f48390ed8f2fa876f2bce1a4dce350e5373e80ece44d92bdeecf7e3e314",
     "man/chemi_toxprints_assays_bulk.Rd": "c603a1cdce89f5ce302b51c501654816e81528ea73800c7e1a68de68649c8ca3",
     "man/chemi_toxprints_assays_by_name.Rd": "3fbb9affeb522e936292c6f88a9f65732482c20ebcbbfa0cbe06199add056a4f",
     "man/chemi_toxprints_assays_check.Rd": "72333f2481780bde4fde934938fd69f7cb5850e0a5e53b7d484462a7ff93e3ea",
-    "man/chemi_toxprints_bulk.Rd": "b88824e97715b6d4ca4bfcdb4c693df3e316c6eb65d8be04210872676db47f72",
+    "man/chemi_toxprints_bulk.Rd": "37004001176b8effe5cb40b87a931a989a9a9c1479119fda04256ba727cc769a",
     "man/chemi_toxprints_calculate.Rd": "dce42eebc53aaf4b6754c0e5a95b041f2a5946f54acf1934f9b28fb42d98e9f0",
     "man/chemi_toxprints_calculate_bulk.Rd": "2d30d3d82ed03d6dad39d8956bf5059bce22ea3bbc51af8785c6e8abe98a09a6",
     "man/chemi_toxprints_chemicals_categories.Rd": "82af374d5cec81db57bc24c78ec90bca974d6ec2f3fb537d8d7e61bd734a8dde",
@@ -3915,9 +3911,9 @@
     "specmill.yml": "f020dc5566fa79ce6b1a0ab0cdd9cf9d25541d6b996cc889fb1b16117c8a47f1",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "f7960566d986fd1a6520eac1973dbf1a2279af9f3e14094464a2b13f4ed90936",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "a45adf4f0c751a35de59bd918174103fd227f1ee440d558cae756f94e629e1a5",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "3cba49e756619b493ce8fce6c0698d688aeb3313f7a152646de75dc7fa1249df"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "6ec1fc8f2a54b3de7bb5d700128ac78cb4ab8c9ed93f0e8a82ad7b16ad5be022"
   },
-  "callbacks": "74e66def282e7fd154920a51da21516cb5d65401611790f360d0e2cec1d38805",
+  "callbacks": "267604cfb0f6981e8e58b008a14e3c5111a961ff2bf1f3b10a1a998511496cdd",
   "formatter": {
     "name": "air",
     "version": "0.11.0"

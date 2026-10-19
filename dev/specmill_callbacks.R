@@ -327,3 +327,28 @@ similarity_list_body <- function(operation) {
     `_chemicals` = params[["candidate_chemicals"]]), Filter(Negate(is.null), OPTIONS)),
     list(OPTIONS = values))
 }
+
+# Canonical ToxPrint bulk body, validated after each client-side input chunk.
+toxprints_canonical_body <- function(operation) {
+  substitute(.api_validation$body_value(
+    base::list(chemicals = base::as.list(params$query)), SCHEMA),
+    list(SCHEMA = operation$schema_body))
+}
+
+# Keep descriptor vectors intact instead of the legacy semicolon flattening.
+toxprints_bulk_response <- function(operation) quote(function(response, context, decode) {
+  observe_api_responses(list(response))
+  body <- decode()
+  records <- .ct_request_records(body, collection = 'chemicals', null_to_na = TRUE)
+  records <- lapply(records, function(record) {
+    record$info <- body$info
+    record
+  })
+  .ct_request_table(records, build = function(records, ...) {
+    purrr::list_rbind(lapply(records, function(record) {
+      record$descriptors <- list(unlist(record$descriptors, use.names = FALSE))
+      record$info <- list(record$info)
+      tibble::as_tibble(record)
+    }))
+  })
+})

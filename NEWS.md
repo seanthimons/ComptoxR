@@ -4,6 +4,11 @@
 
 ## Unreleased
 
+- Rebuild `chemi_toxprints_bulk(query)` with Specmill against the canonical
+  Cheminformatics object request, without CTX authentication. Preserve input
+  cleanup and environment-controlled chunks. Results have one row per chemical,
+  with numeric descriptor vectors retained in a list-column (#353).
+
 - Rebuild `chemi_resolver_getsimilaritylist` with Specmill. `main` is one reference
   identifier and `query` is the candidate set; both resolve separately. Explicit
   Indigo/Tanimoto defaults and the verified `_chemicals` request replace the

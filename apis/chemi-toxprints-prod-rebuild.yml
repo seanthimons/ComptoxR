@@ -29,9 +29,16 @@ operations:
     docs:
       title: Toxprints
       lifecycle: experimental
-      return: Returns a list of results
+      return: A list containing the API response envelope with service metadata,
+        chemicals and optional descriptor headers.
+      description: Calculates ToxPrint descriptors for one structure and preserves
+        the API response envelope. Use chemi_toxprints_bulk for a row-per-chemical table.
+      parameters:
+        smiles: One SMILES string. DTXSID acceptance depends on the service deployment.
+        headers: Include descriptor names in the response; defaults to FALSE.
+        profile: Optional profile name; NULL uses the service default.
       examples:
-      - smiles: DTXSID7020182
+      - smiles: CCO
       tags:
         apiStage: public
   GET /api/toxprints/assays:
@@ -122,35 +129,74 @@ operations:
   POST /api/toxprints:
     name: chemi_toxprints_bulk
     file: R/chemi_toxprints.R
-    helper: generic_request
+    helper: .ct_request
     implementation: generated
     inputs:
       query:
-        type: character
+        type: any
         required: yes
         description: Character vector of strings to send in request body
     request:
       arguments:
-        query:
-          from:
-          - params
-          - query
-        endpoint:
-          value: toxprints
         method:
           value: POST
-        batch_limit:
-          callback: detail_batch_limit
+        path:
+          value: /api/toxprints
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: toxprints_canonical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: toxprints_bulk_response
+        request_controls:
+          value:
+            preserve_errors: yes
     docs:
       title: Toxprints
       lifecycle: experimental
       parameters:
-        query: Character vector of strings to send in request body
-      return: Returns a list with result object
+        query: Character vector of chemical structure strings. SMILES work in production
+          and development; DTXSID support depends on the service deployment.
+      return: One row per chemical, with descriptor vectors and service metadata
+        retained in descriptors and info list-columns.
       examples:
-      - query: DTXSID1024122
+      - query: CCO
       tags:
         apiStage: public
+      description: Calculates ToxPrint descriptors using the Cheminformatics service
+        without CTX authentication. Inputs are cleaned and split by batch_limit, default
+        100.
+    normalize_inputs:
+      query: .ct_legacy_query
+    batch:
+      input: query
+      split: yes
+      max_items:
+        env: batch_limit
+        default: 100
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
+      empty: .ct_empty_table
+    request_controls:
+      preserve_errors: yes
   POST /api/toxprints/assays:
     name: chemi_toxprints_assays_bulk
     file: R/chemi_toxprints_assays.R

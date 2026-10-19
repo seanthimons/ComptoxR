@@ -1277,3 +1277,6 @@ pubchem_search:
 
 pubchem_synonyms:
   bespoke_test: tests/testthat/test-pubchem_retained_http.R
+
+chemi_toxprints_bulk:
+  bespoke_test: "tests/testthat/test-toxprints_bulk.R"
