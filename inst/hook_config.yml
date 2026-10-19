@@ -1376,3 +1376,6 @@ chemi_webtest_predict_export:
 
 chemi_stdizer_groups_preflight_post:
   bespoke_test: tests/testthat/test-native_stdizer_preflight.R
+
+chemi_stdizer_protocols_by_id_post:
+  bespoke_test: tests/testthat/test-native_stdizer_protocol_search.R

@@ -1,11 +1,11 @@
 {
-  "root_parent_commit": "e6cf6cd190bc0a2350f5fbee811c90df2aeaceb4",
+  "root_parent_commit": "8dd6e513",
   "canonical_total": 548,
-  "migrated": 499,
-  "remaining_identities": 49,
+  "migrated": 500,
+  "remaining_identities": 48,
   "disposition_counts": {
-    "source_contract_hold": 32,
-    "release_gate": 9,
+    "source_contract_hold": 30,
+    "release_gate": 10,
     "service_contract_hold": 3,
     "ownership_route_hold": 3,
     "service_contract_and_release_hold": 1,
@@ -966,34 +966,17 @@
       "operation_id": "protocolGet",
       "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/get",
       "operation_sha256": "c955d9a3c4c5a9cb48ffc12e22211a2d553b72ebc9d790051d5500d344873106",
-      "disposition": "source_contract_hold",
-      "blocker": "Required nested Pageable contains sort array with no encoding. Frontend POST demonstrates page/size only, not sort absent/empty/multiple/delimiters or GET behavior. GET also has unreleased scalar boolean fix.",
+      "disposition": "release_gate",
+      "blocker": "Route-specific paging/sort reads now establish the reviewed source correction. Root remains on v0.1.42; scalar query booleans require verified v0.1.45 adoption and independent native wire replay.",
       "links": [
         "https://github.com/seanthimons/specmill/issues/31#issuecomment-6253987684",
         "https://github.com/seanthimons/specmill/issues/177"
       ],
       "evidence": [
-        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json",
+        "dev/specmill-rebuild/canonical-holds-audit/protocol-paging-recheck/service-proof.json"
       ],
-      "next_step": "Obtain complete route-specific paging contract; do not extrapolate Spring conventions or drop sort validation.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-stdizer-prod.json",
-      "operation": "POST /api/stdizer/protocols/{id}",
-      "operation_id": "protocolPost",
-      "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/post",
-      "operation_sha256": "6643252b7de9b6a1fc0efb58afcd579483ebe24ea9d4878b6eddc4a1ba7e2df6",
-      "disposition": "source_contract_hold",
-      "blocker": "Required nested Pageable contains sort array with no encoding. Frontend POST demonstrates page/size only, not sort absent/empty/multiple/delimiters or GET behavior. GET also has unreleased scalar boolean fix.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/31#issuecomment-6253987684",
-        "https://github.com/seanthimons/specmill/issues/177"
-      ],
-      "evidence": [
-        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
-      ],
-      "next_step": "Obtain complete route-specific paging contract; do not extrapolate Spring conventions or drop sort validation.",
+      "next_step": "Adopt released v0.1.45, derive the GET source with exact provenance, and verify booleans plus paging on the generated wrapper.",
       "existing_public_wrappers": []
     },
     {

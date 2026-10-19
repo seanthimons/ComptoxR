@@ -1,5 +1,5 @@
 {
-  "commit": "e6cf6cd190bc0a2350f5fbee811c90df2aeaceb4",
+  "commit": "8dd6e513d54bd4d54278874dee4063ab87e5f846",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -182,9 +182,9 @@
     },
     {
       "schema": "chemi-stdizer-prod",
-      "migrated": 26,
+      "migrated": 27,
       "total": 33,
-      "remaining": 7
+      "remaining": 6
     },
     {
       "schema": "chemi-toxprints-prod",
@@ -4737,6 +4737,15 @@
       "wrapper": "chemi_stdizer_groups_preflight_post",
       "file": "R/chemi_stdizer_groups_preflight_post.R",
       "suite": "tests/testthat/test-native_stdizer_preflight.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "binding_schema": "schema/chemi-stdizer-reviewed-protocol-search.json",
+      "operation": "POST /api/stdizer/protocols/{id}",
+      "wrapper": "chemi_stdizer_protocols_by_id_post",
+      "file": "R/chemi_stdizer_protocols_by_id_post.R",
+      "suite": "tests/testthat/test-native_stdizer_protocol_search.R",
       "migrated": true
     }
   ]

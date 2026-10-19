@@ -1,0 +1,15 @@
+{
+  "cases": 24,
+  "assertions": 44,
+  "all_statuses": 200,
+  "read_only": true,
+  "mutations": false,
+  "protocol_selection": "Service-returned protocol with 3..10 records; no assumed id",
+  "semantics": [
+    "optional paging",
+    "page0 and page1 with size1",
+    "sort id descending",
+    "repeated sort type asc then id desc",
+    "empty sort string retains baseline"
+  ]
+}

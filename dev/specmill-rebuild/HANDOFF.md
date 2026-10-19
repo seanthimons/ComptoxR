@@ -1,10 +1,10 @@
 # Resume the full Specmill API migration
 
-Updated 18 October 2026. Branch feat/specmill-migration-pilot, PR345. Local commits authorized; no ComptoxR push/merge/release. Inspect actual HEAD/status first.
+Updated 19 October 2026. Branch feat/specmill-migration-pilot, PR345. Local commits authorized; no ComptoxR push/merge/release. Inspect actual HEAD/status first.
 
 ## Current root state
 
-Committed checkpoint 499/548. Endpoint addition b53685bd, hook discovery e6cf6cd1, and CI/public-artifact checks a7986f98 are committed locally. Root uses official Specmill 0.1.42, source b17a0856263e0179a164a9673399f221168cda6d, versioned private library dev/specmill-pilot/artifacts/toolkit-library/0.1.42. All generation is wrappers/tests scope with validationTRUE, official helper scaffold. No runtime helper/executor/generic_request patches.
+Current checkpoint 500/548. New protocol POST passes source56 + installed56 assertions and12 deployed reads; all706 owners and32 selected-source validations/freshness pass. Evidence canonical-holds-audit/protocol-paging-recheck. Current48-identity dispositions:30 source,10 release,3 service,3 ownership,1 combined,1 generator. The preceding499 broad suite remains qualified to its snapshot. Endpoint addition b53685bd, hook discovery e6cf6cd1, and CI/public-artifact checks a7986f98 are committed locally. Root uses official Specmill 0.1.42, source b17a0856263e0179a164a9673399f221168cda6d, versioned private library dev/specmill-pilot/artifacts/toolkit-library/0.1.42. All generation is wrappers/tests scope with validationTRUE, official helper scaffold. No runtime helper/executor/generic_request patches.
 
 Latest iteration adds reviewed standardizer POST /api/stdizer/groups/preflight from audit655886bc. Import script has ALREADY run; do not rerun it. New native R file is officially emitted, all 705 ownership hashes match and all 704 preceding owner records are unchanged. New schema/provenance/config/export/Rd/registered test are present. Current production api-docs retrieval is parsed-identical to canonical; canonical raw bytes unchanged. Public freshness/all31 source reports pass; progress and current49-identity dispositions are regenerated.
 
@@ -32,7 +32,7 @@ Review: Standards 0 findings; Spec 1 P2 hook-discovery finding resolved. dev/che
 
 ## Holds and released-only adoption
 
-Official v43 and v44 verified available, root remains42 because current mappings require42 and inputs were kept stable during gates. v44 source 496c91e1eb7365f8f73f9c063f6c78b0c98aa1ee, tarSHA7fdc088cbd3660fab74a7da2c22b67293601dfb0c5fbaf3fc4b93bbb9ee7e478 releases 172 ownership reconciliation. PR176 release is next per overwatch, not yet verified here.
+Official v43 and v44 verified available, root remains42 because current mappings require42 and inputs were kept stable during gates. v44 source 496c91e1eb7365f8f73f9c063f6c78b0c98aa1ee, tarSHA7fdc088cbd3660fab74a7da2c22b67293601dfb0c5fbaf3fc4b93bbb9ee7e478 releases 172 ownership reconciliation. Official v0.1.45 has been released per overwatch; independent verification is in progress in a child, and root adoption is next. Source f686717052b7636775ce1ccca2080056c32f69f0, official archive SHA7f1a2b896caa04a37cdccb71f80f0af45f4c99972f975ed444bdab448188354a. Root remains42 during this checkpoint.
 
 Private proofs, all held for official release/pin:
 - PR176 exact a656ce446fd2f4fe28184e3cad69da02e209ef26, proof 13801f14: five actual boolean routes/shared throttle, 210 groups/65localhost requests PASS, root dev/specmill-pr176-proof.

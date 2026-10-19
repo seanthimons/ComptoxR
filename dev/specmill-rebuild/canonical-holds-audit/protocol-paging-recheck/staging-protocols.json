@@ -1,0 +1,85 @@
+{
+  "url": "https://cim.sciencedataexperts.com/api/stdizer/protocols",
+  "method": "GET",
+  "time_utc": "2026-10-18T22:30:14.071843+00:00",
+  "status": 200,
+  "media": "application/json;charset=UTF-8",
+  "body": [
+    {
+      "id": "662f17e069e4b21f67fe8422",
+      "options": {
+        "workflow": "qsar-ready_08232023",
+        "run": "dsstox-qsar-ready",
+        "recordId": "",
+        "resolve": true
+      },
+      "status": "SUCCEEDED",
+      "exception": "java.lang.NullPointerException",
+      "name": "dsstox-qsar-ready",
+      "recordsNumber": 1225630,
+      "hiddenNumber": 101065,
+      "componentsNumber": 112111,
+      "changedNumber": 227921,
+      "passedNumber": 1100872,
+      "failedNumber": 13904,
+      "filteredNumber": 0,
+      "records": []
+    },
+    {
+      "id": "6a0f55cef089ac5e5e3a0d61",
+      "options": {
+        "workflow": "qsar-ready",
+        "run": "myrunID1",
+        "recordId": "dtxsid",
+        "resolve": true
+      },
+      "status": "SUCCEEDED",
+      "name": "myrunID1",
+      "recordsNumber": 2,
+      "hiddenNumber": 1,
+      "componentsNumber": 1,
+      "changedNumber": 1,
+      "passedNumber": 1,
+      "failedNumber": 0,
+      "filteredNumber": 0,
+      "records": []
+    },
+    {
+      "id": "6a0f64e78b3b075871b2f8ab",
+      "options": {
+        "workflow": "qsar-ready",
+        "run": "myrunID001",
+        "recordId": "dtxsid",
+        "resolve": true
+      },
+      "status": "SUCCEEDED",
+      "name": "myrunID001",
+      "recordsNumber": 4,
+      "hiddenNumber": 2,
+      "componentsNumber": 2,
+      "changedNumber": 2,
+      "passedNumber": 2,
+      "failedNumber": 0,
+      "filteredNumber": 0,
+      "records": []
+    },
+    {
+      "id": "6a11b51f808a800817a91161",
+      "options": {
+        "workflow": "qsar-ready",
+        "run": "myrun",
+        "resolve": true
+      },
+      "status": "SUCCEEDED",
+      "name": "myrun",
+      "recordsNumber": 2,
+      "hiddenNumber": 1,
+      "componentsNumber": 1,
+      "changedNumber": 1,
+      "passedNumber": 1,
+      "failedNumber": 0,
+      "filteredNumber": 0,
+      "records": []
+    }
+  ]
+}
