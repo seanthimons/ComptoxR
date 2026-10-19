@@ -9,8 +9,6 @@ selection:
   include:
   - POST /api/alerts/export
   - POST /api/alerts/export-append
-  - DELETE /api/alerts/groups/{id}
-  - PUT /api/alerts/groups/{id}
   - GET /api/alerts/render
   - GET /api/hazard/download
   - POST /api/hazard/report/export
@@ -19,14 +17,8 @@ selection:
   - GET /api/hazard/reports
   - POST /api/hazard/reports
   - GET /api/hazard/reports/check
-  - DELETE /api/hazard/reports/{id}
   - GET /api/hazard/reports/{id}
-  - PUT /api/hazard/reports/{id}
-  - PUT /api/hazard/reports/{id}/acl
   - POST /api/hazard/reports/{id}/export
-  - DELETE /api/toxprints/assays/{id}
-  - PUT /api/toxprints/assays/{id}
-  - PUT /api/toxprints/assays/{id}/acl
   - GET /api/toxprints/download
   - POST /api/toxprints/export
   - POST /api/toxprints/export_global
@@ -59,36 +51,6 @@ operations:
       key: chemi_burl
     docs:
       title: Append alerts results to an uploaded report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  DELETE /api/alerts/groups/{id}:
-    name: chemi_alerts_groups_delete_by_id
-    file: R/chemi_alerts_groups_delete_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Delete an alerts group
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/alerts/groups/{id}:
-    name: chemi_alerts_groups_update_by_id
-    file: R/chemi_alerts_groups_update_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Update an alerts group
       lifecycle: experimental
       return: The decoded service response, preserving JSON structure, text or media
         bytes.
@@ -217,21 +179,6 @@ operations:
         bytes.
       tags:
         apiStage: public
-  DELETE /api/hazard/reports/{id}:
-    name: chemi_hazard_reports_delete_by_id
-    file: R/chemi_hazard_reports_delete_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Delete a hazard report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
   GET /api/hazard/reports/{id}:
     name: chemi_hazard_reports_by_id
     file: R/chemi_hazard_reports_by_id.R
@@ -247,36 +194,6 @@ operations:
         bytes.
       tags:
         apiStage: public
-  PUT /api/hazard/reports/{id}:
-    name: chemi_hazard_reports_update_by_id
-    file: R/chemi_hazard_reports_update_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Update a hazard report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/hazard/reports/{id}/acl:
-    name: chemi_hazard_reports_acl_update_by_id
-    file: R/chemi_hazard_reports_acl_update_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Update access to a hazard report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
   POST /api/hazard/reports/{id}/export:
     name: chemi_hazard_reports_export_by_id
     file: R/chemi_hazard_reports_export_by_id.R
@@ -287,51 +204,6 @@ operations:
       key: chemi_burl
     docs:
       title: Export a saved hazard report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  DELETE /api/toxprints/assays/{id}:
-    name: chemi_toxprints_assays_delete_by_id
-    file: R/chemi_toxprints_assays_delete_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Delete a ToxPrints assay
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/toxprints/assays/{id}:
-    name: chemi_toxprints_assays_update_by_id
-    file: R/chemi_toxprints_assays_update_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Update a ToxPrints assay
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/toxprints/assays/{id}/acl:
-    name: chemi_toxprints_assays_acl_update_by_id
-    file: R/chemi_toxprints_assays_acl_update_by_id.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Update access to a ToxPrints assay
       lifecycle: experimental
       return: The decoded service response, preserving JSON structure, text or media
         bytes.

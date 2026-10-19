@@ -1,0 +1,128 @@
+[
+  {
+    "service": "chemi-management",
+    "operation": "DELETE /api/alerts/groups/{id}",
+    "name": "chemi_alerts_groups_delete_by_id",
+    "file": "R/chemi_alerts_groups_delete_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "PUT /api/alerts/groups/{id}",
+    "name": "chemi_alerts_groups_update_by_id",
+    "file": "R/chemi_alerts_groups_update_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "DELETE /api/hazard/reports/{id}",
+    "name": "chemi_hazard_reports_delete_by_id",
+    "file": "R/chemi_hazard_reports_delete_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "PUT /api/hazard/reports/{id}",
+    "name": "chemi_hazard_reports_update_by_id",
+    "file": "R/chemi_hazard_reports_update_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "PUT /api/hazard/reports/{id}/acl",
+    "name": "chemi_hazard_reports_acl_update_by_id",
+    "file": "R/chemi_hazard_reports_acl_update_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "DELETE /api/toxprints/assays/{id}",
+    "name": "chemi_toxprints_assays_delete_by_id",
+    "file": "R/chemi_toxprints_assays_delete_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "PUT /api/toxprints/assays/{id}",
+    "name": "chemi_toxprints_assays_update_by_id",
+    "file": "R/chemi_toxprints_assays_update_by_id.R"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "PUT /api/toxprints/assays/{id}/acl",
+    "name": "chemi_toxprints_assays_acl_update_by_id",
+    "file": "R/chemi_toxprints_assays_acl_update_by_id.R"
+  },
+  {
+    "service": "chemi-chet-extra",
+    "operation": "PUT /curators/libraries/{lib_id}",
+    "name": "chemi_chet_curators_libraries_by_lib_id_update",
+    "file": "R/chemi_chet_curators_libraries_by_lib_id_update.R"
+  },
+  {
+    "service": "chemi-chet-extra",
+    "operation": "DELETE /reaction/mappositions/{map_id}",
+    "name": "chemi_chet_reaction_mappositions_by_map_id",
+    "file": "R/chemi_chet_reaction_mappositions_by_map_id.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "DELETE /api/stdizer/groups/{id}",
+    "name": "chemi_stdizer_groups_by_id_delete",
+    "file": "R/chemi_stdizer_groups_by_id_delete.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "PUT /api/stdizer/groups/{id}",
+    "name": "chemi_stdizer_groups_by_id_put",
+    "file": "R/chemi_stdizer_groups_by_id_put.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "PUT /api/stdizer/groups/{id}/acl",
+    "name": "chemi_stdizer_groups_by_id_acl_put",
+    "file": "R/chemi_stdizer_groups_by_id_acl_put.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "DELETE /api/stdizer/protocols/{id}",
+    "name": "chemi_stdizer_protocols_by_id_delete",
+    "file": "R/chemi_stdizer_protocols_by_id_delete.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "PATCH /api/stdizer/protocols/{id}",
+    "name": "chemi_stdizer_protocols_by_id_patch",
+    "file": "R/chemi_stdizer_protocols_by_id_patch.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "PUT /api/stdizer/protocols/{id}",
+    "name": "chemi_stdizer_protocols_by_id_put",
+    "file": "R/chemi_stdizer_protocols_by_id_put.R"
+  },
+  {
+    "service": "chemi-stdizer-unbound",
+    "operation": "PUT /api/stdizer/protocols/{id}/acl",
+    "name": "chemi_stdizer_protocols_by_id_acl_put",
+    "file": "R/chemi_stdizer_protocols_by_id_acl_put.R"
+  },
+  {
+    "service": "chemi-chet-options",
+    "operation": "OPTIONS /reaction/batchsearch",
+    "name": "chemi_chet_reaction_batchsearch_options",
+    "file": "R/chemi_chet_reaction_batchsearch_options.R"
+  },
+  {
+    "service": "chemi-chet-options",
+    "operation": "OPTIONS /reaction/map_DL",
+    "name": "chemi_chet_reaction_map_dl_options",
+    "file": "R/chemi_chet_reaction_map_dl_options.R"
+  },
+  {
+    "service": "chemi-released-boolean-bindings",
+    "operation": "PATCH /api/alerts/groups/{id}/freeze",
+    "name": "chemi_alerts_groups_freeze_by_id",
+    "file": "R/chemi_alerts_groups_freeze_by_id.R"
+  },
+  {
+    "service": "chemi-released-boolean-bindings",
+    "operation": "PATCH /api/stdizer/groups/{id}/freeze",
+    "name": "chemi_stdizer_groups_by_id_freeze_patch",
+    "file": "R/chemi_stdizer_groups_by_id_freeze_patch.R"
+  }
+]

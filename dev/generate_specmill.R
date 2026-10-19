@@ -1,6 +1,14 @@
 # Pilot maintenance. Run from the package root; no runtime dependency on specmill.
 generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) {
   mode <- match.arg(mode)
+  policy <- jsonlite::read_json("dev/endpoint-policy.json", simplifyVector = TRUE)
+  for (file in yaml::read_yaml("specmill.yml")$services) {
+    service <- yaml::read_yaml(file)
+    selected <- union(service$selection$include, names(service$operations))
+    banned <- unlist(policy$banned_operations, use.names = FALSE)
+    stopifnot(all(sub(" .*", "", selected) %in% policy$allowed_methods),
+      !any(selected %in% banned))
+  }
   source("dev/install_specmill.R", local = TRUE)
   verify_specmill()
   callbacks <- new.env(parent = baseenv())

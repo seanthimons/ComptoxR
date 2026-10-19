@@ -11,6 +11,13 @@ keys <- lapply(schemas, function(path) {
   }), use.names = FALSE)
 })
 names(keys) <- schemas
+policy <- jsonlite::read_json('dev/endpoint-policy.json', simplifyVector = TRUE)
+banned <- lapply(schemas, function(schema) {
+  explicit <- unlist(policy$banned_operations[[schema]], use.names = FALSE)
+  keys[[schema]][!sub(' .*', '', keys[[schema]]) %in% policy$allowed_methods |
+    keys[[schema]] %in% explicit]
+})
+names(banned) <- schemas
 owned <- function(path) {
   record <- manifest[[path]]
   !is.null(record) && file.exists(path) && identical(record$hash,
@@ -110,15 +117,18 @@ records <- lapply(records, function(record) {
 })
 rows <- lapply(schemas, function(schema) list(schema = sub('[.]json$', '', basename(schema)),
   migrated = length(completed[[schema]]), total = length(unique(keys[[schema]])),
-  remaining = length(setdiff(keys[[schema]], completed[[schema]]))))
+  banned = length(banned[[schema]]),
+  remaining = length(setdiff(keys[[schema]], union(completed[[schema]], banned[[schema]])))))
 jsonlite::write_json(list(commit = system2('git', c('rev-parse', 'HEAD'), stdout = TRUE),
-  legacy_callers = legacy, toolkit = jsonlite::read_json('dev/specmill-lock.json'), schemas = rows, endpoints = records),
+  legacy_callers = legacy, toolkit = jsonlite::read_json('dev/specmill-lock.json'), schemas = rows,
+  banned_endpoints = banned, endpoints = records),
   'dev/specmill-rebuild/progress.json', pretty = TRUE, auto_unbox = TRUE)
 lines <- c('Endpoints migrated to Specmill — iteration checkpoint', '',
   'Counted: root-adopted native wrappers with matching Specmill ownership hashes and committed offline behavior suites. Fresh generation checks pass. Held private candidates and endpoints with literal legacy request callers are excluded; live validation remains incomplete.', '',
-  'Denominator: all HTTP operations in each canonical `schema/*-prod.json`, including routes not yet exposed by this client. Archived underscore-named CTX copies and coverage metadata are excluded. There are no staging schema files in this checkout.', '',
+  'Denominator: all HTTP operations in each canonical `schema/*-prod.json`, including banned routes. Banned routes are excluded from remaining work and are never counted as migrated. Policy: `dev/endpoint-policy.json`. Dev/staging evidence stays under `dev/`.', '',
   '```', 'Endpoints migrated (adopted / source schema total):',
-  vapply(rows, function(row) paste0(row$schema, ': ', row$migrated, '/', row$total), ''), '```', '',
+  vapply(rows, function(row) paste0(row$schema, ': ', row$migrated, '/', row$total,
+    ' (', row$banned, ' banned; ', row$remaining, ' remaining)'), ''), '```', '',
   paste0('Total: ', sum(vapply(rows, `[[`, 0L, 'migrated')), '/',
     sum(vapply(rows, `[[`, 0L, 'total')), '. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.'))
 writeLines(lines, 'dev/specmill-rebuild/progress.md')

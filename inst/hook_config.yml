@@ -1018,10 +1018,6 @@ chemi_alerts_export:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_alerts_export_append:
   bespoke_test: tests/testthat/test-native_management.R
-chemi_alerts_groups_delete_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_alerts_groups_update_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
 chemi_alerts_render:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_download:
@@ -1038,21 +1034,9 @@ chemi_hazard_reports_create:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports_check:
   bespoke_test: tests/testthat/test-native_management.R
-chemi_hazard_reports_delete_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports_by_id:
   bespoke_test: tests/testthat/test-native_management.R
-chemi_hazard_reports_update_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_hazard_reports_acl_update_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports_export_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_toxprints_assays_delete_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_toxprints_assays_update_by_id:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_toxprints_assays_acl_update_by_id:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_toxprints_download:
   bespoke_test: tests/testthat/test-native_management.R
@@ -1085,8 +1069,6 @@ chemi_chet_curators_libraries_detail_options:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_libraries_by_lib_id:
   bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_curators_libraries_by_lib_id_update:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_login:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_logout:
@@ -1116,8 +1098,6 @@ chemi_chet_reaction_editor_by_reaction_id_create:
 chemi_chet_reaction_map_dl:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_mapfix_by_map_id:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_reaction_mappositions_by_map_id:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_newlibrary:
   bespoke_test: tests/testthat/test-native_chet_extra.R
@@ -1268,18 +1248,6 @@ chemi_predictor_models_model_file:
 chemi_webtest_report:
   bespoke_test: tests/testthat/test-native_small_families.R
 
-chemi_stdizer_groups_by_id_delete:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_groups_by_id_put:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_groups_by_id_acl_put:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
 chemi_stdizer_protocol_export_post:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
@@ -1293,22 +1261,6 @@ chemi_stdizer_protocols_post:
   reason: Native standardizer route with real localhost wire and error coverage.
 
 chemi_stdizer_protocols_check:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_protocols_by_id_delete:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_protocols_by_id_patch:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_protocols_by_id_put:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_protocols_by_id_acl_put:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 
@@ -1327,12 +1279,6 @@ chemi_stdizer_protocols_by_id_issues:
 chemi_stdizer_render:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_chet_reaction_batchsearch_options:
-  bespoke_test: tests/testthat/test-native_chet_options.R
-
-chemi_chet_reaction_map_dl_options:
-  bespoke_test: tests/testthat/test-native_chet_options.R
 
 chemi_safety_rqcodes:
   bespoke_test: tests/testthat/test-native_safety_rqcodes.R
@@ -1380,12 +1326,6 @@ chemi_resolver_exportsimilaritylist:
   bespoke_test: tests/testthat/test-native_released_booleans_v45.R
 
 chemi_resolver_exportsimilaritymap:
-  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
-
-chemi_alerts_groups_freeze_by_id:
-  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
-
-chemi_stdizer_groups_by_id_freeze_patch:
   bespoke_test: tests/testthat/test-native_released_booleans_v45.R
 
 chemi_stdizer_protocols_by_id_get:

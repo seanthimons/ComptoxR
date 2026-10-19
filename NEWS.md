@@ -2,6 +2,12 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- Remove 21 generated wrappers using PUT, PATCH, DELETE or OPTIONS. Client
+  generation now permits only GET and POST and excludes the five AMOS `add_*`
+  uploads tracked in #354.
+
 ## v3.0.0 (2026-09-08)
 
 #### Breaking changes

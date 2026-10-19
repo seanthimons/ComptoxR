@@ -1,14 +1,10 @@
 management_wrappers <- c(
   'chemi_alerts_export', 'chemi_alerts_export_append',
-  'chemi_alerts_groups_delete_by_id', 'chemi_alerts_groups_update_by_id',
   'chemi_alerts_render',
   'chemi_hazard_download', 'chemi_hazard_report_export',
   'chemi_hazard_report_export_append', 'chemi_hazard_report_export2',
-  'chemi_hazard_reports', 'chemi_hazard_reports_create', 'chemi_hazard_reports_check',
-  'chemi_hazard_reports_delete_by_id', 'chemi_hazard_reports_by_id',
-  'chemi_hazard_reports_update_by_id', 'chemi_hazard_reports_acl_update_by_id',
-  'chemi_hazard_reports_export_by_id', 'chemi_toxprints_assays_delete_by_id',
-  'chemi_toxprints_assays_update_by_id', 'chemi_toxprints_assays_acl_update_by_id',
+  'chemi_hazard_reports', 'chemi_hazard_reports_create', 'chemi_hazard_reports_check', 'chemi_hazard_reports_by_id',
+  'chemi_hazard_reports_export_by_id',
   'chemi_toxprints_download', 'chemi_toxprints_export', 'chemi_toxprints_export_global',
   'chemi_toxprints_render')
 

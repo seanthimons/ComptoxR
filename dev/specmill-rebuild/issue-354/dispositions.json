@@ -1,0 +1,90 @@
+[
+  {
+    "operation": "POST /api/amos/add_aqc_spectrum/",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_upload"
+  },
+  {
+    "operation": "POST /api/amos/add_new_fact_sheet/",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_upload"
+  },
+  {
+    "operation": "POST /api/amos/add_new_method/",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_upload"
+  },
+  {
+    "operation": "POST /api/amos/add_new_product_declaration/",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_upload"
+  },
+  {
+    "operation": "POST /api/amos/add_new_safety_data_sheet/",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_upload"
+  },
+  {
+    "operation": "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_method"
+  },
+  {
+    "operation": "PUT /api/amos/update_fact_sheet_info/{internal_id}",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_method"
+  },
+  {
+    "operation": "PUT /api/amos/update_method_info/{internal_id}",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_method"
+  },
+  {
+    "operation": "PUT /api/amos/update_nmr_spectrum_info/{internal_id}",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_method"
+  },
+  {
+    "operation": "PUT /api/amos/update_product_declaration_info/{internal_id}",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_method"
+  },
+  {
+    "operation": "PUT /api/amos/update_safety_data_sheet_info/{internal_id}",
+    "production": true,
+    "development": false,
+    "staging_current": "unavailable: HTTP 503",
+    "staging_archived": false,
+    "disposition": "banned_method"
+  }
+]

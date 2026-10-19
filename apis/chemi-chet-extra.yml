@@ -15,7 +15,6 @@ selection:
   - POST /curators/libraries
   - GET /curators/libraries/detail-options
   - GET /curators/libraries/{lib_id}
-  - PUT /curators/libraries/{lib_id}
   - POST /curators/login
   - POST /curators/logout
   - GET /curators/units
@@ -31,7 +30,6 @@ selection:
   - POST /reaction/editor/{reaction_id}
   - POST /reaction/map_DL
   - POST /reaction/mapfix/{map_id}
-  - DELETE /reaction/mappositions/{map_id}
   - POST /reaction/newlibrary
   - POST /reaction/newreactfile
   - POST /reaction/newreaction
@@ -214,22 +212,6 @@ operations:
       preserve_errors: true
     docs:
       title: Return one library and its editable details
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
-  PUT /curators/libraries/{lib_id}:
-    name: chemi_chet_curators_libraries_by_lib_id_update
-    file: R/chemi_chet_curators_libraries_by_lib_id_update.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Update one library and its detail definitions
       lifecycle: experimental
       return: Decoded JSON, text, or raw bytes according to the response content type;
         NULL for an empty response.
@@ -471,22 +453,6 @@ operations:
       preserve_errors: true
     docs:
       title: Store map element positions
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
-  DELETE /reaction/mappositions/{map_id}:
-    name: chemi_chet_reaction_mappositions_by_map_id
-    file: R/chemi_chet_reaction_mappositions_by_map_id.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Delete stored reaction-map node positions
       lifecycle: experimental
       return: Decoded JSON, text, or raw bytes according to the response content type;
         NULL for an empty response.

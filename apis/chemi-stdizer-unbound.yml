@@ -4,17 +4,10 @@ schemas:
   - schema/chemi-stdizer-prod.json
 selection:
   include:
-  - DELETE /api/stdizer/groups/{id}
-  - PUT /api/stdizer/groups/{id}
-  - PUT /api/stdizer/groups/{id}/acl
   - POST /api/stdizer/protocol/export
   - GET /api/stdizer/protocols
   - POST /api/stdizer/protocols
   - GET /api/stdizer/protocols/check
-  - DELETE /api/stdizer/protocols/{id}
-  - PATCH /api/stdizer/protocols/{id}
-  - PUT /api/stdizer/protocols/{id}
-  - PUT /api/stdizer/protocols/{id}/acl
   - GET /api/stdizer/protocols/{id}/changes
   - POST /api/stdizer/protocols/{id}/export
   - GET /api/stdizer/protocols/{id}/issues
@@ -22,48 +15,6 @@ selection:
 helper: .ct_request
 documentation: true
 operations:
-  DELETE /api/stdizer/groups/{id}:
-    name: chemi_stdizer_groups_by_id_delete
-    file: R/chemi_stdizer_groups_by_id_delete.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer groupDelete
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/stdizer/groups/{id}:
-    name: chemi_stdizer_groups_by_id_put
-    file: R/chemi_stdizer_groups_by_id_put.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer groupUpdatePut
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/stdizer/groups/{id}/acl:
-    name: chemi_stdizer_groups_by_id_acl_put
-    file: R/chemi_stdizer_groups_by_id_acl_put.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer protocolAclUpdatePut_1
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
   POST /api/stdizer/protocol/export:
     name: chemi_stdizer_protocol_export_post
     file: R/chemi_stdizer_protocol_export_post.R
@@ -115,62 +66,6 @@ operations:
       key: chemi_burl
     docs:
       title: Standardizer protocolCheckGet
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  DELETE /api/stdizer/protocols/{id}:
-    name: chemi_stdizer_protocols_by_id_delete
-    file: R/chemi_stdizer_protocols_by_id_delete.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer protocolDelete
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PATCH /api/stdizer/protocols/{id}:
-    name: chemi_stdizer_protocols_by_id_patch
-    file: R/chemi_stdizer_protocols_by_id_patch.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer protocolCuratePatch
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/stdizer/protocols/{id}:
-    name: chemi_stdizer_protocols_by_id_put
-    file: R/chemi_stdizer_protocols_by_id_put.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer protocolUpdatePut
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  PUT /api/stdizer/protocols/{id}/acl:
-    name: chemi_stdizer_protocols_by_id_acl_put
-    file: R/chemi_stdizer_protocols_by_id_acl_put.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer protocolAclUpdatePut
       lifecycle: experimental
       return: The decoded service response, preserving JSON structure, text or media
         bytes.

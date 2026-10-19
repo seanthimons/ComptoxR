@@ -1,0 +1,16 @@
+{
+  "allowed_methods": [
+    "GET",
+    "POST"
+  ],
+  "banned_operations": {
+    "schema/chemi-amos-prod.json": [
+      "POST /api/amos/add_aqc_spectrum/",
+      "POST /api/amos/add_new_fact_sheet/",
+      "POST /api/amos/add_new_method/",
+      "POST /api/amos/add_new_product_declaration/",
+      "POST /api/amos/add_new_safety_data_sheet/"
+    ]
+  },
+  "decision": "Issue #354: exclude non-GET/POST methods and the five AMOS add_* uploads from client generation."
+}

@@ -1,15 +1,8 @@
 stdizer_unbound_wrappers <- c(
-  'chemi_stdizer_groups_by_id_delete',
-  'chemi_stdizer_groups_by_id_put',
-  'chemi_stdizer_groups_by_id_acl_put',
   'chemi_stdizer_protocol_export_post',
   'chemi_stdizer_protocols',
   'chemi_stdizer_protocols_post',
   'chemi_stdizer_protocols_check',
-  'chemi_stdizer_protocols_by_id_delete',
-  'chemi_stdizer_protocols_by_id_patch',
-  'chemi_stdizer_protocols_by_id_put',
-  'chemi_stdizer_protocols_by_id_acl_put',
   'chemi_stdizer_protocols_by_id_changes',
   'chemi_stdizer_protocols_by_id_export_post',
   'chemi_stdizer_protocols_by_id_issues',
@@ -93,7 +86,6 @@ test_that('standardizer bindings validate inputs and preserve actual localhost w
       invalid <- case$args
       property <- switch(name,
         chemi_stdizer_records_post_native = 'options',
-        chemi_stdizer_protocols_by_id_patch = 'curationStatus',
         names(invalid$body)[[1L]])
       invalid$body[[property]] <- 1L
       expect_error(do.call(fn, invalid), info = name)

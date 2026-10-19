@@ -60,7 +60,6 @@ services:
 - apis/chemi-amos-direct-reads.yml
 - apis/chemi-small-families.yml
 - apis/chemi-stdizer-unbound.yml
-- apis/chemi-chet-options.yml
 - apis/chemi-released-chet-facades.yml
 - apis/chemi-released-recursive-facades.yml
 - apis/chemi-webtest-exports.yml

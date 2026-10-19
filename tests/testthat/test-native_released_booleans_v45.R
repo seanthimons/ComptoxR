@@ -30,17 +30,14 @@ testthat::test_that('released boolean bindings validate inputs and send exact na
   url <- paste0('http://127.0.0.1:', readRDS(file.path(directory, 'ready.rds')))
   withr::local_options(list(ComptoxR.chemi_burl = paste0(url, '/api'),
     comptoxr_native.request = list(timeout = 3, max_retries = 0L)))
-  fns <- list(chemi_alerts_groups_freeze_by_id, chemi_stdizer_groups_by_id_freeze_patch,
-    chemi_resolver_exportsimilaritylist, chemi_resolver_exportsimilaritymap, chemi_opera_file)
+  fns <- list(chemi_resolver_exportsimilaritylist, chemi_resolver_exportsimilaritymap, chemi_opera_file)
   bodies <- list(chemicals = list(list(chemical = list(smiles = 'CCO'), result = 'FOUND')))
-  args <- list(list(id = 'one'), list(id = 'one'), list(format = 'JSON', body = bodies),
+  args <- list(list(format = 'JSON', body = bodies),
     list(format = 'JSON', sort = FALSE, showImage = TRUE, limit = 'All',
       body = list(chemicals = list(list(smiles = 'CCO')))),
     list(body = list(file = charToRaw('CCO ethanol\n'))))
-  flags <- list(c('freeze', 'hierarchically'), c('freeze', 'hierarchically'),
-    'showImage', c('sort', 'showImage'), 'standardize')
-  paths <- c('/api/alerts/groups/one/freeze', '/api/stdizer/groups/one/freeze',
-    '/api/resolver/exportsimilaritylist', '/api/resolver/exportsimilaritymap', '/api/opera/file')
+  flags <- list('showImage', c('sort', 'showImage'), 'standardize')
+  paths <- c('/api/resolver/exportsimilaritylist', '/api/resolver/exportsimilaritymap', '/api/opera/file')
   count <- 0L
   for (i in seq_along(fns)) {
     for (value in c(FALSE, TRUE)) {
@@ -50,13 +47,13 @@ testthat::test_that('released boolean bindings validate inputs and send exact na
       count <- count + 1L
       wire <- readRDS(file.path(directory, paste0(count, '.rds')))
       query <- sub('^\\?', '', wire$query)
-      testthat::expect_identical(wire$method, if (i <= 2L) 'PATCH' else 'POST')
+      testthat::expect_identical(wire$method, 'POST')
       testthat::expect_identical(wire$path, paths[[i]])
       for (flag in flags[[i]]) testthat::expect_match(query,
         paste0('(^|&)', flag, '=', tolower(value), '(&|$)'))
-      if (i %in% c(3L, 4L)) testthat::expect_identical(
+      if (i %in% c(1L, 2L)) testthat::expect_identical(
         jsonlite::fromJSON(rawToChar(wire$body), simplifyVector = FALSE), a$body)
-      if (i == 5L) {
+      if (i == 3L) {
         testthat::expect_match(wire$content_type, '^multipart/form-data; boundary=')
         testthat::expect_match(rawToChar(wire$body), 'CCO ethanol\n', fixed = TRUE)
       }

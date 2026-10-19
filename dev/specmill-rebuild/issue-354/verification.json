@@ -1,0 +1,29 @@
+{
+  "generation_apply": "passed with validation enabled, Specmill 0.1.51",
+  "generation_freshness": "passed",
+  "offline_suites": {
+    "native_management": "passed",
+    "native_stdizer_unbound": "passed",
+    "native_chet_extra": "passed",
+    "native_released_booleans_v45": "passed",
+    "endpoint_policy": "passed"
+  },
+  "public_boundary": "passed",
+  "diff_whitespace": "passed",
+  "canonical_schemas_changed": false,
+  "manifest_removals": 21,
+  "manifest_additions": 0,
+  "manifest_changed_records": 0,
+  "canonical_progress": {
+    "migrated": 492,
+    "banned": 32,
+    "remaining": 24,
+    "total": 548
+  },
+  "limits": [
+    "No deployed upload/update/delete requests",
+    "Current staging schema unavailable: HTTP 503",
+    "Full package check not run",
+    "Existing OAS 3.1 GET body interoperability warning remains"
+  ]
+}
