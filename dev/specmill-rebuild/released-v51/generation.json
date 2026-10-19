@@ -1,0 +1,12 @@
+{
+  "version": "0.1.51",
+  "owners": 715,
+  "sources": 34,
+  "validation": true,
+  "freshness": true,
+  "changed_ownership_record": "R/chemi_alerts_render.R",
+  "package_core_unchanged": true,
+  "canonical_schemas_unchanged": true,
+  "selected_response_contracts_and_hashes_unchanged": true,
+  "persisted_response_sources_project_relative": true
+}

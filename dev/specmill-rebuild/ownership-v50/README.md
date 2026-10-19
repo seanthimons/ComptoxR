@@ -1,3 +1,7 @@
+# Released v51 resolution
+
+The parent adopted the reviewed safety/render binding on official v51 after PR187 fixed #186. Full root and relocated-checkout validated freshness now pass, with unchanged runtime/schema bytes. See `../released-v51/`. The v50 portability hold below is historical.
+
 # Root adoption status
 
 Descriptor aggregate GET/POST are officially generated in local commit dbaafea2. The final root check validates34 selected sources and715 ownership hashes. Only these two canonical identities are added by this ownership candidate.

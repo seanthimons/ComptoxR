@@ -2,7 +2,17 @@
 
 Updated 19 October 2026. Branch feat/specmill-migration-pilot, PR345. Local commits authorized; no ComptoxR push/merge/release. Inspect actual HEAD/status first.
 
-## Current v50 checkpoint
+## Current v51 checkpoint
+
+Official Specmill 0.1.51 is adopted locally, source `5a112d8966dfae7624f7e72fa617ccda85c808b4`, exact git-archive SHA256 `19316acb1c749a41bf75db7cf1c2f0726203f19e7dbdd3f5e8290edbed14eb26`. Independent release/archive/77-file/ancestry verification passes. PR187 resolves #186 with project-relative persisted response ownership. The reviewed shared safety GET `/api/alerts/render` is now selected through existing `chemi_alerts_render`, retaining both source contracts/hashes and the review reason. Canonical progress is **513/548**, safety **4/4**. Three PubChem wrappers/six operations remain outside that denominator.
+
+Official validated apply writes only `.specmill/manifest.json`; only render's preceding ownership record acquires metadata. Public root freshness passes **34 selected sources and all 715 output hashes**. A full tracked-checkout copy to another directory independently passes public validated freshness with a byte-identical manifest and all hashes intact. Independent nested-schema portability also passes. Official helper code and provenance remain identical to v50. All **1,205 package core files and 40 archived schemas** are byte-identical. Focused actual localhost replay passes **116 assertions**, zero failures/errors/warnings/skips and no Specmill runtime namespace.
+
+Evidence is `released-v51/`. The initial root runner completed and saved freshness, then hit a trailing parse error after a parent edit during execution; retain its log. A fresh R process verifies the saved results, corrected runner parse and all owner/core/schema hashes. Its preliminary absolute-path assertion was corrected to the returned relative file field; both logs remain. Relocated public freshness exits cleanly. Existing OAS3.1 GET-body interoperability warning remains. No new broad suite, strict package check, remote CI, production request, push, merge or upload is claimed. The v50 broad/installed/bounded check remains applicable to identical package bytes.
+
+The **35** remaining canonical identities are **30 source contracts, four service contracts, one client contract #353**. Both AMOS XLSX endpoints remain user-deferred. The #186 ownership hold alone is removed; all other disposition rows remain unchanged. No other endpoint set has an evidence-backed contract ready for migration. Keep current implementations until source/service/client decisions are reviewed; do not silently repair behavior under migration #311. Progress is recorded in `progress.md/json` and `canonical-holds-audit/current-dispositions.json`. Local commit and PR345 progress comment close this iteration; inspect actual HEAD/status for completion. No root checks remain active after closure.
+
+## Historical v50 checkpoint
 
 Code commit `dbaafea2` adopts official Specmill 0.1.50 and the descriptor/PubChem clients. A following local commit records the final tests, ledgers and test-only corrections. Inspect actual HEAD/status. Nothing has been pushed, merged or released from ComptoxR. No new production requests are authorized or performed.
 

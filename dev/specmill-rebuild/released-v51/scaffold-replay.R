@@ -1,0 +1,8 @@
+a<-commandArgs(TRUE)
+loadNamespace('specmill',lib.loc=a[[1L]])
+s<-specmill:::request_helper_scaffold('.ct_request','https://example.invalid',NULL,'COMPTOXR_NATIVE_DRY_RUN',companions=c('batching','pagination'))
+code<-gsub("#' @export","#' @noRd",s$code,fixed=TRUE)
+code<-paste(sub('[ \t]+$','',strsplit(code,'\n',fixed=TRUE)[[1L]]),collapse='\n')
+writeLines(code,a[[2L]])
+writeLines(s$provenance,paste0(a[[2L]],'.provenance.json'))
+cat(as.character(utils::packageVersion('specmill')),' normalized scaffold SHA256 ',digest::digest(file=a[[2L]],algo='sha256'),'\n',sep='')

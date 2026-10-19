@@ -1,5 +1,5 @@
 {
-  "commit": "dbaafea25834dfcc4ddf708a50b596157f69a88a",
+  "commit": "8710d770db69dca6923f85358f0926f691df23fe",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -54,9 +54,9 @@
   ],
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.50",
-    "source_commit": "064478735580b54a732e3859b066b317e72d53a1",
-    "source_archive_sha256": "7d1ebbac31b3ecc764e8b0cb7baf890a4a5e4ceef67b16cbd96835b1f12d0f78",
+    "version": "0.1.51",
+    "source_commit": "5a112d8966dfae7624f7e72fa617ccda85c808b4",
+    "source_archive_sha256": "19316acb1c749a41bf75db7cf1c2f0726203f19e7dbdd3f5e8290edbed14eb26",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -159,9 +159,9 @@
     },
     {
       "schema": "chemi-safety-prod",
-      "migrated": 3,
+      "migrated": 4,
       "total": 4,
-      "remaining": 1
+      "remaining": 0
     },
     {
       "schema": "chemi-search-prod",
@@ -3657,6 +3657,15 @@
     {
       "schema": "schema/chemi-alerts-prod.json",
       "binding_schema": "schema/chemi-alerts-prod.json",
+      "operation": "GET /api/alerts/render",
+      "wrapper": "chemi_alerts_render",
+      "file": "R/chemi_alerts_render.R",
+      "suite": "tests/testthat/test-native_management.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-safety-prod.json",
+      "binding_schema": "schema/chemi-safety-prod.json",
       "operation": "GET /api/alerts/render",
       "wrapper": "chemi_alerts_render",
       "file": "R/chemi_alerts_render.R",

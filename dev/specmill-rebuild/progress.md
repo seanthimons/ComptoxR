@@ -22,7 +22,7 @@ chemi-pfas_cats-prod: 4/4
 chemi-predictor_models-prod: 5/5
 chemi-rdkit-prod: 4/4
 chemi-resolver-prod: 42/46
-chemi-safety-prod: 3/4
+chemi-safety-prod: 4/4
 chemi-search-prod: 14/14
 chemi-services-prod: 12/14
 chemi-stdizer-prod: 29/33
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28
 epi-suite-prod: 14/14
 ```
 
-Total: 512/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 513/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.

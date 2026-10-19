@@ -55,7 +55,59 @@
     },
     "R/chemi_alerts_render.R": {
       "hash": "4fdbef77e418a7f1f7bd58130999e6eb7276eecfc47bb0fd9e6fcbc192b03049",
-      "operations": "chemi-management GET /api/alerts/render"
+      "operations": "chemi-management GET /api/alerts/render",
+      "response_sources": {
+        "chemi-management GET /api/alerts/render": {
+          "selected": "schema/chemi-alerts-prod.json",
+          "reason": "Reviewed declared PNG/SVG responses for the identical shared alerts/safety render request; preserve the existing chemi_alerts_render wrapper and both source contracts.",
+          "sources": [
+            {
+              "source": "schema/chemi-alerts-prod.json",
+              "source_hash": "b8d8db67175063f97aec2b5ac708610f",
+              "content_type": "image/png, image/svg+xml",
+              "response_schema_type": "binary",
+              "response": {
+                "200": {
+                  "content": {
+                    "image/png": {
+                      "schema": {
+                        "format": "byte",
+                        "type": "string"
+                      }
+                    },
+                    "image/svg+xml": {
+                      "schema": {
+                        "format": "byte",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              }
+            },
+            {
+              "source": "schema/chemi-safety-prod.json",
+              "source_hash": "2a6da521a5458182f4baaf1ce2342d42",
+              "content_type": "*/*",
+              "response_schema_type": "unknown",
+              "response": {
+                "200": {
+                  "content": {
+                    "*/*": {
+                      "schema": {
+                        "format": "byte",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "R/chemi_alerts_version.R": {
       "hash": "2687f57feefca231280057c8a6abc1f4a4304a7c9ee55fed1da1f1fa524ef294",
@@ -2932,7 +2984,7 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.50",
+  "toolkit_version": "0.1.51",
   "inputs": {
     "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -3501,7 +3553,7 @@
     "apis/chemi-chet-prod-rebuild.yml": "b5d5d21087ed9b4ce5eb0e97fb623dfe4d8a3d352c13307cf64963fa7036d1fa",
     "apis/chemi-descriptors-native.yml": "05c90b0b9e440923473499c3d1163f0b1ec533bbd0ada91ce9471939537bda51",
     "apis/chemi-hazard-prod-rebuild.yml": "642bf79dd2f57eeecb5d905149416bf1ff8932363356f1d7a7f028e27878af0f",
-    "apis/chemi-management.yml": "71998a8392e0b88f5a1e131f8423a96672315564bc185b024fd8e3e96a318526",
+    "apis/chemi-management.yml": "70e04beb40b55fdfa3a3ca6d9310b8e9f7db4dbf2f9051e7db3eaa9b8432e7fe",
     "apis/chemi-mordred-prod-rebuild.yml": "76fc6e2b04c1d1c0ef5024598b41118d55c3c3c89330fd3f251ed7a9fa0e80e9",
     "apis/chemi-ncc_cats-prod-rebuild.yml": "6d00095e6d251c541bfc196c20b68edeb7611e2681d36d4388ebdcf3999f3338",
     "apis/chemi-opera-prod-rebuild.yml": "6677b91483de8d6b511c82c8387622706ae29207e7e1e364497570146c6b3308",
