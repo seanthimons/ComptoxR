@@ -4,7 +4,6 @@ schemas:
   - schema/chemi-chet-prod.json
 selection:
   include:
-  - POST /chemicals/chemdelete
   - POST /chemicals/chemical_DL
   - POST /chemicals/newchemfile
   - POST /chemicals/newchemical
@@ -40,22 +39,6 @@ selection:
 helper: .ct_request
 documentation: true
 operations:
-  POST /chemicals/chemdelete:
-    name: chemi_chet_chemicals_chemdelete
-    file: R/chemi_chet_chemicals_chemdelete.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Delete a chemical (POST)
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
   POST /chemicals/chemical_DL:
     name: chemi_chet_chemicals_chemical_dl_post
     file: R/chemi_chet_chemicals_chemical_dl_post.R

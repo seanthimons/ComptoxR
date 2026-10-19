@@ -10,7 +10,36 @@
       "POST /api/amos/add_new_method/",
       "POST /api/amos/add_new_product_declaration/",
       "POST /api/amos/add_new_safety_data_sheet/"
+    ],
+    "schema/chemi-chet-prod.json": [
+      "GET /admin/database",
+      "GET /admin/errorreport",
+      "POST /admin/errorreport",
+      "GET /admin/login",
+      "POST /admin/login",
+      "GET /admin/register",
+      "POST /admin/register",
+      "GET /admin/resolve",
+      "POST /admin/resolve",
+      "GET /auth/errorpage",
+      "POST /auth/errorpage",
+      "GET /auth/errorpage/complete/{idnum}",
+      "POST /auth/errorpage/complete/{idnum}",
+      "GET /auth/errorpage/{showhide}",
+      "POST /auth/errorpage/{showhide}",
+      "GET /auth/login",
+      "POST /auth/login",
+      "GET /auth/logout",
+      "GET /auth/register",
+      "POST /auth/register",
+      "GET /auth/report",
+      "POST /auth/report",
+      "GET /auth/testpage",
+      "POST /auth/testpage",
+      "GET /chemicals/chemdelete",
+      "POST /chemicals/chemdelete"
     ]
   },
-  "decision": "Issue #354: exclude non-GET/POST methods and the five AMOS add_* uploads from client generation."
+  "decision": "Issues #354/#355: only GET/POST globally; exclude five AMOS add_* uploads and all CheT /auth/*, /admin/* and /chemicals/chemdelete operations.",
+  "chet_banned_path_pattern": "^/(auth/|admin/|chemicals/chemdelete/?$)"
 }

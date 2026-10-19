@@ -1047,8 +1047,6 @@ chemi_toxprints_export_global:
 chemi_toxprints_render:
   bespoke_test: tests/testthat/test-native_management.R
 
-chemi_chet_chemicals_chemdelete:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_chemicals_chemical_dl_post:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_chemicals_newchemfile:
@@ -1154,48 +1152,6 @@ chemi_services_convert:
 
 chemi_services_collated_report:
   bespoke_test: tests/testthat/test-native_services_legacy.R
-
-chemi_chet_admin_database:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_admin_errorreport_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_admin_login_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_admin_register_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_admin_resolve_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_errorpage:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_errorpage_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_errorpage_complete_idnum:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_errorpage_complete_idnum_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_errorpage_showhide:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_errorpage_showhide_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_logout:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_testpage:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_testpage_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
 
 chemi_resolver_export:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
@@ -1339,15 +1295,6 @@ chemi_resolver_lookup:
 
 chemi_toxprints:
   bespoke_test: tests/testthat/test-native_released_booleans_v45.R
-
-chemi_chet_auth_login_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_register_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
-
-chemi_chet_auth_report_post:
-  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
 
 pubchem_properties:
   bespoke_test: tests/testthat/test-pubchem_retained_http.R

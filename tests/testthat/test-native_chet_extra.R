@@ -1,5 +1,4 @@
 chet_extra_wrappers <- c(
-  'chemi_chet_chemicals_chemdelete',
   'chemi_chet_chemicals_chemical_dl_post',
   'chemi_chet_chemicals_newchemfile',
   'chemi_chet_chemicals_newchemical',

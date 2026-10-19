@@ -361,81 +361,9 @@
       "hash": "61facc79a88e8555498c37cee96d6c1f7e28ff1ea713d1133aff6877ecdcacec",
       "operations": "chemi-service-info GET /api/arn_cats/version"
     },
-    "R/chemi_chet_admin_database.R": {
-      "hash": "1a91e11200c80aeb1bf8af22499b77be36f82a14186b8b67d3ed7443d2cd60c7",
-      "operations": "chemi-chet-admin-auth GET /admin/database"
-    },
-    "R/chemi_chet_admin_errorreport_post.R": {
-      "hash": "b9f8e983822437d56e3959aaaf0210c7f566fa151ae4659ed3e263a3b1d662cb",
-      "operations": "chemi-chet-admin-auth POST /admin/errorreport"
-    },
-    "R/chemi_chet_admin_login_post.R": {
-      "hash": "9d9c3fb02dceb0e00fc7b59cf55dfa5fc00c39d5ea3f75b698fbe5035d38a346",
-      "operations": "chemi-chet-admin-auth POST /admin/login"
-    },
-    "R/chemi_chet_admin_register_post.R": {
-      "hash": "c958124dd225ac364111d03cf7c17b1943d2042d44d7e88d115bc1efa88726be",
-      "operations": "chemi-chet-admin-auth POST /admin/register"
-    },
-    "R/chemi_chet_admin_resolve_post.R": {
-      "hash": "0a08785ad74af0334016f364374419ed79d438bf36e695c2dae5815647683879",
-      "operations": "chemi-chet-admin-auth POST /admin/resolve"
-    },
-    "R/chemi_chet_auth_errorpage.R": {
-      "hash": "fdb8cdae672c51a830261053c7ec9798ce07a6913895c0bdf7d878bf22379e3a",
-      "operations": "chemi-chet-admin-auth GET /auth/errorpage"
-    },
-    "R/chemi_chet_auth_errorpage_complete_idnum.R": {
-      "hash": "7e19b50638420a09566b9c7949b1daf694caaf44f162c65dd968870fc7dc15b6",
-      "operations": "chemi-chet-admin-auth GET /auth/errorpage/complete/{idnum}"
-    },
-    "R/chemi_chet_auth_errorpage_complete_idnum_post.R": {
-      "hash": "b61effad64682cb5c062ca423666c597dd149cabeac71f3984b3c6af95cb2b5f",
-      "operations": "chemi-chet-admin-auth POST /auth/errorpage/complete/{idnum}"
-    },
-    "R/chemi_chet_auth_errorpage_post.R": {
-      "hash": "ce050c781018e392e05a98a8b5f858c44e660fd7a20dfc1236d0658c2d517468",
-      "operations": "chemi-chet-admin-auth POST /auth/errorpage"
-    },
-    "R/chemi_chet_auth_errorpage_showhide.R": {
-      "hash": "d52bbf906ead4150b0f5257188b49daf9be5eaac4836d9f9a6dca16982353a98",
-      "operations": "chemi-chet-admin-auth GET /auth/errorpage/{showhide}"
-    },
-    "R/chemi_chet_auth_errorpage_showhide_post.R": {
-      "hash": "7a04e76250dcdeeeab2c5b7cb2628ae417cda77c8a4e0629f8c054ea4c9a057b",
-      "operations": "chemi-chet-admin-auth POST /auth/errorpage/{showhide}"
-    },
-    "R/chemi_chet_auth_login_post.R": {
-      "hash": "ee77d37c0a9f5b374906ec2573abaca704ef81327de0b37ab0d8cab1fe9e231c",
-      "operations": "chemi-chet-admin-auth POST /auth/login"
-    },
-    "R/chemi_chet_auth_logout.R": {
-      "hash": "ba03e341bb877b2e0b2b9cd4469741a39b87eae9275fa34f5a28277980d31c20",
-      "operations": "chemi-chet-admin-auth GET /auth/logout"
-    },
-    "R/chemi_chet_auth_register_post.R": {
-      "hash": "8e209d6f14a1c3cc5e31105ba4d85c955e5cf6a11f6673e7b54820248e44449f",
-      "operations": "chemi-chet-admin-auth POST /auth/register"
-    },
-    "R/chemi_chet_auth_report_post.R": {
-      "hash": "43888a5a0a35d1e9ba758ed9bec7e2aa890a7f146a15fabd30684febe75ef1e1",
-      "operations": "chemi-chet-admin-auth POST /auth/report"
-    },
-    "R/chemi_chet_auth_testpage.R": {
-      "hash": "0bf18c21e0ec553410a3dc618f0d0f13bcce2d7d6f3083df564b8d4c60f7036a",
-      "operations": "chemi-chet-admin-auth GET /auth/testpage"
-    },
-    "R/chemi_chet_auth_testpage_post.R": {
-      "hash": "056b2ba710f0cecdda4f7fddce8b8e78e7d0efb4f5995b603dda3995d5e85865",
-      "operations": "chemi-chet-admin-auth POST /auth/testpage"
-    },
     "R/chemi_chet_chemicals_alias.R": {
       "hash": "312cb02442ad6f940e49d23dfe1caf7511673a972e2308f37203596a4bc76246",
       "operations": "chemi-chet-prod-rebuild GET /chemicals/alias"
-    },
-    "R/chemi_chet_chemicals_chemdelete.R": {
-      "hash": "e3f193075fac72322ca51d6fc5fd471d911f446971e3dd4aed2e7cfbac0ad91b",
-      "operations": "chemi-chet-extra POST /chemicals/chemdelete"
     },
     "R/chemi_chet_chemicals_chemical_dl.R": {
       "hash": "0b9efb3e073c2c28a77699edd195362a86e86e0a9672d3bee0be93b5dbd0cde2",
@@ -2904,7 +2832,7 @@
   "inputs": {
     "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
-    "NAMESPACE": "90c9d5f38c3a264564c19ba698a5e17522133c8dd315f3e1f939e08414f80b76",
+    "NAMESPACE": "fcdcec04aa92f613fb5e1c9c803a6fa2f2ce4463cda1d7aa99807a6e59455d33",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
     "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
@@ -2988,25 +2916,7 @@
     "R/chemi_arn_cats.R": "c3614e4de4596e66572238e6a0f41cdc066a65a2cc7232a4d88dadc34bc5be33",
     "R/chemi_arn_cats_metadata.R": "a73f5b5bff2f4ab0c40b7463fdccd6c5c633e623dad9cf6a100e2f8dbb434113",
     "R/chemi_arn_cats_version.R": "61facc79a88e8555498c37cee96d6c1f7e28ff1ea713d1133aff6877ecdcacec",
-    "R/chemi_chet_admin_database.R": "1a91e11200c80aeb1bf8af22499b77be36f82a14186b8b67d3ed7443d2cd60c7",
-    "R/chemi_chet_admin_errorreport_post.R": "b9f8e983822437d56e3959aaaf0210c7f566fa151ae4659ed3e263a3b1d662cb",
-    "R/chemi_chet_admin_login_post.R": "9d9c3fb02dceb0e00fc7b59cf55dfa5fc00c39d5ea3f75b698fbe5035d38a346",
-    "R/chemi_chet_admin_register_post.R": "c958124dd225ac364111d03cf7c17b1943d2042d44d7e88d115bc1efa88726be",
-    "R/chemi_chet_admin_resolve_post.R": "0a08785ad74af0334016f364374419ed79d438bf36e695c2dae5815647683879",
-    "R/chemi_chet_auth_errorpage.R": "fdb8cdae672c51a830261053c7ec9798ce07a6913895c0bdf7d878bf22379e3a",
-    "R/chemi_chet_auth_errorpage_complete_idnum.R": "7e19b50638420a09566b9c7949b1daf694caaf44f162c65dd968870fc7dc15b6",
-    "R/chemi_chet_auth_errorpage_complete_idnum_post.R": "b61effad64682cb5c062ca423666c597dd149cabeac71f3984b3c6af95cb2b5f",
-    "R/chemi_chet_auth_errorpage_post.R": "ce050c781018e392e05a98a8b5f858c44e660fd7a20dfc1236d0658c2d517468",
-    "R/chemi_chet_auth_errorpage_showhide.R": "d52bbf906ead4150b0f5257188b49daf9be5eaac4836d9f9a6dca16982353a98",
-    "R/chemi_chet_auth_errorpage_showhide_post.R": "7a04e76250dcdeeeab2c5b7cb2628ae417cda77c8a4e0629f8c054ea4c9a057b",
-    "R/chemi_chet_auth_login_post.R": "ee77d37c0a9f5b374906ec2573abaca704ef81327de0b37ab0d8cab1fe9e231c",
-    "R/chemi_chet_auth_logout.R": "ba03e341bb877b2e0b2b9cd4469741a39b87eae9275fa34f5a28277980d31c20",
-    "R/chemi_chet_auth_register_post.R": "8e209d6f14a1c3cc5e31105ba4d85c955e5cf6a11f6673e7b54820248e44449f",
-    "R/chemi_chet_auth_report_post.R": "43888a5a0a35d1e9ba758ed9bec7e2aa890a7f146a15fabd30684febe75ef1e1",
-    "R/chemi_chet_auth_testpage.R": "0bf18c21e0ec553410a3dc618f0d0f13bcce2d7d6f3083df564b8d4c60f7036a",
-    "R/chemi_chet_auth_testpage_post.R": "056b2ba710f0cecdda4f7fddce8b8e78e7d0efb4f5995b603dda3995d5e85865",
     "R/chemi_chet_chemicals_alias.R": "312cb02442ad6f940e49d23dfe1caf7511673a972e2308f37203596a4bc76246",
-    "R/chemi_chet_chemicals_chemdelete.R": "e3f193075fac72322ca51d6fc5fd471d911f446971e3dd4aed2e7cfbac0ad91b",
     "R/chemi_chet_chemicals_chemical_dl.R": "0b9efb3e073c2c28a77699edd195362a86e86e0a9672d3bee0be93b5dbd0cde2",
     "R/chemi_chet_chemicals_chemical_dl_post.R": "117513f72ae45e0b03557d5aa36beb8bf8184c1e3c3446df11880f11d94d451f",
     "R/chemi_chet_chemicals_chemset.R": "3b2591bfec7cef06b3e656acb32ed00f61bc81a6d3b5785bb9b3fd03cfc12a09",
@@ -3439,10 +3349,9 @@
     "apis/chemi-amos-prod-full.yml": "44697648e3960dba2668062bcb6855841ecf2998adf6759d5d73d081be584bed",
     "apis/chemi-amos-reviewed-reads.yml": "b853612c7475ad2f38da257a9a1a0724b770e8e4436c1fa5546fc218a5506d1d",
     "apis/chemi-arn_cats-prod-rebuild.yml": "22ba5936bfb3b6caa80b074e9ed298c13ae91470f4bb3890c801d1b3ecb18876",
-    "apis/chemi-chet-admin-auth.yml": "baf4544ac20e1461b9d230b7052da5f1a7d2a717c9cf2aa84f25219ab5c35de2",
     "apis/chemi-chet-chemical-dl-reviewed.yml": "cf9681e29eac02c2ccc1aaa4f1e583ea8d34f4c47ee57a1a856dafdd2c49c986",
     "apis/chemi-chet-direct-reads.yml": "aa9e890975eeb274ab860e79e328cf1734db806f53d964ef49b43f6cfaffc24b",
-    "apis/chemi-chet-extra.yml": "45a6b5b6eb308fc3622056c5bff60e32e6232f2b8c8936df0d0a6e9ac846ef65",
+    "apis/chemi-chet-extra.yml": "2cbfa34ee0936b6cff59b5625b63b3fa2ee8a2b90170058644ff22537a0f1eb8",
     "apis/chemi-chet-prod-full.yml": "dea80b737874c7861693fed65b79f2473358c225db006a440b6c1cd5e35d9a33",
     "apis/chemi-chet-prod-rebuild.yml": "b5d5d21087ed9b4ce5eb0e97fb623dfe4d8a3d352c13307cf64963fa7036d1fa",
     "apis/chemi-descriptors-native.yml": "05c90b0b9e440923473499c3d1163f0b1ec533bbd0ada91ce9471939537bda51",
@@ -3515,7 +3424,7 @@
     "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
-    "inst/hook_config.yml": "a243b07bbe212ac471f70bdb5b02ea100a34ddb47c03ab530b2518366006065a",
+    "inst/hook_config.yml": "c0d7cbc01602db7fc16d32ceeae8ea821442bb8be1bb72a8a4c17708de3a947a",
     "inst/hook_config_generated.yml": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "inst/plumber/ctx/plumber.R": "40fa4dcaf1112fd0bdafd84816589f45931de5f6d34bd052bdabc0cd553a8504",
     "inst/plumber/ecotox/plumber.R": "f596a01091c3ce57c21b711edd306d6454fa7ff35e3fc202d61de1092022af2e",
@@ -3613,25 +3522,7 @@
     "man/chemi_arn_cats_bulk.Rd": "04fbe94d6c1e7e62cf2acebd3f60bcb3cd4bda8df69e0d8596c29a0b6b9ac8fe",
     "man/chemi_arn_cats_metadata.Rd": "bcbf2907e7bf0dc0ded2132fc6b362f6e2d2ec5c99a312635356fc827f57f18b",
     "man/chemi_arn_cats_version.Rd": "2395f71d2092c6d93cdd3d98e52f25043cf10a0ba8d6f7e7827909896be5c732",
-    "man/chemi_chet_admin_database.Rd": "9530155378f083b869d9e80f7da13dfeaeb9616924ca53b6d9a0af278495180a",
-    "man/chemi_chet_admin_errorreport_post.Rd": "4cd7e80a36d7b5c1ff79c82070376632b9bb45969475d59751b700462a9c325e",
-    "man/chemi_chet_admin_login_post.Rd": "4d3b3ab093de6ecbf8042c2217494e6391f7933b396ddcd905cc03ea64578817",
-    "man/chemi_chet_admin_register_post.Rd": "8eec3e92c63c2c1561f073211647d73d8f249c1daee564467933affb8a85533e",
-    "man/chemi_chet_admin_resolve_post.Rd": "b2a118e18e57f62f6d5b7f8277c1a16c2d0e2678ef333abf73c67657c8ebd4bb",
-    "man/chemi_chet_auth_errorpage.Rd": "dcb874acd63dc7b7f183068c73e6fb2c05198bf093a9c217bd051f03677c203e",
-    "man/chemi_chet_auth_errorpage_complete_idnum.Rd": "728d2f41c272e075aedb5bb97381ee55972ce6f3da1b368a1556e11cfc99563e",
-    "man/chemi_chet_auth_errorpage_complete_idnum_post.Rd": "7c436bb86307bf4003012fe572013f57fac685c99a894e66ae48248bfbbb61a7",
-    "man/chemi_chet_auth_errorpage_post.Rd": "fb102a0e561af54befb5dceddd059cb01ec58e6faeb2cc0811495c27078278d4",
-    "man/chemi_chet_auth_errorpage_showhide.Rd": "5be9417b3677a8466d12d6cffe3ec09970f60d201095b9530750b582f5f06e51",
-    "man/chemi_chet_auth_errorpage_showhide_post.Rd": "b38d0ddadf9c7ba0c735cb1ad8c039c87c006bddd539aa76a3c4f4aa649bb453",
-    "man/chemi_chet_auth_login_post.Rd": "1595ec1b1c82c55fe69f167c27ddfd1daa479652e1eb463627c71d2079fffef9",
-    "man/chemi_chet_auth_logout.Rd": "f0242c67f8718bc5c7b05084cfcccff72d1b8f1e1431932cab97f569cb70340e",
-    "man/chemi_chet_auth_register_post.Rd": "34e70dcbff3b8c718b133920cd78dd6e579806ac4da47e851ac12a48cceb6065",
-    "man/chemi_chet_auth_report_post.Rd": "6d3e290a164c9795bb01314ca42214c0048913e934129ff97fc8ba11e77ae808",
-    "man/chemi_chet_auth_testpage.Rd": "689f00646e54901a4edbfc5bc9f1d898f3d2dfa30587edc09f0d47f4143bbba9",
-    "man/chemi_chet_auth_testpage_post.Rd": "faa1024c65957d3c51a8a9e27f82615273f753e474f88b181748d19f81d5ef6f",
     "man/chemi_chet_chemicals_alias.Rd": "cccfbd6f14a4637870e171021975c3bbaa2b12b0b959db2202b7b7216e51b387",
-    "man/chemi_chet_chemicals_chemdelete.Rd": "5618f0f723fefcfce035c0ae6824b7b0c1562fa0c8a56e0701f5946842369bf2",
     "man/chemi_chet_chemicals_chemical_dl.Rd": "0b2a5d59030ae346ae403a8dbee4680b12d45796725f82e3a431ba376e21ee49",
     "man/chemi_chet_chemicals_chemical_dl_post.Rd": "eb7bef74d1c64f8a5e4ef9a30867fe469cbc4e2aba4709793a16a09b0608d864",
     "man/chemi_chet_chemicals_chemset.Rd": "7242b14a75e8b368fd8776405b1ef9412bfc21d013fe3197781d72f784723ecb",
@@ -4167,7 +4058,7 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "schema/pubchem-reviewed.json": "ec4ee5c2c6b10c63248dfaa2f6f1b3198b6b6ebe9cfb11422d52de3adead5a9e",
-    "specmill.yml": "34eb9d5e92a6bd86f6210d9f3af4b56605164c259b7ed5e9c9fa19ecbe6d8831",
+    "specmill.yml": "db65f54050fc35a1d6db92b463934b7401b847a688c79774b208c9b4c59372e6",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "b2d52ee18ca104f1758a8dbb6816c800a161b895311094ca1ae0ca3a0e65d1be",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "36f4f607e6bd765a71c8a586ada806147fd3407a7f9f68b9238d37dbc368a415",
     "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "3cba49e756619b493ce8fce6c0698d688aeb3313f7a152646de75dc7fa1249df"

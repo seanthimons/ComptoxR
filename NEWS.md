@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+- Exclude every CheT `/auth/*`, `/admin/*` and `/chemicals/chemdelete` route,
+  removing 18 generated wrappers and resolving the eight endpoint decisions in #355.
+
 - Remove 21 generated wrappers using PUT, PATCH, DELETE or OPTIONS. Client
   generation now permits only GET and POST and excludes the five AMOS `add_*`
   uploads tracked in #354.

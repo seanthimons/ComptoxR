@@ -55,7 +55,6 @@ services:
 - apis/chemi-chet-extra.yml
 - apis/chemi-resolver-remaining-facade.yml
 - apis/chemi-search-services-native.yml
-- apis/chemi-chet-admin-auth.yml
 - apis/chemi-resolver-extra.yml
 - apis/chemi-amos-direct-reads.yml
 - apis/chemi-small-families.yml

@@ -8,6 +8,9 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
     banned <- unlist(policy$banned_operations, use.names = FALSE)
     stopifnot(all(sub(" .*", "", selected) %in% policy$allowed_methods),
       !any(selected %in% banned))
+    if (any(startsWith(basename(unlist(service$schemas$files)), "chemi-chet"))) {
+      stopifnot(!any(grepl(policy$chet_banned_path_pattern, sub("^[^ ]+ ", "", selected))))
+    }
   }
   source("dev/install_specmill.R", local = TRUE)
   verify_specmill()

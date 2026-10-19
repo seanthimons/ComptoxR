@@ -9,8 +9,17 @@ test_that('banned endpoints cannot be selected or exported', {
     banned <- unlist(policy$banned_operations, use.names = FALSE)
     expect_true(all(sub(' .*', '', selected) %in% policy$allowed_methods), info = file)
     expect_false(any(selected %in% banned), info = file)
+    if (any(startsWith(basename(unlist(service$schemas$files)), 'chemi-chet'))) {
+      expect_false(any(grepl(policy$chet_banned_path_pattern, sub('^[^ ]+ ', '', selected))), info = file)
+    }
   }
-  removed <- jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-354/removed-bindings.json'))
+  expect_true(all(grepl(policy$chet_banned_path_pattern,
+    c('/auth/login', '/auth/new-route', '/admin/new-route', '/chemicals/chemdelete'))))
+  expect_false(any(grepl(policy$chet_banned_path_pattern,
+    c('/chemicals/chemical_DL', '/curators/login', '/chemicals/chemdelete-other'))))
+  removed <- c(
+    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-354/removed-bindings.json')),
+    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-355/removed-bindings.json')))
   for (binding in removed) {
     expect_false(binding$name %in% getNamespaceExports('ComptoxR'))
     expect_false(file.exists(file.path(root, binding$file)))

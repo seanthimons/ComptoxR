@@ -10,7 +10,7 @@ chemi-alerts-prod: 10/16 (3 banned; 3 remaining)
 chemi-amnb_nate-prod: 4/4 (0 banned; 0 remaining)
 chemi-amos-prod: 64/77 (11 banned; 2 remaining)
 chemi-arn_cats-prod: 4/4 (0 banned; 0 remaining)
-chemi-chet-prod: 83/95 (4 banned; 8 remaining)
+chemi-chet-prod: 65/95 (30 banned; 0 remaining)
 chemi-descriptors-prod: 4/4 (0 banned; 0 remaining)
 chemi-hazard-prod: 13/16 (3 banned; 0 remaining)
 chemi-mordred-prod: 4/4 (0 banned; 0 remaining)
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28 (0 banned; 0 remaining)
 epi-suite-prod: 14/14 (0 banned; 0 remaining)
 ```
 
-Total: 492/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 474/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
