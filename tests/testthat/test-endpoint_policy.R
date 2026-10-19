@@ -46,7 +46,12 @@ test_that('banned endpoints cannot be selected or exported', {
     policy$banned_operations[['schema/chemi-amos-prod.json']]))
   expect_true(all(c('chemi_amos', 'chemi_amos_analytical_qc_keyset_pagination_bulk') %in%
     getNamespaceExports('ComptoxR')))
+  expect_true('POST /api/resolver/getpubchemlist' %in%
+    policy$banned_operations[['schema/chemi-resolver-prod.json']])
+  expect_false('POST /api/resolver/getsimilaritylist' %in%
+    policy$banned_operations[['schema/chemi-resolver-prod.json']])
   removed <- c(
+    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-358/removed-bindings.json')),
     jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-357/removed-bindings.json')),
     jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-354/removed-bindings.json')),
     jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-355/removed-bindings.json')),

@@ -76,13 +76,14 @@
     ],
     "schema/chemi-resolver-prod.json": [
       "POST /api/resolver/casharvest",
-      "POST /api/resolver/universalharvest"
+      "POST /api/resolver/universalharvest",
+      "POST /api/resolver/getpubchemlist"
     ],
     "schema/chemi-safety-prod.json": [
       "GET /api/alerts/render"
     ]
   },
-  "decision": "Issues #354-#356: exclude server-side file standardization POST /api/stdizer and saved rule-group management; preserve GET standardization, JSON chemical/record calculations and the recorded route bans. Issue #357: ban both AMOS XLSX batch exports pending a concrete end-user need; retain JSON searches.",
+  "decision": "Issues #354-#356: exclude server-side file standardization POST /api/stdizer and saved rule-group management; preserve GET standardization, JSON chemical/record calculations and the recorded route bans. Issue #357: ban both AMOS XLSX batch exports pending a concrete end-user need; retain JSON searches. Issue #358: ban getpubchemlist without an established end-user purpose; similarity-list uses a separately reviewed generated binding.",
   "chet_banned_path_pattern": "^/(auth/|admin/|chemicals/chemdelete/?$)",
   "banned_path_pattern": "^/api/stdizer/groups(/|$)|(/(add|replace)/?$|^/api/resolver/(casharvest|universalharvest)/?$|^/api/services/(caspreflight|files)/?$)",
   "alerts_allowed_operations": [

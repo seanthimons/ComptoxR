@@ -1,0 +1,36 @@
+{
+  "tests": {
+    "filter": "^similarity_list$|endpoint_policy|chemi_resolver_chemical_resolution",
+    "passed": 662,
+    "failed": 0,
+    "warnings": 0,
+    "skipped": 0
+  },
+  "generation": "Official Specmill 0.1.51 validation-enabled adoption, reviewed four-field public drift and final dev/generate_specmill.R --check passed",
+  "public_boundary": "passed; 1606 text files",
+  "canonical_schemas": "unchanged",
+  "surviving_generated_output_records": "only R/chemi_resolver_getsimilaritylist.R adopted; all unrelated generated owner records unchanged",
+  "progress": {
+    "migrated": 463,
+    "banned": 84,
+    "remaining": 1,
+    "total": 548
+  },
+  "live_requests": "13 direct read-only investigation controls plus four installed generated-wrapper calls with real identifier resolution; no localhost calls",
+  "full_package_check": "not run",
+  "similarity_investigation": {
+    "direct_read_only_controls": 13,
+    "production": "nonempty positive result; Indigo/Tanimoto",
+    "development": "positive result plus required-field and reference-exclusion controls",
+    "staging": "HTTP 502; unverified",
+    "offline_assertions": "passed: similarity-investigation/verify.py",
+    "runtime_adoption": true
+  },
+  "wrapper_live": {
+    "development": "nonempty 0.138 result and empty self-only result passed",
+    "production": "nonempty 0.138 result and empty self-only result passed",
+    "package_install": "passed",
+    "evidence": "similarity-investigation/installed-wrapper-live.json",
+    "final_function_matches_installed": "formals and body identical; later changes affect documentation only"
+  }
+}

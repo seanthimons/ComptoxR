@@ -1,0 +1,195 @@
+{
+  "components": {
+    "schemas": {
+      "Chemical": {
+        "properties": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
+            "type": "string"
+          },
+          "chemId": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "mol": {
+            "type": "string"
+          },
+          "molFormula": {
+            "type": "string"
+          },
+          "monoisotopicMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "OrderSimilarityRequest": {
+        "properties": {
+          "fingerprintName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "default": "indigo"
+          },
+          "main": {
+            "$ref": "#/components/schemas/Chemical"
+          },
+          "padelCompute2D": {
+            "type": "boolean"
+          },
+          "padelCompute3D": {
+            "type": "boolean"
+          },
+          "padelComputeFingerprints": {
+            "type": "boolean"
+          },
+          "rdkitBits": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "rdkitRadius": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "rdkitType": {
+            "type": "string"
+          },
+          "scoreName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "default": "tanimoto"
+          },
+          "toxprintsProfile": {
+            "type": "string"
+          },
+          "tverskyI": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "_chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
+            },
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000
+          }
+        },
+        "type": "object",
+        "required": [
+          "main",
+          "_chemicals",
+          "fingerprintName",
+          "scoreName"
+        ]
+      },
+      "Row": {
+        "properties": {
+          "chemical": {
+            "$ref": "#/components/schemas/Chemical"
+          },
+          "max": {
+            "format": "double",
+            "type": "number"
+          },
+          "similarity": {
+            "$ref": "#/components/schemas/Similarity"
+          }
+        },
+        "type": "object"
+      },
+      "Similarity": {
+        "properties": {
+          "cl": {
+            "type": "string"
+          },
+          "sim": {
+            "format": "float",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Resolver Module",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/resolver/getsimilaritylist": {
+      "post": {
+        "operationId": "getSimilarityList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderSimilarityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Row"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://hcd.rtpnc.epa.gov"
+    }
+  ]
+}

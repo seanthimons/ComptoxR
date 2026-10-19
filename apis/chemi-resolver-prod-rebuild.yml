@@ -2,6 +2,9 @@ id: chemi-resolver-prod-rebuild
 schemas:
   files:
   - schema/chemi-resolver-prod.json
+# #358: POST /api/resolver/getpubchemlist is banned without an established
+# end-user purpose or reviewed implementation. Similarity-list is mapped in
+# chemi-resolver-reviewed-similarity.yml using its verified wire contract.
 selection:
   include:
   - GET /api/resolver/ccte-list

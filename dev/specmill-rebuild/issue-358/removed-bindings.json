@@ -1,0 +1,9 @@
+[
+  {
+    "service": "legacy",
+    "operation": "POST /api/resolver/getpubchemlist",
+    "name": "chemi_resolver_getpubchemlist",
+    "file": "R/chemi_resolver_getpubchemlist.R",
+    "implementation": "legacy"
+  }
+]

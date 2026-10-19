@@ -76,24 +76,11 @@ chemi_search:
   post_response:
     - chemi_search_post_response
 
-chemi_resolver_getpubchemlist:
-  parameter_overrides:
-    page:
-      exclude: true
-    itemsPerPage:
-      exclude: true
-    search:
-      exclude: true
-    linkBy:
-      exclude: true
-    report:
-      exclude: true
-  pre_request:
-    - resolve_query_to_chemical_records
-
 chemi_resolver_getsimilaritylist:
+  bespoke_test: "tests/testthat/test-similarity_list.R"
   pre_request:
-    - resolve_query_to_chemical_records
+    - resolve_similarity_reference
+    - resolve_similarity_candidates
 
 chemi_resolver_getsimilaritymap:
   bespoke_test: "tests/testthat/test-native_similaritymap_state.R"

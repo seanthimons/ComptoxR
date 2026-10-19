@@ -32,7 +32,8 @@ owned <- function(path) {
     digest::digest(enc2utf8(gsub('\r\n?', '\n', paste(readLines(path, warn = FALSE), collapse = '\n'))),
       algo = 'sha256', serialize = FALSE))
 }
-review_files <- c('dev/specmill-rebuild/amos-reviewed-source.json',
+review_files <- c('dev/specmill-rebuild/issue-358/similarity-provenance.json',
+  'dev/specmill-rebuild/amos-reviewed-source.json',
   'dev/specmill-rebuild/chet-chemical-dl/provenance.json',
   'dev/search-services/provenance.json',
   'dev/specmill-rebuild/amos-v41/provenance.json',

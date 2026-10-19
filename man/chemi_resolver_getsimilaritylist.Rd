@@ -2,66 +2,62 @@
 % Please edit documentation in R/chemi_resolver_getsimilaritylist.R
 \name{chemi_resolver_getsimilaritylist}
 \alias{chemi_resolver_getsimilaritylist}
-\title{Resolver Getsimilaritylist}
+\title{Compare a reference chemical with supplied candidate chemicals}
 \usage{
 chemi_resolver_getsimilaritylist(
   query,
+  main,
   idType = "AnyId",
-  fingerprintName = NULL,
-  get_chemicals = NULL,
-  main = NULL,
+  fingerprintName = "indigo",
+  scoreName = "tanimoto",
   padelCompute2D = NULL,
   padelCompute3D = NULL,
   padelComputeFingerprints = NULL,
   rdkitBits = NULL,
   rdkitRadius = NULL,
   rdkitType = NULL,
-  scoreName = NULL,
   toxprintsProfile = NULL,
   tverskyI = NULL
 )
 }
 \arguments{
-\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
+\item{query}{Character vector of 1 to 1000 candidate chemical identifiers. Unresolved candidates are omitted.}
 
-\item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+\item{main}{One reference chemical identifier, resolved separately from query.}
 
-\item{fingerprintName}{Optional parameter}
+\item{idType}{Identifier type for both reference and candidates; defaults to AnyId.}
 
-\item{get_chemicals}{Optional parameter}
+\item{fingerprintName}{Fingerprint engine. Default indigo is verified; other engines require compatible scoring settings.}
 
-\item{main}{Optional parameter}
+\item{scoreName}{Similarity score. Default tanimoto is verified with indigo.}
 
-\item{padelCompute2D}{Optional parameter}
+\item{padelCompute2D}{padelCompute2D}
 
-\item{padelCompute3D}{Optional parameter}
+\item{padelCompute3D}{padelCompute3D}
 
-\item{padelComputeFingerprints}{Optional parameter}
+\item{padelComputeFingerprints}{padelComputeFingerprints}
 
-\item{rdkitBits}{Optional parameter}
+\item{rdkitBits}{rdkitBits}
 
-\item{rdkitRadius}{Optional parameter}
+\item{rdkitRadius}{rdkitRadius}
 
-\item{rdkitType}{Optional parameter}
+\item{rdkitType}{rdkitType}
 
-\item{scoreName}{Optional parameter}
+\item{toxprintsProfile}{toxprintsProfile}
 
-\item{toxprintsProfile}{Optional parameter}
-
-\item{tverskyI}{Optional parameter}
+\item{tverskyI}{tverskyI}
 }
 \value{
-Returns a tibble with results (array of objects)
+A list of API Row objects containing chemical, max and similarity fields. Returns NULL with a warning when no candidates resolve.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
-then sends the resolved Chemical objects to the API endpoint.
+Resolves one reference and a candidate set, then calculates similarities within that set. Does not search a chemical database for new candidates. The reference is excluded from returned candidates.
 }
 \examples{
 \dontrun{
-chemi_resolver_getsimilaritylist(query = c("50-00-0", "DTXSID7020182"))
+chemi_resolver_getsimilaritylist(query = "DTXSID9020112", main = "DTXSID7020182")
 }
 }
 \section{API stage}{

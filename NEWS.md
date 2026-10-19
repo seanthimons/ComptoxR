@@ -4,6 +4,14 @@
 
 ## Unreleased
 
+- Rebuild `chemi_resolver_getsimilaritylist` with Specmill. `main` is one reference
+  identifier and `query` is the candidate set; both resolve separately. Explicit
+  Indigo/Tanimoto defaults and the verified `_chemicals` request replace the
+  broken legacy contract. Remove the schema-artifact `get_chemicals` argument.
+
+- Exclude resolver `getpubchemlist` and remove its public wrapper pending an
+  established end-user purpose (#358). Similarity-list remains held.
+
 - Exclude the two AMOS XLSX batch exports pending a concrete end-user need,
   removing `chemi_amos_batch` and `chemi_amos_analytical_qc_batch` (#357).
   JSON substance search and analytical QC pagination remain available.

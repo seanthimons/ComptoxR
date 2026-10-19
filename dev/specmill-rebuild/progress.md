@@ -21,7 +21,7 @@ chemi-pfas_atlas-prod: 4/4 (0 banned; 0 remaining)
 chemi-pfas_cats-prod: 4/4 (0 banned; 0 remaining)
 chemi-predictor_models-prod: 5/5 (0 banned; 0 remaining)
 chemi-rdkit-prod: 4/4 (0 banned; 0 remaining)
-chemi-resolver-prod: 42/46 (2 banned; 2 remaining)
+chemi-resolver-prod: 43/46 (3 banned; 0 remaining)
 chemi-safety-prod: 3/4 (1 banned; 0 remaining)
 chemi-search-prod: 14/14 (0 banned; 0 remaining)
 chemi-services-prod: 12/14 (2 banned; 0 remaining)
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28 (0 banned; 0 remaining)
 epi-suite-prod: 14/14 (0 banned; 0 remaining)
 ```
 
-Total: 462/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 463/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.

@@ -66,6 +66,7 @@ services:
 - apis/chemi-stdizer-reviewed-protocol-get.yml
 - apis/chemi-descriptors-native.yml
 - apis/pubchem-reviewed.yml
+- apis/chemi-resolver-reviewed-similarity.yml
 callback_files:
 - dev/specmill_callbacks.R
 - dev/specmill-rebuild/remaining-facades/callbacks.R

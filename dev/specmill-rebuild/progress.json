@@ -1,16 +1,6 @@
 {
-  "commit": "70e3b0e5d5898f6aba99fd421e59b7f0e7927c35",
+  "commit": "019cff5043ee2b72c833112308cab0a74edfe597",
   "legacy_callers": [
-    {
-      "wrapper": "chemi_resolver_getpubchemlist",
-      "method": "POST",
-      "route": "resolver/getpubchemlist"
-    },
-    {
-      "wrapper": "chemi_resolver_getsimilaritylist",
-      "method": "POST",
-      "route": "resolver/getsimilaritylist"
-    },
     {
       "wrapper": "chemi_toxprints_bulk",
       "method": "POST",
@@ -143,10 +133,10 @@
     },
     {
       "schema": "chemi-resolver-prod",
-      "migrated": 42,
+      "migrated": 43,
       "total": 46,
-      "banned": 2,
-      "remaining": 2
+      "banned": 3,
+      "remaining": 0
     },
     {
       "schema": "chemi-safety-prod",
@@ -242,7 +232,7 @@
     "schema/chemi-pfas_cats-prod.json": [],
     "schema/chemi-predictor_models-prod.json": [],
     "schema/chemi-rdkit-prod.json": [],
-    "schema/chemi-resolver-prod.json": ["POST /api/resolver/casharvest", "POST /api/resolver/universalharvest"],
+    "schema/chemi-resolver-prod.json": ["POST /api/resolver/casharvest", "POST /api/resolver/getpubchemlist", "POST /api/resolver/universalharvest"],
     "schema/chemi-safety-prod.json": "GET /api/alerts/render",
     "schema/chemi-search-prod.json": [],
     "schema/chemi-services-prod.json": ["POST /api/services/caspreflight", "POST /api/services/files"],
@@ -4430,6 +4420,15 @@
       "wrapper": "chemi_descriptors_bulk",
       "file": "R/chemi_descriptors.R",
       "suite": "tests/testthat/test-native_descriptor_ownership.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-reviewed-similarity.json",
+      "operation": "POST /api/resolver/getsimilaritylist",
+      "wrapper": "chemi_resolver_getsimilaritylist",
+      "file": "R/chemi_resolver_getsimilaritylist.R",
+      "suite": "tests/testthat/test-similarity_list.R",
       "migrated": true
     }
   ]

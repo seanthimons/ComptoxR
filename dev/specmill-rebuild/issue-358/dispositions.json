@@ -1,0 +1,14 @@
+[
+  {
+    "schema": "schema/chemi-resolver-prod.json",
+    "operation": "POST /api/resolver/getpubchemlist",
+    "disposition": "banned_client_scope",
+    "reason": "User cannot establish usage or a useful implementation; no current end-user purpose."
+  },
+  {
+    "schema": "schema/chemi-resolver-prod.json",
+    "operation": "POST /api/resolver/getsimilaritylist",
+    "disposition": "adopted_generated_base",
+    "reason": "Specmill-generated wrapper with independent reference/candidate resolution hooks and reviewed schema mapping; installed-package live controls passed in production and development for Indigo/Tanimoto. Other engines and staging remain unverified."
+  }
+]
