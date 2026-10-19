@@ -1,0 +1,341 @@
+{
+  "version": "0.1.49",
+  "source_commit": "9f77037c6b76167679aaff4c3ee753c71ee89a9b",
+  "owners": 637,
+  "freshness": true,
+  "official_helper_exact": true,
+  "validation": {
+    "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-descriptors-prod.json": {
+      "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-descriptors-prod.json",
+      "source_sha256": "a05d61fd3b73a72a88ac73cf3c133fbce8e2d4fdd5fdca1de84bcc6792e780ff",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "GET /api/descriptors",
+          "method": "GET",
+          "path": "/api/descriptors",
+          "source_location": "#/paths/~1api~1descriptors/get"
+        },
+        {
+          "key": "POST /api/descriptors",
+          "method": "POST",
+          "path": "/api/descriptors",
+          "source_location": "#/paths/~1api~1descriptors/post"
+        },
+        {
+          "key": "GET /api/descriptors/metadata",
+          "method": "GET",
+          "path": "/api/descriptors/metadata",
+          "source_location": "#/paths/~1api~1descriptors~1metadata/get"
+        },
+        {
+          "key": "GET /api/descriptors/version",
+          "method": "GET",
+          "path": "/api/descriptors/version",
+          "source_location": "#/paths/~1api~1descriptors~1version/get"
+        }
+      ],
+      "findings": []
+    },
+    "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-rdkit-prod.json": {
+      "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-rdkit-prod.json",
+      "source_sha256": "6c5c06424c498e73e831ab00856eea584bdc45a5598da5c33ebab8514f389c2a",
+      "schema_version": "2.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "GET /api/rdkit/version",
+          "method": "GET",
+          "path": "/api/rdkit/version",
+          "source_location": "#/paths/~1api~1rdkit~1version/get"
+        },
+        {
+          "key": "GET /api/rdkit/metadata",
+          "method": "GET",
+          "path": "/api/rdkit/metadata",
+          "source_location": "#/paths/~1api~1rdkit~1metadata/get"
+        },
+        {
+          "key": "GET /api/rdkit",
+          "method": "GET",
+          "path": "/api/rdkit",
+          "source_location": "#/paths/~1api~1rdkit/get"
+        },
+        {
+          "key": "POST /api/rdkit",
+          "method": "POST",
+          "path": "/api/rdkit",
+          "source_location": "#/paths/~1api~1rdkit/post"
+        }
+      ],
+      "findings": []
+    },
+    "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-alerts-prod.json": {
+      "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-alerts-prod.json",
+      "source_sha256": "aabd653b436d793b92a84b09e61f033d5282b2877d5834bd908173e4a959002d",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "POST /api/alerts",
+          "method": "POST",
+          "path": "/api/alerts",
+          "source_location": "#/paths/~1api~1alerts/post"
+        },
+        {
+          "key": "GET /api/alerts/alerts",
+          "method": "GET",
+          "path": "/api/alerts/alerts",
+          "source_location": "#/paths/~1api~1alerts~1alerts/get"
+        },
+        {
+          "key": "POST /api/alerts/export",
+          "method": "POST",
+          "path": "/api/alerts/export",
+          "source_location": "#/paths/~1api~1alerts~1export/post"
+        },
+        {
+          "key": "POST /api/alerts/export-append",
+          "method": "POST",
+          "path": "/api/alerts/export-append",
+          "source_location": "#/paths/~1api~1alerts~1export-append/post"
+        },
+        {
+          "key": "GET /api/alerts/groups",
+          "method": "GET",
+          "path": "/api/alerts/groups",
+          "source_location": "#/paths/~1api~1alerts~1groups/get"
+        },
+        {
+          "key": "POST /api/alerts/groups",
+          "method": "POST",
+          "path": "/api/alerts/groups",
+          "source_location": "#/paths/~1api~1alerts~1groups/post"
+        },
+        {
+          "key": "DELETE /api/alerts/groups/{id}",
+          "method": "DELETE",
+          "path": "/api/alerts/groups/{id}",
+          "source_location": "#/paths/~1api~1alerts~1groups~1{id}/delete"
+        },
+        {
+          "key": "GET /api/alerts/groups/{id}",
+          "method": "GET",
+          "path": "/api/alerts/groups/{id}",
+          "source_location": "#/paths/~1api~1alerts~1groups~1{id}/get"
+        },
+        {
+          "key": "PUT /api/alerts/groups/{id}",
+          "method": "PUT",
+          "path": "/api/alerts/groups/{id}",
+          "source_location": "#/paths/~1api~1alerts~1groups~1{id}/put"
+        },
+        {
+          "key": "POST /api/alerts/groups/{id}/add",
+          "method": "POST",
+          "path": "/api/alerts/groups/{id}/add",
+          "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1add/post"
+        },
+        {
+          "key": "PATCH /api/alerts/groups/{id}/freeze",
+          "method": "PATCH",
+          "path": "/api/alerts/groups/{id}/freeze",
+          "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1freeze/patch"
+        },
+        {
+          "key": "POST /api/alerts/groups/{id}/replace",
+          "method": "POST",
+          "path": "/api/alerts/groups/{id}/replace",
+          "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1replace/post"
+        },
+        {
+          "key": "GET /api/alerts/metadata",
+          "method": "GET",
+          "path": "/api/alerts/metadata",
+          "source_location": "#/paths/~1api~1alerts~1metadata/get"
+        },
+        {
+          "key": "GET /api/alerts/operations",
+          "method": "GET",
+          "path": "/api/alerts/operations",
+          "source_location": "#/paths/~1api~1alerts~1operations/get"
+        },
+        {
+          "key": "GET /api/alerts/render",
+          "method": "GET",
+          "path": "/api/alerts/render",
+          "source_location": "#/paths/~1api~1alerts~1render/get"
+        },
+        {
+          "key": "GET /api/alerts/version",
+          "method": "GET",
+          "path": "/api/alerts/version",
+          "source_location": "#/paths/~1api~1alerts~1version/get"
+        }
+      ],
+      "findings": []
+    },
+    "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-safety-prod.json": {
+      "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-safety-prod.json",
+      "source_sha256": "54f3888c7e989693a6f9567634e16f588fc547d851ac7b047f49711b3537d4a3",
+      "schema_version": "3.1.0",
+      "validator": "jsonvalidate 1.5.0 (ajv)",
+      "status": "passed",
+      "reason": "The schema conforms to its OpenAPI specification.",
+      "operations": [
+        {
+          "key": "GET /api/alerts/render",
+          "method": "GET",
+          "path": "/api/alerts/render",
+          "source_location": "#/paths/~1api~1alerts~1render/get"
+        },
+        {
+          "key": "GET /api/safety/metadata",
+          "method": "GET",
+          "path": "/api/safety/metadata",
+          "source_location": "#/paths/~1api~1safety~1metadata/get"
+        },
+        {
+          "key": "POST /api/safety/rqcodes",
+          "method": "POST",
+          "path": "/api/safety/rqcodes",
+          "source_location": "#/paths/~1api~1safety~1rqcodes/post"
+        },
+        {
+          "key": "GET /api/safety/version",
+          "method": "GET",
+          "path": "/api/safety/version",
+          "source_location": "#/paths/~1api~1safety~1version/get"
+        }
+      ],
+      "findings": []
+    }
+  },
+  "routes": {
+    "chemi-descriptors-native GET /api/descriptors": [
+      {
+        "source": "schema/chemi-descriptors-prod.json",
+        "source_hash": "ef1c6bd403ad07aa87a012cc2f8898b2",
+        "key": "GET /api/descriptors",
+        "helper": ".ct_request",
+        "server": {
+          "diagnostic": "Relative server URL requires a recorded origin or explicit base URL override"
+        },
+        "server_resolver": {
+          "name": ".ct_server_url",
+          "key": "chemi_burl",
+          "relative": "/"
+        },
+        "body_media": {},
+        "text_encoding": "scalar"
+      },
+      {
+        "source": "schema/chemi-rdkit-prod.json",
+        "source_hash": "885c6ec76e6282a9689484392cfd9915",
+        "key": "GET /api/rdkit",
+        "helper": ".ct_request",
+        "server": {
+          "diagnostic": "Swagger host/scheme requires a recorded origin or explicit base URL override"
+        },
+        "server_resolver": {
+          "name": ".ct_server_url",
+          "key": "chemi_burl",
+          "relative": "/"
+        },
+        "body_media": {},
+        "text_encoding": "scalar"
+      }
+    ],
+    "chemi-descriptors-native POST /api/descriptors": [
+      {
+        "source": "schema/chemi-descriptors-prod.json",
+        "source_hash": "ef1c6bd403ad07aa87a012cc2f8898b2",
+        "key": "POST /api/descriptors",
+        "helper": ".ct_request",
+        "server": {
+          "diagnostic": "Relative server URL requires a recorded origin or explicit base URL override"
+        },
+        "server_resolver": {
+          "name": ".ct_server_url",
+          "key": "chemi_burl",
+          "relative": "/"
+        },
+        "body_media": "application/json",
+        "text_encoding": "scalar"
+      },
+      {
+        "source": "schema/chemi-rdkit-prod.json",
+        "source_hash": "885c6ec76e6282a9689484392cfd9915",
+        "key": "POST /api/rdkit",
+        "helper": ".ct_request",
+        "server": {
+          "diagnostic": "Swagger host/scheme requires a recorded origin or explicit base URL override"
+        },
+        "server_resolver": {
+          "name": ".ct_server_url",
+          "key": "chemi_burl",
+          "relative": "/"
+        },
+        "body_media": "application/json",
+        "text_encoding": "scalar"
+      }
+    ]
+  },
+  "response_sources": {
+    "selected": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-alerts-prod.json",
+    "reason": "Reviewed declared PNG/SVG responses for the identical shared alerts/safety render request; preserve the existing chemi_alerts_render wrapper and both source contracts.",
+    "sources": [
+      {
+        "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-alerts-prod.json",
+        "source_hash": "b8d8db67175063f97aec2b5ac708610f",
+        "content_type": "image/png, image/svg+xml",
+        "response_schema_type": "binary",
+        "response": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        }
+      },
+      {
+        "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v49-candidate/project/schema/chemi-safety-prod.json",
+        "source_hash": "2a6da521a5458182f4baaf1ce2342d42",
+        "content_type": "*/*",
+        "response_schema_type": "unknown",
+        "response": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        }
+      }
+    ]
+  }
+}

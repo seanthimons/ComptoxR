@@ -1,0 +1,13 @@
+{
+  "official_version": "0.1.50",
+  "official_source": "064478735580b54a732e3859b066b317e72d53a1",
+  "validated_sources": 4,
+  "fresh_owner_hashes": 637,
+  "localhost_assertions": 116,
+  "parity_assertions": 569,
+  "existing_hook_assertions": 98,
+  "previously_saved_production_controls": 4,
+  "new_deployed_calls": 0,
+  "root_tracked_writes": false,
+  "csv_tsv_existing_failure_retained": true
+}

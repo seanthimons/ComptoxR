@@ -14,23 +14,22 @@ pubchem_search(
 \item{query}{Character string. The search term (compound name, SMILES, InChI,
 InChIKey, or molecular formula).}
 
-\item{type}{Character string. The type of identifier in \code{query}. One of
-\code{"name"} (default), \code{"smiles"}, \code{"inchi"}, \code{"inchikey"}, or \code{"formula"}.}
+\item{type}{Character string. The type of identifier in `query`. One of
+`"name"` (default), `"smiles"`, `"inchi"`, `"inchikey"`, or `"formula"`.}
 
-\item{cache}{Logical. If \code{TRUE} (default), results are cached in the session
+\item{cache}{Logical. If `TRUE` (default), results are cached in the session
 environment so repeated searches for the same query and type are instant.}
 }
 \value{
-A tibble with a single column \code{cid} containing integer PubChem CIDs.
-Returns a zero-row tibble if no matches are found.
+A tibble with a single column `cid` containing integer PubChem CIDs.
+  Returns a zero-row tibble if no matches are found.
 }
 \description{
 Search the PubChem PUG REST API by compound name, SMILES, InChI, InChIKey,
 or molecular formula and return matching PubChem Compound IDs (CIDs).
-}
-\details{
+
 SMILES and InChI inputs are automatically sent via POST to avoid URL encoding
-issues with special characters (\code{/}, \verb{#}, \code{+}).
+issues with special characters (`/`, `#`, `+`).
 
 PubChem may return multiple CIDs for a single name query (e.g., different
 stereoisomers). If more than 10 CIDs are returned, a message is displayed
@@ -38,27 +37,19 @@ with the count.
 
 For structure-based searches (SMILES, InChI), the query is sent as a POST
 form body rather than in the URL path. This is required because
-\code{httr2::req_url_path_append()} does not percent-encode path segments,
-and characters like \code{/} and \verb{#} in SMILES notation would corrupt the URL.
+`httr2::req_url_path_append()` does not percent-encode path segments,
+and characters like `/` and `#` in SMILES notation would corrupt the URL.
+
+Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
 }
 \examples{
 \dontrun{
-# Search by name
-pubchem_search("aspirin")
-
-# Search by SMILES (uses POST automatically)
-pubchem_search("CC(=O)OC1=CC=CC=C1C(=O)O", type = "smiles")
-
-# Search by InChIKey
-pubchem_search("BSYNRYMUTXBXSQ-UHFFFAOYSA-N", type = "inchikey")
-
-# Search by molecular formula
-pubchem_search("C9H8O4", type = "formula")
+pubchem_search(query = "aspirin")
+pubchem_search(query = "CC(=O)O", type = "smiles")
 }
-
 }
 \seealso{
-\code{\link[=pubchem_properties]{pubchem_properties()}} to fetch properties for CIDs,
-\code{\link[=pubchem_synonyms]{pubchem_synonyms()}} to fetch synonym lists,
-\code{\link[=ct_chemical_detail_search]{ct_chemical_detail_search()}} for CompTox Dashboard chemical search.
+[pubchem_properties()] to fetch properties for CIDs,
+  [pubchem_synonyms()] to fetch synonym lists,
+  [ct_chemical_detail_search()] for CompTox Dashboard chemical search.
 }

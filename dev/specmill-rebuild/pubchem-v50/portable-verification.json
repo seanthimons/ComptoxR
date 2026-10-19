@@ -1,0 +1,11 @@
+{
+  "all_owner_hashes_match": true,
+  "owners": 13,
+  "public_wrapper_hashes": {
+    "pubchem_search.R": "c067b96ab8e3cd7ce5022b5cf9ba4574b8d02a1d417e174e616ff6fcfc816a24",
+    "pubchem_properties.R": "d5042839d847bca801c69366ea1bbe1402015b372cc32abb2e8f2ac9bd6ab497",
+    "pubchem_synonyms.R": "24a23e62a4c8665997e51d25eccc4ffb9e102d82345b79b3272fcdee317c82a0"
+  },
+  "repeated_portable_callbacks_public_bytes_identical": false,
+  "fresh": true
+}

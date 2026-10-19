@@ -1,0 +1,12 @@
+{
+  "official_version": "0.1.49",
+  "official_source": "9f77037c6b76167679aaff4c3ee753c71ee89a9b",
+  "validated_sources": 4,
+  "fresh_owner_hashes": 637,
+  "localhost_assertions": 116,
+  "parity_assertions": 569,
+  "existing_hook_assertions": 98,
+  "bounded_production_controls": 4,
+  "root_tracked_writes": false,
+  "csv_tsv_existing_failure_retained": true
+}

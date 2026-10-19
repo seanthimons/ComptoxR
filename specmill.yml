@@ -68,8 +68,11 @@ services:
 - apis/chemi-stdizer-reviewed-protocol-search.yml
 - apis/chemi-released-boolean-bindings.yml
 - apis/chemi-stdizer-reviewed-protocol-get.yml
+- apis/chemi-descriptors-native.yml
+- apis/pubchem-reviewed.yml
 callback_files:
 - dev/specmill_callbacks.R
 - dev/specmill-rebuild/remaining-facades/callbacks.R
 - dev/specmill-rebuild/rootheldrelease/callbacks.R
 - dev/specmill-rebuild/released-facades-v42/callbacks.R
+- dev/specmill_pubchem_callbacks.R

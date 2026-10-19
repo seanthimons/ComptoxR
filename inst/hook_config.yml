@@ -139,7 +139,7 @@ chemi_toxprints_calculate_bulk:
     - resolve_query_to_chemical_records
 
 chemi_descriptors:
-  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  bespoke_test: "tests/testthat/test-native_descriptor_ownership.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -178,20 +178,15 @@ chemi_descriptors:
     - add_descriptor_provenance
     - format_descriptor_result
   request_template: &descriptor_get_request
-    helper: generic_request
+    helper: .ct_request
     post_on_skip: true
     args:
-      endpoint: "req_data$request$endpoint"
-      method: "req_data$request$method"
-      batch_limit: "0"
-      server: "req_data$request$server"
-      auth: "FALSE"
-      tidy: "FALSE"
-      content_type: "req_data$request$content_type"
-      options: "req_data$request$options"
+      method: '"GET"'
+      path: "req_data$request$endpoint"
+      query: "req_data$request$options"
 
 chemi_descriptors_bulk:
-  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  bespoke_test: "tests/testthat/test-native_descriptor_ownership.R"
   extra_params:
     headers:
       default: "FALSE"
@@ -235,15 +230,12 @@ chemi_descriptors_bulk:
     - apply_aggregate_rdkit_fallback
   post_response: *descriptor_post
   request_template: &descriptor_post_request
-    helper: generic_chemi_request
+    helper: .ct_request
     post_on_skip: true
     args:
-      endpoint: "req_data$request$endpoint"
-      server: "req_data$request$server"
-      auth: "FALSE"
-      tidy: "FALSE"
+      method: '"POST"'
+      path: "req_data$request$endpoint"
       body: "req_data$request$body"
-      content_type: "req_data$request$content_type"
 
 chemi_padel:
   bespoke_test: "tests/testthat/test-native_calculation.R"
@@ -1416,3 +1408,12 @@ chemi_chet_auth_register_post:
 
 chemi_chet_auth_report_post:
   bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+pubchem_properties:
+  bespoke_test: tests/testthat/test-pubchem_retained_http.R
+
+pubchem_search:
+  bespoke_test: tests/testthat/test-pubchem_retained_http.R
+
+pubchem_synonyms:
+  bespoke_test: tests/testthat/test-pubchem_retained_http.R

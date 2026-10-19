@@ -1,0 +1,54 @@
+{
+  "chemi_descriptors-old": {
+    "name": "chemi_descriptors",
+    "version": "old",
+    "error": null,
+    "process_error": "! in callr subprocess.\nCaused by error in `get(\".ComptoxREnv\", ns)$probe_observer <- function(response) { ...`:\n! target of assignment expands to non-language object",
+    "rows": null,
+    "columns": null,
+    "fallback_used": null,
+    "source_endpoint": null,
+    "warnings": null,
+    "responses": null,
+    "time_utc": null
+  },
+  "chemi_descriptors-candidate": {
+    "name": "chemi_descriptors",
+    "version": "candidate",
+    "error": null,
+    "process_error": "! in callr subprocess.\nCaused by error in `get(\".ComptoxREnv\", ns)$probe_observer <- function(response) { ...`:\n! target of assignment expands to non-language object",
+    "rows": null,
+    "columns": null,
+    "fallback_used": null,
+    "source_endpoint": null,
+    "warnings": null,
+    "responses": null,
+    "time_utc": null
+  },
+  "chemi_descriptors_bulk-old": {
+    "name": "chemi_descriptors_bulk",
+    "version": "old",
+    "error": null,
+    "process_error": "! in callr subprocess.\nCaused by error in `get(\".ComptoxREnv\", ns)$probe_observer <- function(response) { ...`:\n! target of assignment expands to non-language object",
+    "rows": null,
+    "columns": null,
+    "fallback_used": null,
+    "source_endpoint": null,
+    "warnings": null,
+    "responses": null,
+    "time_utc": null
+  },
+  "chemi_descriptors_bulk-candidate": {
+    "name": "chemi_descriptors_bulk",
+    "version": "candidate",
+    "error": null,
+    "process_error": "! in callr subprocess.\nCaused by error in `get(\".ComptoxREnv\", ns)$probe_observer <- function(response) { ...`:\n! target of assignment expands to non-language object",
+    "rows": null,
+    "columns": null,
+    "fallback_used": null,
+    "source_endpoint": null,
+    "warnings": null,
+    "responses": null,
+    "time_utc": null
+  }
+}

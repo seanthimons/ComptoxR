@@ -1,0 +1,19 @@
+{
+  "official_generator": "0.1.50",
+  "files": {
+    "hook_config-additions.yml": "3651521a92153fcbdfd4066949a4b64c3541e406404ba19d86b548fae5b37706",
+    "man/pubchem_synonyms.Rd": "d4e1c1b7d6ec3a09b058b9e441a676e75ef9eea133170d9f9fbac8a404e1b111",
+    "man/pubchem_search.Rd": "5b75f845ba55ed81ef2a544615702ca42cbbb6332769f5e2d17d7ebc990b7825",
+    "man/pubchem_properties.Rd": "bbc82736891305e3c4948c6e97acb91fae1c4117531526922524ded9a9c92e4c",
+    "R/pubchem_search.R": "c067b96ab8e3cd7ce5022b5cf9ba4574b8d02a1d417e174e616ff6fcfc816a24",
+    "R/pubchem_properties.R": "d5042839d847bca801c69366ea1bbe1402015b372cc32abb2e8f2ac9bd6ab497",
+    "R/pubchem_policy.R": "144d5f2f1e6f10f06136d766fb33e69f180e590c56ff8f29ba11df0681c3e08b",
+    "R/pubchem_synonyms.R": "24a23e62a4c8665997e51d25eccc4ffb9e102d82345b79b3272fcdee317c82a0",
+    "dev/specmill_pubchem_callbacks.R": "ad07ee4001e2063be916e83281c3fa43d6f3cf83f73265c89280d091e8c84af4",
+    "schema/pubchem-reviewed.json": "78ef909c19a3a1a3aac978685683fc6c9068f12a83e8170668bd28636cc883f7",
+    "apis/pubchem-reviewed.yml": "fdf6a3d0de3abc755696fad27273ab5b3c32f3ca909c9bc198dc31571bdb6e5d",
+    "tests/testthat/test-pubchem_offline.R": "29d8ddbd7fe87d93f6f2baa8d3fbb0c2b7e51b0520f5f5368e776cda1fa22d81",
+    "tests/testthat/test-pubchem_retained_http.R": "3ac0f79cf76b9bf1e3b869fd5397a79973a5ec3c303bdb92d79f351fd659cdd5"
+  },
+  "trailing_whitespace": false
+}

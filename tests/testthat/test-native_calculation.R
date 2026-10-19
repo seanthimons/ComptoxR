@@ -1,5 +1,5 @@
 calculation_names <- c('chemi_padel', 'chemi_padel_bulk', 'chemi_rdkit', 'chemi_rdkit_bulk',
-  'chemi_webtest', 'chemi_webtest_bulk')
+  'chemi_webtest', 'chemi_webtest_bulk', 'chemi_descriptors', 'chemi_descriptors_bulk')
 
 calculation_frozen <- function(name) {
   definitions <- readRDS(test_path('fixtures/native-calculation-contracts.rds'))
@@ -10,12 +10,13 @@ calculation_capture <- function(fn, args) {
   value <- withCallingHandlers(tryCatch(do.call(fn, args), error = identity),
     warning = function(w) { warnings <<- c(warnings, conditionMessage(w)); invokeRestart('muffleWarning') })
   list(value = if (!inherits(value, 'error')) value,
-    error = if (inherits(value, 'error')) list(class = class(value), message = conditionMessage(value),
+    error = if (inherits(value, 'error')) list(class = if (inherits(value, 'missingArgError')) setdiff(class(value), c('evalError', 'getvarError')) else class(value), message = conditionMessage(value),
       location = value$location, parent = class(value$parent)), warnings = warnings)
 }
 calculation_args <- function(name, output = 'wide') {
   args <- list('CCO', output = output)
   if (grepl('rdkit', name)) args$bits <- 2L
+  if (grepl('^chemi_descriptors', name)) args$type <- 'padel'
   args
 }
 

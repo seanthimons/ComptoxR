@@ -1,0 +1,12 @@
+{
+  "source": "R/chemi_descriptors.R",
+  "archive": "dev/specmill-rebuild/ownership-v50/original-chemi_descriptors.R.txt",
+  "sha256": "4e714d13138b9e93fa7812e0beb9c09ec341c97d6a7ceaea406347ba91a4e1c5",
+  "public_definitions": [
+    "chemi_descriptors",
+    "chemi_descriptors_bulk"
+  ],
+  "reason": "Original grouped source is unowned and lifecycle-protected. Preserve the complete file and both AST definitions; remove original before official Specmill generation creates the native grouped file. No badge removal or ownership metadata edit.",
+  "render_source_retained": "R/chemi_alerts_render.R",
+  "root_generation_pending": true
+}

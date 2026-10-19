@@ -1,0 +1,277 @@
+{
+  "actual_http": 81,
+  "methods": {
+    "GET": 45,
+    "POST": 36
+  },
+  "cold_prefix_requests": 24,
+  "prefixes": ["/rest/pug", "/custom/pug-v2"],
+  "prefix_route_requests": [
+    {
+      "method": "GET",
+      "path": "/rest/pug/compound/name/prefix-cold/cids/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/name/prefix-cold/cids/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/rest/pug/compound/name/prefix-cold/cids/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/name/prefix-cold/cids/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/rest/pug/compound/smiles/cids/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/smiles/cids/JSON",
+      "body": "smiles=C%3DC",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/rest/pug/compound/smiles/cids/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/smiles/cids/JSON",
+      "body": "smiles=C%3DC",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/rest/pug/compound/cid/9101/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/9101/property/XLogP/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/rest/pug/compound/cid/9101/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/9101/property/XLogP/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/rest/pug/compound/cid/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/property/XLogP/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/rest/pug/compound/cid/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/property/XLogP/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/rest/pug/compound/cid/9101/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/9101/synonyms/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/rest/pug/compound/cid/9101/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/9101/synonyms/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/rest/pug/compound/cid/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/synonyms/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/rest/pug/compound/cid/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/rest/pug/compound/cid/synonyms/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/custom/pug-v2/compound/name/prefix-cold/cids/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/name/prefix-cold/cids/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/custom/pug-v2/compound/name/prefix-cold/cids/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/name/prefix-cold/cids/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/custom/pug-v2/compound/smiles/cids/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/smiles/cids/JSON",
+      "body": "smiles=C%3DC",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/custom/pug-v2/compound/smiles/cids/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/smiles/cids/JSON",
+      "body": "smiles=C%3DC",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/custom/pug-v2/compound/cid/9101/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/9101/property/XLogP/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/custom/pug-v2/compound/cid/9101/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/9101/property/XLogP/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/custom/pug-v2/compound/cid/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/property/XLogP/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/custom/pug-v2/compound/cid/property/XLogP/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/property/XLogP/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/custom/pug-v2/compound/cid/9101/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/9101/synonyms/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "GET",
+      "path": "/custom/pug-v2/compound/cid/9101/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/9101/synonyms/JSON",
+      "body": "",
+      "media": {},
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/custom/pug-v2/compound/cid/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/synonyms/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    },
+    {
+      "method": "POST",
+      "path": "/custom/pug-v2/compound/cid/synonyms/JSON",
+      "url": "http://127.0.0.1:27591/custom/pug-v2/compound/cid/synonyms/JSON",
+      "body": "cid=9101%2C9102",
+      "media": "application/x-www-form-urlencoded",
+      "agent": "ComptoxR/3.0.0 (https://github.com/seanthimons/ComptoxR)",
+      "has_auth": false,
+      "has_key": false,
+      "has_cookie": false
+    }
+  ],
+  "default_url_dry_run_routes": 6,
+  "default_url_dry_run_http": 0
+}

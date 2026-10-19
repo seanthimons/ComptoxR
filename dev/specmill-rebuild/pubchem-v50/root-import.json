@@ -1,0 +1,38 @@
+{
+  "original_wrappers_archived_and_removed_for_official_generation": {
+    "R/pubchem_search.R": "0ebb0729051c3036089f98a5f9e8c76ea86db892276dba81c8127e99941d5e11",
+    "R/pubchem_properties.R": "4f1a9e89127656bf6c2c10281ec8497e5d19c9b82f74b2fd708680b78ed0739e",
+    "R/pubchem_synonyms.R": "f9717dd6189b881e0bae89cadbe6c276531d740253ea1bdb9a6ae42b62150286"
+  },
+  "bundle_source": "/home/sxthi/.cache/comptoxr-specmill-finish/release50-verification/pubchem-candidate/bundle",
+  "root_generation_run": false,
+  "root_pin_or_helper_edited": false,
+  "relative_empty_string_bindings": 3,
+  "shared_registry_handoff": "protocol_get_candidate completed before PubChem append",
+  "root_import_files": [
+    "apis/pubchem-reviewed.yml",
+    "schema/pubchem-reviewed.json",
+    "R/pubchem_policy.R",
+    "dev/specmill_pubchem_callbacks.R"
+  ],
+  "evidence_paths": "dev/specmill-rebuild/pubchem-v50; archived originals/*.R.txt",
+  "narrow_validation": {
+    "all_imported_R_parse": true,
+    "shared_registries_parse_and_unique_service_callback": true,
+    "all_three_relative_bindings_empty": true,
+    "bespoke_tests_registered": true,
+    "git_diff_check_passed": true
+  },
+  "parent_next_steps": [
+    "Retire three owned generic-helper contract tests using reviewed hashes and supported specmill::apply_files (retire-helper-contracts.json)",
+    "Adopt/check official50 helper through existing emitter; no companion changes",
+    "Run root official generation and freshness; new public wrappers are intentionally absent until generated",
+    "Run root registered native PubChem parity/public validation/caller suites"
+  ],
+  "unowned_generated_helper_tests_left_for_supported_retirement": {
+    "tests/testthat/test-pubchem_properties.R": "5df371a3f579771d24e3a9402b63fb3e318960e687d4a489239321eefc647667",
+    "tests/testthat/test-pubchem_search.R": "59fc586d5230c02117a742c4bc43b6729c4af512be0f5c42b119705f0d3b0865",
+    "tests/testthat/test-pubchem_synonyms.R": "fca2918e154c3d1a713c0684c7deb57b7288b88264e079249367f8a75b49d5a7"
+  },
+  "retirement_note": "Parent confirmed these old dev/generate_tests.R outputs are unowned by Specmill. Exact SHA predicate authorizes retirement through specmill::apply_files; no ownership metadata edit."
+}

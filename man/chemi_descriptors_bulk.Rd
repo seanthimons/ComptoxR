@@ -19,15 +19,15 @@ chemi_descriptors_bulk(
 
 \item{type}{Descriptor engine: padel, rdkit, mordred, or webtest}
 
-\item{chemIdType}{Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
+\item{chemIdType}{Input identifier type: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1 or AnyId.}
 
-\item{headers}{Request descriptor headers}
+\item{headers}{Request descriptor headers.}
 
-\item{format}{Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)}
+\item{format}{Response format: JSON, CSV or TSV.}
 
-\item{timeout}{Optional upstream calculation timeout}
+\item{timeout}{Optional upstream calculation timeout.}
 
-\item{output}{Output contract: validated wide tibble or raw payload}
+\item{output}{Output contract: validated wide tibble or raw payload.}
 }
 \value{
 Returns a tibble with results
@@ -37,7 +37,7 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_descriptors_bulk(query = "DTXSID1024122")
+chemi_descriptors_bulk(query = "CCO", type = "rdkit")
 }
 }
 \section{API stage}{
