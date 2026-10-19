@@ -38,8 +38,54 @@
       "POST /auth/testpage",
       "GET /chemicals/chemdelete",
       "POST /chemicals/chemdelete"
+    ],
+    "schema/chemi-services-prod.json": [
+      "POST /api/services/caspreflight",
+      "POST /api/services/files"
+    ],
+    "schema/chemi-stdizer-prod.json": [
+      "POST /api/stdizer/groups/{id}/add",
+      "POST /api/stdizer/groups/{id}/replace",
+      "GET /api/stdizer/groups",
+      "POST /api/stdizer/groups",
+      "POST /api/stdizer/groups/preflight",
+      "DELETE /api/stdizer/groups/{id}",
+      "GET /api/stdizer/groups/{id}",
+      "PUT /api/stdizer/groups/{id}",
+      "PUT /api/stdizer/groups/{id}/acl",
+      "PATCH /api/stdizer/groups/{id}/freeze",
+      "GET /api/stdizer/groups/{id}/recursive",
+      "POST /api/stdizer"
+    ],
+    "schema/chemi-alerts-prod.json": [
+      "POST /api/alerts/groups/{id}/add",
+      "POST /api/alerts/groups/{id}/replace",
+      "GET /api/alerts/alerts",
+      "POST /api/alerts/export",
+      "POST /api/alerts/export-append",
+      "GET /api/alerts/groups",
+      "POST /api/alerts/groups",
+      "DELETE /api/alerts/groups/{id}",
+      "GET /api/alerts/groups/{id}",
+      "PUT /api/alerts/groups/{id}",
+      "PATCH /api/alerts/groups/{id}/freeze",
+      "GET /api/alerts/operations",
+      "GET /api/alerts/render"
+    ],
+    "schema/chemi-resolver-prod.json": [
+      "POST /api/resolver/casharvest",
+      "POST /api/resolver/universalharvest"
+    ],
+    "schema/chemi-safety-prod.json": [
+      "GET /api/alerts/render"
     ]
   },
-  "decision": "Issues #354/#355: only GET/POST globally; exclude five AMOS add_* uploads and all CheT /auth/*, /admin/* and /chemicals/chemdelete operations.",
-  "chet_banned_path_pattern": "^/(auth/|admin/|chemicals/chemdelete/?$)"
+  "decision": "Issues #354-#356: exclude server-side file standardization POST /api/stdizer and saved rule-group management; preserve GET standardization, JSON chemical/record calculations and the recorded route bans.",
+  "chet_banned_path_pattern": "^/(auth/|admin/|chemicals/chemdelete/?$)",
+  "banned_path_pattern": "^/api/stdizer/groups(/|$)|(/(add|replace)/?$|^/api/resolver/(casharvest|universalharvest)/?$|^/api/services/(caspreflight|files)/?$)",
+  "alerts_allowed_operations": [
+    "POST /api/alerts",
+    "GET /api/alerts/metadata",
+    "GET /api/alerts/version"
+  ]
 }

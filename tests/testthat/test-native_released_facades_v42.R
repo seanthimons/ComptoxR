@@ -35,7 +35,6 @@ test_that('released legacy facades preserve their values, inputs, wire and failu
   cases <- list(
     chemi_chet_reaction_searchcounts = list('one'),
     chemi_chet_reaction_database_old_by_pagenum_and_searchterm = list('one'),
-    chemi_stdizer_groups_recursive = list('one'),
     chemi_resolver_resolve = list('one', list(list(query = 'x'))),
     chemi_toxprints_assays_bulk = list(acl = 'one', actives = 0, category = 'category', chemicals = list(list(sid = 'record')), options = list(flag = FALSE), total = 0),
     chemi_toxprints_chemicals_categories = list('one'),
@@ -115,14 +114,10 @@ test_that('released legacy facades preserve their values, inputs, wire and failu
       expect_identical(b$value, a$value, info = name)
     })
   }
-  for (name in names(cases)[c(1L, 2L, 3L)]) {
+  for (name in names(cases)[c(1L, 2L)]) {
     reply$mixed <- TRUE; saveRDS(reply, file.path(directory, 'reply.rds'))
     args <- list(c('one', 'bad', 'two'))
     expect_identical(capture(get(name, ns), args), capture(eval(frozen[[name]], ns), args), info = name)
     reply$mixed <- FALSE
   }
-  saveRDS(reply, file.path(directory, 'reply.rds'))
-  chemi_stdizer_groups_recursive('one')
-  actual <- readRDS(file.path(directory, paste0(count + 1L, '.rds')))
-  expect_identical(actual$path, '/api/stdizer/groups/one/recursive')
 })

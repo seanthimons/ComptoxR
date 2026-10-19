@@ -72,45 +72,4 @@ test_that('remaining safety facade preserves lazy inputs and uses the Chemical a
         if (!is.null(actual$error)) actual$error$message else ''))
     }
   }
-  # Held generated group projections are exercised only against this localhost.
-  saveRDS(list(status = 200L, body = '{"id":"local-group","empty":null}'), file.path(directory, 'reply.rds'))
-  groups <- list(
-    chemi_stdizer_groups_bulk = list(acl = list(owner = 'local', access = 'PRIVATE'), description = 'group', frozen = FALSE, operations = list()),
-    chemi_alerts_groups_bulk = list(description = 'group', name = 'local', frozen = FALSE, logicType = 'AND', operations = list())
-  )
-  for (name in names(groups)) {
-    saveRDS(list(status = 200L, body = '{"id":"local-group","empty":null}'), file.path(directory, 'reply.rds'))
-    candidate <- eval(frozen$held[[name]][[1L]][[3L]], ns)
-    reference <- eval(frozen$legacy[[name]][[1L]][[3L]], ns)
-    expect_identical(formals(candidate), formals(reference))
-    expect_identical(do.call(candidate, groups[[name]]), do.call(reference, groups[[name]]))
-    do.call(candidate, groups[[name]])
-    req <- readRDS(file.path(directory, 'request.rds'))
-    expect_identical(req$method, 'POST')
-    expect_identical(req$query, '')
-    body <- jsonlite::fromJSON(rawToChar(req$body), simplifyVector = FALSE)
-    expect_identical(body$description, 'group')
-    expect_identical(body$frozen, FALSE)
-    expect_identical(body$operations, list())
-    expect_null(body$chemicals)
-    expect_null(body$options)
-    before <- tryCatch(reference(), error = identity)
-    after <- tryCatch(candidate(), error = identity)
-    expect_identical(class(after), class(before))
-    expect_identical(conditionMessage(after), conditionMessage(before))
-    if (name == 'chemi_stdizer_groups_bulk') {
-      expect_error(candidate(acl = stop('primary'), description = stop('options first')), 'options first')
-      expect_error(reference(acl = stop('primary'), description = stop('options first')), 'options first')
-      candidate(acl = list(owner = 'local'), request.filesInfo = stop('ignored'), request.replace = stop('ignored'))
-    } else {
-      expect_error(candidate(description = stop('primary'), frozen = stop('options first')), 'options first')
-      expect_error(reference(description = stop('primary'), frozen = stop('options first')), 'options first')
-    }
-    args <- groups[[name]]
-    for (status in c(401L, 404L, 500L)) {
-      saveRDS(list(status = status, body = '{"error":"received"}'), file.path(directory, 'reply.rds'))
-      expect_identical(capture(candidate), capture(reference))
-    }
-  }
-
 })

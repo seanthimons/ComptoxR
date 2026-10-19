@@ -7,9 +7,6 @@ schemas:
   - schema/chemi-toxprints-prod.json
 selection:
   include:
-  - POST /api/alerts/export
-  - POST /api/alerts/export-append
-  - GET /api/alerts/render
   - GET /api/hazard/download
   - POST /api/hazard/report/export
   - POST /api/hazard/report/export-append
@@ -26,54 +23,6 @@ selection:
 helper: .ct_request
 documentation: true
 operations:
-  POST /api/alerts/export:
-    name: chemi_alerts_export
-    file: R/chemi_alerts_export.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Export an alerts report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  POST /api/alerts/export-append:
-    name: chemi_alerts_export_append
-    file: R/chemi_alerts_export_append.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Append alerts results to an uploaded report
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  GET /api/alerts/render:
-    name: chemi_alerts_render
-    file: R/chemi_alerts_render.R
-    helper: .ct_request
-    implementation: generated
-    duplicate_response:
-      source: chemi-alerts-prod.json
-      reason: Reviewed declared PNG/SVG responses for the identical shared alerts/safety render request; preserve the existing chemi_alerts_render wrapper and both source contracts.
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Render an alerts chemical or reaction
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
   GET /api/hazard/download:
     name: chemi_hazard_download
     file: R/chemi_hazard_download.R

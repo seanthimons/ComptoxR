@@ -1,8 +1,8 @@
-testthat::test_that('released ownership declarations preserve real descriptor and render behavior',{
+testthat::test_that('released ownership declarations preserve real descriptor behavior',{
  ns<-asNamespace('ComptoxR');old<-new.env(parent=ns)
  frozen<-readRDS(testthat::test_path('fixtures/native-ownership-contracts.rds'))
  for(name in names(frozen))old[[name]]<-eval(frozen[[name]][[3L]],ns)
- for(name in c('chemi_descriptors','chemi_descriptors_bulk','chemi_alerts_render'))testthat::expect_identical(formals(get(name,ns)),formals(old[[name]]))
+ for(name in c('chemi_descriptors','chemi_descriptors_bulk'))testthat::expect_identical(formals(get(name,ns)),formals(old[[name]]))
  directory<-tempfile('ownership49-');dir.create(directory);on.exit(unlink(directory,recursive=TRUE),add=TRUE)
  reply<-list(status=200L,media='application/json',body=charToRaw('{"chemicals":[{"smiles":"CCO","ordinal":0,"descriptors":[1,2]}],"headers":["a","b"]}'))
  saveRDS(reply,file.path(directory,'reply.rds'))
@@ -69,16 +69,6 @@ testthat::test_that('released ownership declarations preserve real descriptor an
    testthat::expect_true(pre$params$.route$fallback_used);testthat::expect_identical(pre$params$.engine_options$bits,1024L)
   }
  })
- for(media in c('image/svg+xml','image/png')){
-  bytes<-if(media=='image/png')as.raw(c(137,80,78,71,0,255))else charToRaw('<svg xmlns="http://www.w3.org/2000/svg"><text>CCO</text></svg>')
-  saveRDS(list(status=200L,media=media,body=bytes),file.path(directory,'reply.rds'))
-  args<-list(smiles='CCO',format=if(media=='image/png')'PNG'else'SVG',width=20L,height=30L)
-  a<-invoke(old$chemi_alerts_render,args);b<-invoke(get('chemi_alerts_render',ns),args)
-  testthat::expect_identical(a$value,b$value);testthat::expect_identical(a$wires,b$wires)
-  testthat::expect_identical(b$value,if(media=='image/png')bytes else rawToChar(bytes));testthat::expect_identical(b$wires[[1]]$path,'/api/alerts/render')
- }
- saveRDS(list(status=204L,media='image/png',body=raw()),file.path(directory,'reply.rds'))
- testthat::expect_null(invoke(get('chemi_alerts_render',ns),list(smiles='CCO'))$value)
  withr::local_options(list(comptoxr_native.request=list(timeout=0)))
  for(name in c('chemi_descriptors','chemi_descriptors_bulk')){b<-invoke(get(name,ns),list('CCO',type='padel'));testthat::expect_s3_class(b$value,'specmill_call_error');testthat::expect_length(b$wires,0L)}
  options(comptoxr_native.request=list(timeout=1,max_retries=0L));server$kill()

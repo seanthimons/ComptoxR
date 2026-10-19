@@ -1,0 +1,57 @@
+[
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "GET /api/stdizer/groups",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups/preflight",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "DELETE /api/stdizer/groups/{id}",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "GET /api/stdizer/groups/{id}",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "PUT /api/stdizer/groups/{id}",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "PUT /api/stdizer/groups/{id}/acl",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups/{id}/add",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "PATCH /api/stdizer/groups/{id}/freeze",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "GET /api/stdizer/groups/{id}/recursive",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups/{id}/replace",
+    "disposition": "banned_rule_library_management"
+  }
+]

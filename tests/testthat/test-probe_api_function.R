@@ -8,15 +8,15 @@ probe_json_response <- function(req, status = 200L, url = req$url, body = '[{"ok
 }
 
 # Exercise native failures while public vector wrappers await Specmill #135.
-probe_native_wrapper <- function(id) {
+probe_native_wrapper <- function(internal_id) {
   .ct_request_each(function(chunk) {
     .ct_request(
-      method = "GET", path = "/api/alerts/groups/{id}",
-      path_params = list(id = chunk), query = list(), body = NULL,
+      method = "GET", path = "/api/amos/get_info_by_id/{internal_id}",
+      path_params = list(internal_id = chunk), query = list(), body = NULL,
       response_policy = ".ct_list",
       server_resolver = list(name = ".ct_server_url", key = "chemi_burl")
     )
-  }, id, 1L, on_error = "drop")
+  }, internal_id, 1L, on_error = "drop")
 }
 
 test_that("probe resolves Chemi wrappers case-insensitively and forwards arguments", {
@@ -45,7 +45,7 @@ test_that("probe resolves Chemi wrappers case-insensitively and forwards argumen
     .package = "httr2"
   )
 
-  result <- probe_api_function("CHEMI_ALERTS_GROUPS_BY_ID", id = "group-42")
+  result <- probe_api_function("CHEMI_AMOS_GET_INFO_BY_ID", internal_id = "group-42")
 
   expect_identical(result$environment, "configured")
   expect_identical(result$server_id, 1L)
@@ -77,12 +77,12 @@ test_that("probe uses the approved CompTox default", {
 })
 
 test_that("probe reports empty, non-200, redirected, and thrown results", {
-  testthat::local_mocked_bindings(chemi_alerts_groups_by_id = probe_native_wrapper,
+  testthat::local_mocked_bindings(chemi_amos_get_info_by_id = probe_native_wrapper,
     .package = "ComptoxR")
   cases <- list(
     list(body = '[]', message = 'Result is empty'),
     list(status = 503L, message = 'HTTP status was not 200'),
-    list(url = 'https://redirect.example/api/alerts/groups/group-42', message = 'Observed URL does not match')
+    list(url = 'https://redirect.example/api/amos/get_info_by_id/group-42', message = 'Observed URL does not match')
   )
   for (case in cases) {
     testthat::local_mocked_bindings(
@@ -92,18 +92,18 @@ test_that("probe reports empty, non-200, redirected, and thrown results", {
       },
       .package = 'httr2'
     )
-    result <- suppressWarnings(probe_api_function('chemi_alerts_groups_by_id', id = 'group-42'))
+    result <- suppressWarnings(probe_api_function('chemi_amos_get_info_by_id', internal_id = 'group-42'))
     expect_false(any(result$valid))
     expect_match(result$error[[1]], case$message, fixed = TRUE)
   }
   testthat::local_mocked_bindings(req_perform = function(req) stop('request exploded'), .package = 'httr2')
-  expect_warning(errors <- probe_api_function('chemi_alerts_groups_by_id', id = 'group-42'), "failed")
+  expect_warning(errors <- probe_api_function('chemi_amos_get_info_by_id', internal_id = 'group-42'), "failed")
   expect_false(any(errors$valid))
   expect_match(errors$error[[1]], "HTTP request failed before a response was received", fixed = TRUE)
   expect_identical(errors$error[[1]], unname(attr(errors$result[[1]], "failed")[[1]]))
-  testthat::local_mocked_bindings(chemi_alerts_groups_by_id = function(...) stop("request exploded"),
+  testthat::local_mocked_bindings(chemi_amos_get_info_by_id = function(...) stop("request exploded"),
     .package = "ComptoxR")
-  errors <- probe_api_function('chemi_alerts_groups_by_id', id = 'group-42')
+  errors <- probe_api_function('chemi_amos_get_info_by_id', internal_id = 'group-42')
   expect_true(all(errors$error == 'request exploded'))
 })
 
@@ -199,13 +199,13 @@ test_that("response observer sees batched and paginated helper responses", {
 
 
 test_that("probe rejects partial native batches with unobserved request failures", {
-  testthat::local_mocked_bindings(chemi_alerts_groups_by_id = probe_native_wrapper,
+  testthat::local_mocked_bindings(chemi_amos_get_info_by_id = probe_native_wrapper,
     .package = "ComptoxR")
   testthat::local_mocked_bindings(req_perform = function(req, ...) {
     if (endsWith(req$url, "/group-2")) stop("request exploded")
     probe_json_response(req)
   }, .package = "httr2")
-  expect_warning(result <- probe_api_function("chemi_alerts_groups_by_id", id = c("group-1", "group-2")), "failed")
+  expect_warning(result <- probe_api_function("chemi_amos_get_info_by_id", internal_id = c("group-1", "group-2")), "failed")
   expect_false(any(result$valid))
   expect_identical(result$status_codes[[1]], 200L)
   expect_match(result$error[[1]], "HTTP request failed before a response was received", fixed = TRUE)

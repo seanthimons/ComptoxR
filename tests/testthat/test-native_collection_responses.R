@@ -1,6 +1,6 @@
 collection_wrappers <- c("ct_chemical_file_image_search",
   "ct_chemical_file_image_search_by_dtxcid", "ct_chemical_file_image_search_by_gsid",
-  "chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id")
+  "chemi_amos_get_info_by_id")
 
 test_that("file and list projections preserve the real sequential executor's contracts", {
   withr::local_envvar(ctx_api_key = "local-collection-key")

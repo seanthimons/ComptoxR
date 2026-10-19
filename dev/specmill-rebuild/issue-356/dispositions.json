@@ -1,0 +1,57 @@
+[
+  {
+    "schema": "schema/chemi-services-prod.json",
+    "operation": "POST /api/services/caspreflight",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-services-prod.json",
+    "operation": "POST /api/services/files",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups/{id}/add",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups/{id}/replace",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups/{id}/add",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups/{id}/replace",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-resolver-prod.json",
+    "operation": "POST /api/resolver/casharvest",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-resolver-prod.json",
+    "operation": "POST /api/resolver/universalharvest",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer/groups",
+    "disposition": "banned_rule_library_management"
+  },
+  {
+    "schema": "schema/chemi-stdizer-prod.json",
+    "operation": "POST /api/stdizer",
+    "disposition": "banned_server_file_upload"
+  }
+]

@@ -4,6 +4,22 @@
 
 ## Unreleased
 
+- Exclude server-side file standardization at `POST /api/stdizer` and remove
+  `chemi_stdizer_bulk`. GET standardization and JSON chemical/record inputs
+  remain available. All eleven #356 endpoint decisions are now resolved as bans.
+
+- Exclude saved standardizer rule-group management under `/api/stdizer/groups`,
+  removing five wrappers. Calculation, workflow lookup and protocol-result APIs
+  remain available.
+
+- Limit alerts to `POST /api/alerts`, metadata and version. Remove eight
+  wrappers for library management, exports and rendering, including the held
+  `chemi_alerts_groups_bulk` facade.
+
+- Exclude `/add` and `/replace` routes plus resolver `casharvest` and
+  `universalharvest` and service `caspreflight` and `files` endpoints from
+  client generation.
+
 - Exclude every CheT `/auth/*`, `/admin/*` and `/chemicals/chemdelete` route,
   removing 18 generated wrappers and resolving the eight endpoint decisions in #355.
 

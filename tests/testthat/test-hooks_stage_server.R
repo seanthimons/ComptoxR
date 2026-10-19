@@ -7,11 +7,11 @@ test_that('public wrappers retain the configured host without fallback hooks', {
     httr2::response(status_code = 200, headers = list(`Content-Type` = "application/json"),
       body = charToRaw('[{"ok":true}]'))
   }, .package = "httr2")
-  expect_identical(chemi_alerts_alerts(), list(list(ok = TRUE)))
-  expect_identical(seen, 'https://hcd.rtpnc.epa.gov/api/alerts/alerts')
+  expect_identical(chemi_alerts_metadata(), list(list(ok = TRUE)))
+  expect_identical(seen, 'https://hcd.rtpnc.epa.gov/api/alerts/metadata')
   options(ComptoxR.chemi_burl = 'https://configured.example/api')
-  expect_identical(chemi_alerts_alerts(), list(list(ok = TRUE)))
-  expect_identical(seen, 'https://configured.example/api/alerts/alerts')
+  expect_identical(chemi_alerts_metadata(), list(list(ok = TRUE)))
+  expect_identical(seen, 'https://configured.example/api/alerts/metadata')
   expect_false(exists('enforce_stage_server', envir = asNamespace('ComptoxR'), inherits = FALSE))
 })
 

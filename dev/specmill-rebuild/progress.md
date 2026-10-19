@@ -6,7 +6,7 @@ Denominator: all HTTP operations in each canonical `schema/*-prod.json`, includi
 
 ```
 Endpoints migrated (adopted / source schema total):
-chemi-alerts-prod: 10/16 (3 banned; 3 remaining)
+chemi-alerts-prod: 3/16 (13 banned; 0 remaining)
 chemi-amnb_nate-prod: 4/4 (0 banned; 0 remaining)
 chemi-amos-prod: 64/77 (11 banned; 2 remaining)
 chemi-arn_cats-prod: 4/4 (0 banned; 0 remaining)
@@ -21,11 +21,11 @@ chemi-pfas_atlas-prod: 4/4 (0 banned; 0 remaining)
 chemi-pfas_cats-prod: 4/4 (0 banned; 0 remaining)
 chemi-predictor_models-prod: 5/5 (0 banned; 0 remaining)
 chemi-rdkit-prod: 4/4 (0 banned; 0 remaining)
-chemi-resolver-prod: 42/46 (0 banned; 4 remaining)
-chemi-safety-prod: 4/4 (0 banned; 0 remaining)
+chemi-resolver-prod: 42/46 (2 banned; 2 remaining)
+chemi-safety-prod: 3/4 (1 banned; 0 remaining)
 chemi-search-prod: 14/14 (0 banned; 0 remaining)
-chemi-services-prod: 12/14 (0 banned; 2 remaining)
-chemi-stdizer-prod: 21/33 (8 banned; 4 remaining)
+chemi-services-prod: 12/14 (2 banned; 0 remaining)
+chemi-stdizer-prod: 17/33 (16 banned; 0 remaining)
 chemi-toxprints-prod: 19/23 (3 banned; 1 remaining)
 chemi-webtest-prod: 9/9 (0 banned; 0 remaining)
 ctx-bioactivity-prod: 30/30 (0 banned; 0 remaining)
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28 (0 banned; 0 remaining)
 epi-suite-prod: 14/14 (0 banned; 0 remaining)
 ```
 
-Total: 474/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 462/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.

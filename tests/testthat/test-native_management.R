@@ -1,6 +1,4 @@
 management_wrappers <- c(
-  'chemi_alerts_export', 'chemi_alerts_export_append',
-  'chemi_alerts_render',
   'chemi_hazard_download', 'chemi_hazard_report_export',
   'chemi_hazard_report_export_append', 'chemi_hazard_report_export2',
   'chemi_hazard_reports', 'chemi_hazard_reports_create', 'chemi_hazard_reports_check', 'chemi_hazard_reports_by_id',

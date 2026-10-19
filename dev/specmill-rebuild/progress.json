@@ -1,11 +1,6 @@
 {
-  "commit": "5050078d714bac23d99fa241fb5c932591a0e551",
+  "commit": "b6af73e6cd2bafc1cd243ba5dc9a021a3744c578",
   "legacy_callers": [
-    {
-      "wrapper": "chemi_alerts_groups_bulk",
-      "method": "POST",
-      "route": "alerts/groups"
-    },
     {
       "wrapper": "chemi_amos_analytical_qc_batch",
       "method": "POST",
@@ -25,16 +20,6 @@
       "wrapper": "chemi_resolver_getsimilaritylist",
       "method": "POST",
       "route": "resolver/getsimilaritylist"
-    },
-    {
-      "wrapper": "chemi_stdizer_bulk",
-      "method": "POST",
-      "route": "stdizer"
-    },
-    {
-      "wrapper": "chemi_stdizer_groups_bulk",
-      "method": "POST",
-      "route": "stdizer/groups"
     },
     {
       "wrapper": "chemi_toxprints_bulk",
@@ -63,10 +48,10 @@
   "schemas": [
     {
       "schema": "chemi-alerts-prod",
-      "migrated": 10,
+      "migrated": 3,
       "total": 16,
-      "banned": 3,
-      "remaining": 3
+      "banned": 13,
+      "remaining": 0
     },
     {
       "schema": "chemi-amnb_nate-prod",
@@ -170,14 +155,14 @@
       "schema": "chemi-resolver-prod",
       "migrated": 42,
       "total": 46,
-      "banned": 0,
-      "remaining": 4
+      "banned": 2,
+      "remaining": 2
     },
     {
       "schema": "chemi-safety-prod",
-      "migrated": 4,
+      "migrated": 3,
       "total": 4,
-      "banned": 0,
+      "banned": 1,
       "remaining": 0
     },
     {
@@ -191,15 +176,15 @@
       "schema": "chemi-services-prod",
       "migrated": 12,
       "total": 14,
-      "banned": 0,
-      "remaining": 2
+      "banned": 2,
+      "remaining": 0
     },
     {
       "schema": "chemi-stdizer-prod",
-      "migrated": 21,
+      "migrated": 17,
       "total": 33,
-      "banned": 8,
-      "remaining": 4
+      "banned": 16,
+      "remaining": 0
     },
     {
       "schema": "chemi-toxprints-prod",
@@ -252,7 +237,7 @@
     }
   ],
   "banned_endpoints": {
-    "schema/chemi-alerts-prod.json": ["DELETE /api/alerts/groups/{id}", "PUT /api/alerts/groups/{id}", "PATCH /api/alerts/groups/{id}/freeze"],
+    "schema/chemi-alerts-prod.json": ["GET /api/alerts/alerts", "POST /api/alerts/export", "POST /api/alerts/export-append", "GET /api/alerts/groups", "POST /api/alerts/groups", "DELETE /api/alerts/groups/{id}", "GET /api/alerts/groups/{id}", "PUT /api/alerts/groups/{id}", "POST /api/alerts/groups/{id}/add", "PATCH /api/alerts/groups/{id}/freeze", "POST /api/alerts/groups/{id}/replace", "GET /api/alerts/operations", "GET /api/alerts/render"],
     "schema/chemi-amnb_nate-prod.json": [],
     "schema/chemi-amos-prod.json": ["POST /api/amos/add_aqc_spectrum/", "POST /api/amos/add_new_fact_sheet/", "POST /api/amos/add_new_method/", "POST /api/amos/add_new_product_declaration/", "POST /api/amos/add_new_safety_data_sheet/", "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}", "PUT /api/amos/update_fact_sheet_info/{internal_id}", "PUT /api/amos/update_method_info/{internal_id}", "PUT /api/amos/update_nmr_spectrum_info/{internal_id}", "PUT /api/amos/update_product_declaration_info/{internal_id}", "PUT /api/amos/update_safety_data_sheet_info/{internal_id}"],
     "schema/chemi-arn_cats-prod.json": [],
@@ -267,11 +252,11 @@
     "schema/chemi-pfas_cats-prod.json": [],
     "schema/chemi-predictor_models-prod.json": [],
     "schema/chemi-rdkit-prod.json": [],
-    "schema/chemi-resolver-prod.json": [],
-    "schema/chemi-safety-prod.json": [],
+    "schema/chemi-resolver-prod.json": ["POST /api/resolver/casharvest", "POST /api/resolver/universalharvest"],
+    "schema/chemi-safety-prod.json": "GET /api/alerts/render",
     "schema/chemi-search-prod.json": [],
-    "schema/chemi-services-prod.json": [],
-    "schema/chemi-stdizer-prod.json": ["DELETE /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}/acl", "PATCH /api/stdizer/groups/{id}/freeze", "DELETE /api/stdizer/protocols/{id}", "PATCH /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}/acl"],
+    "schema/chemi-services-prod.json": ["POST /api/services/caspreflight", "POST /api/services/files"],
+    "schema/chemi-stdizer-prod.json": ["POST /api/stdizer", "GET /api/stdizer/groups", "POST /api/stdizer/groups", "POST /api/stdizer/groups/preflight", "DELETE /api/stdizer/groups/{id}", "GET /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}/acl", "POST /api/stdizer/groups/{id}/add", "PATCH /api/stdizer/groups/{id}/freeze", "GET /api/stdizer/groups/{id}/recursive", "POST /api/stdizer/groups/{id}/replace", "DELETE /api/stdizer/protocols/{id}", "PATCH /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}/acl"],
     "schema/chemi-toxprints-prod.json": ["DELETE /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}/acl"],
     "schema/chemi-webtest-prod.json": [],
     "schema/ctx-bioactivity-prod.json": [],
@@ -288,42 +273,6 @@
       "wrapper": "epi_search",
       "file": "R/epi_search.R",
       "suite": "tests/testthat/test-contract-epi_search.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "GET /api/alerts/groups/{id}",
-      "wrapper": "chemi_alerts_groups_by_id",
-      "file": "R/chemi_alerts_groups_by_id.R",
-      "suite": "tests/testthat/test-native_failure_empty.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "GET /api/alerts/alerts",
-      "wrapper": "chemi_alerts_alerts",
-      "file": "R/chemi_alerts_alerts.R",
-      "suite": "tests/testthat/test-contract-chemi_alerts_alerts.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "GET /api/alerts/operations",
-      "wrapper": "chemi_alerts_operations",
-      "file": "R/chemi_alerts_operations.R",
-      "suite": "tests/testthat/test-contract-chemi_alerts_operations.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "GET /api/alerts/groups",
-      "wrapper": "chemi_alerts_groups",
-      "file": "R/chemi_alerts_groups.R",
-      "suite": "tests/testthat/test-contract-chemi_alerts_groups.R",
       "migrated": true
     },
     {
@@ -1040,15 +989,6 @@
     {
       "schema": "schema/chemi-stdizer-prod.json",
       "binding_schema": "schema/chemi-stdizer-prod.json",
-      "operation": "GET /api/stdizer/groups/{id}",
-      "wrapper": "chemi_stdizer_groups_by_id",
-      "file": "R/chemi_stdizer_groups_by_id.R",
-      "suite": "tests/testthat/test-contract-chemi_stdizer_groups_by_id.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-stdizer-prod.json",
-      "binding_schema": "schema/chemi-stdizer-prod.json",
       "operation": "GET /api/stdizer/operations",
       "wrapper": "chemi_stdizer_operations",
       "file": "R/chemi_stdizer_operations.R",
@@ -1062,15 +1002,6 @@
       "wrapper": "chemi_stdizer_workflows",
       "file": "R/chemi_stdizer_workflows.R",
       "suite": "tests/testthat/test-contract-chemi_stdizer_workflows.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-stdizer-prod.json",
-      "binding_schema": "schema/chemi-stdizer-prod.json",
-      "operation": "GET /api/stdizer/groups",
-      "wrapper": "chemi_stdizer_groups",
-      "file": "R/chemi_stdizer_groups.R",
-      "suite": "tests/testthat/test-contract-chemi_stdizer_groups.R",
       "migrated": true
     },
     {
@@ -3675,42 +3606,6 @@
       "migrated": true
     },
     {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "POST /api/alerts/export",
-      "wrapper": "chemi_alerts_export",
-      "file": "R/chemi_alerts_export.R",
-      "suite": "tests/testthat/test-native_management.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "POST /api/alerts/export-append",
-      "wrapper": "chemi_alerts_export_append",
-      "file": "R/chemi_alerts_export_append.R",
-      "suite": "tests/testthat/test-native_management.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "binding_schema": "schema/chemi-alerts-prod.json",
-      "operation": "GET /api/alerts/render",
-      "wrapper": "chemi_alerts_render",
-      "file": "R/chemi_alerts_render.R",
-      "suite": "tests/testthat/test-native_management.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-safety-prod.json",
-      "binding_schema": "schema/chemi-safety-prod.json",
-      "operation": "GET /api/alerts/render",
-      "wrapper": "chemi_alerts_render",
-      "file": "R/chemi_alerts_render.R",
-      "suite": "tests/testthat/test-native_management.R",
-      "migrated": true
-    },
-    {
       "schema": "schema/chemi-hazard-prod.json",
       "binding_schema": "schema/chemi-hazard-prod.json",
       "operation": "GET /api/hazard/download",
@@ -4467,15 +4362,6 @@
       "migrated": true
     },
     {
-      "schema": "schema/chemi-stdizer-prod.json",
-      "binding_schema": "schema/chemi-stdizer-prod.json",
-      "operation": "GET /api/stdizer/groups/{id}/recursive",
-      "wrapper": "chemi_stdizer_groups_recursive",
-      "file": "R/chemi_stdizer_groups_recursive.R",
-      "suite": "tests/testthat/test-native_released_facades_v42.R",
-      "migrated": true
-    },
-    {
       "schema": "schema/chemi-webtest-prod.json",
       "binding_schema": "schema/chemi-webtest-prod.json",
       "operation": "POST /api/webtest/predict/export",
@@ -4491,15 +4377,6 @@
       "wrapper": "chemi_webtest_export_append",
       "file": "R/chemi_webtest_export_append.R",
       "suite": "tests/testthat/test-native_webtest_exports.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-stdizer-prod.json",
-      "binding_schema": "schema/chemi-stdizer-reviewed-preflight.json",
-      "operation": "POST /api/stdizer/groups/preflight",
-      "wrapper": "chemi_stdizer_groups_preflight_post",
-      "file": "R/chemi_stdizer_groups_preflight_post.R",
-      "suite": "tests/testthat/test-native_stdizer_preflight.R",
       "migrated": true
     },
     {

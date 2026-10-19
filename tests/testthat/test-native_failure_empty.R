@@ -6,8 +6,7 @@ test_that("reviewed HTTP failures stop once and preserve empty results across re
     ct_chemical_detail_search_by_dtxcid_bulk = "chemical/detail/search/by-dtxcid/",
     chemi_classyfire = "amos/get_classification_for_dtxsid/",
     ct_chemical_search_equal_bulk = "chemical/search/equal/",
-    chemi_amos_get_info_by_id = "amos/get_info_by_id/",
-    chemi_alerts_groups_by_id = "alerts/groups/"
+    chemi_amos_get_info_by_id = "amos/get_info_by_id/"
   )
   for (status in c(404L, 500L)) local({
     local_mocked_bindings(req_perform = function(req, ...) {
@@ -28,7 +27,7 @@ test_that("reviewed HTTP failures stop once and preserve empty results across re
         "API request to {.val {endpoint}} failed for {.val {label}} with status {status}"
       ), "")
       expect_identical(warnings, unname(expected), info = name)
-      empty <- if (name %in% c("chemi_amos_get_info_by_id", "chemi_alerts_groups_by_id"))
+      empty <- if (name == "chemi_amos_get_info_by_id")
         list(NULL, NULL) else tibble::tibble()
       expect_identical(result, empty, info = name)
     }
@@ -69,7 +68,7 @@ test_that("list facades retain successful attribution and missing input position
       body = charToRaw('{"kingdom":"Organic"}'))
   }, .package = "httr2")
   expected <- list(structure(list(kingdom = "Organic"), query = "good"), NULL)
-  for (fn in list(chemi_amos_get_info_by_id, chemi_alerts_groups_by_id)) {
+  for (fn in list(chemi_amos_get_info_by_id)) {
     expect_warning(result <- fn(c("good", "bad")), "failed")
     expect_identical(result, expected)
   }

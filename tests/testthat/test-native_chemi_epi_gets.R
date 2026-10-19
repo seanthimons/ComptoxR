@@ -12,10 +12,7 @@ test_that("native Chemi GETs preserve encoded inputs and schema defaults", {
   query <- httr2::url_parse(requests[[1]]$url)$query
   expect_identical(query, list(query = "café +/&", idType = "AnyId", fuzzy = "Not", mol = "false"))
 
-  result <- chemi_stdizer_groups_by_id(c("group one", "group/two"))
-  expect_length(result, 2L)
-  expect_true(endsWith(requests[[2]]$url, "/api/stdizer/groups/group%20one"))
-  expect_true(endsWith(requests[[3]]$url, "/api/stdizer/groups/group%2Ftwo"))
+
 })
 
 test_that("native EPI GETs validate choices and omit absent optional fields", {

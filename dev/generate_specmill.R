@@ -7,7 +7,10 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
     selected <- union(service$selection$include, names(service$operations))
     banned <- unlist(policy$banned_operations, use.names = FALSE)
     stopifnot(all(sub(" .*", "", selected) %in% policy$allowed_methods),
-      !any(selected %in% banned))
+      !any(selected %in% banned),
+      !any(grepl(policy$banned_path_pattern, sub("^[^ ]+ ", "", selected))))
+    alerts <- selected[grepl("^/api/alerts(/|$)", sub("^[^ ]+ ", "", selected))]
+    stopifnot(all(alerts %in% policy$alerts_allowed_operations))
     if (any(startsWith(basename(unlist(service$schemas$files)), "chemi-chet"))) {
       stopifnot(!any(grepl(policy$chet_banned_path_pattern, sub("^[^ ]+ ", "", selected))))
     }

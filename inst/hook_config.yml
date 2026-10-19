@@ -751,9 +751,6 @@ chemi_toxprint:
 chemi_amos_get_info_by_id:
   bespoke_test: "tests/testthat/test-native_failure_empty.R"
 
-chemi_alerts_groups_by_id:
-  bespoke_test: "tests/testthat/test-native_failure_empty.R"
-
 ct_chemical_search_equal_bulk:
   bespoke_test: "tests/testthat/test-native_failure_empty.R"
 
@@ -1014,12 +1011,6 @@ chemi_chet_chemicals_chemtemp:
 
 chemi_chet_chemicals_chemical_dl:
   bespoke_test: tests/testthat/test-native_chet_chemical_dl.R
-chemi_alerts_export:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_alerts_export_append:
-  bespoke_test: tests/testthat/test-native_management.R
-chemi_alerts_render:
-  bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_download:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_report_export:
@@ -1248,8 +1239,6 @@ chemi_chet_reaction_searchcounts:
   bespoke_test: tests/testthat/test-native_released_facades_v42.R
 chemi_chet_reaction_database_old_by_pagenum_and_searchterm:
   bespoke_test: tests/testthat/test-native_released_facades_v42.R
-chemi_stdizer_groups_recursive:
-  bespoke_test: tests/testthat/test-native_released_facades_v42.R
 chemi_resolver_resolve:
   bespoke_test: tests/testthat/test-native_released_facades_v42.R
 chemi_toxprints_assays_bulk:
@@ -1268,9 +1257,6 @@ chemi_webtest_export_append:
 
 chemi_webtest_predict_export:
   bespoke_test: tests/testthat/test-native_webtest_exports.R
-
-chemi_stdizer_groups_preflight_post:
-  bespoke_test: tests/testthat/test-native_stdizer_preflight.R
 
 chemi_stdizer_protocols_by_id_post:
   bespoke_test: tests/testthat/test-native_stdizer_protocol_search.R
