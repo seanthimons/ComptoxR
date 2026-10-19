@@ -172,5 +172,56 @@
     "schema": "schema/chemi-chet-prod.json",
     "parameters": [],
     "requestBody": null
+  },
+  {
+    "key": "POST /auth/login",
+    "name": "chemi_chet_auth_login_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /auth/register",
+    "name": "chemi_chet_auth_register_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /auth/report",
+    "name": "chemi_chet_auth_report_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
   }
 ]

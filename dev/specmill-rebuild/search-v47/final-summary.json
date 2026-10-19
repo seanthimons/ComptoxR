@@ -1,0 +1,41 @@
+{
+  "completed_utc": "2026-10-19T01:38:36.803067+00:00",
+  "version": "0.1.47",
+  "source_commit": "5ec825277c686a7142ad113340897039b6c3a793",
+  "generation_fresh": true,
+  "official_helper_exact": true,
+  "owner_hashes": 633,
+  "assertions": {
+    "tests.json": {
+      "passed": 146,
+      "failed": 0,
+      "error": 0,
+      "warning": 0,
+      "skipped": 0
+    },
+    "unit-tests.json": {
+      "passed": 155,
+      "failed": 0,
+      "error": 0,
+      "warning": 0,
+      "skipped": 0
+    },
+    "portable-tests.json": {
+      "passed": 111,
+      "failed": 0,
+      "error": 0,
+      "warning": 0,
+      "skipped": 0
+    }
+  },
+  "root_writes": false,
+  "new47_deployed_calls": 0,
+  "prior46_live": "released46-live-verification.json",
+  "debug_state_restoration_rerun": true,
+  "lifecycle": "maturing",
+  "lifecycle_preserved": true,
+  "lifecycle_generation_fresh": true,
+  "lifecycle146_rerun": true,
+  "runtime_ast_policy_callbacks_unchanged": true,
+  "runtime111_and155_not_repeated": true
+}

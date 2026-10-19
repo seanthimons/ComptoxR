@@ -1,14 +1,12 @@
 {
-  "root_parent_commit": "ca02237f98bfa3f056b3c06967b2584c6959bb77",
+  "root_parent_commit": "354401ce",
   "canonical_total": 548,
-  "migrated": 506,
-  "remaining_identities": 42,
+  "migrated": 510,
+  "remaining_identities": 38,
   "disposition_counts": {
     "source_contract_hold": 30,
-    "service_contract_hold": 3,
-    "release_gate": 4,
+    "service_contract_hold": 4,
     "ownership_route_hold": 3,
-    "service_contract_and_release_hold": 1,
     "generator_gap": 1
   },
   "source_audit": "dispositions.json",
@@ -441,25 +439,6 @@
     },
     {
       "schema": "schema/chemi-chet-prod.json",
-      "operation": "POST /auth/login",
-      "operation_id": "api.auth.login_post",
-      "source_location": "#/paths/~1auth~1login/post",
-      "operation_sha256": "a4e7ea6538175bbb98ea17dedf8cbd0b11cd37f347f3b0f3cc80062ef11d0696",
-      "disposition": "release_gate",
-      "blocker": "Released free-form URLencoded validation rejects undeclared fields. Exact PR180 d9c6f9600f075e941999fc4fafffd4ede3d90b73 passes 492 assertions for the three forms.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/178",
-        "https://github.com/seanthimons/specmill/pull/180"
-      ],
-      "evidence": [
-        "dev/chet-admin-auth/pr180-exact/README.md",
-        "dev/chet-admin-auth/pr180-exact/results.json"
-      ],
-      "next_step": "Wait for official release and root pin update; no deployed auth/session verification or adoption.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-chet-prod.json",
       "operation": "GET /auth/register",
       "operation_id": "api.auth.register_get",
       "source_location": "#/paths/~1auth~1register/get",
@@ -480,25 +459,6 @@
     },
     {
       "schema": "schema/chemi-chet-prod.json",
-      "operation": "POST /auth/register",
-      "operation_id": "api.auth.register_post",
-      "source_location": "#/paths/~1auth~1register/post",
-      "operation_sha256": "08d023958c6cd1a40308080d3d975336c87297acb4aff406f58a511685f321a4",
-      "disposition": "release_gate",
-      "blocker": "Released free-form URLencoded validation rejects undeclared fields. Exact PR180 d9c6f9600f075e941999fc4fafffd4ede3d90b73 passes 492 assertions for the three forms.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/178",
-        "https://github.com/seanthimons/specmill/pull/180"
-      ],
-      "evidence": [
-        "dev/chet-admin-auth/pr180-exact/README.md",
-        "dev/chet-admin-auth/pr180-exact/results.json"
-      ],
-      "next_step": "Wait for official release and root pin update; no deployed auth/session verification or adoption.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-chet-prod.json",
       "operation": "GET /auth/report",
       "operation_id": "api.auth.report_get",
       "source_location": "#/paths/~1auth~1report/get",
@@ -515,25 +475,6 @@
         "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
       ],
       "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-chet-prod.json",
-      "operation": "POST /auth/report",
-      "operation_id": "api.auth.report_post",
-      "source_location": "#/paths/~1auth~1report/post",
-      "operation_sha256": "f1fc801becf0e95cdd799b431deec0013e70b239ef0c79cd264f3d139c84e72e",
-      "disposition": "release_gate",
-      "blocker": "Released free-form URLencoded validation rejects undeclared fields. Exact PR180 d9c6f9600f075e941999fc4fafffd4ede3d90b73 passes 492 assertions for the three forms.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/178",
-        "https://github.com/seanthimons/specmill/pull/180"
-      ],
-      "evidence": [
-        "dev/chet-admin-auth/pr180-exact/README.md",
-        "dev/chet-admin-auth/pr180-exact/results.json"
-      ],
-      "next_step": "Wait for official release and root pin update; no deployed auth/session verification or adoption.",
       "existing_public_wrappers": []
     },
     {
@@ -628,8 +569,8 @@
       "operation_id": "getPubchemList",
       "source_location": "#/paths/~1api~1resolver~1getpubchemlist/post",
       "operation_sha256": "fb9f7ca65710b2e409f176e2ff11aa54ca3708b06ec951922bc2e3a67b2fc0d3",
-      "disposition": "service_contract_and_release_hold",
-      "blocker": "PR179 exact proof repairs paging seams, but old nested ChemicalRecord/options, records/totalRecordsCount and hidden controls disagree with declared flat Chemical plus five required query controls and service items/total. Localhost items/total still yields empty legacy result.",
+      "disposition": "service_contract_hold",
+      "blocker": "Paging seams are released and root-adopted for search in v0.1.47, but old nested ChemicalRecord/options, records/totalRecordsCount and hidden controls disagree with declared flat Chemical plus five required query controls and service items/total. Localhost items/total still yields empty legacy result; cache release does not repair this contract.",
       "links": [
         "https://github.com/seanthimons/specmill/issues/173#issuecomment-6253439696",
         "https://github.com/seanthimons/specmill/pull/179"
@@ -708,30 +649,6 @@
         {
           "name": "chemi_alerts_render",
           "file": "R/chemi_alerts_render.R"
-        }
-      ]
-    },
-    {
-      "schema": "schema/chemi-search-prod.json",
-      "operation": "POST /api/search",
-      "operation_id": "search",
-      "source_location": "#/paths/~1api~1search/post",
-      "operation_sha256": "c95f68d7c05802997ab8ed5486b94db771359fa481924c0be195a760945882da",
-      "disposition": "release_gate",
-      "blocker": "Exact PR179 1c3e8a34c41eba5d2a20cc46f8bc2e39abb6d18c passes search paging/state seams; current root release lacks these fixes.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/173",
-        "https://github.com/seanthimons/specmill/pull/179"
-      ],
-      "evidence": [
-        "dev/specmill-rebuild/pr179-finish-1c3e8a3/README.md",
-        "dev/specmill-rebuild/pr179-finish-1c3e8a3/test-totals.json"
-      ],
-      "next_step": "Wait for official release/pin and root behavior gates; 227 proof assertions cover both search and PubChem, not 227 search endpoints.",
-      "existing_public_wrappers": [
-        {
-          "name": "chemi_search",
-          "file": "R/chemi_search.R"
         }
       ]
     },
@@ -886,5 +803,5 @@
       ]
     }
   ],
-  "outside_denominator": "Three retained PubChem public wrappers/six HTTP operations still await cache174; throttling175 is released and root-adopted in v0.1.45."
+  "outside_denominator": "Three retained PubChem public wrappers/six HTTP operations await root adoption of released v0.1.48 session-cache lifecycle; native throttling175 was adopted in v0.1.45. Isolated cache candidate validation is in progress. Separate resolver PubChem source/service mismatch remains held."
 }

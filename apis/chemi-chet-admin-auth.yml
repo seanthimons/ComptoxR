@@ -18,8 +18,11 @@ selection:
   - GET /auth/logout
   - GET /auth/testpage
   - POST /auth/testpage
+  - POST /auth/login
+  - POST /auth/register
+  - POST /auth/report
 helper: .ct_request
-documentation: true
+documentation: yes
 operations:
   GET /admin/database:
     name: chemi_chet_admin_database
@@ -29,7 +32,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: List admin error records
       lifecycle: experimental
@@ -47,7 +50,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Create an error report (POST)
       lifecycle: experimental
@@ -65,7 +68,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Login admin user (POST)
       lifecycle: experimental
@@ -83,7 +86,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Register a new admin user (POST)
       lifecycle: experimental
@@ -101,7 +104,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Resolve a reported error (POST)
       lifecycle: experimental
@@ -119,7 +122,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: View error page (GET)
       lifecycle: experimental
@@ -137,7 +140,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: View error page (POST)
       lifecycle: experimental
@@ -155,7 +158,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Complete error report (GET)
       lifecycle: experimental
@@ -173,7 +176,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Complete error report (POST)
       lifecycle: experimental
@@ -191,7 +194,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: View error page with filter (GET)
       lifecycle: experimental
@@ -209,7 +212,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: View error page with filter (POST)
       lifecycle: experimental
@@ -227,7 +230,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Logout user
       lifecycle: experimental
@@ -245,7 +248,7 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Run test page (GET)
       lifecycle: experimental
@@ -263,9 +266,63 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
     request_controls:
-      preserve_errors: true
+      preserve_errors: yes
     docs:
       title: Run test page (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/login:
+    name: chemi_chet_auth_login_post
+    file: R/chemi_chet_auth_login_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Login user (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/register:
+    name: chemi_chet_auth_register_post
+    file: R/chemi_chet_auth_register_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Register a user (POST)
+      lifecycle: experimental
+      description: Native canonical contract. Session and authorization behavior is
+        server-defined; this function does not manage credentials or session state.
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /auth/report:
+    name: chemi_chet_auth_report_post
+    file: R/chemi_chet_auth_report_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: Report an error (POST)
       lifecycle: experimental
       description: Native canonical contract. Session and authorization behavior is
         server-defined; this function does not manage credentials or session state.

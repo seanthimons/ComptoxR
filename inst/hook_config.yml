@@ -1407,3 +1407,12 @@ chemi_resolver_lookup:
 
 chemi_toxprints:
   bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_chet_auth_login_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_register_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R
+
+chemi_chet_auth_report_post:
+  bespoke_test: tests/testthat/test-native_chet_admin_auth.R

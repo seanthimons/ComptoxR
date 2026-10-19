@@ -1,0 +1,62 @@
+{
+  "production-old": {
+    "version": "old",
+    "base": "https://hcd.rtpnc.epa.gov/api",
+    "process_error": null,
+    "error": null,
+    "rows": 755,
+    "observed": [
+      {
+        "status": 200,
+        "url": "https://hcd.rtpnc.epa.gov/api/search"
+      }
+    ],
+    "warnings": [],
+    "time_utc": "2026-10-19 01:17:34 UTC"
+  },
+  "production-candidate": {
+    "version": "candidate",
+    "base": "https://hcd.rtpnc.epa.gov/api",
+    "process_error": null,
+    "error": null,
+    "rows": 755,
+    "observed": [
+      {
+        "status": 200,
+        "url": "https://hcd.rtpnc.epa.gov/api/search"
+      }
+    ],
+    "warnings": [],
+    "time_utc": "2026-10-19 01:18:25 UTC"
+  },
+  "staging-old": {
+    "version": "old",
+    "base": "https://cim.sciencedataexperts.com/api",
+    "process_error": null,
+    "error": null,
+    "rows": 755,
+    "observed": [
+      {
+        "status": 200,
+        "url": "https://cim.sciencedataexperts.com/api/search"
+      }
+    ],
+    "warnings": [],
+    "time_utc": "2026-10-19 01:18:59 UTC"
+  },
+  "staging-candidate": {
+    "version": "candidate",
+    "base": "https://cim.sciencedataexperts.com/api",
+    "process_error": null,
+    "error": null,
+    "rows": 755,
+    "observed": [
+      {
+        "status": 200,
+        "url": "https://cim.sciencedataexperts.com/api/search"
+      }
+    ],
+    "warnings": [],
+    "time_utc": "2026-10-19 01:19:26 UTC"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "commit": "ca02237f98bfa3f056b3c06967b2584c6959bb77",
+  "commit": "354401ceb76f24d1647e0eab4082978c359c1c50",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -25,11 +25,6 @@
       "wrapper": "chemi_resolver_getsimilaritylist",
       "method": "POST",
       "route": "resolver/getsimilaritylist"
-    },
-    {
-      "wrapper": "chemi_search",
-      "method": "POST",
-      "route": "search"
     },
     {
       "wrapper": "chemi_stdizer_bulk",
@@ -59,9 +54,9 @@
   ],
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.45",
-    "source_commit": "f686717052b7636775ce1ccca2080056c32f69f0",
-    "source_archive_sha256": "6ad76ac77bea42a6bc971614f350d299612238b90bea54b93e85a47ebf09bfab",
+    "version": "0.1.47",
+    "source_commit": "5ec825277c686a7142ad113340897039b6c3a793",
+    "source_archive_sha256": "27639e010a7aabee957389f58406d5094f3769a540d60ac7887b562d5fce2024",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -92,9 +87,9 @@
     },
     {
       "schema": "chemi-chet-prod",
-      "migrated": 84,
+      "migrated": 87,
       "total": 95,
-      "remaining": 11
+      "remaining": 8
     },
     {
       "schema": "chemi-descriptors-prod",
@@ -170,9 +165,9 @@
     },
     {
       "schema": "chemi-search-prod",
-      "migrated": 13,
+      "migrated": 14,
       "total": 14,
-      "remaining": 1
+      "remaining": 0
     },
     {
       "schema": "chemi-services-prod",
@@ -381,6 +376,15 @@
       "wrapper": "ct_chemical_list_all",
       "file": "R/ct_chemical_list_all.R",
       "suite": "tests/testthat/test-native_ctx_list_all.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "binding_schema": "schema/chemi-search-prod.json",
+      "operation": "POST /api/search",
+      "wrapper": "chemi_search",
+      "file": "R/chemi_search.R",
+      "suite": "tests/testthat/test-chemi_search.R",
       "migrated": true
     },
     {
@@ -4376,6 +4380,33 @@
       "operation": "POST /auth/testpage",
       "wrapper": "chemi_chet_auth_testpage_post",
       "file": "R/chemi_chet_auth_testpage_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/login",
+      "wrapper": "chemi_chet_auth_login_post",
+      "file": "R/chemi_chet_auth_login_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/register",
+      "wrapper": "chemi_chet_auth_register_post",
+      "file": "R/chemi_chet_auth_register_post.R",
+      "suite": "tests/testthat/test-native_chet_admin_auth.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "binding_schema": "schema/chemi-chet-prod.json",
+      "operation": "POST /auth/report",
+      "wrapper": "chemi_chet_auth_report_post",
+      "file": "R/chemi_chet_auth_report_post.R",
       "suite": "tests/testthat/test-native_chet_admin_auth.R",
       "migrated": true
     },

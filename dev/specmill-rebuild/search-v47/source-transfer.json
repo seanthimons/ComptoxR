@@ -1,0 +1,6 @@
+{
+  "original_path": "R/chemi_search.R",
+  "archive_path": "dev/specmill-rebuild/search-v47/archived-original-chemi_search.R.txt",
+  "physical_sha256": "3f7325fd341fd323fdb0875727892fe4174e64a1b5c57b1778ba132993c73fce",
+  "reason": "Retain the reviewed original while official generation creates a native wrapper at the original path; original source is unowned and lifecycle-protected. No handwritten wrapper/helper or ownership edit."
+}

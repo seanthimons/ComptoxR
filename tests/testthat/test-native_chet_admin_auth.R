@@ -1,4 +1,7 @@
 chet_admin_auth_wrappers <- c(
+  'chemi_chet_auth_login_post',
+  'chemi_chet_auth_register_post',
+  'chemi_chet_auth_report_post',
   'chemi_chet_admin_database',
   'chemi_chet_admin_errorreport_post',
   'chemi_chet_admin_login_post',
@@ -77,6 +80,44 @@ test_that('chet_admin_auth bindings validate inputs and preserve actual localhos
       expect_match(result$wire$content_type, '^application/x-www-form-urlencoded', info = name)
       fields <- httr2::url_parse(paste0('http://localhost/?', rawToChar(result$wire$body)))$query
       expect_identical(fields, case$args$body, info = name)
+    }
+    if (name %in% c('chemi_chet_auth_login_post', 'chemi_chet_auth_register_post', 'chemi_chet_auth_report_post')) {
+      expect_identical(names(formals(fn)), 'body', info = name)
+      expect_identical(formals(fn)$body, quote(expr = ), info = name)
+      body <- list(
+        text = 'a&b=+/?',
+        integer = 2L,
+        fraction = 1.5,
+        yes = TRUE,
+        no = FALSE,
+        blank = '',
+        `field &` = 'caf\u00e9'
+      )
+      scalar <- invoke(fn, list(body = body))
+      expect_identical(
+        rawToChar(scalar$wire$body),
+        'text=a%26b%3D%2B%2F%3F&integer=2&fraction=1.5&yes=true&no=false&blank=&field%20%26=caf%C3%A9',
+        info = name
+      )
+      expect_identical(invoke(fn, list(body = list()))$wire$body, raw(), info = name)
+      for (bad in list(
+        NULL,
+        NA_character_,
+        NA_real_,
+        NA,
+        NaN,
+        Inf,
+        -Inf,
+        character(),
+        c('a', 'b'),
+        list('a'),
+        list(nested = 'a'),
+        as.raw(1),
+        as.Date('2026-01-01')
+      )) {
+        expect_error(fn(body = list(field = bad)), info = name)
+        expect_false(file.exists(file.path(directory, paste0(count + 1L, '.rds'))), info = name)
+      }
     }
     # A malformed declared input must fail before the localhost server sees it.
     if (length(case$args)) {

@@ -28,5 +28,5 @@ for (row in rows) {
     args = args, query = query, body_media = media, source = row$schema,
     source_sha256 = digest::digest(file = row$schema, algo = 'sha256'))
 }
-stopifnot(length(cases) == 14L)
+stopifnot(length(cases) == 17L)
 saveRDS(cases, 'tests/testthat/fixtures/native-chet-admin-auth.rds')

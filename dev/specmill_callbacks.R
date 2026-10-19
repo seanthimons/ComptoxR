@@ -303,3 +303,5 @@ similaritymap_query <- function(operation) quote(list(sort = if (!is.null(params
 services_body <- function(operation) {
   substitute(.ct_services_body(params, SCHEMA), list(SCHEMA = operation$schema_body))
 }
+
+search_paging <- function(operation) quote(params[["all_pages"]]())
