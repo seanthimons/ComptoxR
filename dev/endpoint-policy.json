@@ -9,7 +9,9 @@
       "POST /api/amos/add_new_fact_sheet/",
       "POST /api/amos/add_new_method/",
       "POST /api/amos/add_new_product_declaration/",
-      "POST /api/amos/add_new_safety_data_sheet/"
+      "POST /api/amos/add_new_safety_data_sheet/",
+      "POST /api/amos/analytical_qc_batch_search",
+      "POST /api/amos/batch_search"
     ],
     "schema/chemi-chet-prod.json": [
       "GET /admin/database",
@@ -80,7 +82,7 @@
       "GET /api/alerts/render"
     ]
   },
-  "decision": "Issues #354-#356: exclude server-side file standardization POST /api/stdizer and saved rule-group management; preserve GET standardization, JSON chemical/record calculations and the recorded route bans.",
+  "decision": "Issues #354-#356: exclude server-side file standardization POST /api/stdizer and saved rule-group management; preserve GET standardization, JSON chemical/record calculations and the recorded route bans. Issue #357: ban both AMOS XLSX batch exports pending a concrete end-user need; retain JSON searches.",
   "chet_banned_path_pattern": "^/(auth/|admin/|chemicals/chemdelete/?$)",
   "banned_path_pattern": "^/api/stdizer/groups(/|$)|(/(add|replace)/?$|^/api/resolver/(casharvest|universalharvest)/?$|^/api/services/(caspreflight|files)/?$)",
   "alerts_allowed_operations": [

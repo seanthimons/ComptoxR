@@ -42,7 +42,12 @@ test_that('banned endpoints cannot be selected or exported', {
     c('/auth/login', '/auth/new-route', '/admin/new-route', '/chemicals/chemdelete'))))
   expect_false(any(grepl(policy$chet_banned_path_pattern,
     c('/chemicals/chemical_DL', '/curators/login', '/chemicals/chemdelete-other'))))
+  expect_true(all(c('POST /api/amos/analytical_qc_batch_search', 'POST /api/amos/batch_search') %in%
+    policy$banned_operations[['schema/chemi-amos-prod.json']]))
+  expect_true(all(c('chemi_amos', 'chemi_amos_analytical_qc_keyset_pagination_bulk') %in%
+    getNamespaceExports('ComptoxR')))
   removed <- c(
+    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-357/removed-bindings.json')),
     jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-354/removed-bindings.json')),
     jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-355/removed-bindings.json')),
     jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-356/alerts-removed-bindings.json')),

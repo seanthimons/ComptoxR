@@ -1,0 +1,21 @@
+{
+  "tests": {
+    "filter": "endpoint_policy|native_amos_remaining|native_amos_read",
+    "passed": 670,
+    "failed": 0,
+    "warnings": 0,
+    "skipped": 0
+  },
+  "generation": "Specmill 0.1.51 apply and freshness check passed with validation enabled",
+  "public_boundary": "passed; 1610 text files",
+  "canonical_schemas": "unchanged",
+  "surviving_generated_output_records": "unchanged",
+  "progress": {
+    "migrated": 462,
+    "banned": 83,
+    "remaining": 3,
+    "total": 548
+  },
+  "live_requests": "not run",
+  "full_package_check": "not run"
+}

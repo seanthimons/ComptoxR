@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+- Exclude the two AMOS XLSX batch exports pending a concrete end-user need,
+  removing `chemi_amos_batch` and `chemi_amos_analytical_qc_batch` (#357).
+  JSON substance search and analytical QC pagination remain available.
+
 - Exclude server-side file standardization at `POST /api/stdizer` and remove
   `chemi_stdizer_bulk`. GET standardization and JSON chemical/record inputs
   remain available. All eleven #356 endpoint decisions are now resolved as bans.

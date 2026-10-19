@@ -8,7 +8,7 @@ Denominator: all HTTP operations in each canonical `schema/*-prod.json`, includi
 Endpoints migrated (adopted / source schema total):
 chemi-alerts-prod: 3/16 (13 banned; 0 remaining)
 chemi-amnb_nate-prod: 4/4 (0 banned; 0 remaining)
-chemi-amos-prod: 64/77 (11 banned; 2 remaining)
+chemi-amos-prod: 64/77 (13 banned; 0 remaining)
 chemi-arn_cats-prod: 4/4 (0 banned; 0 remaining)
 chemi-chet-prod: 65/95 (30 banned; 0 remaining)
 chemi-descriptors-prod: 4/4 (0 banned; 0 remaining)

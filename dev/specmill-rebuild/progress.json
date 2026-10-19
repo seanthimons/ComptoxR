@@ -1,16 +1,6 @@
 {
-  "commit": "b6af73e6cd2bafc1cd243ba5dc9a021a3744c578",
+  "commit": "70e3b0e5d5898f6aba99fd421e59b7f0e7927c35",
   "legacy_callers": [
-    {
-      "wrapper": "chemi_amos_analytical_qc_batch",
-      "method": "POST",
-      "route": "amos/analytical_qc_batch_search"
-    },
-    {
-      "wrapper": "chemi_amos_batch",
-      "method": "POST",
-      "route": "amos/batch_search"
-    },
     {
       "wrapper": "chemi_resolver_getpubchemlist",
       "method": "POST",
@@ -64,8 +54,8 @@
       "schema": "chemi-amos-prod",
       "migrated": 64,
       "total": 77,
-      "banned": 11,
-      "remaining": 2
+      "banned": 13,
+      "remaining": 0
     },
     {
       "schema": "chemi-arn_cats-prod",
@@ -239,7 +229,7 @@
   "banned_endpoints": {
     "schema/chemi-alerts-prod.json": ["GET /api/alerts/alerts", "POST /api/alerts/export", "POST /api/alerts/export-append", "GET /api/alerts/groups", "POST /api/alerts/groups", "DELETE /api/alerts/groups/{id}", "GET /api/alerts/groups/{id}", "PUT /api/alerts/groups/{id}", "POST /api/alerts/groups/{id}/add", "PATCH /api/alerts/groups/{id}/freeze", "POST /api/alerts/groups/{id}/replace", "GET /api/alerts/operations", "GET /api/alerts/render"],
     "schema/chemi-amnb_nate-prod.json": [],
-    "schema/chemi-amos-prod.json": ["POST /api/amos/add_aqc_spectrum/", "POST /api/amos/add_new_fact_sheet/", "POST /api/amos/add_new_method/", "POST /api/amos/add_new_product_declaration/", "POST /api/amos/add_new_safety_data_sheet/", "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}", "PUT /api/amos/update_fact_sheet_info/{internal_id}", "PUT /api/amos/update_method_info/{internal_id}", "PUT /api/amos/update_nmr_spectrum_info/{internal_id}", "PUT /api/amos/update_product_declaration_info/{internal_id}", "PUT /api/amos/update_safety_data_sheet_info/{internal_id}"],
+    "schema/chemi-amos-prod.json": ["POST /api/amos/add_aqc_spectrum/", "POST /api/amos/add_new_fact_sheet/", "POST /api/amos/add_new_method/", "POST /api/amos/add_new_product_declaration/", "POST /api/amos/add_new_safety_data_sheet/", "POST /api/amos/analytical_qc_batch_search", "POST /api/amos/batch_search", "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}", "PUT /api/amos/update_fact_sheet_info/{internal_id}", "PUT /api/amos/update_method_info/{internal_id}", "PUT /api/amos/update_nmr_spectrum_info/{internal_id}", "PUT /api/amos/update_product_declaration_info/{internal_id}", "PUT /api/amos/update_safety_data_sheet_info/{internal_id}"],
     "schema/chemi-arn_cats-prod.json": [],
     "schema/chemi-chet-prod.json": ["GET /admin/database", "GET /admin/errorreport", "POST /admin/errorreport", "GET /admin/login", "POST /admin/login", "GET /admin/register", "POST /admin/register", "GET /admin/resolve", "POST /admin/resolve", "GET /auth/errorpage", "POST /auth/errorpage", "GET /auth/errorpage/complete/{idnum}", "POST /auth/errorpage/complete/{idnum}", "GET /auth/errorpage/{showhide}", "POST /auth/errorpage/{showhide}", "GET /auth/login", "POST /auth/login", "GET /auth/logout", "GET /auth/register", "POST /auth/register", "GET /auth/report", "POST /auth/report", "GET /auth/testpage", "POST /auth/testpage", "GET /chemicals/chemdelete", "POST /chemicals/chemdelete", "PUT /curators/libraries/{lib_id}", "OPTIONS /reaction/batchsearch", "OPTIONS /reaction/map_DL", "DELETE /reaction/mappositions/{map_id}"],
     "schema/chemi-descriptors-prod.json": [],
