@@ -2,7 +2,33 @@
 
 Updated 19 October 2026. Branch feat/specmill-migration-pilot, PR345. Local commits authorized; no ComptoxR push/merge/release. Inspect actual HEAD/status first.
 
-## Current root state
+## Current v50 checkpoint
+
+Code commit `dbaafea2` adopts official Specmill 0.1.50 and the descriptor/PubChem clients. A following local commit records the final tests, ledgers and test-only corrections. Inspect actual HEAD/status. Nothing has been pushed, merged or released from ComptoxR. No new production requests are authorized or performed.
+
+Canonical progress is **512/548**. Only GET and POST `/api/descriptors` are newly completed since `253c38a2`; descriptors are now 4/4. Three PubChem wrappers implement six additional routes outside that denominator. Original unowned sources were archived byte for byte under `ownership-v50` and `pubchem-v50` before official generation recreated their files. Frozen-original localhost comparisons cover URL prefixes, complete hook state, caches, chunks, results and typed errors.
+
+The root pin is 0.1.50, source `064478735580b54a732e3859b066b317e72d53a1`. Exact git archive SHA256: `7d1ebbac31b3ecc764e8b0cb7baf890a4a5e4ceef67b16cbd96835b1f12d0f78`. Official release archive SHA256: `cb8e970df29086405206a21b8b591b848f434fbc0e78984233b0fc532c1f9deb`. All 77 tracked R/inst files and ancestry were verified. The separate root v50 library uses the established exact-archive installer. The emitter uses `scaffold$code` directly with its existing noRd, whitespace, protection and provenance steps. Normalized helper code is unchanged from v47; only official provenance advances. No handwritten wrapper, helper, executor or generic_request patch was used.
+
+Terminal public generation/freshness passes **34 selected sources and all 715 output hashes**. All 711 preceding ownership records are unchanged from `253c38a2`; four R files are newly owned. Final reconcile session 19341 exited 0. Package R/man/inst/data did not change after these checks. Subsequent corrections affect tests and evidence only. Do not rerun the one-time `generate.R` retirement. Use public maintenance `--check` for ordinary freshness; `reconcile.R` records the one-time removal of held metadata.
+
+Passed validation:
+
+- Installed package: **2,389 assertions**, zero failures/errors/warnings/skips, no schema/dev directories and no Specmill runtime namespace. Its snapshot matches the final package core.
+- PubChem isolation: **228 assertions twice in one installed R process**, clean exit. Review changed only the test's throttle realm to `tempfile()`.
+- Source broad run: 14,099 passes, three failures in one obsolete legacy-helper search case, 50 expected skips, zero errors/warnings. That case is archived and removed; remaining real-wire tests stay. Focused affected suites plus new credential tests pass **395 assertions**. Combined current-test verification is **14,114 passes, 50 expected skips, zero failures/errors/warnings**. This combines the completed broad run with focused replacement suites, not a second full-suite invocation. See `combined-safe-summary.json` and `combine-checks.R`.
+- Bounded package check: **0 errors, 0 warnings, 0 notes**. Tests/examples/vignettes/manual were disabled and optional Suggests relaxed. Exact flags and the 1,205-file fingerprint are in `released-v50/package-check`. This is not a full strict check.
+- Hook registry: 288 functions, 123 hooks, 34 extra parameters. Retained test inventory: nine wrappers. Export readiness: 587 exports, zero gaps. Review: zero documented standards breaches, one isolation heuristic fixed/replayed, zero Spec findings. Public boundary and diff checks pass.
+
+The 36 complementary holds in `current-dispositions.json` comprise 30 source contracts, four service contracts, one ownership hold (#186), and one client hold (#353). Both AMOS XLSX operations remain explicitly user-deferred. Resolver PubChem/similarity source-service mismatches are separate from the adopted public PubChem cache facades. Toxprints bulk stays unchanged in shared `R/chemi_toxprints.R`; its native GET sibling is intact. Canonical object/chunk generation works on v50, but changing legacy array/CTX/auth behavior requires separate client review #353. Existing descriptor CSV/TSV post-hook failures are preserved and documented, not represented as successful CSV behavior.
+
+**Do not apply `ownership-v50/management.patch` or `render.yml` yet.** [Specmill #186](https://github.com/seanthimons/specmill/issues/186) proves absolute response-source paths break freshness after a checkout moves. The parent withdrew that selection and removed its metadata through official generation. Render runtime and ownership are unchanged. PR345 blocker comment: 6258741240. Wait for a released fix and pin update; do not normalize the manifest or patch a helper locally. No other endpoint set has an evidence-backed contract ready for migration on v50.
+
+Final evidence is in `released-v50/README.md` and `REVIEW.md`, plus `progress.md/json`, `canonical-holds-audit/current-dispositions.json`, `ownership-v50` and `pubchem-v50`. Logs and bulk audit reports are byte-exact gzip archives. Preliminary failures and interrupted checks are separate from terminal results. No root checks or delegated tasks remain active after the final evidence commit. Future builds must use persistent TMPDIR `/home/sxthi/.cache/comptoxr-specmill-finish/tmp`; preserve other tasks' files and libraries.
+
+Next: released #186 fix, independent cross-checkout replay, pin/helper provenance update, shared safety/render adoption, then public validated apply/check and focused replay. Resolve the other contracts separately before claiming all 548 or complete live validation. Continue local-only unless the user authorizes push or new production calls. Post per-schema progress to PR345 at iteration boundaries.
+
+## Historical v47 and earlier checkpoints
 
 Current510/548 checkpoint is fully validated for local commit; preceding506 is354401ce with PR345 comment6257699701. Root47 pin/source/helper provenance remains as recorded below. Public apply/freshness33 sources/all711 owner hashes PASS; source1374, installed1357, all0failures/errors/warnings/skips, no Specmillruntime. Installed excludes17 source-only CheT schemahash checks. Hook285/123/34, retainedtestinventory12 and publicboundary1733 PASS. Exact four rootwrapper bytes match officialprivatecandidates; R/api_validation.R exactly matches official47 validation_runtime output.
 

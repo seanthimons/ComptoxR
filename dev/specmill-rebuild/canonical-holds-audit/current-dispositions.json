@@ -1,13 +1,13 @@
 {
-  "root_parent_commit": "354401ce",
+  "root_parent_commit": "dbaafea25834dfcc4ddf708a50b596157f69a88a",
   "canonical_total": 548,
-  "migrated": 510,
-  "remaining_identities": 38,
+  "migrated": 512,
+  "remaining_identities": 36,
   "disposition_counts": {
     "source_contract_hold": 30,
     "service_contract_hold": 4,
-    "ownership_route_hold": 3,
-    "generator_gap": 1
+    "ownership_route_hold": 1,
+    "client_contract_hold": 1
   },
   "source_audit": "dispositions.json",
   "operations": [
@@ -498,52 +498,6 @@
       "existing_public_wrappers": []
     },
     {
-      "schema": "schema/chemi-descriptors-prod.json",
-      "operation": "GET /api/descriptors",
-      "operation_id": "descriptorsGet",
-      "source_location": "#/paths/~1api~1descriptors/get",
-      "operation_sha256": "9ea2f0b48fb7ef2cd733d50d50d93f48c4e8081fd82d5359acb13c2d9b70ef52",
-      "disposition": "ownership_route_hold",
-      "blocker": "Declared aggregate-to-RDKit fallback rejects unresolved relative OAS3 versus Swagger2 server identities before the shared explicit resolver is considered. routes support already exists; source ownership/server compatibility is the blocker.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/61#issuecomment-6252954521"
-      ],
-      "evidence": [
-        "dev/specmill-rebuild/calculation-facades/evidence.json",
-        "dev/specmill-rebuild/canonical-holds-audit/descriptor-blockers.json"
-      ],
-      "next_step": "Obtain supported declared-route ownership with these sources and common resolver. v44 ownership reconciliation #170 is a different restored-output-hash fix.",
-      "existing_public_wrappers": [
-        {
-          "name": "chemi_descriptors",
-          "file": "R/chemi_descriptors.R"
-        }
-      ]
-    },
-    {
-      "schema": "schema/chemi-descriptors-prod.json",
-      "operation": "POST /api/descriptors",
-      "operation_id": "descriptorsPost",
-      "source_location": "#/paths/~1api~1descriptors/post",
-      "operation_sha256": "150043223781cd598d439db63edc92425161601d435872e5644a05bb29d92555",
-      "disposition": "ownership_route_hold",
-      "blocker": "Declared aggregate-to-RDKit fallback rejects unresolved relative OAS3 versus Swagger2 server identities before the shared explicit resolver is considered. routes support already exists; source ownership/server compatibility is the blocker.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/61#issuecomment-6252954521"
-      ],
-      "evidence": [
-        "dev/specmill-rebuild/calculation-facades/evidence.json",
-        "dev/specmill-rebuild/canonical-holds-audit/descriptor-blockers.json"
-      ],
-      "next_step": "Obtain supported declared-route ownership with these sources and common resolver. v44 ownership reconciliation #170 is a different restored-output-hash fix.",
-      "existing_public_wrappers": [
-        {
-          "name": "chemi_descriptors_bulk",
-          "file": "R/chemi_descriptors.R"
-        }
-      ]
-    },
-    {
       "schema": "schema/chemi-resolver-prod.json",
       "operation": "POST /api/resolver/casharvest",
       "operation_id": "postMultipartCASHarvest",
@@ -636,15 +590,17 @@
       "source_location": "#/paths/~1api~1alerts~1render/get",
       "operation_sha256": "12e350d181acf835048a2a3cc7a471f8149f18aacfd6a9ce2a202968d3415d65",
       "disposition": "ownership_route_hold",
-      "blocker": "Same request/server as alerts, but wildcard response media versus PNG/SVG prevents shared declaration ownership on official v42.",
+      "blocker": "Official Specmill v0.1.50 supports reviewed duplicate response ownership but persists absolute response source paths in the generated manifest. Copying an unchanged checkout to another root fails validated freshness on that manifest alone. Shared safety/alerts response-owner adoption is retained pending a released portable-provenance fix.",
       "links": [
-        "https://github.com/seanthimons/specmill/issues/61#issuecomment-6254632814",
-        "https://github.com/seanthimons/specmill/issues/61#issuecomment-6254632814"
+        "https://github.com/seanthimons/specmill/issues/186",
+        "https://github.com/seanthimons/specmill/pull/184"
       ],
       "evidence": [
-        "dev/specmill-rebuild/webtest-exports/safety-ownership.json"
+        "dev/specmill-rebuild/released-v50/portability-hold/results.json",
+        "dev/specmill-rebuild/released-v50/portability-hold/repro.R",
+        "dev/specmill-rebuild/released-v50/portability-hold/collect.log"
       ],
-      "next_step": "Upstream61 ownership support; preserve existing alerts binding and do not introduce a duplicate alias.",
+      "next_step": "Follow Specmill#186 and adopt a verified released fix; independently replay cross-root validated freshness before enabling the shared safety response owner. Do not normalize the manifest by hand.",
       "existing_public_wrappers": [
         {
           "name": "chemi_alerts_render",
@@ -788,13 +744,22 @@
       "operation_id": "post",
       "source_location": "#/paths/~1api~1toxprints/post",
       "operation_sha256": "8105456be6b32e36735438b4f45dce5a737a73048376d83dfcb2bcc322beabeb",
-      "disposition": "generator_gap",
-      "blocker": "Explicit client chunk splitting is rejected for canonical object bodies; scalar fan-out cannot preserve configured chunk sizes. Legacy payload/server/auth differences also require review.",
+      "disposition": "client_contract_hold",
+      "blocker": "Official Specmill v0.1.50 releases client-selected chunk input for canonical object bodies. The retained wrapper instead inherits CTX server/auth and sends top-level JSON arrays; canonical Cheminformatics service/object/auth selection would change public behavior and requires separate client-contract review under ComptoxR#311/#353.",
       "links": [
-        "https://github.com/seanthimons/specmill/issues/181"
+        "https://github.com/seanthimons/ComptoxR/issues/353",
+        "https://github.com/seanthimons/ComptoxR/issues/311",
+        "https://github.com/seanthimons/specmill/issues/181",
+        "https://github.com/seanthimons/specmill/pull/185"
       ],
-      "evidence": [],
-      "next_step": "Follow existing #181; leave chemi_toxprints_bulk unchanged. Parent owns the reproduction.",
+      "evidence": [
+        "dev/specmill-rebuild/released-v50/toxprints-hold/hold.json",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/generation.json",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/runtime.json",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/contract-wire.rds",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/legacy-default-dryrun.rds"
+      ],
+      "next_step": "Resolve intended service/auth/payload in separate ComptoxR#353 behavior-repair review; retain chemi_toxprints_bulk unchanged. Do not treat released chunk support as service validation or silently repair legacy behavior. Preserve the native GET in the shared R file.",
       "existing_public_wrappers": [
         {
           "name": "chemi_toxprints_bulk",
@@ -803,5 +768,5 @@
       ]
     }
   ],
-  "outside_denominator": "Three retained PubChem public wrappers/six HTTP operations await root adoption of released v0.1.48 session-cache lifecycle; native throttling175 was adopted in v0.1.45. Isolated cache candidate validation is in progress. Separate resolver PubChem source/service mismatch remains held."
+  "outside_denominator": "Three PubChem public wrappers/six HTTP operations now use root-adopted released session-cache lifecycle and native throttling under Specmill v0.1.50, with isolated and root offline behavior proofs. They remain outside the canonical 548 denominator. Separate resolver PubChem source/service mismatch remains held."
 }

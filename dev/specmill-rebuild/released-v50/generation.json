@@ -1,0 +1,18 @@
+{
+  "pin": {
+    "package": "specmill",
+    "version": "0.1.50",
+    "source_commit": "064478735580b54a732e3859b066b317e72d53a1",
+    "source_archive_sha256": "7d1ebbac31b3ecc764e8b0cb7baf890a4a5e4ceef67b16cbd96835b1f12d0f78",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "owners": 715,
+  "sources": 34,
+  "freshness": true,
+  "owners_unchanged_except_removal_of_held_render_response_sources": true,
+  "new_owners": ["R/chemi_descriptors.R", "R/pubchem_properties.R", "R/pubchem_search.R", "R/pubchem_synonyms.R"],
+  "preceding_records_changed_from_253c38a2": [],
+  "held_duplicate_response": "https://github.com/seanthimons/specmill/issues/186",
+  "helper_sha256": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec"
+}

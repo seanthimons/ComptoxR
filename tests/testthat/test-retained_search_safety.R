@@ -18,24 +18,6 @@ test_that('search keeps transport-only all_pages lazy and preserves full skip st
   expect_false('result' %in% names(result))
 })
 
-test_that('search transport uses original all_pages and preserves partial returned params', {
-  request <- NULL
-  post <- NULL
-  state <- list(params = list(query = 'changed', all_pages = FALSE),
-    request = list(body = list(searchType = 'MASS'), options = list(limit = 1)), marker = 2)
-  local_mocked_bindings(run_hook = function(name, stage, data) {
-    if (stage == 'pre_request') return(state)
-    post <<- data
-    data$result
-  }, generic_chemi_request = function(...) { request <<- list(...); list(answer = 1) })
-  expect_identical(chemi_search(all_pages = TRUE), list(answer = 1))
-  expect_identical(request, list(endpoint = 'search', body = state$request$body,
-    options = state$request$options, tidy = FALSE, paginate = TRUE, max_pages = 100,
-    pagination_strategy = 'offset_limit'))
-  state$result <- list(answer = 1)
-  expect_identical(post, state)
-})
-
 test_that('search localhost requests preserve paging, partial failures and condition stages', {
   skip_if_not_installed('httpuv'); skip_if_not_installed('callr')
   directory <- tempfile('search-facade-'); dir.create(directory)

@@ -1,3 +1,9 @@
+# Root adoption status
+
+All three public wrappers are officially generated in local commit dbaafea2. Root validated generation/freshness passes34 selected sources and715 ownership hashes. Three original unowned wrapper files are archived here; three obsolete unowned helper-call tests were retired through supported apply_files with exact SHA authorization. Their snapshots are in ../released-v50/retired-helper-tests. No private manifest or helper was copied.
+
+Root installed replay passes2389 assertions. The complete source PubChem suite passes228 assertions; its test-only throttle realm now varies per invocation, with228 assertions passing twice in one installed R process. Runtime code and the corrected relative-empty resolver settings are unchanged. Logs are stored byte-exact in gzip files. See ../released-v50 for final evidence and remaining holds.
+
 # Prefix-corrected official50 PubChem candidate PASS
 
 Final official50 portable generation with validationTRUE and freshness passed: three primary operations,13 owned outputs, all owner hashes verified. Actual native runtime passed228 assertions over81 localhost HTTP requests. Public validation/unchanged util caller tests added26 passes:254 total, zero failures/errors/warnings/skips; no Specmill runtime namespace loaded.

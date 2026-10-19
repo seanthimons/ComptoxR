@@ -423,7 +423,7 @@ test_that('PubChem native facades preserve actual requests, caches and Fault war
       expect_equal(req$policies$retry_max_tries, 4)
     }
   })
-  realm <- 'comptoxr-pubchem-native-private'
+  realm <- tempfile('comptoxr-pubchem-native-')
   withr::with_options(
     list(
       comptoxr_native.request = list(

@@ -1,3 +1,9 @@
+# Root adoption status
+
+Descriptor aggregate GET/POST are officially generated in local commit dbaafea2. The final root check validates34 selected sources and715 ownership hashes. Only these two canonical identities are added by this ownership candidate.
+
+Do not apply management.patch or render.yml on v50. The shared safety/render selection is held by https://github.com/seanthimons/specmill/issues/186 because absolute response-source provenance breaks freshness in a different checkout. The parent withdrew those configuration lines and removed the metadata through official generation. Existing chemi_alerts_render runtime bytes and ownership record remain unchanged. The private783-assertion proof below establishes same-root behavior, not cross-checkout portability. Historical logs/diagnostics are stored byte-exact in gzip files.
+
 # Official 50 ownership candidate
 
 This isolated candidate covers canonical GET/POST `/api/descriptors` through existing `chemi_descriptors` and `chemi_descriptors_bulk`, and safety's shared GET `/api/alerts/render` through existing `chemi_alerts_render`. It adds no public alias, signature, schema correction or handwritten runtime change.

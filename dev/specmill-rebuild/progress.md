@@ -11,7 +11,7 @@ chemi-amnb_nate-prod: 4/4
 chemi-amos-prod: 64/77
 chemi-arn_cats-prod: 4/4
 chemi-chet-prod: 87/95
-chemi-descriptors-prod: 2/4
+chemi-descriptors-prod: 4/4
 chemi-hazard-prod: 16/16
 chemi-mordred-prod: 4/4
 chemi-ncc_cats-prod: 4/4
@@ -35,4 +35,4 @@ ctx-hazard-prod: 28/28
 epi-suite-prod: 14/14
 ```
 
-Total: 510/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
+Total: 512/548. This is endpoint ownership/test coverage, not a claim that every live server behavior has been validated.
