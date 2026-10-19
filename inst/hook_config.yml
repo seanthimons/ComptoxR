@@ -662,6 +662,7 @@ epi_submit:
     - unwrap_epi_result
 
 epi_ecosar_surfactant_nonionic:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
   post_response:
     - unwrap_epi_result
 
@@ -1379,3 +1380,30 @@ chemi_stdizer_groups_preflight_post:
 
 chemi_stdizer_protocols_by_id_post:
   bespoke_test: tests/testthat/test-native_stdizer_protocol_search.R
+
+chemi_opera_file:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_resolver_exportsimilaritylist:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_resolver_exportsimilaritymap:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_alerts_groups_freeze_by_id:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_stdizer_groups_by_id_freeze_patch:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_stdizer_protocols_by_id_get:
+  bespoke_test: tests/testthat/test-native_stdizer_protocol_get.R
+
+chemi_opera:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_resolver_lookup:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R
+
+chemi_toxprints:
+  bespoke_test: tests/testthat/test-native_released_booleans_v45.R

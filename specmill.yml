@@ -66,6 +66,8 @@ services:
 - apis/chemi-webtest-exports.yml
 - apis/chemi-stdizer-reviewed-preflight.yml
 - apis/chemi-stdizer-reviewed-protocol-search.yml
+- apis/chemi-released-boolean-bindings.yml
+- apis/chemi-stdizer-reviewed-protocol-get.yml
 callback_files:
 - dev/specmill_callbacks.R
 - dev/specmill-rebuild/remaining-facades/callbacks.R

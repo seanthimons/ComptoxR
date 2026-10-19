@@ -157,7 +157,16 @@ epi_ecosar_surfactant_nonionic <- function(
     response_policy = ".ct_static_list",
     server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
     server_resolver = list(name = ".ct_server_url", key = "epi_burl", relative = "/"),
-    auth = list()
+    auth = list(),
+    parameter_serialization = list(list(
+      name = "useSmiles",
+      location = "query",
+      schema = list(default = FALSE, type = "boolean"),
+      style = "form",
+      explode = TRUE,
+      collection_format = NULL,
+      required = FALSE
+    ))
   )
   result <- run_hook("epi_ecosar_surfactant_nonionic", "post_response", base::list(result = result, params = params))
   result

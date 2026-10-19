@@ -1,12 +1,12 @@
 {
-  "root_parent_commit": "8dd6e513",
+  "root_parent_commit": "ca02237f98bfa3f056b3c06967b2584c6959bb77",
   "canonical_total": 548,
-  "migrated": 500,
-  "remaining_identities": 48,
+  "migrated": 506,
+  "remaining_identities": 42,
   "disposition_counts": {
     "source_contract_hold": 30,
-    "release_gate": 10,
     "service_contract_hold": 3,
+    "release_gate": 4,
     "ownership_route_hold": 3,
     "service_contract_and_release_hold": 1,
     "generator_gap": 1
@@ -56,25 +56,6 @@
         "dev/specmill-rebuild/stdizer-unbound/inventory.json"
       ],
       "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-alerts-prod.json",
-      "operation": "PATCH /api/alerts/groups/{id}/freeze",
-      "operation_id": "groupFreezePatch",
-      "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1freeze/patch",
-      "operation_sha256": "8fe2d728ffa275a2558a95be49dcf372e3404c1b6f12967390b2b45c361671f7",
-      "disposition": "release_gate",
-      "blocker": "Released v42 sends scalar boolean queries uppercase. Exact PR176 a656ce446fd2f4fe28184e3cad69da02e209ef26 passes five held bindings; runtime adoption still held.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/177",
-        "https://github.com/seanthimons/specmill/pull/176"
-      ],
-      "evidence": [
-        "dev/specmill-pr176-proof/README.md",
-        "dev/specmill-pr176-proof/results.json"
-      ],
-      "next_step": "Wait for official release and reviewed root pin update, then regenerate/retest. Moving PR head is not the exact proof.",
       "existing_public_wrappers": []
     },
     {
@@ -622,25 +603,6 @@
       ]
     },
     {
-      "schema": "schema/chemi-opera-prod.json",
-      "operation": "POST /api/opera/file",
-      "operation_id": "app.post_predict_file",
-      "source_location": "#/paths/~1api~1opera~1file/post",
-      "operation_sha256": "376e22f7f58b551dc69b4b5b3110b77f63e6f370849a41de4d61aa3cef6c217c",
-      "disposition": "release_gate",
-      "blocker": "Released v42 sends scalar boolean queries uppercase. Exact PR176 a656ce446fd2f4fe28184e3cad69da02e209ef26 passes five held bindings; runtime adoption still held.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/177",
-        "https://github.com/seanthimons/specmill/pull/176"
-      ],
-      "evidence": [
-        "dev/specmill-pr176-proof/README.md",
-        "dev/specmill-pr176-proof/results.json"
-      ],
-      "next_step": "Wait for official release and reviewed root pin update, then regenerate/retest. Moving PR head is not the exact proof.",
-      "existing_public_wrappers": []
-    },
-    {
       "schema": "schema/chemi-resolver-prod.json",
       "operation": "POST /api/resolver/casharvest",
       "operation_id": "postMultipartCASHarvest",
@@ -658,44 +620,6 @@
         "dev/specmill-rebuild/stdizer-unbound/inventory.json"
       ],
       "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-resolver-prod.json",
-      "operation": "POST /api/resolver/exportsimilaritylist",
-      "operation_id": "exportsimilaritylist",
-      "source_location": "#/paths/~1api~1resolver~1exportsimilaritylist/post",
-      "operation_sha256": "c97ca7d7e9fd8c07fb17e7616bd27420271977f9074ba90ce8690b57982a89a0",
-      "disposition": "release_gate",
-      "blocker": "Released v42 sends scalar boolean queries uppercase. Exact PR176 a656ce446fd2f4fe28184e3cad69da02e209ef26 passes five held bindings; runtime adoption still held.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/177",
-        "https://github.com/seanthimons/specmill/pull/176"
-      ],
-      "evidence": [
-        "dev/specmill-pr176-proof/README.md",
-        "dev/specmill-pr176-proof/results.json"
-      ],
-      "next_step": "Wait for official release and reviewed root pin update, then regenerate/retest. Moving PR head is not the exact proof.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-resolver-prod.json",
-      "operation": "POST /api/resolver/exportsimilaritymap",
-      "operation_id": "exportSimilarityMap",
-      "source_location": "#/paths/~1api~1resolver~1exportsimilaritymap/post",
-      "operation_sha256": "f7d0e2be998b1d0e8dfc4861aab325e65f429bb56b116c24e5fbe8c54b4c5f73",
-      "disposition": "release_gate",
-      "blocker": "Released v42 sends scalar boolean queries uppercase. Exact PR176 a656ce446fd2f4fe28184e3cad69da02e209ef26 passes five held bindings; runtime adoption still held.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/177",
-        "https://github.com/seanthimons/specmill/pull/176"
-      ],
-      "evidence": [
-        "dev/specmill-pr176-proof/README.md",
-        "dev/specmill-pr176-proof/results.json"
-      ],
-      "next_step": "Wait for official release and reviewed root pin update, then regenerate/retest. Moving PR head is not the exact proof.",
       "existing_public_wrappers": []
     },
     {
@@ -923,25 +847,6 @@
     },
     {
       "schema": "schema/chemi-stdizer-prod.json",
-      "operation": "PATCH /api/stdizer/groups/{id}/freeze",
-      "operation_id": "groupFreezePatch",
-      "source_location": "#/paths/~1api~1stdizer~1groups~1{id}~1freeze/patch",
-      "operation_sha256": "9409e8a6191c57f7d1de9721e15e0cfbc8b61d4f11a9317188f0fad638507d9f",
-      "disposition": "release_gate",
-      "blocker": "Released v42 sends scalar boolean queries uppercase. Exact PR176 a656ce446fd2f4fe28184e3cad69da02e209ef26 passes five held bindings; runtime adoption still held.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/177",
-        "https://github.com/seanthimons/specmill/pull/176"
-      ],
-      "evidence": [
-        "dev/specmill-pr176-proof/README.md",
-        "dev/specmill-pr176-proof/results.json"
-      ],
-      "next_step": "Wait for official release and reviewed root pin update, then regenerate/retest. Moving PR head is not the exact proof.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-stdizer-prod.json",
       "operation": "POST /api/stdizer/groups/{id}/replace",
       "operation_id": "groupReplacePostMultipart",
       "source_location": "#/paths/~1api~1stdizer~1groups~1{id}~1replace/post",
@@ -958,25 +863,6 @@
         "dev/specmill-rebuild/stdizer-unbound/inventory.json"
       ],
       "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
-      "existing_public_wrappers": []
-    },
-    {
-      "schema": "schema/chemi-stdizer-prod.json",
-      "operation": "GET /api/stdizer/protocols/{id}",
-      "operation_id": "protocolGet",
-      "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/get",
-      "operation_sha256": "c955d9a3c4c5a9cb48ffc12e22211a2d553b72ebc9d790051d5500d344873106",
-      "disposition": "release_gate",
-      "blocker": "Route-specific paging/sort reads now establish the reviewed source correction. Root remains on v0.1.42; scalar query booleans require verified v0.1.45 adoption and independent native wire replay.",
-      "links": [
-        "https://github.com/seanthimons/specmill/issues/31#issuecomment-6253987684",
-        "https://github.com/seanthimons/specmill/issues/177"
-      ],
-      "evidence": [
-        "dev/specmill-rebuild/stdizer-unbound/inventory.json",
-        "dev/specmill-rebuild/canonical-holds-audit/protocol-paging-recheck/service-proof.json"
-      ],
-      "next_step": "Adopt released v0.1.45, derive the GET source with exact provenance, and verify booleans plus paging on the generated wrapper.",
       "existing_public_wrappers": []
     },
     {
@@ -1000,5 +886,5 @@
       ]
     }
   ],
-  "outside_denominator": "Three retained PubChem public wrappers/six HTTP operations await cache174 and throttle175."
+  "outside_denominator": "Three retained PubChem public wrappers/six HTTP operations still await cache174; throttling175 is released and root-adopted in v0.1.45."
 }

@@ -62,7 +62,7 @@ test_that("native EPI calculation wrappers expose declared inputs and unwrap res
   expect_identical(queries[[2]]$solubilityType, "INSOLUBLE")
   expect_identical(queries[[3]]$mainCarbons, "12")
   expect_identical(queries[[3]]$branches, "0")
-  expect_identical(queries[[3]]$useSmiles, "FALSE")
+  expect_identical(queries[[3]]$useSmiles, "false")
   expect_true(all(vapply(requests, function(req) is.null(req$body), logical(1))))
   expect_false(any(vapply(requests, function(req) "x-api-key" %in% names(req$headers), logical(1))))
   expect_error(epi_ecosar_polymer_nonionic(), "solubilityType")

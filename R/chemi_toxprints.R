@@ -47,7 +47,16 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
     response_policy = ".ct_static_list",
     server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
     server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
-    auth = list()
+    auth = list(),
+    parameter_serialization = list(list(
+      name = "headers",
+      location = "query",
+      schema = list(default = FALSE, type = "boolean"),
+      style = "form",
+      explode = TRUE,
+      collection_format = NULL,
+      required = FALSE
+    ))
   )
   result
 }

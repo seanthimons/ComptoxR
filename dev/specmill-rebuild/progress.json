@@ -1,5 +1,5 @@
 {
-  "commit": "8dd6e513d54bd4d54278874dee4063ab87e5f846",
+  "commit": "ca02237f98bfa3f056b3c06967b2584c6959bb77",
   "legacy_callers": [
     {
       "wrapper": "chemi_alerts_groups_bulk",
@@ -59,18 +59,18 @@
   ],
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.42",
-    "source_commit": "b17a0856263e0179a164a9673399f221168cda6d",
-    "source_archive_sha256": "dbd15b2509171431f00a193a648f426a02873aee5e16a73de740d30b56792351",
+    "version": "0.1.45",
+    "source_commit": "f686717052b7636775ce1ccca2080056c32f69f0",
+    "source_archive_sha256": "6ad76ac77bea42a6bc971614f350d299612238b90bea54b93e85a47ebf09bfab",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "schemas": [
     {
       "schema": "chemi-alerts-prod",
-      "migrated": 12,
+      "migrated": 13,
       "total": 16,
-      "remaining": 4
+      "remaining": 3
     },
     {
       "schema": "chemi-amnb_nate-prod",
@@ -122,9 +122,9 @@
     },
     {
       "schema": "chemi-opera-prod",
-      "migrated": 5,
+      "migrated": 6,
       "total": 6,
-      "remaining": 1
+      "remaining": 0
     },
     {
       "schema": "chemi-padel-prod",
@@ -158,9 +158,9 @@
     },
     {
       "schema": "chemi-resolver-prod",
-      "migrated": 40,
+      "migrated": 42,
       "total": 46,
-      "remaining": 6
+      "remaining": 4
     },
     {
       "schema": "chemi-safety-prod",
@@ -182,9 +182,9 @@
     },
     {
       "schema": "chemi-stdizer-prod",
-      "migrated": 27,
+      "migrated": 29,
       "total": 33,
-      "remaining": 6
+      "remaining": 4
     },
     {
       "schema": "chemi-toxprints-prod",
@@ -1496,7 +1496,7 @@
       "operation": "GET /api/ecosar/surfactant/nonionic",
       "wrapper": "epi_ecosar_surfactant_nonionic",
       "file": "R/epi_ecosar_surfactant_nonionic.R",
-      "suite": "tests/testthat/test-contract-epi_ecosar_surfactant_nonionic.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
       "migrated": true
     },
     {
@@ -2621,7 +2621,7 @@
       "operation": "GET /api/opera",
       "wrapper": "chemi_opera",
       "file": "R/chemi_opera.R",
-      "suite": "tests/testthat/test-contract-chemi_opera.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
       "migrated": true
     },
     {
@@ -2747,7 +2747,7 @@
       "operation": "GET /api/resolver/lookup",
       "wrapper": "chemi_resolver_lookup",
       "file": "R/chemi_resolver_lookup.R",
-      "suite": "tests/testthat/test-contract-chemi_resolver_lookup.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
       "migrated": true
     },
     {
@@ -2909,7 +2909,7 @@
       "operation": "GET /api/toxprints",
       "wrapper": "chemi_toxprints",
       "file": "R/chemi_toxprints.R",
-      "suite": "tests/testthat/test-contract-chemi_toxprints.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
       "migrated": true
     },
     {
@@ -4746,6 +4746,60 @@
       "wrapper": "chemi_stdizer_protocols_by_id_post",
       "file": "R/chemi_stdizer_protocols_by_id_post.R",
       "suite": "tests/testthat/test-native_stdizer_protocol_search.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-opera-prod.json",
+      "binding_schema": "schema/chemi-opera-prod.json",
+      "operation": "POST /api/opera/file",
+      "wrapper": "chemi_opera_file",
+      "file": "R/chemi_opera_file.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/exportsimilaritylist",
+      "wrapper": "chemi_resolver_exportsimilaritylist",
+      "file": "R/chemi_resolver_exportsimilaritylist.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "binding_schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/exportsimilaritymap",
+      "wrapper": "chemi_resolver_exportsimilaritymap",
+      "file": "R/chemi_resolver_exportsimilaritymap.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "binding_schema": "schema/chemi-alerts-prod.json",
+      "operation": "PATCH /api/alerts/groups/{id}/freeze",
+      "wrapper": "chemi_alerts_groups_freeze_by_id",
+      "file": "R/chemi_alerts_groups_freeze_by_id.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "binding_schema": "schema/chemi-stdizer-prod.json",
+      "operation": "PATCH /api/stdizer/groups/{id}/freeze",
+      "wrapper": "chemi_stdizer_groups_by_id_freeze_patch",
+      "file": "R/chemi_stdizer_groups_by_id_freeze_patch.R",
+      "suite": "tests/testthat/test-native_released_booleans_v45.R",
+      "migrated": true
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "binding_schema": "schema/chemi-stdizer-reviewed-protocol-get.json",
+      "operation": "GET /api/stdizer/protocols/{id}",
+      "wrapper": "chemi_stdizer_protocols_by_id_get",
+      "file": "R/chemi_stdizer_protocols_by_id_get.R",
+      "suite": "tests/testthat/test-native_stdizer_protocol_get.R",
       "migrated": true
     }
   ]

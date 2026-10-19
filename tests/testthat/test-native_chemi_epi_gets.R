@@ -10,7 +10,7 @@ test_that("native Chemi GETs preserve encoded inputs and schema defaults", {
   result <- chemi_resolver_lookup("café +/&")
   expect_identical(result, tibble::tibble(id = 1L))
   query <- httr2::url_parse(requests[[1]]$url)$query
-  expect_identical(query, list(query = "café +/&", idType = "AnyId", fuzzy = "Not", mol = "FALSE"))
+  expect_identical(query, list(query = "café +/&", idType = "AnyId", fuzzy = "Not", mol = "false"))
 
   result <- chemi_stdizer_groups_by_id(c("group one", "group/two"))
   expect_length(result, 2L)

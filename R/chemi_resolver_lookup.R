@@ -64,7 +64,16 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
     response_policy = ".ct_tidy",
     server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
     server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
-    auth = list()
+    auth = list(),
+    parameter_serialization = list(list(
+      name = "mol",
+      location = "query",
+      schema = list(default = FALSE, type = "boolean"),
+      style = "form",
+      explode = TRUE,
+      collection_format = NULL,
+      required = FALSE
+    ))
   )
   result
 }

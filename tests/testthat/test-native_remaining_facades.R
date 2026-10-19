@@ -11,7 +11,7 @@ test_that('remaining safety facade preserves lazy inputs and uses the Chemical a
       saveRDS(list(path = request$PATH_INFO, query = request$QUERY_STRING,
         method = request$REQUEST_METHOD, body = request$rook.input$read()), file.path(directory, 'request.rds'))
       reply <- readRDS(file.path(directory, 'reply.rds'))
-      list(status = reply$status, headers = list(`Content-Type` = 'application/json'), body = reply$body)
+      list(status = reply$status, headers = list(`Content-Type` = 'application/json', Connection = 'close'), body = reply$body)
     }))
     saveRDS(port, file.path(directory, 'ready.rds'))
     repeat httpuv::service(100)
@@ -65,7 +65,12 @@ test_that('remaining safety facade preserves lazy inputs and uses the Chemical a
     if (reply$status == 401L) {
       expect_error(do.call(chemi_resolver_safety_flags_bulk, args), class = 'specmill_call_error')
       expect_true('httr2_http_401' %in% capture(old)$error$class)
-    } else expect_identical(capture(chemi_resolver_safety_flags_bulk), capture(old))
+    } else {
+      actual <- capture(chemi_resolver_safety_flags_bulk)
+      expected <- capture(old)
+      expect_identical(actual, expected, info = paste('status', reply$status, 'body', reply$body,
+        if (!is.null(actual$error)) actual$error$message else ''))
+    }
   }
   # Held generated group projections are exercised only against this localhost.
   saveRDS(list(status = 200L, body = '{"id":"local-group","empty":null}'), file.path(directory, 'reply.rds'))

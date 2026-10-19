@@ -137,3 +137,4 @@ operations:
       resolver: .ct_server_url
       key: chemi_burl
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
