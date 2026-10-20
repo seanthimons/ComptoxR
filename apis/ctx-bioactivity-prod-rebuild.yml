@@ -2,38 +2,6 @@ id: ctx-bioactivity-prod-rebuild
 schemas:
   files:
   - schema/ctx-bioactivity-prod.json
-selection:
-  include:
-  - GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}
-  - GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}
-  - GET /bioactivity/aop/search/by-event-number/{eventNumber}
-  - GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}
-  - GET /bioactivity/assay/
-  - GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}
-  - GET /bioactivity/assay/count
-  - GET /bioactivity/assay/search/by-aeid/{aeid}
-  - GET /bioactivity/assay/search/by-endpoint/
-  - GET /bioactivity/assay/search/by-gene/{geneSymbol}
-  - GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}
-  - GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}
-  - GET /bioactivity/data/search/by-aeid/{aeid}
-  - GET /bioactivity/data/search/by-dtxsid/{dtxsid}
-  - GET /bioactivity/data/search/by-m4id/{m4id}
-  - GET /bioactivity/data/search/by-spid/{spid}
-  - GET /bioactivity/data/summary/search/by-aeid/{aeid}
-  - GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}
-  - GET /bioactivity/data/summary/search/by-tissue/
-  - GET /bioactivity/models/search/
-  - GET /bioactivity/models/search/by-dtxsid/{dtxsid}
-  - GET /bioactivity/search/contain/{value}
-  - GET /bioactivity/search/equal/{value}
-  - GET /bioactivity/search/start-with/{value}
-  - POST /bioactivity/assay/search/by-aeid/
-  - POST /bioactivity/data/aed/search/by-dtxsid/
-  - POST /bioactivity/data/search/by-aeid/
-  - POST /bioactivity/data/search/by-dtxsid/
-  - POST /bioactivity/data/search/by-m4id/
-  - POST /bioactivity/data/search/by-spid/
 helper: generic_request
 documentation: yes
 authentication:

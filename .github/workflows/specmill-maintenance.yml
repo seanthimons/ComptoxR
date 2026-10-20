@@ -70,6 +70,7 @@ jobs:
           Rscript -e 'source("dev/check_public_api.R"); check_public_api()'
           Rscript dev/check_hook_config.R
           Rscript dev/specmill-342/verify.R
+          Rscript dev/specmill-333/verify.R
           Rscript dev/generate_specmill.R --check
           Rscript dev/generate_tests.R --check
 

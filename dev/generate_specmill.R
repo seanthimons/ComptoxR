@@ -1,19 +1,13 @@
 # Pilot maintenance. Run from the package root; no runtime dependency on specmill.
-generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) {
+generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, deferrals = NULL) {
   mode <- match.arg(mode)
-  policy <- jsonlite::read_json("dev/endpoint-policy.json", simplifyVector = TRUE)
+  # Path policy lives in specmill.yml selection.exclude. Only method-specific bans remain here
+  # (seanthimons/specmill#189), checked against explicit includes and operation mappings.
+  banned <- unlist(jsonlite::read_json("dev/endpoint-policy.json")$banned_operations, use.names = FALSE)
   for (file in yaml::read_yaml("specmill.yml")$services) {
     service <- yaml::read_yaml(file)
     selected <- union(service$selection$include, names(service$operations))
-    banned <- unlist(policy$banned_operations, use.names = FALSE)
-    stopifnot(all(sub(" .*", "", selected) %in% policy$allowed_methods),
-      !any(selected %in% banned),
-      !any(grepl(policy$banned_path_pattern, sub("^[^ ]+ ", "", selected))))
-    alerts <- selected[grepl("^/api/alerts(/|$)", sub("^[^ ]+ ", "", selected))]
-    stopifnot(all(alerts %in% policy$alerts_allowed_operations))
-    if (any(startsWith(basename(unlist(service$schemas$files)), "chemi-chet"))) {
-      stopifnot(!any(grepl(policy$chet_banned_path_pattern, sub("^[^ ]+ ", "", selected))))
-    }
+    stopifnot(!any(selected %in% banned))
   }
   source("dev/install_specmill.R", local = TRUE)
   verify_specmill()
@@ -32,10 +26,22 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
   if (!is.null(adopt)) {
     args$adopt <- adopt
   }
+  if (!is.null(deferrals)) {
+    args$deferrals <- deferrals
+  }
   plan <- do.call(specmill::generate_client, args)
   print(plan)
+  # An explicitly included or mapped operation that a policy rule drops is a configuration error;
+  # other excluded operations (opt-out services) stay quietly excluded.
+  configured <- unlist(lapply(yaml::read_yaml("specmill.yml")$services, function(file) {
+    service <- yaml::read_yaml(file)
+    paste(service$id, union(service$selection$include, names(service$operations)))
+  }))
+  stopifnot(!any(vapply(plan$excluded, function(x) x$id, "") %in% configured))
+  # 'invalid' is allowed only because located errors become per-operation diagnostics that
+  # deferral can absorb; document-level and unsupported findings still fail below.
   stopifnot(length(plan$validation) > 0L,
-    all(vapply(plan$validation, function(report) identical(report$status, "passed"), FALSE)))
+    all(vapply(plan$validation, function(report) report$status %in% c("passed", "invalid"), FALSE)))
   # Reviewed retained ToxPrint facade, not an assertion about server schema validity.
   # Any change to source, schema, mapping or diagnostics requires a new review.
   retained <- plan$retained_diagnostics
@@ -63,8 +69,10 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
   if (mode != "plan" && any(actions == "protected")) {
     stop("Protected pilot output: review changes and supply exact adoption hashes once.")
   }
-  if (mode == "check" && any(actions %in% c("write", "remove"))) {
-    stop("Pilot generated output is not current.")
+  if (mode == "check") {
+    # Specmill's own check: stale output, schema-change warnings, uncertain deferrals.
+    args$mode <- "check"
+    return(invisible(do.call(specmill::generate_client, args)))
   }
   if (mode == "apply") {
     args$mode <- "apply"
@@ -75,8 +83,17 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
 
 if (sys.nframe() == 0L) {
   args <- commandArgs(TRUE)
+  flags <- args[grepl("^--(enroll|clear)=", args)]
+  args <- setdiff(args, flags)
   if (length(args) != 1L || !args %in% c("--plan", "--check", "--apply")) {
-    stop("Usage: Rscript dev/generate_specmill.R --plan|--check|--apply")
+    stop("Usage: Rscript dev/generate_specmill.R --plan|--check|--apply [--enroll=<service METHOD path>=<reason>]... [--clear=<service METHOD path>]...")
   }
-  generate_specmill(sub("^--", "", args))
+  enroll <- sub("^--enroll=", "", flags[startsWith(flags, "--enroll=")])
+  split <- regexpr("=", enroll, fixed = TRUE)
+  stopifnot(all(split > 1L))
+  deferrals <- list(
+    enroll = if (length(enroll)) stats::setNames(substring(enroll, split + 1L), substr(enroll, 1L, split - 1L)),
+    clear = sub("^--clear=", "", flags[startsWith(flags, "--clear=")])
+  )
+  generate_specmill(sub("^--", "", args), deferrals = if (any(lengths(deferrals))) deferrals)
 }

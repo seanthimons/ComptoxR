@@ -12,18 +12,15 @@ keys <- lapply(schemas, function(path) {
 })
 names(keys) <- schemas
 policy <- jsonlite::read_json('dev/endpoint-policy.json', simplifyVector = TRUE)
+# Path policy is specmill.yml selection.exclude; endpoint-policy.json keeps method-specific bans.
+excluded <- function(path) {
+  vapply(path, function(p) any(vapply(config$selection$exclude, grepl, NA, p, perl = TRUE)), NA)
+}
 banned <- lapply(schemas, function(schema) {
   explicit <- unlist(policy$banned_operations[[schema]], use.names = FALSE)
-  explicit <- union(explicit, keys[[schema]][
-    grepl('^/api/alerts(/|$)', sub('^[^ ]+ ', '', keys[[schema]])) &
-      !keys[[schema]] %in% policy$alerts_allowed_operations])
-  if (identical(schema, 'schema/chemi-chet-prod.json')) {
-    explicit <- union(explicit, keys[[schema]][grepl(policy$chet_banned_path_pattern,
-      sub('^[^ ]+ ', '', keys[[schema]]))])
-  }
-  keys[[schema]][!sub(' .*', '', keys[[schema]]) %in% policy$allowed_methods |
+  keys[[schema]][!sub(' .*', '', keys[[schema]]) %in% config$selection$methods |
     keys[[schema]] %in% explicit |
-    grepl(policy$banned_path_pattern, sub('^[^ ]+ ', '', keys[[schema]]))]
+    excluded(sub('^[^ ]+ ', '', keys[[schema]]))]
 })
 names(banned) <- schemas
 owned <- function(path) {

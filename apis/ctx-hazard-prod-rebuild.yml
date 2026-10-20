@@ -2,36 +2,6 @@ id: ctx-hazard-prod-rebuild
 schemas:
   files:
   - schema/ctx-hazard-prod.json
-selection:
-  include:
-  - GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}
-  - GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}
-  - GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}
-  - GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}
-  - GET /hazard/hawc/search/by-dtxsid/{dtxsid}
-  - GET /hazard/iris/search/by-dtxsid/{dtxsid}
-  - GET /hazard/pprtv/search/by-dtxsid/{dtxsid}
-  - GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}
-  - GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}
-  - GET /hazard/toxref/data/search/by-study-id/{studyId}
-  - GET /hazard/toxref/data/search/by-study-type/{studyType}
-  - GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}
-  - GET /hazard/toxref/effects/search/by-study-id/{studyId}
-  - GET /hazard/toxref/effects/search/by-study-type/{studyType}
-  - GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}
-  - GET /hazard/toxref/observations/search/by-study-id/{studyId}
-  - GET /hazard/toxref/observations/search/by-study-type/{studyType}
-  - GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}
-  - GET /hazard/toxref/summary/search/by-study-id/{studyId}
-  - GET /hazard/toxref/summary/search/by-study-type/{studyType}
-  - GET /hazard/toxval/search/by-category/{dtxsid}
-  - GET /hazard/toxval/search/by-dtxsid/{dtxsid}
-  - GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}
-  - POST /hazard/cancer-summary/search/by-dtxsid/
-  - POST /hazard/genetox/details/search/by-dtxsid/
-  - POST /hazard/genetox/summary/search/by-dtxsid/
-  - POST /hazard/skin-eye/search/by-dtxsid/
-  - POST /hazard/toxval/search/by-dtxsid/
 helper: generic_request
 documentation: yes
 authentication:

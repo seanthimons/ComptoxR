@@ -6,6 +6,26 @@ authentication:
 formatter:
   name: air
   version: 0.11.0
+# Endpoint adoption is opt-out: everything is generated unless it matches a rule here.
+# Rules match paths only (all methods); a method-specific ban needs seanthimons/specmill#189,
+# so POST /api/stdizer stays in dev/endpoint-policy.json for now.
+selection:
+  methods: [GET, POST]
+  exclude:
+  # #354-#356: saved rule-group management and add/replace group mutations (stdizer, alerts).
+  - '^/api/stdizer/groups(/|$)'
+  - '/(add|replace)/?$'
+  # #356/#358: harvest and PubChem-list resolver routes without an established end-user purpose.
+  - '^/api/resolver/(casharvest|universalharvest|getpubchemlist)/?$'
+  # Service file upload and CAS preflight routes.
+  - '^/api/services/(caspreflight|files)/?$'
+  # #357: AMOS XLSX batch exports and write routes; JSON searches stay.
+  - '^/api/amos/(add_aqc_spectrum|add_new_fact_sheet|add_new_method|add_new_product_declaration|add_new_safety_data_sheet|analytical_qc_batch_search|batch_search)/?$'
+  # ChET login, admin and delete pages are not API.
+  - '^/(auth|admin)/'
+  - '^/chemicals/chemdelete/?$'
+  # #356: alerts are limited to POST /api/alerts, GET /api/alerts/metadata and /version.
+  - '^/api/alerts(?!/(metadata|version)/?$|/?$)'
 services:
 - apis/epi-pilot.yml
 - apis/alerts-pilot.yml
