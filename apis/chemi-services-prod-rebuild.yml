@@ -3,11 +3,7 @@ schemas:
   files:
   - schema/chemi-services-prod.json
 selection:
-  include:
-  - GET /api/services/layout
-  - GET /api/services/smirks2rxn
-  - POST /api/services/collated_report
-  - POST /api/services/convert
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

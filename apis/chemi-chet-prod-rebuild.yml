@@ -3,26 +3,7 @@ schemas:
   files:
   - schema/chemi-chet-prod.json
 selection:
-  include:
-  - GET /chemicals/alias
-  - GET /chemicals/chemset
-  - GET /chemicals/counts
-  - GET /chemicals/database
-  - GET /chemicals/database/stats
-  - GET /chemicals/maps
-  - GET /chemicals/singlechemical
-  - GET /chemicals/suggest
-  - GET /reaction/database
-  - GET /reaction/database/stats
-  - GET /reaction/details
-  - GET /reaction/mapid
-  - GET /reaction/react_maps
-  - GET /reaction/reactionmap
-  - GET /reaction/search
-  - GET /reaction/singlereaction
-  - GET /reaction/table
-  - GET /chemicals/{chemical_id}/image
-  - POST /reaction/batchsearch
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

@@ -2712,7 +2712,7 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.53",
+  "toolkit_version": "0.1.54",
   "inputs": {
     "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -3221,7 +3221,7 @@
     "apis/chemi-chet-direct-reads.yml": "aa9e890975eeb274ab860e79e328cf1734db806f53d964ef49b43f6cfaffc24b",
     "apis/chemi-chet-extra.yml": "2cbfa34ee0936b6cff59b5625b63b3fa2ee8a2b90170058644ff22537a0f1eb8",
     "apis/chemi-chet-prod-full.yml": "dea80b737874c7861693fed65b79f2473358c225db006a440b6c1cd5e35d9a33",
-    "apis/chemi-chet-prod-rebuild.yml": "b5d5d21087ed9b4ce5eb0e97fb623dfe4d8a3d352c13307cf64963fa7036d1fa",
+    "apis/chemi-chet-prod-rebuild.yml": "f454c2c32f28bac90ef9bcf12ecc26eba6ac1a928ca887eee66dd72da35d37ba",
     "apis/chemi-descriptors-native.yml": "05c90b0b9e440923473499c3d1163f0b1ec533bbd0ada91ce9471939537bda51",
     "apis/chemi-hazard-prod-rebuild.yml": "1e2e4e05e802aee15434bb8ffe6b9074454e50fde0446b4e5f532163359948fb",
     "apis/chemi-management.yml": "c3fb582f338d61c7a2d6bd50cb8efeb306d34b171e9f992a800648ac55cdba6a",
@@ -3245,7 +3245,7 @@
     "apis/chemi-search-services-native.yml": "5a3d71c6ee3131aa78c2a34b50c120c2329546d653b7e5f3fb5bafae778eca67",
     "apis/chemi-service-info.yml": "0cbd574fcf5984576ea736b72262abd2a7dbeed9c597e6ac016acdc3f51376e4",
     "apis/chemi-services-prod-full.yml": "a18d9b61cd00981057361db7cc99ea1bb8991e0f393708fb388a1d11aa90abf2",
-    "apis/chemi-services-prod-rebuild.yml": "e8d5fde17e7fb90c0882498b691a7a4d81f8417e7062c04f9ae83adf6df06f74",
+    "apis/chemi-services-prod-rebuild.yml": "ea45fa0cee1b4b4ffc6998a054c90cfba0cceda74762aa1a891fa00779b0a608",
     "apis/chemi-small-families.yml": "c668b706e108652aafe67d40fe08d616ffca019948c2484d4b5623d116ff9b23",
     "apis/chemi-stdizer-prod-full.yml": "517ead2f835f1affee8d6912af285a0272e0e0008e66b42cc5b62f96107cf514",
     "apis/chemi-stdizer-prod-rebuild.yml": "423439c7674ed1c3f5a496937ad33ad88bbd650151188f44551240b2661d4a2f",
