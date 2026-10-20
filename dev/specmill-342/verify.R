@@ -31,9 +31,10 @@ local({
   stopifnot(identical(original, digest::digest(file = helper, algo = 'sha256')))
   lock <- file.path(scratch, 'wrong-version.json')
   pin <- jsonlite::read_json('dev/specmill-lock.json')
+  lib <- file.path('dev/specmill-pilot/artifacts/toolkit-library', pin$version)
   pin$version <- 'incorrect-version'
   jsonlite::write_json(pin, lock, auto_unbox = TRUE)
-  error <- tryCatch(verify_specmill(lock = lock), error = identity)
+  error <- tryCatch(verify_specmill(lib = lib, lock = lock), error = identity)
   stopifnot(inherits(error, 'error'), grepl('provenance does not match', conditionMessage(error)))
 })
 manifest <- jsonlite::read_json(file.path(root, '.specmill/manifest.json'))
