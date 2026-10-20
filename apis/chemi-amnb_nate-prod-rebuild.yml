@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-amnb_nate-prod.json
 selection:
-  include:
-  - GET /api/amnb_nate
-  - POST /api/amnb_nate
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

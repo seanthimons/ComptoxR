@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-pfas_atlas-prod.json
 selection:
-  include:
-  - GET /api/pfas_atlas
-  - POST /api/pfas_atlas
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

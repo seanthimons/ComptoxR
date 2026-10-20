@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-mordred-prod.json
 selection:
-  include:
-  - GET /api/mordred
-  - POST /api/mordred
+  unclaimed: true
 helper: generic_request
 documentation: true
 operations:

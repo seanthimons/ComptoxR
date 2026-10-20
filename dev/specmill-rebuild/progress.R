@@ -11,16 +11,18 @@ keys <- lapply(schemas, function(path) {
   }), use.names = FALSE)
 })
 names(keys) <- schemas
-policy <- jsonlite::read_json('dev/endpoint-policy.json', simplifyVector = TRUE)
-# Path policy is specmill.yml selection.exclude; endpoint-policy.json keeps method-specific bans.
-excluded <- function(path) {
-  vapply(path, function(p) any(vapply(config$selection$exclude, grepl, NA, p, perl = TRUE)), NA)
+# Path policy is specmill.yml selection.exclude; entries may be method-qualified ('POST ^/path$').
+excluded <- function(key) {
+  method <- sub(' .*', '', key)
+  path <- sub('^[^ ]+ ', '', key)
+  vapply(seq_along(key), function(i) any(vapply(config$selection$exclude, function(rule) {
+    m <- regmatches(rule, regexec('^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|TRACE) (.+)$', rule))[[1]]
+    (!length(m) || m[2] == method[i]) && grepl(if (length(m)) m[3] else rule, path[i], perl = TRUE)
+  }, NA)), NA)
 }
 banned <- lapply(schemas, function(schema) {
-  explicit <- unlist(policy$banned_operations[[schema]], use.names = FALSE)
   keys[[schema]][!sub(' .*', '', keys[[schema]]) %in% config$selection$methods |
-    keys[[schema]] %in% explicit |
-    excluded(sub('^[^ ]+ ', '', keys[[schema]]))]
+    excluded(keys[[schema]])]
 })
 names(banned) <- schemas
 owned <- function(path) {
@@ -131,7 +133,7 @@ jsonlite::write_json(list(commit = system2('git', c('rev-parse', 'HEAD'), stdout
   'dev/specmill-rebuild/progress.json', pretty = TRUE, auto_unbox = TRUE)
 lines <- c('Endpoints migrated to Specmill — iteration checkpoint', '',
   'Counted: root-adopted native wrappers with matching Specmill ownership hashes and committed offline behavior suites. Fresh generation checks pass. Held private candidates and endpoints with literal legacy request callers are excluded; live validation remains incomplete.', '',
-  'Denominator: all HTTP operations in each canonical `schema/*-prod.json`, including banned routes. Banned routes are excluded from remaining work and are never counted as migrated. Policy: `dev/endpoint-policy.json`. Dev/staging evidence stays under `dev/`.', '',
+  'Denominator: all HTTP operations in each canonical `schema/*-prod.json`, including banned routes. Banned routes are excluded from remaining work and are never counted as migrated. Policy: `specmill.yml` `selection`. Dev/staging evidence stays under `dev/`.', '',
   '```', 'Endpoints migrated (adopted / source schema total):',
   vapply(rows, function(row) paste0(row$schema, ': ', row$migrated, '/', row$total,
     ' (', row$banned, ' banned; ', row$remaining, ' remaining)'), ''), '```', '',

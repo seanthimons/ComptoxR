@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-pfas_cats-prod.json
 selection:
-  include:
-  - GET /api/pfas_cats
-  - POST /api/pfas_cats
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

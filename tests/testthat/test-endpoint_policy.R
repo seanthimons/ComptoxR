@@ -1,27 +1,26 @@
 test_that('banned endpoints cannot be selected or exported', {
   root <- test_path('../..')
-  skip_if_not(file.exists(file.path(root, 'dev/endpoint-policy.json')))
-  policy <- jsonlite::read_json(file.path(root, 'dev/endpoint-policy.json'), simplifyVector = TRUE)
   config <- yaml::read_yaml(file.path(root, 'specmill.yml'))
-  excluded <- function(path) {
-    vapply(path, function(p) any(vapply(config$selection$exclude, grepl, NA, p, perl = TRUE)), NA)
+  excluded <- function(path, method = NA_character_) {
+    vapply(path, function(p) any(vapply(config$selection$exclude, function(rule) {
+      m <- regmatches(rule, regexec('^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|TRACE) (.+)$', rule))[[1]]
+      if (length(m)) !is.na(method) && m[2] == method && grepl(m[3], p, perl = TRUE) else grepl(rule, p, perl = TRUE)
+    }, NA)), NA)
   }
   expect_setequal(config$selection$methods, c('GET', 'POST'))
   for (file in config$services) {
     service <- yaml::read_yaml(file.path(root, file))
     selected <- union(service$selection$include, names(service$operations))
     expect_true(all(sub(' .*', '', selected) %in% config$selection$methods), info = file)
-    expect_false(any(selected %in% unlist(policy$banned_operations, use.names = FALSE)), info = file)
-    expect_false(any(excluded(sub('^[^ ]+ ', '', selected))), info = file)
+    expect_false(any(mapply(excluded, sub('^[^ ]+ ', '', selected), sub(' .*', '', selected))), info = file)
   }
   expect_false(any(excluded(c('/api/alerts', '/api/alerts/metadata', '/api/alerts/version'))))
   expect_true(all(excluded(c('/api/alerts/groups', '/api/alerts/export', '/api/alerts/render'))))
   expect_setequal(grep('^chemi_alerts', getNamespaceExports('ComptoxR'), value = TRUE),
     c('chemi_alerts', 'chemi_alerts_metadata', 'chemi_alerts_version'))
   expect_length(grep('^chemi_stdizer_groups', getNamespaceExports('ComptoxR')), 0L)
-  # Path-only excludes cannot ban POST alone (seanthimons/specmill#189), so the local ban remains.
-  expect_identical(policy$banned_operations[['schema/chemi-stdizer-prod.json']], 'POST /api/stdizer')
-  expect_false(excluded('/api/stdizer'))
+  expect_true(excluded('/api/stdizer', 'POST'))
+  expect_false(excluded('/api/stdizer', 'GET'))
   expect_true(all(c('chemi_stdizer', 'chemi_stdizer_chemicals', 'chemi_stdizer_records') %in%
     getNamespaceExports('ComptoxR')))
   expect_true(all(excluded(

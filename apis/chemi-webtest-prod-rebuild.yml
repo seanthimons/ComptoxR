@@ -3,11 +3,7 @@ schemas:
   files:
   - schema/chemi-webtest-prod.json
 selection:
-  include:
-  - GET /api/webtest
-  - GET /api/webtest/predict
-  - POST /api/webtest
-  - POST /api/webtest/predict
+  unclaimed: true
 helper: generic_request
 documentation: true
 operations:

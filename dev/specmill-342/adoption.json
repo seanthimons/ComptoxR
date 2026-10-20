@@ -79,12 +79,12 @@
   },
   "current_adoption": {
     "reviewed_at": "2026-10-20",
-    "base_commit": "a812abfb54b80a86048f6b78f077ae85103d1431",
+    "base_commit": "a36c0eeb94954cdd170d9aebb4890a0651e2aa2d",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.52",
-      "source_commit": "b32a9c1bfc15e33585e4c78d7b63a0a577c452a9",
-      "source_archive_sha256": "cb2108e76ee3b95ebb308290236b3b502c5041895d470136e426eded3d48de7e",
+      "version": "0.1.53",
+      "source_commit": "5f6bc50de5d15f6bd320a0c60bacd7888c32b3c4",
+      "source_archive_sha256": "c68f037497b7084128c5ca69b5631a26a416d9bf0ec9fa9ba302236147ee5be5",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
       "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
     },
-    "review": "Official 0.1.52 scaffold emission and provenance checked by verify.R; adds contract-change deferral and manifest endpoint inventories, no helper or facade change."
+    "review": "Official 0.1.53 scaffold emission and provenance checked by verify.R; adds method-qualified selection.exclude and selection.unclaimed, no helper or facade change."
   },
   "adoption_history": [
     {
@@ -473,6 +473,24 @@
         "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
       },
       "review": "Official 0.1.51 scaffold emission and provenance match the adopted native helper. Generic facade and emitter hashes are unchanged from the 0.1.41 adoption. Refresh the native helper hash for the released scaffold already adopted on this branch; prior verification remains historical evidence."
+    },
+    {
+      "reviewed_at": "2026-10-20",
+      "base_commit": "a812abfb54b80a86048f6b78f077ae85103d1431",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.52",
+        "source_commit": "b32a9c1bfc15e33585e4c78d7b63a0a577c452a9",
+        "source_archive_sha256": "cb2108e76ee3b95ebb308290236b3b502c5041895d470136e426eded3d48de7e",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.52 scaffold emission and provenance checked by verify.R; adds contract-change deferral and manifest endpoint inventories, no helper or facade change."
     }
   ]
 }

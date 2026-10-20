@@ -3,8 +3,7 @@ schemas:
   files:
   - schema/epi-suite-prod.json
 selection:
-  include:
-  - POST /api/submit/batch
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-rdkit-prod.json
 selection:
-  include:
-  - GET /api/rdkit
-  - POST /api/rdkit
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

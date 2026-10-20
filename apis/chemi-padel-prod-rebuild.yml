@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-padel-prod.json
 selection:
-  include:
-  - GET /api/padel
-  - POST /api/padel
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

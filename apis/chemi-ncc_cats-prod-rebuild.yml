@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-ncc_cats-prod.json
 selection:
-  include:
-  - GET /api/ncc_cats
-  - POST /api/ncc_cats
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

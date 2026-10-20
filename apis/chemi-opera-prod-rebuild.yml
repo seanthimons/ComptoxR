@@ -3,10 +3,7 @@ schemas:
   files:
   - schema/chemi-opera-prod.json
 selection:
-  include:
-  - GET /api/opera
-  - GET /api/opera/report
-  - POST /api/opera
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

@@ -3,13 +3,7 @@ schemas:
   files:
   - schema/ctx-exposure-prod.json
 selection:
-  include:
-  - GET /exposure/functional-use/category
-  - GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}
-  - GET /exposure/functional-use/search/by-dtxsid/{dtxsid}
-  - GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}
-  - POST /exposure/functional-use/search/by-dtxsid/
-  - POST /exposure/seem/demographic/search/by-dtxsid/
+  unclaimed: true
 helper: generic_request
 documentation: yes
 authentication:

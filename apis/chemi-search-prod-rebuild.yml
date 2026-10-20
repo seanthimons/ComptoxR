@@ -3,11 +3,7 @@ schemas:
   files:
   - schema/chemi-search-prod.json
 selection:
-  include:
-  - GET /api/search/exact
-  - GET /api/search/gethazard
-  - GET /api/search/similar
-  - GET /api/search/substructure
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

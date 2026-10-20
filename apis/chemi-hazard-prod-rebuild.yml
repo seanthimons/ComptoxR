@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-hazard-prod.json
 selection:
-  include:
-  - POST /api/hazard
-  - GET /api/hazard
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

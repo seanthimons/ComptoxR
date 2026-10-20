@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-arn_cats-prod.json
 selection:
-  include:
-  - GET /api/arn_cats
-  - POST /api/arn_cats
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

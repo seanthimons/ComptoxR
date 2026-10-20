@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-predictor_models-prod.json
 selection:
-  include:
-  - GET /api/predictor_models/predict
-  - POST /api/predictor_models/predict
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

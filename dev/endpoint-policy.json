@@ -1,8 +1,0 @@
-{
-  "decision": "Method-specific bans only. Path-level policy lives in specmill.yml selection.exclude (issues #354-#358). POST /api/stdizer (server-side file standardization) stays banned while GET /api/stdizer is approved; Specmill's exclude is path-only (seanthimons/specmill#189), so this ban is still enforced by dev/generate_specmill.R.",
-  "banned_operations": {
-    "schema/chemi-stdizer-prod.json": [
-      "POST /api/stdizer"
-    ]
-  }
-}

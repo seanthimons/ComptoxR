@@ -3,39 +3,7 @@ schemas:
   files:
   - schema/ctx-chemical-prod.json
 selection:
-  include:
-  - GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}
-  - GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}
-  - GET /chemical/list/chemicals/search/start-with/{list}/{word}
-  - GET /chemical/list/chemicals/search/equal/{list}/{word}
-  - GET /chemical/list/chemicals/search/contain/{list}/{word}
-  - GET /chemical/detail/search/by-dtxcid/{dtxcid}
-  - GET /chemical/detail/search/by-smiles/
-  - GET /chemical/fate/search/by-dtxsid/{dtxsid}
-  - GET /chemical/fate/summary/experimental/search/
-  - GET /chemical/fate/summary/predicted/search/
-  - GET /chemical/fate/summary/search/
-  - GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}
-  - GET /chemical/list/chemicals/search/by-listname/{list}
-  - GET /chemical/list/search/by-dtxsid/{dtxsid}
-  - GET /chemical/list/search/by-type/{type}
-  - GET /chemical/list/type
-  - GET /chemical/msready/search/by-mass/{start}/{end}
-  - GET /chemical/property/experimental/name
-  - GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}
-  - GET /chemical/property/predicted/name
-  - GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}
-  - GET /chemical/property/summary/experimental/search/
-  - GET /chemical/property/summary/predicted/search/
-  - GET /chemical/property/summary/search/
-  - GET /chemical/property/summary/search/by-dtxsid/{dtxsid}
-  - GET /chemical/search/equal/{word}
-  - POST /chemical/detail/search/by-dtxcid/
-  - POST /chemical/fate/search/by-dtxsid/
-  - POST /chemical/msready/search/by-mass/
-  - POST /chemical/property/experimental/search/by-dtxsid/
-  - POST /chemical/property/predicted/search/by-dtxsid/
-  - POST /chemical/search/equal/
+  unclaimed: true
 helper: generic_request
 documentation: yes
 authentication:

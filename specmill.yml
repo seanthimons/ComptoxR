@@ -7,11 +7,12 @@ formatter:
   name: air
   version: 0.11.0
 # Endpoint adoption is opt-out: everything is generated unless it matches a rule here.
-# Rules match paths only (all methods); a method-specific ban needs seanthimons/specmill#189,
-# so POST /api/stdizer stays in dev/endpoint-policy.json for now.
+# Rules match paths; prefix a rule with a method ('POST ^/path$') to ban that method only.
 selection:
   methods: [GET, POST]
   exclude:
+  # Server-side file standardization; GET /api/stdizer stays approved.
+  - 'POST ^/api/stdizer/?$'
   # #354-#356: saved rule-group management and add/replace group mutations (stdizer, alerts).
   - '^/api/stdizer/groups(/|$)'
   - '/(add|replace)/?$'

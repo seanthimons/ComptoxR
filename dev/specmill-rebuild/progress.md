@@ -2,7 +2,7 @@ Endpoints migrated to Specmill — iteration checkpoint
 
 Counted: root-adopted native wrappers with matching Specmill ownership hashes and committed offline behavior suites. Fresh generation checks pass. Held private candidates and endpoints with literal legacy request callers are excluded; live validation remains incomplete.
 
-Denominator: all HTTP operations in each canonical `schema/*-prod.json`, including banned routes. Banned routes are excluded from remaining work and are never counted as migrated. Policy: `dev/endpoint-policy.json`. Dev/staging evidence stays under `dev/`.
+Denominator: all HTTP operations in each canonical `schema/*-prod.json`, including banned routes. Banned routes are excluded from remaining work and are never counted as migrated. Policy: `specmill.yml` `selection`. Dev/staging evidence stays under `dev/`.
 
 ```
 Endpoints migrated (adopted / source schema total):

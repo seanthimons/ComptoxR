@@ -1,14 +1,6 @@
 # Pilot maintenance. Run from the package root; no runtime dependency on specmill.
 generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, deferrals = NULL) {
   mode <- match.arg(mode)
-  # Path policy lives in specmill.yml selection.exclude. Only method-specific bans remain here
-  # (seanthimons/specmill#189), checked against explicit includes and operation mappings.
-  banned <- unlist(jsonlite::read_json("dev/endpoint-policy.json")$banned_operations, use.names = FALSE)
-  for (file in yaml::read_yaml("specmill.yml")$services) {
-    service <- yaml::read_yaml(file)
-    selected <- union(service$selection$include, names(service$operations))
-    stopifnot(!any(selected %in% banned))
-  }
   source("dev/install_specmill.R", local = TRUE)
   verify_specmill()
   callbacks <- new.env(parent = baseenv())
