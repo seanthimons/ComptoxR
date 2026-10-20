@@ -1,5 +1,5 @@
 # Periodic schema update check
-# Runs on schedule to detect API schema changes and generate function stubs
+# Runs on schedule to detect API schema changes and regenerate Specmill wrappers
 name: Schema Update Check
 
 on:
@@ -217,7 +217,9 @@ jobs:
       - name: Generate wrappers
         id: stubs
         if: steps.schema_changes.outputs.changed == 'true'
-        run: Rscript dev/generate_specmill.R --apply
+        run: |
+          set -o pipefail
+          Rscript dev/generate_specmill.R --apply 2>&1 | tee specmill_apply.log
 
       - name: Update documentation
         if: steps.schema_changes.outputs.changed == 'true'
@@ -264,7 +266,7 @@ jobs:
         id: changes
         run: |
           # Check if there are any changes to commit
-          if [ -z "$(git status --porcelain --untracked-files=all -- schema/ R/ man/ NAMESPACE inst/ tests/ .github/badges/)" ]; then
+          if [ -z "$(git status --porcelain --untracked-files=all -- schema/ R/ man/ NAMESPACE inst/ tests/ .github/badges/ .specmill/ apis/)" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "No changes to commit"
           else
@@ -316,52 +318,17 @@ jobs:
             cat schema_diff_report.md >> pr_body.md
           fi
 
-          # Add stub generation section
-          cat >> pr_body.md << 'STUBS'
-
-          ### Function Stub Generation
-          STUBS
-          echo "- **Stubs Generated:** ${{ steps.stubs.outputs.stubs_generated || '0' }}" >> pr_body.md
-          echo "- **New Files Created:** ${{ steps.stubs.outputs.stubs_created || '0' }}" >> pr_body.md
-          echo "- **Existing Files Updated:** ${{ steps.stubs.outputs.stubs_appended || '0' }}" >> pr_body.md
-          echo "- **Skipped (empty schema):** ${{ steps.stubs.outputs.stubs_skipped || '0' }}" >> pr_body.md
-          echo "- **Protected (lifecycle guard):** ${{ steps.stubs.outputs.stubs_protected || '0' }}" >> pr_body.md
-
-          # Add parameter drift section if detected
-          DRIFT_COUNT="${{ steps.stubs.outputs.drift_count || '0' }}"
-          if [ "$DRIFT_COUNT" != "0" ] && [ -f "drift_report.csv" ]; then
-            echo "" >> pr_body.md
-            echo "### Parameter Drift Detected" >> pr_body.md
-            echo "" >> pr_body.md
-            echo "**${DRIFT_COUNT} parameter drift(s) detected across ${{ steps.stubs.outputs.drift_endpoints || '0' }} endpoint(s).**" >> pr_body.md
-            echo "" >> pr_body.md
-            echo "| Function | Endpoint | Change | Parameter | Details |" >> pr_body.md
-            echo "|----------|----------|--------|-----------|---------|" >> pr_body.md
-            # Read drift_report.csv and format as markdown table
-            tail -n +2 drift_report.csv | while IFS=',' read -r endpoint file function_name drift_type param_name schema_value code_value; do
-              # Remove quotes from CSV fields
-              endpoint=$(echo "$endpoint" | tr -d '"')
-              file=$(echo "$file" | tr -d '"')
-              function_name=$(echo "$function_name" | tr -d '"')
-              drift_type=$(echo "$drift_type" | tr -d '"')
-              param_name=$(echo "$param_name" | tr -d '"')
-              schema_value=$(echo "$schema_value" | tr -d '"')
-              code_value=$(echo "$code_value" | tr -d '"')
-
-              # Format change type
-              if [ "$drift_type" = "param_added" ]; then
-                change="➕ Added"
-                details="$schema_value"
-              else
-                change="➖ Removed"
-                details="$code_value"
-              fi
-
-              echo "| \`$function_name\` | $endpoint | $change | \`$param_name\` | $details |" >> pr_body.md
-            done
-            echo "" >> pr_body.md
-            echo "**Action Required:** Review these functions manually and update parameters as needed." >> pr_body.md
-          fi
+          # Add Specmill generation section
+          {
+            echo ""
+            echo "### Specmill Generation"
+            echo ""
+            echo '```'
+            tail -n 60 specmill_apply.log 2>/dev/null || echo "Generation did not run."
+            echo '```'
+            echo ""
+            echo "Deferred or skipped operations are recorded in \`.specmill/manifest.json\`."
+          } >> pr_body.md
 
           # Add test gaps section
           cat >> pr_body.md << 'TESTGAPS'
@@ -386,7 +353,7 @@ jobs:
           fi
           cat >> pr_body.md << 'TAIL'
           - [ ] Review schema changes for breaking API modifications
-          - [ ] Review generated function stubs for correctness
+          - [ ] Review regenerated Specmill wrappers and `.specmill/manifest.json`
           - [ ] Check if any existing package functions need updates
           - [ ] Run tests to verify compatibility
 
@@ -399,7 +366,7 @@ jobs:
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update API schemas, generate function stubs and tests"
+          commit-message: "chore: update API schemas, regenerate Specmill wrappers and tests"
           title: "chore: API schema and test updates"
           body-path: pr_body.md
           add-paths: |
@@ -410,6 +377,8 @@ jobs:
             inst/
             tests/
             .github/badges/
+            .specmill/
+            apis/
           branch: automated/schema-update
           delete-branch: true
           labels: |
