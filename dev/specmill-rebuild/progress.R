@@ -31,14 +31,9 @@ owned <- function(path) {
     digest::digest(enc2utf8(gsub('\r\n?', '\n', paste(readLines(path, warn = FALSE), collapse = '\n'))),
       algo = 'sha256', serialize = FALSE))
 }
-review_files <- c('dev/specmill-rebuild/issue-358/similarity-provenance.json',
-  'dev/specmill-rebuild/amos-reviewed-source.json',
-  'dev/specmill-rebuild/chet-chemical-dl/provenance.json',
+review_files <- c('dev/specmill-rebuild/chet-chemical-dl/provenance.json',
   'dev/search-services/provenance.json',
-  'dev/specmill-rebuild/amos-v41/provenance.json',
-  'dev/specmill-rebuild/canonical-holds-audit/root-provenance.json',
-  'dev/specmill-rebuild/canonical-holds-audit/protocol-paging-recheck/provenance.json',
-  'dev/specmill-rebuild/canonical-holds-audit/protocol-get-v45/provenance.json')
+  'dev/specmill-rebuild/canonical-holds-audit/root-provenance.json')
 reviews <- lapply(review_files[file.exists(review_files)], function(file) {
   review <- jsonlite::read_json(file)
   if (is.null(review$output)) review$output <- review$reviewed

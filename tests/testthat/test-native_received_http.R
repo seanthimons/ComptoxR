@@ -28,14 +28,7 @@ test_that('adopted static and AMOS wrappers preserve real received HTTP status c
     chemi_resolver_pubchem_section = list('one'),
     chemi_toxprints_calculate = list('C'),
     chemi_chet_chemicals_image = list(1),
-    chemi_chet_reaction_batchsearch = list('one', 'chemical'),
-    chemi_amos_substances_for_ids = list('FS-10313'),
-    chemi_amos_retrieve_fact_sheets = list('FS-10313'),
-    chemi_amos_retrieve_product_declarations = list('PD-104171'),
-    chemi_amos_retrieve_safety_data_sheets = list('SDS-100074'),
-    chemi_amos_for_document_ids = list('Fact Sheet',
-      search_info = list(internal_id = list(value = 'FS-10313', exact = TRUE)),
-      record_info_fields = 'internal_id'))
+    chemi_chet_reaction_batchsearch = list('one', 'chemical'))
   legacy <- readRDS(test_path('fixtures/native-static-media-contracts.rds'))
   for (status in c(404L, 500L, 401L)) {
     saveRDS(status, file.path(directory, 'status.rds'))

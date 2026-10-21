@@ -1,7 +1,7 @@
 id: chemi-amos-direct-reads
 schemas:
   files:
-  - schema/chemi-amos-reviewed-native.json
+  - schema/chemi-amos-prod.json
 selection:
   include:
   - GET /api/amos/additional_sources_for_substance/{dtxsid}

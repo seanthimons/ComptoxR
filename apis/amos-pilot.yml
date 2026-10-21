@@ -1,7 +1,7 @@
 id: amos-pilot
 schemas:
   files:
-  - schema/chemi-amos-reviewed-native.json
+  - schema/chemi-amos-prod.json
 selection:
   include:
   - GET /api/amos/release_notes

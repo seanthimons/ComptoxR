@@ -2716,7 +2716,7 @@
   "inputs": {
     "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
-    "NAMESPACE": "ec5588d2d249e4a62b33ef3fbe4b91131b1772f483becb36434cfe65d2d1652d",
+    "NAMESPACE": "fdf4251a0be048e17d64fbd79f33e9279314b6d270827d9909abca6c328f42c0",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
     "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
@@ -2735,12 +2735,10 @@
     "R/chemi_amos_by_text.R": "e0fd73b803265de41548cc319b8b5577905a1f58febbe0c227fb52e792835a8b",
     "R/chemi_amos_count_substances_in_ids.R": "030728b21cc3d71a14908af285eab475bc533e0d3cfa1d3a093dab191a1cb0aa",
     "R/chemi_amos_database.R": "76ceae377695fe3b189d1b21db2ad62deecc54f975ccfb7d0e35f04229c17f94",
-    "R/chemi_amos_dtxsids.R": "d1864d3d456777e6d65dd6a80c7cc79faf61768ffe93a992325ed911224e3302",
     "R/chemi_amos_dtxsids_from_functional_use.R": "d66e4761c3d5ee93b83ed717c41c9a409f0a2f20e5d5da3f351cf21f5e48fb31",
     "R/chemi_amos_entropy_similarity.R": "5c15ca66dcedf741cac46e9aab289a08f8e6d1b45c5228c46afb30f4426377d8",
     "R/chemi_amos_fact_sheet_keyset_pagination.R": "4dc26059f1aa5fb54d6b6eeaac81dc693aef9d4ffeff56b3aa563d1769a55452",
     "R/chemi_amos_find_dtxsids.R": "626d51e6115eab3279d099fbc3e309ceaa9d8091de0faa0b1b03bd5efde3934e",
-    "R/chemi_amos_for_document_ids.R": "02680f7e351f781657885c8e02c56b2fa0a62031abf3e2e29af0a04120de5651",
     "R/chemi_amos_formula.R": "a7730d07aafad33d8b8eb786c9d0a081a17026152ea2992a652bc26df30f3b90",
     "R/chemi_amos_functional_class.R": "1319e7c5c8d3b10bd2ea3db5549025e329582a0bfd0b7c197dc85a8a6804875a",
     "R/chemi_amos_functional_uses_for_dtxsid.R": "e98d5ac780f4e0e2740ee723b86759fd1320cfc77d6320e13d24d0cd9cf92941",
@@ -2778,14 +2776,10 @@
     "R/chemi_amos_record_ids_for_substance.R": "16c12a00c65169c40067a81d3073aed7f7dfcd2009a51fe4ce1d4a1090e5e0bb",
     "R/chemi_amos_record_type_count.R": "fbc7b8a945595f3e98325ddb08c71034559a2af28d2a718931ca6884b936ba05",
     "R/chemi_amos_release_notes.R": "ea60fa3144add0038b37808b8b2134bbd1980f22e748f0fca88638167ef553ae",
-    "R/chemi_amos_retrieve_fact_sheets.R": "c54e9438759cc6866a7bf3efb676d314ae2ab5120369f7edbe1e9a5058554931",
-    "R/chemi_amos_retrieve_product_declarations.R": "98c6f9cb2a436d553621d24140119d683decc02682cce6ab1781590f06440c3f",
-    "R/chemi_amos_retrieve_safety_data_sheets.R": "424b687e0ce0f50adaba2ec89f18f001bd691c563949c592f146313d060c72c6",
     "R/chemi_amos_safety_data_sheet_keyset_pagination.R": "aab2bc7bc7431aa1e9696ff9cb7f49644adfff20c2821816fbb743c14be8cb0b",
     "R/chemi_amos_spectral_entropy.R": "b1a0cc26dfcf963f60c1c48d09d4840212d0d742305b42b99ee10c0cee164ec8",
     "R/chemi_amos_spectrum_count_for_methodology.R": "19796d39dcc6b91cc7fcd93a657a19aa6cc97a16afd583893b0abe1809808104",
     "R/chemi_amos_substances_for_classification.R": "27c8485ac6e025f24adf57580830d7a0a44bd9e2fcd529f28eb1a5fc7ab8beb6",
-    "R/chemi_amos_substances_for_ids.R": "174458f2518bd466db5871a3098c000edcff4682ff697e586e8ab42abb89342b",
     "R/chemi_amos_substring.R": "a94b8d95294b756b9c9dba96b102ff96cb65f94b3e4d83b4556f06daafb9e541",
     "R/chemi_arn_cats.R": "c3614e4de4596e66572238e6a0f41cdc066a65a2cc7232a4d88dadc34bc5be33",
     "R/chemi_arn_cats_metadata.R": "a73f5b5bff2f4ab0c40b7463fdccd6c5c633e623dad9cf6a100e2f8dbb434113",
@@ -3209,11 +3203,10 @@
     "R/zzz.R": "58e56802939bd0b227bb0945e8049bda43e447199e0c9442dcdbd73528d4f7c2",
     "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
     "apis/alerts-pilot.yml": "3cf17918fb51d151161302a9a2184d90808001204765622a66902d53164427a6",
-    "apis/amos-pilot.yml": "77ff563f039fc17a71a7fa3029c7a57000cfefbdd5eed29eac650abd3735892c",
+    "apis/amos-pilot.yml": "bf3e47d1ce15940ae46ecb52731cad38c44139baa4b4ef64c13350f3579e96b3",
     "apis/chemi-amnb_nate-prod-rebuild.yml": "f2d399f569f4187e54df6b9b6b0e05b4fd7e4bcbc4211a821e33d721d54ac7a7",
-    "apis/chemi-amos-direct-reads.yml": "d69782507976dc04e280cb075d512eadde7f5cf19c4a5fb254a1a02f83910631",
-    "apis/chemi-amos-prod-full.yml": "3b9da043383d086b3c34ff86a15edf63c8ac43208d66b9a59653c4597479f74b",
-    "apis/chemi-amos-reviewed-reads.yml": "b853612c7475ad2f38da257a9a1a0724b770e8e4436c1fa5546fc218a5506d1d",
+    "apis/chemi-amos-direct-reads.yml": "4c0bd894e6c534e5978d204041b705461ac73b72edca2b166d9667296c8a4f77",
+    "apis/chemi-amos-prod-full.yml": "ff32382e16f8d09ae1ddd89aac8e02b6ca6cea8c3506dac05e4dddd6383e8dfc",
     "apis/chemi-arn_cats-prod-rebuild.yml": "ea81424013662efbcb38bc1480ba67e175917b47dec87b4d11c3ef883928dd0c",
     "apis/chemi-chet-chemical-dl-reviewed.yml": "cf9681e29eac02c2ccc1aaa4f1e583ea8d34f4c47ee57a1a856dafdd2c49c986",
     "apis/chemi-chet-direct-reads.yml": "aa9e890975eeb274ab860e79e328cf1734db806f53d964ef49b43f6cfaffc24b",
@@ -3288,7 +3281,7 @@
     "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
-    "inst/hook_config.yml": "86d8a906934996818cb3a1d8702c1bc08af379d6845602e91cc91345126e65db",
+    "inst/hook_config.yml": "d9e583441c969fb0909503e1d24c3ca1d345354c8c939923e2b65cf8cddd76bc",
     "inst/hook_config_generated.yml": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "inst/plumber/ctx/plumber.R": "40fa4dcaf1112fd0bdafd84816589f45931de5f6d34bd052bdabc0cd553a8504",
     "inst/plumber/ecotox/plumber.R": "f596a01091c3ce57c21b711edd306d6454fa7ff35e3fc202d61de1092022af2e",
@@ -3316,13 +3309,11 @@
     "man/chemi_amos_by_text.Rd": "e7847a02ea72c3886f00d6eddf091d1900006834746068c3294322e655490acb",
     "man/chemi_amos_count_substances_in_ids.Rd": "b98530fff6d4ed9d21b47faf8ec0d5497470cfe12797fba22e452aaef9814516",
     "man/chemi_amos_database.Rd": "719592a5a3162e13080f2b8a58fbdfb26783a03fbbe4a75dfde8295f56f42157",
-    "man/chemi_amos_dtxsids.Rd": "748632cdda24818e90b128ed6eb091892b8cdaa86647df0cfab66590a7359029",
     "man/chemi_amos_dtxsids_from_functional_use.Rd": "6a5be0b8b7af33fca7b278d9a593ff7a37a3a6e8f7602ae7f94c57b4213ecb75",
     "man/chemi_amos_entropy_similarity.Rd": "a0c8f58d0333ecfcd1a9629ed3a4d532b07849a536135c614cedd25379a9dd0b",
     "man/chemi_amos_fact_sheet_keyset_pagination.Rd": "06aaa56bd6d376e00c9475c26e44aa3fdf3b9544ba9a13652ec3f2a9fa0ba190",
     "man/chemi_amos_fact_sheet_keyset_pagination_bulk.Rd": "dbe0486fa08a462ffa557edee9c4ffaf25d78083867173b6af75d12074edb502",
     "man/chemi_amos_find_dtxsids.Rd": "a968fe7ff7f5e76c274127462484c0b215fa6c8f29188c00c67425611d9b0b39",
-    "man/chemi_amos_for_document_ids.Rd": "5fd4f48c2fe527b3745f31099656fdba85b195ea70a07dfd78171c4f2a3e6f19",
     "man/chemi_amos_formula.Rd": "d6642ae17716a237bbdb6f015c554d99c93c641cad003d57c78ab71c042829a1",
     "man/chemi_amos_functional_class.Rd": "5aea5dfd83718ed77cf8ae02a37ee3fc100a926489f59a97591f0f7d0a197e32",
     "man/chemi_amos_functional_uses_for_dtxsid.Rd": "d5a26c07be13e0239ec7bb728d08029c9619120161d5f2ed5105f241a7106a0a",
@@ -3362,15 +3353,11 @@
     "man/chemi_amos_record_ids_for_substance.Rd": "b48aaadcdf9049907843aea20b55a388b156398a8bd148eb083db7e56a0e810e",
     "man/chemi_amos_record_type_count.Rd": "825ab611e9dfb12634a2af27752ad82c64b99130ed9cc7b0c56e97a2f761dd9a",
     "man/chemi_amos_release_notes.Rd": "f9c22c5e97cd58a42109350c54a2804b160fbcaf605976f29605b5f8cb76d159",
-    "man/chemi_amos_retrieve_fact_sheets.Rd": "9660a0860714d7bf341ed1121316043292cb2c5ae4be93d76604fd425476dae7",
-    "man/chemi_amos_retrieve_product_declarations.Rd": "47de9585b46c45060d79256f2475e5e1e9ae9f56f3e9b5edd1233bf49a080c35",
-    "man/chemi_amos_retrieve_safety_data_sheets.Rd": "c4bee9c95d939d0f8b03bc7b5b367808348d5c59de32c0b4d58fd27d53b744d5",
     "man/chemi_amos_safety_data_sheet_keyset_pagination.Rd": "a3c9fea39eb1531550a8438cfd37b13b7c29a916537c4945df29e3fd616b7c22",
     "man/chemi_amos_safety_data_sheet_keyset_pagination_bulk.Rd": "b8a1bb45108f495db683cb0618f2e76a7a9c2d9e3dfb7182b495edcc46a69051",
     "man/chemi_amos_spectral_entropy.Rd": "bd1cd4e51eb82b37354e87c95761c2472d1a02963ce40676dbb340a7b90a1186",
     "man/chemi_amos_spectrum_count_for_methodology.Rd": "c4285ca36a1e460cb04c9d2390359b335b02487c463a4f55574e04a9329dbcb9",
     "man/chemi_amos_substances_for_classification.Rd": "6110aa2412552a609ad653a0756f12f5b030dc5b34df255109d6eceeff425813",
-    "man/chemi_amos_substances_for_ids.Rd": "a6039a2bf5ae46eaa596171ee1f02c8482b43ea3d9a388f121ca2815e64f5667",
     "man/chemi_amos_substring.Rd": "9935aaf19c0f8d9b9fdb7f484244ec17583bcaec770c6267fcd5774cce6712a7",
     "man/chemi_arn_cats.Rd": "f6255a8556613eb42bbf6de3c81ece290b556e71b25d8e5593a9f81705a21d41",
     "man/chemi_arn_cats_bulk.Rd": "04fbe94d6c1e7e62cf2acebd3f60bcb3cd4bda8df69e0d8596c29a0b6b9ac8fe",
@@ -3872,8 +3859,7 @@
     "man/validate_search_inputs.Rd": "df6ef5609779d461085b29c1aaf72b8052eabd16749b8b719c49445341a41f49",
     "schema/chemi-alerts-prod.json": "89c6fc6b63e04a9c5aa932ecc2b055446281c0198cd5150e76e103f68c6dae19",
     "schema/chemi-amnb_nate-prod.json": "3d12619b6a940e9e7259d98aaba3f2f22e8f0e438dfd673098f8028cccf5352c",
-    "schema/chemi-amos-reviewed-native.json": "a6d6c412dfe916a2d404a141c6131feebd3c7de96e7dbcfb22c6a5f16d2d6ec8",
-    "schema/chemi-amos-reviewed-reads.json": "f11b6be677066a05ce163b0b2c574ecb97b5072ea8a8adbdcac2d889e1cfe828",
+    "schema/chemi-amos-prod.json": "af48cfae59b5d4d7c3adc09f4a42e67b92f8646cba16770947e02153e1fbdefe",
     "schema/chemi-arn_cats-prod.json": "34206d545144e2a03e0b5faff3cacc10e1322929d3d4ee646f9ff0aa4396112f",
     "schema/chemi-chet-chemical-dl-reviewed.json": "12eb669d0b356b5bd4387ee63d02fa65c8a8904161919702530746a604a9981e",
     "schema/chemi-chet-prod.json": "a92a5bb5b616f268f87bb980e75339d31ec26b3eaa14f3a0bdc3f6ad8636abcd",
@@ -3901,7 +3887,7 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "schema/pubchem-reviewed.json": "ec4ee5c2c6b10c63248dfaa2f6f1b3198b6b6ebe9cfb11422d52de3adead5a9e",
-    "specmill.yml": "297f23f70d7f31d9872ebe618b3e00b98234ff2d9f1a45582a364feebb867b9e",
+    "specmill.yml": "3f1f7148efc6ab7c711de6d33c097afc94e665a166b21d23b0f20d0dd6ea7b47",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "f7960566d986fd1a6520eac1973dbf1a2279af9f3e14094464a2b13f4ed90936",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "a45adf4f0c751a35de59bd918174103fd227f1ee440d558cae756f94e629e1a5",
     "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "6ec1fc8f2a54b3de7bb5d700128ac78cb4ab8c9ed93f0e8a82ad7b16ad5be022"
@@ -4005,108 +3991,138 @@
         ]
       }
     },
-    "schema/chemi-amos-reviewed-native.json": {
+    "schema/chemi-amos-prod.json": {
       "keys": [
-        "GET /api/amos/release_notes",
-        "GET /api/amos/get_data_source_info/",
-        "GET /api/amos/get_ir_spectrum/{internal_id}",
-        "GET /api/amos/get_nmr_spectrum/{internal_id}",
-        "GET /api/amos/get_mass_spectrum/{internal_id}",
-        "GET /api/amos/get_info_by_id/{internal_id}",
-        "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
-        "GET /api/amos/search_by_text/{substr}",
-        "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
-        "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
-        "GET /api/amos/get_pdf/{record_type}/{internal_id}",
+        "POST /api/amos/add_aqc_spectrum/",
+        "POST /api/amos/add_new_fact_sheet/",
+        "POST /api/amos/add_new_method/",
+        "POST /api/amos/add_new_product_declaration/",
+        "POST /api/amos/add_new_safety_data_sheet/",
+        "GET /api/amos/additional_sources_for_substance/{dtxsid}",
+        "POST /api/amos/all_similarities_by_dtxsid/",
+        "POST /api/amos/analytical_qc_batch_search",
+        "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
+        "POST /api/amos/analytical_qc_keyset_pagination/{limit}",
+        "POST /api/amos/batch_search",
+        "POST /api/amos/count_substances_in_ids/",
         "GET /api/amos/database_summary/",
+        "POST /api/amos/dtxsids/",
         "GET /api/amos/dtxsids_from_functional_use/{functional_use}",
+        "POST /api/amos/entropy_similarity/",
+        "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
+        "POST /api/amos/fact_sheet_keyset_pagination/{limit}",
         "GET /api/amos/find_dtxsids/{internal_id}",
         "GET /api/amos/formula_search/{formula}",
         "GET /api/amos/functional_class_search/{functional_class}",
         "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
+        "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+        "GET /api/amos/get_data_source_info/",
         "GET /api/amos/get_fact_sheet_editor_info/{internal_id}",
+        "GET /api/amos/get_info_by_id/{internal_id}",
+        "GET /api/amos/get_ir_spectrum/{internal_id}",
+        "GET /api/amos/get_mass_spectrum/{internal_id}",
         "GET /api/amos/get_method_editor_info/{internal_id}",
         "GET /api/amos/get_ms_ready_methods/{inchikey}",
+        "GET /api/amos/get_nmr_spectrum/{internal_id}",
         "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}",
+        "GET /api/amos/get_pdf/{record_type}/{internal_id}",
+        "GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}",
         "GET /api/amos/get_product_declaration_editor_info/{internal_id}",
         "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}",
+        "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
+        "GET /api/amos/get_substance_file_for_record/{internal_id}",
         "GET /api/amos/get_substances_for_search_term/{search_term}",
         "GET /api/amos/inchikey_first_block_search/{first_block}",
         "GET /api/amos/list_fact_sheet_types/",
         "GET /api/amos/list_functional_classes",
-        "GET /api/amos/record_id_search/{internal_id}",
-        "GET /api/amos/record_type_count/{record_type}",
-        "GET /api/amos/substring_search/{substring}",
-        "GET /api/amos/search/{dtxsid}",
-        "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
         "GET /api/amos/list_sources_by_record_type/{record_type}",
-        "POST /api/amos/spectral_entropy/",
-        "POST /api/amos/entropy_similarity/",
-        "POST /api/amos/spectrum_count_for_methodology/",
         "POST /api/amos/mass_range_search/",
-        "POST /api/amos/next_level_classification/",
-        "POST /api/amos/substances_for_classification/",
-        "POST /api/amos/all_similarities_by_dtxsid/",
-        "POST /api/amos/max_similarity_by_dtxsid/",
-        "POST /api/amos/mass_spectrum_similarity_search/",
-        "POST /api/amos/dtxsids/",
-        "POST /api/amos/record_counts_by_dtxsid/",
         "POST /api/amos/mass_spectra_for_substances/",
-        "POST /api/amos/count_substances_in_ids/",
-        "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
-        "POST /api/amos/analytical_qc_keyset_pagination/{limit}",
-        "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
-        "POST /api/amos/fact_sheet_keyset_pagination/{limit}",
+        "POST /api/amos/mass_spectrum_similarity_search/",
+        "POST /api/amos/max_similarity_by_dtxsid/",
         "GET /api/amos/method_keyset_pagination/{limit}",
         "POST /api/amos/method_keyset_pagination/{limit}",
+        "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
+        "POST /api/amos/next_level_classification/",
         "GET /api/amos/product_declaration_keyset_pagination/{limit}",
         "POST /api/amos/product_declaration_keyset_pagination/{limit}",
+        "POST /api/amos/record_counts_by_dtxsid/",
+        "GET /api/amos/record_id_search/{internal_id}",
+        "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
+        "GET /api/amos/record_type_count/{record_type}",
+        "GET /api/amos/release_notes",
+        "POST /api/amos/retrieve_fact_sheets/",
+        "POST /api/amos/retrieve_product_declarations/",
+        "POST /api/amos/retrieve_safety_data_sheets/",
         "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
         "POST /api/amos/safety_data_sheet_keyset_pagination/{limit}",
-        "GET /api/amos/additional_sources_for_substance/{dtxsid}",
-        "GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}",
-        "GET /api/amos/get_substance_file_for_record/{internal_id}"
+        "GET /api/amos/search/{dtxsid}",
+        "GET /api/amos/search_by_text/{substr}",
+        "POST /api/amos/search_for_document_ids/{record_type}",
+        "POST /api/amos/spectral_entropy/",
+        "POST /api/amos/spectrum_count_for_methodology/",
+        "POST /api/amos/substances_for_classification/",
+        "POST /api/amos/substances_for_ids/",
+        "GET /api/amos/substring_search/{substring}",
+        "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}",
+        "PUT /api/amos/update_fact_sheet_info/{internal_id}",
+        "PUT /api/amos/update_method_info/{internal_id}",
+        "PUT /api/amos/update_nmr_spectrum_info/{internal_id}",
+        "PUT /api/amos/update_product_declaration_info/{internal_id}",
+        "PUT /api/amos/update_safety_data_sheet_info/{internal_id}"
       ],
       "functions": {
-        "GET /api/amos/release_notes": [
-          "chemi_amos_release_notes"
-        ],
-        "GET /api/amos/get_data_source_info/": [
-          "chemi_amos_get_data_source_info"
-        ],
-        "GET /api/amos/get_ir_spectrum/{internal_id}": [
-          "chemi_amos_get_ir_spectrum"
-        ],
-        "GET /api/amos/get_nmr_spectrum/{internal_id}": [
-          "chemi_amos_get_nmr_spectrum"
-        ],
-        "GET /api/amos/get_mass_spectrum/{internal_id}": [
-          "chemi_amos_get_mass_spectrum"
-        ],
-        "GET /api/amos/get_info_by_id/{internal_id}": [
-          "chemi_amos_get_info_by_id"
-        ],
         "GET /api/amos/get_classification_for_dtxsid/{dtxsid}": [
           "chemi_amos_get_classification_for_dtxsid",
           "chemi_classyfire"
         ],
+        "GET /api/amos/get_data_source_info/": [
+          "chemi_amos_get_data_source_info"
+        ],
+        "GET /api/amos/get_info_by_id/{internal_id}": [
+          "chemi_amos_get_info_by_id"
+        ],
+        "GET /api/amos/get_ir_spectrum/{internal_id}": [
+          "chemi_amos_get_ir_spectrum"
+        ],
+        "GET /api/amos/get_mass_spectrum/{internal_id}": [
+          "chemi_amos_get_mass_spectrum"
+        ],
+        "GET /api/amos/get_nmr_spectrum/{internal_id}": [
+          "chemi_amos_get_nmr_spectrum"
+        ],
+        "GET /api/amos/release_notes": [
+          "chemi_amos_release_notes"
+        ],
         "GET /api/amos/search_by_text/{substr}": [
           "chemi_amos_by_text"
         ],
-        "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}": [
-          "chemi_amos_record_ids_for_substance"
+        "POST /api/amos/all_similarities_by_dtxsid/": [
+          "chemi_amos_all_similarities"
         ],
-        "GET /api/amos/method_with_spectra/{search_type}/{internal_id}": [
-          "chemi_amos_method_with_spectra"
+        "GET /api/amos/analytical_qc_keyset_pagination/{limit}": [
+          "chemi_amos_analytical_qc_keyset_pagination"
         ],
-        "GET /api/amos/get_pdf/{record_type}/{internal_id}": [
-          "chemi_amos_get_pdf"
+        "POST /api/amos/analytical_qc_keyset_pagination/{limit}": [
+          "chemi_amos_analytical_qc_keyset_pagination_bulk"
+        ],
+        "POST /api/amos/count_substances_in_ids/": [
+          "chemi_amos_count_substances_in_ids"
         ],
         "GET /api/amos/database_summary/": [
           "chemi_amos_database"
         ],
         "GET /api/amos/dtxsids_from_functional_use/{functional_use}": [
           "chemi_amos_dtxsids_from_functional_use"
+        ],
+        "POST /api/amos/entropy_similarity/": [
+          "chemi_amos_entropy_similarity"
+        ],
+        "GET /api/amos/fact_sheet_keyset_pagination/{limit}": [
+          "chemi_amos_fact_sheet_keyset_pagination"
+        ],
+        "POST /api/amos/fact_sheet_keyset_pagination/{limit}": [
+          "chemi_amos_fact_sheet_keyset_pagination_bulk"
         ],
         "GET /api/amos/find_dtxsids/{internal_id}": [
           "chemi_amos_find_dtxsids"
@@ -4132,11 +4148,17 @@
         "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}": [
           "chemi_amos_get_nmr_spectrum_editor_info"
         ],
+        "GET /api/amos/get_pdf/{record_type}/{internal_id}": [
+          "chemi_amos_get_pdf"
+        ],
         "GET /api/amos/get_product_declaration_editor_info/{internal_id}": [
           "chemi_amos_get_product_declaration_editor_info"
         ],
         "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}": [
           "chemi_amos_get_safety_data_sheet_editor_info"
+        ],
+        "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}": [
+          "chemi_amos_get_similar_structures"
         ],
         "GET /api/amos/get_substances_for_search_term/{search_term}": [
           "chemi_amos_get_substances_for_term"
@@ -4150,74 +4172,20 @@
         "GET /api/amos/list_functional_classes": [
           "chemi_amos_list_functional_classes"
         ],
-        "GET /api/amos/record_id_search/{internal_id}": [
-          "chemi_amos_record_id"
-        ],
-        "GET /api/amos/record_type_count/{record_type}": [
-          "chemi_amos_record_type_count"
-        ],
-        "GET /api/amos/substring_search/{substring}": [
-          "chemi_amos_substring"
-        ],
-        "GET /api/amos/search/{dtxsid}": [
-          "chemi_amos"
-        ],
-        "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}": [
-          "chemi_amos_get_similar_structures"
-        ],
         "GET /api/amos/list_sources_by_record_type/{record_type}": [
           "chemi_amos_list_sources_by_record_type"
-        ],
-        "POST /api/amos/spectral_entropy/": [
-          "chemi_amos_spectral_entropy"
-        ],
-        "POST /api/amos/entropy_similarity/": [
-          "chemi_amos_entropy_similarity"
-        ],
-        "POST /api/amos/spectrum_count_for_methodology/": [
-          "chemi_amos_spectrum_count_for_methodology"
         ],
         "POST /api/amos/mass_range_search/": [
           "chemi_amos_mass_range"
         ],
-        "POST /api/amos/next_level_classification/": [
-          "chemi_amos_next_level_classification"
-        ],
-        "POST /api/amos/substances_for_classification/": [
-          "chemi_amos_substances_for_classification"
-        ],
-        "POST /api/amos/all_similarities_by_dtxsid/": [
-          "chemi_amos_all_similarities"
-        ],
-        "POST /api/amos/max_similarity_by_dtxsid/": [
-          "chemi_amos_max_similarity"
+        "POST /api/amos/mass_spectra_for_substances/": [
+          "chemi_amos_mass_spectra_for_substances"
         ],
         "POST /api/amos/mass_spectrum_similarity_search/": [
           "chemi_amos_mass_spectrum_similarity"
         ],
-        "POST /api/amos/dtxsids/": [
-          "chemi_amos_dtxsids"
-        ],
-        "POST /api/amos/record_counts_by_dtxsid/": [
-          "chemi_amos_record_counts"
-        ],
-        "POST /api/amos/mass_spectra_for_substances/": [
-          "chemi_amos_mass_spectra_for_substances"
-        ],
-        "POST /api/amos/count_substances_in_ids/": [
-          "chemi_amos_count_substances_in_ids"
-        ],
-        "GET /api/amos/analytical_qc_keyset_pagination/{limit}": [
-          "chemi_amos_analytical_qc_keyset_pagination"
-        ],
-        "POST /api/amos/analytical_qc_keyset_pagination/{limit}": [
-          "chemi_amos_analytical_qc_keyset_pagination_bulk"
-        ],
-        "GET /api/amos/fact_sheet_keyset_pagination/{limit}": [
-          "chemi_amos_fact_sheet_keyset_pagination"
-        ],
-        "POST /api/amos/fact_sheet_keyset_pagination/{limit}": [
-          "chemi_amos_fact_sheet_keyset_pagination_bulk"
+        "POST /api/amos/max_similarity_by_dtxsid/": [
+          "chemi_amos_max_similarity"
         ],
         "GET /api/amos/method_keyset_pagination/{limit}": [
           "chemi_amos_method_keyset_pagination"
@@ -4225,17 +4193,50 @@
         "POST /api/amos/method_keyset_pagination/{limit}": [
           "chemi_amos_method_keyset_pagination_bulk"
         ],
+        "GET /api/amos/method_with_spectra/{search_type}/{internal_id}": [
+          "chemi_amos_method_with_spectra"
+        ],
+        "POST /api/amos/next_level_classification/": [
+          "chemi_amos_next_level_classification"
+        ],
         "GET /api/amos/product_declaration_keyset_pagination/{limit}": [
           "chemi_amos_product_declaration_keyset_pagination"
         ],
         "POST /api/amos/product_declaration_keyset_pagination/{limit}": [
           "chemi_amos_product_declaration_keyset_pagination_bulk"
         ],
+        "POST /api/amos/record_counts_by_dtxsid/": [
+          "chemi_amos_record_counts"
+        ],
+        "GET /api/amos/record_id_search/{internal_id}": [
+          "chemi_amos_record_id"
+        ],
+        "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}": [
+          "chemi_amos_record_ids_for_substance"
+        ],
+        "GET /api/amos/record_type_count/{record_type}": [
+          "chemi_amos_record_type_count"
+        ],
         "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}": [
           "chemi_amos_safety_data_sheet_keyset_pagination"
         ],
         "POST /api/amos/safety_data_sheet_keyset_pagination/{limit}": [
           "chemi_amos_safety_data_sheet_keyset_pagination_bulk"
+        ],
+        "GET /api/amos/search/{dtxsid}": [
+          "chemi_amos"
+        ],
+        "POST /api/amos/spectral_entropy/": [
+          "chemi_amos_spectral_entropy"
+        ],
+        "POST /api/amos/spectrum_count_for_methodology/": [
+          "chemi_amos_spectrum_count_for_methodology"
+        ],
+        "POST /api/amos/substances_for_classification/": [
+          "chemi_amos_substances_for_classification"
+        ],
+        "GET /api/amos/substring_search/{substring}": [
+          "chemi_amos_substring"
         ],
         "GET /api/amos/additional_sources_for_substance/{dtxsid}": [
           "chemi_amos_additional_sources_for_substance"
@@ -5887,32 +5888,6 @@
         ]
       }
     },
-    "schema/chemi-amos-reviewed-reads.json": {
-      "keys": [
-        "POST /api/amos/retrieve_fact_sheets/",
-        "POST /api/amos/retrieve_product_declarations/",
-        "POST /api/amos/retrieve_safety_data_sheets/",
-        "POST /api/amos/substances_for_ids/",
-        "POST /api/amos/search_for_document_ids/{record_type}"
-      ],
-      "functions": {
-        "POST /api/amos/retrieve_fact_sheets/": [
-          "chemi_amos_retrieve_fact_sheets"
-        ],
-        "POST /api/amos/retrieve_product_declarations/": [
-          "chemi_amos_retrieve_product_declarations"
-        ],
-        "POST /api/amos/retrieve_safety_data_sheets/": [
-          "chemi_amos_retrieve_safety_data_sheets"
-        ],
-        "POST /api/amos/substances_for_ids/": [
-          "chemi_amos_substances_for_ids"
-        ],
-        "POST /api/amos/search_for_document_ids/{record_type}": [
-          "chemi_amos_for_document_ids"
-        ]
-      }
-    },
     "schema/chemi-hazard-prod.json": {
       "keys": [
         "GET /api/hazard",
@@ -6061,6 +6036,54 @@
     }
   },
   "deferrals": {
+    "chemi-amos-prod-full POST /api/amos/dtxsids/": {
+      "key": "POST /api/amos/dtxsids/",
+      "source": "schema/chemi-amos-prod.json",
+      "reason": "Prod schema declares no responses (schema_defect); reviewed overlay is no longer first-party; deferred until upstream schema is fixed",
+      "fingerprint": "v1:4d5ad0a067cb1e6ffaf6e818e0a2e9e7a85bd3009478ca986de501f98fbdfccb",
+      "version": 1,
+      "functions": []
+    },
+    "chemi-amos-prod-full POST /api/amos/retrieve_fact_sheets/": {
+      "key": "POST /api/amos/retrieve_fact_sheets/",
+      "source": "schema/chemi-amos-prod.json",
+      "reason": "Prod schema is defective (invalid parameter types); deferred until upstream fixes the schema",
+      "fingerprint": "v1:2c1ca8e7f8212596f5b4250483f2929b77fd6dff6720c9ff62c6de56d21d1e67",
+      "version": 1,
+      "functions": []
+    },
+    "chemi-amos-prod-full POST /api/amos/retrieve_product_declarations/": {
+      "key": "POST /api/amos/retrieve_product_declarations/",
+      "source": "schema/chemi-amos-prod.json",
+      "reason": "Prod schema is defective (invalid parameter types); deferred until upstream fixes the schema",
+      "fingerprint": "v1:f9082010ebcc485758c1b1bb5eb119cc90fb05e558444ddba3f84642052d287d",
+      "version": 1,
+      "functions": []
+    },
+    "chemi-amos-prod-full POST /api/amos/retrieve_safety_data_sheets/": {
+      "key": "POST /api/amos/retrieve_safety_data_sheets/",
+      "source": "schema/chemi-amos-prod.json",
+      "reason": "Prod schema is defective (invalid parameter types); deferred until upstream fixes the schema",
+      "fingerprint": "v1:e351afd84dd8e6ffdd8f6205fce920fe8ec3082b678ff40f6802f0756cfc47a1",
+      "version": 1,
+      "functions": []
+    },
+    "chemi-amos-prod-full POST /api/amos/search_for_document_ids/{record_type}": {
+      "key": "POST /api/amos/search_for_document_ids/{record_type}",
+      "source": "schema/chemi-amos-prod.json",
+      "reason": "Prod schema is defective (invalid parameter types); deferred until upstream fixes the schema",
+      "fingerprint": "v1:47713c6c26a0290b2e6b782ca6aa5fb504098bb14d3ef8388741b74df02c7fb9",
+      "version": 1,
+      "functions": []
+    },
+    "chemi-amos-prod-full POST /api/amos/substances_for_ids/": {
+      "key": "POST /api/amos/substances_for_ids/",
+      "source": "schema/chemi-amos-prod.json",
+      "reason": "Prod schema is defective (invalid parameter types); deferred until upstream fixes the schema",
+      "fingerprint": "v1:49d66ba908e113e71cb39a1ee29ddb7fbad1f51bd7bc834ca002c81b225f6d9a",
+      "version": 1,
+      "functions": []
+    },
     "chemi-resolver-prod-rebuild POST /api/resolver/getsimilaritylist": {
       "key": "POST /api/resolver/getsimilaritylist",
       "source": "schema/chemi-resolver-prod.json",

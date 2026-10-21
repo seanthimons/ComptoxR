@@ -9,6 +9,12 @@
   cleanup and environment-controlled chunks. Results have one row per chemical,
   with numeric descriptor vectors retained in a list-column (#353).
 
+- Remove six AMOS wrappers whose production schema is defective (`chemi_amos_dtxsids`,
+  `chemi_amos_substances_for_ids`, `chemi_amos_retrieve_fact_sheets`,
+  `chemi_amos_retrieve_product_declarations`, `chemi_amos_retrieve_safety_data_sheets`,
+  `chemi_amos_for_document_ids`). They are deferred in Specmill until the upstream
+  schema is fixed; no hand-edited schema overlays are kept for them.
+
 - Remove `chemi_resolver_getsimilaritylist`: the production schema's request body
   is not compliant, so the operation is deferred in Specmill until upstream
   fixes it (seanthimons/specmill#165). No wrapper is generated meanwhile.

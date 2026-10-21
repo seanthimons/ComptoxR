@@ -1,5 +1,5 @@
 {
-  "commit": "0f54d1614bcca84e9ec331add3ad6e46541913bc",
+  "commit": "9e5a297a36bced828c9153fa779095fe45a8049b",
   "legacy_callers": [
     {
       "wrapper": "ct_related",
@@ -37,10 +37,10 @@
     },
     {
       "schema": "chemi-amos-prod",
-      "migrated": 64,
+      "migrated": 58,
       "total": 77,
       "banned": 13,
-      "remaining": 0
+      "remaining": 6
     },
     {
       "schema": "chemi-arn_cats-prod",
@@ -261,7 +261,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/release_notes",
       "wrapper": "chemi_amos_release_notes",
       "file": "R/chemi_amos_release_notes.R",
@@ -270,7 +270,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_data_source_info/",
       "wrapper": "chemi_amos_get_data_source_info",
       "file": "R/chemi_amos_get_data_source_info.R",
@@ -279,7 +279,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_ir_spectrum/{internal_id}",
       "wrapper": "chemi_amos_get_ir_spectrum",
       "file": "R/chemi_amos_get_ir_spectrum.R",
@@ -288,7 +288,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_nmr_spectrum/{internal_id}",
       "wrapper": "chemi_amos_get_nmr_spectrum",
       "file": "R/chemi_amos_get_nmr_spectrum.R",
@@ -297,7 +297,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_mass_spectrum/{internal_id}",
       "wrapper": "chemi_amos_get_mass_spectrum",
       "file": "R/chemi_amos_get_mass_spectrum.R",
@@ -306,7 +306,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_info_by_id/{internal_id}",
       "wrapper": "chemi_amos_get_info_by_id",
       "file": "R/chemi_amos_get_info_by_id.R",
@@ -315,7 +315,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
       "wrapper": "chemi_amos_get_classification_for_dtxsid",
       "file": "R/chemi_amos_get_classification_for_dtxsid.R",
@@ -324,7 +324,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/search_by_text/{substr}",
       "wrapper": "chemi_amos_by_text",
       "file": "R/chemi_amos_by_text.R",
@@ -369,7 +369,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
       "wrapper": "chemi_amos_record_ids_for_substance",
       "file": "R/chemi_amos_record_ids_for_substance.R",
@@ -378,7 +378,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
       "wrapper": "chemi_amos_method_with_spectra",
       "file": "R/chemi_amos_method_with_spectra.R",
@@ -387,7 +387,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_pdf/{record_type}/{internal_id}",
       "wrapper": "chemi_amos_get_pdf",
       "file": "R/chemi_amos_get_pdf.R",
@@ -396,7 +396,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/database_summary/",
       "wrapper": "chemi_amos_database",
       "file": "R/chemi_amos_database.R",
@@ -405,7 +405,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/dtxsids_from_functional_use/{functional_use}",
       "wrapper": "chemi_amos_dtxsids_from_functional_use",
       "file": "R/chemi_amos_dtxsids_from_functional_use.R",
@@ -414,7 +414,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/find_dtxsids/{internal_id}",
       "wrapper": "chemi_amos_find_dtxsids",
       "file": "R/chemi_amos_find_dtxsids.R",
@@ -423,7 +423,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/formula_search/{formula}",
       "wrapper": "chemi_amos_formula",
       "file": "R/chemi_amos_formula.R",
@@ -432,7 +432,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/functional_class_search/{functional_class}",
       "wrapper": "chemi_amos_functional_class",
       "file": "R/chemi_amos_functional_class.R",
@@ -441,7 +441,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
       "wrapper": "chemi_amos_functional_uses_for_dtxsid",
       "file": "R/chemi_amos_functional_uses_for_dtxsid.R",
@@ -450,7 +450,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_fact_sheet_editor_info/{internal_id}",
       "wrapper": "chemi_amos_get_fact_sheet_editor_info",
       "file": "R/chemi_amos_get_fact_sheet_editor_info.R",
@@ -459,7 +459,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_method_editor_info/{internal_id}",
       "wrapper": "chemi_amos_get_method_editor_info",
       "file": "R/chemi_amos_get_method_editor_info.R",
@@ -468,7 +468,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_ms_ready_methods/{inchikey}",
       "wrapper": "chemi_amos_get_ms_ready_methods",
       "file": "R/chemi_amos_get_ms_ready_methods.R",
@@ -477,7 +477,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}",
       "wrapper": "chemi_amos_get_nmr_spectrum_editor_info",
       "file": "R/chemi_amos_get_nmr_spectrum_editor_info.R",
@@ -486,7 +486,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_product_declaration_editor_info/{internal_id}",
       "wrapper": "chemi_amos_get_product_declaration_editor_info",
       "file": "R/chemi_amos_get_product_declaration_editor_info.R",
@@ -495,7 +495,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}",
       "wrapper": "chemi_amos_get_safety_data_sheet_editor_info",
       "file": "R/chemi_amos_get_safety_data_sheet_editor_info.R",
@@ -504,7 +504,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_substances_for_search_term/{search_term}",
       "wrapper": "chemi_amos_get_substances_for_term",
       "file": "R/chemi_amos_get_substances_for_term.R",
@@ -513,7 +513,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/inchikey_first_block_search/{first_block}",
       "wrapper": "chemi_amos_inchikey_first_block",
       "file": "R/chemi_amos_inchikey_first_block.R",
@@ -522,7 +522,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/list_fact_sheet_types/",
       "wrapper": "chemi_amos_list_fact_sheet_types",
       "file": "R/chemi_amos_list_fact_sheet_types.R",
@@ -531,7 +531,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/list_functional_classes",
       "wrapper": "chemi_amos_list_functional_classes",
       "file": "R/chemi_amos_list_functional_classes.R",
@@ -540,7 +540,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/record_id_search/{internal_id}",
       "wrapper": "chemi_amos_record_id",
       "file": "R/chemi_amos_record_id.R",
@@ -549,7 +549,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/record_type_count/{record_type}",
       "wrapper": "chemi_amos_record_type_count",
       "file": "R/chemi_amos_record_type_count.R",
@@ -558,7 +558,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/substring_search/{substring}",
       "wrapper": "chemi_amos_substring",
       "file": "R/chemi_amos_substring.R",
@@ -567,7 +567,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/search/{dtxsid}",
       "wrapper": "chemi_amos",
       "file": "R/chemi_amos.R",
@@ -576,7 +576,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
       "wrapper": "chemi_classyfire",
       "file": "R/chemi_classyfire.R",
@@ -585,7 +585,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
       "wrapper": "chemi_amos_get_similar_structures",
       "file": "R/chemi_amos_get_similar_structures.R",
@@ -594,7 +594,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/list_sources_by_record_type/{record_type}",
       "wrapper": "chemi_amos_list_sources_by_record_type",
       "file": "R/chemi_amos_list_sources_by_record_type.R",
@@ -603,7 +603,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/spectral_entropy/",
       "wrapper": "chemi_amos_spectral_entropy",
       "file": "R/chemi_amos_spectral_entropy.R",
@@ -612,7 +612,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/entropy_similarity/",
       "wrapper": "chemi_amos_entropy_similarity",
       "file": "R/chemi_amos_entropy_similarity.R",
@@ -621,7 +621,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/spectrum_count_for_methodology/",
       "wrapper": "chemi_amos_spectrum_count_for_methodology",
       "file": "R/chemi_amos_spectrum_count_for_methodology.R",
@@ -630,7 +630,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/mass_range_search/",
       "wrapper": "chemi_amos_mass_range",
       "file": "R/chemi_amos_mass_range.R",
@@ -639,7 +639,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/next_level_classification/",
       "wrapper": "chemi_amos_next_level_classification",
       "file": "R/chemi_amos_next_level_classification.R",
@@ -648,7 +648,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/substances_for_classification/",
       "wrapper": "chemi_amos_substances_for_classification",
       "file": "R/chemi_amos_substances_for_classification.R",
@@ -657,7 +657,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/all_similarities_by_dtxsid/",
       "wrapper": "chemi_amos_all_similarities",
       "file": "R/chemi_amos_all_similarities.R",
@@ -666,7 +666,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/max_similarity_by_dtxsid/",
       "wrapper": "chemi_amos_max_similarity",
       "file": "R/chemi_amos_max_similarity.R",
@@ -675,7 +675,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/mass_spectrum_similarity_search/",
       "wrapper": "chemi_amos_mass_spectrum_similarity",
       "file": "R/chemi_amos_mass_spectrum_similarity.R",
@@ -684,16 +684,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
-      "operation": "POST /api/amos/dtxsids/",
-      "wrapper": "chemi_amos_dtxsids",
-      "file": "R/chemi_amos_dtxsids.R",
-      "suite": "tests/testthat/test-native_amos_dtxsids.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/record_counts_by_dtxsid/",
       "wrapper": "chemi_amos_record_counts",
       "file": "R/chemi_amos_record_counts.R",
@@ -702,7 +693,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/mass_spectra_for_substances/",
       "wrapper": "chemi_amos_mass_spectra_for_substances",
       "file": "R/chemi_amos_mass_spectra_for_substances.R",
@@ -711,7 +702,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/count_substances_in_ids/",
       "wrapper": "chemi_amos_count_substances_in_ids",
       "file": "R/chemi_amos_count_substances_in_ids.R",
@@ -720,7 +711,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_analytical_qc_keyset_pagination",
       "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
@@ -729,7 +720,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/analytical_qc_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_analytical_qc_keyset_pagination_bulk",
       "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
@@ -738,7 +729,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_fact_sheet_keyset_pagination",
       "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
@@ -747,7 +738,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/fact_sheet_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_fact_sheet_keyset_pagination_bulk",
       "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
@@ -756,7 +747,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/method_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_method_keyset_pagination",
       "file": "R/chemi_amos_method_keyset_pagination.R",
@@ -765,7 +756,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/method_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_method_keyset_pagination_bulk",
       "file": "R/chemi_amos_method_keyset_pagination.R",
@@ -774,7 +765,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/product_declaration_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_product_declaration_keyset_pagination",
       "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
@@ -783,7 +774,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/product_declaration_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_product_declaration_keyset_pagination_bulk",
       "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
@@ -792,7 +783,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_safety_data_sheet_keyset_pagination",
       "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
@@ -801,7 +792,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "POST /api/amos/safety_data_sheet_keyset_pagination/{limit}",
       "wrapper": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
       "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
@@ -3113,51 +3104,6 @@
       "migrated": true
     },
     {
-      "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-reads.json",
-      "operation": "POST /api/amos/substances_for_ids/",
-      "wrapper": "chemi_amos_substances_for_ids",
-      "file": "R/chemi_amos_substances_for_ids.R",
-      "suite": "tests/testthat/test-native_amos_remaining.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-reads.json",
-      "operation": "POST /api/amos/retrieve_fact_sheets/",
-      "wrapper": "chemi_amos_retrieve_fact_sheets",
-      "file": "R/chemi_amos_retrieve_fact_sheets.R",
-      "suite": "tests/testthat/test-native_amos_remaining.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-reads.json",
-      "operation": "POST /api/amos/retrieve_product_declarations/",
-      "wrapper": "chemi_amos_retrieve_product_declarations",
-      "file": "R/chemi_amos_retrieve_product_declarations.R",
-      "suite": "tests/testthat/test-native_amos_remaining.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-reads.json",
-      "operation": "POST /api/amos/retrieve_safety_data_sheets/",
-      "wrapper": "chemi_amos_retrieve_safety_data_sheets",
-      "file": "R/chemi_amos_retrieve_safety_data_sheets.R",
-      "suite": "tests/testthat/test-native_amos_remaining.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-reads.json",
-      "operation": "POST /api/amos/search_for_document_ids/{record_type}",
-      "wrapper": "chemi_amos_for_document_ids",
-      "file": "R/chemi_amos_for_document_ids.R",
-      "suite": "tests/testthat/test-native_amos_remaining.R",
-      "migrated": true
-    },
-    {
       "schema": "schema/chemi-hazard-prod.json",
       "binding_schema": "schema/chemi-hazard-prod.json",
       "operation": "POST /api/hazard",
@@ -4212,7 +4158,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/additional_sources_for_substance/{dtxsid}",
       "wrapper": "chemi_amos_additional_sources_for_substance",
       "file": "R/chemi_amos_additional_sources_for_substance.R",
@@ -4221,7 +4167,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}",
       "wrapper": "chemi_amos_get_pdf_metadata",
       "file": "R/chemi_amos_get_pdf_metadata.R",
@@ -4230,7 +4176,7 @@
     },
     {
       "schema": "schema/chemi-amos-prod.json",
-      "binding_schema": "schema/chemi-amos-reviewed-native.json",
+      "binding_schema": "schema/chemi-amos-prod.json",
       "operation": "GET /api/amos/get_substance_file_for_record/{internal_id}",
       "wrapper": "chemi_amos_get_substance_file_for_record",
       "file": "R/chemi_amos_get_substance_file_for_record.R",
