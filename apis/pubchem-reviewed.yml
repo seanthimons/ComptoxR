@@ -1,3 +1,5 @@
+# Documented exception to the no-overlay policy: PubChem PUG REST is an external API with
+# no EPA prod schema, so schema/pubchem-reviewed.json is the first-party source.
 id: pubchem-reviewed
 prepare: preserve_pubchem_docs
 schemas:

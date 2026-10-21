@@ -19,6 +19,11 @@
   optional but the deployed service rejects a bodyless GET, so it is deferred in Specmill.
   `chemi_chet_chemicals_chemical_dl_post()` is unchanged.
 
+- Remove `chemi_services_preflight()` and `chemi_services_universalpreflight()`. The production
+  schema describes their multipart `files[]` upload as a binary query parameter, so they are
+  deferred in Specmill until upstream corrects it. The hand-edited preflight overlay schemas are
+  deleted. `schema/pubchem-reviewed.json` stays as the first-party PubChem schema.
+
 - Remove `chemi_resolver_getsimilaritylist`: the production schema's request body
   is not compliant, so the operation is deferred in Specmill until upstream
   fixes it (seanthimons/specmill#165). No wrapper is generated meanwhile.

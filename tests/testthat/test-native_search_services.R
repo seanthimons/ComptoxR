@@ -7,9 +7,7 @@ search_services_wrappers <- c(
   'chemi_search_render_png',
   'chemi_search_render_svg',
   'chemi_services_export',
-  'chemi_services_export_json_report',
-  'chemi_services_preflight',
-  'chemi_services_universalpreflight')
+  'chemi_services_export_json_report')
 
 test_that('search_services bindings validate inputs and preserve actual localhost wire contracts', {
   skip_if_not_installed('httpuv')

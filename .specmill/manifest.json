@@ -2716,7 +2716,7 @@
   "inputs": {
     "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
-    "NAMESPACE": "3c3f8947946c7868e8dee8399e9133f8357fb1118b5a67beafeb79cf8f3e7519",
+    "NAMESPACE": "9fe9ef1f4a8d5d4fecd2c63ae3dc7758522bc10767476496ccaf31953b0a95b7",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
     "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
@@ -2967,10 +2967,8 @@
     "R/chemi_services_inputs.R": "c114b874acb90887322268e04f5839d878a90f99ec1af79b7fa98e8e1386a0b3",
     "R/chemi_services_layout.R": "70e726e0ed3616e19883c07faac68a6f3d53504aa2c4f26d9aef0ef6c1938013",
     "R/chemi_services_metadata.R": "9cf2c2aa33ab58c61aa1e0760e3c836deeb7e3a8c576f6e0630ae2b0bf885901",
-    "R/chemi_services_preflight.R": "e2ceee22d3a2e69090447c067a51deac188a7ab023d9ae1645dfba993cc994a1",
     "R/chemi_services_release_notes.R": "464a528f2cd865bf6e5ed74e8003f5a55767637e3a1c291a3d07a822f2a460df",
     "R/chemi_services_smirks2rxn.R": "b8004e28c639fe75d484d8b48cfbefe778637926d31ed5f6afc8fb722bc6b69a",
-    "R/chemi_services_universalpreflight.R": "3976185ce9c7f49ae90529fc04573d25a6fd08c50eb78a6f5cbe65f2ccc3b649",
     "R/chemi_services_version.R": "b5821e0e58f4d278fcee77d4889d3d7171a999c8317f281f8c15fbf88321a85e",
     "R/chemi_stdizer.R": "5f3f6d58f2355ad412bbe99ba5996e8b56fc9a1cf93cdf93221e96d0731d39dc",
     "R/chemi_stdizer_chemicals.R": "bfc108ec05d31e46d729555e51fe59a2c553246b391579b25387bd08475e6363",
@@ -3230,7 +3228,7 @@
     "apis/chemi-resolver-remaining-facade.yml": "6ff1c0b834fc8eb521567aa4d4179cf3828c81f1e9f4365071a1feb5f4bf51e9",
     "apis/chemi-safety-prod-rebuild.yml": "77af33fdbc94082a399b2d5f8dc6f1fe8814acad2064d65992d8fdbd423b1fa2",
     "apis/chemi-search-prod-rebuild.yml": "ba2efd138cdf1e437cfd4b6ef9ca484b098d0b17c1e169588b61419c05461168",
-    "apis/chemi-search-services-native.yml": "5a3d71c6ee3131aa78c2a34b50c120c2329546d653b7e5f3fb5bafae778eca67",
+    "apis/chemi-search-services-native.yml": "4f54a3333d90c72d1194bbade48fe1223bca8eb5dcde8bb921d2b71133db798c",
     "apis/chemi-service-info.yml": "0cbd574fcf5984576ea736b72262abd2a7dbeed9c597e6ac016acdc3f51376e4",
     "apis/chemi-services-prod-full.yml": "a18d9b61cd00981057361db7cc99ea1bb8991e0f393708fb388a1d11aa90abf2",
     "apis/chemi-services-prod-rebuild.yml": "ea45fa0cee1b4b4ffc6998a054c90cfba0cceda74762aa1a891fa00779b0a608",
@@ -3256,7 +3254,7 @@
     "apis/epi-pilot.yml": "183e76e239ac505c509281fdacfb6fa778516a33fbf08a57d594cdfce59b2cf0",
     "apis/epi-suite-prod-full.yml": "88d7a7b0c29a945f470e205bccf953d3d06f4c72c628fa167e6c4474b21a7fbc",
     "apis/epi-suite-prod-rebuild.yml": "aa1999555416a34c2f58d1f833d5b36d03275cd8729ebf5d3dd9eab9f1d72df0",
-    "apis/pubchem-reviewed.yml": "819a743d8908c610aea7704f09f8e2f9a62182c4087c5e3055eb9259d4056a0e",
+    "apis/pubchem-reviewed.yml": "4024763c56898d29f6184d539578fd99956d8850f64d9b6ba6de7cc3c5da5b0d",
     "apis/search-pilot.yml": "099c2c8ba64b1786449033dd0d1dc0bc9df5fb0cdd91c8dea0fb14a83c605d7a",
     "data/cheminformatics_hazard_pal.rda": "281fa896294e8cd2a1690e6a7f240add3b39f6a2d7620427c03659202e785207",
     "data/cust_pal.rda": "c026cc11536c28919b0ec588108ece09ba8e5bf3ae2f4b163e8d1868fdaf16df",
@@ -3279,7 +3277,7 @@
     "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
-    "inst/hook_config.yml": "93b7ad882e53ae0ecf0457fc1a1bfa851a6dec62c41f05c40ac1de984e671438",
+    "inst/hook_config.yml": "8867caf8a195dd77e211ff7128b638def08d32d2dd2f3c0294f87c4b9aa63017",
     "inst/hook_config_generated.yml": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "inst/plumber/ctx/plumber.R": "40fa4dcaf1112fd0bdafd84816589f45931de5f6d34bd052bdabc0cd553a8504",
     "inst/plumber/ecotox/plumber.R": "f596a01091c3ce57c21b711edd306d6454fa7ff35e3fc202d61de1092022af2e",
@@ -3549,10 +3547,8 @@
     "man/chemi_services_export_json_report.Rd": "82e264825b6064ddc3ad1dbb79e518c4c0a0093d607cd35a4e16a3b0abfb09d4",
     "man/chemi_services_layout.Rd": "023345c68b493121c744bbd2ace3e94143044dcca24a94bfdb7d1c1916239e2a",
     "man/chemi_services_metadata.Rd": "4da4f0c7f5945d93d72d3ed5b7900e617030f106ebfc97be416a9a6296242a7d",
-    "man/chemi_services_preflight.Rd": "1948c0ea09896ee12b233fd46fab3f738603905f777ef3c8a099e755af7d39af",
     "man/chemi_services_release_notes.Rd": "3374c34ebf837e2ab764ef4ae4502db2f64237b93f73e09a27160da713c99cdd",
     "man/chemi_services_smirks2rxn.Rd": "19f3b5de18ee255630657d8952a685222924b80afb6aaee67657074afc7fa59a",
-    "man/chemi_services_universalpreflight.Rd": "ff33a9b7393a7ffbdb6d844cb3d24a4e055b4bfe58060b202df4e0d64c76d9de",
     "man/chemi_services_version.Rd": "1d6070b2f1c421b2007153c850e2dbe092e3529832ef956e200cf07a8f1203e1",
     "man/chemi_stdizer.Rd": "d5ee2aa9af02c0b10c05acb121a6f90cd2d73a7907992a7fc20b7099fef97624",
     "man/chemi_stdizer_chemicals.Rd": "8b216c83ab9f06d7ab75c970a14483d9e3529bca8cec96b70fcea7a12c242089",
@@ -3873,7 +3869,6 @@
     "schema/chemi-safety-prod.json": "692b6b22c765f3c2b749a47c42930d12a338b338693254dbbc3bb96a8d0c0efa",
     "schema/chemi-search-prod.json": "b23315d3dfaf35c7f62c5e646ec55d835d027b72e61e3b83843a2f3c8cf49526",
     "schema/chemi-services-prod.json": "373d3b6bf3e9f62615785053341bc19625c0b2f9fb5ae748733f716449fbf010",
-    "schema/chemi-services-reviewed-preflight.json": "5a00fb9bd8a87def42aba601dde5ddb2b26f805865da6704fbaeefc8a9319f16",
     "schema/chemi-stdizer-prod.json": "ba0b33f97722645015547f86999a67a71bdaec3c97e6fedf2631dd6c90aeb93f",
     "schema/chemi-toxprints-prod.json": "ec06631508780ed4b0accc3afc4f1c2afa7d6dd86aafd97039c8d90693ee70da",
     "schema/chemi-webtest-prod.json": "1f09783af1a8084952b6f2e448f4e672fb1a25c98154e525a1b1b922f1f9fcf3",
@@ -5051,6 +5046,12 @@
         ],
         "GET /api/services/version": [
           "chemi_services_version"
+        ],
+        "POST /api/services/export": [
+          "chemi_services_export"
+        ],
+        "POST /api/services/export_json_report": [
+          "chemi_services_export_json_report"
         ]
       }
     },
@@ -5970,38 +5971,6 @@
         ]
       }
     },
-    "schema/chemi-services-reviewed-preflight.json": {
-      "keys": [
-        "POST /api/services/caspreflight",
-        "GET /api/services/cim_component_info",
-        "POST /api/services/collated_report",
-        "POST /api/services/convert",
-        "POST /api/services/export",
-        "POST /api/services/export_json_report",
-        "POST /api/services/files",
-        "GET /api/services/layout",
-        "GET /api/services/metadata",
-        "POST /api/services/preflight",
-        "GET /api/services/release_notes",
-        "GET /api/services/smirks2rxn",
-        "POST /api/services/universalpreflight",
-        "GET /api/services/version"
-      ],
-      "functions": {
-        "POST /api/services/export": [
-          "chemi_services_export"
-        ],
-        "POST /api/services/export_json_report": [
-          "chemi_services_export_json_report"
-        ],
-        "POST /api/services/preflight": [
-          "chemi_services_preflight"
-        ],
-        "POST /api/services/universalpreflight": [
-          "chemi_services_universalpreflight"
-        ]
-      }
-    },
     "schema/pubchem-reviewed.json": {
       "keys": [
         "GET /compound/{namespace}/{query}/cids/JSON",
@@ -6088,6 +6057,22 @@
       "fingerprint": "v1:5d60da2bcc3d9a07aeb26f93741303e9bb94318b49b0508485bdf0435cb91ba4",
       "version": 1,
       "functions": "getSimilarityList"
+    },
+    "chemi-search-services-native POST /api/services/preflight": {
+      "key": "POST /api/services/preflight",
+      "source": "schema/chemi-services-prod.json",
+      "reason": "Prod describes the multipart files[] upload as a binary query parameter, so the operation cannot be generated compliantly; deferred until upstream corrects the schema (upload support: specmill#28)",
+      "fingerprint": "v1:e18bf1631cc4439ab7adaa023142e29ed8b88c86fb2ecdf7413e14307482d891",
+      "version": 1,
+      "functions": []
+    },
+    "chemi-search-services-native POST /api/services/universalpreflight": {
+      "key": "POST /api/services/universalpreflight",
+      "source": "schema/chemi-services-prod.json",
+      "reason": "Prod describes the multipart files[] upload as a binary query parameter, so the operation cannot be generated compliantly; deferred until upstream corrects the schema (upload support: specmill#28)",
+      "fingerprint": "v1:8e94fec1425b005fc31ed363c28da6d9fac26bd59b2f0aa8d0e260c1dc3be374",
+      "version": 1,
+      "functions": []
     }
   }
 }

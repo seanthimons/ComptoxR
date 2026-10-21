@@ -1093,12 +1093,6 @@ chemi_services_export:
 chemi_services_export_json_report:
   bespoke_test: tests/testthat/test-native_search_services.R
 
-chemi_services_preflight:
-  bespoke_test: tests/testthat/test-native_search_services.R
-
-chemi_services_universalpreflight:
-  bespoke_test: tests/testthat/test-native_search_services.R
-
 chemi_services_convert:
   bespoke_test: tests/testthat/test-native_services_legacy.R
 

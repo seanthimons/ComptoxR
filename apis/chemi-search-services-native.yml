@@ -2,7 +2,7 @@ id: chemi-search-services-native
 schemas:
   files:
   - schema/chemi-search-prod.json
-  - schema/chemi-services-reviewed-preflight.json
+  - schema/chemi-services-prod.json
 selection:
   include:
   - POST /api/search/download
@@ -158,38 +158,6 @@ operations:
       preserve_errors: true
     docs:
       title: Chemi services export json report
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
-  POST /api/services/preflight:
-    name: chemi_services_preflight
-    file: R/chemi_services_preflight.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Chemi services preflight
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
-  POST /api/services/universalpreflight:
-    name: chemi_services_universalpreflight
-    file: R/chemi_services_universalpreflight.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Chemi services universalpreflight
       lifecycle: experimental
       return: Decoded JSON, text, or raw bytes according to the response content type;
         NULL for an empty response.

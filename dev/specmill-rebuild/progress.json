@@ -1,5 +1,5 @@
 {
-  "commit": "5a809f97dc855feee35d30589789a491c4a31c5b",
+  "commit": "bee83c4a587b3bc6d0003a14263dd7605fa4ef7f",
   "legacy_callers": [
     {
       "wrapper": "ct_related",
@@ -149,10 +149,10 @@
     },
     {
       "schema": "chemi-services-prod",
-      "migrated": 12,
+      "migrated": 10,
       "total": 14,
       "banned": 2,
-      "remaining": 0
+      "remaining": 2
     },
     {
       "schema": "chemi-stdizer-prod",
@@ -4005,7 +4005,7 @@
     },
     {
       "schema": "schema/chemi-services-prod.json",
-      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
+      "binding_schema": "schema/chemi-services-prod.json",
       "operation": "POST /api/services/export",
       "wrapper": "chemi_services_export",
       "file": "R/chemi_services_export.R",
@@ -4014,28 +4014,10 @@
     },
     {
       "schema": "schema/chemi-services-prod.json",
-      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
+      "binding_schema": "schema/chemi-services-prod.json",
       "operation": "POST /api/services/export_json_report",
       "wrapper": "chemi_services_export_json_report",
       "file": "R/chemi_services_export_json_report.R",
-      "suite": "tests/testthat/test-native_search_services.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-services-prod.json",
-      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
-      "operation": "POST /api/services/preflight",
-      "wrapper": "chemi_services_preflight",
-      "file": "R/chemi_services_preflight.R",
-      "suite": "tests/testthat/test-native_search_services.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-services-prod.json",
-      "binding_schema": "schema/chemi-services-reviewed-preflight.json",
-      "operation": "POST /api/services/universalpreflight",
-      "wrapper": "chemi_services_universalpreflight",
-      "file": "R/chemi_services_universalpreflight.R",
       "suite": "tests/testthat/test-native_search_services.R",
       "migrated": true
     },
