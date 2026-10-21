@@ -1,5 +1,4 @@
 # CRAN-safe checks for the shared chemi_resolver_lookup_bulk boundary.
-# Similarity reference/candidate hooks are covered in test-similarity_list.R.
 
 test_that("bulk resolver validates ids before options and HTTP", {
   called <- FALSE

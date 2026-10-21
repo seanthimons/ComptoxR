@@ -1,5 +1,5 @@
 {
-  "commit": "578acd2e85febd3a9533e00eb550d1b71bcfc964",
+  "commit": "0f54d1614bcca84e9ec331add3ad6e46541913bc",
   "legacy_callers": [
     {
       "wrapper": "ct_related",
@@ -14,9 +14,9 @@
   ],
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.54",
-    "source_commit": "ab4aaf24a9017aa9f6adfd9fde1b9b8359e53471",
-    "source_archive_sha256": "f4f29a05df47e5d238a66c9ddea09f8d199311d6350c806e86630b2649bacab5",
+    "version": "0.1.55",
+    "source_commit": "7662261e47a1d4680502ffcaaa76d64ccc556902",
+    "source_archive_sha256": "88117af57ef53fee156042e8ddb3a8350f0ef173e95eaf0d582158b920f0173d",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -128,10 +128,10 @@
     },
     {
       "schema": "chemi-resolver-prod",
-      "migrated": 43,
+      "migrated": 42,
       "total": 46,
       "banned": 3,
-      "remaining": 0
+      "remaining": 1
     },
     {
       "schema": "chemi-safety-prod",
@@ -4365,7 +4365,7 @@
     },
     {
       "schema": "schema/chemi-stdizer-prod.json",
-      "binding_schema": "schema/chemi-stdizer-reviewed-protocol-search.json",
+      "binding_schema": "schema/chemi-stdizer-prod.json",
       "operation": "POST /api/stdizer/protocols/{id}",
       "wrapper": "chemi_stdizer_protocols_by_id_post",
       "file": "R/chemi_stdizer_protocols_by_id_post.R",
@@ -4401,7 +4401,7 @@
     },
     {
       "schema": "schema/chemi-stdizer-prod.json",
-      "binding_schema": "schema/chemi-stdizer-reviewed-protocol-get.json",
+      "binding_schema": "schema/chemi-stdizer-prod.json",
       "operation": "GET /api/stdizer/protocols/{id}",
       "wrapper": "chemi_stdizer_protocols_by_id_get",
       "file": "R/chemi_stdizer_protocols_by_id_get.R",
@@ -4424,15 +4424,6 @@
       "wrapper": "chemi_descriptors_bulk",
       "file": "R/chemi_descriptors.R",
       "suite": "tests/testthat/test-native_descriptor_ownership.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-resolver-prod.json",
-      "binding_schema": "schema/chemi-resolver-reviewed-similarity.json",
-      "operation": "POST /api/resolver/getsimilaritylist",
-      "wrapper": "chemi_resolver_getsimilaritylist",
-      "file": "R/chemi_resolver_getsimilaritylist.R",
-      "suite": "tests/testthat/test-similarity_list.R",
       "migrated": true
     }
   ]

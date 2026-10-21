@@ -318,16 +318,6 @@ descriptor_aggregate_get_response <- function(operation) quote(function(response
   .ct_static_json_result(response, context, decode, state$request$endpoint)
 })
 
-# Project resolved inputs onto the independently verified similarity wire contract.
-similarity_list_body <- function(operation) {
-  fields <- setdiff(names(operation$schema_body$properties), c("main", "_chemicals"))
-  values <- as.call(c(list(quote(base::list)), stats::setNames(lapply(fields,
-    function(name) call("[[", as.name("params"), name)), fields)))
-  substitute(c(list(main = params[["reference_chemical"]],
-    `_chemicals` = params[["candidate_chemicals"]]), Filter(Negate(is.null), OPTIONS)),
-    list(OPTIONS = values))
-}
-
 # Canonical ToxPrint bulk body, validated after each client-side input chunk.
 toxprints_canonical_body <- function(operation) {
   substitute(.api_validation$body_value(

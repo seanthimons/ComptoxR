@@ -9,13 +9,12 @@
   cleanup and environment-controlled chunks. Results have one row per chemical,
   with numeric descriptor vectors retained in a list-column (#353).
 
-- Rebuild `chemi_resolver_getsimilaritylist` with Specmill. `main` is one reference
-  identifier and `query` is the candidate set; both resolve separately. Explicit
-  Indigo/Tanimoto defaults and the verified `_chemicals` request replace the
-  broken legacy contract. Remove the schema-artifact `get_chemicals` argument.
+- Remove `chemi_resolver_getsimilaritylist`: the production schema's request body
+  is not compliant, so the operation is deferred in Specmill until upstream
+  fixes it (seanthimons/specmill#165). No wrapper is generated meanwhile.
 
 - Exclude resolver `getpubchemlist` and remove its public wrapper pending an
-  established end-user purpose (#358). Similarity-list remains held.
+  established end-user purpose (#358).
 
 - Exclude the two AMOS XLSX batch exports pending a concrete end-user need,
   removing `chemi_amos_batch` and `chemi_amos_analytical_qc_batch` (#357).

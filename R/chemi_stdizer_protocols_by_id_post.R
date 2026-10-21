@@ -28,12 +28,12 @@ chemi_stdizer_protocols_by_id_post <- function(id, page = NULL, size = NULL, sor
     base::list("id" = id, "page" = page, "size" = size, "sort" = sort),
     list(
       id = list(type = "string"),
-      page = list(format = "int32", minimum = 0L, type = "integer"),
-      size = list(format = "int32", minimum = 1L, type = "integer"),
-      sort = list(items = list(type = "string"), type = "array")
+      page = list(type = "integer", description = "page", minimum = 0L),
+      size = list(type = "integer", description = "size", minimum = 1L),
+      sort = list(type = "array", description = "sort", items = list(type = "string"))
     ),
     .api_validation$body_value,
-    c(id = "path", page = "query", size = "query", sort = "query")
+    c(id = "path", page = "client", size = "client", sort = "client")
   )
   if (base::missing(body)) {
     base::stop("Required body")
@@ -64,12 +64,6 @@ chemi_stdizer_protocols_by_id_post <- function(id, page = NULL, size = NULL, sor
     if (base::is.null(body)) body <- jsonlite::unbox(NA)
   }
   params <- base::list("id" = id, "page" = page, "size" = size, "sort" = sort, "body" = body)
-  if (base::is.character(params[["page"]]) && base::any(!base::nzchar(params[["page"]]))) {
-    base::stop("Empty query parameter: page")
-  }
-  if (base::is.character(params[["size"]]) && base::any(!base::nzchar(params[["size"]]))) {
-    base::stop("Empty query parameter: size")
-  }
   result <- .ct_request(
     "method" = "POST",
     "path" = "/api/stdizer/protocols/{id}",

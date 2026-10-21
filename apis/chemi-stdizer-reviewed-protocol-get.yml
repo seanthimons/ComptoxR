@@ -2,7 +2,7 @@
   "id": "chemi-stdizer-reviewed-protocol-get",
   "schemas": {
     "files": [
-      "schema/chemi-stdizer-reviewed-protocol-get.json"
+      "schema/chemi-stdizer-prod.json"
     ]
   },
   "selection": {
@@ -209,6 +209,28 @@
               }
             ]
           }
+        }
+      },
+      "exclude_parameters": [
+        "pageable"
+      ],
+      "extra_parameters": {
+        "page": {
+          "type": "integer",
+          "minimum": 0,
+          "default": null
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "default": null
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
         }
       }
     }

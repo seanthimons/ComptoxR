@@ -55,9 +55,9 @@ chemi_stdizer_protocols_by_id_get <- function(
       changed = list(type = "boolean"),
       failed = list(type = "boolean"),
       passed = list(type = "boolean"),
-      page = list(format = "int32", minimum = 0L, type = "integer"),
-      size = list(format = "int32", minimum = 1L, type = "integer"),
-      sort = list(items = list(type = "string"), type = "array")
+      page = list(type = "integer", description = "page", minimum = 0L),
+      size = list(type = "integer", description = "size", minimum = 1L),
+      sort = list(type = "array", description = "sort", items = list(type = "string"))
     ),
     .api_validation$body_value,
     c(
@@ -67,9 +67,9 @@ chemi_stdizer_protocols_by_id_get <- function(
       changed = "query",
       failed = "query",
       passed = "query",
-      page = "query",
-      size = "query",
-      sort = "query"
+      page = "client",
+      size = "client",
+      sort = "client"
     )
   )
   params <- base::list(
@@ -97,12 +97,6 @@ chemi_stdizer_protocols_by_id_get <- function(
   }
   if (base::is.character(params[["passed"]]) && base::any(!base::nzchar(params[["passed"]]))) {
     base::stop("Empty query parameter: passed")
-  }
-  if (base::is.character(params[["page"]]) && base::any(!base::nzchar(params[["page"]]))) {
-    base::stop("Empty query parameter: page")
-  }
-  if (base::is.character(params[["size"]]) && base::any(!base::nzchar(params[["size"]]))) {
-    base::stop("Empty query parameter: size")
   }
   result <- .ct_request(
     "method" = "GET",

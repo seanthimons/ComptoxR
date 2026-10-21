@@ -1108,7 +1108,7 @@
       "operations": "chemi-stdizer-unbound POST /api/stdizer/protocols/{id}/export"
     },
     "R/chemi_stdizer_protocols_by_id_get.R": {
-      "hash": "2a0bee95d274a8e1d890454675c554cc191b3571b17f1867951b4099dabd643c",
+      "hash": "ff4ec23265ae470916a7d8c5fa25ccb9073e32e73c7f76ad48bc1d285dc47f8f",
       "operations": "chemi-stdizer-reviewed-protocol-get GET /api/stdizer/protocols/{id}"
     },
     "R/chemi_stdizer_protocols_by_id_issues.R": {
@@ -1116,7 +1116,7 @@
       "operations": "chemi-stdizer-unbound GET /api/stdizer/protocols/{id}/issues"
     },
     "R/chemi_stdizer_protocols_by_id_post.R": {
-      "hash": "048085859a45338bc305d9982193027276088253636fda7816ed534792217223",
+      "hash": "aa40453bf18dff0b7317a6acbabcb00049df3b5924317416ecf8f7aa9d5d9751",
       "operations": "chemi-stdizer-reviewed-protocol-search POST /api/stdizer/protocols/{id}"
     },
     "R/chemi_stdizer_protocols_check.R": {
@@ -2712,11 +2712,11 @@
       "operations": "epi-suite-prod-rebuild POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.54",
+  "toolkit_version": "0.1.55",
   "inputs": {
     "DESCRIPTION": "bb3e81d022b20548f38f7983245cd411536acefdb58ec8164b53c4f3b6214ab7",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
-    "NAMESPACE": "ac1024c2353111603eb4634ba5d28b9fc0baa62a4da56ea28e04521873d64416",
+    "NAMESPACE": "ec5588d2d249e4a62b33ef3fbe4b91131b1772f483becb36434cfe65d2d1652d",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
     "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
@@ -2920,7 +2920,6 @@
     "R/chemi_resolver_getannotationslist.R": "6eb7a69b398d7cd188f5648b041fc74dde7704616a7b5e9afb2b43f827007fc9",
     "R/chemi_resolver_getdatasources.R": "251347182f0b85bece20835de00c86b17bb0f97b5f307509f8cf0438bb1be2d1",
     "R/chemi_resolver_getintegrityreports.R": "5827bf98f4bffc424f4a8c7e83267ad7febd141453cad98da21fda2262613e8f",
-    "R/chemi_resolver_getsimilaritylist.R": "22c153a52d01278e6c5b555680dc6df70bb4da83f9461a1aadfda783a1cedab7",
     "R/chemi_resolver_getsimilaritymap.R": "4deb9f373684a9ddc719b5049c17f4d806d7d91e4b1bcda708dea094f6f3e005",
     "R/chemi_resolver_getsubstance.R": "d758f6c5932c369f155ce1c2de0a106c9353ceb6efa500e30bf9d76ec680b512",
     "R/chemi_resolver_ghs_classes.R": "7019197f1bdca723e1b722c6eeb3b3b0adce254335b9d522f482f6e149a3b032",
@@ -2988,9 +2987,9 @@
     "R/chemi_stdizer_protocols.R": "a85a0b9a5bcb0711deb306b4b4a72154207c058d3233253c15954a5f1603b9f3",
     "R/chemi_stdizer_protocols_by_id_changes.R": "2c92f3f26e682abf18c91b2317e762c46485bdbc435668c8afe99f17cc69e095",
     "R/chemi_stdizer_protocols_by_id_export_post.R": "973893e69cde32d86521f3aeae46f6086d0b1c0e47dda87ed73bbe80e20a7418",
-    "R/chemi_stdizer_protocols_by_id_get.R": "2a0bee95d274a8e1d890454675c554cc191b3571b17f1867951b4099dabd643c",
+    "R/chemi_stdizer_protocols_by_id_get.R": "ff4ec23265ae470916a7d8c5fa25ccb9073e32e73c7f76ad48bc1d285dc47f8f",
     "R/chemi_stdizer_protocols_by_id_issues.R": "4eded62e01a1dbddab32ad918f535ba66c69bf992ea860a23852bf57e22ddb65",
-    "R/chemi_stdizer_protocols_by_id_post.R": "048085859a45338bc305d9982193027276088253636fda7816ed534792217223",
+    "R/chemi_stdizer_protocols_by_id_post.R": "aa40453bf18dff0b7317a6acbabcb00049df3b5924317416ecf8f7aa9d5d9751",
     "R/chemi_stdizer_protocols_check.R": "9c29ce1ddf164de32062e6ff3598bf3e8c5c0835a9287c690554a074b21d725c",
     "R/chemi_stdizer_protocols_post.R": "d76a6a43aab61b3531c17be9f0a357d03848cad308828746fb46f8c7dbe05ad3",
     "R/chemi_stdizer_records.R": "a4e1a055d690803bc3e429abbbcaec9dd04b94822057cd0c1ae43cddcaab2386",
@@ -3177,7 +3176,6 @@
     "R/hooks_list.R": "6f92d7ba988fd37d68006f50eed0286854c56c2a81597c3d9ca04bb1c2be4167",
     "R/hooks_property.R": "ed4fe401fdc72e4c390ab495667c7e410f5472967d49b782d35a7243a9fbfcc2",
     "R/hooks_search.R": "fbab4456a1dbbe7cb895e736b6425391d88dc535e73530fb5dff9b8ce0d8ecb0",
-    "R/hooks_similarity_list.R": "5598bf44119e96a7f5637b430686875dce4b5e20ac8e8f60086d5f07c32942fa",
     "R/hooks_validation.R": "38fada5f966ce47ba92879c834917507c4b7ac97b1c84f6c3943bcbe573efe89",
     "R/hooks_webtest.R": "1c468c0eb47b9b836cf7742746f7ddd40d8ab4c64f7c9aa109d755f1b5883d9b",
     "R/input_policy.R": "9e5b0e0c15faa0cbca4d35c5f5ae0a1d3a7e7ee8abcac15fdd9f63521479e3c0",
@@ -3237,9 +3235,8 @@
     "apis/chemi-released-chet-facades.yml": "abf46aa41dba75f1e377ecd3c745ba57f1df5c3b88f9bf7539a0341850bc2047",
     "apis/chemi-resolver-extra.yml": "2b29a92b4c249eb852b9d35722c8c3251ae38f27ea191b51c48608427980ad9f",
     "apis/chemi-resolver-prod-full.yml": "4f05aa84449e309c26befe4afa2ab1ef6efd16e5e3f9a171c3db585c9c1ce0d2",
-    "apis/chemi-resolver-prod-rebuild.yml": "5b4159659989ce59e3934a15d652be0ec74ee7172e5d35cafbdbd163f267406f",
+    "apis/chemi-resolver-prod-rebuild.yml": "fba2f4072a2da5c0843e1a8256c44a35c3767b715babc34537d62dd8b4e7d93e",
     "apis/chemi-resolver-remaining-facade.yml": "6ff1c0b834fc8eb521567aa4d4179cf3828c81f1e9f4365071a1feb5f4bf51e9",
-    "apis/chemi-resolver-reviewed-similarity.yml": "171e2d0f8ff7384ffb3a0d53109dc0c8040e860f304c8ae147ea4c359cefea08",
     "apis/chemi-safety-prod-rebuild.yml": "77af33fdbc94082a399b2d5f8dc6f1fe8814acad2064d65992d8fdbd423b1fa2",
     "apis/chemi-search-prod-rebuild.yml": "ba2efd138cdf1e437cfd4b6ef9ca484b098d0b17c1e169588b61419c05461168",
     "apis/chemi-search-services-native.yml": "5a3d71c6ee3131aa78c2a34b50c120c2329546d653b7e5f3fb5bafae778eca67",
@@ -3249,8 +3246,8 @@
     "apis/chemi-small-families.yml": "c668b706e108652aafe67d40fe08d616ffca019948c2484d4b5623d116ff9b23",
     "apis/chemi-stdizer-prod-full.yml": "517ead2f835f1affee8d6912af285a0272e0e0008e66b42cc5b62f96107cf514",
     "apis/chemi-stdizer-prod-rebuild.yml": "423439c7674ed1c3f5a496937ad33ad88bbd650151188f44551240b2661d4a2f",
-    "apis/chemi-stdizer-reviewed-protocol-get.yml": "3a5cc1ac4e46067d92efaeea249b070d427f953a33e94a2fee078b74c499a676",
-    "apis/chemi-stdizer-reviewed-protocol-search.yml": "bff3a33879ea5b85e9ac2a209e108de52267abc7298683cb9f040d5516c73b20",
+    "apis/chemi-stdizer-reviewed-protocol-get.yml": "e9c4d56871316007a7570dabbea27ad7b6acc417d3c5aadccd39bc8b2d081103",
+    "apis/chemi-stdizer-reviewed-protocol-search.yml": "9f80d4c8810bddf4a5688af51b46e792efc5b6ef180562db74ec4a81b80b7d4e",
     "apis/chemi-stdizer-unbound.yml": "5b11a866cd03c9bc41b9ea97ea502718273afe471b13ad4d30336a8d2a5f1640",
     "apis/chemi-toxprint-prod-rebuild.yml": "a5245e2e2162fa79e4c4ed97725e8458d7b02e51a7e83595f2fd9eb5e5d54022",
     "apis/chemi-toxprints-prod-full.yml": "5fbc59451675b0ef94a35718f9698d99cc7b1b98cf74862c318acf4ed330a434",
@@ -3286,12 +3283,12 @@
     "dev/specmill-rebuild/released-facades-v42/callbacks.R": "a0b57fc327d0e7a075ca1d77cb14faf6d998172a304464c67015d1e82f0aae9d",
     "dev/specmill-rebuild/remaining-facades/callbacks.R": "7ef49143d04265a41fbbc5eb96c255a043fc4fc35a6352ad9e4118a9c481d41f",
     "dev/specmill-rebuild/rootheldrelease/callbacks.R": "79d6d1aa570944af649cde36429069c6aa8d3970979bdb8be2167c0e8f87907a",
-    "dev/specmill_callbacks.R": "6dc05e809db423f2ff5340bf633eaec51478f0fc669175d11b3758dc7f91df77",
+    "dev/specmill_callbacks.R": "0d03499624c1889b9b5e5a627606e149316c9b7992fb4524624e1c3cbf38e78c",
     "dev/specmill_pubchem_callbacks.R": "5a2f97f019896740ddccd254c079960048bee3c62b9db8883a6851007ba225a2",
     "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
-    "inst/hook_config.yml": "5bbe1612671b0526d6e582e6e7c89fee227270ee838b810823f215f26220ee58",
+    "inst/hook_config.yml": "86d8a906934996818cb3a1d8702c1bc08af379d6845602e91cc91345126e65db",
     "inst/hook_config_generated.yml": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "inst/plumber/ctx/plumber.R": "40fa4dcaf1112fd0bdafd84816589f45931de5f6d34bd052bdabc0cd553a8504",
     "inst/plumber/ecotox/plumber.R": "f596a01091c3ce57c21b711edd306d6454fa7ff35e3fc202d61de1092022af2e",
@@ -3517,7 +3514,6 @@
     "man/chemi_resolver_getannotationslist.Rd": "b4cf2321241f5cf6877685fe34fabbe7a7153c98859457e7adf6e13c94eddcb0",
     "man/chemi_resolver_getdatasources.Rd": "6b8d50f897bd2fdce7e97a5d29c995563eb1ad3149967e0ff831bf121779191b",
     "man/chemi_resolver_getintegrityreports.Rd": "3e0f45382c7b23c83abe43dba8cb94d6ad4a2ca2e719bfc0c333cad0fad65008",
-    "man/chemi_resolver_getsimilaritylist.Rd": "2badbc8105d0dad7c06e2e7c72f46247fad42521c5dd1d863f45abec513f87a7",
     "man/chemi_resolver_getsimilaritymap.Rd": "aab9813fa7807986e776a6b3480cd803f203fa7bb83da32c257060405443fede",
     "man/chemi_resolver_getsubstance.Rd": "3021e0db962051b9fd6964b3c3ea0d5af77d73c177215e200bdf35db40314a53",
     "man/chemi_resolver_ghs_classes.Rd": "b5b0d774e8896432a465d8a68aed44c611ac2c9454e8f69f6b0cc841b65ae9af",
@@ -3892,14 +3888,11 @@
     "schema/chemi-predictor_models-prod.json": "0a532b11aa276c3bec6c2bb79b95419d102afcf8639b51e6ca084ca50c3b5c52",
     "schema/chemi-rdkit-prod.json": "51ee6ddb5658d436e4e05d407bb909df7b3d6692230fd7a3c8a1506574f90e6b",
     "schema/chemi-resolver-prod.json": "7d79ad2a089ee69934275717dfce241f0b650ff707a5538bb4465bfcae9d8766",
-    "schema/chemi-resolver-reviewed-similarity.json": "0ec836d4d2f3391eab7dd3896564fd24e7968e10accd43ebab053f495417fb87",
     "schema/chemi-safety-prod.json": "692b6b22c765f3c2b749a47c42930d12a338b338693254dbbc3bb96a8d0c0efa",
     "schema/chemi-search-prod.json": "b23315d3dfaf35c7f62c5e646ec55d835d027b72e61e3b83843a2f3c8cf49526",
     "schema/chemi-services-prod.json": "373d3b6bf3e9f62615785053341bc19625c0b2f9fb5ae748733f716449fbf010",
     "schema/chemi-services-reviewed-preflight.json": "5a00fb9bd8a87def42aba601dde5ddb2b26f805865da6704fbaeefc8a9319f16",
     "schema/chemi-stdizer-prod.json": "ba0b33f97722645015547f86999a67a71bdaec3c97e6fedf2631dd6c90aeb93f",
-    "schema/chemi-stdizer-reviewed-protocol-get.json": "8de6bb73c3a88cd395acd2f56b65ebbca2b363447463c152253a7ace8c730596",
-    "schema/chemi-stdizer-reviewed-protocol-search.json": "a652f35fc4a0d5a775e84597468dc19e685cbd511e1a055f372e4a9370a68494",
     "schema/chemi-toxprints-prod.json": "ec06631508780ed4b0accc3afc4f1c2afa7d6dd86aafd97039c8d90693ee70da",
     "schema/chemi-webtest-prod.json": "1f09783af1a8084952b6f2e448f4e672fb1a25c98154e525a1b1b922f1f9fcf3",
     "schema/ctx-bioactivity-prod.json": "f4464f8b3cef99c4447a0b5db905d71475a8ff4e5804d61324cb85d72d37c3f5",
@@ -3908,12 +3901,12 @@
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
     "schema/pubchem-reviewed.json": "ec4ee5c2c6b10c63248dfaa2f6f1b3198b6b6ebe9cfb11422d52de3adead5a9e",
-    "specmill.yml": "72d738fc0b613015a85594184bf879ae3a1fcc24c1dfbe80ab705d7c2643e79b",
+    "specmill.yml": "297f23f70d7f31d9872ebe618b3e00b98234ff2d9f1a45582a364feebb867b9e",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "f7960566d986fd1a6520eac1973dbf1a2279af9f3e14094464a2b13f4ed90936",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "a45adf4f0c751a35de59bd918174103fd227f1ee440d558cae756f94e629e1a5",
     "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "6ec1fc8f2a54b3de7bb5d700128ac78cb4ab8c9ed93f0e8a82ad7b16ad5be022"
   },
-  "callbacks": "267604cfb0f6981e8e58b008a14e3c5111a961ff2bf1f3b10a1a998511496cdd",
+  "callbacks": "049d167e5d8e2237dea2cbea283e5ac4ae43ea367db902ff6c2ec8b903f0d81b",
   "formatter": {
     "name": "air",
     "version": "0.11.0"
@@ -5011,6 +5004,9 @@
         ],
         "POST /api/resolver/exportsimilaritymap": [
           "chemi_resolver_exportsimilaritymap"
+        ],
+        "POST /api/resolver/getsimilaritylist": [
+          "getSimilarityList"
         ]
       }
     },
@@ -5139,6 +5135,12 @@
         ],
         "GET /api/stdizer/render": [
           "chemi_stdizer_render"
+        ],
+        "POST /api/stdizer/protocols/{id}": [
+          "chemi_stdizer_protocols_by_id_post"
+        ],
+        "GET /api/stdizer/protocols/{id}": [
+          "chemi_stdizer_protocols_by_id_get"
         ]
       }
     },
@@ -6036,26 +6038,6 @@
         ]
       }
     },
-    "schema/chemi-stdizer-reviewed-protocol-search.json": {
-      "keys": [
-        "POST /api/stdizer/protocols/{id}"
-      ],
-      "functions": {
-        "POST /api/stdizer/protocols/{id}": [
-          "chemi_stdizer_protocols_by_id_post"
-        ]
-      }
-    },
-    "schema/chemi-stdizer-reviewed-protocol-get.json": {
-      "keys": [
-        "GET /api/stdizer/protocols/{id}"
-      ],
-      "functions": {
-        "GET /api/stdizer/protocols/{id}": [
-          "chemi_stdizer_protocols_by_id_get"
-        ]
-      }
-    },
     "schema/pubchem-reviewed.json": {
       "keys": [
         "GET /compound/{namespace}/{query}/cids/JSON",
@@ -6076,16 +6058,16 @@
           "pubchem_synonyms"
         ]
       }
-    },
-    "schema/chemi-resolver-reviewed-similarity.json": {
-      "keys": [
-        "POST /api/resolver/getsimilaritylist"
-      ],
-      "functions": {
-        "POST /api/resolver/getsimilaritylist": [
-          "chemi_resolver_getsimilaritylist"
-        ]
-      }
+    }
+  },
+  "deferrals": {
+    "chemi-resolver-prod-rebuild POST /api/resolver/getsimilaritylist": {
+      "key": "POST /api/resolver/getsimilaritylist",
+      "source": "schema/chemi-resolver-prod.json",
+      "reason": "Prod body schema includes chemicals/get_chemicals the service rejects; deferred until upstream fixes (specmill#165)",
+      "fingerprint": "v1:5d60da2bcc3d9a07aeb26f93741303e9bb94318b49b0508485bdf0435cb91ba4",
+      "version": 1,
+      "functions": "getSimilarityList"
     }
   }
 }

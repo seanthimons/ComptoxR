@@ -3,8 +3,9 @@ schemas:
   files:
   - schema/chemi-resolver-prod.json
 # #358: POST /api/resolver/getpubchemlist is banned without an established
-# end-user purpose or reviewed implementation. Similarity-list is mapped in
-# chemi-resolver-reviewed-similarity.yml using its verified wire contract.
+# end-user purpose or reviewed implementation. POST getsimilaritylist is
+# included but enrolled as deferred (#165): the prod schema's body is not
+# compliant, so no wrapper is generated until upstream changes it.
 selection:
   include:
   - GET /api/resolver/ccte-list
@@ -19,6 +20,7 @@ selection:
   - GET /api/resolver/mesh
   - POST /api/resolver/lookup
   - POST /api/resolver/resolve
+  - POST /api/resolver/getsimilaritylist
   - POST /api/resolver/getsimilaritymap
   - GET /api/resolver/safety-flags
   - GET /api/resolver/pubchem-section
