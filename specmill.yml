@@ -70,7 +70,6 @@ services:
 - apis/ctx-list-name.yml
 - apis/chemi-chet-direct-reads.yml
 - apis/chemi-service-info.yml
-- apis/chemi-chet-chemical-dl-reviewed.yml
 - apis/chemi-management.yml
 - apis/chemi-chet-extra.yml
 - apis/chemi-resolver-remaining-facade.yml

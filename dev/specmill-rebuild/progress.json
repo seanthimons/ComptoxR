@@ -1,5 +1,5 @@
 {
-  "commit": "9e5a297a36bced828c9153fa779095fe45a8049b",
+  "commit": "5a809f97dc855feee35d30589789a491c4a31c5b",
   "legacy_callers": [
     {
       "wrapper": "ct_related",
@@ -51,10 +51,10 @@
     },
     {
       "schema": "chemi-chet-prod",
-      "migrated": 65,
+      "migrated": 64,
       "total": 95,
       "banned": 30,
-      "remaining": 0
+      "remaining": 1
     },
     {
       "schema": "chemi-descriptors-prod",
@@ -3524,15 +3524,6 @@
       "wrapper": "chemi_webtest_version",
       "file": "R/chemi_webtest_version.R",
       "suite": "tests/testthat/test-native_service_info.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-chet-prod.json",
-      "binding_schema": "schema/chemi-chet-chemical-dl-reviewed.json",
-      "operation": "GET /chemicals/chemical_DL",
-      "wrapper": "chemi_chet_chemicals_chemical_dl",
-      "file": "R/chemi_chet_chemicals_chemical_dl.R",
-      "suite": "tests/testthat/test-native_chet_chemical_dl.R",
       "migrated": true
     },
     {

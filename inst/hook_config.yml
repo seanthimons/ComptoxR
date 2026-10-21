@@ -972,8 +972,6 @@ chemi_chet_curators_me:
 chemi_chet_chemicals_chemtemp:
   bespoke_test: tests/testthat/test-native_chet_direct_reads.R
 
-chemi_chet_chemicals_chemical_dl:
-  bespoke_test: tests/testthat/test-native_chet_chemical_dl.R
 chemi_hazard_download:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_report_export:

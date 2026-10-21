@@ -15,6 +15,10 @@
   `chemi_amos_for_document_ids`). They are deferred in Specmill until the upstream
   schema is fixed; no hand-edited schema overlays are kept for them.
 
+- Remove `chemi_chet_chemicals_chemical_dl()`. The production schema marks the GET body
+  optional but the deployed service rejects a bodyless GET, so it is deferred in Specmill.
+  `chemi_chet_chemicals_chemical_dl_post()` is unchanged.
+
 - Remove `chemi_resolver_getsimilaritylist`: the production schema's request body
   is not compliant, so the operation is deferred in Specmill until upstream
   fixes it (seanthimons/specmill#165). No wrapper is generated meanwhile.
