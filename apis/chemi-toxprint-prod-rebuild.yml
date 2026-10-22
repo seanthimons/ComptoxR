@@ -2,6 +2,9 @@ id: chemi-toxprint-prod-rebuild
 schemas:
   files:
   - schema/chemi-toxprints-prod.json
+# Include list on purpose: chemi-toxprints-prod-rebuild also maps POST /api/toxprints/calculate
+# (chemi_toxprints_calculate_bulk). Under opt-out selection only one service can claim the
+# operation, so the single-chemical and bulk wrappers stay on explicit include lists.
 selection:
   include:
   - POST /api/toxprints/calculate

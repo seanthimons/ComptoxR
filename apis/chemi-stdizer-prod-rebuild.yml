@@ -3,9 +3,7 @@ schemas:
   files:
   - schema/chemi-stdizer-prod.json
 selection:
-  include:
-  - POST /api/stdizer/records
-  - POST /api/stdizer/chemicals
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

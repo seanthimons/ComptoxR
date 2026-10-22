@@ -2,30 +2,12 @@ id: chemi-resolver-prod-rebuild
 schemas:
   files:
   - schema/chemi-resolver-prod.json
-# #358: POST /api/resolver/getpubchemlist is banned without an established
-# end-user purpose or reviewed implementation. POST getsimilaritylist is
-# included but enrolled as deferred (#165): the prod schema's body is not
+# #358: POST /api/resolver/getpubchemlist is banned by the exclude rule in specmill.yml
+# without an established end-user purpose or reviewed implementation. POST getsimilaritylist
+# is selected (unclaimed) but enrolled as deferred (#165): the prod schema's body is not
 # compliant, so no wrapper is generated until upstream changes it.
 selection:
-  include:
-  - GET /api/resolver/ccte-list
-  - GET /api/resolver/classyfire
-  - GET /api/resolver/getannotation
-  - GET /api/resolver/getannotationslist
-  - GET /api/resolver/getsubstance
-  - GET /api/resolver/ghs-list
-  - GET /api/resolver/links
-  - GET /api/resolver/lookup
-  - GET /api/resolver/lookupCASRN
-  - GET /api/resolver/mesh
-  - POST /api/resolver/lookup
-  - POST /api/resolver/resolve
-  - POST /api/resolver/getsimilaritylist
-  - POST /api/resolver/getsimilaritymap
-  - GET /api/resolver/safety-flags
-  - GET /api/resolver/pubchem-section
-  - POST /api/resolver/orderBySimilarity
-  - POST /api/resolver/pubchem-section
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:
