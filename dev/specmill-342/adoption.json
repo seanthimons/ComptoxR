@@ -78,13 +78,13 @@
     "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
   },
   "current_adoption": {
-    "reviewed_at": "2026-10-21",
-    "base_commit": "0f54d1614bcca84e9ec331add3ad6e46541913bc",
+    "reviewed_at": "2026-10-22",
+    "base_commit": "af4c0f71caa13c918cb8a783106a86de8cf40251",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.55",
-      "source_commit": "7662261e47a1d4680502ffcaaa76d64ccc556902",
-      "source_archive_sha256": "88117af57ef53fee156042e8ddb3a8350f0ef173e95eaf0d582158b920f0173d",
+      "version": "0.1.56",
+      "source_commit": "d0ae3f22900f4399f121f42c969bb7427d4f63bb",
+      "source_archive_sha256": "e4b13520da98545ac812e20a9cfe3a4b9c81a6748f8ada09edd4e995297dab8e",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -93,7 +93,7 @@
       "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
       "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
     },
-    "review": "Official 0.1.55 scaffold emission and provenance checked by verify.R; adds extra_parameters minimum/maximum/items validation, no helper or facade change."
+    "review": "Official 0.1.56 scaffold emission and provenance checked by verify.R; adds opt-in prune of retired operation outputs, no helper or facade change."
   },
   "adoption_history": [
     {
@@ -527,6 +527,24 @@
         "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
       },
       "review": "Official 0.1.53 scaffold emission and provenance checked by verify.R; adds method-qualified selection.exclude and selection.unclaimed, no helper or facade change."
+    },
+    {
+      "reviewed_at": "2026-10-21",
+      "base_commit": "0f54d1614bcca84e9ec331add3ad6e46541913bc",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.55",
+        "source_commit": "7662261e47a1d4680502ffcaaa76d64ccc556902",
+        "source_archive_sha256": "88117af57ef53fee156042e8ddb3a8350f0ef173e95eaf0d582158b920f0173d",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.55 scaffold emission and provenance checked by verify.R; adds extra_parameters minimum/maximum/items validation, no helper or facade change."
     }
   ]
 }

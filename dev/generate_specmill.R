@@ -1,5 +1,5 @@
 # Pilot maintenance. Run from the package root; no runtime dependency on specmill.
-generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, deferrals = NULL) {
+generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, deferrals = NULL, prune = NULL) {
   mode <- match.arg(mode)
   source("dev/install_specmill.R", local = TRUE)
   verify_specmill()
@@ -20,6 +20,10 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, 
   }
   if (!is.null(deferrals)) {
     args$deferrals <- deferrals
+  }
+  if (!is.null(prune)) {
+    # Opt-in removal of a retired operation's owned output; --plan previews, --apply removes.
+    args$prune <- prune
   }
   plan <- do.call(specmill::generate_client, args)
   print(plan)
@@ -75,10 +79,10 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, 
 
 if (sys.nframe() == 0L) {
   args <- commandArgs(TRUE)
-  flags <- args[grepl("^--(enroll|clear)=", args)]
+  flags <- args[grepl("^--(enroll|clear|prune)=", args)]
   args <- setdiff(args, flags)
   if (length(args) != 1L || !args %in% c("--plan", "--check", "--apply")) {
-    stop("Usage: Rscript dev/generate_specmill.R --plan|--check|--apply [--enroll=<service METHOD path>=<reason>]... [--clear=<service METHOD path>]...")
+    stop("Usage: Rscript dev/generate_specmill.R --plan|--check|--apply [--enroll=<service METHOD path>=<reason>]... [--clear=<service METHOD path>]... [--prune=<service METHOD path>]...")
   }
   enroll <- sub("^--enroll=", "", flags[startsWith(flags, "--enroll=")])
   split <- regexpr("=", enroll, fixed = TRUE)
@@ -87,5 +91,7 @@ if (sys.nframe() == 0L) {
     enroll = if (length(enroll)) stats::setNames(substring(enroll, split + 1L), substr(enroll, 1L, split - 1L)),
     clear = sub("^--clear=", "", flags[startsWith(flags, "--clear=")])
   )
-  generate_specmill(sub("^--", "", args), deferrals = if (any(lengths(deferrals))) deferrals)
+  prune <- sub("^--prune=", "", flags[startsWith(flags, "--prune=")])
+  generate_specmill(sub("^--", "", args), deferrals = if (any(lengths(deferrals))) deferrals,
+    prune = if (length(prune)) prune)
 }
