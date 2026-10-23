@@ -51,7 +51,6 @@ ctx_api_key=YOUR_KEY_HERE
 Save the file and restart R. Then check the setup:
 
 ```{r}
-ct_api_key()
 run_setup()
 ```
 

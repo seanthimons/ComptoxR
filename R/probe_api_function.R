@@ -35,7 +35,7 @@ probe_api_function <- function(function_name, ...) {
     cli::cli_abort("{.arg function_name} must name an exported {.code chemi_*} or {.code ct_*} wrapper.")
   }
 
-  if (function_name %in% c("chemi_server", "ct_api_key", "ct_classify")) {
+  if (function_name %in% c("chemi_server", "ct_classify")) {
     cli::cli_abort("{.val {function_name}} is not an API wrapper.")
   }
 

@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+- **Breaking:** remove `ct_api_key()`. Wrappers and the startup/sitrep checks read the
+  `ctx_api_key` environment variable directly.
 - **Breaking:** remove the exported legacy transport helpers `generic_request()`
   and `generic_chemi_request()` (and the unexported `generic_search_request()` and
   `generic_pubchem_request()`). `ct_related()` and `ct_similar()` now call the

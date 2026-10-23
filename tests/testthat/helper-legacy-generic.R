@@ -356,7 +356,7 @@ local({
           body_media <- "application/json"
           headers <- list(Accept = content_type)
           if (auth) {
-            headers[["x-api-key"]] <- ct_api_key()
+            headers[["x-api-key"]] <- Sys.getenv("ctx_api_key")
           }
     
           # Implementation for POST requests (Typically bulk searches)
@@ -924,7 +924,7 @@ local({
       }
       headers <- list(Accept = content_type)
       if (auth) {
-        headers[["x-api-key"]] <- ct_api_key()
+        headers[["x-api-key"]] <- Sys.getenv("ctx_api_key")
       }
       req <- .ct_legacy_build(req, "POST", payload, headers)
     

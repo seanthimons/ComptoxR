@@ -140,7 +140,6 @@ test_that("probe reports wrappers whose HTTP status cannot be observed", {
 test_that("probe rejects unsupported and non-wrapper names", {
   expect_error(probe_api_function("chemi_not_real"), "No exported ComptoxR function")
   expect_error(probe_api_function("chemi_server"), "not an API wrapper")
-  expect_error(probe_api_function("ct_api_key"), "not an API wrapper")
   expect_error(probe_api_function(character()), "one non-empty function name")
 })
 
