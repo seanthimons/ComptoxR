@@ -1,0 +1,886 @@
+[
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "key": "POST /api/alerts/export",
+    "operationId": "exportPost",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ExportRequest"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_alerts_export"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "key": "POST /api/alerts/export-append",
+    "operationId": "exportAppendAlertsReportFromChemicals",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "properties": {
+              "alertRequest": {
+                "$ref": "#/components/schemas/AlertRequest"
+              },
+              "file": {
+                "format": "binary",
+                "type": "string"
+              }
+            },
+            "required": [
+              "alertRequest"
+            ],
+            "type": "object"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_alerts_export_append"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "key": "DELETE /api/alerts/groups/{id}",
+    "operationId": "groupDelete",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "description": "OK"
+      }
+    },
+    "name": "chemi_alerts_groups_delete_by_id"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "key": "PUT /api/alerts/groups/{id}",
+    "operationId": "groupUpdatePut",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/LibraryGroup"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "description": "OK"
+      }
+    },
+    "name": "chemi_alerts_groups_update_by_id"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "key": "PATCH /api/alerts/groups/{id}/freeze",
+    "operationId": "groupFreezePatch",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "freeze",
+        "required": false,
+        "schema": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      {
+        "in": "query",
+        "name": "hierarchically",
+        "required": false,
+        "schema": {
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "description": "OK"
+      }
+    },
+    "name": "chemi_alerts_groups_freeze_by_id"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "key": "GET /api/alerts/render",
+    "operationId": "render",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "smiles",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "smirks",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "format",
+        "required": false,
+        "schema": {
+          "default": "SVG",
+          "enum": [
+            "PNG",
+            "SVG"
+          ],
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "width",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      {
+        "in": "query",
+        "name": "height",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "image/png": {
+            "schema": {
+              "format": "byte",
+              "type": "string"
+            }
+          },
+          "image/svg+xml": {
+            "schema": {
+              "format": "byte",
+              "type": "string"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_alerts_render"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "GET /api/hazard/download",
+    "operationId": "downloadGet",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "file",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_download"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "POST /api/hazard/report/export",
+    "operationId": "reportExportPost",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/HazardExportRequest"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_report_export"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "POST /api/hazard/report/export-append",
+    "operationId": "exportAppendHazardReportFromChemicals",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "properties": {
+              "file": {
+                "format": "binary",
+                "type": "string"
+              },
+              "hazardRequest": {
+                "$ref": "#/components/schemas/HazardRequest"
+              }
+            },
+            "required": [
+              "hazardRequest"
+            ],
+            "type": "object"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_report_export_append"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "POST /api/hazard/report/export2",
+    "operationId": "reportExportPost2",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/HazardExportRequest"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_report_export2"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "GET /api/hazard/reports",
+    "operationId": "protocolsGet",
+    "parameters": [],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "items": {
+                "$ref": "#/components/schemas/Protocol"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "POST /api/hazard/reports",
+    "operationId": "reportCreatePost",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/HazardReport"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/HazardReport"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_create"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "GET /api/hazard/reports/check",
+    "operationId": "protocolCheckGet",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "name",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_check"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "DELETE /api/hazard/reports/{id}",
+    "operationId": "reportDelete",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_delete_by_id"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "GET /api/hazard/reports/{id}",
+    "operationId": "reportGet",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/HazardReport"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_by_id"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "PUT /api/hazard/reports/{id}",
+    "operationId": "reportUpdatePut",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/HazardReport"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/HazardReport"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_update_by_id"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "PUT /api/hazard/reports/{id}/acl",
+    "operationId": "assayAclUpdatePut",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ACL"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/ACL"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_acl_update_by_id"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "key": "POST /api/hazard/reports/{id}/export",
+    "operationId": "reportExportByIdPost",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/HazardExportRequest"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_hazard_reports_export_by_id"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "DELETE /api/toxprints/assays/{id}",
+    "operationId": "assayDelete",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_assays_delete_by_id"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "PUT /api/toxprints/assays/{id}",
+    "operationId": "assayUpdatePut",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/Assay"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Assay"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_assays_update_by_id"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "PUT /api/toxprints/assays/{id}/acl",
+    "operationId": "assayAclUpdatePut",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ACL"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ACL"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_assays_acl_update_by_id"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "GET /api/toxprints/download",
+    "operationId": "downloadGet",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "file",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_download"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/export",
+    "operationId": "exportAssayPost",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ExportGeneratedRequest"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_export"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/export_global",
+    "operationId": "exportGlobalAssaysPost",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ExportGlobalAssaysRequest"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_export_global"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "key": "GET /api/toxprints/render",
+    "operationId": "render",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "smiles",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "id",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      {
+        "in": "query",
+        "name": "profile",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "label",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "format",
+        "required": false,
+        "schema": {
+          "default": "SVG",
+          "enum": [
+            "PNG",
+            "SVG"
+          ],
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "width",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      {
+        "in": "query",
+        "name": "height",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    ],
+    "requestBody": null,
+    "responses": {
+      "200": {
+        "content": {
+          "*/*": {
+            "schema": {
+              "format": "byte",
+              "type": "string"
+            }
+          }
+        },
+        "description": "OK"
+      }
+    },
+    "name": "chemi_toxprints_render"
+  }
+]

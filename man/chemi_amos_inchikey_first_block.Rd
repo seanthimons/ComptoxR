@@ -7,10 +7,10 @@
 chemi_amos_inchikey_first_block(first_block)
 }
 \arguments{
-\item{first_block}{First block of an InChIKey.}
+\item{first_block}{First block of an InChIKey. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

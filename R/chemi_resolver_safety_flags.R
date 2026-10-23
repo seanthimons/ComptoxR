@@ -1,48 +1,9 @@
 #' Resolver Safety Flags
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param query Required parameter
-#' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
-#' @return Returns a list with result object
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_resolver_safety_flags(query = "DTXSID7020182")
-#' }
-chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
-  result <- generic_request(
-    endpoint = "resolver/safety-flags",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Resolver Safety Flags
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param additionalProps Optional parameter
+#' @param additionalProps Chemical metadata map. Supply a nonempty map together with the chemical fields.
 #' @param averageMass Optional parameter
 #' @param canonicalSmiles Optional parameter
 #' @param casrn Optional parameter
@@ -62,11 +23,11 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_safety_flags_bulk(additionalProps = "DTXSID1024122")
+#' chemi_resolver_safety_flags_bulk(additionalProps = list(source = "ComptoxR"), sid = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_resolver_safety_flags_bulk <- function(
   additionalProps = NULL,
   averageMass = NULL,
@@ -86,61 +47,102 @@ chemi_resolver_safety_flags_bulk <- function(
   smiles = NULL,
   request.filesInfo = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(averageMass)) {
-    options$averageMass <- averageMass
-  }
-  if (!is.null(canonicalSmiles)) {
-    options$canonicalSmiles <- canonicalSmiles
-  }
-  if (!is.null(casrn)) {
-    options$casrn <- casrn
-  }
-  if (!is.null(chemId)) {
-    options$chemId <- chemId
-  }
-  if (!is.null(cid)) {
-    options$cid <- cid
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(image)) {
-    options$image <- image
-  }
-  if (!is.null(inchi)) {
-    options$inchi <- inchi
-  }
-  if (!is.null(inchiKey)) {
-    options$inchiKey <- inchiKey
-  }
-  if (!is.null(mol)) {
-    options$mol <- mol
-  }
-  if (!is.null(molFormula)) {
-    options$molFormula <- molFormula
-  }
-  if (!is.null(monoisotopicMass)) {
-    options$monoisotopicMass <- monoisotopicMass
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(sid)) {
-    options$sid <- sid
-  }
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
-  }
-  result <- generic_chemi_request(
-    query = additionalProps,
-    endpoint = "resolver/safety-flags",
-    options = options,
-    tidy = FALSE
+  params <- base::list(
+    "additionalProps" = function() additionalProps,
+    "averageMass" = function() averageMass,
+    "canonicalSmiles" = function() canonicalSmiles,
+    "casrn" = function() casrn,
+    "chemId" = function() chemId,
+    "cid" = function() cid,
+    "id" = function() id,
+    "image" = function() image,
+    "inchi" = function() inchi,
+    "inchiKey" = function() inchiKey,
+    "mol" = function() mol,
+    "molFormula" = function() molFormula,
+    "monoisotopicMass" = function() monoisotopicMass,
+    "name" = function() name,
+    "sid" = function() sid,
+    "smiles" = function() smiles,
+    "request.filesInfo" = function() request.filesInfo
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/resolver/safety-flags",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = structure(list(), names = character(0)),
+    "body" = base::local({
+      body <- base::list(
+        averageMass = params[["averageMass"]](),
+        canonicalSmiles = params[["canonicalSmiles"]](),
+        casrn = params[["casrn"]](),
+        chemId = params[["chemId"]](),
+        cid = params[["cid"]](),
+        id = params[["id"]](),
+        image = params[["image"]](),
+        inchi = params[["inchi"]](),
+        inchiKey = params[["inchiKey"]](),
+        mol = params[["mol"]](),
+        molFormula = params[["molFormula"]](),
+        monoisotopicMass = params[["monoisotopicMass"]](),
+        name = params[["name"]](),
+        sid = params[["sid"]](),
+        smiles = params[["smiles"]](),
+        additionalProps = params[["additionalProps"]]()
+      )
+      value <- unique(as.vector(body[["additionalProps"]]))
+      value <- value[!is.na(value) & value != ""]
+      if (!length(value)) {
+        cli::cli_abort("Either query or chemicals parameter must be provided.")
+      }
+      body <- base::Filter(base::Negate(base::is.null), body)
+      body <- .api_validation$body_value(
+        body,
+        structure(
+          list(
+            properties = list(
+              additionalProps = list(additionalProperties = structure(list(), names = character(0)), type = "object"),
+              averageMass = list(format = "double", type = "number"),
+              canonicalSmiles = list(type = "string"),
+              casrn = list(type = "string"),
+              chemId = list(type = "string"),
+              cid = list(type = "string"),
+              id = list(type = "string"),
+              image = list(type = "string"),
+              inchi = list(type = "string"),
+              inchiKey = list(type = "string"),
+              mol = list(
+                type = "string"
+              ),
+              molFormula = list(type = "string"),
+              monoisotopicMass = list(format = "double", type = "number"),
+              name = list(type = "string"),
+              sid = list(type = "string"),
+              smiles = list(type = "string")
+            ),
+            type = "object"
+          ),
+          specmill_id = "#/components/schemas/Chemical"
+        )
+      )
+      if (TRUE) {
+        list(body)
+      } else {
+        body
+      }
+    }),
+    "headers" = list(Accept = "application/json"),
+    "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+    "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    "auth" = list(),
+    "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
+      context$endpoint <- "resolver/safety-flags"
+      .ct_chemi_result(response, context, decode, tidy = FALSE)
+    },
+    "request_controls" = list(preserve_errors = TRUE)
+  )
+  result
 }

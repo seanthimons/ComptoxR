@@ -1,0 +1,31 @@
+{
+  "specmill_version": "0.1.24",
+  "source_schema": "schema/epi-suite-prod.json",
+  "source_schema_sha256": "9600acaee2f82c502cece3b2d613ccdac85c2c60983d1b45125c19efe735cad3",
+  "checked_at_utc": "2026-10-17",
+  "cases": [
+    {
+      "operation": "https://episuite.dev/api/ecosar/dye",
+      "valid_request_url": "https://episuite.dev/api/ecosar/dye?molecularWeight=300&waterSolubility=100&ethoxylate=0",
+      "valid_status": 200,
+      "response_sha256": "cb204f81986ca4d0c58cca51bf08d0dd268939deee4468a87422df7e03c19356",
+      "zero_argument_status": 400
+    },
+    {
+      "operation": "https://episuite.dev/api/ecosar/polymer/nonionic",
+      "valid_request_url": "https://episuite.dev/api/ecosar/polymer/nonionic?solubilityType=INSOLUBLE&averageMolecularWeight=5000&mw500Percentage=5&mw1000Percentage=10",
+      "valid_status": 200,
+      "response_sha256": "337623c2742d93bbbb3ff188886a9b7fc65c3b85d183d4468e9ac452a763acb9",
+      "zero_argument_status": 400
+    },
+    {
+      "operation": "https://episuite.dev/api/ecosar/surfactant/nonionic",
+      "valid_request_url": "https://episuite.dev/api/ecosar/surfactant/nonionic?mainCarbons=12&waterSolubility=100&logKow=3&molecularWeight=250&ethoxylate=0&useSmiles=false",
+      "valid_status": 200,
+      "response_sha256": "26e486ae5ea774ab37cbd623f497b370d2766ffe516542a3ffc66dda8ba39a60",
+      "zero_argument_status": 400
+    }
+  ],
+  "formatting": "Captured production responses replay identically through legacy unwrap hook and generated native candidate.",
+  "api_change": "Expose declared calculation parameters on three previously zero-argument wrappers; polymer solubilityType and surfactant mainCarbons are required."
+}

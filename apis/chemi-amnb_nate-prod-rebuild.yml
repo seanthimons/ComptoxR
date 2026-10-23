@@ -1,0 +1,83 @@
+id: chemi-amnb_nate-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-amnb_nate-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: yes
+operations:
+  GET /api/amnb_nate:
+    name: chemi_amnb_nate
+    file: R/chemi_amnb_nate.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Amnb Nate
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/amnb_nate:
+    name: chemi_amnb_nate_bulk
+    file: R/chemi_amnb_nate.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      smiles:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/amnb_nate
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: classifier_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: ''
+        auth:
+          value: ~
+        response_policy:
+          value: .ct_prediction
+    docs:
+      title: Generate predictions for multiple molecules
+      lifecycle: experimental
+      parameters:
+        chemicals: Optional parameter
+        smiles: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - chemicals: DTXSID1024122
+      tags:
+        apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

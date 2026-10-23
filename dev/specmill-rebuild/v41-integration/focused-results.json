@@ -1,0 +1,23 @@
+{
+  "toolkit_version": "0.1.41",
+  "source": "05862bee1804806cea157ff1962300d741516301",
+  "assertions": 1607,
+  "suites": {
+    "chemi_descriptor_contracts": 98,
+    "chemi_descriptor_smiles_hooks": 8,
+    "hooks_hazard": 42,
+    "native_calculation": 433,
+    "native_chet_direct_reads": 148,
+    "native_ctx_list_name": 333,
+    "native_epi_distribution": 23,
+    "native_service_info": 522
+  },
+  "later_registration_assertions": 2,
+  "later_registration_replay": "PASS",
+  "initial_full_gates": "ENOSPC; retry with persistent TMPDIR",
+  "chet_direct_replay_assertions": 150,
+  "retained_root_assertions": {
+    "pubchem_retained_http": 77,
+    "retained_search_safety": 58
+  }
+}

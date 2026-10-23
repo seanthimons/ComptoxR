@@ -1,0 +1,39 @@
+{
+  "calls": 4,
+  "external_process_timeout_s": 45,
+  "candidate_timeout_s": 20,
+  "results": {
+    "chemi_descriptors": {
+      "rows": 1,
+      "metadata_columns": 10,
+      "descriptor_columns": 1024,
+      "fallback_used": true,
+      "source_endpoint": "rdkit",
+      "all_values_and_provenance_equal": true,
+      "warnings_equal": true,
+      "responses": [
+        {
+          "status": 200,
+          "url": "https://hcd.rtpnc.epa.gov/api/rdkit?smiles=CCO&type=ecfp&radius=3&bits=1024",
+          "media": "application/json"
+        }
+      ]
+    },
+    "chemi_descriptors_bulk": {
+      "rows": 1,
+      "metadata_columns": 10,
+      "descriptor_columns": 1024,
+      "fallback_used": true,
+      "source_endpoint": "rdkit",
+      "all_values_and_provenance_equal": true,
+      "warnings_equal": true,
+      "responses": [
+        {
+          "status": 200,
+          "url": "https://hcd.rtpnc.epa.gov/api/rdkit",
+          "media": "application/json"
+        }
+      ]
+    }
+  }
+}

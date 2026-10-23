@@ -1,0 +1,18 @@
+[
+  {
+    "endpoint": "chemi-resolver-reviewed-similarity POST /api/resolver/getsimilaritylist",
+    "parameter": "fingerprintName"
+  },
+  {
+    "endpoint": "chemi-resolver-reviewed-similarity POST /api/resolver/getsimilaritylist",
+    "parameter": "get_chemicals"
+  },
+  {
+    "endpoint": "chemi-resolver-reviewed-similarity POST /api/resolver/getsimilaritylist",
+    "parameter": "main"
+  },
+  {
+    "endpoint": "chemi-resolver-reviewed-similarity POST /api/resolver/getsimilaritylist",
+    "parameter": "scoreName"
+  }
+]

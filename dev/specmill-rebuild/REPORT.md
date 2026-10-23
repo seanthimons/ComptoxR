@@ -1,0 +1,1989 @@
+# Specmill public API client rebuild (#325)
+
+Work stays on `feat/specmill-migration-pilot`. Deletion experiments run only in
+detached worktrees under the ignored `dev/specmill-pilot/artifacts/rebuild-<commit>/`.
+Toolkit pin: specmill v0.1.8 `2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c`, archive SHA-256
+`6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091`. Air 0.11.0.
+
+## Generic request migration (#331)
+
+[The assessment in #331](https://github.com/seanthimons/ComptoxR/issues/331) inventories all four transport helpers
+and identifies the upstream ports needed before replacement: response policy,
+generated batch/pagination support, and plain-text bodies. Existing native
+serialization, authentication, form encoding, and retry controls can be reused.
+The helpers remain client-owned while compatibility is verified; #331 is open.
+The installed-client verifier now checks internal search/PubChem transport and
+all four helper signatures as well as exported wrapper contracts.
+
+## Preservation inventory (#326)
+
+`Rscript dev/specmill-rebuild/inventory.R` parses every top-level definition in
+`R/` and writes [inventory.json](inventory.json): file, export status, category,
+review reason, mapped operation, lifecycle badge, and deparsed formals. It also
+writes [removal-allowlist.json](removal-allowlist.json), which lists whole files
+with SHA-256 hashes.
+
+| Export category | Exports |
+| --- | ---: |
+| generated (specmill-owned) | 263 |
+| retained_mapped (fixed contract, existing implementation) | 5 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 83 |
+| runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
+| sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
+| utility | 11 |
+| re-exported `%>%` | 1 |
+| **Total** | **409** |
+
+The inventory categorizes exports by source file and mapping, not by name
+prefix. As a result, `chemi_server()` and `epi_server()` are classified as
+runtime, not endpoint wrappers. They are two of the 248 functions in #310 and
+stay retained as runtime configuration. Counts include the #337 waves below; the original tranche was 101 generated and 246 unmapped.
+
+The allowlist is derived from the generated operation mappings and the specmill
+manifest. It now contains the 226 whole files that hold the 263 generated wrappers
+(originally 93 files for 101 wrappers).
+A file is allowlisted only if every top-level definition in it is generated.
+The script stops if a generated file has a retained or unaccounted neighbor.
+The four retained files (`R/ct_chemical_detail_search.R`,
+`R/ct_chemical_list_all.R`, `R/chemi_search.R`, and
+`R/chemi_resolver_lookup_bulk.R`) are excluded.
+
+Preservation check: after rebuilding in the worktree, `git status --porcelain`
+must be empty. That compares every tracked file byte for byte, including runtime
+code, hooks, sidecars, `man/`, `NAMESPACE`, tests, fixtures, and the manifest.
+Because the files are identical, exports, signatures, documentation, and
+lifecycle badges are unchanged.
+
+## Rehearsal of the existing 101 wrappers (#327)
+
+`Rscript dev/specmill-rebuild/rehearse.R` (clean committed checkout) does the following:
+
+1. Creates a detached worktree at `HEAD` and links the pinned toolkit library.
+2. Checks each allowlisted file hash, then deletes exactly those 93 files.
+3. Runs `dev/generate_specmill.R --apply`, then `--apply` again, then `--check`.
+   After each step, `git status` must show no difference.
+
+Result at `71ca1678`: 93 files removed and 101 operations regenerated. All three
+steps were byte-identical. The planner printed the existing informational
+relative-server-URL notes; they are not diagnostics.
+
+Runtime verification of the rebuilt worktree, installed into
+`artifacts/rebuild-library`:
+
+```bash
+COMPTOXR_CRAN_SAFE_TESTS=true NOT_CRAN=false Rscript -e 'testthat::test_local(filter="^(contract-.*|generic_request_edge|hooks_stage_server|chemi_search|ct_chemical_list_all_hooks)$", stop_on_failure=TRUE)'
+Rscript dev/specmill-full/verify-runtime.R artifacts/before-library artifacts/rebuild-library artifacts/rebuild-runtime
+```
+
+The fixed contract, request-edge, and hook tests all passed. All 459 installed-client
+localhost cases passed against the original `4fd720b9` client, with no candidate
+failures. No output was promoted: the rebuilt files are identical to the branch.
+
+Rollback: revert the `dev/specmill-rebuild/` commits. The package is untouched.
+
+## Specmill v0.1.6 and stable generation (#310)
+
+The toolkit is pinned to v0.1.6, which fixes stable-wrapper generation.
+Stable wrappers are generated normally, and the badge comes from the mapping
+(`docs: {lifecycle: ...}`). Nothing is marked `implementation: existing`,
+nothing was badged by hand, and no generated file was edited. Re-running the
+schema audit at 0.1.6 gave the same 53 parser blockers and 102 fixture failures
+as 0.1.4. Only the CHET collision reason text changed, and it now has more
+detail. The re-audit output was not committed.
+
+v0.1.8 renders data-literal defaults and examples as plain R
+([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53))
+and adds `propose_mappings()` and `verify_adoption()`
+([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54)).
+Re-pinning changed no generated wrapper: `--apply` only updated the manifest's
+`toolkit_version`, and the rehearsal stayed byte-identical.
+
+## Generation waves (#310, #311, #314)
+
+`Rscript dev/specmill-rebuild/wave.R <name>` screens every unmapped export and
+stages mechanical candidates in a detached worktree. It stops if the generated
+wrappers change any roxygen output. `dev/specmill-rebuild/verify-wave.sh <name>`
+does the rest:
+
+- retires superseded legacy tests;
+- re-runs `--check`;
+- installs the candidate;
+- runs the contract, request-edge, and hook tests;
+- compares the installed original `4fd720b9` client with the candidate on localhost.
+
+A wave is adopted only when all of the following hold:
+
+- generation is idempotent;
+- roxygen, `man/`, `NAMESPACE`, and lifecycle lines are unchanged;
+- formals are identical;
+- the before/after interfaces are equal;
+- there are zero candidate failures.
+
+| Wave | Operations | Localhost cases | Commit |
+| --- | ---: | ---: | --- |
+| hazard-pilot | 5 | 489 | `77de2d69` |
+| stable-batch | 67 | 834 | `0fb6f4d5` |
+| options-batch | 52 | 1015 | `b851a6cd` |
+| vector-examples | 14 | 1099 | `30a4dc49` |
+| hook-owned | 10 | 1151 | `d5c4224d` |
+
+The options-batch wave covers wrappers with an optional `options <- list();
+if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
+`compact_object`. Each candidate is called with the option inputs omitted,
+explicit, `FALSE`, and `0`, and with no arguments at all. Every call must reach
+the helper exactly as the original does. On localhost, the requests are
+observed and compared between the original and generated clients, not
+modelled.
+
+The vector-examples wave maps a `c()` of scalar literals in an example to a
+sequence example. At 0.1.6 it was rejected because specmill rendered it as
+`base::evalq(c(...), envir = base::baseenv())`, which changed the Rd examples.
+At 0.1.8 the Rd output is unchanged. The wave adopts the nine `*_bulk`
+wrappers and five siblings that were retained only because they share a file
+with one of them.
+
+## Defects found in the original client (#329, #330)
+
+- Paginated `generic_request` wrappers send only the first query of a batch.
+  Queries 2..n are dropped. The runtime batch probe is skipped for these
+  wrappers, and the before/after snapshots keep the original behavior.
+- `chemi_stdizer_records` and `chemi_toxprints_assays_bulk` overwrite their
+  public `options` argument with a locally built list. The #337 options-correction
+  wave below fixes both and generates their wrappers.
+- `chemi_chet_reaction_batchsearch` evaluates its missing arguments in a
+  different order from its signature, so a generated wrapper would give a
+  different missing-argument error. It is retained.
+
+## Dispositions (#310–#314)
+
+`Rscript dev/specmill-rebuild/dispositions.R` covers all 248 checklist exports
+and writes [dispositions.json](dispositions.json) and
+[DISPOSITIONS.md](DISPOSITIONS.md). Each generated export records its service,
+operation key, file, and wave. Each retained export records:
+
+- the screen reason;
+- the helper route (method and endpoint);
+- the supported and blocked audit records on that route, with code, reason,
+  pointer, and issue;
+- any file siblings;
+- for hooked wrappers, the hook chain, with the file that defines each hook and
+  the stages the wrapper actually invokes.
+
+| Issue | Generated | Retained | Retained mapped | Client utility |
+| --- | ---: | ---: | ---: | ---: |
+| #310 | 90 | 15 | 1 | 3 |
+| #311 | 59 | 34 | 0 | 0 |
+| #312 | 10 | 16 | 0 | 0 |
+| #313 | 1 | 15 | 0 | 0 |
+| #314 | 2 | 2 | 0 | 0 |
+
+Reasons for keeping an export retained:
+
+- no unique supported schema route (40), including the ambiguous-media and
+  malformed-route blockers in #313;
+- a client hook chain (18);
+- a hand-written implementation (16);
+- an inseparable grouped file (11);
+- the remaining original evaluation-order defect above.
+
+A retained function is a valid completion state. No contract is guessed.
+
+## Hooks (#312)
+
+Ten fixed-route descriptor and WebTEST wrappers are generated through the
+hook-owned wave in #340. The other 18 previously unmapped hooked wrappers remain retained.
+Hook functions and the runtime registry remain client-owned in every case.
+
+## Hook-owned requests (#340)
+
+The `hook-owned` wave adopts the scalar and bulk forms of `chemi_padel`,
+`chemi_mordred`, `chemi_rdkit`, `chemi_webtest`, and `chemi_webtest_predict`.
+`wave.R` uses the reviewed GET/POST routes from #340 and checks them against
+the corresponding schemas. It never infers a route from a hook expression.
+Each helper argument referencing `req_data$request` is bound to `hook_state`;
+literal arguments remain `value` bindings. The declared pre/post chains,
+full post-hook state, and `post_on_skip` are preserved. The prediction wrappers
+also retain required `endpoint`/`endpoints` formals that become NULL when omitted.
+The existing `preserve_choice_defaults` callback keeps vector defaults unchanged.
+
+The screen compares formals and the full hook/helper call sequence against the
+original, with both normal and skipped requests. Roxygen output, `man/`,
+`NAMESPACE`, examples, and lifecycle badges are unchanged. Generated contract
+tests freeze the original hook/helper boundary. The descriptor and WebTEST
+behavior tests run with `verify-wave.sh` too; the obsolete assertion requiring
+the local variable text `post_data <- req_data` was removed.
+
+Localhost cases stub only identifier resolution. All ten wrappers exercise a
+resolved identifier, each engine's explicit options/body, raw output, invalid
+input that skips transport, unresolved identifiers, and missing required input.
+Both prediction wrappers also exercise omitted endpoint selectors, which the
+validation hooks reject after the wrappers convert missing arguments to NULL. Requests,
+results, warnings, and errors are compared with the original installed client.
+Only the random localhost port in result provenance is normalized.
+
+The verification script passed all contract, request-edge, descriptor, and
+WebTEST hook tests. All 1151 localhost cases and 409 exported signatures matched
+the original, with zero candidate failures. The inventory parser now skips the
+generator marker before reading lifecycle badges, so the ledger retains each
+wrapper's actual badge.
+
+The 217-file rehearsal at `d5c4224d` regenerated all 249 generated wrappers.
+Regeneration, a second apply, and check were byte-identical. Verification
+results are recorded in `wave-hook-owned.json` and `runtime-results.json`. The disposition ledger records the reviewed route,
+request bindings, hook chains, post state, and post-on-skip policy for every
+adopted wrapper.
+
+## Full rebuild rehearsal (#328)
+
+Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
+each one is classified. The rehearsal ran `rehearse.R` at `ee7a80c6`
+(specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
+removed the 212 allowlisted files. Regeneration, a second `--apply`, and
+`--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
+installed into `artifacts/rebuild-final-library` and checked two ways:
+
+- The contract, request-edge, and hook tests passed.
+- All 1099 localhost cases (409 exported signatures) matched the original
+  `4fd720b9` client, with no candidate failures.
+
+No output was promoted: the rebuilt tree is identical to the branch.
+
+Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
+`30a4dc49`) to
+restore the hand-written files and legacy tests. Revert the other
+`dev/specmill-rebuild/` commits to remove the tooling.
+
+## Resolver query validation (#337)
+
+`chemi_resolver_lookup` and `chemi_resolver_lookupCASRN` now use schema
+parameters instead of explicit `inputs`. Both reject missing, NULL, empty,
+blank, NA, and multiple query values before transport. Lookup's optional
+parameters also use the schema's types and enums. Public signatures,
+lifecycle badges, valid request bytes, and returned objects are preserved.
+The bulk lookup wrapper moved unchanged into its own file and remains retained.
+
+The contract suite, resolver regression tests, and legacy generator checks
+passed. The installed-client localhost comparison passed 1172 cases with
+zero candidate failures and preserved all 409 exported signatures and helper
+signatures. The 12 corrected invalid-query cases are recorded separately in
+`runtime-results.json`; all make zero requests in the generated client.
+
+In a detached worktree with the current changes applied over `5bab21b5`,
+removing all 218 allowlisted wrapper files and regenerating restored every
+managed file byte-for-byte. A second apply and check were also identical.
+Evidence is recorded in `wave-resolver-query.json`.
+
+## Inline CT mappings (#337)
+
+The `inline-ct` wave generated `ct_bioactivity_assay_search_by_endpoint`,
+`ct_chemical_search_equal_bulk`, and its grouped sibling `ct_chemical_search_equal`.
+The wave mapper now supports named inline request lists and the exact-search
+batch-limit callback. Public signatures, stable badges, documentation,
+namespace, query encoding, and returned objects are preserved. Bulk exact
+search still sends newline-delimited `text/plain` with a `1000` fallback when
+`batch_limit` is unset.
+
+The contract, request-edge, hook, batch-limit regression, and PubChem CAS
+fallback tests passed. Three superseded legacy tests were retired, and the
+legacy generator check passed. A focused installed-client comparison passed
+96 localhost cases with zero failures. It covered all three CT exports,
+the prior resolver corrections, and existing pilot/helper probes, and
+preserved all 409 exported signatures and retained helper signatures.
+The verifier now uses an exact lookup of `query` so `query_params` is never
+mistaken for a batch query through R's partial list-name matching.
+
+The deletion/rebuild rehearsal at the disposable snapshot `12c9a72c` removed
+220 allowlisted files. Regeneration, a second apply, and check were
+byte-identical. Evidence is recorded in `wave-inline-ct.json` and
+`runtime-inline-ct-results.json`. This completes two more #337 entries;
+21 remain to review.
+
+## Public options correction (#337)
+
+The `options-correction` wave fixes and generates `chemi_stdizer_records` and
+`chemi_toxprints_assays_bulk`, plus the grouped GET sibling
+`chemi_toxprints_assays`. The reviewed routes are `POST /api/stdizer/records`
+in `chemi-stdizer-prod.json`, and `GET /api/toxprints/assays` and
+`POST /api/toxprints/assays` in `chemi-toxprints-prod.json`. The GET listing
+route has optional query parameters `category` and `label`; the schema's
+`GET /api/toxprints/assays/{name}` is a separate operation.
+
+Both POST schemas declare an `options` property. The wrappers previously
+replaced caller options with their accumulator before assigning that property.
+The wave freezes a corrected reference using a separate accumulator and maps
+it to the existing `compact_object` binding. Caller options now reach
+`generic_chemi_request` at `options$options` and the existing wrapped payload
+at `payload.options.options`. NULL values are omitted; empty lists, nested
+lists, FALSE, and zero are preserved. The helper's existing query, wrapping,
+sibling fields, authentication, error handling, and returned objects stay
+unchanged. Public signatures, experimental badges, documentation, examples,
+and namespace output are preserved.
+
+The contract, options regression, request-edge, and hook suites passed.
+The focused regression adds 57 assertions, and three superseded generated
+legacy tests were retired. The legacy generator check passed. All 1209
+installed-client localhost cases passed with zero candidate failures, preserving
+409 exported signatures and all helper signatures. `verify-runtime.R` records
+14 intentional options-correction cases separately from the prior 12 resolver
+query corrections. It asserts the corrected nested options field and compares
+every other request field, results, warnings, and errors with the original.
+`runtime-options-correction-results.json` records the full comparison; exact
+parity is intentionally false for the recorded corrections.
+
+The disposable snapshot `e4afc155` includes the existing uncommitted work.
+Its rehearsal removed all 222 allowlisted files and regenerated 256 wrappers.
+Regeneration, a second apply, and check were byte-identical. The user's branch
+and index were preserved; no files were deleted in the primary checkout for
+the rehearsal. The inventory, allowlist, and dispositions now reflect this
+wave. Evidence is in `wave-options-correction.json` and
+`runtime-options-correction-results.json`. Two more #337 entries are complete;
+19 remain to review. The GET sibling was also migrated as part of whole-file
+ownership.
+
+## Prediction body alternatives (#337)
+
+The `prediction-bodies` wave generates `chemi_opera_bulk` and
+`chemi_predictor_models_predict_bulk`, plus their grouped GET siblings
+`chemi_opera` and `chemi_predictor_models_predict`. The reviewed routes are
+`GET /api/opera` and `POST /api/opera` in `chemi-opera-prod.json`, and
+`GET /api/predictor_models/predict` and `POST /api/predictor_models/predict`
+in `chemi-predictor_models-prod.json`.
+
+Both POST schemas have two `oneOf` body alternatives. The development callback
+`prediction_body` renders the existing non-NULL shape check from each schema's
+required-field sets, then compacts schema properties in public input order.
+Exactly one of smiles or chemicals must be supplied; the predictor also
+requires a non-NULL model ID. The original error message, explicit JSON body,
+NULL omission, scalar/empty/FALSE/zero acceptance, and field order are preserved.
+OPERA's cache_only body field and format/standardize query fields retain their
+defaults and explicit NULL behavior. Both GET wrappers retain their options
+and transport settings. No new behavior correction is introduced. Public
+signatures, experimental badges, documentation, examples, namespace output,
+helper defaults, and returned objects are unchanged.
+
+The contract, prediction regression, request-edge, and hook suites passed.
+The focused regression has 122 assertions. Four superseded generated legacy
+tests were retired, and the legacy generator check passed. All 1249
+installed-client localhost cases passed with zero candidate failures and
+preserved all 409 exported signatures and helper signatures. The 40 cases
+added for this group matched exact requests, returned objects, warnings,
+and errors. They cover both POST shapes, encoding, empty/FALSE/zero values,
+OPERA controls, neither/both body shapes, NULL or missing model IDs, HTTP 400,
+and both GET siblings. The prior resolver and options corrections remain
+recorded separately in `verify-runtime.R`.
+
+The disposable snapshot `ad813f74` contains the existing uncommitted work.
+Its rehearsal removed all 224 allowlisted files and regenerated 260 wrappers.
+Regeneration, a second apply, and check were byte-identical. The original
+branch, index, and unrelated work were preserved. The inventory, allowlist,
+and dispositions now reflect this wave. Evidence is recorded in
+`wave-prediction-bodies.json` and `runtime-prediction-bodies-results.json`.
+Two more #337 entries are complete; 17 remain to review. Both GET siblings
+were also migrated to preserve whole-file ownership.
+
+## Explicit request-body builders (#337)
+
+The `request-bodies` wave generates `ct_chemical_msready_search_by_mass_bulk`
+and `epi_submit_batch`, plus the grouped GET sibling
+`ct_chemical_msready_search_by_mass`. Reviewed schema routes are
+`POST /chemical/msready/search/by-mass/` and
+`GET /chemical/msready/search/by-mass/{start}/{end}` in
+`ctx-chemical-prod.json`, and `POST /api/submit/batch` in
+`epi-suite-prod.json`.
+
+The mapper now recognizes `request_body <- list()` followed by direct or
+NULL-guarded field assignments, using the existing `compact_object` binding.
+The existing `search_equal_batch_limit` callback preserves the environment
+setting and fallback of 1000. Both explicit bodies still bypass query batching
+and send one request. Public field order, defaults, required-argument errors,
+NULL omission, FALSE/zero/empty values, helper defaults, authentication,
+response handling, experimental badges, documentation, examples, and namespace
+output are preserved. The small `mass_range_path_params` development callback
+emits the original `c(end = end)` expression. The GET public `end = NULL`
+default remains optional despite the schema requiring both path parameters.
+
+EPI discrepancy disposition: the schema requires an array of 1-100
+`BatchEstimateRequest` objects, but the public wrapper builds one object from
+73 public fields. This migration generates that existing object without wrapping,
+batching, or additional schema validation. The wrapper also retains its
+current default `ctx_burl` server and `auth = TRUE`, even though the reviewed
+schema route belongs to EPI. Correcting these public request policies requires
+separate API review. The discrepancy is recorded in `dispositions.json` and
+`wave-request-bodies.json`; no behavior correction is introduced here.
+
+All 1152 contract and regression assertions passed, including 51 focused
+assertions. The focused suite covers all body fields in original order,
+omitted and explicit NULL inputs, FALSE/zero/empty values, missing arguments,
+batch-limit defaults and overrides, and optional GET path parameters.
+Three superseded legacy generated tests were retired; the legacy generator
+check passed. Roxygen output and namespace output are unchanged. The prior
+resolver query and public-options corrections remain recorded separately in
+`dev/specmill-full/verify-runtime.R`.
+
+The installed original and migrated clients passed all 1291 localhost cases
+with zero candidate failures. The 42 new cases matched exact requests, objects,
+warnings and errors, including JSON precision, empty accumulators, GET start
+encoding, the existing reserved-end URL parsing error, and HTTP 400 responses.
+All 409 exported signatures and all four helper signatures are preserved.
+The existing verifier ran the independent clients concurrently; its comparison
+and prior-correction assertions were unchanged. Results are recorded in
+`runtime-request-bodies-results.json`.
+
+The final disposable snapshot `b47f3d8d` removed all 226 allowlisted files
+and regenerated 263 wrappers. Regeneration, a second apply and check were
+byte-identical. Evidence is recorded in `wave-request-bodies.json`.
+
+The inventory, removal allowlist, dispositions and wave evidence are updated.
+The mirror-selection plan and all unrelated uncommitted work were preserved.
+Two more #337 entries are complete; 15 remain to review. The GET sibling was
+also migrated to preserve whole-file ownership.
+
+## Bulk resolver compatibility (#337)
+
+`chemi_resolver_lookup_bulk` now has an explicit supported mapping for
+`chemi-resolver-prod.json POST /api/resolver/lookup` and a fixed helper-call
+contract in `specmill-rebuild-contracts.rds`. Its disposition is
+`retained_mapped`, using specmill's existing `implementation: existing` policy.
+The stable handwritten source is byte-identical and remains outside the
+removal allowlist. Specmill checks its public signature and generates the
+fixed contract test. The prior generic legacy test was retired.
+
+The wrapper is a shared resolution root for compound, descriptor, hazard and
+WebTEST hooks and the resolve-then-POST wrappers. It rejects NULL/length-zero
+`ids` before evaluating any other argument or entering `generic_chemi_request`,
+then calls `as.character`. It retains `idsType`, `fuzzy` and `mol` options even
+when explicitly NULL, but omits NULL `filters` and `format`. The helper keeps
+identifiers in an array through `I(query)`, deduplicates and removes NA/blank
+values, merges options at the top level and sends one request. The original
+helper defaults, caller `tidy`, defaults, field order, scalar/FALSE/zero/list
+acceptance, missing-argument errors, badges, documentation and authentication
+are preserved without imposing schema enum/type validation.
+
+A prototype rendered by pinned specmill 0.1.8 confirmed why generation was
+rejected. Request-binding callbacks run after `params <- list(...)` and inside
+the helper invocation. With a query callback, NULL ids enter the helper before
+raising the original guard error. With `idsType = stop("option evaluated")`,
+parameter capture raises that option error before checking NULL ids, whereas
+the original raises `ids must be a non-empty character vector` without
+forcing the option. The probe results are recorded in `wave-resolver-bulk.json`.
+A generated replacement needs reviewed guard/coercion support before public
+parameter capture; callbacks inside helper arguments do not preserve that
+boundary. No runtime hooks or callbacks were added for this retained mapping.
+
+All 1360 contract, regression and hook assertions passed with no failures,
+errors or warnings. The resolver/caller suite has 128 assertions, including
+45 direct resolver assertions. Tests cover the guard before helper/option
+execution, coercion, mixed NULL options, FALSE/zero/empty/nested values,
+field order, no environment-driven batching, returned objects, and the shared
+resolution callers. The legacy generator check passed.
+
+All 1317 installed-client localhost cases passed with zero candidate failures.
+The 26 new bulk-resolver cases matched exact requests, returned objects,
+warnings and errors. They cover singleton-array serialization, numeric/logical/
+factor/list coercion, duplicate/NA/blank filtering, encoded identifiers, default
+and mixed NULL/FALSE/zero/empty/nested options, unknown enum passthrough, raw
+results, environment batch settings, missing/NULL/empty ids, and HTTP 400.
+All 409 exported signatures and all four helper signatures are preserved.
+Results are recorded in `runtime-resolver-bulk-results.json`.
+
+The disposable snapshot `8ff314c1` removed all 226 allowlisted files and
+regenerated 263 wrappers. Regeneration, a second apply and check were
+byte-identical. The retained resolver source was never deleted and its hash
+remained unchanged. Evidence is recorded in `wave-resolver-bulk.json`.
+
+The inventory, dispositions, removal allowlist and wave evidence are updated.
+Prior intentional corrections remain recorded separately in
+`dev/specmill-full/verify-runtime.R`. The original branch and unrelated work,
+including the mirror-selection plan, were preserved. This completes one
+retained #337 disposition; 14 entries remain to review.
+
+## Resolver, classification and RQ transformations (#337)
+
+The `resolver-transformations` wave reviews three more entries and records each
+as `retained_mapped`, with fixed Specmill contracts and byte-identical source:
+
+| Wrapper | Schema | Exact operation key | Mapping service |
+| --- | --- | --- | --- |
+| `chemi_resolver_getsimilaritymap` | `chemi-resolver-prod.json` | `POST /api/resolver/getsimilaritymap` | `chemi-resolver-prod-rebuild` |
+| `chemi_classyfire` | `chemi-amos-prod.json` | `GET /api/amos/get_classification_for_dtxsid/{dtxsid}` | `chemi-amos-prod-full` |
+| `chemi_safety_rqcodes` | `chemi-safety-prod.json` | `POST /api/safety/rqcodes` | `chemi-safety-prod-rebuild` |
+
+These keys were checked against the schema path/method definitions and parser
+operations, then against the literal helper calls. The supported ClassyFire
+route is also mapped by `amos-pilot` for its separate public wrapper. The five
+upstream-blocked AMOS entries are excluded from this wave.
+
+Similarity-map starts with `chemicals=NULL` in its pre-hook parameters. The
+registered chain in `inst/hook_config.yml` resolves through the retained shared
+`chemi_resolver_lookup_bulk`, retries without `idsType` on resolver failure,
+keeps only FOUND records, selects chemical fields in the original order with
+retained NULL values, clears query to NULL, and flattens the nested chemical
+records. These primitives live in `R/hooks_compound.R`; their sibling callers
+are covered by the existing resolution, descriptor, hazard and WebTEST tests.
+There are no other direct production callers of these three public wrappers.
+The wrapper returns a skip result immediately, without a request or post hook.
+It applies partial parameter updates, omits only NULL section, serializes sort
+with `tolower(as.character())`, and calls `generic_chemi_request(tidy=FALSE)`.
+The helper uses default `chemi_burl`, auth=FALSE and wrap=TRUE, retains NULL
+chemical fields, omits NULL URL parameters and preserves HTTP failures.
+
+The schema's `PubchemRequest` declares `chemicals` and a top-level `section`;
+the original helper places section inside `options`. This wave preserves that
+existing request. Its required boolean sort also keeps the public FALSE default
+and permissive NULL/zero/string behavior. The post-hook state contains the
+updated public parameters and excludes chemicals. The registered formatter
+returns a named matrix, molecule-name tibble and hclust object for cluster,
+row-major off-diagonal pairs for long, or the unchanged response for raw.
+NULL format and method use the original defaults; invalid choices retain the
+post-hook error class. `hook_registry.R` still owns hook chaining/error wrapping.
+
+ClassyFire uses `generic_request` with GET, batch_limit=1, chemi_burl and
+auth=FALSE. Query normalization, deduplication, URL encoding, sequential requests,
+tidy binding and request errors remain in that helper. For nonempty results,
+its `any_of` selection preserves available query/value/sid aliases under dtxsid
+and selects kingdom, superklass, klass and subklass in that order, renaming the
+last three. Multiple identifier columns retain dplyr's dtxsid1/2/3 naming.
+Empty data frames return unchanged; malformed NULL helper results retain their
+original error. The wrapper has no lifecycle badge and invokes no hooks.
+
+RQ codes has no parameters or hook calls. It passes explicit `query=NULL` to
+`generic_chemi_request`, which rejects an empty query before constructing or
+sending an HTTP request with `Either query or chemicals parameter must be
+provided.` The schema requires a Chemical array; changing this call or signature
+requires separately authorized correction. Mocked helper responses exercise its
+otherwise unreachable transformation: pluck rqCode, compact missing records,
+return NULL when empty, bind tibble rows, split rq on a space, remove parentheses
+and commas, then convert pounds/kilograms to numeric. Field order, FALSE/zero
+metadata, malformed split errors and numeric-coercion warnings are preserved.
+
+`probe-transformations.R` replays the pinned 0.1.8 rendering probes using existing
+bindings and the existing choice-default callback. Similarity-map generation
+omits chemicals from the initial pre-hook state; ClassyFire returns the original
+column names and extra fields; RQ codes returns the raw list instead of a tibble.
+Results are recorded in `wave-resolver-transformations.json`. No hooks were added
+to force generation, and the toolkit pin and prior intentional corrections in
+`verify-runtime.R` are unchanged. Retained mappings generate contract tests,
+not replacement wrappers, and remain outside the removal allowlist.
+
+The installed original and candidate both pass the 92 focused regression
+assertions. The contract, regression, caller/hook, helper and legacy stub
+suites pass 1,651 assertions with zero failures, errors or warnings. The
+legacy generator check passes. The installed-client localhost comparison
+passes all 1,353 cases, including 36 new cases for these wrappers, with zero
+candidate failures. It compares exact wire bytes, authentication, classes,
+objects, warnings/errors, all 409 exported signatures and helper signatures.
+The 12 prior query corrections and 14 options corrections remain separately
+asserted by `verify-runtime.R`. Evidence is in
+`runtime-resolver-transformations-results.json` and
+`wave-resolver-transformations.json`.
+
+The isolated snapshot `95b83b4c` deleted all 226 allowlisted files and rebuilt
+263 generated operations. Regeneration, second apply and check were
+byte-identical, with no differences. The three retained source files were
+excluded from deletion and kept their original hashes. The inventory,
+dispositions, removal allowlist and wave evidence are updated. This completes
+three more #337 entries; 11 remain, including the five upstream-blocked AMOS
+entries. The mirror-selection plan remains uncommitted and unchanged.
+
+## Custom transformations (#337)
+
+Reviewed `chemi_toxprint`, `chemi_functional_use` and `chemi_safety_section`
+from original wrappers through helpers, imported request builders, hook registry,
+callers and exact schema operations. There are no lifecycle badges or hook calls
+in these three wrappers. `probe_api_function` categorizes functional-use and
+safety-section as legacy probes; its caller tests and exported utility contracts
+are included in verification. Public signatures, source, documentation and
+imports are unchanged.
+
+ToxPrint's exact key is `chemi-toxprints-prod.json POST /api/toxprints/calculate`.
+The pinned native parser rejects its binary `files[]` query parameter and nested
+`request` query object, reporting `binary_parameter`, `review_required` and
+source location `#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema`.
+This requires source contract review (#16); it does not establish schema validity.
+`blocked-toxprint.yml` is an inactive proposal, not an adopted mapping. Original
+behavior remains: `generic_chemi_request` receives ordered OR/PV1/TP options,
+retains explicit NULL/FALSE/zero, uses its existing default transport and returns
+with helper visibility. Query rejection precedes forcing lazy options. The
+schema differs from this existing chemicals/options payload; no correction is
+made. Regression and localhost cases cover this preserved behavior despite the
+parser blocker.
+
+Functional-use's exact key is `chemi-amos-prod.json GET
+/api/amos/functional_uses_for_dtxsid/{dtxsid}`. This supported operation is
+separate from the five excluded upstream-blocked AMOS entries. Its direct httr2
+requests validate nonempty character input, preserve duplicate/blank/NA values,
+and append identifiers literally to the path. Invalid URLs containing spaces
+send no request; sequential `on_error='continue'` swallows their errors and
+returns an empty data frame. Authentication and retries are absent. CLI messages
+and progress are unconditional; run-debug returns the first dry run. Normal
+JSON parses to a list and currently fails `jsonlite::flatten` with
+`is.data.frame(x) is not TRUE`. Unqualified `list_c` is also unavailable in the
+namespace. Mocked parsing/utilities exercise the otherwise unreachable named
+`dtxsid,functional_classes` tibble transformation, retaining FALSE/zero.
+
+Safety-section's exact key is `chemi-resolver-prod.json GET
+/api/resolver/pubchem-section`. Section validation precedes forcing query,
+including omitted arguments and native errors. Ordered URL parameters are
+query, idType=DTXSID, section. Duplicates and FALSE/zero survive; empty query
+creates no requests and returns NULL. There is no debug shortcut, auth or retry.
+All failed responses return NULL. Normal named JSON currently fails inside
+`resps_data` with `Can't merge the outer name` before reaching the unavailable
+unqualified `list_c`, `keep_at` and `discard_at`. Copied original closures with
+mocked collaborators exercise section naming, Value extraction and Markup
+removal without adding bindings to the package namespace. Existing failures,
+messages and returned classes remain unchanged.
+
+Pinned rendering probes return raw response lists rather than the originals'
+empty data frame/NULL. The toolkit also rejects `req_perform_sequential` as a
+client helper because it is imported from httr2 rather than defined in `R/`.
+The two supported operations therefore have explicit `retained_direct` mappings
+in `screen-results.json`, consumed by inventory and dispositions, with frozen
+handwritten request-builder contracts. Their YAML proposals remain outside
+active `specmill.yml`. No shim or hook was introduced to force generation.
+Neither direct wrapper nor blocked ToxPrint is on the removal allowlist.
+
+The installed original passes all 85 focused regression/contract assertions.
+The candidate's contract, regression, caller/hook, request helper and legacy
+stub suites pass 1,824 assertions with no failures, errors or warnings. The
+legacy generator check passes. Prior intentional corrections remain unchanged
+in `verify-runtime.R`; the toolkit pin and mirror-selection plan are unchanged.
+This wave generates zero wrappers, retains two mapped wrappers and records one
+parser-blocked wrapper. Nine #337 entries remain: five upstream-blocked AMOS
+entries, this ToxPrint parser blocker and three unreviewed entries.
+
+The isolated snapshot `febc39b6` deleted 226 allowlisted files and rebuilt
+263 operations. Regeneration, second apply and check were byte-identical.
+All final generation inputs and allowlisted file bytes match that snapshot.
+All three reviewed source files retain their original hashes.
+
+The installed original/candidate localhost comparison passes all 1,396 cases
+(including 43 new cases), with zero candidate failures. Exact wire requests,
+returned objects/classes, errors/warnings, 409 exported signatures and helper
+signatures match, apart from the previously recorded 12 query and 14 options
+corrections, which remain separately asserted. Evidence is recorded in
+`runtime-custom-transforms-results.json` and `wave-custom-transforms.json`.
+
+## Prediction and local classifier (#337)
+
+Reviewed `chemi_predict` and `ct_classify` through their original implementations,
+helpers, request builders, hook registry and production callers. At user
+direction, `ct_related` is excluded from generation as a legacy Dashboard scraper
+wrapper. Source, public signatures/defaults, documentation, lifecycle badges or
+their absence, imports and runtime behavior remain unchanged.
+
+Prediction's exact schema/method/path is `chemi-webtest-prod.json POST
+/api/webtest/predict`. The wrapper first checks query using its original
+`is.null(query) | missing(query)` expression, then calls `chemi_resolver_lookup`
+with the original query. Missing query retains its native missing-argument error;
+NULL query fails before report is evaluated. Resolver errors propagate, and
+`length(resolved_chemicals)==0` fails before report validation. No normalization,
+chemical-name extraction or SMILES conversion is added. Resolved objects become
+the structures payload unchanged, including NULL fields, FALSE and zero.
+
+Report validation accepts eleven original formats. UNKNOWN is documented and
+present in the schema enum but rejected by this wrapper, with the existing
+warning and JSON fallback. FALSE, zero, NA and other invalid scalar formats also
+warn and use JSON; NULL/empty/vector formats retain native condition errors.
+The direct request uses POST webtest/predict, an explicit Accept header,
+`auto_unbox=TRUE`, no authentication/retry policy and ordered structures/report
+fields. Schema `PredictionRequest` declares format; the original sends report.
+This discrepancy is preserved without correction. CLI messages are unconditional,
+with no debug shortcut or hook calls. Parsed JSON returns unchanged, including
+NULL, empty lists, FALSE/zero and malformed-JSON errors. Actual httr2 HTTP failures
+occur before the wrapper's status guard; mocked responses separately cover that
+guard. Transport failures propagate.
+
+The exact resolver operation is `chemi-resolver-prod.json GET
+/api/resolver/lookup`. Its shared helper still owns normalization, batching,
+encoding and authentication behavior. The earlier intentional resolver input
+corrections remain separately asserted in `verify-runtime.R`. New prediction
+runtime cases mock the resolver to isolate the unchanged wrapper from those
+already-authorized dependency corrections. Existing resolver and caller tests
+remain in the broad suite. `probe_api_function` treats prediction as a legacy
+probe; no other direct production caller or hook configuration was found.
+
+Pinned native generation exposes a body parameter instead of query/report.
+The retained-contract diagnostic also rejects imported `req_perform` as a client
+helper. The explicit `retained_direct` mapping in `screen-results.json` records
+the confirmed schema key and original transport. The inactive `retained-predict.yml`
+and `probe-prediction-classifier.R` reproduce the compatibility review. A frozen
+handwritten contract captures all nine original resolver/request/response calls.
+No shim, new hook, toolkit pin change or generated wrapper is introduced.
+The existing prediction-body callback requires schema oneOf alternatives, which
+this request lacks. Existing WebTEST prediction hooks require endpoint/method
+inputs, resolve canonical SMILES in bulk, emit skip/error rows and build
+format=JSON bodies. Reusing them would change this wrapper's validation order,
+payload, warnings/errors and returned objects.
+
+`ct_classify` has no schema/method/path key: it is a local dataframe utility.
+`create_compound_classifier` shares its source file, and `.onLoad` in `zzz.R`
+creates and caches that closure in `.ComptoxREnv$classifier`. The wrapper reuses
+the cached value; only NULL causes lazy creation and storage. Nonfunction cached
+values retain their errors. Cached return visibility and inputs, including
+NULL/FALSE/zero, are preserved. The grouped source file is retained as runtime
+code and stays outside the removal allowlist.
+
+Original single-row and batch outputs are frozen independently. Whole-column
+`isTRUE(isMarkush)` and `isTRUE(isotope==1L)` cause different classification
+results in batches; this review records that behavior without correction.
+Tests cover formula/SMILES decisions, mixture composition, original column order,
+metadata containing NULL/FALSE/zero, tibble/data.frame classes, empty data,
+missing columns/arguments, and cache initialization/reuse/error behavior. The
+classifier neither sends requests nor executes hooks and has no lifecycle badge.
+`probe_api_function` skips it as a client utility; the existing caller tests pass.
+
+`ct_related` retains its questioning badge and explicit legacy
+https://comptox.epa.gov/dashboard-api/ccdapp2/ server, GET
+related-substances/search/by-dtxsid, auth=FALSE and per-item id parameters.
+No production schema key is guessed. Its disposition is `retained_excluded`,
+its inventory category excludes it from future migration screening, and its
+existing mocked compatibility tests are run without accessing the legacy server.
+The five upstream-blocked AMOS entries are untouched.
+
+Both installed original and candidate pass 118 focused assertions. Contract,
+regression, request-helper, caller/hook, legacy stub and related-wrapper
+compatibility suites pass 1,952 assertions with no failures, errors or warnings.
+Legacy test generation/check passes without retiring tests. This wave generates
+zero wrappers, maps one retained prediction wrapper, retains one local utility,
+and records the requested scraper exclusion. Six #337 entries remain: five
+upstream-blocked AMOS entries and the previously reviewed ToxPrint parser blocker.
+
+The isolated snapshot `0cf48ad6` deleted all 226 allowlisted files and rebuilt
+263 operations. Regeneration, second apply and check were byte-identical, with
+no differences. Final generation inputs and allowlisted file bytes match that
+snapshot. All reviewed source hashes, the toolkit pin, hook configuration,
+documentation and the uncommitted mirror-selection plan are unchanged.
+
+The installed original/candidate localhost comparison passes all 1,453 cases,
+including 57 new prediction/classifier cases, with zero candidate failures.
+Exact request fields, objects/classes, errors/warnings, 409 exported signatures
+and helper signatures match apart from the previously recorded 12 query and 14
+options corrections, which remain separately asserted. The temporary parallel
+runner redirects subprocess output to files and reads completed immutable
+request records once to avoid blocked output channels and repeated disk reads;
+client code, modeled expectations and comparison assertions are unchanged.
+Evidence is in `runtime-prediction-classifier-results.json` and
+`wave-prediction-classifier.json`.
+
+## ToxPrint retained contract (#337)
+
+Starting from `cef28d1d`, `chemi_toxprint` is now `retained_mapped` through
+`apis/chemi-toxprint-prod-rebuild.yml`. Five #337 entries remain, all excluded
+upstream-blocked AMOS entries. `ct_related` remains the excluded legacy scraper.
+
+The confirmed key is `schema/chemi-toxprints-prod.json POST
+/api/toxprints/calculate`. The original wrapper calls `generic_chemi_request`
+with endpoint `toxprints/calculate` and ordered `OR/PV1/TP` options. The helper
+normalizes query before forcing options and builds JSON `chemicals/options`,
+with each identifier under `sid`. Its default authentication is FALSE; request
+headers, retries, debug/verbose behavior, response observation and conversion
+remain unchanged. No production caller or hook references this singular wrapper.
+The plural `chemi_toxprints_calculate_bulk` shares the route but owns different
+hook and request contracts; it is untouched.
+
+The schema's POST operation already declares `application/json` CalculateRequest
+with chemicals/options; ToxprintsOptions declares OR/PV1/TP. It also declares
+binary `files[]` and nested `request` query parameters. Chemical omits the
+helper's sid field. These discrepancies are recorded without a schema correction
+or an assertion about the server's accepted contracts. The original schema hash
+is frozen in `wave-toxprint.json`; file-upload alternatives are not removed.
+
+Pinned Specmill 0.1.8 `read_service_operations` supports explicit inputs/request
+mappings and `implementation: existing` for unsupported operations. Existing
+`from` and `object` bindings preserve five successful helper-call variants,
+including retained NULL, mixed FALSE/zero and nested values. The integer input
+hint preserves the literal odds_ratio=3L default; it adds no client validation.
+The public signature remains exactly
+`chemi_toxprint(query, odds_ratio = 3L, p_val = 0.05, true_pos = 3)`.
+
+The pinned renderer eagerly captures options before helper query rejection and
+returns an invisible helper result visibly. `probe-toxprint.R` reproduces both
+mismatches and freezes the original helper call and returned class. The supported
+retained mapping keeps the source byte-for-byte. No callback, hook, lifecycle
+badge, documentation change, runtime correction or toolkit pin change is added.
+Only its fixed contract test is generated; that test supersedes the legacy
+metadata stub retired by the existing legacy test generator.
+
+The generation entry point accepts exactly the reviewed retained diagnostic,
+with matching source/schema/helper/mapping hashes. Native binary/nested
+diagnostics remain in the wave evidence. Changed hashes, changed diagnostics,
+unrelated retained diagnostics and generated mapping diagnostics still stop
+maintenance. This records a reviewed client facade, not native parser support
+for binary or nested query parameters.
+
+Contract, regression, request-helper and relevant caller/hook suites passed
+1,839 assertions with no failures, errors or warnings. The expanded regression
+passed 99 assertions against each installed original and candidate client.
+Legacy generation/check and native check passed. The installed-client localhost
+comparison passed all 1,474 cases, including 21 new ToxPrint cases, with zero
+candidate failures. Request bytes, objects/classes, errors/warnings, 409 exported
+signatures and helper signatures agree, apart from the previously recorded
+12 query and 14 options corrections, whose assertions are unchanged.
+`runtime-toxprint-results.json` records the comparison. The existing temporary
+runner caches completed immutable request records and redirects process output;
+its expectations and comparison assertions match `verify-runtime.R`.
+
+The deletion/rebuild snapshot `d996565e` removed all 226 allowlisted files and
+rebuilt 263 generated operations. First apply, second apply and final check were
+byte-identical, with no differences. ToxPrint's retained source is deliberately
+outside that allowlist. Final generation inputs, maintenance gate and manifest
+match the snapshot. The wrapper, shared helper, schemas, documentation, hooks,
+callbacks, toolkit pin and `verify-runtime.R` are byte-identical to `cef28d1d`.
+The uncommitted mirror-selection plan retains its recorded SHA256.
+
+
+## Approved policy retention (#336 and #341), 1 October 2026
+
+#336 is completed by explicit maintenance disposition: all 24 wrappers remain
+hand-written. The ledger records the upstream link for every wrapper. The groups
+are [specmill#26](https://github.com/seanthimons/specmill/issues/26): 16 AMOS
+body-media contracts; [specmill#27](https://github.com/seanthimons/specmill/issues/27):
+four invalid-type and two malformed-path AMOS contracts;
+[specmill#28](https://github.com/seanthimons/specmill/issues/28): `chemi_stdizer_bulk`
+binary/nested contract; and
+[specmill#29](https://github.com/seanthimons/specmill/issues/29):
+`chemi_resolver_ghs_list_count` GET-body review. This policy neither fixes upstream
+contracts nor adopts unsupported routes. A resolved contract still requires a
+reviewed generation wave and compatibility verification.
+
+#341 is completed by retaining both `chemi_descriptors` and
+`chemi_descriptors_bulk`. Their existing `apply_aggregate_rdkit_fallback` switches
+GET/POST `/api/descriptors` to the separate RDKit schema's GET/POST `/api/rdkit`
+route when required. Preserve this fallback until
+[specmill#61](https://github.com/seanthimons/specmill/issues/61) can declare and
+verify the additional routes, or a verified upstream service repair allows its
+removal. Future adoption requires reviewed localhost fallback cases and a wave.
+The retention reasons cite #341 and the upstream blocker. No wrapper, hook,
+schema, mapping or runtime behavior changes in this closeout.
+
+## ChET server path on the PR branch (#339)
+
+The `d4dc1ea9` fix cited when #339 closed exists only on
+`feat/specmill-hooks-wave`. This branch had corrected 4 of the 28 `chemi_chet_*`
+wrappers (image and the three #331 pagination wrappers). The other 24 still sent
+`https://hcd.rtpnc.epa.gov/api/reaction/...` and got back the HTML app shell.
+
+A clean-room client generated with Specmill alone from
+`schema/chemi-chet-prod.json`, with the schema origin recorded, resolves
+`https://hcd.rtpnc.epa.gov/api/chet` + `/reaction/libraries` and returns JSON live.
+Specmill handles the schema server correctly. The defect is in the explicit
+`generic_request` mappings (`server: chemi_burl` plus a hand-written `endpoint`),
+which ignore the server path. It goes away once ChET moves to the native helper.
+Until then, the fix is applied in the mappings:
+
+- Every endpoint in both ChET service configs starts with `chet/`. 21 generated
+  wrappers were regenerated, and the prefix is the only change in each.
+- Retained `searchcounts`, `database_old_by_pagenum_and_searchterm` and
+  `batchsearch` get the same prefix. `batchsearch` sends the schema's
+  `{"dtxsids": [...], "search_level": ...}` body (`sid_label`, `array_payload`).
+- The ChET contract fixtures and the `specmill-full` frozen runtime cases carry
+  `chet/`. `verify-runtime.R` runs the original client with that prefix removed,
+  then compares the 65 remaining ChET cases with `/chet` inserted.
+- `wave.R` and `dispositions.R` match ChET routes below `chet/`. The inventory
+  and ledger were refreshed.
+
+Result: `generate_specmill.R --check` is clean, and `specmill-342/verify.R` and the
+contract/adoption tests pass. The installed-client comparison against `4fd720b9`
+matched all 1474 localhost cases, with 0 candidate failures. Live, every ChET
+wrapper that takes no arguments returned JSON, as did `batchsearch` and
+`searchcounts` (with `search_type`). The exceptions are `reaction/database_old`
+and `reaction/database-old/{page}/{term}`, which return upstream HTTP 500
+`application/problem+json`.
+
+
+## Native Chemi/EPI GET migration, 17 October 2026
+
+Eleven metadata GETs now use the native request helper. Their live results match
+all eleven legacy results, including attributes. Another 89 parameterized and
+static GETs move to native schema-derived transport, with explicit service
+resolution, response policies and per-input iteration where required. ChET uses
+the schema's `/api/chet` server prefix. Required and typed schema parameters
+replace incomplete legacy formals, including EPI solubility and chain-length
+inputs. Examples now supply the required schema inputs.
+
+All 89 fixed helper contracts and captured localhost requests passed. Wire
+checks cover paths, query parameters and defaults, empty GET bodies and decoded
+outputs. All 55 successful legacy live probes match the native result exactly
+after rechecking static record attribution, empty objects and resolver lookup's
+tibble policy. The remaining 34 legacy probes failed upstream or used invalid
+legacy inputs. Their native outcomes are recorded separately, including dropped
+per-input failures, rather than being counted as live parity passes.
+`wave-native-get.json` records each operation, input and live outcome.
+
+The production toolkit pin remains 0.1.18 for this batch. Isolated analytical-QC
+verification against Specmill commit `12e8a3a` passed exact live parity for
+DTXSID7020182, with 29 rows and 16 columns, captured API-key/path checks,
+unchanged archived schema and generation freshness. Its production wrapper
+waits for a validated release. Detail bulk wrappers remain retained after the
+0.1.21 body-order release because their call-time `batch_limit` contract requires
+[Specmill #128](https://github.com/seanthimons/specmill/issues/128).
+
+
+The predictor-model GET retains `model_id` as its first public argument through
+`parameter_order`; query wire mappings remain keyed by name. Existing helper
+mocks now exercise the native transport. `probe_api_function()` also recognizes
+native per-input failure attributes, including a failed request following a
+successful response, so it cannot report that partial batch as valid.
+
+Final validation for the 89-operation batch: the complete test suite passed with
+zero failures or warnings and two existing skips, for optional pROC and the
+explicit integration-only test. All 89 helper contracts and localhost request
+captures passed. Documentation was regenerated, and the final Specmill check
+passed. The four pager candidates are separate and remain retained pending
+[Specmill #129](https://github.com/seanthimons/specmill/issues/129).
+
+## Eight additional native GET routes, 17 October 2026
+
+Three AMOS routes now have explicit native mappings: PDF retrieval,
+method-with-spectra lookup and record IDs for a substance. Five CTX mappings
+cover list contain/equal/start-with searches and experimental/predicted property
+ranges. Required trailing path parameters and numeric range bounds now come
+from the archived schema. AMOS PDFs return binary bytes in a per-request list,
+consistent with the other native download wrappers.
+
+All eight fixed helper contracts and localhost request captures passed.
+Dedicated tests cover encoded multi-parameter paths, CTX credential presence,
+range validation before HTTP and exact PDF bytes. The existing implementation
+mirrors are replaced by generated fixed contracts. Documentation was rebuilt,
+and the final generation freshness check passed. No archived schema changed.
+
+## Published Specmill 0.1.22 adoption, 17 October 2026
+
+The development toolkit is pinned to the published v0.1.22 source tag
+`d55f7fa8cbbc9ce797b45c35dd9d6f49cefbf445`, with a verified Git archive SHA256.
+The native helper was re-emitted through the existing reviewed adoption script.
+The runtime adds the released batching policy limit; generated text validation
+now preserves line inputs until per-chunk encoding. No archived schema changed.
+
+The adoption record preserves the original review and adds the current toolkit
+and helper hashes. Its verifier now checks the current record against the pin,
+including freshness, idempotence and protected-file ownership. The three new
+AMOS GET mappings also retain their public API-stage documentation tags.
+
+The two detail bulk wrappers and exact-search bulk remain retained pending the
+release of call-time batch bindings in Specmill #128. Analytical QC, reviewed
+AMOS path corrections, the bodyless resolver subset and the four native pagers
+also remain isolated until their respective fixes are released and pinned.
+
+Validation: the complete package test suite passed with zero failures or
+warnings and the same two existing optional/integration skips. The reviewed
+helper adoption verifier passed, including current pin and source provenance.
+
+## Two native prediction POST wrappers, 17 October 2026
+
+OPERA bulk and predictor-model bulk now send their explicit bodies through the
+native transport. Their existing generation callback still selects exactly one
+of the `smiles` and `chemicals` shapes, retaining public argument order and
+non-NULL values such as FALSE, zero and empty lists. Request bindings preserve
+OPERA query options and the JSON Accept header. A client response policy retains
+raw JSON objects, missing fields and the legacy empty-list result.
+
+Localhost comparisons against the frozen legacy wrappers passed for both body
+shapes, nested chemical records, UTF-8 input, empty/FALSE/zero values and OPERA
+query options. Each comparison checked exact request body bytes, method, path,
+query and headers, plus identical decoded results. Ambiguous or absent shapes
+fail before HTTP. These checks establish transport parity; no live prediction
+POST was required or claimed.
+
+The updated native helper contracts and prediction-body test file passed with
+zero failures or warnings. Both GET siblings remain covered. The focused
+checks include raw JSON/NULL result shape and all previously reviewed input
+variants; the complete suite had already passed after the runtime pin update.
+Final generation freshness check passed for the two prediction POST wrappers.
+
+## Five native classifier POST wrappers, 17 October 2026
+
+The AMNB NATE, ARN Cats, NCC Cats, PFAS Atlas and PFAS Cats bulk wrappers use the
+native transport with their existing public arguments. A generation callback
+projects unique, non-empty identifiers into chemical records and retains the
+nullable model/SMILES options. NCC keeps its unwrapped array. The response policy
+preserves the decoded JSON structure used by the previous helper.
+
+Before adoption, all five rendered candidates passed localhost comparisons
+against the frozen legacy implementations. Captures matched exact body bytes,
+method, path, query and headers, with identical results. Cases cover duplicates,
+blank/missing identifiers, UTF-8, FALSE and zero identifiers/options, NULL model
+and nested option values. Empty inputs fail before HTTP. No live classifier POST
+or undocumented body correction is claimed.
+
+## Published Specmill 0.1.23 and analytical QC, 17 October 2026
+
+The development pin advances to released v0.1.23, source/tag
+`2d480996ec6607c823d0a85be1a3de6a438b429d`, with verified Git archive SHA256
+`cbabe13134734c1f34ce5553d6515ceef7159b97b491ac0b1c11415a0fc221ea`.
+The emitted native helper is byte-identical to v0.1.22. The adoption record
+retains that review in its history and verifies the current release pin.
+
+Analytical QC uses the released operation-scoped API-key security correction,
+the existing CTX credential mapping and the native tibble response policy.
+Its archived schema remains unchanged. The unreleased dynamic bulk binding,
+AMOS path/body corrections and pager metadata setting remain isolated.
+
+Released-pin QC verification passed against the production read-only endpoint:
+29 rows and 16 columns match the retained implementation; replaying the same
+captured response also matches exactly, including column order and attributes.
+Localhost captures verify the API-key header, correct path and zero GET body
+bytes. The six updated native contracts, classifier normalization/option tests
+and prediction regressions passed without failures or warnings. Helper adoption
+freshness and ownership checks pass against the current pin.
+
+## Normalization hold and PR136 verification, 17 October 2026
+
+The analytical-QC native adoption above is held again by Specmill #135. Its
+released security correction is verified, but the native wrapper also needs
+legacy identifier cleanup before validation and iteration. The five classifier
+POSTs remain native because their existing body projection already performs
+that cleanup. The production development pin stays at released v0.1.23.
+
+The normalization audit found affected recent and earlier CTX migrations.
+Their native operation settings, contracts and focused tests are preserved in
+`held-normalization.rds`. Affected wrappers return to their legacy helper
+mappings until the shared upstream fix is released and pinned. Static requests
+and structured mass bodies are reviewed separately; line semantics are not
+changed by this hold.
+
+Isolated actual-wrapper verification of Specmill PR136 at
+`213dd7ee68dc1a643264db795d97aa83be5a98ef` passed for AMOS info-by-ID and both
+chemical-detail array POSTs. Localhost requests and full results match the
+legacy implementations for duplicates, blanks, NA, nested input lists and
+UTF-8. Named and positional calls agree. Normalization runs once per call
+before fan-out/chunking; arrays retain 2/1 splits and singleton JSON arrays.
+Empty input errors precede projection evaluation and HTTP. Replacement values
+still undergo normal validation. Exact-search line duplicates and LF bytes
+remain unchanged without normalization configured. Final generation freshness
+passed against that exact commit. This is isolation evidence, not production
+adoption of an unreleased source.
+
+The completed audit holds 144 wrappers: 120 fan-out GETs and 24 ordinary array
+POSTs. `held-normalization.json` lists every operation and output file. The RDS
+contains their pre-hold native configurations/contracts plus the focused native
+tests, so adoption can resume after a released normalization fix. The two detail
+arrays and exact-search lines remain retained under their separate reviews.
+
+## Published Specmill 0.1.24 and EPI search, 17 October 2026
+
+The development pin advances to released v0.1.24 at
+`49b2ddeea8476dd9d2b2e6a7f6fa2908815a1b3a`, with verified Git archive SHA256
+`35d136a776d3cfd76d0628682baa7f630b88394fa60c2cca3a6c944c3a109293`.
+It releases per-call environment/default/cap batch sizing and includes the
+prior security/body-order/text fixes. The emitted helper remains byte-identical.
+Normalization is absent from this release, so the 144-wrapper hold remains.
+
+EPI search now uses the native helper and the existing post-response formatting
+hook. Its public query/limit arguments and defaults are preserved. Independent
+localhost comparisons cover default options, UTF-8/reserved characters and an
+explicit NULL limit, checking exact method/path/query/Accept header, absence of
+authentication, zero body bytes and identical formatted results.
+
+The final history pass adds the earlier ToxVal bulk POST to the hold. Its native
+migration predates the other CTX array wave, bringing ordinary arrays to 24 and
+the combined hold to 144. Probe tests now exercise native request-failure
+aggregation through a test fixture, independently of whether the selected
+public alerts wrapper is temporarily retained. Public wrapper forwarding and
+retained-input cleanup remain tested separately.
+
+All 144 saved native candidates subsequently passed instrumentation at the
+exact PR136 commit: cleanup executes once per wrapper call, duplicate inputs
+collapse, blank/NA character entries are removed, and empty cleanup fails
+before the request helper. The 24 ordinary arrays and both detail arrays also
+configure successfully with per-call environment batch sizing. The refreshed
+localhost fan-out/detail-array checks pass with both features together, and the
+final full candidate freshness check passes.
+
+Specmill v0.1.24 also exposes a cosmetic emission defect tracked in
+[specmill#138](https://github.com/seanthimons/specmill/issues/138): the new shared
+batch validator introduces two trailing-whitespace lines. Runtime tests and
+freshness are unaffected. The generated file is preserved exactly; this is the
+only current `git diff --check` exception and is reported upstream.
+
+Validation of the retained v0.1.24 state: complete CRAN-safe package suite passes
+3,599 assertions, zero failures and zero warnings. Fifty tests skip for absent
+local databases, optional pROC, external source-build paths or opt-in integration.
+Released-helper provenance/ownership checks and final client generation freshness
+pass. Native classifier and EPI-search request comparisons pass independently.
+
+## Seven additional native GET wrappers, 17 October 2026
+
+Three EPI calculation stubs now expose their archived source parameters: dye,
+nonionic polymer and nonionic surfactant. Polymer requires `solubilityType` and
+surfactant requires `mainCarbons`. Existing zero-argument HTTP requests returned
+400 for all three; valid declared inputs returned 200 JSON. Captured production
+responses replay identically through the old and native formatting paths, which
+use the existing result-unwrapping hook. `wave-epi-inputs.json` records requests,
+statuses, response hashes and the unchanged schema hash.
+
+`epi_submit` keeps all 73 arguments, their order and exact defaults. Captured
+requests match the legacy implementation for defaults, UTF-8/reserved characters,
+FALSE, zero and NULL. A read-safe production request returned 200 and its same
+response/URL replay matches exactly. The mapping preserves the scientific theta
+default `0.00010836`; YAML is written at full numeric precision.
+
+Alerts groups, standardizer groups and standardization also use native requests.
+Their reviewed bindings preserve the JSON Accept header and list formatting,
+including named objects, NULL values and empty responses. The neighboring POST
+functions move intact to separate files, with identical parsed bodies and
+formals. They retain their existing implementations. Standardizer list and
+calculation requests returned 200 JSON; the alerts group listing returned 502,
+so no successful live claim is made for that route.
+
+Generated documentation is refreshed for these wrappers and for the temporary
+normalization hold, keeping documented signatures aligned with retained code.
+
+Validation of this seven-GET wave: 817 targeted assertions pass with zero failures,
+warnings or skips, including all fixed client contracts, request-edge and hook
+checks, native calculation tests and the retained POST neighbors. Code/documentation
+argument and default checks have no mismatches. Actual exported wrappers replay
+captured production responses identically; EPI submit and both standardizer GETs
+also retain exact legacy URLs and headers. Final generation freshness passes.
+`wave-static-chemi.json` records the live limitations and intact POST moves.
+
+## Released normalization adoption, v0.1.25
+
+Pinned Specmill v0.1.25 at source/tag
+`01fe162db735249a497ea9d30811b1d646733aa4`. The local source archive SHA256 is
+`4173d7e493c5055da72133360c9ffcf987245c4582f5101799eb2c017c08100a`.
+The released normalizer policy permits adoption of all 144 saved candidates,
+plus both detail bulk endpoints. Each uses the client-owned `.ct_legacy_query`
+policy before validation, preserving list flattening, duplicate removal, blank/NA
+cleanup and the early empty-input error. The 24 ordinary arrays and two detail
+arrays resolve `batch_limit` on each call with fallback 100 and split enabled.
+
+Eight endpoints with multiple path parameters bind a response callback that
+passes the primary input to the existing client formatter. Forty saved legacy
+response cases verify exact values and attributes for objects, arrays, keyed
+objects, empty arrays and JSON null. Callback closure arguments are tested through
+actual HTTP request construction and decoding instead of comparing serialized R
+environments in helper-call fixtures. The client list policy now retains JSON
+null as `list(NULL)`, matching the old formatter. Singleton JSON-array inputs
+also retain a scalar query column on object responses, rather than an unnamed
+list column. Both detail bulk wrappers have explicit regression coverage.
+
+The original held configurations and pre-release isolation evidence remain in
+`held-normalization.rds`; their status record now identifies the released
+adoption. The exact-search line endpoint, ToxPrint visibility, reviewed AMOS path
+and media/response declarations, resolver body omission and paging metadata
+policies retain their existing implementations pending their separate reviews
+or released fixes.
+
+Validation: the complete package test suite passes with no failures or warnings;
+two tests skip because pROC is absent and live integration is disabled. All 144
+normalization cases and 40 legacy attribution cases pass, with additional
+per-chunk attribution, singleton-object, binary-file and dynamic-limit checks.
+Code/documentation arguments and defaults have no mismatches. Official generation
+freshness passes at the released pin; existing warnings for retained descriptor
+routes remain tracked upstream. Archived schemas are unchanged and
+`git diff --check` is clean.
+
+## EPI batch calculation facade
+
+`epi_submit_batch` now uses native transport while keeping all 73 public
+arguments, their order and exact defaults. Its existing flat estimate is
+projected into the declared one-item BatchEstimateRequest array; module values
+remain arrays even for a single module. This corrects the previous CTX origin,
+CTX credential requirement and object-shaped body. The request now targets EPI
+without CTX authentication. NULL fields are omitted; FALSE, zero and UTF-8 values
+are retained and the complete source body schema validates before HTTP.
+
+A reviewed read-safe production calculation for `modules = "logKow"` and
+`smiles = "CCO"` returned 200 JSON without a CTX key. The actual generated facade
+replays that captured response identically to the old formatter. A named client
+response policy excludes the scientific request object from identifier
+attribution. Tests cover body nesting, module singleton arrays, defaults,
+FALSE/zero, routing, authentication, invalid modules before HTTP and exact public
+formals. `wave-epi-batch.json` records source/release and response hashes.
+
+The separate exact-search line review identified upstream
+[Specmill #140](https://github.com/seanthimons/specmill/issues/140). Encoding lines
+mutates `params$query` into joined text before response callbacks, losing the
+original per-chunk entry boundaries. A mocked accepted 200 object then gains a
+query column for a multi-entry chunk, unlike the retained formatter. This is
+separate from the successful production array replay and makes no new production
+response-shape claim. The upstream agent owns triage, implementation and release;
+exact-search bulk remains retained without a local transport workaround.
+
+EPI batch validation: targeted native calculation/normalization/list-policy
+regressions and the generated fixed helper contract pass without failures,
+warnings or skips. Documentation signatures/defaults and final official
+generation freshness pass. No archived schema or transport helper changes.
+
+## Native Classyfire classification facade
+
+`chemi_classyfire(query)` now uses the archived AMOS path with a reviewed public
+parameter rename, `.ct_legacy_query` cleanup and native fan-out. Its existing
+nrow-gated column selection runs once in a supported post-combine hook. The
+client hook executor now accepts that stage, returns the combined result when
+unconfigured, and preserves its usual error context. The transport helper is
+unchanged.
+
+Twelve actual old/native HTTP cases match exact result values/attributes and
+URLs, covering objects, arrays, identifier aliases, missing classification
+fields, empty arrays and null, with duplicate/blank/NA inputs. Separate tests
+verify one formatting call after fan-out, early empty rejection and post-combine
+error class/stage/parent details. Existing compound, hazard, webtest and server
+hook regressions pass, as does the preserved fixed helper contract. Documentation
+arguments/defaults match the code. No new live production claim is made for this
+facade. The old return documentation is corrected to describe its existing
+tibble result. `wave-classyfire.json` records the released source and schema hash.
+
+## Reviewed AMOS JSON reads, 18 October 2026
+
+Released Specmill v0.1.29, source
+`0f436277450801c9640e27725b0805561fd91984`, enables ten additional
+native AMOS POST wrappers. Nine read/calculation routes use reviewed missing
+JSON media declarations and complete client request projections. DTXSID lookup
+also uses the reviewed declaration for its originally empty response map.
+The original schema bytes and raw validation findings remain archived.
+
+Captured production JSON responses and exact request projections pass for the
+nine read/calculation routes, including scientific nested arrays, optional
+fields, positional/named calls and hard HTTP/credential errors. DTXSID lookup
+preserves its captured decoded result, duplicate/blank/NA cleanup and singleton
+JSON arrays. A persistent localhost check verifies its actual UTF-8 request
+bytes, preflight rejection and HTTP 404/500/401 failures. These are reviewed API
+request projections; the old generic query facades are not asserted to have
+sent equivalent valid JSON bodies.
+
+The Excel substances-for-IDs route, two routes whose archived example requests
+returned 500 HTML, and the separately verified cursor pagers remain retained.
+No binary, upload or write semantics are inferred. The native and generic
+transport helper bytes are unchanged. ComptoxR remains local only.
+
+Three additional AMOS identifier read routes use the same released media policy:
+`record_counts_by_dtxsid`, `mass_spectra_for_substances` and
+`count_substances_in_ids`. Their captured production 200 JSON values and exact
+array projections are preserved. The count capture establishes the zero result
+for an unknown record ID; it does not establish nonempty record contents.
+Reviewed normalization runs before capture, body schema validation and encoding.
+Tests cover duplicate/blank/NA cleanup, character-list inputs, early empty
+rejection and singleton JSON array bytes over actual localhost HTTP.
+
+The legacy test inventory now explicitly recognizes `.ct_request` and selects
+replacement suites for the eleven reviewed missing generated test paths. No
+missing suite is ignored and no manifest ownership entry is manually purged.
+Specmill #152/PR153 provides explicit ownership retirement after release.
+
+## Native reviewed JSON toxprint, 18 October 2026
+
+Specmill v0.1.30, released source
+`f4efdbcf23f879553e5de50325d637ab46625ed3`, now generates `chemi_toxprint`
+for POST `/api/toxprints/calculate`. The reviewed JSON subset excludes `files[]`
+and `request`, normalizes query before eager option capture, and forwards final
+helper visibility. It has no hooks, batching or pagination. The client formatter
+retains the existing `dtxsid`/`query_id` projections; no upload behavior is claimed.
+
+Thirty-five actual localhost comparisons preserve exact original request bytes,
+method/path/headers, decoded results and visibility for named/positional calls,
+normalization, UTF-8 and original NULL/FALSE/zero/nested options. Empty queries
+fail before option expressions are forced or HTTP occurs. Invisible helper
+NULL/FALSE/zero/nested returns propagate unchanged. The native and existing
+ToxPrint contract suites pass 356 assertions; documentation signatures and legacy
+test freshness pass. Schemas and both transport helpers are byte-identical.
+
+The old existing owned helper-only contract is explicitly retired through
+`specmill::apply_files()` after selection of its native replacement suite.
+Missing historical ownership entries remain for the separately released #152 fix.
+No live service POST or full package test run is claimed. No ComptoxR push.
+
+## Released validator whitespace fix, 18 October 2026
+
+Specmill v0.1.31, source `d572fcc50f739387a689289efdaa9ee8b1338908`,
+regenerates `R/api_validation.R` without trailing whitespace. The change comes
+from upstream PR139 through ordinary generation. The old and new parsed
+expressions are identical, and trimming only the old trailing whitespace
+produces the new source exactly. Both transport helpers and archived schemas
+are unchanged. No wrapper policy or endpoint adoption changes in this wave.
+
+## Released logical line inputs, 18 October 2026
+
+Specmill v0.1.32, source `daa69c84d7076e10385508eb54279548b149d849`,
+is pinned. The actual exact-search bulk candidate passes all126 prior localhost
+success comparisons on this release, preserving logical per-chunk callback inputs
+separately from LF wire bytes. Runtime limits, cap and normalization checks pass.
+The production `ct_chemical_search_equal_bulk` wrapper remains retained.
+
+Nine real HTTP failure cases expose pending failure-policy adoption requirements:
+single404/500 currently drops instead of throwing; failed multi-chunk results gain
+`failed` metadata; all-failed results need the original empty tibble constructor.
+Warning wording also differs and is recorded on open PR146 for supported-seam or
+upstream triage. The old multi-chunk401 path drops while native aborts; this is
+recorded separately for credential-policy review, not as a request to weaken
+native hard errors. PR144/146 comments and complete evidence are linked from
+`pending-exact-search-lines.json`. No helper workaround or production wrapper
+change was made. Schemas and transport helpers are unchanged; no ComptoxR push.
+
+## Combined line and batch warning verification, 18 October 2026
+
+Validation-only Specmill source `ba8c060fff8b9d1b647e4e70265f2546e4fc609e`
+combines the released line fix with PR144 metadata opt-out and PR146 request-count
+and warning policies. Its independently archived source SHA256 is
+`4c9cb0b160670995fd79348a6bd541b7c69d41d5ab9926f980256a80d537fb90`.
+The production toolkit pin and wrappers are unchanged.
+
+All107 prior ordinary failure cases pass with exact warning strings and complete
+result attributes, without exclusions. The line wrapper additionally passes126
+actual localhost success comparisons and56 actual404/500 single/all/partial
+comparisons with exact wire bytes, result attributes and warning strings. Native
+401 remains hard without formatted warnings in six actual HTTP cases; the legacy
+multi401 behavior is explicitly not claimed equivalent. All seven selected
+wrappers keep malformed200 JSON hard. The two list-facade policies reuse the
+existing client error classifier for that last requirement.
+
+Reviewed client response policies attach structured status and endpoint fields to
+ordinary received HTTP errors. A client formatter uses CLI formatting to return
+the original complete warning string; transport errors return no warning, matching
+the old multiple-request behavior. No error-message parsing or transport helper
+patch is used. The line wrapper selects its empty tibble constructor and plain
+failure metadata, while existing list post-combine grouping remains intact.
+
+Whole-client validated generation and final official freshness pass on the exact
+combined source, with no schema edits. Configurations, callbacks, client functions
+and captured cases are archived under `warning_combined` in both pending batch
+and line RDS records. `verify-combined-line-failures.R` independently repeats the
+real HTTP line checks against a candidate checkout. These remain isolated,
+release-pending results; no full package test rerun or ComptoxR push.
+
+## Released metadata policy pin, 18 October 2026
+
+Pinned official Specmill v0.1.33, source
+`28b8e4516013c078baa977460453418b0c760e3f`. The official release archive
+passes its published SHA256SUMS; our independently archived source SHA256 is
+`c7e8530dee23fc4bf689355029016b09e2c71160c3503b146a91b5bba76ce3f8`.
+Reviewed helper regeneration is byte-identical. Whole-client validated generation
+changes only the manifest toolkit version; wrapper configurations and archived
+schemas remain unchanged. Focused normalization, failure-empty, response-error
+and list-all tests pass. Final official freshness passes with the existing
+retained descriptor-origin warnings.
+
+The released batch metadata opt-out is available, but the complete line and
+failure-policy adoption remains held for PR146's released request-count and
+warning policies. The previously accepted combined evidence remains isolated;
+401 stays hard and legacy multi401 equivalence is not claimed. No ComptoxR push.
+
+PR146 final-head isolation at `104372855c3072cd64e59a9b9748dbe03bc3fe8b`
+also passes all107 prior batch-failure comparisons,126 actual localhost line
+success comparisons,56 actual localhost HTTP failure comparisons, six native401
+hard-error cases and seven malformed-success-body hard-error checks. Complete
+attributes, warning strings and wire bytes are preserved; whole-client validated
+generation and final official freshness pass. The exact independently archived
+source SHA256 is `9aadc8ab63cd31a01e5b97fe4e05f641b5b0baa49077a37afa669cbf582e91c0`.
+The existing combined evidence records now include this final-head recheck.
+The formatter-name collision regression remains upstream coverage; actual wrappers
+exercise their reviewed named client formatter. No production wrapper adoption.
+
+## Released request-count and warning adoption, 18 October 2026
+
+Pinned official Specmill v0.1.34 at
+`4cace56d03e34470d962a845f77d8c5ba9b9e2c8`. Official archive checksum,
+DESCRIPTION version and PR146 ancestry pass. Independently archived source SHA256:
+`132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28`.
+The shared helper is regenerated from the released source through the existing
+reviewed decoder adapter; no local runtime patch is added.
+
+Adopted native `ct_chemical_search_equal_bulk` and the reviewed complete failure
+policies for `ct_chemical_detail_search_bulk`,
+`ct_chemical_detail_search_by_dtxcid`, `ct_chemical_detail_search_by_dtxcid_bulk`,
+`chemi_classyfire`, `chemi_amos_get_info_by_id` and `chemi_alerts_groups_by_id`.
+Single effective requests stop on ordinary failures; multiple requests continue
+with reviewed structured HTTP warnings and suppressed transport warnings. Tables
+use the original empty tibble constructor. List facades preserve numeric names,
+successful attribution and NULL positions. Failure metadata is explicitly disabled.
+Line callbacks retain logical entries separately from encoded LF body bytes.
+
+All302 accepted comparisons pass again on this released production pin:107 prior
+batch cases,126 actual localhost line success comparisons,56 actual localhost
+HTTP404/500 failure comparisons, six native localhost401 hard-error cases and
+seven malformed-success-body hard-error cases. Values, complete attributes,
+warning strings and captured wire bytes are compared. All seven public signatures
+match frozen legacy definitions. Focused Classyfire, normalization, response-error,
+line-limit and failure-contract tests pass, as do legacy test-inventory freshness
+and documentation signature checks. Five existing obsolete helper-call suites
+were explicitly retired through the public ownership API after replacement
+coverage was selected; unrelated missing ownership entries remain untouched.
+
+401 tests are simulated; they are not production authentication failure reports.
+Native401 remains hard, and old multi401 equivalence is explicitly excluded.
+Fourteen pagers and deferred lookup remain held for their releases. Other vector,
+list and file-response contracts still need individual review. No full package
+check rerun and no ComptoxR push.
+
+Final validated whole-client generation and official freshness pass on the adopted
+release, with only the existing retained descriptor-origin warnings. Schemas and
+the exact-search GET sibling remain unchanged.
+
+## Released deferred lookup adoption, 18 October 2026
+
+Pinned official Specmill v0.1.35 at
+`a4a7e5249c98e9cfe7c596f2ff995c6a00a44412`. Official archive checksum,
+DESCRIPTION version and final PR148 ancestry pass. Independent source archive
+SHA256: `f63b07c8d5be06262658659135925c920311d7a2bbaacecc6c5c59ca06e23020`.
+
+`chemi_resolver_lookup_bulk` now uses native generation for POST
+`/api/resolver/lookup`. Reviewed client policies preserve the initial ids guard,
+body-option capture, cleanup-only pre-request hook and complete JSON projection.
+`defer_inputs: [tidy]` and the response callback's thunk preserve response-only
+formatting evaluation. The public signature and parameter descriptions remain
+intact. The shared request helpers and archived schemas are unchanged.
+
+All56 frozen old/native full-result and exact request-projection comparisons pass
+on the released pin. Initial/blank guards, option precedence, no HTTP on invalid
+ids, transport before tidy, memoized tidy evaluation and NULL/FALSE/zero/nested
+formatting pass. All four archived production NULL-body captures replay equally;
+no new live calls were made. The native lookup suite preserves coercion, NULL
+option slots and unbatched behavior, and the shared resolver caller tests pass.
+Existing native toxprint regression, legacy test inventory, documentation
+signatures, validated whole-client generation and final official freshness pass.
+The existing obsolete helper-call suite was explicitly retired through the public
+ownership API after native handwritten coverage was selected. The usual retained
+descriptor-origin warnings remain unchanged.
+
+Fourteen pagers remain held for PR151's final integrated verification and released
+pin. No full package check rerun or ComptoxR push; migration remains incomplete.
+
+## Final integrated fourteen-pager isolation, 18 October 2026
+
+Verified exact PR151 head `d8ef8bab73df161c720e328ac301c0c1d7f64516`,
+including released v0.1.35 main, from a fresh checkout of ComptoxR `9ade2e9e`.
+No duplicate active pager job was present before starting. The independently
+archived Specmill source SHA256 is
+`59ed90ddc74539e7ef5aa50d714232bfde0631e82850c4155c056a57933a8eed`.
+A private install regenerated the reviewed helper and pagination companion plus
+all14 archived operations using their original client callback names.
+
+All338 checks pass:20 captured manual/automatic keyset replays,30 advanced
+cursor/filter/sort projections,160 keyset failure/empty/parsing cases,40 cursor
+and credential safety cases, two GET/POST empty-page continuation cases, eight
+page-pager success cases,64 page-pager failure cases and all14 generated examples.
+Complete result attributes, warnings, request contracts and HTTP error-policy
+behavior are checked against the original wrappers. Tests use mocked responses
+and archived captures; simulated401 cases are not production authentication
+failure reports. No new live calls were made.
+
+Whole-client validated generation and final validated freshness pass with zero
+selected-operation diagnostics/mapping diagnostics/drift; the usual retained
+schema-origin warnings remain visible. Archived schemas are unchanged. Both
+pending pager RDS records now retain the final source identity, verification
+scope, replay/setup scripts and frozen original page-wrapper definitions.
+
+This is isolated verification only. Root remains on released v0.1.35; no root
+helper, wrapper, API configuration or toolkit pin adoption. All14 pagers stay
+retained until PR151 is released. No full package check rerun or ComptoxR push.
+
+## Released fourteen-pager adoption, 18 October 2026
+
+Pinned official Specmill v0.1.36 at
+`0e3ed64ddc48b0104c00fb541678d5f75935afe3`. Official archive checksum,
+DESCRIPTION version and final PR151 ancestry pass. Independent source archive
+SHA256: `9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673`.
+Adopted the ten reviewed AMOS keyset GET/POST wrappers and four page pagers using
+the archived configs/callbacks and official paired helper/pagination companion.
+The existing reviewed decoder adapter is unchanged; no new helper patch is used.
+
+All338 accepted cases pass again on the released pin, including all14 generated
+examples, complete result attributes, warning strings and request contracts.
+GET cursor defaults remain NULL and POST cursor defaults remain empty strings;
+filters/sort, manual controls, empty continuation and partial-error/metadata
+policies are retained. Numeric page/size defaults are emitted as schema integers
+with their original values. The new native suite checks all14 signatures/default
+values, captured contracts, partial failures, credential hard errors and empty
+continuation. It compares full warning strings to frozen legacy functions under
+the same CLI environment rather than fixing a platform-dependent glyph.
+
+The five existing native page-wrapper contract suites pass after regeneration of
+the upstream callback-environment lookup bindings. Lookup, list-all and batch
+failure regressions also pass. The local legacy generator retired its ten replaced
+generated suites; four existing Specmill helper-call suites were explicitly
+retired via its public ownership API after native coverage was selected. The
+legacy inventory now passes with34 remaining generated wrappers. Documentation
+signatures, validated whole-client generation and final validated freshness pass;
+archived schemas remain unchanged. Existing retained origin warnings are unchanged.
+
+No unrelated missing ownership entries were removed: explicit missing-file
+retirement remains held for released PR153. Native401 remains hard; credential
+cases are simulated, not production401 reports. No new live calls, full package
+check rerun or ComptoxR push. Other vector/list/file contracts remain under review;
+migration is incomplete.
+
+## Released explicit ownership retirement, 18 October 2026
+
+Pinned official Specmill v0.1.37 at
+`ac1fa3389dbce30d22236bdf470105647fe69ca8`; official archive checksum passes.
+Independent source archive SHA256:
+`b238b68c18909484245de4dc1f475d50e548abae5574c6fb305709e9da9be536`.
+The shared generated helpers are unchanged.
+
+Individually selected eleven already-missing owned helper-call suites for explicit
+public-API retirement. Each wrapper has a configured, existing native replacement
+suite; the complete wrapper/path/replacement mapping is retained in
+`reviewed-test-retirements.json`. Plan is read-only, apply removes only those
+ownership records, unrelated records remain identical and a second apply is
+idempotent. No blanket cleanup or ownership inference is used. The corresponding
+normalization, list-all, additional-path/range and special mass/array suites pass,
+as do legacy test-inventory and final generated-client freshness checks. Complete
+failure-policy review remains separate from replacement test selection.
+
+All queued upstream fixes are now released. Independent vector/list/file review
+continues; this is not full migration completion. No full package check rerun,
+new production calls or ComptoxR push.
+
+## Independent file/list review and new blocker154, 18 October 2026
+
+The reviewed candidate corrects three image routes and the two AMOS/alerts list
+facades through supported client collection/projection callbacks on released37.
+It preserves PNG Accept headers, single-image unwrapping, raw fallback/image
+attributes/info/pixels, missing positions, late JSON parsing and HTTP warning
+order. Mocked response tests retain httr2's real sequential executor.
+
+Important correction: earlier mocks used lapply on named request lists and
+incorrectly kept numeric response names. Real httr2::req_perform_sequential returns
+unnamed responses. Prior numeric-name parity claims for these list facades and
+files are superseded. Corrected107 batch comparisons pass with the real executor
+and the isolated candidate;735 image cases,180 actual localhost image cases,
+224 actual localhost list cases and ten simulated native401 hard cases pass
+within value/attribute/warning/request and hard-error timing scopes. Image object
+comparison checks attributes/info/pixels, not external-pointer identity or
+non-deterministic re-encoding timestamps.
+
+The candidate is NOT adopted. Final-format error propagation differs: for two
+malformed200JSON responses, the original list wrapper sends both requests then
+raises purrr_error_indexed; the generated collector plus post_combine hook sends
+both requests but raises comptoxr_post_combine_hook_error. Per-response formatting
+runs too early. This unsupported final-format condition contract is filed as
+https://github.com/seanthimons/specmill/issues/154 and tasked to the upstream agent
+for implementation/release or proof of an existing supported declarative seam.
+No client hook-executor/runtime workaround is used. Original error classes are
+explicitly outside the candidate's passing scope.
+
+All five affected root wrappers/configs/client policies remain on their previous
+implementation pending a released fix. The complete isolated candidate, replay
+scripts, captured cases, regression source and exact condition reproduction are
+archived in pending-file-list-projections.rds/json. The two MOL routes and PDF
+facade still require separate file review. Pin37 and the eleven scoped ownership
+retirements remain complete. No new production calls or ComptoxR push; migration
+is not complete.
+
+## Independent PR155 final-format verification, 18 October 2026
+
+Verified exact unreleased Specmill `2cadcc9e2ed0e01a21d97717242215d12704b365`
+from an independent archive/private installation against the five-wrapper
+candidate frozen at `fa93f64b`. Source archive SHA256 is
+`d9211a11294b4fa3ee80478119708b20c36dce631f3d047d667471ef1a7a5ea6`.
+Operation `result_formatter` replaces only each selected archived post_combine
+formatter. Both list and image client projections retain purrr::map to preserve
+indexed conditions. The image projection's remaining lapply was independently
+reproduced as a condition-class difference for empty200JSON and corrected in the
+isolated candidate. No shared helper, client executor or generator patch.
+
+Passing proof includes320 actual localhost list cases and180 image cases,
+including final-format error classes, exact values/attributes/warnings/wire,
+list parse index/parent classes and all-three-requests-before-formatting timing.
+Successful object/array/nested HTTP fixtures now contain valid JSON, correcting
+previous over-escaping. Ten simulated native401 checks remain hard; old multi401
+parity is excluded and no production401 claim is made. Five typed formatter
+sentinels remain catchable after both requests. Public formals/defaults match;
+the shared request helper is byte-identical to root v37.
+
+The420-case collection suite, failure/empty/additional suites and final824
+normalization assertions pass. The isolated test updates remove stale numeric
+response names and supply raw response records to the five new final formatters
+in normalization mocks. Initial harness failures and the successful rerun are
+retained in the evidence. Earlier735 image value/warning/wire cases also pass.
+Final validated whole-client freshness and the34-wrapper legacy test inventory
+pass. Full configs, pure client projections, corrected tests/scripts and captured
+cases are under issue154_validation in pending-file-list-projections.rds/json.
+
+PR155: https://github.com/seanthimons/specmill/pull/155 . Root pin and all five
+wrappers remain unchanged pending a verified release. No production calls, full
+ComptoxR package check or push; migration remains incomplete.
+
+## Released v0.1.38 five-wrapper adoption, 18 October 2026
+
+Independently downloaded the official release archive and SHA256SUMS: archive
+`ba38500be990f8a478f14e8a7809ca0afb08459ed7ffbbca7efd10cdc0670403`
+and DESCRIPTION0.1.38 pass. The tag resolves to
+`f0adbc08f35142cd2f85b1a1b60606b58e9d749e` and contains final PR155
+`2cadcc9e2ed0e01a21d97717242215d12704b365`. Development pin uses an
+independently archived source with SHA256
+`d79169d631d528ed2754fee19002f84667a84416097dfcba55b64f5e688f0373`.
+
+Adopted the reviewed AMOS get_info_by_id and alerts groups-by-id final list
+projections plus all three CTX chemical-image routes. Operation result_formatter
+runs the original client purrr projection after transport/combination, outside
+hook wrapping and drop policy. Only the selected list post_combine formatter
+hooks were removed. Three obsolete list response-policy functions are removed;
+all remaining callers are generated native operations. Shared request helper and
+compatibility executor are unchanged, with no new runtime dependency.
+
+Released-pin checks pass:320 actual localhost list and180 image comparisons,
+five typed formatter catches after both requests, ten simulated native hard401
+cases, and1332 regular assertions with zero failures/warnings. List malformed
+successes retain indexed classes/locations/parent classes after all requests;
+values/attributes/warnings/wire and image pixels/raw fallback remain reviewed.
+Native multi401 deliberately does not claim old parity or production evidence.
+Corrected real-executor numeric-name assertions, normalization response mocks
+and valid JSON fixtures are included. Image documentation now describes the
+unnamed multi-input list. Original public formals/defaults are unchanged.
+
+Final validated whole-client freshness, helper/pin provenance and34-wrapper
+legacy generated-test inventory pass. Documentation check matches the baseline,
+including its existing pipe.Rd %>% note. Complete released cases/logs/provenance
+are archived as release38_adoption in pending-file-list-projections.rds/json;
+failure-policy and pending batch/line records link this adoption without
+replacing historical evidence. The five-wrapper release hold is cleared.
+
+MOL/PDF and other individual vector/list/file contracts remain separate work.
+No production calls, full package check or ComptoxR push. This is not a complete
+migration claim.
+
+## 18 October 2026 resumed file and static review, unreleased blockers
+
+Baseline `83a96ec7`, Specmill v0.1.38. No wrapper adoption in this checkpoint.
+Read-only production probes used the authorized CTX key without recording the
+credential or request auth headers. Captures in `file-static-live-review.rds`
+contain only URL, status, media and body. Both MOL routes returned 200 text/plain;
+AMOS get_pdf/method/1 returned 204 with no body; resolver safety-flags,
+pubchem-section, and toxprints/calculate GETs returned 200 JSON. The 204 is not
+proof of a successful PDF download. Captured MOL bodies replay through the native
+wrappers in `test-native_file_media.R`; together with `native_additional_gets`,
+22 assertions pass. Native MOL text decoding works on those actual bodies. The
+old JSON Accept/tidy projection and its text parsing failures are a separate
+compatibility question, not evidence that the server returns JSON.
+
+`pending-mol-contracts.rds` records a held JSON/tidy parity candidate, frozen
+original definitions and the 180-case mocked real-sequential comparison. 156
+cases match values, attributes, warnings, wire requests and final indexed parse
+condition classes/location/parent. The remaining 24 are single-request
+transport/HTTP condition class differences. Specmill #156 was filed and linked
+from PR345; upstream PR159 now offers opt-in preserve_errors. Adoption remains
+held until a release, pin update and independent exact-client verification.
+Original HTTP mocks used a synthetic httr2_http condition; follow-up verification
+must use httr2::resp_check_status or localhost for authentic status subclasses.
+
+`pending-static-final-formatters.rds` retains three GET candidates and a corrected
+supported direct-response-policy variant. An initial report, Specmill #157,
+correctly identified that result_formatter rejects unbatched calls, but overstated
+the consequence. The generated decoder invokes response policies without
+wrapping, allowing the existing pure list projection at that seam. Correction
+posted upstream and sent to overwatch. Direct policy proof matches all 54
+scalar/NULL cases, including malformed JSON indexed conditions. Eighteen invalid
+vector-query cases are rejected before HTTP by both implementations but differ
+in condition indexing. This is not full failure parity; transport remains held
+on #156. Candidate GETs preserve bulk siblings in their existing source files.
+
+Specmill #158 records the separately confirmed private-state blocker for
+getsimilaritymap and similar resolved-chemical facades: pre-hook state contains
+private chemicals=NULL; partial updates may set it; post-hook params exclude it;
+public formals and skip-before-post ordering must remain unchanged. Overwatch
+owns implementation and release. No artificial client hooks added.
+
+`remaining-legacy-contracts.rds` freezes the current legacy inventory's public
+formals, helper calls and sources. It was collected while the three static GET
+candidates were loaded; those three entries have no legacy helper call. It is an
+implementation aid, not a completion count. Root wrappers remain on the released
+implementation. Candidate work continues in isolated local checkouts. No
+ComptoxR push, merge or release; no write/upload production probes.
+
+### Exact upstream fix verification and released-baseline test repair
+
+PR159 exact `e77e862da77c7e2f35dc49e6085715ed6863f1bb` passes all
+180 held MOL comparisons with explicit preserve_errors controls and authentic
+httr2 received-HTTP conditions. Its superseding
+`da88138c0b2b25d7dda1a0ce45f668ba51ace20e` also passes the 180 comparisons
+through the actual private client using the updated official decoder companion.
+The private emitter takes scaffold$code directly and retains noRd, whitespace,
+protection and provenance checks. Eight independent decoder status/control cases
+and a standalone policy/context/decode case pass. Root remains v0.1.38 until the
+upstream release. The JSON/tidy MOL candidate is a parity/typed-error proof;
+restoring legacy JSON parsing is not evidence of correct text-server handling.
+
+Broader private checks exposed one normalization mock needing collected responses
+for the held MOL projection, and four stale ChET assertions. The four ChET
+assertions reproduce unchanged on released root `48c4de6e`: expected paths omit
+`/api`, and manual counts expect unwrapped data while the adopted manual pager
+preserves its envelope. Corrected those exact test expectations. The localhost
+adoption suite now passes all 20 assertions. No pager implementation changed.
+
+PR160 exact `c93a8c96f0818c8d1e74bfc5d74ac971e7f20f88` passes 42
+getsimilaritymap native-versus-frozen comparisons plus exact public formals.
+Checks include complete initial and final hook states, private NULL/flat chemical
+updates, skip ordering, partial/NULL/unknown updates, optional section and lowercase
+sort, actual body/URL/Accept, return values, warnings and early errors. A private
+native state suite replaces its old fixed-helper test fixture for verification;
+root facade remains retained. Existing supported prepare callback preserves the
+literal vector default without changes to other resolver wrapper outputs.
+
+### Combined list hook and resolved payload review
+
+Specmill #162 documented the list-name migration blocker: applying the extraction
+hook inside each request preserved duplicate SID rows, while the original wrapper
+applied it once to the combined tidy result. PR163 exact
+`b79412fd330ddad452ff1a31c22917ba6fa543eb` resolves this with
+`post_response_scope: combined` and `post_params_source: original`.
+Independent archive SHA256 is
+`6fec334c6f930fe26ed3eb581c5a210406a2091a0f091ebdf2d26dd6999b27ad`.
+The native collector/final tidy formatter and unchanged real hook pass 30 exact
+comparisons: normal/single/duplicate/blank/NA/empty inputs, extraction on/off,
+duplicate SID payloads, missing SID hook failures and malformed JSON. Values,
+requests, warnings and hook traces match; errors also match class/message/parent
+class. Evidence: `pending-list-name-pr163-replay.rds`; upstream verification:
+https://github.com/seanthimons/specmill/pull/163#issuecomment-6252180259.
+Root adoption remains held for serialized releases and full checks.
+
+Seven resolved-chemical candidates initially matched the old wrappers in 70
+comparisons, but payload review found the old generic envelope itself violated
+several declared request schemas. `pending-resolved-chemical-candidates.rds`
+records that **old-shape parity experiment, not an adoption-ready payload**.
+The subsequent candidate uses Chemical versus ChemicalRecord/ResolvedChemical
+items as declared, and places schema fields directly in the request object.
+Resolving a chemical must preserve its complete fields rather than retaining only
+SID/SMILES. A live ToxPrint experiment also established that omitting optional
+`options` produces HTTP 500, while an explicit empty object succeeds with total=1
+and one returned chemical (`toxprints-native-flat-live-review.rds`). The corrected
+private candidate now reproduces that positive result through the real wrapper.
+These client body/data projections use supported callbacks; no transport helper
+or executor was patched. Other targets still need successful live validation:
+PubChem section returned 500; standardizer's default request returned an empty
+result in the old shape and a configuration error in the flat control.
+
+`resolved-live-review.rds`, `resolved-shapes-live-review.rds` and
+`chet-batch-live-review.rds` retain credential-free read-only evidence. ChET batch
+search returned HTTP 200 JSON. `pending-chet-media-batch.rds` and
+`pending-typed-errors-private-state.rds` preserve held candidate contracts.
+No evidence file constitutes a completion count or permission to pin unreleased
+Specmill in root.
+
+### Released 0.1.39 helper adoption
+
+Root now pins official v0.1.39 source/tag
+`01a6142e1c8b9aef736664627063efa5d1849416`, with independently verified PR159
+ancestry. Downloaded release package matches SHA256SUMS
+`0cc81496e10e0d2d6f5f6ca6f56c2e7214233e3095fd65cdb38ebfa1cc86fa43`;
+the separately reproducible git-archive checksum recorded in the lock is
+`5c6941c4a1d8e4de0c5eb54206ca2ec487b89be1aec11c1099fb6da25664c3f6`.
+The adopter now consumes the official scaffold directly, removing the old
+substring decoder extraction while retaining noRd, whitespace normalization,
+whole-file protection and provenance. No handwritten runtime change.
+Helper freshness/idempotence/provenance/protection checks pass. Seventeen new
+assertions verify original transport condition identity, typed received 404/500
+with original response, unchanged defaults, hard 401 and invalid controls,
+plus standalone policy context/decode. Existing failure/media/localhost adoption
+suites pass 85 assertions. Operation-specific adoption continues separately;
+private-state/combined-hook candidates remain held until released.
+Full released generation apply and a fresh check pass. Broader collection,
+normalization and pager checks pass. The response-error suite had one stale AMOS
+expectation: its reviewed final collector reports `purrr_error_indexed` at row 1,
+not `specmill_call_error`. This reproduces unchanged with the v0.1.38 helper;
+corrected that assertion and checked the simpleError parent explicitly.
+
+### Five static/media endpoints adopted on the released pin
+
+Adopted three static GETs (resolver safety flags, resolver PubChem section,
+ToxPrint calculation), ChET image retrieval and ChET batch search. Native source
+ownership is recorded by full public generation; public signatures and bulk
+siblings remain intact. Selected operations explicitly opt into released typed
+transport preservation. Pure response projections retain ordinary HTTP warning/
+NULL results, while native 401 remains a hard call failure. The image ID is one
+encoded path segment. No runtime helper/executor customization.
+
+`test-native_static_media.R` passes 279 assertions against frozen original public
+functions, plus explicit input/path and failure checks. Existing collection
+coverage passes 441 assertions; the localhost adoption check passes 20 after its
+remaining image fixture route was updated to `/api/chet/...`. Five obsolete legacy
+helper-mock suites were retired individually, verified unowned, and replaced by
+the registered behavior suite; no other test ownership was removed. Full generation
+and a fresh check pass with zero operation/mapping/drift diagnostics. The legacy
+wrapper inventory now reports 29; it is not an endpoint completion fraction.
+
+The PR progress ledger is reproduced by `Rscript dev/specmill-rebuild/progress.R`.
+It counts unique canonical schema HTTP operations with owned native wrapper hashes
+and committed behavior coverage, excluding held candidates and matching literal
+legacy callers. All source operations form the denominator, including unexposed
+routes; archived underscore-named CTX duplicates are excluded. This conservative
+ownership/test measure does not replace the remaining live/failure behavior audit.
+
+New read-only AMOS evidence: three retrieve-document routes return HTTP 200 JSON
+with empty result arrays; substances_for_ids returns an actual ZIP/Excel workbook
+with workbook and worksheet members. General/analytical batch exports return HTTP
+500 for both minimal and populated schema bodies. Those failures are recorded in
+`amos-remaining-live-review.rds` and `amos-full-body-live-review.rds`; no successful
+batch-export validation is claimed.
+
+### Five production-verified AMOS reads adopted
+
+Adopted the three retrieve-document reads, substances_for_ids and document-ID
+search. Positive calls through the final root wrappers return one expected record
+per retrieve operation, the expected FS-10313 document search ID, and a populated
+Excel workbook containing DTXSID7020182. The old generic Chemi payload/gate did
+not send these valid flat request objects. Public names, files and formals remain
+unchanged; Excel responses are returned as raw bytes.
+
+The archived production Swagger2 snapshot is unchanged. A separately named,
+self-contained OAS3.0.3 subset derives only the five confirmed POST operations
+from the preserved staging source and explicitly selects production. Source URL,
+retrieval time, full source/output/canonical hashes, unchanged operation objects,
+transitive local components and exact semantic removals/server replacement are
+recorded in `amos-reviewed-source.json`; `bundle_amos_reads.R` reproduces it.
+The bundle passes `validate_schema`. Full generation with validation enabled,
+zero operation/mapping/retained/drift diagnostics, and a fresh root check pass.
+No query-type bypass, dialect splice, helper patch or snapshot rewrite.
+
+The new AMOS suite passes 110 assertions, including actual localhost POST paths,
+JSON content type and serialized array/object bodies, Excel bytes, signatures,
+ordinary HTTP errors, transport identity, parse failures, hard401 and early
+validation. The combined AMOS/static/localhost run passes 566 assertions. Five
+specific unowned legacy helper-mock suites were replaced by that registered suite.
+Production evidence is in `amos-root-live-review.rds`; the latest ChET image
+live check also succeeds for PNG, SVG and PDF (`chet-image-live-review.rds`).
+
+Updated schema progress is 300/548 under the ledger's stated criteria; legacy
+wrapper inventory is 24. General and analytical batch exports remain retained
+with recorded server500 controls; no successful behavior claim for those routes.
+The earlier static/media and collection expectation counts were corrected to
+279 and441 from their reporter output; all passed, and endpoint fractions were
+unaffected. The earlier PR progress comment was corrected in place.
+
+### Authentic received-error correction and released 0.1.40 baseline
+
+The first new static/AMOS failure mocks returned error responses directly instead
+of applying the request's httr2 error predicate. They therefore asserted an
+unreachable ordinary-status projection for legacy single requests. Corrected the
+mocks to honor `request$policies$error_is_error` and `resp_check_status`; corrected
+the supported client response policies to invoke the preserved decoder on 4xx/5xx
+before projecting success data. No generator helper/executor patch was made.
+
+The permanent real-localhost suite `test-native_received_http.R` now passes 81
+assertions for all ten newly adopted wrappers: received404/500 retain httr2 status
+classes and original response/body; five frozen old wrappers independently raise
+the same typed statuses; native401 remains hard. The corrected static/media279,
+AMOS110 and decoder/control17 suites also pass (487 assertions across these four
+suites). Successful production read checks are independently recorded above.
+Earlier ordinary HTTP warning/NULL claims for these new single-request wrappers
+are superseded by this correction. Endpoint counts remain300/548.
+
+Root now independently verifies and pins official Specmill v0.1.40 source/tag
+`8fa120e84fe8d0267c11e515e6fd1f387ff4a36f`, including final PR160 ancestry.
+Downloaded release checksum matches SHA256SUMS
+`9201d10a2d2ce620f8fcae9725003f56b82fa3140aa49df5a5bac81f23acdf28`;
+reproducible git-archive checksum is
+`e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175`.
+Official helper emission/provenance/protection, full generation and fresh check
+pass. Private-state operation adoption follows separately; the combined-hook
+candidate remains held for its serialized release. No ComptoxR push.
+
+## Released private-state adoption and source/service review (18 October 2026)
+
+The v0.1.40 candidate uses the released `private_params` and `post_params`
+settings for resolver similarity map, alerts, hazard POST, similarity ordering,
+PubChem section POST, standardizer chemicals and ToxPrint calculate POST; hazard
+GET preserves its existing formatting hook. All eight retain public formals.
+The initial private chemicals slot, partial hook updates, skip-before-post,
+and original public post-hook state have independent replacement tests.
+
+Request bodies follow the declared endpoint schema: Chemical arrays are flat,
+ResolvedChemical/ChemicalRecord arrays remain nested, and body fields such as
+section and similarity settings are top-level. Empty options serialize as an
+object; declared option arrays are normalized/validated by the generated body
+validator. The resolver projection keeps its original six nullable fields and
+retains additional chemical fields, including mol/cid, which working calculation
+requests need. This is an intentional request correction, not byte parity with
+legacy nested option bodies. Shared retained resolution callers remain tested.
+
+Root replay passed 655 assertions across the chemical-resolution, compound-hook,
+hazard-GET, resolved HTTP/payload and similarity-map state suites. This includes
+actual localhost JSON bodies, typed received 404/500 responses and hard native
+401 behavior, malformed-success conditions and unresolved skips. The exact old
+owned map contract was removed using released `specmill::apply_files`; its
+fixture entry was retired and bespoke coverage registered. Seven obsolete
+unowned legacy helper-boundary files were replaced. The inventory reports 17
+remaining legacy suites; that number is not an endpoint denominator.
+
+Five final production read/calculation probes returned positive data: ToxPrint
+(total 1), similarity ordering, similarity map, PubChem section, and standardizer
+chemicals with `options = list(workflow = "ms-ready")`. Similarity ordering needs
+an explicit main reference Chemical; missing workflow/reference defaults remain
+unchanged and the service rejects them. Hazard GET/POST and alerts returned 502;
+controlled successes and schema checks do not establish positive production
+behavior for those three.
+
+Resolver `chemi_resolver_getsimilaritylist`, POST `/api/resolver/getsimilaritylist`
+in `chemi-resolver-prod.json`, remains on its existing implementation. Fresh
+production schema still declares `get_chemicals`, but an otherwise complete
+minimal declared request fails HTTP500 because that getter is null. An
+undocumented `_chemicals` control plus main returns only an empty array, so it
+was rejected as a correction. Filed [Specmill #165](https://github.com/seanthimons/specmill/issues/165)
+and linked it from PR345. Portable request/response evidence, originals and
+explicit production limits are in `wave-resolved-chemical-evidence.rds`.
+
+Staging follow-up requested by the user: the same generated hazard GET and POST
+returned HTTP200 with a nonempty `hazardChemicals` array on
+`https://cim.sciencedataexperts.com`. Alerts default options received an explicit
+400 requiring 1–1000 `options.alerts` entries; GET `/api/alerts/groups` advertised
+57 groups. Retrying the generated alerts wrapper with the advertised Ashby group
+name (`ashby`) returned HTTP200 with nonempty alertFlags and no application errors. The advertised ID returned a group-not-found application error and was rejected. These are staging proofs,
+not claims that production 502 availability has recovered. Public defaults stay
+unchanged; callers must select alert groups. The initial source/service limits
+above are superseded only for these positive staging controls.
+
+Whole-client generation with `validation = TRUE` passed with zero operation,
+mapping, retained diagnostics and drift; a fresh whole-client check passed.
+Archived invalid sources remain visible in validation reporting for retained
+operations, without a bypass. Scoped Rd files were regenerated from the final
+native definitions. Reproduced endpoint checkpoint: **308/548**; all canonical
+schema fractions are in `progress.md`/`progress.json`. No ComptoxR push.
+
+The first broad CRAN-safe run exposed ten obsolete AMOS keyset test files that
+still mocked `generic_request` after the earlier native pager adoption. Stopped
+that run, verified each file's generated banner and existing native pager
+bespoke registration, and retired only those unowned stale files. Their actual
+request/cursor/result/failure coverage remains in `test-native_pagers.R`.
+`retired-amos-legacy-pager-tests.rds` records the exact paths. The broad suite is
+being rerun with external HTTP blocked and localhost permitted.
+
+The broad replay also found two handwritten similarity-map suites still mocking
+the old helper. Updated those collaborators and expected payload locations to
+the reviewed native mapping, retaining resolver arguments, option/sort coercion,
+exact pre/post states, skip/retry behavior and formatter/error assertions; all
+82 assertions pass. Three older owned image fixed-call snapshots similarly
+predated the released image formatter. Registered the existing collection/media
+suite, retired those exact tests via public `apply_files`, and archived their
+fixture entries in `retired-image-fixed-contracts.rds`. The collection and
+normalization regression suites pass; no runtime change was needed for these
+test corrections.
+
+## Released v0.1.41 integration: 53 operations
+
+The root now selects released v0.1.41 and adopts the list-name facade, six dedicated
+descriptor GET/POST bindings, two EPI reads, forty service metadata/version GETs
+and four CheT direct reads. Canonical source files are unchanged. The native
+helper matches the official scaffold and provenance byte for byte. Its existing
+pagination companion calls digest, so DESCRIPTION now declares that runtime
+dependency. Specmill itself remains development-only.
+
+Validated full generation and the independent fresh check pass. All 590 owned
+output hashes match; the final apply changes no output. Operation, mapping,
+retained-output and drift diagnostics are empty. Warnings for the four retained
+Mordred/WebTEST prediction routes remain visible. The schema ledger advances
+from 308/548 to 361/548 and the remaining legacy generated-test inventory is 16.
+
+The focused root replay passed 1,607 assertions. Two subsequent registration
+assertions initially ran before their fixture helper was defined; that test-only
+ordering error was fixed and the entire CheT suite then passed 150 assertions.
+The broad safe run finished 7,781 passing assertions, zero failed expectations,
+zero warnings, 50 expected optional-data skips and that one subsequently corrected
+error. It is not labeled a clean single full-suite pass. Root retained PubChem
+and search/safety suites additionally passed 77 and 58 assertions. The package
+build/check gate finished 0 errors, 0 warnings, 0 notes with tests, examples,
+vignettes and manual generation excluded; tests ran separately.
+
+Initial gates failed when the shared /tmp tmpfs filled during R's source-tree
+copy. Their evidence is preserved. Retries use persistent TMPDIR and a minimal
+package source snapshot, without copying development artifacts or modifying
+active libraries. Portable results and reproduction are in
+[v41-integration](v41-integration/README.md).
+
+Live results remain explicitly scoped: all 40 service-info routes returned
+meaningful production bodies; all six descriptor calculations returned values;
+EPI /api returned 14 paths. The JAR is covered by controlled byte-preservation
+tests, not a production download. CheT temporary chemical detail returns 500.
+Production hazard/alerts remain unavailable, with staging and rejected-control
+evidence retained from the preceding wave. Newly completed reviewed download
+and management candidates are excluded until the next root integration.

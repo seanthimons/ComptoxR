@@ -1,8 +1,8 @@
 #' Padel
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param smiles One SMILES string or resolvable chemical identifier
 #' @param x2d Calculate two-dimensional descriptors (default: TRUE)
 #' @param x3d Calculate three-dimensional descriptors (default: FALSE)
@@ -13,11 +13,11 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_padel(smiles = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_padel <- function(
   smiles,
   x2d = TRUE,
@@ -27,48 +27,46 @@ chemi_padel <- function(
   timeout = NULL,
   output = c("wide", "raw")
 ) {
-  req_data <- run_hook(
-    "chemi_padel",
-    "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `x2d` = x2d,
-        `x3d` = x3d,
-        `fp` = fp,
-        `headers` = headers,
-        `timeout` = timeout,
-        `output` = output
-      )
-    )
+  params <- base::list(
+    "smiles" = smiles,
+    "x2d" = x2d,
+    "x3d" = x3d,
+    "fp" = fp,
+    "headers" = headers,
+    "timeout" = timeout,
+    "output" = output
   )
-  if (isTRUE(req_data$skip_request)) {
-    result <- req_data$result
+  state <- run_hook("chemi_padel", "pre_request", base::list(params = params))
+  changed <- base::intersect(base::names(params), base::names(state$params))
+  params[changed] <- state$params[changed]
+  if (base::isTRUE(state$skip_request)) {
+    result <- state$result
   } else {
-    result <- generic_request(
-      endpoint = req_data$request$endpoint,
-      method = req_data$request$method,
-      batch_limit = 0,
-      server = req_data$request$server,
-      auth = FALSE,
-      tidy = FALSE,
-      content_type = req_data$request$content_type,
-      options = req_data$request$options
+    result <- .ct_request(
+      "method" = "GET",
+      "path" = state[["request"]][["endpoint"]],
+      "path_params" = structure(list(), names = character(0)),
+      "query" = state[["request"]][["options"]],
+      "body" = NULL,
+      "headers" = base::list("Accept" = state[["request"]][["content_type"]]),
+      "server" = base::list("url" = state[["request"]][["server"]]),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        .ct_static_json_result(response, context, decode, state$request$endpoint)
+      },
+      "request_controls" = list(preserve_errors = TRUE)
     )
   }
-
-  post_data <- req_data
-  post_data$result <- result
-  result <- run_hook("chemi_padel", "post_response", post_data)
-
-  return(result)
+  state["result"] <- base::list(result)
+  result <- run_hook("chemi_padel", "post_response", state)
+  result
 }
 
 #' Padel
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param query Chemical structures or resolvable identifiers
 #' @param x2d Calculate two-dimensional descriptors
 #' @param x3d Calculate three-dimensional descriptors
@@ -79,11 +77,11 @@ chemi_padel <- function(
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_padel_bulk(query = "DTXSID1024122")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_padel_bulk <- function(
   query,
   x2d = TRUE,
@@ -93,37 +91,50 @@ chemi_padel_bulk <- function(
   timeout = NULL,
   output = c("wide", "raw")
 ) {
-  req_data <- run_hook(
-    "chemi_padel_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `x2d` = x2d,
-        `x3d` = x3d,
-        `fp` = fp,
-        `headers` = headers,
-        `timeout` = timeout,
-        `output` = output
-      )
-    )
+  params <- base::list(
+    "query" = query,
+    "x2d" = x2d,
+    "x3d" = x3d,
+    "fp" = fp,
+    "headers" = headers,
+    "timeout" = timeout,
+    "output" = output
   )
-  if (isTRUE(req_data$skip_request)) {
-    result <- req_data$result
+  state <- run_hook("chemi_padel_bulk", "pre_request", base::list(params = params))
+  changed <- base::intersect(base::names(params), base::names(state$params))
+  params[changed] <- state$params[changed]
+  if (base::isTRUE(state$skip_request)) {
+    result <- state$result
   } else {
-    result <- generic_chemi_request(
-      endpoint = req_data$request$endpoint,
-      server = req_data$request$server,
-      auth = FALSE,
-      tidy = FALSE,
-      body = req_data$request$body,
-      content_type = req_data$request$content_type
+    result <- .ct_request(
+      "method" = "POST",
+      "path" = state[["request"]][["endpoint"]],
+      "path_params" = structure(list(), names = character(0)),
+      "query" = structure(list(), names = character(0)),
+      "body" = state[["request"]][["body"]],
+      "headers" = base::list("Accept" = state[["request"]][["content_type"]]),
+      "server" = base::list("url" = state[["request"]][["server"]]),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        if (context$status >= 400L) {
+          decode()
+        }
+        if (
+          context$status >= 200L &&
+            context$status < 300L &&
+            grepl("^text/(csv|tab-separated-values|tsv)", state$request$content_type, ignore.case = TRUE)
+        ) {
+          observe_api_responses(list(response))
+          value <- .ct_response_delimited(response, context, decode)
+          return(if (!length(value)) list() else value)
+        }
+        context$endpoint <- state$request$endpoint
+        .ct_chemi_result(response, context, decode, tidy = FALSE)
+      },
+      "request_controls" = list(preserve_errors = TRUE)
     )
   }
-
-  post_data <- req_data
-  post_data$result <- result
-  result <- run_hook("chemi_padel_bulk", "post_response", post_data)
-
-  return(result)
+  state["result"] <- base::list(result)
+  result <- run_hook("chemi_padel_bulk", "post_response", state)
+  result
 }

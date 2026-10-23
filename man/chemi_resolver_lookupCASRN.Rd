@@ -7,10 +7,10 @@
 chemi_resolver_lookupCASRN(query)
 }
 \arguments{
-\item{query}{Required parameter}
+\item{query}{query}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

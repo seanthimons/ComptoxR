@@ -1,0 +1,901 @@
+Verified specmill 0.1.42 at /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/toolkit-library/0.1.42/specmill
+Source revision: b17a0856263e0179a164a9673399f221168cda6d
+Source archive SHA256: dbd15b2509171431f00a193a648f426a02873aee5e16a73de740d30b56792351
+Schema validation
+  epi-suite-prod.json: passed
+  chemi-alerts-prod.json: passed
+  chemi-amos-reviewed-native.json: passed
+  ctx-chemical-prod.json: passed
+  chemi-search-prod.json: passed
+  chemi-chet-prod.json: passed
+  chemi-resolver-prod.json: passed
+  chemi-services-prod.json: passed
+  chemi-stdizer-prod.json: passed
+  chemi-toxprints-prod.json: passed
+  ctx-exposure-prod.json: passed
+  ctx-hazard-prod.json: passed
+  ctx-bioactivity-prod.json: passed
+  chemi-amnb_nate-prod.json: passed
+  chemi-arn_cats-prod.json: passed
+  chemi-ncc_cats-prod.json: passed
+  chemi-opera-prod.json: passed
+  chemi-pfas_atlas-prod.json: passed
+  chemi-pfas_cats-prod.json: passed
+  chemi-padel-prod.json: passed
+  chemi-mordred-prod.json: passed
+  chemi-rdkit-prod.json: passed
+  chemi-webtest-prod.json: passed
+  chemi-predictor_models-prod.json: passed
+  chemi-safety-prod.json: passed
+  chemi-amos-reviewed-reads.json: passed
+  chemi-hazard-prod.json: passed
+  chemi-descriptors-prod.json: passed
+  chemi-chet-chemical-dl-reviewed.json: passed
+  chemi-services-reviewed-preflight.json: passed
+Selected operations (502)
+  epi-pilot: GET /api/search -> epi_search
+  alerts-pilot: POST /api/alerts -> chemi_alerts
+  alerts-pilot: GET /api/alerts/alerts -> chemi_alerts_alerts
+  alerts-pilot: GET /api/alerts/groups -> chemi_alerts_groups
+  alerts-pilot: GET /api/alerts/groups/{id} -> chemi_alerts_groups_by_id
+  alerts-pilot: GET /api/alerts/operations -> chemi_alerts_operations
+  amos-pilot: GET /api/amos/release_notes -> chemi_amos_release_notes
+  amos-pilot: GET /api/amos/get_data_source_info/ -> chemi_amos_get_data_source_info
+  amos-pilot: GET /api/amos/get_ir_spectrum/{internal_id} -> chemi_amos_get_ir_spectrum
+  amos-pilot: GET /api/amos/get_nmr_spectrum/{internal_id} -> chemi_amos_get_nmr_spectrum
+  amos-pilot: GET /api/amos/get_mass_spectrum/{internal_id} -> chemi_amos_get_mass_spectrum
+  amos-pilot: GET /api/amos/get_info_by_id/{internal_id} -> chemi_amos_get_info_by_id
+  amos-pilot: GET /api/amos/get_classification_for_dtxsid/{dtxsid} -> chemi_amos_get_classification_for_dtxsid
+  amos-pilot: GET /api/amos/search_by_text/{substr} -> chemi_amos_by_text
+  ctx-pilot: POST /chemical/detail/search/by-dtxsid/ -> ct_chemical_detail_search_bulk
+  ctx-pilot: GET /chemical/detail/search/by-dtxsid/{dtxsid} -> ct_chemical_detail_search
+  ctx-pilot: GET /chemical/list/all -> ct_chemical_list_all
+  search-pilot: POST /api/search -> chemi_search
+  chemi-amos-prod-full: GET /api/amos/get_classification_for_dtxsid/{dtxsid} -> chemi_classyfire
+  chemi-amos-prod-full: GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type} -> chemi_amos_record_ids_for_substance
+  chemi-amos-prod-full: GET /api/amos/method_with_spectra/{search_type}/{internal_id} -> chemi_amos_method_with_spectra
+  chemi-amos-prod-full: GET /api/amos/get_pdf/{record_type}/{internal_id} -> chemi_amos_get_pdf
+  chemi-amos-prod-full: GET /api/amos/database_summary/ -> chemi_amos_database
+  chemi-amos-prod-full: GET /api/amos/dtxsids_from_functional_use/{functional_use} -> chemi_amos_dtxsids_from_functional_use
+  chemi-amos-prod-full: GET /api/amos/find_dtxsids/{internal_id} -> chemi_amos_find_dtxsids
+  chemi-amos-prod-full: GET /api/amos/formula_search/{formula} -> chemi_amos_formula
+  chemi-amos-prod-full: GET /api/amos/functional_class_search/{functional_class} -> chemi_amos_functional_class
+  chemi-amos-prod-full: GET /api/amos/functional_uses_for_dtxsid/{dtxsid} -> chemi_amos_functional_uses_for_dtxsid
+  chemi-amos-prod-full: GET /api/amos/get_fact_sheet_editor_info/{internal_id} -> chemi_amos_get_fact_sheet_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_method_editor_info/{internal_id} -> chemi_amos_get_method_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_ms_ready_methods/{inchikey} -> chemi_amos_get_ms_ready_methods
+  chemi-amos-prod-full: GET /api/amos/get_nmr_spectrum_editor_info/{internal_id} -> chemi_amos_get_nmr_spectrum_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_product_declaration_editor_info/{internal_id} -> chemi_amos_get_product_declaration_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_safety_data_sheet_editor_info/{internal_id} -> chemi_amos_get_safety_data_sheet_editor_info
+  chemi-amos-prod-full: GET /api/amos/get_substances_for_search_term/{search_term} -> chemi_amos_get_substances_for_term
+  chemi-amos-prod-full: GET /api/amos/inchikey_first_block_search/{first_block} -> chemi_amos_inchikey_first_block
+  chemi-amos-prod-full: GET /api/amos/list_fact_sheet_types/ -> chemi_amos_list_fact_sheet_types
+  chemi-amos-prod-full: GET /api/amos/list_functional_classes -> chemi_amos_list_functional_classes
+  chemi-amos-prod-full: GET /api/amos/record_id_search/{internal_id} -> chemi_amos_record_id
+  chemi-amos-prod-full: GET /api/amos/record_type_count/{record_type} -> chemi_amos_record_type_count
+  chemi-amos-prod-full: GET /api/amos/substring_search/{substring} -> chemi_amos_substring
+  chemi-amos-prod-full: GET /api/amos/search/{dtxsid} -> chemi_amos
+  chemi-amos-prod-full: GET /api/amos/get_similar_structures/{identifier_type}/{identifier} -> chemi_amos_get_similar_structures
+  chemi-amos-prod-full: GET /api/amos/list_sources_by_record_type/{record_type} -> chemi_amos_list_sources_by_record_type
+  chemi-amos-prod-full: POST /api/amos/spectral_entropy/ -> chemi_amos_spectral_entropy
+  chemi-amos-prod-full: POST /api/amos/entropy_similarity/ -> chemi_amos_entropy_similarity
+  chemi-amos-prod-full: POST /api/amos/spectrum_count_for_methodology/ -> chemi_amos_spectrum_count_for_methodology
+  chemi-amos-prod-full: POST /api/amos/mass_range_search/ -> chemi_amos_mass_range
+  chemi-amos-prod-full: POST /api/amos/next_level_classification/ -> chemi_amos_next_level_classification
+  chemi-amos-prod-full: POST /api/amos/substances_for_classification/ -> chemi_amos_substances_for_classification
+  chemi-amos-prod-full: POST /api/amos/all_similarities_by_dtxsid/ -> chemi_amos_all_similarities
+  chemi-amos-prod-full: POST /api/amos/max_similarity_by_dtxsid/ -> chemi_amos_max_similarity
+  chemi-amos-prod-full: POST /api/amos/mass_spectrum_similarity_search/ -> chemi_amos_mass_spectrum_similarity
+  chemi-amos-prod-full: POST /api/amos/dtxsids/ -> chemi_amos_dtxsids
+  chemi-amos-prod-full: POST /api/amos/record_counts_by_dtxsid/ -> chemi_amos_record_counts
+  chemi-amos-prod-full: POST /api/amos/mass_spectra_for_substances/ -> chemi_amos_mass_spectra_for_substances
+  chemi-amos-prod-full: POST /api/amos/count_substances_in_ids/ -> chemi_amos_count_substances_in_ids
+  chemi-amos-prod-full: GET /api/amos/analytical_qc_keyset_pagination/{limit} -> chemi_amos_analytical_qc_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/analytical_qc_keyset_pagination/{limit} -> chemi_amos_analytical_qc_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/fact_sheet_keyset_pagination/{limit} -> chemi_amos_fact_sheet_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/fact_sheet_keyset_pagination/{limit} -> chemi_amos_fact_sheet_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/method_keyset_pagination/{limit} -> chemi_amos_method_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/method_keyset_pagination/{limit} -> chemi_amos_method_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/product_declaration_keyset_pagination/{limit} -> chemi_amos_product_declaration_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/product_declaration_keyset_pagination/{limit} -> chemi_amos_product_declaration_keyset_pagination_bulk
+  chemi-amos-prod-full: GET /api/amos/safety_data_sheet_keyset_pagination/{limit} -> chemi_amos_safety_data_sheet_keyset_pagination
+  chemi-amos-prod-full: POST /api/amos/safety_data_sheet_keyset_pagination/{limit} -> chemi_amos_safety_data_sheet_keyset_pagination_bulk
+  chemi-chet-prod-full: GET /chemicals/database-old -> chemi_chet_chemicals_database_old
+  chemi-chet-prod-full: GET /chemicals/verify/{dtxsid} -> chemi_chet_chemicals_verify
+  chemi-chet-prod-full: GET /reaction/database_old -> chemi_chet_reaction_database_old
+  chemi-chet-prod-full: GET /reaction/dbcounts -> chemi_chet_reaction_dbcounts
+  chemi-chet-prod-full: GET /reaction/libraries -> chemi_chet_reaction_libraries
+  chemi-chet-prod-full: GET /reaction/mappositions/{map_id} -> chemi_chet_reaction_mappositions
+  chemi-chet-prod-full: GET /reaction/maps -> chemi_chet_reaction_maps
+  chemi-resolver-prod-full: GET /api/resolver/ccte-lists -> chemi_resolver_ccte_lists
+  chemi-resolver-prod-full: GET /api/resolver/getallannotations -> chemi_resolver_getallannotations
+  chemi-resolver-prod-full: GET /api/resolver/getdatasources -> chemi_resolver_getdatasources
+  chemi-resolver-prod-full: GET /api/resolver/ghs-list-count -> chemi_resolver_ghs_list_count
+  chemi-resolver-prod-full: GET /api/resolver/ghs/classes -> chemi_resolver_ghs_classes
+  chemi-resolver-prod-full: GET /api/resolver/ghs/hcodes -> chemi_resolver_ghs_hcodes
+  chemi-resolver-prod-full: GET /api/resolver/ghs/pcodes -> chemi_resolver_ghs_pcodes
+  chemi-resolver-prod-full: GET /api/resolver/hcodes -> chemi_resolver_hcodes
+  chemi-services-prod-full: GET /api/services/cim_component_info -> chemi_services_cim_component_info
+  chemi-services-prod-full: GET /api/services/release_notes -> chemi_services_release_notes
+  chemi-stdizer-prod-full: GET /api/stdizer -> chemi_stdizer
+  chemi-stdizer-prod-full: GET /api/stdizer/groups -> chemi_stdizer_groups
+  chemi-stdizer-prod-full: GET /api/stdizer/groups/{id} -> chemi_stdizer_groups_by_id
+  chemi-stdizer-prod-full: GET /api/stdizer/operations -> chemi_stdizer_operations
+  chemi-stdizer-prod-full: GET /api/stdizer/workflows -> chemi_stdizer_workflows
+  chemi-toxprints-prod-full: GET /api/toxprints/assays/{name} -> chemi_toxprints_assays_by_name
+  chemi-toxprints-prod-full: POST /api/toxprints/chemicals_categories -> chemi_toxprints_chemicals_categories
+  chemi-toxprints-prod-full: GET /api/toxprints/enrichments -> chemi_toxprints_enrichments
+  chemi-toxprints-prod-full: POST /api/toxprints/toxprints_categories -> chemi_toxprints_toxprints_categories
+  ctx-chemical-prod-full: GET /chemical/count/by-exact-formula/{formula} -> ct_chemical_count_by_exact_formula
+  ctx-chemical-prod-full: GET /chemical/count/by-msready-formula/{formula} -> ct_chemical_count_by_msready_formula
+  ctx-chemical-prod-full: POST /chemical/extra-data/search/by-dtxsid/ -> ct_chemical_extra_data_search_bulk
+  ctx-chemical-prod-full: GET /chemical/extra-data/search/by-dtxsid/{dtxsid} -> ct_chemical_extra_data_search
+  ctx-chemical-prod-full: GET /chemical/file/image/search/by-dtxcid/{dtxcid} -> ct_chemical_file_image_search_by_dtxcid
+  ctx-chemical-prod-full: GET /chemical/file/image/search/by-dtxsid/{dtxsid} -> ct_chemical_file_image_search
+  ctx-chemical-prod-full: GET /chemical/file/image/search/by-gsid/{gsid} -> ct_chemical_file_image_search_by_gsid
+  ctx-chemical-prod-full: GET /chemical/file/mol/search/by-dtxcid/{dtxcid} -> ct_chemical_file_mol_search_by_dtxcid
+  ctx-chemical-prod-full: GET /chemical/file/mol/search/by-dtxsid/{dtxsid} -> ct_chemical_file_mol_search
+  ctx-chemical-prod-full: POST /chemical/msready/search/by-dtxcid/ -> ct_chemical_msready_search_by_dtxcid_bulk
+  ctx-chemical-prod-full: GET /chemical/msready/search/by-dtxcid/{dtxcid} -> ct_chemical_msready_search_by_dtxcid
+  ctx-chemical-prod-full: GET /chemical/msready/search/by-formula/{formula} -> ct_chemical_msready_search_by_formula
+  ctx-chemical-prod-full: GET /chemical/search/by-exact-formula/{formula} -> ct_chemical_search_by_exact_formula
+  ctx-chemical-prod-full: POST /chemical/search/by-msready-formula/ -> ct_chemical_search_by_msready_formula_bulk
+  ctx-chemical-prod-full: GET /chemical/search/by-msready-formula/{formula} -> ct_chemical_search_by_msready_formula
+  ctx-chemical-prod-full: GET /chemical/search/contain/{word} -> ct_chemical_search_contain
+  ctx-chemical-prod-full: GET /chemical/search/start-with/{word} -> ct_chemical_search_start_with
+  ctx-chemical-prod-full: POST /chemical/synonym/search/by-dtxsid/ -> ct_chemical_synonym_search_bulk
+  ctx-chemical-prod-full: GET /chemical/synonym/search/by-dtxsid/{dtxsid} -> ct_chemical_synonym_search
+  ctx-exposure-prod-full: GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid} -> ct_exposure_ccd_chem_weight_fractions_search
+  ctx-exposure-prod-full: GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid} -> ct_exposure_ccd_functional_use_search
+  ctx-exposure-prod-full: GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid} -> ct_exposure_ccd_keywords_search
+  ctx-exposure-prod-full: GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid} -> ct_exposure_ccd_monitoring_data_search
+  ctx-exposure-prod-full: GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid} -> ct_exposure_ccd_production_volume_search
+  ctx-exposure-prod-full: GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid} -> ct_exposure_ccd_puc_search
+  ctx-exposure-prod-full: POST /exposure/httk/search/by-dtxsid/ -> ct_exposure_httk_search_bulk
+  ctx-exposure-prod-full: GET /exposure/httk/search/by-dtxsid/{dtxsid} -> ct_exposure_httk_search
+  ctx-exposure-prod-full: POST /exposure/list-presence/search/by-dtxsid/ -> ct_exposure_list_presence_search_bulk
+  ctx-exposure-prod-full: GET /exposure/list-presence/search/by-dtxsid/{dtxsid} -> ct_exposure_list_presence_search
+  ctx-exposure-prod-full: GET /exposure/list-presence/tags -> ct_exposure_list_presence_tags
+  ctx-exposure-prod-full: GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid} -> ct_exposure_mmdb_aggregate
+  ctx-exposure-prod-full: GET /exposure/mmdb/aggregate/by-medium -> ct_exposure_mmdb_aggregate_by_medium
+  ctx-exposure-prod-full: GET /exposure/mmdb/mediums -> ct_exposure_mmdb_mediums
+  ctx-exposure-prod-full: GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid} -> ct_exposure_mmdb_single_sample
+  ctx-exposure-prod-full: GET /exposure/mmdb/single-sample/by-medium -> ct_exposure_mmdb_single_sample_by_medium
+  ctx-exposure-prod-full: GET /exposure/product-data/puc -> ct_exposure_product_data_puc
+  ctx-exposure-prod-full: POST /exposure/product-data/search/by-dtxsid/ -> ct_exposure_product_data_search_bulk
+  ctx-exposure-prod-full: GET /exposure/product-data/search/by-dtxsid/{dtxsid} -> ct_exposure_product_data_search
+  ctx-exposure-prod-full: POST /exposure/seem/general/search/by-dtxsid/ -> ct_exposure_seem_general_search_bulk
+  ctx-exposure-prod-full: GET /exposure/seem/general/search/by-dtxsid/{dtxsid} -> ct_exposure_seem_general_search
+  epi-suite-prod-full: GET /api -> epi_api
+  epi-suite-prod-full: GET /api/download -> epi_download
+  epi-suite-prod-full: GET /api/ecosar/dye -> epi_ecosar_dye
+  epi-suite-prod-full: GET /api/ecosar/polymer/amphoteric -> epi_ecosar_polymer_amphoteric
+  epi-suite-prod-full: GET /api/ecosar/polymer/anionic -> epi_ecosar_polymer_anionic
+  epi-suite-prod-full: GET /api/ecosar/polymer/nonionic -> epi_ecosar_polymer_nonionic
+  epi-suite-prod-full: GET /api/ecosar/polymer/polycationic -> epi_ecosar_polymer_polycationic
+  epi-suite-prod-full: GET /api/ecosar/surfactant/amphoteric -> epi_ecosar_surfactant_amphoteric
+  epi-suite-prod-full: GET /api/ecosar/surfactant/anionic -> epi_ecosar_surfactant_anionic
+  epi-suite-prod-full: GET /api/ecosar/surfactant/cationic -> epi_ecosar_surfactant_cationic
+  epi-suite-prod-full: GET /api/ecosar/surfactant/nonionic -> epi_ecosar_surfactant_nonionic
+  epi-suite-prod-full: GET /api/submit -> epi_submit
+  ctx-hazard-prod-rebuild: GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid} -> ct_hazard_adme_ivive_search
+  ctx-hazard-prod-rebuild: POST /hazard/cancer-summary/search/by-dtxsid/ -> ct_hazard_cancer_search_bulk
+  ctx-hazard-prod-rebuild: GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid} -> ct_hazard_cancer_search
+  ctx-hazard-prod-rebuild: POST /hazard/genetox/details/search/by-dtxsid/ -> ct_hazard_genetox_details_search_bulk
+  ctx-hazard-prod-rebuild: GET /hazard/genetox/details/search/by-dtxsid/{dtxsid} -> ct_hazard_genetox_details_search
+  ctx-hazard-prod-rebuild: POST /hazard/genetox/summary/search/by-dtxsid/ -> ct_hazard_genetox_search_bulk
+  ctx-hazard-prod-rebuild: GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid} -> ct_hazard_genetox_search
+  ctx-hazard-prod-rebuild: GET /hazard/hawc/search/by-dtxsid/{dtxsid} -> ct_hazard_hawc_search
+  ctx-hazard-prod-rebuild: GET /hazard/iris/search/by-dtxsid/{dtxsid} -> ct_hazard_iris_search
+  ctx-hazard-prod-rebuild: GET /hazard/pprtv/search/by-dtxsid/{dtxsid} -> ct_hazard_pprtv_search
+  ctx-hazard-prod-rebuild: POST /hazard/skin-eye/search/by-dtxsid/ -> ct_hazard_skin_eye_search_bulk
+  ctx-hazard-prod-rebuild: GET /hazard/skin-eye/search/by-dtxsid/{dtxsid} -> ct_hazard_skin_eye_search
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/data/search/by-dtxsid/{dtxsid} -> ct_hazard_toxref_data_search
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/data/search/by-study-id/{studyId} -> ct_hazard_toxref_data_search_by_study_id
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/data/search/by-study-type/{studyType} -> ct_hazard_toxref_data_search_by_study_type
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid} -> ct_hazard_toxref_effects_search
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/effects/search/by-study-id/{studyId} -> ct_hazard_toxref_effects_search_by_study_id
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/effects/search/by-study-type/{studyType} -> ct_hazard_toxref_effects_search_by_study_type
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid} -> ct_hazard_toxref_observations_search
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/observations/search/by-study-id/{studyId} -> ct_hazard_toxref_observations_search_by_study_id
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/observations/search/by-study-type/{studyType} -> ct_hazard_toxref_observations_search_by_study_type
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid} -> ct_hazard_toxref_search
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/summary/search/by-study-id/{studyId} -> ct_hazard_toxref_search_by_study_id
+  ctx-hazard-prod-rebuild: GET /hazard/toxref/summary/search/by-study-type/{studyType} -> ct_hazard_toxref_search_by_study_type
+  ctx-hazard-prod-rebuild: GET /hazard/toxval/search/by-category/{dtxsid} -> ct_hazard_toxval_search_by_category
+  ctx-hazard-prod-rebuild: POST /hazard/toxval/search/by-dtxsid/ -> ct_hazard_toxval_search_bulk
+  ctx-hazard-prod-rebuild: GET /hazard/toxval/search/by-dtxsid/{dtxsid} -> ct_hazard_toxval_search
+  ctx-hazard-prod-rebuild: GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid} -> ct_hazard_toxval_supercategory_search
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid} -> ct_bioactivity_analyticalqc_search
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId} -> ct_bioactivity_aop_search_by_entrez_gene_id
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/aop/search/by-event-number/{eventNumber} -> ct_bioactivity_aop_search_by_event_number
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid} -> ct_bioactivity_aop_search_by_toxcast_aeid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/ -> ct_bioactivity_assay
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/chemicals/search/by-aeid/{aeid} -> ct_bioactivity_assay_chemicals_search_by_aeid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/count -> ct_bioactivity_assay_count
+  ctx-bioactivity-prod-rebuild: POST /bioactivity/assay/search/by-aeid/ -> ct_bioactivity_assay_search_by_aeid_bulk
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/search/by-aeid/{aeid} -> ct_bioactivity_assay_search_by_aeid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/search/by-endpoint/ -> ct_bioactivity_assay_search_by_endpoint
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/search/by-gene/{geneSymbol} -> ct_bioactivity_assay_search_by_gene
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/assay/single-conc/search/by-aeid/{aeid} -> ct_bioactivity_assay_single_conc_search_by_aeid
+  ctx-bioactivity-prod-rebuild: POST /bioactivity/data/aed/search/by-dtxsid/ -> ct_bioactivity_data_aed_search_bulk
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid} -> ct_bioactivity_data_aed_search
+  ctx-bioactivity-prod-rebuild: POST /bioactivity/data/search/by-aeid/ -> ct_bioactivity_data_search_by_aeid_bulk
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/search/by-aeid/{aeid} -> ct_bioactivity_data_search_by_aeid
+  ctx-bioactivity-prod-rebuild: POST /bioactivity/data/search/by-dtxsid/ -> ct_bioactivity_data_search_bulk
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/search/by-dtxsid/{dtxsid} -> ct_bioactivity_data_search_by_dtxsid
+  ctx-bioactivity-prod-rebuild: POST /bioactivity/data/search/by-m4id/ -> ct_bioactivity_data_search_by_m4id_bulk
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/search/by-m4id/{m4id} -> ct_bioactivity_data_search_by_m4id
+  ctx-bioactivity-prod-rebuild: POST /bioactivity/data/search/by-spid/ -> ct_bioactivity_data_search_by_spid_bulk
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/search/by-spid/{spid} -> ct_bioactivity_data_search_by_spid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/summary/search/by-aeid/{aeid} -> ct_bioactivity_data_summary_search_by_aeid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid} -> ct_bioactivity_data_summary_search_by_dtxsid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/data/summary/search/by-tissue/ -> ct_bioactivity_data_search_by_tissue
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/models/search/ -> ct_bioactivity_models_search
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/models/search/by-dtxsid/{dtxsid} -> ct_bioactivity_models_search_by_dtxsid
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/search/contain/{value} -> ct_bioactivity_search_contain
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/search/equal/{value} -> ct_bioactivity_search_equal
+  ctx-bioactivity-prod-rebuild: GET /bioactivity/search/start-with/{value} -> ct_bioactivity_search_start_with
+  ctx-chemical-prod-rebuild: POST /chemical/detail/search/by-dtxcid/ -> ct_chemical_detail_search_by_dtxcid_bulk
+  ctx-chemical-prod-rebuild: GET /chemical/detail/search/by-dtxcid/{dtxcid} -> ct_chemical_detail_search_by_dtxcid
+  ctx-chemical-prod-rebuild: GET /chemical/detail/search/by-smiles/ -> ct_chemical_detail_search_by_smiles
+  ctx-chemical-prod-rebuild: POST /chemical/fate/search/by-dtxsid/ -> ct_chemical_fate_search_bulk
+  ctx-chemical-prod-rebuild: GET /chemical/fate/search/by-dtxsid/{dtxsid} -> ct_chemical_fate_search_by_dtxsid
+  ctx-chemical-prod-rebuild: GET /chemical/fate/summary/experimental/search/ -> ct_chemical_fate_experimental_search
+  ctx-chemical-prod-rebuild: GET /chemical/fate/summary/predicted/search/ -> ct_chemical_fate_predicted_search
+  ctx-chemical-prod-rebuild: GET /chemical/fate/summary/search/ -> ct_chemical_fate_summary_search
+  ctx-chemical-prod-rebuild: GET /chemical/fate/summary/search/by-dtxsid/{dtxsid} -> ct_chemical_fate_summary_search_by_dtxsid
+  ctx-chemical-prod-rebuild: GET /chemical/list/chemicals/search/by-listname/{list} -> ct_chemical_list_chemicals_search_by_listname
+  ctx-chemical-prod-rebuild: GET /chemical/list/chemicals/search/contain/{list}/{word} -> ct_chemical_list_chemicals_search_contain
+  ctx-chemical-prod-rebuild: GET /chemical/list/chemicals/search/equal/{list}/{word} -> ct_chemical_list_chemicals_search_equal
+  ctx-chemical-prod-rebuild: GET /chemical/list/chemicals/search/start-with/{list}/{word} -> ct_chemical_list_chemicals_search_start_with
+  ctx-chemical-prod-rebuild: GET /chemical/list/search/by-dtxsid/{dtxsid} -> ct_chemical_list_search
+  ctx-chemical-prod-rebuild: GET /chemical/list/search/by-type/{type} -> ct_chemical_list_search_by_type
+  ctx-chemical-prod-rebuild: GET /chemical/list/type -> ct_chemical_list_type
+  ctx-chemical-prod-rebuild: POST /chemical/msready/search/by-mass/ -> ct_chemical_msready_search_by_mass_bulk
+  ctx-chemical-prod-rebuild: GET /chemical/msready/search/by-mass/{start}/{end} -> ct_chemical_msready_search_by_mass
+  ctx-chemical-prod-rebuild: GET /chemical/property/experimental/name -> ct_chemical_property_experimental_name
+  ctx-chemical-prod-rebuild: POST /chemical/property/experimental/search/by-dtxsid/ -> ct_chemical_property_experimental_search_bulk
+  ctx-chemical-prod-rebuild: GET /chemical/property/experimental/search/by-dtxsid/{dtxsid} -> ct_chemical_property_experimental_search_by_dtxsid
+  ctx-chemical-prod-rebuild: GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end} -> ct_chemical_property_experimental_search_by_range
+  ctx-chemical-prod-rebuild: GET /chemical/property/predicted/name -> ct_chemical_property_predicted_name
+  ctx-chemical-prod-rebuild: POST /chemical/property/predicted/search/by-dtxsid/ -> ct_chemical_property_predicted_search_bulk
+  ctx-chemical-prod-rebuild: GET /chemical/property/predicted/search/by-dtxsid/{dtxsid} -> ct_chemical_property_predicted_search_by_dtxsid
+  ctx-chemical-prod-rebuild: GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end} -> ct_chemical_property_predicted_search_by_range
+  ctx-chemical-prod-rebuild: GET /chemical/property/summary/experimental/search/ -> ct_chemical_property_summary_experimental_search
+  ctx-chemical-prod-rebuild: GET /chemical/property/summary/predicted/search/ -> ct_chemical_property_summary_predicted_search
+  ctx-chemical-prod-rebuild: GET /chemical/property/summary/search/ -> ct_chemical_property_summary_search
+  ctx-chemical-prod-rebuild: GET /chemical/property/summary/search/by-dtxsid/{dtxsid} -> ct_chemical_property_summary_search_by_dtxsid
+  ctx-chemical-prod-rebuild: POST /chemical/search/equal/ -> ct_chemical_search_equal_bulk
+  ctx-chemical-prod-rebuild: GET /chemical/search/equal/{word} -> ct_chemical_search_equal
+  ctx-exposure-prod-rebuild: GET /exposure/functional-use/category -> ct_exposure_functional_use_category
+  ctx-exposure-prod-rebuild: GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid} -> ct_exposure_functional_use_probability_search
+  ctx-exposure-prod-rebuild: POST /exposure/functional-use/search/by-dtxsid/ -> ct_exposure_functional_use_search_bulk
+  ctx-exposure-prod-rebuild: GET /exposure/functional-use/search/by-dtxsid/{dtxsid} -> ct_exposure_functional_use_search
+  ctx-exposure-prod-rebuild: POST /exposure/seem/demographic/search/by-dtxsid/ -> ct_exposure_seem_demographic_search_bulk
+  ctx-exposure-prod-rebuild: GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid} -> ct_exposure_seem_demographic_search
+  chemi-amnb_nate-prod-rebuild: GET /api/amnb_nate -> chemi_amnb_nate
+  chemi-amnb_nate-prod-rebuild: POST /api/amnb_nate -> chemi_amnb_nate_bulk
+  chemi-arn_cats-prod-rebuild: GET /api/arn_cats -> chemi_arn_cats
+  chemi-arn_cats-prod-rebuild: POST /api/arn_cats -> chemi_arn_cats_bulk
+  chemi-chet-prod-rebuild: GET /chemicals/alias -> chemi_chet_chemicals_alias
+  chemi-chet-prod-rebuild: GET /chemicals/chemset -> chemi_chet_chemicals_chemset
+  chemi-chet-prod-rebuild: GET /chemicals/counts -> chemi_chet_chemicals_counts
+  chemi-chet-prod-rebuild: GET /chemicals/database -> chemi_chet_chemicals_database
+  chemi-chet-prod-rebuild: GET /chemicals/database/stats -> chemi_chet_chemicals_database_stats
+  chemi-chet-prod-rebuild: GET /chemicals/maps -> chemi_chet_chemicals_maps
+  chemi-chet-prod-rebuild: GET /chemicals/singlechemical -> chemi_chet_chemicals_singlechemical
+  chemi-chet-prod-rebuild: GET /chemicals/suggest -> chemi_chet_chemicals_suggest
+  chemi-chet-prod-rebuild: GET /chemicals/{chemical_id}/image -> chemi_chet_chemicals_image
+  chemi-chet-prod-rebuild: POST /reaction/batchsearch -> chemi_chet_reaction_batchsearch
+  chemi-chet-prod-rebuild: GET /reaction/database -> chemi_chet_reaction_database
+  chemi-chet-prod-rebuild: GET /reaction/database/stats -> chemi_chet_reaction_database_stats
+  chemi-chet-prod-rebuild: GET /reaction/details -> chemi_chet_reaction_details
+  chemi-chet-prod-rebuild: GET /reaction/mapid -> chemi_chet_reaction_mapid
+  chemi-chet-prod-rebuild: GET /reaction/react_maps -> chemi_chet_reaction_react_maps
+  chemi-chet-prod-rebuild: GET /reaction/reactionmap -> chemi_chet_reaction_reactionmap
+  chemi-chet-prod-rebuild: GET /reaction/search -> chemi_chet_reaction
+  chemi-chet-prod-rebuild: GET /reaction/singlereaction -> chemi_chet_reaction_singlereaction
+  chemi-chet-prod-rebuild: GET /reaction/table -> chemi_chet_reaction_table
+  chemi-ncc_cats-prod-rebuild: GET /api/ncc_cats -> chemi_ncc_cats
+  chemi-ncc_cats-prod-rebuild: POST /api/ncc_cats -> chemi_ncc_cats_bulk
+  chemi-opera-prod-rebuild: GET /api/opera -> chemi_opera
+  chemi-opera-prod-rebuild: POST /api/opera -> chemi_opera_bulk
+  chemi-opera-prod-rebuild: GET /api/opera/report -> chemi_opera_report
+  chemi-pfas_atlas-prod-rebuild: GET /api/pfas_atlas -> chemi_pfas_atlas
+  chemi-pfas_atlas-prod-rebuild: POST /api/pfas_atlas -> chemi_pfas_atlas_bulk
+  chemi-pfas_cats-prod-rebuild: GET /api/pfas_cats -> chemi_pfas_cats
+  chemi-pfas_cats-prod-rebuild: POST /api/pfas_cats -> chemi_pfas_cats_bulk
+  chemi-resolver-prod-rebuild: GET /api/resolver/ccte-list -> chemi_resolver_ccte_list
+  chemi-resolver-prod-rebuild: GET /api/resolver/classyfire -> chemi_resolver_classyfire
+  chemi-resolver-prod-rebuild: GET /api/resolver/getannotation -> chemi_resolver_getannotation
+  chemi-resolver-prod-rebuild: GET /api/resolver/getannotationslist -> chemi_resolver_getannotationslist
+  chemi-resolver-prod-rebuild: POST /api/resolver/getsimilaritymap -> chemi_resolver_getsimilaritymap
+  chemi-resolver-prod-rebuild: GET /api/resolver/getsubstance -> chemi_resolver_getsubstance
+  chemi-resolver-prod-rebuild: GET /api/resolver/ghs-list -> chemi_resolver_ghs_list
+  chemi-resolver-prod-rebuild: GET /api/resolver/links -> chemi_resolver_links
+  chemi-resolver-prod-rebuild: GET /api/resolver/lookup -> chemi_resolver_lookup
+  chemi-resolver-prod-rebuild: POST /api/resolver/lookup -> chemi_resolver_lookup_bulk
+  chemi-resolver-prod-rebuild: GET /api/resolver/lookupCASRN -> chemi_resolver_lookupCASRN
+  chemi-resolver-prod-rebuild: GET /api/resolver/mesh -> chemi_resolver_mesh
+  chemi-resolver-prod-rebuild: POST /api/resolver/orderBySimilarity -> chemi_resolver_orderBySimilarity
+  chemi-resolver-prod-rebuild: GET /api/resolver/pubchem-section -> chemi_resolver_pubchem_section
+  chemi-resolver-prod-rebuild: POST /api/resolver/pubchem-section -> chemi_resolver_pubchem_section_bulk
+  chemi-resolver-prod-rebuild: POST /api/resolver/resolve -> chemi_resolver_resolve
+  chemi-resolver-prod-rebuild: GET /api/resolver/safety-flags -> chemi_resolver_safety_flags
+  chemi-search-prod-rebuild: GET /api/search/exact -> chemi_search_exact
+  chemi-search-prod-rebuild: GET /api/search/gethazard -> chemi_search_gethazard
+  chemi-search-prod-rebuild: GET /api/search/similar -> chemi_search_similar
+  chemi-search-prod-rebuild: GET /api/search/substructure -> chemi_search_substructure
+  chemi-services-prod-rebuild: POST /api/services/collated_report -> chemi_services_collated_report
+  chemi-services-prod-rebuild: POST /api/services/convert -> chemi_services_convert
+  chemi-services-prod-rebuild: GET /api/services/layout -> chemi_services_layout
+  chemi-services-prod-rebuild: GET /api/services/smirks2rxn -> chemi_services_smirks2rxn
+  chemi-toxprints-prod-rebuild: GET /api/toxprints -> chemi_toxprints
+  chemi-toxprints-prod-rebuild: POST /api/toxprints -> chemi_toxprints_bulk
+  chemi-toxprints-prod-rebuild: GET /api/toxprints/assays -> chemi_toxprints_assays
+  chemi-toxprints-prod-rebuild: POST /api/toxprints/assays -> chemi_toxprints_assays_bulk
+  chemi-toxprints-prod-rebuild: GET /api/toxprints/assays/check -> chemi_toxprints_assays_check
+  chemi-toxprints-prod-rebuild: GET /api/toxprints/calculate -> chemi_toxprints_calculate
+  chemi-toxprints-prod-rebuild: POST /api/toxprints/calculate -> chemi_toxprints_calculate_bulk
+  chemi-toxprints-prod-rebuild: GET /api/toxprints/global_assays -> chemi_toxprints_global_assays
+  chemi-toxprints-prod-rebuild: GET /api/toxprints/global_toxprints -> chemi_toxprints_global_toxprints
+  chemi-toxprints-prod-rebuild: GET /api/toxprints/toxprints -> chemi_toxprints_toxprints
+  chemi-padel-prod-rebuild: GET /api/padel -> chemi_padel
+  chemi-padel-prod-rebuild: POST /api/padel -> chemi_padel_bulk
+  chemi-mordred-prod-rebuild: GET /api/mordred -> chemi_mordred
+  chemi-mordred-prod-rebuild: POST /api/mordred -> chemi_mordred_bulk
+  chemi-rdkit-prod-rebuild: GET /api/rdkit -> chemi_rdkit
+  chemi-rdkit-prod-rebuild: POST /api/rdkit -> chemi_rdkit_bulk
+  chemi-webtest-prod-rebuild: GET /api/webtest -> chemi_webtest
+  chemi-webtest-prod-rebuild: POST /api/webtest -> chemi_webtest_bulk
+  chemi-webtest-prod-rebuild: GET /api/webtest/predict -> chemi_webtest_predict
+  chemi-webtest-prod-rebuild: POST /api/webtest/predict -> chemi_webtest_predict_bulk
+  chemi-stdizer-prod-rebuild: POST /api/stdizer/chemicals -> chemi_stdizer_chemicals
+  chemi-stdizer-prod-rebuild: POST /api/stdizer/records -> chemi_stdizer_records
+  chemi-predictor_models-prod-rebuild: GET /api/predictor_models/predict -> chemi_predictor_models_predict
+  chemi-predictor_models-prod-rebuild: POST /api/predictor_models/predict -> chemi_predictor_models_predict_bulk
+  epi-suite-prod-rebuild: POST /api/submit/batch -> epi_submit_batch
+  chemi-safety-prod-rebuild: POST /api/safety/rqcodes -> chemi_safety_rqcodes
+  chemi-toxprint-prod-rebuild: POST /api/toxprints/calculate -> chemi_toxprint
+  chemi-amos-reviewed-reads: POST /api/amos/retrieve_fact_sheets/ -> chemi_amos_retrieve_fact_sheets
+  chemi-amos-reviewed-reads: POST /api/amos/retrieve_product_declarations/ -> chemi_amos_retrieve_product_declarations
+  chemi-amos-reviewed-reads: POST /api/amos/retrieve_safety_data_sheets/ -> chemi_amos_retrieve_safety_data_sheets
+  chemi-amos-reviewed-reads: POST /api/amos/substances_for_ids/ -> chemi_amos_substances_for_ids
+  chemi-amos-reviewed-reads: POST /api/amos/search_for_document_ids/{record_type} -> chemi_amos_for_document_ids
+  chemi-hazard-prod-rebuild: GET /api/hazard -> chemi_hazard
+  chemi-hazard-prod-rebuild: POST /api/hazard -> chemi_hazard_bulk
+  ctx-list-name: GET /chemical/list/search/by-name/{listName} -> ct_chemical_list_search_by_name
+  chemi-chet-direct-reads: GET /chemicals/chemtemp/{type}/{value} -> chemi_chet_chemicals_chemtemp
+  chemi-chet-direct-reads: GET /curators/me -> chemi_chet_curators_me
+  chemi-chet-direct-reads: GET /metadata -> chemi_chet_metadata
+  chemi-chet-direct-reads: GET /version -> chemi_chet_version
+  chemi-service-info: GET /api/alerts/metadata -> chemi_alerts_metadata
+  chemi-service-info: GET /api/alerts/version -> chemi_alerts_version
+  chemi-service-info: GET /api/amnb_nate/metadata -> chemi_amnb_nate_metadata
+  chemi-service-info: GET /api/amnb_nate/version -> chemi_amnb_nate_version
+  chemi-service-info: GET /api/arn_cats/metadata -> chemi_arn_cats_metadata
+  chemi-service-info: GET /api/arn_cats/version -> chemi_arn_cats_version
+  chemi-service-info: GET /api/descriptors/metadata -> chemi_descriptors_metadata
+  chemi-service-info: GET /api/descriptors/version -> chemi_descriptors_version
+  chemi-service-info: GET /api/hazard/metadata -> chemi_hazard_metadata
+  chemi-service-info: GET /api/hazard/version -> chemi_hazard_version
+  chemi-service-info: GET /api/mordred/version -> chemi_mordred_version
+  chemi-service-info: GET /api/mordred/metadata -> chemi_mordred_metadata
+  chemi-service-info: GET /api/ncc_cats/metadata -> chemi_ncc_cats_metadata
+  chemi-service-info: GET /api/ncc_cats/version -> chemi_ncc_cats_version
+  chemi-service-info: GET /api/opera/metadata -> chemi_opera_metadata
+  chemi-service-info: GET /api/opera/version -> chemi_opera_version
+  chemi-service-info: GET /api/padel/metadata -> chemi_padel_metadata
+  chemi-service-info: GET /api/padel/version -> chemi_padel_version
+  chemi-service-info: GET /api/pfas_atlas/metadata -> chemi_pfas_atlas_metadata
+  chemi-service-info: GET /api/pfas_atlas/version -> chemi_pfas_atlas_version
+  chemi-service-info: GET /api/pfas_cats/metadata -> chemi_pfas_cats_metadata
+  chemi-service-info: GET /api/pfas_cats/version -> chemi_pfas_cats_version
+  chemi-service-info: GET /api/predictor_models/metadata -> chemi_predictor_models_metadata
+  chemi-service-info: GET /api/predictor_models/version -> chemi_predictor_models_version
+  chemi-service-info: GET /api/rdkit/version -> chemi_rdkit_version
+  chemi-service-info: GET /api/rdkit/metadata -> chemi_rdkit_metadata
+  chemi-service-info: GET /api/resolver/metadata -> chemi_resolver_metadata
+  chemi-service-info: GET /api/resolver/version -> chemi_resolver_version
+  chemi-service-info: GET /api/safety/metadata -> chemi_safety_metadata
+  chemi-service-info: GET /api/safety/version -> chemi_safety_version
+  chemi-service-info: GET /api/search/metadata -> chemi_search_metadata
+  chemi-service-info: GET /api/search/version -> chemi_search_version
+  chemi-service-info: GET /api/services/metadata -> chemi_services_metadata
+  chemi-service-info: GET /api/services/version -> chemi_services_version
+  chemi-service-info: GET /api/stdizer/metadata -> chemi_stdizer_metadata
+  chemi-service-info: GET /api/stdizer/version -> chemi_stdizer_version
+  chemi-service-info: GET /api/toxprints/metadata -> chemi_toxprints_metadata
+  chemi-service-info: GET /api/toxprints/version -> chemi_toxprints_version
+  chemi-service-info: GET /api/webtest/metadata -> chemi_webtest_metadata
+  chemi-service-info: GET /api/webtest/version -> chemi_webtest_version
+  chemi-chet-chemical-dl-reviewed: GET /chemicals/chemical_DL -> chemi_chet_chemicals_chemical_dl
+  chemi-management: POST /api/alerts/export -> chemi_alerts_export
+  chemi-management: POST /api/alerts/export-append -> chemi_alerts_export_append
+  chemi-management: DELETE /api/alerts/groups/{id} -> chemi_alerts_groups_delete_by_id
+  chemi-management: PUT /api/alerts/groups/{id} -> chemi_alerts_groups_update_by_id
+  chemi-management: GET /api/alerts/render -> chemi_alerts_render
+  chemi-management: GET /api/hazard/download -> chemi_hazard_download
+  chemi-management: POST /api/hazard/report/export -> chemi_hazard_report_export
+  chemi-management: POST /api/hazard/report/export-append -> chemi_hazard_report_export_append
+  chemi-management: POST /api/hazard/report/export2 -> chemi_hazard_report_export2
+  chemi-management: GET /api/hazard/reports -> chemi_hazard_reports
+  chemi-management: POST /api/hazard/reports -> chemi_hazard_reports_create
+  chemi-management: GET /api/hazard/reports/check -> chemi_hazard_reports_check
+  chemi-management: DELETE /api/hazard/reports/{id} -> chemi_hazard_reports_delete_by_id
+  chemi-management: GET /api/hazard/reports/{id} -> chemi_hazard_reports_by_id
+  chemi-management: PUT /api/hazard/reports/{id} -> chemi_hazard_reports_update_by_id
+  chemi-management: PUT /api/hazard/reports/{id}/acl -> chemi_hazard_reports_acl_update_by_id
+  chemi-management: POST /api/hazard/reports/{id}/export -> chemi_hazard_reports_export_by_id
+  chemi-management: DELETE /api/toxprints/assays/{id} -> chemi_toxprints_assays_delete_by_id
+  chemi-management: PUT /api/toxprints/assays/{id} -> chemi_toxprints_assays_update_by_id
+  chemi-management: PUT /api/toxprints/assays/{id}/acl -> chemi_toxprints_assays_acl_update_by_id
+  chemi-management: GET /api/toxprints/download -> chemi_toxprints_download
+  chemi-management: POST /api/toxprints/export -> chemi_toxprints_export
+  chemi-management: POST /api/toxprints/export_global -> chemi_toxprints_export_global
+  chemi-management: GET /api/toxprints/render -> chemi_toxprints_render
+  chemi-chet-extra: POST /chemicals/chemdelete -> chemi_chet_chemicals_chemdelete
+  chemi-chet-extra: POST /chemicals/chemical_DL -> chemi_chet_chemicals_chemical_dl_post
+  chemi-chet-extra: POST /chemicals/newchemfile -> chemi_chet_chemicals_newchemfile
+  chemi-chet-extra: POST /chemicals/newchemical -> chemi_chet_chemicals_newchemical
+  chemi-chet-extra: POST /chemicals/template_DL -> chemi_chet_chemicals_template_dl
+  chemi-chet-extra: POST /curators/change-password -> chemi_chet_curators_change_password
+  chemi-chet-extra: GET /curators/detail-sets -> chemi_chet_curators_detail_sets
+  chemi-chet-extra: POST /curators/details -> chemi_chet_curators_details
+  chemi-chet-extra: POST /curators/libraries -> chemi_chet_curators_libraries
+  chemi-chet-extra: GET /curators/libraries/detail-options -> chemi_chet_curators_libraries_detail_options
+  chemi-chet-extra: GET /curators/libraries/{lib_id} -> chemi_chet_curators_libraries_by_lib_id
+  chemi-chet-extra: PUT /curators/libraries/{lib_id} -> chemi_chet_curators_libraries_by_lib_id_update
+  chemi-chet-extra: POST /curators/login -> chemi_chet_curators_login
+  chemi-chet-extra: POST /curators/logout -> chemi_chet_curators_logout
+  chemi-chet-extra: GET /curators/units -> chemi_chet_curators_units
+  chemi-chet-extra: POST /curators/units -> chemi_chet_curators_units_create
+  chemi-chet-extra: GET /reaction/download_DB_backup -> chemi_chet_reaction_download_db_backup
+  chemi-chet-extra: POST /reaction/editor/check-existing -> chemi_chet_reaction_editor_check_existing
+  chemi-chet-extra: POST /reaction/editor/check-existing-map -> chemi_chet_reaction_editor_check_existing_map
+  chemi-chet-extra: GET /reaction/editor/library-details -> chemi_chet_reaction_editor_library_details
+  chemi-chet-extra: POST /reaction/editor/load-map -> chemi_chet_reaction_editor_load_map
+  chemi-chet-extra: POST /reaction/editor/load-reactions -> chemi_chet_reaction_editor_load_reactions
+  chemi-chet-extra: POST /reaction/editor/save-scheme -> chemi_chet_reaction_editor_save_scheme
+  chemi-chet-extra: GET /reaction/editor/{reaction_id} -> chemi_chet_reaction_editor_by_reaction_id
+  chemi-chet-extra: POST /reaction/editor/{reaction_id} -> chemi_chet_reaction_editor_by_reaction_id_create
+  chemi-chet-extra: POST /reaction/map_DL -> chemi_chet_reaction_map_dl
+  chemi-chet-extra: POST /reaction/mapfix/{map_id} -> chemi_chet_reaction_mapfix_by_map_id
+  chemi-chet-extra: DELETE /reaction/mappositions/{map_id} -> chemi_chet_reaction_mappositions_by_map_id
+  chemi-chet-extra: POST /reaction/newlibrary -> chemi_chet_reaction_newlibrary
+  chemi-chet-extra: POST /reaction/newreactfile -> chemi_chet_reaction_newreactfile
+  chemi-chet-extra: POST /reaction/newreaction -> chemi_chet_reaction_newreaction
+  chemi-chet-extra: POST /reaction/reaction_dl -> chemi_chet_reaction_reaction_dl
+  chemi-chet-extra: POST /reaction/reactiondelete -> chemi_chet_reaction_reactiondelete
+  chemi-chet-extra: POST /reaction/template_DL -> chemi_chet_reaction_template_dl
+  chemi-chet-extra: POST /reaction/visibility -> chemi_chet_reaction_visibility
+  remaining-resolver-facade: POST /api/resolver/safety-flags -> chemi_resolver_safety_flags_bulk
+  chemi-search-services-native: POST /api/search/download -> chemi_search_download
+  chemi-search-services-native: GET /api/search/download/mol -> chemi_search_download_mol
+  chemi-search-services-native: GET /api/search/download/mol-by-smiles -> chemi_search_download_mol_by_smiles
+  chemi-search-services-native: POST /api/search/download/properties -> chemi_search_download_properties
+  chemi-search-services-native: POST /api/search/download/search-result-as-sdf -> chemi_search_download_sdf
+  chemi-search-services-native: GET /api/search/render/png -> chemi_search_render_png
+  chemi-search-services-native: GET /api/search/render/svg -> chemi_search_render_svg
+  chemi-search-services-native: POST /api/services/export -> chemi_services_export
+  chemi-search-services-native: POST /api/services/export_json_report -> chemi_services_export_json_report
+  chemi-search-services-native: POST /api/services/preflight -> chemi_services_preflight
+  chemi-search-services-native: POST /api/services/universalpreflight -> chemi_services_universalpreflight
+  chemi-chet-admin-auth: GET /admin/database -> chemi_chet_admin_database
+  chemi-chet-admin-auth: POST /admin/errorreport -> chemi_chet_admin_errorreport_post
+  chemi-chet-admin-auth: POST /admin/login -> chemi_chet_admin_login_post
+  chemi-chet-admin-auth: POST /admin/register -> chemi_chet_admin_register_post
+  chemi-chet-admin-auth: POST /admin/resolve -> chemi_chet_admin_resolve_post
+  chemi-chet-admin-auth: GET /auth/errorpage -> chemi_chet_auth_errorpage
+  chemi-chet-admin-auth: POST /auth/errorpage -> chemi_chet_auth_errorpage_post
+  chemi-chet-admin-auth: GET /auth/errorpage/complete/{idnum} -> chemi_chet_auth_errorpage_complete_idnum
+  chemi-chet-admin-auth: POST /auth/errorpage/complete/{idnum} -> chemi_chet_auth_errorpage_complete_idnum_post
+  chemi-chet-admin-auth: GET /auth/errorpage/{showhide} -> chemi_chet_auth_errorpage_showhide
+  chemi-chet-admin-auth: POST /auth/errorpage/{showhide} -> chemi_chet_auth_errorpage_showhide_post
+  chemi-chet-admin-auth: GET /auth/logout -> chemi_chet_auth_logout
+  chemi-chet-admin-auth: GET /auth/testpage -> chemi_chet_auth_testpage
+  chemi-chet-admin-auth: POST /auth/testpage -> chemi_chet_auth_testpage_post
+  chemi-resolver-extra: GET /api/resolver/export -> chemi_resolver_export
+  chemi-resolver-extra: POST /api/resolver/export -> chemi_resolver_export_post
+  chemi-resolver-extra: POST /api/resolver/export-append -> chemi_resolver_export_append
+  chemi-resolver-extra: POST /api/resolver/export-records -> chemi_resolver_export_records
+  chemi-resolver-extra: GET /api/resolver/export-section -> chemi_resolver_export_section
+  chemi-resolver-extra: POST /api/resolver/export-section -> chemi_resolver_export_section_post
+  chemi-resolver-extra: POST /api/resolver/export_classyfire -> chemi_resolver_export_classyfire
+  chemi-resolver-extra: POST /api/resolver/exportpubchemlist -> chemi_resolver_exportpubchemlist
+  chemi-resolver-extra: GET /api/resolver/getintegrityreports -> chemi_resolver_getintegrityreports
+  chemi-resolver-extra: POST /api/resolver/ghs-list-count -> chemi_resolver_ghs_list_count_post
+  chemi-resolver-extra: GET /api/resolver/render -> chemi_resolver_render
+  chemi-resolver-extra: POST /api/resolver/universalharvest_cart -> chemi_resolver_universalharvest_cart
+  chemi-amos-direct-reads: GET /api/amos/additional_sources_for_substance/{dtxsid} -> chemi_amos_additional_sources_for_substance
+  chemi-amos-direct-reads: GET /api/amos/get_pdf_metadata/{record_type}/{internal_id} -> chemi_amos_get_pdf_metadata
+  chemi-amos-direct-reads: GET /api/amos/get_substance_file_for_record/{internal_id} -> chemi_amos_get_substance_file_for_record
+  chemi-small-families: GET /api/predictor_models/model/file/ -> chemi_predictor_models_model_file
+  chemi-small-families: GET /api/webtest/report -> chemi_webtest_report
+  chemi-stdizer-unbound: DELETE /api/stdizer/groups/{id} -> chemi_stdizer_groups_by_id_delete
+  chemi-stdizer-unbound: PUT /api/stdizer/groups/{id} -> chemi_stdizer_groups_by_id_put
+  chemi-stdizer-unbound: PUT /api/stdizer/groups/{id}/acl -> chemi_stdizer_groups_by_id_acl_put
+  chemi-stdizer-unbound: POST /api/stdizer/protocol/export -> chemi_stdizer_protocol_export_post
+  chemi-stdizer-unbound: GET /api/stdizer/protocols -> chemi_stdizer_protocols
+  chemi-stdizer-unbound: POST /api/stdizer/protocols -> chemi_stdizer_protocols_post
+  chemi-stdizer-unbound: GET /api/stdizer/protocols/check -> chemi_stdizer_protocols_check
+  chemi-stdizer-unbound: DELETE /api/stdizer/protocols/{id} -> chemi_stdizer_protocols_by_id_delete
+  chemi-stdizer-unbound: PATCH /api/stdizer/protocols/{id} -> chemi_stdizer_protocols_by_id_patch
+  chemi-stdizer-unbound: PUT /api/stdizer/protocols/{id} -> chemi_stdizer_protocols_by_id_put
+  chemi-stdizer-unbound: PUT /api/stdizer/protocols/{id}/acl -> chemi_stdizer_protocols_by_id_acl_put
+  chemi-stdizer-unbound: GET /api/stdizer/protocols/{id}/changes -> chemi_stdizer_protocols_by_id_changes
+  chemi-stdizer-unbound: POST /api/stdizer/protocols/{id}/export -> chemi_stdizer_protocols_by_id_export_post
+  chemi-stdizer-unbound: GET /api/stdizer/protocols/{id}/issues -> chemi_stdizer_protocols_by_id_issues
+  chemi-stdizer-unbound: GET /api/stdizer/render -> chemi_stdizer_render
+  chemi-chet-options: OPTIONS /reaction/batchsearch -> chemi_chet_reaction_batchsearch_options
+  chemi-chet-options: OPTIONS /reaction/map_DL -> chemi_chet_reaction_map_dl_options
+  rootheldrelease: GET /reaction/database-old/{pagenum}/{searchterm} -> chemi_chet_reaction_database_old_by_pagenum_and_searchterm
+  rootheldrelease: GET /reaction/searchcounts/{search_input}/{search_type} -> chemi_chet_reaction_searchcounts
+  held-recursive-facade: GET /api/stdizer/groups/{id}/recursive -> chemi_stdizer_groups_recursive
+  chemi-webtest-exports: POST /api/webtest/export-append -> chemi_webtest_export_append
+  chemi-webtest-exports: POST /api/webtest/predict/export -> chemi_webtest_predict_export
+
+Excluded operations (0)
+
+Files to remove
+Server selection requires an explicit override at runtime:
+  GET /api/search: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/alerts: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/alerts: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/groups: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/groups/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/operations: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/amos/release_notes: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_data_source_info/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_ir_spectrum/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_nmr_spectrum/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_mass_spectrum/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_info_by_id/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/search_by_text/{substr}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/search: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/method_with_spectra/{search_type}/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_pdf/{record_type}/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/database_summary/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/dtxsids_from_functional_use/{functional_use}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/find_dtxsids/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/formula_search/{formula}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/functional_class_search/{functional_class}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/functional_uses_for_dtxsid/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_fact_sheet_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_method_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_ms_ready_methods/{inchikey}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_product_declaration_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_substances_for_search_term/{search_term}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/inchikey_first_block_search/{first_block}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/list_fact_sheet_types/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/list_functional_classes: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/record_id_search/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/record_type_count/{record_type}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/substring_search/{substring}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/search/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_similar_structures/{identifier_type}/{identifier}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/list_sources_by_record_type/{record_type}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/spectral_entropy/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/entropy_similarity/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/spectrum_count_for_methodology/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/mass_range_search/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/next_level_classification/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/substances_for_classification/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/all_similarities_by_dtxsid/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/max_similarity_by_dtxsid/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/mass_spectrum_similarity_search/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/dtxsids/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/record_counts_by_dtxsid/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/mass_spectra_for_substances/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/count_substances_in_ids/: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/analytical_qc_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/analytical_qc_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/fact_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/fact_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/method_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/method_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/product_declaration_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/product_declaration_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/safety_data_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/amos/safety_data_sheet_keyset_pagination/{limit}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /chemicals/database-old: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/verify/{dtxsid}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/database_old: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/dbcounts: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/libraries: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/mappositions/{map_id}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/maps: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ccte-lists: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/getallannotations: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/getdatasources: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ghs-list-count: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ghs/classes: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ghs/hcodes: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ghs/pcodes: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/hcodes: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/services/cim_component_info: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/services/release_notes: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/groups: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/groups/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/operations: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/workflows: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/assays/{name}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/chemicals_categories: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/enrichments: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/toxprints_categories: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/download: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/dye: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/polymer/amphoteric: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/polymer/anionic: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/polymer/nonionic: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/polymer/polycationic: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/surfactant/amphoteric: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/surfactant/anionic: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/surfactant/cationic: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ecosar/surfactant/nonionic: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/submit: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/amnb_nate: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/amnb_nate: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/arn_cats: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/arn_cats: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/alias: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/chemset: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/counts: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/database: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/database/stats: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/maps: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/singlechemical: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/suggest: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/{chemical_id}/image: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/batchsearch: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/database: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/database/stats: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/details: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/mapid: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/react_maps: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/reactionmap: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/search: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/singlereaction: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/table: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ncc_cats: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/ncc_cats: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/opera: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/opera: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/opera/report: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/pfas_atlas: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/pfas_atlas: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/pfas_cats: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/pfas_cats: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ccte-list: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/classyfire: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/getannotation: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/getannotationslist: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/getsimilaritymap: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/getsubstance: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/ghs-list: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/links: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/lookup: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/lookup: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/lookupCASRN: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/mesh: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/orderBySimilarity: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/pubchem-section: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/pubchem-section: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/resolve: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/safety-flags: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/exact: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/gethazard: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/similar: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/substructure: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/services/collated_report: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/services/convert: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/services/layout: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/services/smirks2rxn: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/assays: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/assays: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/assays/check: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/calculate: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/calculate: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/global_assays: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/global_toxprints: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/toxprints: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/padel: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/padel: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/mordred: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/mordred: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/rdkit: Swagger host/scheme requires a recorded origin or explicit base URL override
+  POST /api/rdkit: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/webtest: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/webtest: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/webtest/predict: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/webtest/predict: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/stdizer/chemicals: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/stdizer/records: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/predictor_models/predict: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/predictor_models/predict: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/submit/batch: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/safety/rqcodes: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/calculate: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/hazard: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/chemtemp/{type}/{value}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /curators/me: Relative server URL requires a recorded origin or explicit base URL override
+  GET /metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/amnb_nate/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/amnb_nate/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/arn_cats/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/arn_cats/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/descriptors/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/descriptors/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/mordred/version: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/mordred/metadata: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/ncc_cats/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/ncc_cats/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/opera/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/opera/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/padel/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/padel/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/pfas_atlas/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/pfas_atlas/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/pfas_cats/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/pfas_cats/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/predictor_models/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/predictor_models/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/rdkit/version: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/rdkit/metadata: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/resolver/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/safety/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/safety/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/services/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/services/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/webtest/metadata: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/webtest/version: Relative server URL requires a recorded origin or explicit base URL override
+  GET /chemicals/chemical_DL: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/alerts/export: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/alerts/export-append: Relative server URL requires a recorded origin or explicit base URL override
+  DELETE /api/alerts/groups/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/alerts/groups/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/alerts/render: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard/download: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/hazard/report/export: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/hazard/report/export-append: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/hazard/report/export2: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard/reports: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/hazard/reports: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard/reports/check: Relative server URL requires a recorded origin or explicit base URL override
+  DELETE /api/hazard/reports/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/hazard/reports/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/hazard/reports/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/hazard/reports/{id}/acl: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/hazard/reports/{id}/export: Relative server URL requires a recorded origin or explicit base URL override
+  DELETE /api/toxprints/assays/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/toxprints/assays/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/toxprints/assays/{id}/acl: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/download: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/export: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/toxprints/export_global: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/toxprints/render: Relative server URL requires a recorded origin or explicit base URL override
+  POST /chemicals/chemdelete: Relative server URL requires a recorded origin or explicit base URL override
+  POST /chemicals/chemical_DL: Relative server URL requires a recorded origin or explicit base URL override
+  POST /chemicals/newchemfile: Relative server URL requires a recorded origin or explicit base URL override
+  POST /chemicals/newchemical: Relative server URL requires a recorded origin or explicit base URL override
+  POST /chemicals/template_DL: Relative server URL requires a recorded origin or explicit base URL override
+  POST /curators/change-password: Relative server URL requires a recorded origin or explicit base URL override
+  GET /curators/detail-sets: Relative server URL requires a recorded origin or explicit base URL override
+  POST /curators/details: Relative server URL requires a recorded origin or explicit base URL override
+  POST /curators/libraries: Relative server URL requires a recorded origin or explicit base URL override
+  GET /curators/libraries/detail-options: Relative server URL requires a recorded origin or explicit base URL override
+  GET /curators/libraries/{lib_id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /curators/libraries/{lib_id}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /curators/login: Relative server URL requires a recorded origin or explicit base URL override
+  POST /curators/logout: Relative server URL requires a recorded origin or explicit base URL override
+  GET /curators/units: Relative server URL requires a recorded origin or explicit base URL override
+  POST /curators/units: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/download_DB_backup: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/editor/check-existing: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/editor/check-existing-map: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/editor/library-details: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/editor/load-map: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/editor/load-reactions: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/editor/save-scheme: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/editor/{reaction_id}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/editor/{reaction_id}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/map_DL: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/mapfix/{map_id}: Relative server URL requires a recorded origin or explicit base URL override
+  DELETE /reaction/mappositions/{map_id}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/newlibrary: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/newreactfile: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/newreaction: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/reaction_dl: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/reactiondelete: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/template_DL: Relative server URL requires a recorded origin or explicit base URL override
+  POST /reaction/visibility: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/safety-flags: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/search/download: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/download/mol: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/download/mol-by-smiles: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/search/download/properties: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/search/download/search-result-as-sdf: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/render/png: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/search/render/svg: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/services/export: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/services/export_json_report: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/services/preflight: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/services/universalpreflight: Relative server URL requires a recorded origin or explicit base URL override
+  GET /admin/database: Relative server URL requires a recorded origin or explicit base URL override
+  POST /admin/errorreport: Relative server URL requires a recorded origin or explicit base URL override
+  POST /admin/login: Relative server URL requires a recorded origin or explicit base URL override
+  POST /admin/register: Relative server URL requires a recorded origin or explicit base URL override
+  POST /admin/resolve: Relative server URL requires a recorded origin or explicit base URL override
+  GET /auth/errorpage: Relative server URL requires a recorded origin or explicit base URL override
+  POST /auth/errorpage: Relative server URL requires a recorded origin or explicit base URL override
+  GET /auth/errorpage/complete/{idnum}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /auth/errorpage/complete/{idnum}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /auth/errorpage/{showhide}: Relative server URL requires a recorded origin or explicit base URL override
+  POST /auth/errorpage/{showhide}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /auth/logout: Relative server URL requires a recorded origin or explicit base URL override
+  GET /auth/testpage: Relative server URL requires a recorded origin or explicit base URL override
+  POST /auth/testpage: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/export: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/export: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/export-append: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/export-records: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/export-section: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/export-section: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/export_classyfire: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/exportpubchemlist: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/getintegrityreports: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/ghs-list-count: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/resolver/render: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/resolver/universalharvest_cart: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/amos/additional_sources_for_substance/{dtxsid}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/amos/get_substance_file_for_record/{internal_id}: Swagger host/scheme requires a recorded origin or explicit base URL override
+  GET /api/predictor_models/model/file/: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/webtest/report: Relative server URL requires a recorded origin or explicit base URL override
+  DELETE /api/stdizer/groups/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/stdizer/groups/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/stdizer/groups/{id}/acl: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/stdizer/protocol/export: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/protocols: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/stdizer/protocols: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/protocols/check: Relative server URL requires a recorded origin or explicit base URL override
+  DELETE /api/stdizer/protocols/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PATCH /api/stdizer/protocols/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/stdizer/protocols/{id}: Relative server URL requires a recorded origin or explicit base URL override
+  PUT /api/stdizer/protocols/{id}/acl: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/protocols/{id}/changes: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/stdizer/protocols/{id}/export: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/protocols/{id}/issues: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/render: Relative server URL requires a recorded origin or explicit base URL override
+  OPTIONS /reaction/batchsearch: Relative server URL requires a recorded origin or explicit base URL override
+  OPTIONS /reaction/map_DL: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/database-old/{pagenum}/{searchterm}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /reaction/searchcounts/{search_input}/{search_type}: Relative server URL requires a recorded origin or explicit base URL override
+  GET /api/stdizer/groups/{id}/recursive: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/webtest/export-append: Relative server URL requires a recorded origin or explicit base URL override
+  POST /api/webtest/predict/export: Relative server URL requires a recorded origin or explicit base URL override
+Warning message:
+OAS 3.1 GET request body has undefined interoperability semantics

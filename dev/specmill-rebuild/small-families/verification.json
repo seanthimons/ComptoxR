@@ -1,0 +1,45 @@
+{
+  "apply_actions": {
+    "unchanged": 590,
+    "write": 3
+  },
+  "diagnostics": 0,
+  "mapping_diagnostics": 0,
+  "retained_diagnostics": 0,
+  "drift": 0,
+  "pin": {
+    "package": "specmill",
+    "version": "0.1.41",
+    "source_commit": "05862bee1804806cea157ff1962300d741516301",
+    "source_archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "full_validation": true,
+  "freshness": "passed",
+  "all_proof_owner_hashes": 592,
+  "all_parent_owner_hashes": 590,
+  "frozen_file_hashes": 42,
+  "outputs": [
+    {
+      "operation": "GET /api/predictor_models/model/file/",
+      "name": "chemi_predictor_models_model_file",
+      "ownership": {
+        "hash": "bfcf51f9814e34e1dbb14f6eb086630b0287f64285dae3aedf6197d32f05a959",
+        "operations": "chemi-small-families GET /api/predictor_models/model/file/"
+      },
+      "documentation_sha256": "f2d2acac45b38db0886c3b03d3bd9015d56948753ac2efb3b7cce0700d491fe0"
+    },
+    {
+      "operation": "GET /api/webtest/report",
+      "name": "chemi_webtest_report",
+      "ownership": {
+        "hash": "49d232629d1a90801a07e7ada11504b2f541381b201e885d135dea27aab16861",
+        "operations": "chemi-small-families GET /api/webtest/report"
+      },
+      "documentation_sha256": "db218b2cd8d2f8477e9581ca981aa1b856d047c48f5e02175b3a7186e0927027"
+    }
+  ],
+  "parent_config_and_manifest": "unchanged; integrate service with official generation in parent",
+  "original_public_exports_checked": 457
+}

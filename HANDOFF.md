@@ -1,4 +1,16 @@
-# Handoff: delegated package migrations
+# Project handoff
+
+## Resume the full API migration, 18 October 2026
+
+Read [the current Specmill migration handoff](dev/specmill-rebuild/HANDOFF.md)
+before continuing API generation, retained-wrapper adoption, or contract review.
+The implementation checkpoint is local commit `3829b114` on
+`feat/specmill-migration-pilot`, pinned to released Specmill v0.1.38.
+Full API migration remains incomplete; ComptoxR is local-only with no push.
+
+The September completion statements and worker assignments below describe an
+earlier package/database migration. They do not establish completion or direct
+the current Specmill work.
 
 ## Follow-up: wrapmaint generalization (2026-09-08)
 

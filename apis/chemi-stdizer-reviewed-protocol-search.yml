@@ -1,0 +1,149 @@
+{
+  "id": "chemi-stdizer-reviewed-protocol-search",
+  "schemas": {
+    "files": [
+      "schema/chemi-stdizer-prod.json"
+    ]
+  },
+  "selection": {
+    "include": [
+      "POST /api/stdizer/protocols/{id}"
+    ]
+  },
+  "helper": ".ct_request",
+  "documentation": true,
+  "operations": {
+    "POST /api/stdizer/protocols/{id}": {
+      "name": "chemi_stdizer_protocols_by_id_post",
+      "file": "R/chemi_stdizer_protocols_by_id_post.R",
+      "implementation": "generated",
+      "server": {
+        "resolver": ".ct_server_url",
+        "key": "chemi_burl"
+      },
+      "request_controls": {
+        "preserve_errors": true
+      },
+      "docs": {
+        "title": "Search records in a standardizer protocol",
+        "lifecycle": "experimental",
+        "return": "Decoded protocol metadata and its requested page of records.",
+        "tags": {
+          "apiStage": "public"
+        },
+        "parameters": {
+          "id": "Protocol identifier returned by chemi_stdizer_protocols().",
+          "page": "Zero-based page index; NULL leaves the service default.",
+          "size": "Positive page size; NULL leaves the service default.",
+          "sort": "Character vector of sort expressions, such as c(\"type,asc\", \"id,desc\"). Each expression is sent as its own sort query field. NULL or character() omits sorting."
+        },
+        "description": "Search criteria as a named list. Use list() for an unfiltered search; optional flags include hidden, components, changed, failed and passed."
+      },
+      "normalize_inputs": {
+        "sort": ".ct_protocol_sort"
+      },
+      "request": {
+        "arguments": {
+          "method": {
+            "value": "POST"
+          },
+          "path": {
+            "value": "/api/stdizer/protocols/{id}"
+          },
+          "path_params": {
+            "object": {
+              "id": {
+                "from": [
+                  "params",
+                  "id"
+                ]
+              }
+            }
+          },
+          "query": {
+            "object": {
+              "page": {
+                "from": [
+                  "params",
+                  "page"
+                ]
+              },
+              "size": {
+                "from": [
+                  "params",
+                  "size"
+                ]
+              },
+              "sort": {
+                "from": [
+                  "params",
+                  "sort"
+                ]
+              }
+            }
+          },
+          "body": {
+            "from": [
+              "params",
+              "body"
+            ]
+          },
+          "headers": {
+            "value": {}
+          },
+          "server": {
+            "value": {
+              "url": "https://hcd.rtpnc.epa.gov"
+            }
+          },
+          "server_resolver": {
+            "value": {
+              "name": ".ct_server_url",
+              "key": "chemi_burl",
+              "relative": "/"
+            }
+          },
+          "auth": {
+            "value": []
+          },
+          "query_serialization": {
+            "value": {
+              "sort": "explode"
+            }
+          },
+          "body_media": {
+            "value": "application/json"
+          },
+          "request_controls": {
+            "value": {
+              "preserve_errors": true
+            }
+          }
+        }
+      },
+      "exclude_parameters": [
+        "pageable"
+      ],
+      "extra_parameters": {
+        "page": {
+          "type": "integer",
+          "minimum": 0,
+          "default": null
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "default": null
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      }
+    }
+  },
+  "hook_config": "inst/hook_config.yml"
+}

@@ -1,0 +1,8 @@
+{
+  "operation": "POST /api/amos/batch_search",
+  "definition": "BatchSearchGeneralRequest",
+  "status": 500,
+  "media": "text/html; charset=utf-8",
+  "size": 265,
+  "date": "2026-10-18 00:22:59 UTC"
+}

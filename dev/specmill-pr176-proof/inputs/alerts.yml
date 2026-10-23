@@ -1,0 +1,19 @@
+id: proof-alerts
+schemas:
+  files:
+  - schema/chemi-alerts-prod.json
+selection:
+  include:
+  - PATCH /api/alerts/groups/{id}/freeze
+helper: .ct_request
+documentation: true
+operations:
+  PATCH /api/alerts/groups/{id}/freeze:
+    name: chemi_alerts_groups_freeze_by_id
+    file: R/chemi_alerts_groups_freeze_by_id.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true

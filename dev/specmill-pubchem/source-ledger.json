@@ -1,0 +1,23 @@
+{
+  "source_url": "https://pubchem.ncbi.nlm.nih.gov/pcfe/docs/markdown/pug-rest.md",
+  "retrieved_utc": "2026-10-18T18:10:18.735337+00:00",
+  "source_sha256": "be2273c1565e68ab6252e680913bacc72ccb215c66a7c4ce53bbf638b4ae3fb6",
+  "output_sha256": "78ef909c19a3a1a3aac978685683fc6c9068f12a83e8170668bd28636cc883f7",
+  "operations": 6,
+  "public_wrappers": 3,
+  "review": [
+    "Request POST Body specifies cid CSV form encoding; Input specifies namespaces and POST-only InChI.",
+    "Operation, Property, Synonyms and SIDS/CIDS/AIDS sections define paths and JSON output.",
+    "Only JSON and existing public wrapper namespace choices selected; other operations omitted.",
+    "No server contract maxItems=100 added: 100 is existing client batching policy.",
+    "String CID path/form retains CSV wire representation; public integer coercion remains client policy.",
+    "Response objects remain open; no additional required success fields or assumed property types.",
+    "Existing CanonicalSMILES/IsomericSMILES allowlist aliases remain client behavior; no source spelling rewrite.",
+    "No canonical snapshot modified. No adoption or canonical denominator asserted."
+  ],
+  "blockers": [
+    "https://github.com/seanthimons/specmill/issues/174",
+    "https://github.com/seanthimons/specmill/issues/175"
+  ],
+  "adopted_operations": 0
+}

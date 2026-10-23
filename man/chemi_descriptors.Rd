@@ -18,13 +18,13 @@ chemi_descriptors(
 
 \item{type}{Descriptor engine: padel, rdkit, mordred, or webtest}
 
-\item{headers}{Request upstream descriptor headers (default: FALSE)}
+\item{headers}{Request descriptor headers.}
 
-\item{format}{Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)}
+\item{format}{Response format: JSON, CSV or TSV.}
 
-\item{timeout}{Optional upstream calculation timeout}
+\item{timeout}{Optional upstream calculation timeout.}
 
-\item{output}{Output contract: validated wide tibble or raw payload}
+\item{output}{Output contract: validated wide tibble or raw payload.}
 }
 \value{
 Returns a tibble with results
@@ -34,7 +34,7 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_descriptors(smiles = "DTXSID7020182")
+chemi_descriptors(smiles = "CCO", type = "rdkit")
 }
 }
 \section{API stage}{

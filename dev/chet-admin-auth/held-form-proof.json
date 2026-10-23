@@ -1,0 +1,8 @@
+{
+  "issue": "https://github.com/seanthimons/specmill/issues/178",
+  "operations": 3,
+  "localhost_only": true,
+  "http_requests": 0,
+  "canonical_allows_additional_properties": true,
+  "generated_validation_rejects_username": true
+}

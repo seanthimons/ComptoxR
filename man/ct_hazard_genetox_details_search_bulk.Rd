@@ -4,19 +4,19 @@
 \alias{ct_hazard_genetox_details_search_bulk}
 \title{Get detailed data for a batch of DTXSIDs}
 \usage{
-ct_hazard_genetox_details_search_bulk(query)
+ct_hazard_genetox_details_search_bulk(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox substance identifiers. Inputs are sent in chunks using the configured call-time item limit and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_hazard_genetox_details_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+ct_hazard_genetox_details_search_bulk(dtxsid = list("DTXSID7020182", "DTXSID2021315"))
 }
 }

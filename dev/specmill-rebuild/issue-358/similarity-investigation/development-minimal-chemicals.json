@@ -1,0 +1,46 @@
+{
+  "environment": "development",
+  "url": "https://cim-dev.sciencedataexperts.com/api/resolver/getsimilaritylist",
+  "retrieved_utc": "2026-10-19T18:51:41.311455+00:00",
+  "request": {
+    "main": {
+      "chemId": "DTXSID7020182",
+      "sid": "DTXSID7020182",
+      "smiles": "CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1"
+    },
+    "_chemicals": [
+      {
+        "chemId": "DTXSID7020182",
+        "sid": "DTXSID7020182",
+        "smiles": "CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1"
+      },
+      {
+        "chemId": "DTXSID9020112",
+        "sid": "DTXSID9020112",
+        "smiles": "CCNC1N=C(Cl)N=C(NC(C)C)N=1"
+      }
+    ],
+    "fingerprintName": "indigo",
+    "scoreName": "tanimoto"
+  },
+  "status": 200,
+  "media": "application/json",
+  "request_id": "7d3f7da2-761b-4000-9871-eb2e6d663f7e",
+  "response": [
+    {
+      "chemical": {
+        "chemId": "DTXSID9020112",
+        "sid": "DTXSID9020112",
+        "smiles": "CCNC1N=C(Cl)N=C(NC(C)C)N=1",
+        "averageMass": 215.6832594871521,
+        "monoisotopicMass": 215.0937716960907,
+        "additionalProps": {}
+      },
+      "max": 0.138,
+      "similarity": {
+        "sim": 0.138,
+        "cl": "ybc1"
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_mass_range.R
 \name{chemi_amos_mass_range}
 \alias{chemi_amos_mass_range}
-\title{Returns a list of substances whose monoisotopic mass falls within the specified range.}
+\title{chemi amos mass range}
 \usage{
 chemi_amos_mass_range(lower_mass_limit = NULL, upper_mass_limit = NULL)
 }
@@ -12,14 +12,14 @@ chemi_amos_mass_range(lower_mass_limit = NULL, upper_mass_limit = NULL)
 \item{upper_mass_limit}{Upper limit of the mass range to search for.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_mass_range(lower_mass_limit = "DTXSID1024122")
+chemi_amos_mass_range(lower_mass_limit = 194.1, upper_mass_limit = 194.2)
 }
 }
 \section{API stage}{

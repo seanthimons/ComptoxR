@@ -1,0 +1,25 @@
+{
+  "url": "https://hcd.rtpnc.epa.gov/api/amos/swagger.json",
+  "final_url": "https://hcd.rtpnc.epa.gov/api/amos/swagger.json",
+  "status": 200,
+  "retrieved_utc": "2026-10-18T19:37:00.228055+00:00",
+  "sha256": "4591f49840d0f0f5c8e092fd588c43087a8582e8555c3d477ef4c1a98390eaf4",
+  "canonical_sha256": "1d0ef1fbd813e2381a1e6e841d69e5070ee438e588a01dc3298b984ba7ca5f35",
+  "equals_archived_canonical": false,
+  "dialect": "2.0",
+  "parsed_document_identical": false,
+  "all_operation_objects_identical": true,
+  "document_identical_except_examples": true,
+  "example_differences": [
+    {
+      "pointer": "/definitions/mass_spectrum_similarity_search_request/properties/spectrum/example/1/1",
+      "archived": 10.2292,
+      "retrieved": 10.229229
+    },
+    {
+      "pointer": "/definitions/max_similarity_by_dtxsid_request/properties/spectra/example/0/1/1",
+      "archived": 10.2292,
+      "retrieved": 10.229229
+    }
+  ]
+}

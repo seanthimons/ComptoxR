@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_resolver_orderBySimilarity.R
 \name{chemi_resolver_orderBySimilarity}
 \alias{chemi_resolver_orderBySimilarity}
-\title{Resolver orderBySimilarity}
+\title{chemi resolver orderBySimilarity}
 \usage{
 chemi_resolver_orderBySimilarity(
   query,
@@ -30,7 +30,7 @@ chemi_resolver_orderBySimilarity(
 
 \item{get_chemicals}{Optional parameter}
 
-\item{main}{Optional parameter}
+\item{main}{Reference Chemical object for similarity ordering; supply sid and smiles. The service requires this reference.}
 
 \item{padelCompute2D}{Optional parameter}
 
@@ -51,18 +51,10 @@ chemi_resolver_orderBySimilarity(
 \item{tverskyI}{Optional parameter}
 }
 \value{
-Returns a tibble with results (array of objects)
+Decoded response records, with the configured client formatting.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
-then sends the resolved Chemical objects to the API endpoint.
-}
-\examples{
-\dontrun{
-chemi_resolver_orderBySimilarity(query = c("50-00-0", "DTXSID7020182"))
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

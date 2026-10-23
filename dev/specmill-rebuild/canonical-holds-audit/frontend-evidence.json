@@ -1,0 +1,24 @@
+{
+  "url": "https://hcd.rtpnc.epa.gov/js/app.2b8197a6.js",
+  "sha256": "dc6443e91da0ceef29f7f930cbb91671003cc3a8c983d77cbbc0bce4ca7754dd",
+  "archive": "/home/sxthi/.cache/comptoxr-search-services/app.js",
+  "snippets": [
+    {
+      "byte_offset": 456342,
+      "text": "\"preflight-url\":`${e.STDIZER_URL}/groups/preflight`,\"upload-url\":`${e.STDIZER_URL}/groups`"
+    },
+    {
+      "byte_offset": 102818,
+      "text": "const e=new FormData;this.files.forEach(t=>e.append(\"files[]\",t,t.name)),this.$axios.post(this.preflightUrl,e)"
+    },
+    {
+      "byte_offset": 433691,
+      "text": "STDIZER_URL:UP"
+    },
+    {
+      "byte_offset": 876742,
+      "text": "VUE_APP_STDIZER_URL||TP)+\"/stdizer\""
+    }
+  ],
+  "retrieval": "Previously archived 2026-10-18; no network request in this derivation."
+}

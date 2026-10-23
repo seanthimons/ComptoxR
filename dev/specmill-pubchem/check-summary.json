@@ -1,0 +1,37 @@
+{
+  "base_commit": "341b8526d21cf16e95576b95d44c8d9afd8a9725",
+  "official_specmill": "0.1.41",
+  "official_source_commit": "05862bee1804806cea157ff1962300d741516301",
+  "official_git_archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc",
+  "public_wrappers": 3,
+  "separate_reviewed_http_operations": 6,
+  "adopted_operations": 0,
+  "pubchem_assertions_passed": 181,
+  "pubchem_failures": 0,
+  "pubchem_warnings": 0,
+  "pubchem_skips": 0,
+  "retained_localhost_assertions": 77,
+  "positive_live_controls": 7,
+  "source_validation": "passed",
+  "source_apply_and_freshness": "passed",
+  "official_full_generation_plan": "passed, validation TRUE; zero operation/mapping/retained/drift diagnostics",
+  "official_full_generation_root_changes": [
+    ".specmill/manifest.json"
+  ],
+  "root_full_freshness": "not claimed; parent owns pin/helper/manifest integration",
+  "unchanged_files_sha256": {
+    "R/pubchem_properties.R": "4f1a9e89127656bf6c2c10281ec8497e5d19c9b82f74b2fd708680b78ed0739e",
+    "R/pubchem_search.R": "0ebb0729051c3036089f98a5f9e8c76ea86db892276dba81c8127e99941d5e11",
+    "R/pubchem_synonyms.R": "f9717dd6189b881e0bae89cadbe6c276531d740253ea1bdb9a6ae42b62150286",
+    "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+    "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+    "NAMESPACE": "6006eb511a1dec1fae985307f37ecf2414bde3e6759a4c80a010d65dcad758a3",
+    "dev/specmill-lock.json": "291b9bca431d3e7d7c54cacfb8e7851a0f3de94aa988b2f9abf3706b831379a8",
+    ".specmill/manifest.json": "5dae445bd01acd4998ebd0e224f031e19fa9c10cac6dd8eecea76030bc88b976",
+    "specmill.yml": "6d39a315bea7702c28787687082abbcc770caed2cdc1a6d120c19e90b0437091"
+  },
+  "upstream_blockers": [
+    174,
+    175
+  ]
+}

@@ -1,0 +1,203 @@
+id: chemi-mordred-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-mordred-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: true
+operations:
+  GET /api/mordred:
+    name: chemi_mordred
+    file: R/chemi_mordred.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: true
+        description: One SMILES string or resolvable chemical identifier
+      headers:
+        type: character
+        default: null
+        description: Request upstream descriptor headers
+      inchi:
+        type: character
+        default: null
+        description: Include InChI identifiers
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: true
+    post_state: hook_state
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        path_params:
+          value: {}
+        query:
+          from:
+          - hook_state
+          - request
+          - options
+        body:
+          value: null
+        headers:
+          object:
+            Accept:
+              from:
+              - hook_state
+              - request
+              - content_type
+        server:
+          object:
+            url:
+              from:
+              - hook_state
+              - request
+              - server
+        auth:
+          value: []
+        response_policy:
+          callback: descriptor_get_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Generate descriptors for one molecule
+      lifecycle: experimental
+      parameters:
+        smiles: One SMILES string or resolvable chemical identifier
+        headers: Request upstream descriptor headers
+        inchi: Include InChI identifiers
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+  POST /api/mordred:
+    name: chemi_mordred_bulk
+    file: R/chemi_mordred.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: character
+        required: true
+        description: Chemical structures or resolvable identifiers
+      options:
+        type: character
+        default: null
+        description: Named list of additional dedicated Mordred options
+      headers:
+        type: character
+        default: null
+        description: Request descriptor headers
+      inchi:
+        type: character
+        default: null
+        description: Include InChI identifiers
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: true
+    post_state: hook_state
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        headers:
+          object:
+            Accept:
+              from:
+              - hook_state
+              - request
+              - content_type
+        server:
+          object:
+            url:
+              from:
+              - hook_state
+              - request
+              - server
+        auth:
+          value: []
+        response_policy:
+          callback: descriptor_post_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Generate descriptors for multiple molecules
+      lifecycle: experimental
+      parameters:
+        chemicals: Chemical structures or resolvable identifiers
+        options: Named list of additional dedicated Mordred options
+        headers: Request descriptor headers
+        inchi: Include InChI identifiers
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - chemicals: DTXSID1024122
+      tags:
+        apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hooks:
+  chemi_mordred:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_mordred_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  chemi_mordred_bulk:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_mordred_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+prepare: preserve_choice_defaults

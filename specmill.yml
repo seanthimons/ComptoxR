@@ -1,0 +1,92 @@
+config_version: 1
+package: ComptoxR
+# CTX credential name -> environment variable read by the generated auth.
+authentication:
+  ctx: ctx_api_key
+formatter:
+  name: air
+  version: 0.11.0
+# Endpoint adoption is opt-out: everything is generated unless it matches a rule here.
+# Rules match paths; prefix a rule with a method ('POST ^/path$') to ban that method only.
+selection:
+  methods: [GET, POST]
+  exclude:
+  # Server-side file standardization; GET /api/stdizer stays approved.
+  - 'POST ^/api/stdizer/?$'
+  # #354-#356: saved rule-group management and add/replace group mutations (stdizer, alerts).
+  - '^/api/stdizer/groups(/|$)'
+  - '/(add|replace)/?$'
+  # #356/#358: harvest and PubChem-list resolver routes without an established end-user purpose.
+  - '^/api/resolver/(casharvest|universalharvest|getpubchemlist)/?$'
+  # Service file upload and CAS preflight routes.
+  - '^/api/services/(caspreflight|files)/?$'
+  # #357: AMOS XLSX batch exports and write routes; JSON searches stay.
+  - '^/api/amos/(add_aqc_spectrum|add_new_fact_sheet|add_new_method|add_new_product_declaration|add_new_safety_data_sheet|analytical_qc_batch_search|batch_search)/?$'
+  # ChET login, admin and delete pages are not API.
+  - '^/(auth|admin)/'
+  - '^/chemicals/chemdelete/?$'
+  # #356: alerts are limited to POST /api/alerts, GET /api/alerts/metadata and /version.
+  - '^/api/alerts(?!/(metadata|version)/?$|/?$)'
+services:
+- apis/epi-pilot.yml
+- apis/alerts-pilot.yml
+- apis/amos-pilot.yml
+- apis/ctx-pilot.yml
+- apis/search-pilot.yml
+- apis/chemi-amos-prod-full.yml
+- apis/chemi-chet-prod-full.yml
+- apis/chemi-resolver-prod-full.yml
+- apis/chemi-services-prod-full.yml
+- apis/chemi-stdizer-prod-full.yml
+- apis/chemi-toxprints-prod-full.yml
+- apis/ctx-chemical-prod-full.yml
+- apis/ctx-exposure-prod-full.yml
+- apis/epi-suite-prod-full.yml
+- apis/ctx-hazard-prod-rebuild.yml
+- apis/ctx-bioactivity-prod-rebuild.yml
+- apis/ctx-chemical-prod-rebuild.yml
+- apis/ctx-exposure-prod-rebuild.yml
+- apis/chemi-amnb_nate-prod-rebuild.yml
+- apis/chemi-arn_cats-prod-rebuild.yml
+- apis/chemi-chet-prod-rebuild.yml
+- apis/chemi-ncc_cats-prod-rebuild.yml
+- apis/chemi-opera-prod-rebuild.yml
+- apis/chemi-pfas_atlas-prod-rebuild.yml
+- apis/chemi-pfas_cats-prod-rebuild.yml
+- apis/chemi-resolver-prod-rebuild.yml
+- apis/chemi-search-prod-rebuild.yml
+- apis/chemi-services-prod-rebuild.yml
+- apis/chemi-toxprints-prod-rebuild.yml
+- apis/chemi-padel-prod-rebuild.yml
+- apis/chemi-mordred-prod-rebuild.yml
+- apis/chemi-rdkit-prod-rebuild.yml
+- apis/chemi-webtest-prod-rebuild.yml
+- apis/chemi-stdizer-prod-rebuild.yml
+- apis/chemi-predictor_models-prod-rebuild.yml
+- apis/epi-suite-prod-rebuild.yml
+- apis/chemi-safety-prod-rebuild.yml
+- apis/chemi-hazard-prod-rebuild.yml
+- apis/ctx-list-name.yml
+- apis/chemi-chet-direct-reads.yml
+- apis/chemi-service-info.yml
+- apis/chemi-management.yml
+- apis/chemi-chet-extra.yml
+- apis/chemi-resolver-remaining-facade.yml
+- apis/chemi-search-services-native.yml
+- apis/chemi-resolver-extra.yml
+- apis/chemi-amos-direct-reads.yml
+- apis/chemi-small-families.yml
+- apis/chemi-stdizer-unbound.yml
+- apis/chemi-released-chet-facades.yml
+- apis/chemi-webtest-exports.yml
+- apis/chemi-stdizer-reviewed-protocol-search.yml
+- apis/chemi-released-boolean-bindings.yml
+- apis/chemi-stdizer-reviewed-protocol-get.yml
+- apis/chemi-descriptors-native.yml
+- apis/pubchem-reviewed.yml
+callback_files:
+- dev/specmill_callbacks.R
+- dev/specmill-rebuild/remaining-facades/callbacks.R
+- dev/specmill-rebuild/rootheldrelease/callbacks.R
+- dev/specmill-rebuild/released-facades-v42/callbacks.R
+- dev/specmill_pubchem_callbacks.R

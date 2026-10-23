@@ -62,16 +62,16 @@ get_hook_config <- function() {
 #' Run Hook Chain for Function
 #'
 #' Executes registered hooks for a given function and hook type.
-#' Returns data unchanged if no hooks are registered.
+#' Returns data unchanged if no hooks are registered, or data$result for post-combine.
 #'
 #' @param fn_name Character string naming the function
-#' @param hook_type Character string: "pre_request" or "post_response"
+#' @param hook_type Character string: "pre_request", "post_response", or "post_combine"
 #' @param data Data to pass through hook chain
 #'
 #' @return Transformed data after all hooks execute, or original data if no hooks registered
 #' @noRd
 run_hook <- function(fn_name, hook_type, data) {
-  if (!hook_type %in% c("pre_request", "post_response")) {
+  if (!hook_type %in% c("pre_request", "post_response", "post_combine")) {
     cli::cli_abort("Unsupported hook stage {.val {hook_type}}.")
   }
 
@@ -80,6 +80,7 @@ run_hook <- function(fn_name, hook_type, data) {
 
   # If no hooks registered, return data unchanged
   if (is.null(hook_chain) || length(hook_chain) == 0) {
+    if (hook_type == "post_combine") return(data$result)
     return(data)
   }
 

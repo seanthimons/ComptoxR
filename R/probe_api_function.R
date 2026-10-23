@@ -35,7 +35,7 @@ probe_api_function <- function(function_name, ...) {
     cli::cli_abort("{.arg function_name} must name an exported {.code chemi_*} or {.code ct_*} wrapper.")
   }
 
-  if (function_name %in% c("chemi_server", "ct_api_key", "ct_classify")) {
+  if (function_name %in% c("chemi_server", "ct_classify")) {
     cli::cli_abort("{.val {function_name}} is not an API wrapper.")
   }
 
@@ -93,6 +93,10 @@ probe_api_function <- function(function_name, ...) {
           NULL
         }
       )
+      request_errors <- attr(result, "failed", exact = TRUE)
+      if (is.null(call_error) && length(request_errors) && all(status_codes == 200L)) {
+        call_error <- paste(unlist(request_errors, use.names = FALSE), collapse = "; ")
+      }
       if (legacy_direct) {
         observed_urls <<- character()
         status_codes <<- integer()

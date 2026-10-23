@@ -1,0 +1,99 @@
+{
+  "code_commit": "dbaafea2",
+  "canonical_migrated": 512,
+  "canonical_total": 548,
+  "remaining": 36,
+  "holds": {
+    "source_contract_hold": 30,
+    "service_contract_hold": 4,
+    "ownership_route_hold": 1,
+    "client_contract_hold": 1
+  },
+  "pubchem_outside_denominator": {
+    "wrappers": 3,
+    "routes": 6
+  },
+  "generation": {
+    "pin": {
+      "package": "specmill",
+      "version": "0.1.50",
+      "source_commit": "064478735580b54a732e3859b066b317e72d53a1",
+      "source_archive_sha256": "7d1ebbac31b3ecc764e8b0cb7baf890a4a5e4ceef67b16cbd96835b1f12d0f78",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "owners": 715,
+    "sources": 34,
+    "freshness": true,
+    "owners_unchanged_except_removal_of_held_render_response_sources": true,
+    "new_owners": [
+      "R/chemi_descriptors.R",
+      "R/pubchem_properties.R",
+      "R/pubchem_search.R",
+      "R/pubchem_synonyms.R"
+    ],
+    "preceding_records_changed_from_253c38a2": [],
+    "held_duplicate_response": "https://github.com/seanthimons/specmill/issues/186",
+    "helper_sha256": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec"
+  },
+  "installed": {
+    "result": {
+      "passed": 2389,
+      "failed": 0,
+      "error": 0,
+      "warning": 0,
+      "skipped": 0
+    },
+    "specmill_runtime_loaded": false,
+    "installed_library": "/home/sxthi/.cache/comptoxr-specmill-finish/released50-library",
+    "source_schemas_in_snapshot": false,
+    "source_dev_files_in_snapshot": false
+  },
+  "source_combined": {
+    "result": {
+      "passed": 14114,
+      "failed": 0,
+      "error": 0,
+      "warning": 0,
+      "skipped": 50
+    },
+    "verification": "Completed broad run plus focused replacement suites, not a second full-suite invocation.",
+    "broad_original": {
+      "passed": 14099,
+      "failed": 3,
+      "errors": 0,
+      "warnings": 0,
+      "skips": 50
+    },
+    "corrective": {
+      "passed": 395,
+      "failed": 0,
+      "errors": 0,
+      "warnings": 0,
+      "skips": 0
+    },
+    "replaced_files": [
+      "test-api_token.R",
+      "test-native_chemi_search.R",
+      "test-pubchem_retained_http.R",
+      "test-retained_search_safety.R"
+    ],
+    "source_credential_test_added_after_broad_start": true,
+    "runtime_changed_after_broad_start": false,
+    "retired_case": "search-test-retirement.json",
+    "cases": 804,
+    "files": 365
+  },
+  "bounded_package_check": {
+    "errors": 0,
+    "warnings": 0,
+    "notes": 0,
+    "limitations": "Bounded package snapshot check only. No schema/dev/tests/vignettes. Tests, examples, vignette rebuilding and PDF manual disabled; optional Suggests relaxed; external HTTP directed to closed loopback proxy; inherited credential-like environment variables blanked. Not a full strict check."
+  },
+  "public_boundary_text_files": 1736,
+  "production_calls": 0,
+  "push": false,
+  "merge": false,
+  "release": false,
+  "full_strict_package_check": false
+}

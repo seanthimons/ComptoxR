@@ -1,0 +1,18 @@
+{
+  "source_commit": "05862bee1804806cea157ff1962300d741516301",
+  "normalized_sha256_verified": true,
+  "owners": {
+    "chemi_chet_auth_register_post.R": {
+      "hash": "0690cb3f2eca11535a55533818ee19c27d16211f380469d081719a24376db194",
+      "operations": "chemi-chet-admin-auth POST /auth/register"
+    },
+    "chemi_chet_auth_report_post.R": {
+      "hash": "93fa66baf9294aae948226fcb87f97918f53e6364354736896639f737928105d",
+      "operations": "chemi-chet-admin-auth POST /auth/report"
+    },
+    "chemi_chet_auth_login_post.R": {
+      "hash": "d84943e07216247a1112b32459e1a2ed58fa733628281e5221f66077e2b0b5c2",
+      "operations": "chemi-chet-admin-auth POST /auth/login"
+    }
+  }
+}

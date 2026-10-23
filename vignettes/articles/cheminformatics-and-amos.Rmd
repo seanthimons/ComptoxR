@@ -127,16 +127,6 @@ class_members <- chemi_amos_substances_for_classification(
 )
 ```
 
-Request ClassyFire fields for several DTXSIDs with the AMOS batch workflow.
-
-```{r}
-amos_batch <- chemi_amos_batch(
-  dtxsids = c("DTXSID7020182", "DTXSID0020319", "DTXSID9020243"),
-  include_classyfire = TRUE
-)
-glimpse(amos_batch)
-```
-
 ClassyFire describes chemical structure classes. ChemFuncT describes
 functional uses. Keep the two classification systems separate. Advanced users
 can query ChemFuncT with

@@ -1,0 +1,1016 @@
+{
+  "specmill": "0.1.18",
+  "source_commit": "8993424ebc9fc7d0fe18e361d767a3d37b710301",
+  "wrappers": 89,
+  "wire_checks": "89 localhost paths, query parameters/defaults, empty GET bodies and decoded outputs",
+  "live": [
+    {
+      "name": "chemi_alerts_groups_by_id",
+      "method": "GET",
+      "path": "/api/alerts/groups/{id}",
+      "inputs": {
+        "id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "HTTP 502 Bad Gateway.",
+      "native": "Dropped request failures: HTTP 502 text/html response",
+      "identical": false
+    },
+    {
+      "name": "chemi_alerts_alerts",
+      "method": "GET",
+      "path": "/api/alerts/alerts",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 502 Bad Gateway.",
+      "native": "HTTP 502 text/html response",
+      "identical": false
+    },
+    {
+      "name": "chemi_alerts_operations",
+      "method": "GET",
+      "path": "/api/alerts/operations",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 502 Bad Gateway.",
+      "native": "HTTP 502 text/html response",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_release_notes",
+      "method": "GET",
+      "path": "/api/amos/release_notes",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_get_data_source_info",
+      "method": "GET",
+      "path": "/api/amos/get_data_source_info/",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 68 elements",
+      "native": "Returned 68 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_get_ir_spectrum",
+      "method": "GET",
+      "path": "/api/amos/get_ir_spectrum/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_nmr_spectrum",
+      "method": "GET",
+      "path": "/api/amos/get_nmr_spectrum/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_mass_spectrum",
+      "method": "GET",
+      "path": "/api/amos/get_mass_spectrum/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_info_by_id",
+      "method": "GET",
+      "path": "/api/amos/get_info_by_id/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_get_classification_for_dtxsid",
+      "method": "GET",
+      "path": "/api/amos/get_classification_for_dtxsid/{dtxsid}",
+      "inputs": {
+        "dtxsid": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_by_text",
+      "method": "GET",
+      "path": "/api/amos/search_by_text/{substr}",
+      "inputs": {
+        "substr": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_database",
+      "method": "GET",
+      "path": "/api/amos/database_summary/",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_dtxsids_from_functional_use",
+      "method": "GET",
+      "path": "/api/amos/dtxsids_from_functional_use/{functional_use}",
+      "inputs": {
+        "functional_use": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_find_dtxsids",
+      "method": "GET",
+      "path": "/api/amos/find_dtxsids/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_formula",
+      "method": "GET",
+      "path": "/api/amos/formula_search/{formula}",
+      "inputs": {
+        "formula": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_functional_class",
+      "method": "GET",
+      "path": "/api/amos/functional_class_search/{functional_class}",
+      "inputs": {
+        "functional_class": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_functional_uses_for_dtxsid",
+      "method": "GET",
+      "path": "/api/amos/functional_uses_for_dtxsid/{dtxsid}",
+      "inputs": {
+        "dtxsid": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_get_fact_sheet_editor_info",
+      "method": "GET",
+      "path": "/api/amos/get_fact_sheet_editor_info/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_method_editor_info",
+      "method": "GET",
+      "path": "/api/amos/get_method_editor_info/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_ms_ready_methods",
+      "method": "GET",
+      "path": "/api/amos/get_ms_ready_methods/{inchikey}",
+      "inputs": {
+        "inchikey": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_get_nmr_spectrum_editor_info",
+      "method": "GET",
+      "path": "/api/amos/get_nmr_spectrum_editor_info/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_product_declaration_editor_info",
+      "method": "GET",
+      "path": "/api/amos/get_product_declaration_editor_info/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_safety_data_sheet_editor_info",
+      "method": "GET",
+      "path": "/api/amos/get_safety_data_sheet_editor_info/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_get_substances_for_term",
+      "method": "GET",
+      "path": "/api/amos/get_substances_for_search_term/{search_term}",
+      "inputs": {
+        "search_term": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_inchikey_first_block",
+      "method": "GET",
+      "path": "/api/amos/inchikey_first_block_search/{first_block}",
+      "inputs": {
+        "first_block": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_list_fact_sheet_types",
+      "method": "GET",
+      "path": "/api/amos/list_fact_sheet_types/",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 129 elements",
+      "native": "Returned 129 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_list_functional_classes",
+      "method": "GET",
+      "path": "/api/amos/list_functional_classes",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_record_id",
+      "method": "GET",
+      "path": "/api/amos/record_id_search/{internal_id}",
+      "inputs": {
+        "internal_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos_record_type_count",
+      "method": "GET",
+      "path": "/api/amos/record_type_count/{record_type}",
+      "inputs": {
+        "record_type": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_amos_substring",
+      "method": "GET",
+      "path": "/api/amos/substring_search/{substring}",
+      "inputs": {
+        "substring": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_amos",
+      "method": "GET",
+      "path": "/api/amos/search/{dtxsid}",
+      "inputs": {
+        "dtxsid": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_database_old",
+      "method": "GET",
+      "path": "/chemicals/database-old",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 4301 elements",
+      "native": "Returned 4301 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_verify",
+      "method": "GET",
+      "path": "/chemicals/verify/{dtxsid}",
+      "inputs": {
+        "dtxsid": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "Dropped request failures: HTTP 500 application/problem+json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_chet_reaction_database_old",
+      "method": "GET",
+      "path": "/reaction/database_old",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "HTTP 500 application/problem+json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_chet_reaction_dbcounts",
+      "method": "GET",
+      "path": "/reaction/dbcounts",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_mappositions",
+      "method": "GET",
+      "path": "/reaction/mappositions/{map_id}",
+      "inputs": {
+        "map_id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "Dropped request failures: HTTP 500 application/problem+json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_chet_reaction_maps",
+      "method": "GET",
+      "path": "/reaction/maps",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1379 elements",
+      "native": "Returned 1379 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_stdizer_groups_by_id",
+      "method": "GET",
+      "path": "/api/stdizer/groups/{id}",
+      "inputs": {
+        "id": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "HTTP 404 Not Found.",
+      "native": "Dropped request failures: HTTP 404 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_toxprints_assays_by_name",
+      "method": "GET",
+      "path": "/api/toxprints/assays/{name}",
+      "inputs": {
+        "name": "DTXSID7020182"
+      },
+      "policy": ".ct_list",
+      "legacy": "HTTP 404 Not Found.",
+      "native": "Dropped request failures: HTTP 404 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_toxprints_enrichments",
+      "method": "GET",
+      "path": "/api/toxprints/enrichments",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "epi_ecosar_polymer_amphoteric",
+      "method": "GET",
+      "path": "/api/ecosar/polymer/amphoteric",
+      "inputs": {
+        "solubilityType": "INSOLUBLE"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "Returned 1 elements",
+      "identical": false
+    },
+    {
+      "name": "epi_ecosar_polymer_anionic",
+      "method": "GET",
+      "path": "/api/ecosar/polymer/anionic",
+      "inputs": {
+        "solubilityType": "INSOLUBLE"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "Returned 1 elements",
+      "identical": false
+    },
+    {
+      "name": "epi_ecosar_polymer_polycationic",
+      "method": "GET",
+      "path": "/api/ecosar/polymer/polycationic",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "epi_ecosar_surfactant_amphoteric",
+      "method": "GET",
+      "path": "/api/ecosar/surfactant/amphoteric",
+      "inputs": {
+        "carbonChainLength": 8
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "HTTP 400 application/json response",
+      "identical": false
+    },
+    {
+      "name": "epi_ecosar_surfactant_anionic",
+      "method": "GET",
+      "path": "/api/ecosar/surfactant/anionic",
+      "inputs": {
+        "carbonChainLength": 1
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "HTTP 400 application/json response",
+      "identical": false
+    },
+    {
+      "name": "epi_ecosar_surfactant_cationic",
+      "method": "GET",
+      "path": "/api/ecosar/surfactant/cationic",
+      "inputs": {
+        "carbonChainLength": 1
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "HTTP 400 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_amnb_nate",
+      "method": "GET",
+      "path": "/api/amnb_nate",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_arn_cats",
+      "method": "GET",
+      "path": "/api/arn_cats",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_alias",
+      "method": "GET",
+      "path": "/chemicals/alias",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_chemset",
+      "method": "GET",
+      "path": "/chemicals/chemset",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_database_stats",
+      "method": "GET",
+      "path": "/chemicals/database/stats",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_maps",
+      "method": "GET",
+      "path": "/chemicals/maps",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_singlechemical",
+      "method": "GET",
+      "path": "/chemicals/singlechemical",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_chemicals_suggest",
+      "method": "GET",
+      "path": "/chemicals/suggest",
+      "inputs": {
+        "query": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_database_stats",
+      "method": "GET",
+      "path": "/reaction/database/stats",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_details",
+      "method": "GET",
+      "path": "/reaction/details",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_mapid",
+      "method": "GET",
+      "path": "/reaction/mapid",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_react_maps",
+      "method": "GET",
+      "path": "/reaction/react_maps",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_reactionmap",
+      "method": "GET",
+      "path": "/reaction/reactionmap",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction",
+      "method": "GET",
+      "path": "/reaction/search",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_singlereaction",
+      "method": "GET",
+      "path": "/reaction/singlereaction",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_chet_reaction_table",
+      "method": "GET",
+      "path": "/reaction/table",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_ncc_cats",
+      "method": "GET",
+      "path": "/api/ncc_cats",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_opera",
+      "method": "GET",
+      "path": "/api/opera",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "HTTP 400 application/problem+json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_opera_report",
+      "method": "GET",
+      "path": "/api/opera/report",
+      "inputs": {
+        "dtxsid": "DTXSID7020182",
+        "modelId": 1
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 404 Not Found.",
+      "native": "HTTP 404 text/plain response",
+      "identical": false
+    },
+    {
+      "name": "chemi_pfas_atlas",
+      "method": "GET",
+      "path": "/api/pfas_atlas",
+      "inputs": {
+        "smiles": "O=C(O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_pfas_cats",
+      "method": "GET",
+      "path": "/api/pfas_cats",
+      "inputs": {
+        "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_resolver_ccte_list",
+      "method": "GET",
+      "path": "/api/resolver/ccte-list",
+      "inputs": {
+        "name": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_resolver_getannotation",
+      "method": "GET",
+      "path": "/api/resolver/getannotation",
+      "inputs": {
+        "name": "DTXSID7020182",
+        "heading": "benzene"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Failed to perform HTTP request.\nCaused by error in `curl::curl_fetch_memory()`:\n! Timeout was reached [hcd.rtpnc.epa.gov]:\nOperation timed out after 15002 milliseconds with 0 bytes received",
+      "native": "HTTP request failed before a response was received: timeout of 30 s reached (raise request_controls.timeout, or use Inf for no limit)",
+      "identical": false
+    },
+    {
+      "name": "chemi_resolver_getannotationslist",
+      "method": "GET",
+      "path": "/api/resolver/getannotationslist",
+      "inputs": {
+        "name": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "HTTP 500 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_resolver_getsubstance",
+      "method": "GET",
+      "path": "/api/resolver/getsubstance",
+      "inputs": {
+        "name": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "HTTP 500 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_resolver_ghs_list",
+      "method": "GET",
+      "path": "/api/resolver/ghs-list",
+      "inputs": {
+        "name": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_resolver_links",
+      "method": "GET",
+      "path": "/api/resolver/links",
+      "inputs": {
+        "query": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_resolver_lookup",
+      "method": "GET",
+      "path": "/api/resolver/lookup",
+      "inputs": {
+        "query": "DTXSID7020182"
+      },
+      "policy": ".ct_tidy",
+      "legacy": "Returned 7 elements",
+      "native": "Returned 7 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_resolver_lookupCASRN",
+      "method": "GET",
+      "path": "/api/resolver/lookupCASRN",
+      "inputs": {
+        "query": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_resolver_mesh",
+      "method": "GET",
+      "path": "/api/resolver/mesh",
+      "inputs": {
+        "query": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 0 elements",
+      "native": "Returned 0 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_search_exact",
+      "method": "GET",
+      "path": "/api/search/exact",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "HTTP 500 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_search_gethazard",
+      "method": "GET",
+      "path": "/api/search/gethazard",
+      "inputs": {
+        "sid": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_search_similar",
+      "method": "GET",
+      "path": "/api/search/similar",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "HTTP 400 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_search_substructure",
+      "method": "GET",
+      "path": "/api/search/substructure",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "HTTP 500 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_services_layout",
+      "method": "GET",
+      "path": "/api/services/layout",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_services_smirks2rxn",
+      "method": "GET",
+      "path": "/api/services/smirks2rxn",
+      "inputs": {
+        "smirks": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "ℹ In index: 1.\nCaused by error in `httr2::resp_body_json()` at ComptoxR/R/z_generic_request.R:1332:7:\n! Unexpected content type \"NA\".\n• Expecting type \"application/json\" or suffix \"json\".",
+      "native": "Returned 0 elements",
+      "identical": false
+    },
+    {
+      "name": "chemi_toxprints",
+      "method": "GET",
+      "path": "/api/toxprints",
+      "inputs": {
+        "smiles": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_toxprints_assays",
+      "method": "GET",
+      "path": "/api/toxprints/assays",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_toxprints_assays_check",
+      "method": "GET",
+      "path": "/api/toxprints/assays/check",
+      "inputs": {
+        "name": "DTXSID7020182"
+      },
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_toxprints_global_assays",
+      "method": "GET",
+      "path": "/api/toxprints/global_assays",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_toxprints_global_toxprints",
+      "method": "GET",
+      "path": "/api/toxprints/global_toxprints",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "Returned 1 elements",
+      "native": "Returned 1 elements",
+      "identical": true
+    },
+    {
+      "name": "chemi_toxprints_toxprints",
+      "method": "GET",
+      "path": "/api/toxprints/toxprints",
+      "inputs": [],
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 500 Internal Server Error.",
+      "native": "HTTP 500 application/json response",
+      "identical": false
+    },
+    {
+      "name": "chemi_predictor_models_predict",
+      "method": "GET",
+      "path": "/api/predictor_models/predict",
+      "inputs": {
+        "model_id": 1
+      },
+      "policy": ".ct_static_list",
+      "legacy": "HTTP 400 Bad Request.",
+      "native": "HTTP 400 application/json response",
+      "identical": false
+    }
+  ]
+}

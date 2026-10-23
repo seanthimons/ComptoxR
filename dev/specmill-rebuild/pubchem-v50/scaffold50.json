@@ -1,0 +1,12 @@
+{
+  "version": "0.1.50",
+  "source": "064478735580b54a732e3859b066b317e72d53a1",
+  "policy_ast_unchanged": true,
+  "scaffold_code_identical49": true,
+  "companions": [
+    "batching",
+    "pagination"
+  ],
+  "comparison": "Both official scaffold code strings normalized by established export/noRd and trailing-whitespace steps",
+  "normalized_code_sha256": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec"
+}

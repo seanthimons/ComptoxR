@@ -1,0 +1,8 @@
+{
+  "original_descriptor_definitions": 2,
+  "descriptor_formals_exact": true,
+  "render_runtime_ast_identical": true,
+  "duplicate_aliases": false,
+  "public_files_preserved": true,
+  "canonical_source_files_unchanged": true
+}

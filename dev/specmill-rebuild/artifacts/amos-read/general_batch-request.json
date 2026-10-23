@@ -1,0 +1,19 @@
+{
+  "ids": [
+    "DTXSID9020112",
+    "DTXSID3022401",
+    "benzene"
+  ],
+  "include_classyfire": true,
+  "methodologies": {
+    "GC/MS": true,
+    "LC/MS": true,
+    "NMR": false,
+    "all": false
+  },
+  "record_types": {
+    "Fact Sheet": false,
+    "Method": true,
+    "Spectrum": true
+  }
+}

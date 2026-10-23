@@ -1,0 +1,4 @@
+Exact source a656ce446fd2f4fe28184e3cad69da02e209ef26
+
+Request throttling: default unchanged, declarative/runtime policy, shared real GET/POST/fan-out bucket and hard configuration errors passed.
+Scalar query booleans: exact lowercase PATCH wire, all flag combinations, omitted NULLs, pre-send invalid values, unchanged strings/numbers across Swagger2 and OpenAPI3 passed.

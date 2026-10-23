@@ -190,11 +190,11 @@ test_that("format_chemi_hazard_result validates format values", {
   )
 })
 
-test_that("chemi_hazard post-processes mocked generic_request output", {
+test_that("chemi_hazard post-processes mocked native output", {
   calls <- list()
 
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       captured <- list(...)
       calls[[length(calls) + 1L]] <<- captured
       mock_chemi_hazard_response()
@@ -205,8 +205,8 @@ test_that("chemi_hazard post-processes mocked generic_request output", {
   result <- ComptoxR::chemi_hazard(query = "DTXSID-A", format = "tidy")
 
   expect_gt(length(calls), 0L)
-  expect_equal(calls[[1L]]$endpoint, "hazard")
-  expect_false(calls[[1L]]$tidy)
+  expect_identical(calls[[1L]]$path, "/api/hazard")
+  expect_identical(calls[[1L]]$method, "GET")
   expect_equal(result$dtxsid[1L], "DTXSID-A")
   expect_equal(nrow(result), 6L)
 })
@@ -231,13 +231,13 @@ test_that("chemi_hazard_bulk keeps resolver pre-hook and post-processes output",
         )
       ))
     },
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       chemi_called <<- TRUE
       captured <- list(...)
-      expect_null(captured$query)
-      expect_equal(captured$endpoint, "hazard")
-      expect_false(captured$tidy)
-      expect_length(captured$chemicals, 1L)
+      expect_length(Filter(Negate(is.null), captured$query), 0L)
+      expect_identical(captured$path, "/api/hazard")
+      expect_identical(captured$method, "POST")
+      expect_length(captured$body$chemicals, 1L)
       mock_chemi_hazard_response(wrapped = FALSE)
     },
     .package = "ComptoxR"

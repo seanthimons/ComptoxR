@@ -2,6 +2,73 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- **Breaking:** remove `ct_api_key()`. Wrappers and the startup/sitrep checks read the
+  `ctx_api_key` environment variable directly.
+- **Breaking:** remove the exported legacy transport helpers `generic_request()`
+  and `generic_chemi_request()` (and the unexported `generic_search_request()` and
+  `generic_pubchem_request()`). `ct_related()` and `ct_similar()` now call the
+  native `.ct_request()` directly with unchanged signatures and output. Shared
+  response helpers moved to `R/response_helpers.R`; `batch_limit()` is kept.
+
+- Remove `chemi_toxprint()`. Its operation (`POST /api/toxprints/calculate`) is
+  covered by `chemi_toxprints_calculate_bulk()`, which takes Chemical records.
+
+- Rebuild `chemi_toxprints_bulk(query)` with Specmill against the canonical
+  Cheminformatics object request, without CTX authentication. Preserve input
+  cleanup and environment-controlled chunks. Results have one row per chemical,
+  with numeric descriptor vectors retained in a list-column (#353).
+
+- Remove six AMOS wrappers whose production schema is defective (`chemi_amos_dtxsids`,
+  `chemi_amos_substances_for_ids`, `chemi_amos_retrieve_fact_sheets`,
+  `chemi_amos_retrieve_product_declarations`, `chemi_amos_retrieve_safety_data_sheets`,
+  `chemi_amos_for_document_ids`). They are deferred in Specmill until the upstream
+  schema is fixed; no hand-edited schema overlays are kept for them.
+
+- Remove `chemi_chet_chemicals_chemical_dl()`. The production schema marks the GET body
+  optional but the deployed service rejects a bodyless GET, so it is deferred in Specmill.
+  `chemi_chet_chemicals_chemical_dl_post()` is unchanged.
+
+- Remove `chemi_services_preflight()` and `chemi_services_universalpreflight()`. The production
+  schema describes their multipart `files[]` upload as a binary query parameter, so they are
+  deferred in Specmill until upstream corrects it. The hand-edited preflight overlay schemas are
+  deleted. `schema/pubchem-reviewed.json` stays as the first-party PubChem schema.
+
+- Remove `chemi_resolver_getsimilaritylist`: the production schema's request body
+  is not compliant, so the operation is deferred in Specmill until upstream
+  fixes it (seanthimons/specmill#165). No wrapper is generated meanwhile.
+
+- Exclude resolver `getpubchemlist` and remove its public wrapper pending an
+  established end-user purpose (#358).
+
+- Exclude the two AMOS XLSX batch exports pending a concrete end-user need,
+  removing `chemi_amos_batch` and `chemi_amos_analytical_qc_batch` (#357).
+  JSON substance search and analytical QC pagination remain available.
+
+- Exclude server-side file standardization at `POST /api/stdizer` and remove
+  `chemi_stdizer_bulk`. GET standardization and JSON chemical/record inputs
+  remain available. All eleven #356 endpoint decisions are now resolved as bans.
+
+- Exclude saved standardizer rule-group management under `/api/stdizer/groups`,
+  removing five wrappers. Calculation, workflow lookup and protocol-result APIs
+  remain available.
+
+- Limit alerts to `POST /api/alerts`, metadata and version. Remove eight
+  wrappers for library management, exports and rendering, including the held
+  `chemi_alerts_groups_bulk` facade.
+
+- Exclude `/add` and `/replace` routes plus resolver `casharvest` and
+  `universalharvest` and service `caspreflight` and `files` endpoints from
+  client generation.
+
+- Exclude every CheT `/auth/*`, `/admin/*` and `/chemicals/chemdelete` route,
+  removing 18 generated wrappers and resolving the eight endpoint decisions in #355.
+
+- Remove 21 generated wrappers using PUT, PATCH, DELETE or OPTIONS. Client
+  generation now permits only GET and POST and excludes the five AMOS `add_*`
+  uploads tracked in #354.
+
 ## v3.0.0 (2026-09-08)
 
 #### Breaking changes

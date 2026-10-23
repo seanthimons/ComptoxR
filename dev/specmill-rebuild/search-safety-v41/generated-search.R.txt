@@ -1,0 +1,37 @@
+#' chemi_search
+#'
+#' @noMd
+#' @param query query
+#' @param search_type search_type
+#' @param similarity_type similarity_type
+#' @param min_similarity min_similarity
+#' @param hazard_name hazard_name
+#' @param min_toxicity min_toxicity
+#' @param min_authority min_authority
+#' @param mass_type mass_type
+#' @param min_mass min_mass
+#' @param max_mass max_mass
+#' @param filter_features filter_features
+#' @param feature_filters feature_filters
+#' @param element_include element_include
+#' @param element_exclude element_exclude
+#' @param exclude_all_others exclude_all_others
+#' @param limit limit
+#' @param all_pages all_pages
+#' @return Decoded response returned by the client request helper.
+#' @export
+# Generated with specmill; do not edit by hand.
+chemi_search <- function(query = NULL, search_type = c("exact", "substructure", "similar", "mass", "hazard", "features"), similarity_type = c("tanimoto", "euclid", "tversky"), min_similarity = 0.85, hazard_name = NULL, min_toxicity = c("VH", "H", "M", "L", "A"), min_authority = c("auth", "screen", "qsar"), mass_type = c("mono", "mw", "abu"), min_mass = NULL, max_mass = NULL, filter_features = FALSE, feature_filters = NULL, element_include = NULL, element_exclude = NULL, exclude_all_others = FALSE, limit = 50, all_pages = FALSE) {
+  params <- base::list("query" = query, "search_type" = search_type, "similarity_type" = similarity_type, "min_similarity" = min_similarity, "hazard_name" = hazard_name, "min_toxicity" = min_toxicity, "min_authority" = min_authority, "mass_type" = mass_type, "min_mass" = min_mass, "max_mass" = max_mass, "filter_features" = filter_features, "feature_filters" = feature_filters, "element_include" = element_include, "element_exclude" = element_exclude, "exclude_all_others" = exclude_all_others, "limit" = limit, "all_pages" = all_pages)
+  state <- run_hook("chemi_search", "pre_request", base::list(params = params))
+  changed <- base::intersect(base::names(params), base::names(state$params))
+  params[changed] <- state$params[changed]
+  if (base::isTRUE(state$skip_request)) {
+    result <- state$result
+  } else {
+    result <- generic_chemi_request("endpoint" = "search", "body" = state[["request"]][["body"]], "options" = state[["request"]][["options"]], "tidy" = FALSE, "paginate" = params[["all_pages"]], "max_pages" = 100, "pagination_strategy" = "offset_limit")
+  }
+  state["result"] <- base::list(result)
+  result <- run_hook("chemi_search", "post_response", state)
+  result
+}

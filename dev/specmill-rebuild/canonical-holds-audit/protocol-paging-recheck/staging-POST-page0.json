@@ -1,0 +1,27 @@
+{
+  "environment": "staging",
+  "url": "https://cim.sciencedataexperts.com/api/stdizer/protocols/6a0f64e78b3b075871b2f8ab?page=0&size=1",
+  "method": "POST",
+  "case": "page0",
+  "query_pairs": [
+    [
+      "page",
+      "0"
+    ],
+    [
+      "size",
+      "1"
+    ]
+  ],
+  "request_body": {},
+  "time_utc": "2026-10-18T22:31:29.476274+00:00",
+  "status": 200,
+  "media": "application/json;charset=UTF-8",
+  "records": [
+    {
+      "id": "6a0f64e88b3b075871b2f8ac",
+      "type": "PARENT"
+    }
+  ],
+  "filteredNumber": 4
+}

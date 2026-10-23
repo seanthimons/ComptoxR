@@ -1,0 +1,555 @@
+{
+  "issues": [
+    331,
+    342
+  ],
+  "base_commit": "080fc7ea860a4b0a085a338b608b25b4fad0baf9",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.16",
+    "source_commit": "733146a8c2abf45737faf1c61fd51c520115f661",
+    "source_archive_sha256": "c6b918ff8d1950f5684fc08047d4b5103750c4cc8b68dba2780c2c787e96a428",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "adopted_sha256": {
+    "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
+    "R/z_specmill_request.R": "1679f809da498b8de5df6b61b5d856e200781d3f4d1ae5a5f53dda4ea967e280",
+    "dev/specmill-342/compatibility.patch": "d17ea06902eeb2f8a9be6a52d206f1f5df13ecdfe7e6e9d5a5aeff3afcf05c76",
+    "dev/specmill-342/emit.R": "d80b71f5b84072ccdd5cb1a57721e51e3a2744221e630c80d061652f3bbfb3b5",
+    "DESCRIPTION": "3df8e472ec2667e41102a95b3b9d792965f7d414276d954481539a19eaf5b793",
+    "R/chemi_chet_chemicals_image.R": "a4280cbd047a2762902901f995735ba1d1a5ad5d513baa0e4f4b3f7c1694b1b4"
+  },
+  "retained_definitions": [
+    "generic_search_request",
+    "generic_pubchem_request",
+    "safe_tidy_bind",
+    "is_transient_error",
+    "parse_delimited_response",
+    "unwrap_collection_envelope"
+  ],
+  "client_facades": [
+    "generic_request",
+    "generic_chemi_request"
+  ],
+  "generated_implementation": [
+    ".ct_request",
+    ".ct_request_decode",
+    ".ct_request_batched",
+    ".ct_request_paginated"
+  ],
+  "accepted_changes": {
+    "chet_page_default": {
+      "exports": [
+        "chemi_chet_chemicals_counts",
+        "chemi_chet_chemicals_database",
+        "chemi_chet_reaction_database"
+      ],
+      "before": 0,
+      "after": 1,
+      "strategy": "chet_page"
+    },
+    "chet_image": "Required magick dependency: PNG/SVG return images, PDF stays raw. Correct the broken image route to /api/chet/chemicals/{chemical_id}/image.",
+    "chet_pagination_routes": "Three pagination wrappers use /api/chet/chemicals/counts, /api/chet/chemicals/database and /api/chet/reaction/database."
+  },
+  "verification": {
+    "upstream_scripts_passed": 13,
+    "installed_runtime_cases": 1474,
+    "candidate_failures": 0,
+    "exported_signatures_reviewed": 409,
+    "changed_exported_defaults": 3,
+    "generic_helper_signatures_equal": true,
+    "runtime_report": "dev/specmill-pilot/artifacts/issue-342-adopted-runtime-results.json",
+    "runtime_report_sha256": "79fd973a65d6973cabb4d5ea5fab99f9a3df5d56a0f99b0209640397a93cae6f",
+    "magick_installed": true,
+    "magick_version": "2.9.1",
+    "image_endpoint": "https://hcd.rtpnc.epa.gov/api/chet/chemicals/1/image",
+    "live_image_formats_verified": [
+      "png",
+      "svg",
+      "pdf"
+    ],
+    "image_results_sha256": "2f212933ec253d7db552b55fde391cb0d66a85bd2fa461f15c43c60ba84ebc36",
+    "live_pagination_rows": {
+      "chemi_chet_chemicals_counts": 4420,
+      "chemi_chet_chemicals_database": 4028,
+      "chemi_chet_reaction_database": 5152
+    },
+    "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
+  },
+  "current_adoption": {
+    "reviewed_at": "2026-10-22",
+    "base_commit": "af4c0f71caa13c918cb8a783106a86de8cf40251",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.56",
+      "source_commit": "d0ae3f22900f4399f121f42c969bb7427d4f63bb",
+      "source_archive_sha256": "e4b13520da98545ac812e20a9cfe3a4b9c81a6748f8ada09edd4e995297dab8e",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "adopted_sha256": {
+      "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+      "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+    },
+    "review": "Official 0.1.56 scaffold emission and provenance checked by verify.R; adds opt-in prune of retired operation outputs, no helper or facade change. Retired generic_request/generic_chemi_request (PR #345); ct_related and ct_similar call .ct_request directly.",
+    "facades_retired": [
+      "generic_request",
+      "generic_chemi_request",
+      "generic_search_request",
+      "generic_pubchem_request"
+    ]
+  },
+  "adoption_history": [
+    {
+      "reviewed_at": "2026-10-20",
+      "base_commit": "578acd2e85febd3a9533e00eb550d1b71bcfc964",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.54",
+        "source_commit": "ab4aaf24a9017aa9f6adfd9fde1b9b8359e53471",
+        "source_archive_sha256": "f4f29a05df47e5d238a66c9ddea09f8d199311d6350c806e86630b2649bacab5",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.54 scaffold emission and provenance checked by verify.R; fixes selection.unclaimed claims across same-server schemas, no helper or facade change."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "6fd078f2",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.22",
+        "source_commit": "d55f7fa8cbbc9ce797b45c35dd9d6f49cefbf445",
+        "source_archive_sha256": "765af47cf779e91f6f477a837fbe262877874955ecdac14cde0f775e08f6ceed",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Re-emitted unchanged adoption transform from released toolkit; native delta adds published runtime batch-size lowering. Existing committed generic facade is unchanged. Original adoption evidence above is preserved."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "57322adc",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.23",
+        "source_commit": "2d480996ec6607c823d0a85be1a3de6a438b429d",
+        "source_archive_sha256": "cbabe13134734c1f34ce5553d6515ceef7159b97b491ac0b1c11415a0fc221ea",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.23 security-correction adoption. Re-emitted native runtime matches the previous released helper exactly; prior adoption records preserved."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "57322adc",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.24",
+        "source_commit": "49b2ddeea8476dd9d2b2e6a7f6fa2908815a1b3a",
+        "source_archive_sha256": "35d136a776d3cfd76d0628682baa7f630b88394fa60c2cca3a6c944c3a109293",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.23 security-correction adoption. Re-emitted native runtime matches the previous released helper exactly; prior adoption records preserved."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.25",
+        "source_commit": "01fe162db735249a497ea9d30811b1d646733aa4",
+        "source_archive_sha256": "4173d7e493c5055da72133360c9ffcf987245c4582f5101799eb2c017c08100a",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.23 security-correction adoption. Re-emitted native runtime matches the previous released helper exactly; prior adoption records preserved."
+    },
+    {
+      "reviewed_at": "2026-10-17",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.26",
+        "source_commit": "3206891c579f4a8464c8bf137ee533bbb39a5f38",
+        "source_archive_sha256": "8800b06f0f8e95d5788b476a62fb0667eb67446c8dfc9d94e43487610ddc9250",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.26 reviewed AMOS path declaration adoption. Re-emitted native and generic helpers are byte-identical to the previously reviewed release; prior adoption records preserved."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.27",
+        "source_commit": "6eb0d557b92603862180d170079068db53a124b5",
+        "source_archive_sha256": "3cdcc95937b0d7645d39673aa7b35ba54234a3597fc2e892d6eee636a689c62f",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.27 reviewed optional bodyless GET subset adoption. Native and generic runtime helpers remain byte-identical to the previous reviewed release; archived source request-body semantics outside the selected subset are not asserted."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.28",
+        "source_commit": "69656feb96241a1a8b45cc66909e260f931df224",
+        "source_archive_sha256": "5e41db1d0583c17fa17e3967fd1be13c9a13946aba6d790913473447e6cad851",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.28 toolkit adoption. Native and generic runtime helpers remain byte-identical to the previous reviewed release. Four pager metadata candidates pass normal results but remain retained pending released PR151 request-failure policy adoption."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.29",
+        "source_commit": "0f436277450801c9640e27725b0805561fd91984",
+        "source_archive_sha256": "4e97ae11f80cd248800a51689c5b795732b016c64fd068fa25fc65f3f2b87b8b",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.29 reviewed missing JSON media and empty response declarations for individually evidenced AMOS read operations. Runtime helper hashes remain explicitly reviewed; archived schemas are preserved."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.30",
+        "source_commit": "f4efdbcf23f879553e5de50325d637ab46625ed3",
+        "source_archive_sha256": "ab58e0ac90980be0bd7f86195976c495666f0694d7a9cfc3ac3688eb62473053",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.30 reviewed toxprint helper-return visibility and early normalization adoption. Runtime helper hashes are explicitly reviewed; archived schemas are preserved."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.31",
+        "source_commit": "d572fcc50f739387a689289efdaa9ee8b1338908",
+        "source_archive_sha256": "85578ef0bd2da908a813f851651e423c253a12d7c7832f1503e887128f72ef97",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.31 validator-source whitespace emission fix. Helper regeneration uses the released generator; validator expressions must remain identical and archived schemas remain unchanged."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.32",
+        "source_commit": "daa69c84d7076e10385508eb54279548b149d849",
+        "source_archive_sha256": "5b112595d440bbc058f6869acd83ea7745d5ae9ba74bcc0605f47dc0c2de73ac",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.32 logical line input preservation. Regenerated helpers are reviewed; exact-search bulk adoption requires released success and real HTTP failure parity."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.33",
+        "source_commit": "28b8e4516013c078baa977460453418b0c760e3f",
+        "source_archive_sha256": "c7e8530dee23fc4bf689355029016b09e2c71160c3503b146a91b5bba76ce3f8",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "5887e5b3117887ebb64ed4203e7f838201c602918cd5cbfff6c8647747638d5f",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.33 batch metadata opt-out support. Regenerated helper defaults remain reviewed; line and combined failure-policy wrapper adoption remains held for released PR146."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.34",
+        "source_commit": "4cace56d03e34470d962a845f77d8c5ba9b9e2c8",
+        "source_archive_sha256": "132b5bfa5f480e4d156bac9f366447036c5de5269474dde5eb38dac46385ea28",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "0b15af0a40579410b82e3be1599490419e7b37e19c075dfbeba6cc0a8b625d45",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.34 request-count and warning policies with metadata opt-out and logical line callbacks. Adopt only the seven reviewed wrappers; credentials remain hard."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.35",
+        "source_commit": "a4a7e5249c98e9cfe7c596f2ff995c6a00a44412",
+        "source_archive_sha256": "f63b07c8d5be06262658659135925c920311d7a2bbaacecc6c5c59ca06e23020",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "0b15af0a40579410b82e3be1599490419e7b37e19c075dfbeba6cc0a8b625d45",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.35 deferred client inputs. Adopt the reviewed resolver lookup cleanup/body projection and response-only tidy thunk; pagers remain held."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.36",
+        "source_commit": "0e3ed64ddc48b0104c00fb541678d5f75935afe3",
+        "source_archive_sha256": "9f6147e0151dbf2a4112659196cb198cc4d694171c2890afb3b613409db93673",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.36 cursor/page policies and client callback lookup. Adopt the fourteen reviewed pagers with paired generated helper and pagination companion; credentials remain hard."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.37",
+        "source_commit": "ac1fa3389dbce30d22236bdf470105647fe69ca8",
+        "source_archive_sha256": "b238b68c18909484245de4dc1f475d50e548abae5574c6fb305709e9da9be536",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released 0.1.37 supports reviewed explicit retirement of already-missing owned outputs. Preserve unrelated ownership; retire only listed suites with selected native replacement coverage."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "49f60add",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.38",
+        "source_commit": "f0adbc08f35142cd2f85b1a1b60606b58e9d749e",
+        "source_archive_sha256": "d79169d631d528ed2754fee19002f84667a84416097dfcba55b64f5e688f0373",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "bb9ae6a30d4934c06a43eef6d3e728063b6f1a9615f1019de33619b26077d546",
+        "dev/specmill-342/emit.R": "87904c31f36e6bf1958ff8219cec1e030020acdaec54d5d95179446c885084f8"
+      },
+      "review": "Released v0.1.38 final result_formatter supports reviewed list/image final projection outside hooks and batch drop, retaining client purrr indexed conditions. Shared runtime regenerated through existing provenance workflow."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "03a6f88b",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.39",
+        "source_commit": "01a6142e1c8b9aef736664627063efa5d1849416",
+        "source_archive_sha256": "5c6941c4a1d8e4de0c5eb54206ca2ec487b89be1aec11c1099fb6da25664c3f6",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Released 0.1.39 official standalone decoder companion; direct scaffold emission removes substring extraction. Preserve defaults; typed condition control available only on explicitly selected operations."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "981cb10d",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.40",
+        "source_commit": "8fa120e84fe8d0267c11e515e6fd1f387ff4a36f",
+        "source_archive_sha256": "e4bd2415f61426d55e80b443e37cd744fd75f0ab251bf229d68b275b7e184175",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Released 0.1.40 private/public hook state settings. Official scaffold emission, unchanged native credential hard failures; operation adoption reviewed separately."
+    },
+    {
+      "reviewed_at": "2026-10-18",
+      "base_commit": "2b88f70f",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.41",
+        "source_commit": "05862bee1804806cea157ff1962300d741516301",
+        "source_archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.41 scaffold$code, unchanged helper/executor. Combined post-response hooks and original parameters support released PR163 adoption."
+    },
+    {
+      "reviewed_at": "2026-10-19",
+      "base_commit": "c224265ca6ea003fc92b2cd38184b806b5f8c15a",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.51",
+        "source_commit": "5a112d8966dfae7624f7e72fa617ccda85c808b4",
+        "source_archive_sha256": "19316acb1c749a41bf75db7cf1c2f0726203f19e7dbdd3f5e8290edbed14eb26",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.51 scaffold emission and provenance match the adopted native helper. Generic facade and emitter hashes are unchanged from the 0.1.41 adoption. Refresh the native helper hash for the released scaffold already adopted on this branch; prior verification remains historical evidence."
+    },
+    {
+      "reviewed_at": "2026-10-20",
+      "base_commit": "a812abfb54b80a86048f6b78f077ae85103d1431",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.52",
+        "source_commit": "b32a9c1bfc15e33585e4c78d7b63a0a577c452a9",
+        "source_archive_sha256": "cb2108e76ee3b95ebb308290236b3b502c5041895d470136e426eded3d48de7e",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.52 scaffold emission and provenance checked by verify.R; adds contract-change deferral and manifest endpoint inventories, no helper or facade change."
+    },
+    {
+      "reviewed_at": "2026-10-20",
+      "base_commit": "a36c0eeb94954cdd170d9aebb4890a0651e2aa2d",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.53",
+        "source_commit": "5f6bc50de5d15f6bd320a0c60bacd7888c32b3c4",
+        "source_archive_sha256": "c68f037497b7084128c5ca69b5631a26a416d9bf0ec9fa9ba302236147ee5be5",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.53 scaffold emission and provenance checked by verify.R; adds method-qualified selection.exclude and selection.unclaimed, no helper or facade change."
+    },
+    {
+      "reviewed_at": "2026-10-21",
+      "base_commit": "0f54d1614bcca84e9ec331add3ad6e46541913bc",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.55",
+        "source_commit": "7662261e47a1d4680502ffcaaa76d64ccc556902",
+        "source_archive_sha256": "88117af57ef53fee156042e8ddb3a8350f0ef173e95eaf0d582158b920f0173d",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.55 scaffold emission and provenance checked by verify.R; adds extra_parameters minimum/maximum/items validation, no helper or facade change."
+    }
+  ]
+}

@@ -1,0 +1,669 @@
+id: chemi-service-info
+schemas:
+  files:
+  - schema/chemi-alerts-prod.json
+  - schema/chemi-amnb_nate-prod.json
+  - schema/chemi-arn_cats-prod.json
+  - schema/chemi-descriptors-prod.json
+  - schema/chemi-hazard-prod.json
+  - schema/chemi-mordred-prod.json
+  - schema/chemi-ncc_cats-prod.json
+  - schema/chemi-opera-prod.json
+  - schema/chemi-padel-prod.json
+  - schema/chemi-pfas_atlas-prod.json
+  - schema/chemi-pfas_cats-prod.json
+  - schema/chemi-predictor_models-prod.json
+  - schema/chemi-rdkit-prod.json
+  - schema/chemi-resolver-prod.json
+  - schema/chemi-safety-prod.json
+  - schema/chemi-search-prod.json
+  - schema/chemi-services-prod.json
+  - schema/chemi-stdizer-prod.json
+  - schema/chemi-toxprints-prod.json
+  - schema/chemi-webtest-prod.json
+selection:
+  include:
+  - GET /api/alerts/metadata
+  - GET /api/alerts/version
+  - GET /api/amnb_nate/metadata
+  - GET /api/amnb_nate/version
+  - GET /api/arn_cats/metadata
+  - GET /api/arn_cats/version
+  - GET /api/descriptors/metadata
+  - GET /api/descriptors/version
+  - GET /api/hazard/metadata
+  - GET /api/hazard/version
+  - GET /api/mordred/version
+  - GET /api/mordred/metadata
+  - GET /api/ncc_cats/metadata
+  - GET /api/ncc_cats/version
+  - GET /api/opera/metadata
+  - GET /api/opera/version
+  - GET /api/padel/metadata
+  - GET /api/padel/version
+  - GET /api/pfas_atlas/metadata
+  - GET /api/pfas_atlas/version
+  - GET /api/pfas_cats/metadata
+  - GET /api/pfas_cats/version
+  - GET /api/predictor_models/metadata
+  - GET /api/predictor_models/version
+  - GET /api/rdkit/version
+  - GET /api/rdkit/metadata
+  - GET /api/resolver/metadata
+  - GET /api/resolver/version
+  - GET /api/safety/metadata
+  - GET /api/safety/version
+  - GET /api/search/metadata
+  - GET /api/search/version
+  - GET /api/services/metadata
+  - GET /api/services/version
+  - GET /api/stdizer/metadata
+  - GET /api/stdizer/version
+  - GET /api/toxprints/metadata
+  - GET /api/toxprints/version
+  - GET /api/webtest/metadata
+  - GET /api/webtest/version
+helper: .ct_request
+documentation: yes
+operations:
+  GET /api/alerts/metadata:
+    name: chemi_alerts_metadata
+    file: R/chemi_alerts_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve alerts metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/alerts/version:
+    name: chemi_alerts_version
+    file: R/chemi_alerts_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve alerts version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/amnb_nate/metadata:
+    name: chemi_amnb_nate_metadata
+    file: R/chemi_amnb_nate_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve amnb nate metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/amnb_nate/version:
+    name: chemi_amnb_nate_version
+    file: R/chemi_amnb_nate_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve amnb nate version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/arn_cats/metadata:
+    name: chemi_arn_cats_metadata
+    file: R/chemi_arn_cats_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve arn cats metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/arn_cats/version:
+    name: chemi_arn_cats_version
+    file: R/chemi_arn_cats_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve arn cats version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/descriptors/metadata:
+    name: chemi_descriptors_metadata
+    file: R/chemi_descriptors_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve descriptors metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/descriptors/version:
+    name: chemi_descriptors_version
+    file: R/chemi_descriptors_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve descriptors version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/hazard/metadata:
+    name: chemi_hazard_metadata
+    file: R/chemi_hazard_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve hazard metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/hazard/version:
+    name: chemi_hazard_version
+    file: R/chemi_hazard_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve hazard version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/mordred/version:
+    name: chemi_mordred_version
+    file: R/chemi_mordred_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve mordred version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/mordred/metadata:
+    name: chemi_mordred_metadata
+    file: R/chemi_mordred_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve mordred metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/ncc_cats/metadata:
+    name: chemi_ncc_cats_metadata
+    file: R/chemi_ncc_cats_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve ncc cats metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/ncc_cats/version:
+    name: chemi_ncc_cats_version
+    file: R/chemi_ncc_cats_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve ncc cats version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/opera/metadata:
+    name: chemi_opera_metadata
+    file: R/chemi_opera_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve opera metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/opera/version:
+    name: chemi_opera_version
+    file: R/chemi_opera_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve opera version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/padel/metadata:
+    name: chemi_padel_metadata
+    file: R/chemi_padel_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve padel metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/padel/version:
+    name: chemi_padel_version
+    file: R/chemi_padel_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve padel version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/pfas_atlas/metadata:
+    name: chemi_pfas_atlas_metadata
+    file: R/chemi_pfas_atlas_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve pfas atlas metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/pfas_atlas/version:
+    name: chemi_pfas_atlas_version
+    file: R/chemi_pfas_atlas_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve pfas atlas version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/pfas_cats/metadata:
+    name: chemi_pfas_cats_metadata
+    file: R/chemi_pfas_cats_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve pfas cats metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/pfas_cats/version:
+    name: chemi_pfas_cats_version
+    file: R/chemi_pfas_cats_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve pfas cats version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/predictor_models/metadata:
+    name: chemi_predictor_models_metadata
+    file: R/chemi_predictor_models_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve predictor models metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/predictor_models/version:
+    name: chemi_predictor_models_version
+    file: R/chemi_predictor_models_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve predictor models version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/rdkit/version:
+    name: chemi_rdkit_version
+    file: R/chemi_rdkit_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve rdkit version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/rdkit/metadata:
+    name: chemi_rdkit_metadata
+    file: R/chemi_rdkit_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve rdkit metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/resolver/metadata:
+    name: chemi_resolver_metadata
+    file: R/chemi_resolver_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve resolver metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/resolver/version:
+    name: chemi_resolver_version
+    file: R/chemi_resolver_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve resolver version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/safety/metadata:
+    name: chemi_safety_metadata
+    file: R/chemi_safety_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve safety metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/safety/version:
+    name: chemi_safety_version
+    file: R/chemi_safety_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve safety version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/search/metadata:
+    name: chemi_search_metadata
+    file: R/chemi_search_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve search metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/search/version:
+    name: chemi_search_version
+    file: R/chemi_search_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve search version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/services/metadata:
+    name: chemi_services_metadata
+    file: R/chemi_services_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve services metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/services/version:
+    name: chemi_services_version
+    file: R/chemi_services_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve services version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/metadata:
+    name: chemi_stdizer_metadata
+    file: R/chemi_stdizer_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve stdizer metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/version:
+    name: chemi_stdizer_version
+    file: R/chemi_stdizer_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve stdizer version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/toxprints/metadata:
+    name: chemi_toxprints_metadata
+    file: R/chemi_toxprints_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve toxprints metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/toxprints/version:
+    name: chemi_toxprints_version
+    file: R/chemi_toxprints_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve toxprints version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/webtest/metadata:
+    name: chemi_webtest_metadata
+    file: R/chemi_webtest_metadata.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve webtest metadata
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+  GET /api/webtest/version:
+    name: chemi_webtest_version
+    file: R/chemi_webtest_version.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Retrieve webtest version
+      lifecycle: experimental
+      return: The decoded service response, preserving its declared JSON structure
+        or media bytes.
+      tags:
+        apiStage: public
+hook_config: inst/hook_config.yml

@@ -8,10 +8,10 @@
 ct_chemical_list_chemicals_search_by_listname(list)
 }
 \arguments{
-\item{list}{Primary query parameter. Type: string}
+\item{list}{list Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

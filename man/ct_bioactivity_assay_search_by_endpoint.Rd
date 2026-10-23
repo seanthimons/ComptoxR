@@ -7,16 +7,16 @@
 ct_bioactivity_assay_search_by_endpoint(endpoint)
 }
 \arguments{
-\item{endpoint}{Required parameter}
+\item{endpoint}{endpoint}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_assay_search_by_endpoint(endpoint = "DTXSID7020182")
+ct_bioactivity_assay_search_by_endpoint(endpoint = "CCTE_GLTED_hIYD")
 }
 }

@@ -1,0 +1,30 @@
+{
+  "url": "https://hcd.rtpnc.epa.gov/api/resolver/getsimilaritylist",
+  "method": "POST",
+  "request": {
+    "chemicals": [
+      {
+        "chemical": {
+          "sid": "ethanol",
+          "smiles": "CCO"
+        },
+        "result": "FOUND"
+      }
+    ],
+    "main": {
+      "sid": "ethanol",
+      "smiles": "CCO"
+    },
+    "get_chemicals": [
+      {
+        "sid": "ethanol",
+        "smiles": "CCO"
+      }
+    ]
+  },
+  "time_utc": "2026-10-18T22:56:45.795740+00:00",
+  "status": 500,
+  "media": "application/json",
+  "response_sha256": "cca23eb46d2b5f35bd226581f676ce9eeed6e08d2680e0461cedcf8906bb5348",
+  "response": "{\"timestamp\":\"2026-10-18T22:56:46.297+00:00\",\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"Cannot invoke \\\"java.util.List.stream()\\\" because the return value of \\\"gov.epa.resolver.controller.model.OrderSimilarityRequest.get_chemicals()\\\" is null\",\"path\":\"/api/resolver/getsimilaritylist\"}"
+}

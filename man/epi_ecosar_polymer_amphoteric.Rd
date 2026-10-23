@@ -4,17 +4,46 @@
 \alias{epi_ecosar_polymer_amphoteric}
 \title{Estimate an amphoteric polymer}
 \usage{
-epi_ecosar_polymer_amphoteric()
+epi_ecosar_polymer_amphoteric(
+  solubilityType,
+  polymerType = "carbon",
+  amineNitrogens = NULL,
+  cationAnionRatio = NULL,
+  averageMolecularWeight = NULL,
+  mw500Percentage = NULL,
+  mw1000Percentage = NULL,
+  cas = NULL,
+  chemicalName = NULL
+)
+}
+\arguments{
+\item{solubilityType}{solubilityType}
+
+\item{polymerType}{polymerType}
+
+\item{amineNitrogens}{amineNitrogens}
+
+\item{cationAnionRatio}{cationAnionRatio}
+
+\item{averageMolecularWeight}{averageMolecularWeight}
+
+\item{mw500Percentage}{mw500Percentage}
+
+\item{mw1000Percentage}{mw1000Percentage}
+
+\item{cas}{cas}
+
+\item{chemicalName}{chemicalName}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_polymer_amphoteric()
+epi_ecosar_polymer_amphoteric(solubilityType = "INSOLUBLE")
 }
 }
 \section{API stage}{

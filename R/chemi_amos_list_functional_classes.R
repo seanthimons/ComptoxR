@@ -1,27 +1,28 @@
 #' Returns a list of all functional use classes that are assigned to at least one substance.
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @return Returns a tibble with results
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amos_list_functional_classes()
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_amos_list_functional_classes <- function() {
-  result <- generic_request(
-    endpoint = "amos/list_functional_classes",
+  params <- base::list()
+  result <- .ct_request(
     method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE
+    path = "/api/amos/list_functional_classes",
+    path_params = base::list(),
+    query = base::list(),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Swagger host/scheme requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list()
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

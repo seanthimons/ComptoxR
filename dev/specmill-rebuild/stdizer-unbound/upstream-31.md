@@ -1,0 +1,7 @@
+PR345 standardizer follow-up on official released v0.1.41, source 05862bee1804806cea157ff1962300d741516301.
+
+Canonical `schema/chemi-stdizer-prod.json` declares required nested query object `pageable` referencing Pageable on both GET and POST `/api/stdizer/protocols/{id}`. Pageable has integer page >=0, integer size >=1 and string-array sort. Candidate names are `chemi_stdizer_protocols_by_id` and `chemi_stdizer_protocols_by_id_post`. These are unbound operations with no previous wrappers. Neither the canonical schema nor existing facades were changed.
+
+Minimal reproduction: select these two method/path keys with `.ct_request`, `implementation: generated`, and `server: {resolver: .ct_server_url, key: chemi_burl}`; run `specmill::generate_client(root=project, config='specmill.yml', mode='plan', validation=TRUE, artifacts=c('wrappers','documentation'))`. Each produces `capability_gap`, code `nested_parameter`, reason `Unsupported nested parameter object`. Locations are GET parameters/6/schema and POST parameters/1/schema. The add-group operation also has an optional GroupAddRequest nested query object, alongside the binary query problem tracked in #28.
+
+No flattening, replacement schema or validation bypass was introduced. No deployed endpoint was called. Canonical bytes and the 22-operation candidate/diagnostics will be committed under `dev/specmill-rebuild/stdizer-unbound/`. This blocks https://github.com/seanthimons/ComptoxR/pull/345. GET also exposes the scalar booleans tracked in #177.

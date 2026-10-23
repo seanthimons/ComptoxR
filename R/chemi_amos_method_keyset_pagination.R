@@ -1,71 +1,139 @@
-#' Returns information on a batch of methods using keyset pagination.
+#' chemi amos method keyset pagination
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param limit Limit of records to return.
-#' @param cursor Optional keyset cursor returned by a previous response.
-#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
-#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
-#' @return Returns a tibble with results
-#' @apiStage public
+#' @param limit limit
+#' @param cursor cursor
+#' @param all_pages TRUE (the default) requests page after page, starting at cursor, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in cursor.
+#' @param max_pages Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning.
+#' @return A list of records when all_pages is TRUE, otherwise the original response envelope.
 #' @export
-#'
 #' @examples
 #' \dontrun{
-#' chemi_amos_method_keyset_pagination(limit = "DTXSID7020182")
+#' chemi_amos_method_keyset_pagination(limit = 1L, all_pages = FALSE, max_pages = 2L)
 #' }
-chemi_amos_method_keyset_pagination <- function(limit, cursor = NULL, all_pages = TRUE, max_pages = 100) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(cursor)) {
-    options[['cursor']] <- cursor
+# Generated with specmill; do not edit by hand.
+chemi_amos_method_keyset_pagination <- function(limit, cursor = NULL, all_pages = TRUE, max_pages = 100L) {
+  params <- base::list("limit" = limit, "cursor" = cursor)
+  if (!base::is.logical(all_pages) || base::length(all_pages) != 1L || base::is.na(all_pages)) {
+    base::stop("all_pages must be TRUE or FALSE", call. = FALSE)
   }
-  result <- generic_request(
-    query = limit,
-    endpoint = "amos/method_keyset_pagination/",
-    method = "GET",
-    batch_limit = 1,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options,
-    paginate = all_pages,
-    max_pages = max_pages,
-    pagination_strategy = "cursor",
-    pagination_cursor_location = "query"
+  send <- function(params) {
+    result <- .ct_request(
+      "method" = "GET",
+      "path" = "/api/amos/method_keyset_pagination/{limit}",
+      "path_params" = base::list("limit" = params[["limit"]]),
+      "query" = base::list("cursor" = params[["cursor"]]),
+      "body" = NULL,
+      "headers" = list(Accept = "application/json"),
+      "server" = list(diagnostic = "Reviewed AMOS production origin."),
+      "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        context$endpoint <- "amos/method_keyset_pagination/"
+        context$query <- params[["limit"]]
+        if (all_pages) {
+          return(.ct_keyset_page(response, context, decode))
+        }
+        .ct_keyset_manual(response, context, decode)
+      }
+    )
+    result
+  }
+  if (!base::isTRUE(all_pages)) {
+    result <- send(params)
+    if (base::inherits(result, "httr2_request")) {
+      base::return(result)
+    }
+    base::return(base::get(
+      ".ct_keyset_items",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    )(result))
+  }
+  result <- .ct_request_pages(
+    function(page) {
+      params[base::names(page)] <- page
+      send(params)
+    },
+    "cursor",
+    params[["cursor"]],
+    max_pages,
+    completed = base::get(
+      ".ct_keyset_done",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    ),
+    mode = "cursor",
+    next_cursor = base::get(
+      ".ct_keyset_next",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    ),
+    items = base::get(
+      ".ct_keyset_items",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    ),
+    error_policy = "partial",
+    warn_limits = TRUE,
+    warn_errors = FALSE,
+    stop_on_empty = FALSE,
+    on_limit = base::get(
+      ".ct_keyset_limit_warning",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    )
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  if (!base::inherits(result, "httr2_request") && !base::is.null(result)) {
+    base::attr(result, "pagination") <- NULL
+  }
+  result
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  kept <- base::attr(result, "pagination", exact = TRUE)
+  result <- run_hook(
+    "chemi_amos_method_keyset_pagination",
+    "post_combine",
+    base::list(result = result, params = params)
+  )
+  if (!base::is.null(kept) && !base::is.null(result) && base::is.null(base::attr(result, "pagination", exact = TRUE))) {
+    base::attr(result, "pagination") <- kept
+  }
+  result
 }
 
-#' Returns filtered methods using keyset pagination.
+#' chemi amos method keyset pagination bulk
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param limit Limit of records to return.
-#' @param cursor Optional keyset cursor returned by a previous response. (default: )
-#' @param document_text Optional full-text document search. (default: )
-#' @param dtxsid Optional DTXSID substance filter. (default: )
-#' @param filterModel Alias for filters. (default: {})
-#' @param filters AG Grid filter model keyed by table field name. (default: {})
-#' @param full_table Text to match across searchable table columns. (default: )
-#' @param include_total If true, include total filtered record count in pagination. (default: FALSE)
-#' @param quickFilter Alias for full_table. (default: )
-#' @param sortModel Optional AG Grid sort model. The first entry is used; internal_id is always used as a stable tie-breaker. Send the same sortModel with each cursor request. (default: [])
-#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
-#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
-#' @return Returns a tibble with results
-#' @apiStage public
+#' @param limit limit
+#' @param cursor cursor
+#' @param document_text document_text
+#' @param dtxsid dtxsid
+#' @param filterModel filterModel
+#' @param filters filters
+#' @param full_table full_table
+#' @param include_total include_total
+#' @param quickFilter quickFilter
+#' @param sortModel sortModel
+#' @param all_pages TRUE (the default) requests page after page, starting at cursor, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in cursor.
+#' @param max_pages Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning.
+#' @return A list of records when all_pages is TRUE, otherwise the original response envelope.
 #' @export
-#'
 #' @examples
 #' \dontrun{
-#' chemi_amos_method_keyset_pagination_bulk(limit = "DTXSID7020182")
+#' chemi_amos_method_keyset_pagination_bulk(limit = 1L, all_pages = FALSE, max_pages = 2L)
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_amos_method_keyset_pagination_bulk <- function(
   limit,
   cursor = "",
@@ -78,54 +146,110 @@ chemi_amos_method_keyset_pagination_bulk <- function(
   quickFilter = "",
   sortModel = list(),
   all_pages = TRUE,
-  max_pages = 100
+  max_pages = 100L
 ) {
-  # Build request body
-  request_body <- list()
-  if (!is.null(cursor)) {
-    request_body$cursor <- cursor
-  }
-  if (!is.null(document_text)) {
-    request_body$document_text <- document_text
-  }
-  if (!is.null(dtxsid)) {
-    request_body$dtxsid <- dtxsid
-  }
-  if (!is.null(filterModel)) {
-    request_body$filterModel <- filterModel
-  }
-  if (!is.null(filters)) {
-    request_body$filters <- filters
-  }
-  if (!is.null(full_table)) {
-    request_body$full_table <- full_table
-  }
-  if (!is.null(include_total)) {
-    request_body$include_total <- include_total
-  }
-  if (!is.null(quickFilter)) {
-    request_body$quickFilter <- quickFilter
-  }
-  if (!is.null(sortModel)) {
-    request_body$sortModel <- sortModel
-  }
-  result <- generic_request(
-    query = NULL,
-    endpoint = "amos/method_keyset_pagination/",
-    method = "POST",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    path_params = c(limit = limit),
-    body = request_body,
-    paginate = all_pages,
-    max_pages = max_pages,
-    pagination_strategy = "cursor",
-    pagination_cursor_location = "body"
+  params <- base::list(
+    "limit" = limit,
+    "cursor" = cursor,
+    "document_text" = document_text,
+    "dtxsid" = dtxsid,
+    "filterModel" = filterModel,
+    "filters" = filters,
+    "full_table" = full_table,
+    "include_total" = include_total,
+    "quickFilter" = quickFilter,
+    "sortModel" = sortModel
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  if (!base::is.logical(all_pages) || base::length(all_pages) != 1L || base::is.na(all_pages)) {
+    base::stop("all_pages must be TRUE or FALSE", call. = FALSE)
+  }
+  send <- function(params) {
+    result <- .ct_request(
+      "method" = "POST",
+      "path" = "/api/amos/method_keyset_pagination/{limit}",
+      "path_params" = base::list("limit" = params[["limit"]]),
+      "query" = structure(list(), names = character(0)),
+      "body" = base::Filter(base::Negate(base::is.null), params[base::setdiff(base::names(params), "limit")]),
+      "headers" = list(Accept = "application/json"),
+      "server" = list(diagnostic = "Reviewed AMOS production origin."),
+      "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+      "auth" = list(),
+      "response_policy" = function(response, context, decode) {
+        context$endpoint <- "amos/method_keyset_pagination/"
+        context$query <- NULL
+        if (all_pages) {
+          return(.ct_keyset_page(response, context, decode))
+        }
+        .ct_keyset_manual(response, context, decode)
+      }
+    )
+    result
+  }
+  if (!base::isTRUE(all_pages)) {
+    result <- send(params)
+    if (base::inherits(result, "httr2_request")) {
+      base::return(result)
+    }
+    base::return(base::get(
+      ".ct_keyset_items",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    )(result))
+  }
+  result <- .ct_request_pages(
+    function(page) {
+      params[base::names(page)] <- page
+      send(params)
+    },
+    "cursor",
+    params[["cursor"]],
+    max_pages,
+    completed = base::get(
+      ".ct_keyset_done",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    ),
+    mode = "cursor",
+    next_cursor = base::get(
+      ".ct_keyset_next",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    ),
+    items = base::get(
+      ".ct_keyset_items",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    ),
+    error_policy = "partial",
+    warn_limits = TRUE,
+    warn_errors = FALSE,
+    stop_on_empty = FALSE,
+    on_limit = base::get(
+      ".ct_keyset_limit_warning",
+      envir = base::environment(.ct_request_pages),
+      mode = "function",
+      inherits = FALSE
+    )
+  )
+  if (!base::inherits(result, "httr2_request") && !base::is.null(result)) {
+    base::attr(result, "pagination") <- NULL
+  }
+  result
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  kept <- base::attr(result, "pagination", exact = TRUE)
+  result <- run_hook(
+    "chemi_amos_method_keyset_pagination_bulk",
+    "post_combine",
+    base::list(result = result, params = params)
+  )
+  if (!base::is.null(kept) && !base::is.null(result) && base::is.null(base::attr(result, "pagination", exact = TRUE))) {
+    base::attr(result, "pagination") <- kept
+  }
+  result
 }

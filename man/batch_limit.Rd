@@ -11,4 +11,6 @@ batch_limit(limit = 200)
 }
 \description{
 Sets the global batch limit for POST requests. Defaults to 200.
+Only wrappers that read the \code{batch_limit} setting use it. Wrappers that
+split requests at a fixed size set per API (100 items for CTX) ignore it.
 }

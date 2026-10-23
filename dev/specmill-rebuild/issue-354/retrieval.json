@@ -1,0 +1,26 @@
+[
+  {
+    "environment": "production",
+    "url": "https://hcd.rtpnc.epa.gov/api/amos/swagger.json",
+    "retrieved_utc": "2026-10-19T15:50:24.798276+00:00",
+    "status": 200,
+    "sha256": "4591f49840d0f0f5c8e092fd588c43087a8582e8555c3d477ef4c1a98390eaf4",
+    "path_count": 72,
+    "dialect": "2.0"
+  },
+  {
+    "environment": "staging",
+    "url": "https://cim.sciencedataexperts.com/api/amos/swagger.json",
+    "retrieved_utc": "2026-10-19T15:50:24.798897+00:00",
+    "error": "HTTP Error 503: Service Temporarily Unavailable"
+  },
+  {
+    "environment": "development",
+    "url": "https://cim-dev.sciencedataexperts.com/api/amos/swagger.json",
+    "retrieved_utc": "2026-10-19T15:50:24.799351+00:00",
+    "status": 200,
+    "sha256": "627d6cb4ec4aab1448163b578a6b857476c817a93404369cddfe87a4dd54c401",
+    "path_count": 63,
+    "dialect": "3.0.3"
+  }
+]

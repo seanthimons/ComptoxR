@@ -7,20 +7,15 @@
 chemi_chet_reaction_searchcounts(search_input, search_type = NULL)
 }
 \arguments{
-\item{search_input}{Primary query parameter. Type: string}
+\item{search_input}{search_input Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{search_type}{Optional parameter. Type: string}
+\item{search_type}{search_type}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\examples{
-\dontrun{
-chemi_chet_reaction_searchcounts(search_input = "DTXSID7020182")
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

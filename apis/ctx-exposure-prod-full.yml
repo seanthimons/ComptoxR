@@ -1,0 +1,537 @@
+id: ctx-exposure-prod-full
+schemas:
+  files:
+  - schema/ctx-exposure-prod.json
+selection:
+  include:
+  - GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}
+  - GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}
+  - POST /exposure/httk/search/by-dtxsid/
+  - GET /exposure/httk/search/by-dtxsid/{dtxsid}
+  - POST /exposure/list-presence/search/by-dtxsid/
+  - GET /exposure/list-presence/search/by-dtxsid/{dtxsid}
+  - GET /exposure/list-presence/tags
+  - GET /exposure/mmdb/aggregate/by-medium
+  - GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}
+  - GET /exposure/mmdb/mediums
+  - GET /exposure/mmdb/single-sample/by-medium
+  - GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}
+  - GET /exposure/product-data/puc
+  - POST /exposure/product-data/search/by-dtxsid/
+  - GET /exposure/product-data/search/by-dtxsid/{dtxsid}
+  - POST /exposure/seem/general/search/by-dtxsid/
+  - GET /exposure/seem/general/search/by-dtxsid/{dtxsid}
+helper: .ct_request
+documentation: yes
+authentication:
+  api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
+operations:
+  GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_chem_weight_fractions_search
+    file: R/ct_exposure_ccd_chem_weight_fractions_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Chemical Weight Fractions data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_functional_use_search
+    file: R/ct_exposure_ccd_functional_use_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Reported Functional Use data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_keywords_search
+    file: R/ct_exposure_ccd_keywords_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get General Use Keywords data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_monitoring_data_search
+    file: R/ct_exposure_ccd_monitoring_data_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Biomonitoring data by DTXSID with CCD projection
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_production_volume_search
+    file: R/ct_exposure_ccd_production_volume_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Production Volume data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_ccd_puc_search
+    file: R/ct_exposure_ccd_puc_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Product Use Category data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  POST /exposure/httk/search/by-dtxsid/:
+    name: ct_exposure_httk_search_bulk
+    file: R/ct_exposure_httk_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get httk data for a batch of DTXSIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /exposure/httk/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_httk_search
+    file: R/ct_exposure_httk_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get httk data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  POST /exposure/list-presence/search/by-dtxsid/:
+    name: ct_exposure_list_presence_search_bulk
+    file: R/ct_exposure_list_presence_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get List Presence data for a batch of DTXSIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /exposure/list-presence/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_list_presence_search
+    file: R/ct_exposure_list_presence_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get List Presence data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/list-presence/tags:
+    name: ct_exposure_list_presence_tags
+    file: R/ct_exposure_list_presence_tags.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get List Presence Tags
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /exposure/mmdb/aggregate/by-medium:
+    name: ct_exposure_mmdb_aggregate_by_medium
+    file: R/ct_exposure_mmdb_aggregate_by_medium.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    request_controls:
+      timeout: .inf
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
+    docs:
+      title: Get Aggregate data by Medium
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - medium: surface water
+  GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}:
+    name: ct_exposure_mmdb_aggregate
+    file: R/ct_exposure_mmdb_aggregate.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Aggregate data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/mmdb/mediums:
+    name: ct_exposure_mmdb_mediums
+    file: R/ct_exposure_mmdb_mediums.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get all Media options
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /exposure/mmdb/single-sample/by-medium:
+    name: ct_exposure_mmdb_single_sample_by_medium
+    file: R/ct_exposure_mmdb_single_sample_by_medium.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    request_controls:
+      timeout: .inf
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
+    docs:
+      title: Get Single Sample data by Medium
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - medium: surface water
+  GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}:
+    name: ct_exposure_mmdb_single_sample
+    file: R/ct_exposure_mmdb_single_sample.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get Single Sample data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /exposure/product-data/puc:
+    name: ct_exposure_product_data_puc
+    file: R/ct_exposure_product_data_puc.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get all product use categories
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /exposure/product-data/search/by-dtxsid/:
+    name: ct_exposure_product_data_search_bulk
+    file: R/ct_exposure_product_data_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get product data for a batch of DTXSIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /exposure/product-data/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_product_data_search
+    file: R/ct_exposure_product_data_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get product data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  POST /exposure/seem/general/search/by-dtxsid/:
+    name: ct_exposure_seem_general_search_bulk
+    file: R/ct_exposure_seem_general_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get SEEM General Exposure Prediction data for a batch of DTXSIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /exposure/seem/general/search/by-dtxsid/{dtxsid}:
+    name: ct_exposure_seem_general_search
+    file: R/ct_exposure_seem_general_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get SEEM General Exposure Prediction data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

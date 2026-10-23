@@ -1,6 +1,8 @@
 # Local schema clients
 
-Install the pinned development toolkit recorded in `dev/toolkit-lock.json`.
+Install the pinned specmill revision recorded in `dev/specmill-lock.json`
+(`Rscript dev/install_specmill.R`) and export its versioned library as `R_LIBS`
+using the [development setup](../CONTRIBUTING.md#before-you-open-a-pr).
 Keep local schema snapshots and clients outside every ComptoxR checkout.
 The command takes six explicit positional arguments:
 
@@ -48,7 +50,7 @@ sys.source('/absolute/local/output/client.R', envir = client)
 
 The generated package declares httr2 and jsonlite at runtime. The latter is
 required by httr2's optional JSON functions. It returns an httr2 response and
-propagates HTTP errors. It does not load ComptoxR or wrapmaint. It has no
+propagates HTTP errors. It does not load ComptoxR or specmill. It has no
 automatic authentication, pagination or chemical resolution. Those behaviors
 need separately reviewed local helper code. Keep generated clients local;
 public operations must be regenerated from approved production schemas.
@@ -57,7 +59,7 @@ Verification: `Rscript dev/migration-evidence/verify-local-client.R` generates
 the four-operation catalogue twice, compares both output hashes, rejects public
 output and replacement of existing files, reports an unsupported header, and
 starts a fresh R process. It also installs the generated package in a separate
-library that contains only its runtime dependencies, with wrapmaint and
+library that contains only its runtime dependencies, with specmill and
 ComptoxR unavailable. Both forms check three mocked HTTP requests,
 path/query encoding, JSON placement and HTTP error propagation without loading
 the toolkit or ComptoxR. Mocking uses the httr2
@@ -78,7 +80,7 @@ The frozen alerts output also passed a fresh-process mocked GET for
 Repeat that check with
 `Rscript --vanilla dev/migration-evidence/verify-local-client.R --alerts <absolute_client.R>`.
 The actual alerts package also passed installation and the same mocked GET in
-the separate `migration-516dfd4/library-localalerts-json` library, with wrapmaint
+the separate `migration-516dfd4/library-localalerts-json` library, with specmill
 and ComptoxR absent. Repeat with
 `Rscript dev/migration-evidence/verify-local-client.R --install-alerts <package_root> <new_local_library>`.
 Install output reports no man pages: these are minimal local packages, not

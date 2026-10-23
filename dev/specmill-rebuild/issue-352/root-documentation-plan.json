@@ -1,0 +1,8 @@
+{
+  "diagnostics": 0,
+  "mapping_diagnostics": 0,
+  "signature_drift": 0,
+  "protected_documentation_outputs": 86,
+  "includes_namespace": true,
+  "decision": "Use the established root wrapper/test artifact scope. Generate only the changed RQ manual page with roxygen2; leave unrelated namespace/manual changes protected."
+}

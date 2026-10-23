@@ -178,5 +178,7 @@ generate_tests_is_entrypoint <- function() {
 }
 
 if (generate_tests_is_entrypoint()) {
+  source("dev/install_specmill.R", local = TRUE)
+  verify_specmill()
   generate_tests_main()
 }

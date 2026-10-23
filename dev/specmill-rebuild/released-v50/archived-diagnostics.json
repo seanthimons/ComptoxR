@@ -1,0 +1,14 @@
+[
+  {
+    "original": "dev/specmill-rebuild/ownership-v50/evidence-v49/response-diagnostics.txt",
+    "archive": "dev/specmill-rebuild/ownership-v50/evidence-v49/response-diagnostics.txt.gz",
+    "original_sha256": "ae70a40776797532224a2bfbbeab3f6ca9bb73227be37d085e4f3e3221cb8f72",
+    "byte_exact_after_decompression": true
+  },
+  {
+    "original": "dev/specmill-rebuild/ownership-v50/evidence-v49/before-profile-correction/response-diagnostics.txt",
+    "archive": "dev/specmill-rebuild/ownership-v50/evidence-v49/before-profile-correction/response-diagnostics.txt.gz",
+    "original_sha256": "ae70a40776797532224a2bfbbeab3f6ca9bb73227be37d085e4f3e3221cb8f72",
+    "byte_exact_after_decompression": true
+  }
+]

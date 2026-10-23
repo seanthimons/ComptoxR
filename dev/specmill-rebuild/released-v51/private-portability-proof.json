@@ -1,0 +1,9 @@
+{
+  "version": "0.1.51",
+  "validation_TRUE": true,
+  "selected": "schema/nested/alerts.json",
+  "sources": ["schema/nested/alerts.json", "schema/nested/safety.json"],
+  "copied_checkout_fresh": true,
+  "all_files_unchanged": true,
+  "manifest_raw_bytes_unchanged": true
+}

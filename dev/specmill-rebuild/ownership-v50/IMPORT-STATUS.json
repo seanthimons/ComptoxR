@@ -1,0 +1,29 @@
+{
+  "status": "inputs imported; root generation pending",
+  "configuration": [
+    "apis/chemi-descriptors-native.yml",
+    "apis/chemi-management.yml",
+    "specmill.yml"
+  ],
+  "callback": "dev/specmill_callbacks.R: descriptor_aggregate_get_response",
+  "registry": "inst/hook_config.yml: two descriptor bespoke_test fields",
+  "tests": [
+    "tests/testthat/test-native_descriptor_ownership.R",
+    "tests/testthat/test-native_calculation.R"
+  ],
+  "fixtures": [
+    "tests/testthat/fixtures/native-ownership-contracts.rds",
+    "tests/testthat/fixtures/native-calculation-contracts.rds"
+  ],
+  "manuals": [
+    "man/chemi_descriptors.Rd",
+    "man/chemi_descriptors_bulk.Rd",
+    "man/chemi_alerts_render.Rd"
+  ],
+  "original_grouped_source_archived_and_removed": true,
+  "render_source_retained": true,
+  "root_generation_run_by_this_agent": false,
+  "pin_helper_manifest_changes_by_this_agent": false,
+  "new_deployed_calls": 0,
+  "shared_file_serialization": "Ownership edits finished and files released before PubChem edits."
+}

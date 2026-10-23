@@ -7,10 +7,10 @@
 ct_hazard_toxref_search_by_study_type(studyType)
 }
 \arguments{
-\item{studyType}{Study Type. Type: string}
+\item{studyType}{studyType Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

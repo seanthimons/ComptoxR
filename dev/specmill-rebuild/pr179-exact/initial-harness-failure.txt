@@ -1,0 +1,139 @@
+proof: ........................1234....56..7.89..a.bc.def......
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-proof.R:98:5'): actual search normalization and real single
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`actual` is length 1
+`expected` is length 2
+
+`class(actual)`:   "tbl_df"              "tbl"   "data.frame"
+`class(expected)`: "specmill_call_error" "error" "condition" 
+
+`names(actual)`:   "sid"           
+`names(expected)`: "message" "call"
+
+`attr(actual, 'row.names')` is an integer vector (1)
+`attr(expected, 'row.names')` is absent
+
+`actual$sid` is a character vector ('sid0')
+`expected$sid` is absent
+
+`actual$message` is absent
+`expected$message` is a character vector ('Missing client server resolver: .ct_server_url')
+
+`actual$call` is absent
+`expected$call` is NULL
+
+
+── 2. Failure ('test-proof.R:99:5'): actual search normalization and real single
+Expected `vapply(b$trace, `[[`, "", "stage")` to be identical to `c("pre_request", "post_response")`.
+Differences:
+`actual`:   "pre_request"                
+`expected`: "pre_request" "post_response"
+
+
+── 3. Failure ('test-proof.R:100:5'): actual search normalization and real singl
+Expected `b$wires` to have length 1.
+Actual length: 0.
+
+── 4. Error ('test-proof.R:101:5'): actual search normalization and real single/
+<subscriptOutOfBoundsError/error/condition>
+Error in `b$wires[[1]]`: subscript out of bounds
+Backtrace:
+    ▆
+ 1. └─testthat::expect_identical(b$wires[[1]]$path, "/search") at test-proof.R:101:5
+ 2.   └─testthat::quasi_label(enquo(object), label)
+ 3.     └─rlang::eval_bare(expr, quo_get_env(quo))
+
+── 5. Failure ('test-proof.R:126:3'): full returned search state and hook transp
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`actual` is length 4
+`expected` is length 2
+
+`names(actual)`:   "params"  "marker" "request" "result"
+`names(expected)`: "message" "call"                     
+
+`class(actual)` is absent
+`class(expected)` is a character vector ('specmill_call_error', 'error', 'condition')
+
+`actual$params` is a list
+`expected$params` is absent
+
+`actual$marker` is a character vector ('keep')
+`expected$marker` is absent
+
+`actual$request` is a list
+`expected$request` is absent
+
+`actual$result` is a list
+`expected$result` is absent
+
+`actual$message` is absent
+`expected$message` is a character vector ('Missing client server resolver: .ct_server_url')
+
+`actual$call` is absent
+`expected$call` is NULL
+
+
+── 6. Failure ('test-proof.R:134:5'): received errors, malformed JSON, dryrun an
+Expected `b$wires` to have length 1.
+Actual length: 0.
+
+── 7. Failure ('test-proof.R:134:5'): received errors, malformed JSON, dryrun an
+Expected `b$wires` to have length 1.
+Actual length: 0.
+
+── 8. Failure ('test-proof.R:137:7'): received errors, malformed JSON, dryrun an
+Expected `b$value` to inherit from "httr2_http_404".
+Actual class: "specmill_call_error"/"error"/"condition".
+
+── 9. Error ('test-proof.R:138:7'): received errors, malformed JSON, dryrun and 
+Error in `httr2::resp_body_string(b$value$resp)`: `resp` must be an HTTP response object, not `NULL`.
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(...) at test-proof.R:138:7
+ 2. │ └─testthat::quasi_label(enquo(object), label)
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─httr2::resp_body_string(resp = b$value$resp)
+ 5.   └─httr2:::check_response(resp)
+ 6.     └─httr2:::stop_input_type(...)
+ 7.       └─rlang::abort(message, ..., call = call, arg = arg)
+
+── 10. Failure ('test-proof.R:166:5'): PubChem exact dynamic limit is rejected; 
+Expected `a$value` to be identical to `b$value`.
+Differences:
+`actual` is length 4
+`expected` is length 2
+
+`names(actual)`:   "totalRecordsCount" "recordsCount" "offset" "records"
+`names(expected)`: "message"           "call"                           
+
+`class(actual)` is absent
+`class(expected)` is a character vector ('specmill_call_error', 'error', 'condition')
+
+`actual$totalRecordsCount` is an integer vector (2)
+`expected$totalRecordsCount` is absent
+
+`actual$recordsCount` is an integer vector (1)
+`expected$recordsCount` is absent
+
+`actual$offset` is an integer vector (0)
+`expected$offset` is absent
+
+`actual$records` is a list
+`expected$records` is absent
+
+`actual$message` is absent
+`expected$message` is a character vector ('Missing client server resolver: .ct_server_url')
+
+`actual$call` is absent
+`expected$call` is NULL
+
+  ... and 5 more
+
+
+Maximum number of 10 failures reached, some test results may be missing.
+
+══ DONE ════════════════════════════════════════════════════════════════════════

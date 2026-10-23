@@ -1,0 +1,75 @@
+{
+  "base_commit": "2b88f70f",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.41",
+    "source_commit": "05862bee1804806cea157ff1962300d741516301",
+    "source_archive_sha256": "70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "release_sha256": "66fc7630db90b3d353c74ecfd0db3c70b4c30337df18566acdb1db756396fe88",
+  "wrapper": "ct_chemical_list_search_by_name",
+  "operation": "GET /chemical/list/search/by-name/{listName}",
+  "schema": "schema/ctx-chemical-prod.json",
+  "baseline": {
+    "version": "1.7.0",
+    "commit": "9a79d48ce88af1e2ea9da6dda571a1e7db6709fa",
+    "exact_comparisons": 30
+  },
+  "generation": {
+    "validation": true,
+    "diagnostics": 0,
+    "mapping_diagnostics": 0,
+    "retained_diagnostics": 0,
+    "drift": 0,
+    "fresh_files": 546,
+    "schema_validation": {
+      "invalid": 1,
+      "passed": 25
+    },
+    "reviewed_invalid_schema": "schema/chemi-amos-prod.json"
+  },
+  "tests": {
+    "suites": 9,
+    "tests": 36,
+    "assertions": 1811,
+    "failed": 0,
+    "errors": 0,
+    "warnings": 0,
+    "skipped": 0,
+    "list_name_assertions": 333
+  },
+  "localhost": {
+    "statuses": [200, 404, 500, 401],
+    "json_accept": true,
+    "api_key_header": true,
+    "normalized_paths": true,
+    "combined_hook": true,
+    "transport_condition_identity": true
+  },
+  "helper": {
+    "emitter": "dev/specmill-342/emit.R",
+    "direct_scaffold_code": true,
+    "checks": "freshness, idempotence, provenance, version, overwrite refusal, explicit adoption and ownership",
+    "sha256": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+    "unchanged_from_parent": true
+  },
+  "retired_test": {
+    "path": "tests/testthat/test-ct_chemical_list_search_by_name.R",
+    "sha256": "3564dc8c68e60f0f9d434347316be85040efe513a8a14594e318d7e5aa26d7c7",
+    "replacement": "tests/testthat/test-native_ctx_list_name.R"
+  },
+  "logs": {
+    "generation": "/tmp/comptoxr-v41-final-apply.log",
+    "freshcheck": "/tmp/comptoxr-v41-freshcheck.log",
+    "tests": "/tmp/comptoxr-v41-tests.log",
+    "helper": "/tmp/comptoxr-v41-helper.log",
+    "installed_replay": "/tmp/comptoxr-v41-candidate-replay.log",
+    "legacy_test_generation": "/tmp/comptoxr-v41-legacy-tests-check.log"
+  },
+  "no_push": true,
+  "no_production_writes": true,
+  "shared_progress_ledger_unchanged": true,
+  "shared_callbacks_unchanged": true
+}

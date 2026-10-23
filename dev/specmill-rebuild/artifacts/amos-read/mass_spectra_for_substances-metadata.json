@@ -1,0 +1,19 @@
+{
+  "name": "mass_spectra_for_substances",
+  "url": "https://hcd.rtpnc.epa.gov/api/amos/mass_spectra_for_substances/",
+  "method": "POST",
+  "request_sha256": "95ceb8b487a7f1eef821c6b318334c9a6164c44ff50c31ecf247197c4cd07798",
+  "time": "2026-10-17T22:05:01.518443+00:00",
+  "status": 200,
+  "headers": {
+    "Date": "Sat, 17 Oct 2026 22:05:01 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "814182",
+    "Connection": "close",
+    "Vary": "Accept-Encoding",
+    "Access-Control-Allow-Origin": "*",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains"
+  },
+  "response_sha256": "a85443e239e9f35a86d8aa931dd59b46f88b1ed0922ae71722f906d37cb66d5f",
+  "bytes": 814182
+}

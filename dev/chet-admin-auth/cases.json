@@ -1,0 +1,227 @@
+[
+  {
+    "key": "GET /admin/database",
+    "name": "chemi_chet_admin_database",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /admin/errorreport",
+    "name": "chemi_chet_admin_errorreport_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /admin/login",
+    "name": "chemi_chet_admin_login_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /admin/register",
+    "name": "chemi_chet_admin_register_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /admin/resolve",
+    "name": "chemi_chet_admin_resolve_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "GET /auth/errorpage",
+    "name": "chemi_chet_auth_errorpage",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /auth/errorpage",
+    "name": "chemi_chet_auth_errorpage_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "GET /auth/errorpage/complete/{idnum}",
+    "name": "chemi_chet_auth_errorpage_complete_idnum",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "idnum",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "POST /auth/errorpage/complete/{idnum}",
+    "name": "chemi_chet_auth_errorpage_complete_idnum_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "idnum",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "GET /auth/errorpage/{showhide}",
+    "name": "chemi_chet_auth_errorpage_showhide",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "showhide",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "POST /auth/errorpage/{showhide}",
+    "name": "chemi_chet_auth_errorpage_showhide_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "showhide",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": null
+  },
+  {
+    "key": "GET /auth/logout",
+    "name": "chemi_chet_auth_logout",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "GET /auth/testpage",
+    "name": "chemi_chet_auth_testpage",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /auth/testpage",
+    "name": "chemi_chet_auth_testpage_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": null
+  },
+  {
+    "key": "POST /auth/login",
+    "name": "chemi_chet_auth_login_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /auth/register",
+    "name": "chemi_chet_auth_register_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  },
+  {
+    "key": "POST /auth/report",
+    "name": "chemi_chet_auth_report_post",
+    "schema": "schema/chemi-chet-prod.json",
+    "parameters": [],
+    "requestBody": {
+      "content": {
+        "application/x-www-form-urlencoded": {
+          "schema": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        }
+      },
+      "required": true
+    }
+  }
+]

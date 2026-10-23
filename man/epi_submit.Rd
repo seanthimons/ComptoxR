@@ -228,14 +228,14 @@ epi_submit(
 \item{polymerType}{Optional parameter}
 }
 \value{
-Returns a list with result object
+Returns a named list of result modules
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_submit(smiles = "CCO")
+epi_submit(smiles = "CCO", modules = "logKow")
 }
 }
 \section{API stage}{

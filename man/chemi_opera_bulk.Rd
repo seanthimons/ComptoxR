@@ -31,7 +31,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_opera_bulk(cache_only = "DTXSID1024122")
+chemi_opera_bulk(smiles = c("CCO", "CCCC"), cache_only = TRUE)
 }
 }
 \section{API stage}{

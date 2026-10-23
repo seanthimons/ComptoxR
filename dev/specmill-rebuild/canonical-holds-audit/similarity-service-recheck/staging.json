@@ -1,0 +1,30 @@
+{
+  "url": "https://cim.sciencedataexperts.com/api/resolver/getsimilaritylist",
+  "method": "POST",
+  "request": {
+    "chemicals": [
+      {
+        "chemical": {
+          "sid": "ethanol",
+          "smiles": "CCO"
+        },
+        "result": "FOUND"
+      }
+    ],
+    "main": {
+      "sid": "ethanol",
+      "smiles": "CCO"
+    },
+    "get_chemicals": [
+      {
+        "sid": "ethanol",
+        "smiles": "CCO"
+      }
+    ]
+  },
+  "time_utc": "2026-10-18T22:56:45.797868+00:00",
+  "status": 400,
+  "media": "application/problem+json",
+  "response_sha256": "e9678114c35c4765518f03a9bd46aee6452c58a18f89fbfef0b4b2f071eeeab1",
+  "response": "{\"type\":\"about:blank\",\"title\":\"Bad Request\",\"status\":400,\"detail\":\"_chemicals must contain 1 to 1000 entries.\",\"instance\":\"/api/resolver/getsimilaritylist\",\"request_id\":\"b80a90ae-e7d5-4002-b510-863d6e7d7b30\"}"
+}

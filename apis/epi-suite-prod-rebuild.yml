@@ -1,0 +1,440 @@
+id: epi-suite-prod-rebuild
+schemas:
+  files:
+  - schema/epi-suite-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: yes
+operations:
+  POST /api/submit/batch:
+    name: epi_submit_batch
+    file: R/epi_submit_batch.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      modules:
+        type: character
+        required: yes
+        description: Selected calculations. Items run in canonical dependency order
+          rather than submitted array order; use waterSolubilityProvider for the shared
+          water-solubility choice.
+      advectionTimeAir:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeSediment:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeSoil:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeWater:
+        type: character
+        default: ~
+        description: Optional parameter
+      amineNitrogens:
+        type: character
+        default: ~
+        description: Optional parameter
+      aopRateConstant:
+        type: character
+        default: ~
+        description: Optional parameter
+      averageMolecularWeight:
+        type: character
+        default: ~
+        description: Optional parameter
+      averagingTimeDays:
+        type: character
+        default: ~
+        description: Optional parameter
+      biowin3:
+        type: character
+        default: ~
+        description: Optional parameter
+      biowin5:
+        type: character
+        default: ~
+        description: Optional parameter
+      biowinScore:
+        type: character
+        default: ~
+        description: Optional parameter
+      bodyWeightKg:
+        type: character
+        default: ~
+        description: Optional parameter
+      boilingPointC:
+        type: character
+        default: ~
+        description: Optional parameter
+      branchedCarbons:
+        type: character
+        default: ~
+        description: Optional parameter
+      branches:
+        type: character
+        default: ~
+        description: Optional parameter
+      carbonChainLength:
+        type: character
+        default: ~
+        description: Optional parameter
+      cas:
+        type: character
+        default: ~
+        description: CAS Registry Number. Only a CAS-identified batch item can resolve
+          experimental results; CAS takes precedence when SMILES is also supplied.
+      cationAnionRatio:
+        type: character
+        default: ~
+        description: Optional parameter
+      chemicalName:
+        type: character
+        default: ~
+        description: Optional parameter
+      daylightHours:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateAir:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateSediment:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateSoil:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateWater:
+        type: character
+        default: ~
+        description: Optional parameter
+      ethoxylate:
+        type: character
+        default: ~
+        description: Optional parameter
+      eventDurationHours:
+        type: character
+        default: ~
+        description: Optional parameter
+      eventFrequencyPerDay:
+        type: character
+        default: ~
+        description: Optional parameter
+      exposureDurationYears:
+        type: character
+        default: ~
+        description: Optional parameter
+      exposureFrequencyDaysPerYear:
+        type: character
+        default: ~
+        description: Optional parameter
+      fractionAbsorbed:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeAir:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeHoursAerationVessel:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeHoursPrimaryClarifier:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeHoursSettlingTank:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeSediment:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeSoil:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeWater:
+        type: character
+        default: ~
+        description: Optional parameter
+      henryAtmM3PerMol:
+        type: character
+        default: ~
+        description: Optional parameter
+      koc:
+        type: character
+        default: ~
+        description: Optional parameter
+      lakeCurrentMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      lakeDepthMeters:
+        type: character
+        default: ~
+        description: Optional parameter
+      lakeWindMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      logKoa:
+        type: character
+        default: ~
+        description: Optional parameter
+      logKow:
+        type: character
+        default: ~
+        description: Optional parameter
+      mainCarbons:
+        type: character
+        default: ~
+        description: Optional parameter
+      meltingPointC:
+        type: character
+        default: ~
+        description: Optional parameter
+      molecularWeight:
+        type: character
+        default: ~
+        description: Optional resolved molecular weight. Part of the complete positive
+          VP/WSOL/MW triplet that enables the HENRYWIN VP/WSOL candidate.
+      mw1000Percentage:
+        type: character
+        default: ~
+        description: Optional parameter
+      mw500Percentage:
+        type: character
+        default: ~
+        description: Optional parameter
+      ohConcentrationE6OhPerCm3:
+        type: character
+        default: ~
+        description: Optional parameter
+      ozoneConcentrationE11MolPerCm3:
+        type: character
+        default: ~
+        description: Optional parameter
+      polymerType:
+        type: character
+        default: ~
+        description: Optional parameter
+      propoxyGroups:
+        type: character
+        default: ~
+        description: Optional parameter
+      removeMetals:
+        type: character
+        default: ~
+        description: Optional parameter
+      riverCurrentMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      riverDepthMeters:
+        type: character
+        default: ~
+        description: Optional parameter
+      riverWindMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      skinSurfaceAreaCm2:
+        type: character
+        default: ~
+        description: Optional parameter
+      smiles:
+        type: character
+        default: ~
+        description: Raw structure input. A SMILES-only batch item is estimated without
+          experimental results.
+      solubilityType:
+        type: character
+        default: ~
+        description: Optional parameter
+      subcooledVaporPressureMmHg:
+        type: character
+        default: ~
+        description: Optional parameter
+      theta:
+        type: character
+        default: ~
+        description: Optional parameter
+      tspUgPerM3:
+        type: character
+        default: ~
+        description: Optional parameter
+      useSmiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      userKpCmPerHour:
+        type: character
+        default: ~
+        description: Optional parameter
+      vaporPressureMmHg:
+        type: character
+        default: ~
+        description: Optional resolved vapor pressure in mmHg. Its omission leaves
+          structural HENRYWIN candidates available.
+      vaporPressureTemperatureC:
+        type: numeric
+        default: 25.0
+        description: 'Fixed MPBPVP calculation temperature in °C; values other than
+          25 are rejected.. Options: 25 (default: 25)'
+      waterConcentrationMgPerCm3:
+        type: character
+        default: ~
+        description: Optional parameter
+      waterConcentrationMgPerLiter:
+        type: character
+        default: ~
+        description: Optional parameter
+      waterSolubility:
+        type: character
+        default: ~
+        description: Optional parameter
+      waterSolubilityMgPerL:
+        type: character
+        default: ~
+        description: Optional resolved water solubility in mg/L. Its omission leaves
+          structural HENRYWIN candidates available.
+      waterSolubilityProvider:
+        type: character
+        default: ~
+        description: Optional parameter
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/submit/batch
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: epi_batch_array
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value: []
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: epi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: .ct_static_tidy
+    docs:
+      title: Estimate an ordered batch of chemicals
+      lifecycle: experimental
+      parameters:
+        modules: Selected calculations. Items run in canonical dependency order rather
+          than submitted array order; use waterSolubilityProvider for the shared water-solubility
+          choice.
+        advectionTimeAir: Optional parameter
+        advectionTimeSediment: Optional parameter
+        advectionTimeSoil: Optional parameter
+        advectionTimeWater: Optional parameter
+        amineNitrogens: Optional parameter
+        aopRateConstant: Optional parameter
+        averageMolecularWeight: Optional parameter
+        averagingTimeDays: Optional parameter
+        biowin3: Optional parameter
+        biowin5: Optional parameter
+        biowinScore: Optional parameter
+        bodyWeightKg: Optional parameter
+        boilingPointC: Optional parameter
+        branchedCarbons: Optional parameter
+        branches: Optional parameter
+        carbonChainLength: Optional parameter
+        cas: CAS Registry Number. Only a CAS-identified batch item can resolve experimental
+          results; CAS takes precedence when SMILES is also supplied.
+        cationAnionRatio: Optional parameter
+        chemicalName: Optional parameter
+        daylightHours: Optional parameter
+        emissionRateAir: Optional parameter
+        emissionRateSediment: Optional parameter
+        emissionRateSoil: Optional parameter
+        emissionRateWater: Optional parameter
+        ethoxylate: Optional parameter
+        eventDurationHours: Optional parameter
+        eventFrequencyPerDay: Optional parameter
+        exposureDurationYears: Optional parameter
+        exposureFrequencyDaysPerYear: Optional parameter
+        fractionAbsorbed: Optional parameter
+        halfLifeAir: Optional parameter
+        halfLifeHoursAerationVessel: Optional parameter
+        halfLifeHoursPrimaryClarifier: Optional parameter
+        halfLifeHoursSettlingTank: Optional parameter
+        halfLifeSediment: Optional parameter
+        halfLifeSoil: Optional parameter
+        halfLifeWater: Optional parameter
+        henryAtmM3PerMol: Optional parameter
+        koc: Optional parameter
+        lakeCurrentMPerSec: Optional parameter
+        lakeDepthMeters: Optional parameter
+        lakeWindMPerSec: Optional parameter
+        logKoa: Optional parameter
+        logKow: Optional parameter
+        mainCarbons: Optional parameter
+        meltingPointC: Optional parameter
+        molecularWeight: Optional resolved molecular weight. Part of the complete
+          positive VP/WSOL/MW triplet that enables the HENRYWIN VP/WSOL candidate.
+        mw1000Percentage: Optional parameter
+        mw500Percentage: Optional parameter
+        ohConcentrationE6OhPerCm3: Optional parameter
+        ozoneConcentrationE11MolPerCm3: Optional parameter
+        polymerType: Optional parameter
+        propoxyGroups: Optional parameter
+        removeMetals: Optional parameter
+        riverCurrentMPerSec: Optional parameter
+        riverDepthMeters: Optional parameter
+        riverWindMPerSec: Optional parameter
+        skinSurfaceAreaCm2: Optional parameter
+        smiles: Raw structure input. A SMILES-only batch item is estimated without
+          experimental results.
+        solubilityType: Optional parameter
+        subcooledVaporPressureMmHg: Optional parameter
+        theta: Optional parameter
+        tspUgPerM3: Optional parameter
+        useSmiles: Optional parameter
+        userKpCmPerHour: Optional parameter
+        vaporPressureMmHg: Optional resolved vapor pressure in mmHg. Its omission
+          leaves structural HENRYWIN candidates available.
+        vaporPressureTemperatureC: 'Fixed MPBPVP calculation temperature in °C; values
+          other than 25 are rejected.. Options: 25 (default: 25)'
+        waterConcentrationMgPerCm3: Optional parameter
+        waterConcentrationMgPerLiter: Optional parameter
+        waterSolubility: Optional parameter
+        waterSolubilityMgPerL: Optional resolved water solubility in mg/L. Its omission
+          leaves structural HENRYWIN candidates available.
+        waterSolubilityProvider: Optional parameter
+      return: Returns a tibble with the batch response
+      examples:
+      - modules:
+        - logKow
+        smiles: CCO
+      tags:
+        apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: epi_burl
+    response_policy: .ct_static_tidy
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

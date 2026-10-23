@@ -7,12 +7,12 @@
 ct_hazard_adme_ivive_search(dtxsid, projection = NULL)
 }
 \arguments{
-\item{dtxsid}{DSSTox Substance Identifier. Type: string}
+\item{dtxsid}{dtxsid Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{projection}{Specifies if projection is used. Option: ccd-adme-data. If omitted, the default ADME-IVIVE projection is returned.}
+\item{projection}{projection}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

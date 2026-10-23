@@ -1,0 +1,1433 @@
+diff --git a/.specmill/manifest.json b/.specmill/manifest.json
+index 434dc9c0..b3d50f5b 100644
+--- a/.specmill/manifest.json
++++ b/.specmill/manifest.json
+@@ -142,11 +142,11 @@
+       "operations": "chemi-chet-prod-rebuild GET /chemicals/chemset"
+     },
+     "R/chemi_chet_chemicals_counts.R": {
+-      "hash": "b501bd040bc0f7e167763c962e805aa101919b69263832fa66fb1fe9a6b1073b",
++      "hash": "f4d89ed58ae354c3c09bcfd0db8a2a156e385ad2c1449c5645fd9c9e6dd1a7ff",
+       "operations": "chemi-chet-prod-rebuild GET /chemicals/counts"
+     },
+     "R/chemi_chet_chemicals_database.R": {
+-      "hash": "b58423dcae138f58d18b08f659e48068d28acf5c4f6faafd0c963de8942bcb43",
++      "hash": "5feb1c7bef2776208c2d29d36377e61fdf8bb8a46a6e190d4cd90e7b1e4fa978",
+       "operations": "chemi-chet-prod-rebuild GET /chemicals/database"
+     },
+     "R/chemi_chet_chemicals_database_old.R": {
+@@ -178,7 +178,7 @@
+       "operations": "chemi-chet-prod-rebuild GET /reaction/search"
+     },
+     "R/chemi_chet_reaction_database.R": {
+-      "hash": "c6774c0dd855768b3a9fda6443d8281735cad2a42e9ef3fd6b4e09336684053d",
++      "hash": "2c1c488d4d85e3507f78a776c0e24cc11a6f6abc655bf01fe5acc98366093b0c",
+       "operations": "chemi-chet-prod-rebuild GET /reaction/database"
+     },
+     "R/chemi_chet_reaction_database_old.R": {
+@@ -1996,7 +1996,7 @@
+   },
+   "toolkit_version": "0.1.11",
+   "inputs": {
+-    "DESCRIPTION": "f5744eb973520a886df631a9ec5937b6382213616f971385cc5246f425735998",
++    "DESCRIPTION": "3eb80bd7eb26cc8be3a18e8dcd418c73a87d9ed86ed2562b47b74e118903609e",
+     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
+     "NAMESPACE": "f6f4f431687cc68c978b4d234ae61aa2d66dc7dd939470445edf8bdfe7596a1c",
+     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
+@@ -2067,18 +2067,18 @@
+     "R/chemi_arn_cats.R": "35f98875f6937b98ba68bbbfcab6a9e62778ae82e523dd1afdc27b97664569bf",
+     "R/chemi_chet_chemicals_alias.R": "d991fa748e7d6b5d445f36ac839c3c6bab3106d78d0b70ec8f1b806fc2d29c58",
+     "R/chemi_chet_chemicals_chemset.R": "6b1b849f7c331172f133b56ecd617a75fd60d9cebfb5bf32272615e4231b6ff8",
+-    "R/chemi_chet_chemicals_counts.R": "b501bd040bc0f7e167763c962e805aa101919b69263832fa66fb1fe9a6b1073b",
+-    "R/chemi_chet_chemicals_database.R": "b58423dcae138f58d18b08f659e48068d28acf5c4f6faafd0c963de8942bcb43",
++    "R/chemi_chet_chemicals_counts.R": "f4d89ed58ae354c3c09bcfd0db8a2a156e385ad2c1449c5645fd9c9e6dd1a7ff",
++    "R/chemi_chet_chemicals_database.R": "5feb1c7bef2776208c2d29d36377e61fdf8bb8a46a6e190d4cd90e7b1e4fa978",
+     "R/chemi_chet_chemicals_database_old.R": "18651d8609c03b2f8765f5edf0e163be1419a48b8d2179457a9c0a17cc2eab3f",
+     "R/chemi_chet_chemicals_database_stats.R": "47d77480f15042ad6d204dd788c6865d807cf1ff5456bf2bfbdbfce97e136ad6",
+-    "R/chemi_chet_chemicals_image.R": "f11f5f5b64a1103a5c905ac7614315be3a6fc087f429dfb3b079c2dbcaa7e77e",
++    "R/chemi_chet_chemicals_image.R": "40a92159b4defb8955f7fa03af7a12806403d67fdd3e79f8abfde053fb13ec0a",
+     "R/chemi_chet_chemicals_maps.R": "73e7114e2f752a956df12a2cbc0ea7efc4b574057c1f90857d79501fb2c28067",
+     "R/chemi_chet_chemicals_singlechemical.R": "316b82f502d34cea7ddc59f22aed479626b85183122331f3fbf28aee04ac186b",
+     "R/chemi_chet_chemicals_suggest.R": "053eed9c3cf15c1cb0cde584d5958d9e6aeac8d2381ea9967f16f5cf5aa3485d",
+     "R/chemi_chet_chemicals_verify.R": "edf3fc68ba868ab90ace54b4c94917e179775fe49fb0018e21ea780e17b9cdcf",
+     "R/chemi_chet_reaction.R": "a5ebc34496e83a33cdc82545d05706af3960727dad73886cd70d189381932218",
+     "R/chemi_chet_reaction_batchsearch.R": "746767d109776ebf1c9e49148d905d711e486f8e8ed65c2826fc452ee9dc946b",
+-    "R/chemi_chet_reaction_database.R": "c6774c0dd855768b3a9fda6443d8281735cad2a42e9ef3fd6b4e09336684053d",
++    "R/chemi_chet_reaction_database.R": "2c1c488d4d85e3507f78a776c0e24cc11a6f6abc655bf01fe5acc98366093b0c",
+     "R/chemi_chet_reaction_database_old.R": "164620eee4a5c008eb13e2d2fc9a3058dcf21b76203bea05272a77694ad3a473",
+     "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R": "dfe2d6dda47f3f1de1cd5dd2cc4a2d31cf424b8e0c9a2ec64e1631d87432e534",
+     "R/chemi_chet_reaction_database_stats.R": "7774e45a7b39b81085e67bb74bcb24596d451b5548ff68244f5e41bb84396f3d",
+@@ -2342,7 +2342,8 @@
+     "R/utils-pipe.R": "46373367178015c987248669ea7eeb34d4f52598e1ef5ea4ecb1351c75091312",
+     "R/z_db_download.R": "9a268696141778e16af30ed29e09dbb082865ab72f322660140d1af7b1fda635",
+     "R/z_db_version.R": "9e4e15ea5311098c605f0c13dd20df6acd635514435c26fa1da99c551559bc7e",
+-    "R/z_generic_request.R": "b77d71fafd615f0ace2733663a1a3138ca4fe87b6a7f64102bdf515f49572abd",
++    "R/z_generic_request.R": "240b92b00c11f5d09390b8ef452e0e9676a3d9525a20a518438bfb25deb177dc",
++    "R/z_specmill_request.R": "b1db6627d1ce649af34d93a3b9c93b832c7fa059f86e0a8ea0a53884d7ba28d9",
+     "R/zzz.R": "0030a14d94dff8e0b90bc40014744a02ecc86dab2217e0ed8db6d0be2753008a",
+     "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
+     "apis/alerts-pilot.yml": "98111708ad28031ace7af599cc1154b7d82d434e1127ab41b4362fb6ef88505b",
+@@ -2351,7 +2352,7 @@
+     "apis/chemi-amos-prod-full.yml": "737e0c256be74f0cd8a870dfac6dacd3285c2aeea34275ac6f08cd6f8e389bf8",
+     "apis/chemi-arn_cats-prod-rebuild.yml": "f8410d269f647de82ffd26ca42639dddbc4f0ad2a1c9a9afc5a28e869b8b1162",
+     "apis/chemi-chet-prod-full.yml": "6889d5ac349c6faedf5f6fe4e6a557d3ccf67c39452218cc9bb96efd087e3531",
+-    "apis/chemi-chet-prod-rebuild.yml": "4251005f3e460af08ea2f0dfabe509193ebe9852892c08999ca34b07418935c6",
++    "apis/chemi-chet-prod-rebuild.yml": "cc6d34e21b5195ebf2bddcb811f7447216351aa03705e58a83e35c6ee371db44",
+     "apis/chemi-mordred-prod-rebuild.yml": "f76dc489f40b33f36ab7a253ba72c5149c9b59c64c503883c9cb1580969c250a",
+     "apis/chemi-ncc_cats-prod-rebuild.yml": "f8f958f20a8b4a9c80e6bff726816c09adf8387ce758a7f1dd54b802d8913c0b",
+     "apis/chemi-opera-prod-rebuild.yml": "1d397718bc4939f4cbeaff9801f1c4bc41e136ebc0d8c962e876bb99faa9de2b",
+@@ -2486,18 +2487,18 @@
+     "man/chemi_arn_cats_bulk.Rd": "04fbe94d6c1e7e62cf2acebd3f60bcb3cd4bda8df69e0d8596c29a0b6b9ac8fe",
+     "man/chemi_chet_chemicals_alias.Rd": "aaeb2eff93a209dc1cbc07b3910451c34f14acdc2f3eae8d6124fa715c3e77cf",
+     "man/chemi_chet_chemicals_chemset.Rd": "b34206cdbb3f27104781f0a9aaace62273159c0d7e73e3c7ce8028844bfe6bcf",
+-    "man/chemi_chet_chemicals_counts.Rd": "8d346b6f738d5df7d91a591084cbbf578051949777d2d7229ad55e94a71899d9",
+-    "man/chemi_chet_chemicals_database.Rd": "07917a4c283b564332273c1d7d5b6d5be9ee388977af0a8f9899b6880d60ce68",
++    "man/chemi_chet_chemicals_counts.Rd": "2f2c4059cc9b7d2b93249ee16600216bf1b8469c40368c3c5da2872eafa0d199",
++    "man/chemi_chet_chemicals_database.Rd": "ab7ef657216c976220e84810284d7a79a30f373d0f802455ca26ddc4bf33ab33",
+     "man/chemi_chet_chemicals_database_old.Rd": "23a1165c3129cb6ee1262bf65fd1012c835c0316aa769d5e19479349a0bb961d",
+     "man/chemi_chet_chemicals_database_stats.Rd": "f7dd8e0b8b088ecebdc4c762e0fee5132f52122ff76fefd1f58e6a4338c81e96",
+-    "man/chemi_chet_chemicals_image.Rd": "335ff3922035aa3455746dbd9a788fdeaa1390b5c32ad88db3130767270c79de",
++    "man/chemi_chet_chemicals_image.Rd": "72fc536b687089bb4ba432f59ed8eb6acd6cc552cf062db9700d550742cc77ad",
+     "man/chemi_chet_chemicals_maps.Rd": "350a5a62ad06dc1f6b0136afeb85da09d68969558b37c1e7f56c55b4453d5d3c",
+     "man/chemi_chet_chemicals_singlechemical.Rd": "d4fe33a169245597694402d6d9d677ab1a2dd42abfcc80a869fa6fed9599e9a0",
+     "man/chemi_chet_chemicals_suggest.Rd": "ca6031acdeb85a23e01454ad814a63140b5f5f0f62332ca146d55c870f658112",
+     "man/chemi_chet_chemicals_verify.Rd": "ef4795683e7e0e8da929d914839a552a8054f78d272131bbd784f8511d99dda2",
+     "man/chemi_chet_reaction.Rd": "12276813da6603246a09dadf07232a3f192b68b5ce2f7baf2c5ebec710f06779",
+     "man/chemi_chet_reaction_batchsearch.Rd": "0570dfb654c7efff6744483a5fdcc76483497ecf69017ceae9f728fa1fea427a",
+-    "man/chemi_chet_reaction_database.Rd": "2efdcadb1d82cf01d4203a641956a99d1ca9cd32ec45231db3941259094c53d6",
++    "man/chemi_chet_reaction_database.Rd": "f981909e5123c2bfc44ecf06591f681e21853c0164e51b85a613aea99e3e593c",
+     "man/chemi_chet_reaction_database_old.Rd": "0d5f8c808a97beb99056f9050cd363f51b877ec66e26d954dc28ada52c43b8b1",
+     "man/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.Rd": "cbf10645d5d548ade98dcd66df06bfcb8a0892f3d88575ec8d6195e5bd853189",
+     "man/chemi_chet_reaction_database_stats.Rd": "358430220033aa1541aa17d85cb441eb2b2c2fdeddc73d9528937d391ddb19a5",
+@@ -2803,8 +2804,8 @@
+     "man/epi_submit_batch.Rd": "b248e57cb385fd7e3d696515601bb69d1c637b8f3a319f48411473f7f792db23",
+     "man/expand_element_exclusion.Rd": "565c81e55aeb39b3416dcc1f60c6896514ff92816336d1ae6bc8c8c1398ed414",
+     "man/figures/logo.png": "a9596936829ed80ea95e6f54b337e18782ef4582406345805df6c86bc0f40ebf",
+-    "man/generic_chemi_request.Rd": "fc8b67d620687faac937adb99557ffbc0dd133f5982078db89ae06a8d08b4e26",
+-    "man/generic_request.Rd": "3c4b1f28cd910e9de2747dbaae6d7a45141b7209d5472d7cd60bb173465d5c0a",
++    "man/generic_chemi_request.Rd": "cd615a45a79cb259f8caae6f98d02a6f1269843af48bdb4ac75417c7a39a2abc",
++    "man/generic_request.Rd": "91e4c5cf9c6c61929c769a1e5ec0159905086b42d36396642d459b62d965b26a",
+     "man/generic_search_request.Rd": "d4cdae6912d763ac6f39ae9de7463d3e98fedebcae2e581d86f7dc339ab4c8ad",
+     "man/genra_engine.Rd": "77a02feae545e6266d403c639c57df9678abb36bfb1e766cb91985f72939f20c",
+     "man/genra_get_tox_data.Rd": "e56ddd1be58029f2f89a5ed003c9b327e2751b7471f237369137bd4e9d50ef8a",
+@@ -2886,7 +2887,7 @@
+     "specmill.yml": "674557a651ee9da7c96e545e4c0290e4d70215d1230551ac8ac73304fa221664",
+     "tests/testthat/fixtures/specmill-full-contracts.rds": "28f3d20c6914b09dbac37ad2f2de173a5c39274a12b2257b70e512f717b9fc55",
+     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
+-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "124ae63f70c60f15bdae4d4ab5ffcf5c395d06ae100a7e010c50a7a9617975f0"
++    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "ec87da63f25f8814ac3e8c94e0c38817e06f5e3887f7be676753b8890890eab8"
+   },
+   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
+   "formatter": {
+diff --git a/DESCRIPTION b/DESCRIPTION
+index d5631cf2..2c195f1f 100644
+--- a/DESCRIPTION
++++ b/DESCRIPTION
+@@ -36,6 +36,7 @@ Imports:
+     httr2,
+     jsonlite (>= 1.8.8),
+     lifecycle,
++    magick,
+     magrittr (>= 2.0.3),
+     purrr (>= 1.0.2),
+     rlang,
+@@ -59,7 +60,6 @@ Suggests:
+     janitor,
+     knitr,
+     lubridate,
+-    magick,
+     mockery,
+     pkgload,
+     plumber,
+diff --git a/R/chemi_chet_chemicals_counts.R b/R/chemi_chet_chemicals_counts.R
+index 542e12fc..5e1a84ba 100644
+--- a/R/chemi_chet_chemicals_counts.R
++++ b/R/chemi_chet_chemicals_counts.R
+@@ -15,10 +15,10 @@
+ #' chemi_chet_chemicals_counts(page = "DTXSID7020182")
+ #' }
+ # Generated with specmill; do not edit by hand.
+-chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE, max_pages = 100) {
++chemi_chet_chemicals_counts <- function(page = 1, size = NULL, all_pages = TRUE, max_pages = 100) {
+   params <- base::list("page" = page, "size" = size, "all_pages" = all_pages, "max_pages" = max_pages)
+   result <- generic_request(
+-    "endpoint" = "chemicals/counts",
++    "endpoint" = "chet/chemicals/counts",
+     "method" = "GET",
+     "batch_limit" = 0,
+     "server" = "chemi_burl",
+@@ -33,7 +33,7 @@ chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE,
+     }),
+     "paginate" = params[["all_pages"]],
+     "max_pages" = params[["max_pages"]],
+-    "pagination_strategy" = "page_size"
++    "pagination_strategy" = "chet_page"
+   )
+   result
+ }
+diff --git a/R/chemi_chet_chemicals_database.R b/R/chemi_chet_chemicals_database.R
+index 136bc97a..70e7734b 100644
+--- a/R/chemi_chet_chemicals_database.R
++++ b/R/chemi_chet_chemicals_database.R
+@@ -20,7 +20,7 @@
+ #' }
+ # Generated with specmill; do not edit by hand.
+ chemi_chet_chemicals_database <- function(
+-  page = 0,
++  page = 1,
+   size = NULL,
+   query = NULL,
+   exact_search = NULL,
+@@ -40,7 +40,7 @@ chemi_chet_chemicals_database <- function(
+     "max_pages" = max_pages
+   )
+   result <- generic_request(
+-    "endpoint" = "chemicals/database",
++    "endpoint" = "chet/chemicals/database",
+     "method" = "GET",
+     "batch_limit" = 0,
+     "server" = "chemi_burl",
+@@ -62,7 +62,7 @@ chemi_chet_chemicals_database <- function(
+     }),
+     "paginate" = params[["all_pages"]],
+     "max_pages" = params[["max_pages"]],
+-    "pagination_strategy" = "page_size"
++    "pagination_strategy" = "chet_page"
+   )
+   result
+ }
+diff --git a/R/chemi_chet_chemicals_image.R b/R/chemi_chet_chemicals_image.R
+index 25579332..3a75d378 100644
+--- a/R/chemi_chet_chemicals_image.R
++++ b/R/chemi_chet_chemicals_image.R
+@@ -3,17 +3,17 @@
+ #' @description
+ #' `r lifecycle::badge("experimental")`
+ #'
+-#' @param chemical_id Primary query parameter. Type: integer
++#' @param chemical_id ChET chemical ID. Type: integer.
+ #' @param width Optional parameter
+ #' @param height Optional parameter
+ #' @param format Optional parameter. Options: png, svg, pdf (default: png)
+-#' @return Returns image data (raw bytes or magick image object)
++#' @return A magick image for PNG or SVG, or raw bytes for PDF.
+ #' @apiStage public
+ #' @export
+ #'
+ #' @examples
+ #' \dontrun{
+-#' chemi_chet_chemicals_image(chemical_id = "DTXSID7020182")
++#' chemi_chet_chemicals_image(chemical_id = 1)
+ #' }
+ chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL, format = "png") {
+   # Collect optional parameters
+@@ -29,12 +29,13 @@ chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL,
+   }
+   result <- generic_request(
+     query = chemical_id,
+-    endpoint = "chemicals/image",
++    endpoint = "chet/chemicals",
+     method = "GET",
+     batch_limit = 1,
+     server = "chemi_burl",
+     auth = FALSE,
+     tidy = FALSE,
++    path_params = "image",
+     content_type = "application/pdf, image/png, image/svg+xml",
+     options = options
+   )
+diff --git a/R/chemi_chet_reaction_database.R b/R/chemi_chet_reaction_database.R
+index 64adad80..3900d77e 100644
+--- a/R/chemi_chet_reaction_database.R
++++ b/R/chemi_chet_reaction_database.R
+@@ -23,7 +23,7 @@
+ #' }
+ # Generated with specmill; do not edit by hand.
+ chemi_chet_reaction_database <- function(
+-  page = 0,
++  page = 1,
+   size = NULL,
+   query = NULL,
+   lib_name = NULL,
+@@ -49,7 +49,7 @@ chemi_chet_reaction_database <- function(
+     "max_pages" = max_pages
+   )
+   result <- generic_request(
+-    "endpoint" = "reaction/database",
++    "endpoint" = "chet/reaction/database",
+     "method" = "GET",
+     "batch_limit" = 0,
+     "server" = "chemi_burl",
+@@ -74,7 +74,7 @@ chemi_chet_reaction_database <- function(
+     }),
+     "paginate" = params[["all_pages"]],
+     "max_pages" = params[["max_pages"]],
+-    "pagination_strategy" = "page_size"
++    "pagination_strategy" = "chet_page"
+   )
+   result
+ }
+diff --git a/R/z_generic_request.R b/R/z_generic_request.R
+index 699c0da3..56f6e0b9 100644
+--- a/R/z_generic_request.R
++++ b/R/z_generic_request.R
+@@ -198,12 +198,12 @@ unwrap_collection_envelope <- function(body) {
+ #' @param query_params Optional named list of URL query parameters. Use this for
+ #'        API parameters whose names collide with `generic_request()` formals.
+ #' @param paginate Boolean; whether to automatically fetch all pages for paginated endpoints.
+-#'        Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
++#'        Defaults to FALSE. When TRUE, uses generated pagination support to loop through
+ #'        pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.
+ #' @param max_pages Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
+ #'        Acts as a safety limit to prevent runaway pagination loops.
+ #' @param pagination_strategy The pagination strategy to use. One of: "offset_limit", "page_number",
+-#'        "page_size", "cursor", or NULL. When NULL, paginate is ignored.
++#'        "page_size", "chet_page", "cursor", or NULL. When NULL, paginate is ignored.
+ #'        Usually set by generated stubs from Phase 19 metadata.
+ #' @param pagination_cursor_location For cursor pagination, the schema-derived
+ #'        cursor location: "query" or "body". Defaults to "query".
+@@ -215,7 +215,7 @@ unwrap_collection_envelope <- function(body) {
+ #' @return Depends on content_type:
+ #'         - JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
+ #'         - text/plain: A character string.
+-#'         - image/*: Raw bytes, or a magick image object if the magick package is available.
++#'         - image/*: A magick image object, with raw bytes as a fallback for unreadable images.
+ #'         If no results are found, returns an empty tibble, empty list, or NULL.
+ #' @export
+ generic_request <- function(
+@@ -287,10 +287,7 @@ generic_request <- function(
+     mult_count <- ceiling(length(query) / batch_limit)
+
+     if (length(query) > batch_limit) {
+-      query_list <- split(
+-        query,
+-        rep(1:mult_count, each = batch_limit, length.out = length(query))
+-      )
++      query_list <- .ct_request_batched(identity, query, size = batch_limit)
+     } else {
+       query_list <- list(query)
+     }
+@@ -346,31 +343,26 @@ generic_request <- function(
+   req_list <- purrr::map(
+     query_list,
+     function(query_part) {
+-      req <- httr2::request(base_url) %>%
+-        httr2::req_url_path_append(endpoint) %>%
+-        httr2::req_headers(
+-          Accept = content_type
+-        )
+-
++      req <- httr2::request(base_url) %>% httr2::req_url_path_append(endpoint)
++      request_body <- NULL
++      body_media <- "application/json"
++      headers <- list(Accept = content_type)
+       if (auth) {
+-        req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
++        headers[["x-api-key"]] <- ct_api_key()
+       }
+
+       # Implementation for POST requests (Typically bulk searches)
+       if (toupper(method) == "POST") {
+-        req <- req %>%
+-          httr2::req_method("POST")
+-
+         # Set request body based on body_type
+         if (body_type == "raw_text") {
+           # Send as newline-delimited plain text (e.g., /chemical/search/equal/)
+-          body_text <- paste(query_part, collapse = "\n")
+-          req <- req %>% httr2::req_body_raw(body_text, type = "text/plain")
++          request_body <- paste(query_part, collapse = "\n")
++          body_media <- "text/plain"
+         } else if (!is.null(body)) {
+-          req <- req %>% httr2::req_body_json(body, auto_unbox = TRUE)
++          request_body <- body
+         } else {
+           # Default: Send as JSON array
+-          req <- req %>% httr2::req_body_json(query_part, auto_unbox = FALSE)
++          request_body <- I(query_part)
+         }
+
+         # Append additional path parameters if provided
+@@ -384,8 +376,6 @@ generic_request <- function(
+         req <- req %>% httr2::req_url_query(!!!ellipsis_args)
+       } else {
+         # Implementation for GET requests
+-        req <- req %>% httr2::req_method("GET")
+-
+         # Scenario A: Static endpoint (no query appending)
+         if (batch_limit == 0) {
+           # Add original query value to query parameters if provided
+@@ -432,14 +422,7 @@ generic_request <- function(
+         }
+       }
+
+-      # Add retry with exponential backoff for transient errors (429, 5xx)
+-      req <- req %>%
+-        httr2::req_retry(
+-          max_tries = 3,
+-          is_transient = is_transient_error
+-        )
+-
+-      return(req)
++      .ct_request_build(req, if (toupper(method) == "POST") "POST" else "GET", request_body, headers, body_media)
+     }
+   )
+
+@@ -450,11 +433,11 @@ generic_request <- function(
+   }
+
+   # --- 5.5. Pagination ---
+-  # When paginate=TRUE, use httr2::req_perform_iterative() instead of normal execution
++  # When paginate=TRUE, use .ct_request_pages() instead of normal execution
+   if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
+     first_req <- req_list[[1]]
+
+-    # Build strategy-specific next_req callback for httr2::req_perform_iterative()
++    # Build strategy-specific next_req callback for .ct_request_pages()
+     if (pagination_strategy == "offset_limit" && !is.null(path_params)) {
+       # AMOS-style: limit in path (query), offset in path_params
+       # iterate_with_offset doesn't support path params, so use custom next_req
+@@ -462,7 +445,7 @@ generic_request <- function(
+       initial_offset <- as.numeric(path_params[["offset"]] %||% path_params[[1]] %||% 0)
+
+       next_req <- function(resp, req) {
+-        body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++        body <- .ct_response_json(resp)
+         # Unwrap if response is wrapped in a named container (e.g., {"results": [...]})
+         records <- if (is.list(body) && !is.null(names(body))) {
+           body[["results"]] %||% body[["records"]] %||% body[["data"]] %||% body
+@@ -493,10 +476,21 @@ generic_request <- function(
+         start = as.numeric(ellipsis_args[["pageNumber"]] %||% 1),
+         offset = 1,
+         resp_complete = function(resp) {
+-          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++          body <- .ct_response_json(resp)
+           length(body) == 0
+         }
+       )
++    } else if (pagination_strategy == "chet_page") {
++      next_req <- httr2::iterate_with_offset(
++        "page",
++        start = as.numeric(ellipsis_args[["page"]] %||% 1),
++        offset = 1,
++        resp_complete = function(resp) {
++          value <- .ct_response_json(resp)
++          records <- value[["data"]] %||% value
++          length(records) == 0L
++        }
++      )
+     } else if (pagination_strategy == "page_size") {
+       # Spring Boot Pageable: page + size as query params, 0-indexed
+       start_page <- as.numeric(ellipsis_args[["page"]] %||% 0)
+@@ -505,10 +499,10 @@ generic_request <- function(
+         start = start_page,
+         offset = 1,
+         resp_pages = function(resp) {
+-          httr2::resp_body_json(resp, simplifyVector = FALSE)[["totalPages"]]
++          .ct_response_json(resp)[["totalPages"]]
+         },
+         resp_complete = function(resp) {
+-          isTRUE(httr2::resp_body_json(resp, simplifyVector = FALSE)[["last"]])
++          isTRUE(.ct_response_json(resp)[["last"]])
+         }
+       )
+     } else if (pagination_strategy == "offset_limit" && is.null(path_params)) {
+@@ -523,7 +517,7 @@ generic_request <- function(
+         start = initial_offset,
+         offset = page_size,
+         resp_complete = function(resp) {
+-          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++          body <- .ct_response_json(resp)
+           # Check various response shapes for exhaustion
+           records <- body[["results"]] %||%
+             body[["data"]] %||%
+@@ -543,7 +537,7 @@ generic_request <- function(
+         )
+       }
+       next_req <- function(resp, req) {
+-        response_body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++        response_body <- .ct_response_json(resp)
+         pagination <- response_body[["pagination"]] %||% list()
+         if (identical(pagination[["hasNext"]], FALSE)) {
+           return(NULL)
+@@ -565,7 +559,7 @@ generic_request <- function(
+     }
+
+     # Execute iterative pagination
+-    resps <- httr2::req_perform_iterative(
++    resps <- .ct_request_pages(
+       first_req,
+       next_req = next_req,
+       max_reqs = max_pages,
+@@ -597,10 +591,12 @@ generic_request <- function(
+
+     # Extract records from all responses based on strategy
+     body_list <- purrr::map(resps, function(resp) {
+-      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++      body <- .ct_response_json(resp)
+
+       # Strategy-specific record extraction
+-      records <- if (pagination_strategy == "page_size") {
++      records <- if (pagination_strategy == "chet_page") {
++        body[["data"]] %||% body
++      } else if (pagination_strategy == "page_size") {
+         # Spring Boot wraps in "content"
+         body[["content"]] %||% list()
+       } else if (!is.null(body[["results"]])) {
+@@ -654,85 +650,57 @@ generic_request <- function(
+
+   # --- 7. Response Processing ---
+
+-  # Determine response type from content_type parameter
+-
+-  is_image <- grepl("^image/", content_type)
+-  is_delimited <- grepl(
+-    "^text/(csv|tab-separated-values|tsv)",
+-    content_type,
+-    ignore.case = TRUE
++  # Actual response media selects decoding; the caller still owns status policy.
++  media <- vapply(
++    resp_list,
++    function(r) {
++      if (inherits(r, "httr2_error")) {
++        r <- r$resp
++      }
++      if (!inherits(r, "httr2_response")) {
++        return("")
++      }
++      tolower(sub(";.*$", "", httr2::resp_header(r, "content-type") %||% ""))
++    },
++    character(1)
+   )
+-  is_text <- grepl("^text/plain", content_type, ignore.case = TRUE) || is_delimited
+-
+-  # For non-JSON content types, we handle responses differently
+-
+-  if (is_image) {
+-    # Image responses: return raw bytes or magick image
+-    body_list <- resp_list %>%
+-      purrr::map2(query_list, function(r, qp) {
+-        if (inherits(r, "httr2_error")) {
+-          r <- r$resp
+-        }
+-        if (!inherits(r, "httr2_response")) {
+-          return(NULL)
+-        }
+-
+-        status <- httr2::resp_status(r)
+-        if (status < 200 || status >= 300) {
+-          qp_label <- if (length(qp) > 0) qp[1] else endpoint
+-          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
+-          return(NULL)
+-        }
+-
+-        raw_bytes <- httr2::resp_body_raw(r)
+-
+-        # Try to convert to magick image if package is available
+-        if (requireNamespace("magick", quietly = TRUE)) {
+-          tryCatch(
+-            magick::image_read(raw_bytes),
+-            error = function(e) raw_bytes
+-          )
++  non_json <- grepl("^(image/|text/|application/(pdf|csv))", media)
++  declared_non_json <- grepl("^(image/|text/)", content_type, ignore.case = TRUE)
++  if (declared_non_json || (grepl(",", content_type, fixed = TRUE) && any(non_json))) {
++    body_list <- purrr::map2(resp_list, query_list, function(r, qp) {
++      if (inherits(r, "httr2_error")) {
++        r <- r$resp
++      }
++      if (!inherits(r, "httr2_response")) {
++        return(NULL)
++      }
++      status <- httr2::resp_status(r)
++      if (status < 200 || status >= 300) {
++        qp_label <- if (length(qp) > 0) qp[1] else endpoint
++        cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
++        return(NULL)
++      }
++      .ct_request_decode(r, response_policy = function(response, context, decode) {
++        value <- if (declared_non_json && !startsWith(tolower(content_type), context$media)) {
++          if (grepl("^image/", content_type)) {
++            httr2::resp_body_raw(response)
++          } else if (grepl("^text/(csv|tab-separated-values|tsv)", content_type, ignore.case = TRUE)) {
++            parse_delimited_response(httr2::resp_body_string(response), content_type)
++          } else {
++            httr2::resp_body_string(response)
++          }
+         } else {
+-          raw_bytes
++          .ct_response_delimited(response, context, decode)
+         }
++        if (startsWith(context$media, "image/") || grepl("^image/", content_type)) {
++          # PDF stays raw; converting it would require Ghostscript.
++          return(tryCatch(magick::image_read(httr2::resp_body_raw(response)), error = function(e) value))
++        }
++        value
+       })
+-
+-    # For single query, return the image directly (not as a list)
+-    if (length(body_list) == 1) {
+-      return(body_list[[1]])
+-    }
+-    return(body_list)
+-  }
+-
+-  if (is_text) {
+-    # Text responses: return as character string
+-    body_list <- resp_list %>%
+-      purrr::map2(query_list, function(r, qp) {
+-        if (inherits(r, "httr2_error")) {
+-          r <- r$resp
+-        }
+-        if (!inherits(r, "httr2_response")) {
+-          return(NULL)
+-        }
+-
+-        status <- httr2::resp_status(r)
+-        if (status < 200 || status >= 300) {
+-          qp_label <- if (length(qp) > 0) qp[1] else endpoint
+-          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
+-          return(NULL)
+-        }
+-
+-        text <- httr2::resp_body_string(r)
+-        if (is_delimited) {
+-          parse_delimited_response(text, content_type)
+-        } else {
+-          text
+-        }
+-      })
+-
+-    # For single query, return the string directly
+-    if (length(body_list) == 1) {
+-      return(body_list[[1]])
++    })
++    if (length(body_list) == 1L) {
++      return(body_list[[1L]])
+     }
+     return(body_list)
+   }
+@@ -755,7 +723,7 @@ generic_request <- function(
+         return(NULL)
+       }
+
+-      body <- unwrap_collection_envelope(httr2::resp_body_json(r))
++      body <- unwrap_collection_envelope(.ct_response_json(r))
+
+       # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
+       if (length(qp) == 1 && is.list(body)) {
+@@ -833,7 +801,7 @@ generic_request <- function(
+ #' @param content_type Expected response content type. JSON responses are parsed
+ #'        as lists; CSV and TSV responses are parsed as data frames.
+ #' @param paginate Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+-#'        When TRUE, uses httr2::req_perform_iterative() to loop through pages.
++#'        When TRUE, uses generated pagination support to loop through pages.
+ #' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
+ #' @param pagination_strategy Pagination strategy. For chemi search, usually "offset_limit" (body).
+ #' @param ... Named query parameters appended to the request URL.
+@@ -941,27 +909,16 @@ generic_chemi_request <- function(
+     cli::cli_end()
+   }
+
+-  # 4. Request building
+-  req <- httr2::request(base_url) %>%
+-    httr2::req_url_path_append(endpoint) %>%
+-    httr2::req_method("POST") %>%
+-    httr2::req_body_json(payload) %>%
+-    httr2::req_headers(Accept = content_type)
+-
++  # Client policy supplies the URL, credentials and chemical payload.
++  req <- httr2::request(base_url) %>% httr2::req_url_path_append(endpoint)
+   if (length(query_params) > 0) {
+     req <- do.call(httr2::req_url_query, c(list(req), query_params))
+   }
+-
++  headers <- list(Accept = content_type)
+   if (auth) {
+-    req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
++    headers[["x-api-key"]] <- ct_api_key()
+   }
+-
+-  # Add retry with exponential backoff for transient errors (429, 5xx)
+-  req <- req %>%
+-    httr2::req_retry(
+-      max_tries = 3,
+-      is_transient = is_transient_error
+-    )
++  req <- .ct_request_build(req, "POST", payload, headers)
+
+   # 5. Debugging
+   if (run_debug) {
+@@ -976,7 +933,7 @@ generic_chemi_request <- function(
+     page_limit <- as.numeric(options[["limit"]] %||% 100)
+
+     next_req <- function(resp, req) {
+-      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++      body <- .ct_response_json(resp)
+       total <- body[["totalRecordsCount"]] %||% 0
+       current_offset <- body[["offset"]] %||% 0
+       records_count <- body[["recordsCount"]] %||% length(body[["records"]] %||% list())
+@@ -990,7 +947,7 @@ generic_chemi_request <- function(
+       req %>% httr2::req_body_json_modify(offset = new_offset)
+     }
+
+-    resps <- httr2::req_perform_iterative(
++    resps <- .ct_request_pages(
+       req,
+       next_req = next_req,
+       max_reqs = max_pages,
+@@ -1012,7 +969,7 @@ generic_chemi_request <- function(
+
+     # Extract records from each page
+     body_list <- purrr::map(resps, function(resp) {
+-      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
++      body <- .ct_response_json(resp)
+       records <- body[["records"]] %||% list()
+       if (!is.null(pluck_res)) {
+         records <- purrr::map(records, ~ purrr::pluck(.x, pluck_res))
+@@ -1048,9 +1005,9 @@ generic_chemi_request <- function(
+     ignore.case = TRUE
+   )
+   body <- if (is_csv || is_tsv) {
+-    parse_delimited_response(httr2::resp_body_string(resp), content_type)
++    .ct_request_decode(resp, response_policy = .ct_response_delimited)
+   } else {
+-    httr2::resp_body_json(resp, simplifyVector = FALSE)
++    .ct_response_json(resp)
+   }
+
+   if (!is.null(pluck_res)) {
+@@ -1338,3 +1295,94 @@ generic_pubchem_request <- function(
+
+   tibble::tibble()
+ }
++
++# Client-owned adapter: preserve historical URL bytes and unbounded timeout.
++.ct_request_build <- function(target, method, body, headers, body_media = "application/json") {
++  previous <- options(
++    comptoxr_native.dry_run = TRUE,
++    comptoxr_native.request = list(),
++    comptoxr_native.run_verbose = FALSE
++  )
++  on.exit(options(previous), add = TRUE)
++  curl::curl_parse_url(target$url)
++  origin <- httr2::url_modify(target$url, path = "", query = NULL, fragment = NULL)
++  path <- substring(target$url, nchar(origin) + 1L)
++  req <- .ct_request(
++    method,
++    path,
++    list(),
++    list(),
++    body,
++    headers = headers,
++    body_media = body_media,
++    server = list(url = origin),
++    request_controls = list(max_retries = 2, retry_writes = TRUE, retry_policy = is_transient_error)
++  )
++  httr2::req_options(req, timeout_ms = NULL)
++}
++
++# Preserve httr2 JSON errors and explicitly requested JSON when a server mislabels it.
++.ct_response_json <- function(response) {
++  .ct_request_decode(response, response_policy = function(response, context, decode) {
++    if (grepl("(/json|\\+json)$", context$media) && httr2::resp_has_body(response)) {
++      tryCatch(decode(check_status = FALSE), error = function(e) {
++        httr2::resp_body_json(response, simplifyVector = FALSE)
++      })
++    } else {
++      httr2::resp_body_json(response, simplifyVector = FALSE)
++    }
++  })
++}
++
++# Native iteration owns the loop; existing callbacks own URL/body advancement.
++# Retain responses, including the final empty page/error, for the observer.
++.ct_request_pages <- function(req, next_req, max_reqs, on_error = "return", progress = FALSE) {
++  total <- max_reqs
++  bar <- if (progress) cli::cli_progress_bar("Fetching pages", total = max_reqs) else NULL
++  if (progress) {
++    on.exit(cli::cli_progress_done(id = bar), add = TRUE)
++  }
++  result <- .ct_request_paginated(
++    function(page, size) {
++      response <- tryCatch(httr2::req_perform(req), httr2_error = function(e) {
++        if (on_error == "return") e else stop(e)
++      })
++      if (progress) {
++        cli::cli_progress_update(id = bar)
++      }
++      list(response)
++    },
++    mode = "page",
++    parameter = "page",
++    size_parameter = "size",
++    page_size = 1,
++    start = 1,
++    items = identity,
++    max_pages = max_reqs,
++    max_items = NULL,
++    warn_limits = FALSE,
++    policy = list(),
++    completed = function(response, state) {
++      response <- response[[1L]]
++      if (inherits(response, "httr2_error")) {
++        return(TRUE)
++      }
++      req <<- withCallingHandlers(next_req(response, req), httr2_total_pages = function(cnd) {
++        total <<- min(total, cnd$n)
++      })
++      is.null(req) || state$requests >= total
++    }
++  )
++  unlist(result$pages, recursive = FALSE)
++}
++
++# Native strict CSV decoding is preferred; preserve legacy malformed-table errors.
++.ct_response_delimited <- function(response, context, decode) {
++  tryCatch(decode(format = "delimited", check_status = FALSE), error = function(e) {
++    if (context$media %in% c("text/csv", "application/csv", "text/tab-separated-values", "text/tsv")) {
++      parse_delimited_response(httr2::resp_body_string(response), context$media)
++    } else {
++      stop(e)
++    }
++  })
++}
+diff --git a/apis/chemi-chet-prod-rebuild.yml b/apis/chemi-chet-prod-rebuild.yml
+index 8bd9fd69..d39c44f5 100644
+--- a/apis/chemi-chet-prod-rebuild.yml
++++ b/apis/chemi-chet-prod-rebuild.yml
+@@ -112,7 +112,7 @@ operations:
+     inputs:
+       page:
+         type: numeric
+-        default: 0.0
++        default: 1.0
+         description: Optional parameter
+       size:
+         type: character
+@@ -130,7 +130,7 @@ operations:
+     request:
+       arguments:
+         endpoint:
+-          value: chemicals/counts
++          value: chet/chemicals/counts
+         method:
+           value: GET
+         batch_limit:
+@@ -160,7 +160,7 @@ operations:
+           - params
+           - max_pages
+         pagination_strategy:
+-          value: page_size
++          value: chet_page
+     docs:
+       title: Chemical counts by library
+       lifecycle: experimental
+@@ -183,7 +183,7 @@ operations:
+     inputs:
+       page:
+         type: numeric
+-        default: 0.0
++        default: 1.0
+         description: Optional parameter
+       size:
+         type: character
+@@ -217,7 +217,7 @@ operations:
+     request:
+       arguments:
+         endpoint:
+-          value: chemicals/database
++          value: chet/chemicals/database
+         method:
+           value: GET
+         batch_limit:
+@@ -263,7 +263,7 @@ operations:
+           - params
+           - max_pages
+         pagination_strategy:
+-          value: page_size
++          value: chet_page
+     docs:
+       title: Search chemicals
+       lifecycle: experimental
+@@ -471,7 +471,7 @@ operations:
+     inputs:
+       page:
+         type: numeric
+-        default: 0.0
++        default: 1.0
+         description: Optional parameter
+       size:
+         type: character
+@@ -517,7 +517,7 @@ operations:
+     request:
+       arguments:
+         endpoint:
+-          value: reaction/database
++          value: chet/reaction/database
+         method:
+           value: GET
+         batch_limit:
+@@ -575,7 +575,7 @@ operations:
+           - params
+           - max_pages
+         pagination_strategy:
+-          value: page_size
++          value: chet_page
+     docs:
+       title: Search reactions
+       lifecycle: experimental
+diff --git a/man/chemi_chet_chemicals_counts.Rd b/man/chemi_chet_chemicals_counts.Rd
+index 4ba18c50..a38e14cc 100644
+--- a/man/chemi_chet_chemicals_counts.Rd
++++ b/man/chemi_chet_chemicals_counts.Rd
+@@ -5,7 +5,7 @@
+ \title{Chemical counts by library}
+ \usage{
+ chemi_chet_chemicals_counts(
+-  page = 0,
++  page = 1,
+   size = NULL,
+   all_pages = TRUE,
+   max_pages = 100
+diff --git a/man/chemi_chet_chemicals_database.Rd b/man/chemi_chet_chemicals_database.Rd
+index 3b5483e4..031229a4 100644
+--- a/man/chemi_chet_chemicals_database.Rd
++++ b/man/chemi_chet_chemicals_database.Rd
+@@ -5,7 +5,7 @@
+ \title{Search chemicals}
+ \usage{
+ chemi_chet_chemicals_database(
+-  page = 0,
++  page = 1,
+   size = NULL,
+   query = NULL,
+   exact_search = NULL,
+diff --git a/man/chemi_chet_chemicals_image.Rd b/man/chemi_chet_chemicals_image.Rd
+index 31ff0b27..c74df657 100644
+--- a/man/chemi_chet_chemicals_image.Rd
++++ b/man/chemi_chet_chemicals_image.Rd
+@@ -12,7 +12,7 @@ chemi_chet_chemicals_image(
+ )
+ }
+ \arguments{
+-\item{chemical_id}{Primary query parameter. Type: integer}
++\item{chemical_id}{ChET chemical ID. Type: integer.}
+
+ \item{width}{Optional parameter}
+
+@@ -21,14 +21,14 @@ chemi_chet_chemicals_image(
+ \item{format}{Optional parameter. Options: png, svg, pdf (default: png)}
+ }
+ \value{
+-Returns image data (raw bytes or magick image object)
++A magick image for PNG or SVG, or raw bytes for PDF.
+ }
+ \description{
+ \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+ }
+ \examples{
+ \dontrun{
+-chemi_chet_chemicals_image(chemical_id = "DTXSID7020182")
++chemi_chet_chemicals_image(chemical_id = 1)
+ }
+ }
+ \section{API stage}{
+diff --git a/man/chemi_chet_reaction_database.Rd b/man/chemi_chet_reaction_database.Rd
+index dc23844b..2ded5da4 100644
+--- a/man/chemi_chet_reaction_database.Rd
++++ b/man/chemi_chet_reaction_database.Rd
+@@ -5,7 +5,7 @@
+ \title{Search reactions}
+ \usage{
+ chemi_chet_reaction_database(
+-  page = 0,
++  page = 1,
+   size = NULL,
+   query = NULL,
+   lib_name = NULL,
+diff --git a/man/generic_chemi_request.Rd b/man/generic_chemi_request.Rd
+index 658c2d80..606705bc 100644
+--- a/man/generic_chemi_request.Rd
++++ b/man/generic_chemi_request.Rd
+@@ -63,7 +63,7 @@ as provided, preserving array order and duplicates.}
+ as lists; CSV and TSV responses are parsed as data frames.}
+
+ \item{paginate}{Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+-When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
++When TRUE, uses generated pagination support to loop through pages.}
+
+ \item{max_pages}{Maximum pages to fetch when paginate=TRUE. Defaults to 100.}
+
+diff --git a/man/generic_request.Rd b/man/generic_request.Rd
+index aa3dca0b..68fca8ed 100644
+--- a/man/generic_request.Rd
++++ b/man/generic_request.Rd
+@@ -73,14 +73,14 @@ JSON-encoded instead of the batched \code{query} payload.}
+ API parameters whose names collide with \code{generic_request()} formals.}
+
+ \item{paginate}{Boolean; whether to automatically fetch all pages for paginated endpoints.
+-Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
++Defaults to FALSE. When TRUE, uses generated pagination support to loop through
+ pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.}
+
+ \item{max_pages}{Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
+ Acts as a safety limit to prevent runaway pagination loops.}
+
+ \item{pagination_strategy}{The pagination strategy to use. One of: "offset_limit", "page_number",
+-"page_size", "cursor", or NULL. When NULL, paginate is ignored.
++"page_size", "chet_page", "cursor", or NULL. When NULL, paginate is ignored.
+ Usually set by generated stubs from Phase 19 metadata.}
+
+ \item{pagination_cursor_location}{For cursor pagination, the schema-derived
+@@ -97,7 +97,7 @@ cursor location: "query" or "body". Defaults to "query".}
+ Depends on content_type:
+ - JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
+ - text/plain: A character string.
+-- image/*: Raw bytes, or a magick image object if the magick package is available.
++- image/*: A magick image object, with raw bytes as a fallback for unreadable images.
+ If no results are found, returns an empty tibble, empty list, or NULL.
+ }
+ \description{
+diff --git a/tests/testthat/fixtures/specmill-rebuild-contracts.rds b/tests/testthat/fixtures/specmill-rebuild-contracts.rds
+index 76eb26d7e147ef0ee89c6f4bdb01009c9293d691..e9a5f0911cdfe0b251ed4f2a22faf492434ac4dd 100644
+GIT binary patch
+literal 9989
+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
+
+literal 9983
+zcmZvhRZtwjvW9Wj;O_2Du;4Di-4=J3;2JErJ1p*QA^76X;;sP}39bQd?z!jj&OA)@
+zeAN%#RZ~6vH$@y0)PEN2Mc`@1CV#VaHU1KHx>kzgS~IJXb9Z-7x)L*6`=7!L)wRn9
+zUvQ^qx68*qW%d}Wx0^!hl!52(ye=2cKAUZ`%hW0GRF~Q=c?hjI6kPI@vNe4TceR?K
+z0yPu@j42#U=*14dVcoL3gH`(9%)fn025&36JC^}#_H0|!m><b+-6?PWF@J-FpMA>O
+zB;I?LeKsk#kzbl{o`e&T_EM65LTE7M6f-81k2}XVcE&zhBvS`7@g~kh&kyFB>aae9
+z`qlH2>zFJ_#%?z<5&^ZetRK(0x@n_7Tpk!w9M_{(J!&5)Jx^1`nf}(B+$w$WYU=>?
+zCK;ETc1{r!C|XF#6EMS7A3V$A0k3oJWV3s4*cgd!S)z4C5&>gDqpHWOuRR&u<v1P+
+zDw3r43J69TsdN=3Rm0pC5UlRNnMDK?e^|^{HxP3+fr)_dIyd`8x@GF2e(elOO~Sz=
+zV&1DZNf*0+r!pZ)XDwH~*~cm}Y@v?MZdBD|%FA=BGu-svn!K+8AVuX$@hL`jxm+Nd
+zzbq-!%f3vg1o(5Qj0o6nM`Fo$B;CMGdIlthx+IBsg`q{Ovd7E7?YI2(O#-nS&&;$5
+zM_;bkWsOnCzsBG-X)PB1XReH<Fy3p4rvQz3Vw+?!&%~TSLxIBFUR70YaqL`_F{2eR
+zxb75Gfn8%tMh5n(x9lGCn$vo%Ag)Hs$2d{Io2!)-tk+a=KD3t%PF~2ZU<Bk#sNt)q
+zWe~m;oXzV_f9Rc-kX!fB9Ji^);%VDzQf=UCF%mw3DNt0@h|e7|pLE~r-zE^IUCM~c
+zFdb*)X<8bv`15FiDNRSknsLn|NX}Mpw264bRK@3^K7zVVy&}v(=v9gFRcb$~)Z(jV
+zahZ(Rmq@0uj+n({yd7l-Bl%&kf1b^)7LIanA_Y87xd#9Yken14c*;e8W^a^W#Hy3X
+zXrf<9#pM{{Ix?>=$|lh6Q_AwmhV8KD<Zm$+xLf+(R1bx~ES71s(hpe1)BJJh>h-PM
+z5ob%bN3(~q=gt(YpR1Ej*zw@<cP<(f7xziVlZE$nTW9t9SZUj3MT=+!W`3uuq1J$q
+zsuPES=8IO8kSZzyrqgIncusER!MmwIcOG<sUqWXs#ZT$BbM!RM3#h#>I$-<*)imy+
+zKi1drUDXepGAMq%wtl?>yKhFAe@5Uq(W^`eHT!tWgUZHy!l~L6ZMD$Dop~Gp_e1?7
+z*bd2T?_x7;iMiw~K>CQD-i%B)`S2AYlMAf1b{iG$&aYBO0-YDRGNq&;-eRE$*a0VD
+zIfM>fgL{TH{YQ0SDvtJqeR{#J+u|O~G7wuEjfw@wW5sZb!%p-?{HmEE#v;aa@q^-^
+zy4XQucA?XB+)Z9SY={5Nh6X(E8FICQcABA)`a*N=XSrG}(mSj9J1aXv$0=-#3y7t`
+zEn2T#KR?m<O1ZwvSdL5()|S1BdYd&X&DTL0%|Yw$m<vb5=WaPD2z#(|dAALppXV55
+zojO9JZbAk_1}g*D5QFq1b=LG@Eg+*-7Zs(t6qFp%-u{B^js!BvV6SsegA$Smou9-m
+zD@Ag_FSGM^^4;MeUy%X5RW;gnBXu|jiB+jy3zi1mB;)A%TF`L1VP>xj-Vc;IdWKb`
+z@YLD0Z<dC*6(6eaw`w=KGUU1QA&m3bPNW&EVzqMN?N7hFr31dJ?s6Ff5J$<I+w$2#
+zGJth%8*M_y^z=6%!lG2dLLVt1H@(be29*|}Uv{6?RF`!=b=3UWaLljLv91C+sqeQ_
+zUn_^So|gqf486K2izi^j2!1;#IP&RKq!v}v8L~B5I&6lud1`d}6OO(GuWbdkJ`Nva
+zj(?E9P3j(Utoi;)Lt^JppVh|&cisL>s;gUM8w`_iEMAhkE{=Q&1ROM@u&d3qrMZ4-
+zI^GH`>?9g%L%>dev#4MC%!cS!eoQX~HR2eWd~)**YQ$**gDG5VxP_XT^o#e&Zv@qR
+znIuT9a=z90o|!P^`73M=eQnM>O2hCCmJfQAc|WLg8#CM_nr439bVA6OFU5Nj^}Gbp
+z_^`9{mQt6ittYF^l*UAvww4dLC9e?dL+AdhH?9wx&=9X{lalX3P~YsJW28kla|NvN
+zw8!3Z0xwVDz?2}X6jH>@(L$6)^>h(Ofziu^U3${b!{NPaNVZ9S$9t3YKxoHC_K`j#
+zh>sCq$j*g-)`}k`;hF|kI5o8E>7hK2&})m)eWB8k)ys4rQ6f~;0~pMxVSaWK+H^pf
+zSI8DD!@*y{;DYQXDXm;zNJXh5glEZ{fO(B%1Em}B>>{=px7!Yu9jL^-uaGa#BO=;q
+z>uGv_&hS`<OMU*9yJ{^!a&q}j17xnJ$occ<!wBBJ#2P<=gO#6<1U?6G@TT&S`GPN+
+zIfjLQ$>VJu`pb$M!4&hEqaZVoChE@iXUJ?U4A-#wxL)Zq+cQ}UvgSReB7o-Xz-$Uv
+zc+sq$HbhXHRT1|ry^+^jd>*Nr9)alW4^I1w1g_z;Zhv!_l~Y+TI4nr?ce{B`SL5CX
+zRec@GNzAW}+!Q*R?H>P9l#<P1?V&be3x1%4A=|QgjTzWIU{)f&-!@!$vwCTRi~O4y
+z@j|u#uT*LPp-~N0d5T&tj8s$!y?3rA1mTAXTb2rE?(SJw!-oCtGsVrS?=ZSwAbk^#
+zu{;paSm|n$=(3^N*HV$Z5PokTR}QM%_gwtSN9@<2YQC=dwenN`oX$e0r{fW=bRe=W
+zROx3JI}Lw+M<Jtjlgv{;D3E>};LzvmYWB%COdE+Fx;#&bPWWqxpB2JL@VsYx<9Z^7
+zT=U2}LvT97;V6V@F_|7L(0eD5uT?W<-8%uDJZo_GOOoxt%EO!G)V873$AC>8ovWP^
+z5J+nXfAVF;kSD!tbi6ERXQ>nMw>^-io9Ys=_@`FSwLiDYVCam^{Gy9<O@Do<;+))R
+ze7lCmGhB9cjHHp4$VaWCdi0Y&=;<_vI`qetXTwminDv*;pN{gS(wZxP(V>A5mI*i<
+z2LioMSo+_QyYOq(NGReO#p*6kMWkG;@<w4<*!Bo&d8a-?VZW#$_BJYb8hr#BHb&Fb
+zyXW?)r<L>KuSFGRP!@SW5%j`4K)w&)EicAUWVKG(buwVIKLAz@TtNfaF6cfW7V<-*
+zZ}=Vin~T<canz{8?6F!GIUj3|N9xR3js{S8>J>Z<rCt_N3lLv`sEaw5ze*hSqDmQp
+zEL~vDG?sEJz1qcynf~^#(4C}SbD9B2>x!1t3KTJnv6PaIzzGr5BmHJ3`90&tX?Q~)
+z+d%i?W#;ojYx7GkX48VA>?O1wjZ+#Ewq^mNYYcY#CZ!<p-E9V$#+fqzI$d>+lrnfs
+z!o0NJ({>%cbn+P>XjQ+6x;kLQVoY%FYlsM2#iR``v+GcLrK>A{e$tY1B)EwfRq>-Y
+z`;C^RMos!?HkzLKh2j@8ljh6IrlpzSQL{2(2^afoE<>kE;``P`ROi8}+c*KSckB_~
+z1V&tq`&M152h(04pXJM1IAP(Z?5;7YzAtNUr69&uy>!!6{>$9jPNR}8Wbe3UiSV)v
+zEFzQoC>v)0!7sT=2%@8`n_%OCL^OObtq%e-h3~}s7VS`ZKk?JW?jn>l9`x<f^?B)f
+z##%gS_OZL*E#^$iw)zfGcNYUlbx)pra44c>F!GU4{<!k#GP1q01ttZ)i&ms&FQK^@
+z&!>q-80opIBL-TYuC$$H(v|LvJd$d~YBAwSzKGq8zt8=}Je8N9`$uW)5WN?!*hJfH
+z;*To-kwpf&djqxhc|E$fk#cY`qO}j%cCBHRN_(@4U7O6)_6#u{Qe8v|<KtX8!4;3d
+z2<<+<fTg|#8cy%J-p`Q`q(f?1Ky$tG(Lu(3n)b$-fi*lm+UIHz0$rhs%EU{`(I-)+
+z%W?S9S?tru%CR4he<Sm0<SvqayEB%%<0m$LI&qH{nxQmBI&^IkxaFLRae#>%GaGP5
+zeb|gol!<|P*j(y3R$VciIz3lzY(Acv7}PL!4KbAY;wX*SxqQ3V0bj$v-}`yVHI1+x
+zJAUH`z;@5f@Ade!xr90OS#X+d^@ty>ehCY<d$ZaLOLm7qnKA3@RW#pusGLY7Itq(e
+zpIT4C_++kQ(@DM4sPCv3uu9cX)yO7`#)y}1jTnJQ3KGGy^?k8oWYK11k>f{|DY0gs
+zhDO8Wg0HP=`GO+u^D_h6L#9~p2zgoiCZLXi&C^Gy;fCF{P1yG>$6+e@;87@a^jwmc
+zGDOT>9b``Ve-%2Q?I2<`!4$}8n(JN@1q+-8B?ZRQ2z$P8^^LzExLc6EfQAG|GzwTs
+zHyOS6CEo4JI5rE&R6O-w$|b#7I*MA^ZHzTymT^@WPhd}m7VjiPGHCEXJ8iC8MbCA-
+zCA7uUL|)@-x=17#Ra`X_-=kF7CWvV|)3K98ba100nny`JPiBr6@@vjo&jd|`?=g8I
+z=BzHI&v*f3V42=&^Z?A!vBz-10ZoTk{-AbAm_on#v_@>H*>1m{STi(~mj%v1^@}Fw
+zKbl+-H9Pc1dO>2BwZ8+cIymNm(PKk0#W;oEDjQ;JU-pV}Aa%W0vrk^+R%iap7yW15
+zorI#QmYUT<2rhnXgX7MKm(>d@+NXc&q&CQ;o9Ln(%Sdc~aP8i7sjIU>w3Nu)Ij1=s
+zq}4j=s(6ssZM{#)g<$?NT5_j3XBw-K_l^eC+eD{3eAS$G68ahmB5R`1<h#;ANNhe0
+z`Q6@!_R4NYwDjF{ITW~XO%TaXz?CX6okH1vZrT%yK8WFRH~kB_95pTHqQyJGtx88B
+zO|lcAhM$z^J}VB8dZUz4O5S6;oEuqAY}i_5qDdo5<f6EojWC$xqQ)nVdVor3nkT2y
+zmFzHK4#zW4M5hA&gtr3j6AXG1QFB`NiFYVGdy-Rkh^=1H`y8gok)v1>;1u`<*}>?2
+zeTj?m$D|0<AF<dI%g5GM+rp>_(qgAsQS#0y$TErpWL(ciSuGF*qX4={MRzA`%2H|4
+zW1YI$;|N+^s9F=*8T2QDIMN&2&OJTZ_}mZAKdxP@el86dlYZ}%I{pnlmFN0a7N0_|
+zZ-0bH?PL?cil=|fTc^V{sIGOe&gUF2Z`V0-3RlyOcBFwm&>lZ_s>g0`;T^V)k0Rx1
+zeLtT~LRk)S6_TdGRoCpG3NKc8l~{rgl$uX|BS7r?TT1QyZXw>ZzRSg)Q_bsrr4fbT
+z?1p~l>baT&gz)M7D4LHepNH(n#xzi2CHychDHG)B2{p?-bA7M?&Zt&FZA!bU7jdY(
+z$48DI>9~ozu}K<}7G8YsTbDqLvp~h;GH5Xpl&&YGHdyMplT1G@nI#tsc-k#tP%8{D
+z0@kslX)fFEH4s;s?gQVv3Ky2)TdeZOQkiK3&u>4TMI3<V&wU>q84^hVQKX8Djf9Ab
+z5|gywhQQ~P<g>oikH4vZ%l>4ddc|ziFP(Dd$`<G`>_~9E{35x@PAZo)3X^Y}<ad65
+z=0L=JI3-7_$aNxT&m|ymn<T(F{Mw@d)NqKTbJe&Z^zp0(b4CukoXp{GgpiPobk><|
+z){t!fHZ}{MD+g}uU6j134qdXY0?sYBUQ-lgy*3S!*k2X~f6)!~keV}tkEQ%*JlK4Y
+z>~@2qPgeC{Eg9&wI$D(znv<Q{DF-IP(_Qk?)i%i*Z_JJcCRS+1HU`URb)@UED1^uG
+zDjm|#ao26~$(awIU~_ctGm7r}J6s8G0(Z{dI8U(cVkGLz96f6==3Kso2Hq9LkrMcj
+zA3iQrIf2BRekTJW^Y=Y*^|+0CK7ID|dJ=%KsG-gzDJ>^skkc7jtD%X#H>_W$@ulE)
+z?G3yh8W5mcA}DzyQu0)iMC?HPncs69OfS2=<c?Rkz#@$S@*z3xruf&nP9ZZ`)yon_
+zKJ2lJ$$)#nM<PhL<u>??vZ4dOWSR-;`0+Mpv>N4HBTY&g8zpVtYd+negvYYx#NsZy
+zn?}%Nw{m6(|Cr2w;@$BODt#SW1bGC!<K#Cd9>1=eoML8>fnALz(d2Y`t6RKs(4hu+
+z#i2$#=YO1jy9ztwRO!gF1Nv*UoP`@|wyGUV)E8aEm0yrRj^*_JdXWojNkKAWD+RLl
+zDG8#kIToO|BTIO=FZ?7F(tUyz<djdl*{-)t9^8ckpHocPYbza_%cJp<F#0XMoev*B
+zeNf9@SU2xpI#pjL#FrQgyBgyjBn&&7t~fs$@RHUQ@=Wy;kD^-bEuB1qCjD2M;|P6m
+zbV<0D+k1661;pHVCYA}cMCQc*X-C1uAz#QTt9ML|-SXV>50+$X2F$8?2>G;#zC#r;
+zXiMObFI6&hbQYA-{fVpy;_-^qCGoVH_mmm-4ji(2EBJod@1+f8nMl<h?t0?^EqnE=
+zUe0awTfSrMgjk&y=b0eumXW^eB72$!SFd76<;jYt_Ez8*Pn^u_4R;DW#EQ2hvluk7
+zBnM2}Rw>44vJi=2hWy3C_t_6%@JFub7gLuu-cGA0y_aW#hl|YMK#)nVpIwL+U*#lA
+z@8Wxla{iM}VKgI!>EV)>x|;ssu*5jX;(n;e_*S-Q&7*fUZWJV?KEYHoElT@nyqomp
+z6P1sGdkz1wTR2O33g-b+UN$ni(X7lFUB#Yt-Nv14d58~X&8fM}eI3c<s}ioviDUKp
+zX9ws|6!sjHYF$kB2g@p|dzLb))jH3~vEM`bmf*M>!BSiq7Uc}KBOex8p|S4aJAN^-
+zJRFy`6gj^dH>?uok-GNmSl~T)rVCcb6MX4`fCM6BPdg>|@NV43*><Tx2*n_|poy%8
+zR(BTsO{NtY9K=><NTfqA3a@$b^>$X9WUt}Z-{+9CNsoH=5)voaXy`-_(7`v-r`~kK
+zmjaU3WQTz#T^Wo!w4xaB3djc~M=<p(7bDHTZDAg-R{x_YvM7>39952#6;C&lJ=1ov
+zaYLm;gHCYZf{?&DmS>Z%E`tWGV=+$d8M%o8<BPtw$C_=~+T`Q_<t3&k+domEle5*a
+z-jAG>;YVdAyeaB+Q@EO|4Fhc}T{q&e?#j3C%ERd)T#(1D^Q_9PVCgc3F1G))d1fWn
+z{3bBd?BZOxJZs*@)9omFO|I9qpGce#Mfj^xP15rxKm%B0pWnomv+MET_4U7hT}SXp
+z|J`xuGX=9~g)Vo>joMvSZ8o)NXwRv;V5N!|x6Y=n2_cSebO8A12V)lXOcSF)_K6p(
+zsCvm+HaH{UKH30{!A6hw<(9w3^k%dx2GGRL?U}&bE$7@_&0@|+eWZW?YC6zLbugn+
+z2g)Oq?!*W{Dl-xbl41m}7_K5YG?t1{p$dO$*G%%>AxuH!YcBcKVx!Gn>%M0xCb*%X
+zktO7;BCAzdaQz%HGacv+i$iDkcJRaDqob$uH|D>fOsw?~SG$buV=|mN*CW)n#_>P+
+z_J;dbhJG#w>qTt~gK9v}Qg<`E&i5tQJtPS3@7*#hU?-Bs$cEsxo};~I4BQJo3x>F^
+z58Q+u!DEt(JbnIlmHRi#d<295+h#jG>UFR)pEG|dy$r8ZjnGKXnIj8rMWMPB<m`6u
+z@zw2wr{B<Jn!UQ7SydAVF_6inwciGj`%aL_Osfj$DK}<~Q~0j!TB-G>33WeOpHCy>
+z2^0h^c!wP_!Z3(!$cVYm0;*;E*1Ol>sV`dc)6$K#Ng|<^3g3B#dQHAJa^3I4J}@)U
+zff_!P`=7S%%wL<}Hi|fk_>L^1@cUpZ;TMV3{oyH6-GhjIFF<A4?6x1aP;6EfqiRo3
+zV=$H~N%7&DBr?~iBCwDBP-{Qp$sz_O*oiHdMjV$ALAjsyPntf_ySCkYNw%aJ?;PTA
+z<Uj%(o=#2&5&ng((8Y$n`;F9tU3Y|%Gp4MA1{-Jq$A&47MBnnWDvd4=qaWDsGpk4~
+zdtjgr<x|qXRXtl@ZRui1NsJcYMHjZ+X}^Ibbao3}Eo(6K80ShlshTkz86sgMeLi#2
+z+M7IpTJZ#}I&8TG^N3vh;*UeWc3h2KW?!i;8eU%$!>qU8j1TqH1@%M^e=(4~QgEpH
+zDpbqGMg-IhS?Uu0B}|+q6f`?5?7h3e2ZtQ7(9eM2dwZx~NBb0xbcGQ+&pt?|Cj({X
+zv<u}dQai|q(JzG9_+AgC1H}yG^_|>VCQpoW7Z)EHN<P<IMNWokRU@P-OXS+M8t}{P
+z&V<5x461j?82Zn6o-y<UR3{A7f^|2HP+AxZ6leMs*8Q=g5)-VM5_IWwd)dERww_&1
+z<Ld9Z=EsuOC3WXa-ay-;)Wa-`2DR8qGGB6(VLZ4~fttF!?4psfC_yw)y*gkt)T;{L
+zd<*hykQVeARylklzvX8MJTRIP3O;rt_=;7hr-)}<yQtdYIw5+y)Ug+HDr8ybT_6bF
+z!JSr-4o2S86a3fwbLRjftX7S<*F9mE7sjDtlAo@$J%YMlBZ2$h*cO{u<AOoub$8M`
+z=x)@AtyrCh1cdHV(!(%2c;A_w*4~Ox8{87k?ayw2lFS-|mE(_tE{qm4V}eh;i!p6B
+zP0;ydb4?oqAPQG2%w=*1%o%hYYXi&cCn7!nma(}4PiAL>G4|{@SX<au7DK1&tKUL-
+z0N7}-nhLHQIM(?GOZ)^gy13}d{H_-u^5qLv!%Vhy!ZCX+SK(xTMX3Ur0pDRk3sjSW
+zd`NJApYns8=zGf<(am%wR1j3K1=&?>a`!9BvUvx6ktbZ*j6Jc7be3e+Goa)yPw>;@
+zT>@MuCe(8rAWJF0igPYx8GG*MzEE=gFk~1~L0WU?v93957pCS&wu^VQ9uj~5Xa!2>
+zsxjG*N|#5C$i@z7%legKMETk2>kbPn-<yy)F{NmO1B3HK|5RErT0Cjo%kS`lkAPjf
+z#YV?wXUBjk?bc*WLEIijP$f-5r3fyOO<F}z!A!bXEaqP6EkcNHe7KdD(w`vq5JgqC
+zxY)XVPBh5`c$jvDWyM-+eFkWs@zNnuT26Q?`^)qP)DoGx(=J>J*Ge!WGlqo~QDotW
+z_Au+Ng^^$gp9kb|56f}Th_m0jT%w6+4<FD)K+<k+(LN$qs`yZZ)Dxghcy|;RQg8im
+zBusB6DTk5e1dtQMwk;;;Tg?(>Q2Hgt0U&%(3c+Aa!w4{_hi$Zh!QI_w>3=;!foeot
+zHN_3yGCLkHL<A*-tfr?@=DkD4H%J>wC=}?DuVCpG+|A;Niu9EW=JlDDc8!ig((bYH
+z^|-|1D_{=Le*y=X^%YSVd$DdQpIRxT!?FH&BL)E)le&4Luj=Cgo2Z|xuujd%4+o2D
+zip3ycZp)P3w)ph~7E)-WZDz9$h1IuCwC)hy{xc-s{Q11wRoBR8>;9T7k(#ZvLic`I
+zLjP{EbNC*tdrUHtOBMuDwS)trwJl^bv<w0)7W&zVn;_Tdf4{|+I3e<Fw}kuyw?Ko&
+z&X66UYs2}&cdns^_yCe9Va_vnTc`S9PI|oo0jSp4@s=BOv58$p)R=JaIoiFOiybT?
+zv^Xp6?AT#KoOxpxlrGmdo%h;UT~}M^`s2}`VRERhPR(9DnS1{N{~_E0MF{_62ChW)
+zq(5>sWL_3<*MnB_7DPw^D-T_&0(bgKBws=^x-($YsE6vh4&quI<BS}@+0{}mNEdzM
+zgk>f=iR$d$kl=zzMfpkwU+thSa*`J)5Lo*@5WN%;M<&ivv=qG@5693z|MQ!953$LY
+z>W~#|cJr@=0xc7!0K3_b8F1;tNeOxT-_RBM-Q>t-F{&%DZtflIm$D-pnIwUPM8H(U
+z<-hroMiYK-I<{b_i;SCmN7HE@_t%p0>iOEtFe{;mZezz$EJ@f_ez455FQL(Z5_CWR
+zq|$RMvE_g|wA_)1{X#8i`m7}%%KE=SAkJn;2TYPvdB@E+x~Z^9m`bON$s1R=&9EJq
+zpviAq6`$et%<Q;}+Q!)@M~8M%wo#zGWw#Y&#)1sco0rJ&pf19~ymiC|-bkB9U57}D
+zJbBY*Y-6^fDI?*%2}sM7mdtq8kMIVeyDflS`|W=pC+DUFD+z}xzb^T;pX5rzR=QL>
+z6|5P1pyVNzo(iT66zXYBvD1A7RWumRRm@Moq#Z7bT0kr;AUGBfO$!K*1%%+A1QTCn
+zS{2KnbWr?RKRqL*HdaYN=ctUf21YYQJBDezdMwRS+gh=inU`*jwN12T@nK41gGb3}
+z_Ww2f9W&M~S{BK3%N|x)+eWRcMER92n)K}xr#1eI3bM)`K&)*H{}7kbMU1|^+LVSr
+zAY&b;W%0kL;veEux~Tex{(0GFtZV*5Ib{!vtZn~A+4}ag|Gca-)_MM+?6QX`);61e
+zUL_hzQNKU#zp=dXB;^j@Md~Y?X8qqG^80dLL-K*lBl2HiaD7HQ=ZBD1$Yu4oi~Jol
+zcizoic!k|mxU8N2<T4f$dSHz#P!`dLt(%kXgZ?ccG1z^dlagKd^~DSKE|^N|6=e7W
+zo8yCDXoL!~M*&N)0ZR}WJf!-E^TRI%@+A6_+%QkX;#7A5$B^)$7ZfnDHF|j6k0HrV
+z5tweGn3nMt$l>3yM88C3)mO^?B6iS1M!h2j$`8bChn;!%d&m*pX-qwQlRA9*V%A4M
+z(cBak-`Rg*`SUeW?fn+@ZQR$K;4_^7oAocxxooAbS0zrQt|=sa+_J7n1b?Z3y4IEU
+zv<!h2^y{8ggIrH}cfa4iH6I18xtRW(No2Wl+}z5h+&FPV-Cne03eu_!eg&zPSrdJz
+zB51Q7bh9QOmpLiiXi|@S6OcwOFljBJbhHpt7Ls;;M66&z+GY1o=X`{zp!my@Ks^QV
+zSEK$$B;*-uQMfyKD)j5phZYD+I*N<YkQ5B^1;E9oHQYRQMRcqRtN+}HTE(0-0c|HH
+zDmWpJ5h*6X<i>2s$oU3ieJ_2YK%R%TW?HeESm~soc#l>{PJViEN!UrQ;^>z6^9rS)
+z#-RM2JhTe!gblOX4f=0^4thsVsvIVT7;Rz8snfFP)VNxKy~z$TMob3S$8IR#_WW2%
+zvh@#_S0INk*^^%Rx4US0IpEI)%uOE5sPR0#5#Ao(l%o4tbIy~N93%850#XZV8c<Yl
+zhh&r<Mx9niYAH|;{3z44U20g4iC|8!_9PQM-`g>2N%~FI*`z@xR9K#a@RMK=199s`
+zh<w|v?jq)3rlp?Z{jS^}jwzJ7k*Eld@_4t!j}`Jrl+?iy%0a|^pZZjSy~nq}#INd`
+z-0)x6nLZNIu2B2~t2quC9PWHn8O_R;pPCrjK;3k>Uj#odG%)ZY8X-)vGB$t%^!E)F
+z_a`|8y@fod7ib5jcW@VKN|8kvwp9QqiUtZ;<Up86t(I_Db?CrmeS0jtIfmRag#XvD
+z)zT`0R}ZxmfmVl(MiJM70>WV73683VGS!kA6!(au>X=0%gH1!J(jO_%I20Icsb*aa
+z2c4S*(pGf*cexz`*pyHM<L+vWmX10A-+dNnZ+2DzfzFmxD|^Ow-3BNxEQ7U@KKHx>
+zlrB^L2A}*O8YD8c_7sFMtowM^H<z{wq9CV&-rDF@4?tgwjRjtbM1x$oT?!fwF<^gT
+z!zFf2KgFPBC)>6(c56wa+^5nOGNT~B^gJ>4=m|HDsV@1bR5gYvX#)^VFQG<aGcAo}
+zPaX7@-32lVoe34goc@JaI`q?Zq?dn_SVis{_0aUInupqH=OgaljwPxuRe)}L=FS~w
+zNxmz85(AaaMjuJOR1R&`IPInDA^GpfNY4T?&(?Aw{#;-$D)q``k_iVcCHfAr<V1^6
+zZqDXR33*!i)i~U0%qcD6(|?ltcDN&IgY-g2%VU-=G$_8&F?W@HWslffPDNM!re1Q6
+zMse>|;s+d3uM03HqG5~UlPswB-%}Ku90=Bx;<p9wWlyjADbaoY0kZEYrp5VqmbbeV
+zVM9tlI0yf+#o-$<EM5(EyP8zvzWf{+MZ=HMT}Ny6#j>7earinL@7*2;PI|o+DUO~}
+zGuacnDpCy_amk4(a*WG3qB<?R+?tIFHoQ#zItn)T#fH23RLo;^r1ik<)U1x??BoI_
+zT@6AusWPBx?1_&CNDpUC_HEl!ZzU*rQM~Lt_@!#8FtS8;`A{C?=DLpQp?3cBFMmqc
+zVFMcw?z!l_UQ8QqxSNjluq}{QNw@<0W=9k3=R8M`ufKmFft+lRE6kj)n518Yvzc()
+z`%r$TVR@<YS%%;6Ur@v6eI<#i;{N3pz~A`P#?$)B-LIw>Xr@F*70gz1Hc*a*`irBZ
+z4QxUe*4L_!79RM-1ZJaHTI1rhRx}#u5&1?6X=tqq&8=j{IVaOsVUaL9^ESXBl0PV(
+zxa)&r)#A+jBNS0{EHs(sd2=IU@;>*aF_V%@+snGUqI4u)v+{m&vfn47B<Yr~dJ|gZ
+z%Yhoyse)QE<;A$D?{muRPUS>{5s#(JIBD(?>oRZE@R}3Y_5{L~yt7!>F&X?@XEg-(
+zHcRgE+yT1dsa-0c0^ZGlOliJq#WQ0_-^YDJyu^I&rJq)yDfUF>Qn9|!|ER-Zz#o`)
+zl;uB3(r=;jqL5|g&+M{gQoSpdUoVp~3Q!EVr2Q3bq+jrdz?P@G0dmm|KM179M`f|g
+ze3g+zCJu`fNXDDk!shwPpy4oJ7gmTkvcqhdlGSONlE<h({@uStoSybwRr!vZyYnpC
+z>nb`DFU=RJjPd$Q^dYaOf=Dw@S65`tC0YeLKg8r-S<xY&Xgd2qY4<#ps#K=ko8|Xc
+zU%$%f5i{+22EX~H06L)(f)ISj?;9oN+x9F4i}uU(vYPLaDg}&GaB(i-Q`xLEbRr$<
+z#FlIZS<TAuU}t((E8)Ra8rgYNKPm`?P%O`jI=n`c?K)Ly2@9&1$Ucx<coe0<<%srl
+z=|sk&N(sO3hO%Ouy~NU-xvO>uvm`Yf4jxd|=x=p;!x)M)?|^vpDMH$BCpXVmSWTII
+zJw@}+VU_2|(4bAM)(#6@lALWGv#6J}r*Q;5N11|<vLCC0*wa%fagW);9|CvFs7ZW8
+zNqTN{4&n3`r1Jp1F<Np`hTFSFl)CRtJ@Yrnn?2fN`i-eSEzvRiC=?A|)-0CF`wUZR
+qbBIKzv+c=(O=<Cb5GHrFM*>F`2~rIlxlUa^D0pVvED!(num1y_7FkLF
+
+diff --git a/tests/testthat/test-chemi_chet_chemicals_image.R b/tests/testthat/test-chemi_chet_chemicals_image.R
+index 00af270d..2efb123a 100644
+--- a/tests/testthat/test-chemi_chet_chemicals_image.R
++++ b/tests/testthat/test-chemi_chet_chemicals_image.R
+@@ -30,12 +30,13 @@ test_that("chemi_chet_chemicals_image passes request metadata to helper", {
+   expect_true(is.list(call))
+   expect_equal(call$.helper, "generic_request")
+   expect_equal(call[["query"]], 1L)
+-  expect_equal(call[["endpoint"]], "chemicals/image")
++  expect_equal(call[["endpoint"]], "chet/chemicals")
+   expect_equal(call[["method"]], "GET")
+   expect_equal(call[["batch_limit"]], 1)
+   expect_equal(call[["server"]], "chemi_burl")
+   expect_equal(call[["auth"]], FALSE)
+   expect_equal(call[["tidy"]], FALSE)
++  expect_equal(call[["path_params"]], "image")
+   expect_equal(call[["content_type"]], "application/pdf, image/png, image/svg+xml")
+   expect_true("options" %in% names(call))
+   expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
+diff --git a/tests/testthat/test-generic_request.R b/tests/testthat/test-generic_request.R
+index 239d08ae..486ceb06 100644
+--- a/tests/testthat/test-generic_request.R
++++ b/tests/testthat/test-generic_request.R
+@@ -75,11 +75,11 @@ test_that("generic_request progress follows the verbose option", {
+   )
+
+   testthat::with_mocked_bindings(
+-    req_perform_iterative = function(req, next_req, max_reqs, on_error, progress) {
++    .ct_request_pages = function(req, next_req, max_reqs, on_error, progress) {
+       progress_values <<- c(progress_values, progress)
+       list(response)
+     },
+-    .package = "httr2",
++    .package = "ComptoxR",
+     {
+       for (verbose in c(FALSE, TRUE)) {
+         suppressMessages(withr::with_options(
+diff --git a/tests/testthat/test-generic_request_edge.R b/tests/testthat/test-generic_request_edge.R
+index 8b0b96a0..e99e8ad9 100644
+--- a/tests/testthat/test-generic_request_edge.R
++++ b/tests/testthat/test-generic_request_edge.R
+@@ -199,7 +199,8 @@ test_that("generic_request batch_limit>1 sends a bulk POST JSON array", {
+   )
+   # Both items fit in one batch and become the JSON-array request body.
+   expect_equal(captured_method, "POST")
+-  expect_equal(captured_body, c("A", "B"))
++  expect_equal(as.vector(captured_body), c("A", "B"))
++  expect_s3_class(captured_body, "AsIs")
+ })
+
+ # --- path_params + batching abort (downstream wrappers rely on this guard) ---

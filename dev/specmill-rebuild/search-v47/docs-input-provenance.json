@@ -1,0 +1,9 @@
+{
+  "original_wrapper_snapshot": "old-chemi_search.R.txt",
+  "original_wrapper_sha256": "3f7325fd341fd323fdb0875727892fe4174e64a1b5c57b1778ba132993c73fce",
+  "docs_input": "docs.json",
+  "docs_sha256": "8938d0d07bb6aa62207c3ecd3dc30c5ace40337c45b714b243dbca81cc8c1b06",
+  "parameters": 17,
+  "example_workflows": 5,
+  "derivation": "Retain original title, descriptions, return, examples and declared maturing lifecycle; convert Rd syntax to supported plain prose/code spans. Stable was only the old compatibility fallback. No generated wrapper/manual patch."
+}

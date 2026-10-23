@@ -10,14 +10,14 @@ chemi_amos_record_counts(dtxsids = NULL)
 \item{dtxsids}{List of DTXSIDs to search for.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_record_counts(dtxsids = "DTXSID1024122")
+chemi_amos_record_counts(dtxsids = "DTXSID7020182")
 }
 }
 \section{API stage}{

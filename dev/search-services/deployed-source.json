@@ -1,0 +1,31 @@
+{
+  "retrieved_utc": "2026-10-18",
+  "url": "https://hcd.rtpnc.epa.gov/js/app.2b8197a6.js",
+  "sha256": "dc6443e91da0ceef29f7f930cbb91671003cc3a8c983d77cbbc0bce4ca7754dd",
+  "snippets": [
+    {
+      "offset": 57797,
+      "text": "onExportAllCollated(){this.downloading=!0;const e=`${OP}/collated_report`;let t={exportHazard:this.exportAllHazard,exportHazard2:this.exportAllHazard2,exportSafety:this.exportAllSafety,exportAlerts:this.exportAllAlerts,exportPrediction:this.exportPredictions};(t.exportHazard||t.exportHazard2)&&(t.hazardRequest=JSON.stringify({options:this.getHazardOptions,chemicals:this.selectedStructures.map(e=>({chemical:e,properties:{similarity:e.similarity}}))})),t.exportSafety&&(t.chemicals=JSON.stringify(this.selectedStructures)),t.exportAlerts&&(t.alertRequest=JSON.stringify({options:this.alertsOptions,chemicals:this.selectedStructures})),t.exportPrediction&&(t.predictionRequest=JSON.stringify({report:\"HTML\",structures:this.selectedStructures.map(e=>e.cid||e.sid||e.casrn||e.smiles).filter(e=>!!e)})),await this.$axios.post(e,t,{responseType:\"blob\"}).then(e=>{let t=JP(\"full\",\"xlsx\");iM(t,e.data,\"xlsx\")}).catch(e=>{console.error(\"Error during export:\",e),ee(e,\"Error during export\")}),this.downloading=!1}}},Vi=Ui;var Hi=(0,I.A)(Vi,Mi,Di,!1,null,\"2736d916\",null);const Bi=Hi.exports;var ji=function(){var e=this,t=e._self._c,i=e._self._setupProxy;return t(b.A,{attrs:{\"offset-y\":\"\",transition:\"scale-transition\"},scopedSlots:e._u([{key:\"activator\",fn:function({attrs:a,on:s}){return[t(A.A,e._b({attr"
+    },
+    {
+      "offset": 465358,
+      "text": "this.$axios.post(`${OP}/convert`,{content:this.rxn,type:\"mol2smiles\"})"
+    },
+    {
+      "offset": 102821,
+      "text": "this.files.forEach(t=>e.append(\"files[]\",t,t.name)),this.$axios.post(this.preflightUrl,e)"
+    },
+    {
+      "offset": 63337,
+      "text": "\"preflight-url\":`${i.SERVICES_URL}/preflight`"
+    },
+    {
+      "offset": 436444,
+      "text": "\"preflight-url\":`${e.SERVICES_URL}/universalpreflight`"
+    },
+    {
+      "offset": 103306,
+      "text": "e.append(\"request\",JSON.stringify({filesInfo:this.filesHeaders.map(e=>({fileName:e.fileName,idField:e.idField,strField:e.strField,actField:e.actField,fillAdditionalProps:e.fillAdditionalProps})),operationType:this.operationType,severity:this.severity,action:this.action,replace:this.replace,options:this.options})),this.$axios.post(this.uploadUrl,e).then(e=>{this.uploading=!1,this.closeDialog(),this.$emit(\"uploaded\",e.data)}).catch(e=>{this.uploading=!1,this.message=aM(e)})}}}},xs=As;var Cs=(0,I.A)(xs,ns,cs,!1,null,\"5c9ad9f2\",null);const ws=Cs.exports,ks=(0,l.defineComponent)({__name:\"AddChemicals\",props:{inline:{type:Boolean,default:!1},vBtnProps:{default:()=>({})}},setup(e){var t;const i=null===(t=(0,l.getCurrentInstance)())||void 0===t?void 0:t.proxy,a=null===i||void 0===i?void 0:i.$store,s=(0,l.ref)(!1),o=(0,l.ref)(!1),r=(0,l.ref)(!1),n"
+    }
+  ]
+}

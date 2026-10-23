@@ -1,0 +1,1 @@
+Request pagination: unchanged formals, lazy skip, one hook cycle/full state, nested body offset/size, single envelope and combined records, partial HTTP recovery, hard errors, malformed metadata, dry run, excluded control updates, NULL result policy and dynamic page caps passed.

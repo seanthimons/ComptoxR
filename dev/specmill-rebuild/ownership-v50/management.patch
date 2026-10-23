@@ -1,0 +1,15 @@
+*** Begin Patch
+*** Update File: apis/chemi-management.yml
+@@
+   - schema/chemi-alerts-prod.json
++  - schema/chemi-safety-prod.json
+@@
+   GET /api/alerts/render:
+     name: chemi_alerts_render
+     file: R/chemi_alerts_render.R
+     helper: .ct_request
+     implementation: generated
++    duplicate_response:
++      source: chemi-alerts-prod.json
++      reason: Reviewed declared PNG/SVG responses for the identical shared alerts/safety render request; preserve the existing chemi_alerts_render wrapper and both source contracts.
+*** End Patch

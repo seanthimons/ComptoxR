@@ -25,7 +25,7 @@ chemi_resolver_safety_flags_bulk(
 )
 }
 \arguments{
-\item{additionalProps}{Optional parameter}
+\item{additionalProps}{Chemical metadata map. Supply a nonempty map together with the chemical fields.}
 
 \item{averageMass}{Optional parameter}
 
@@ -67,7 +67,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_safety_flags_bulk(additionalProps = "DTXSID1024122")
+chemi_resolver_safety_flags_bulk(additionalProps = list(source = "ComptoxR"), sid = "DTXSID7020182")
 }
 }
 \section{API stage}{

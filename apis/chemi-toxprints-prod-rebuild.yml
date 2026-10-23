@@ -1,0 +1,508 @@
+id: chemi-toxprints-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-toxprints-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: yes
+operations:
+  GET /api/toxprints:
+    name: chemi_toxprints
+    file: R/chemi_toxprints.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints
+      lifecycle: experimental
+      return: A list containing the API response envelope with service metadata,
+        chemicals and optional descriptor headers.
+      description: Calculates ToxPrint descriptors for one structure and preserves
+        the API response envelope. Use chemi_toxprints_bulk for a row-per-chemical table.
+      parameters:
+        smiles: One SMILES string. DTXSID acceptance depends on the service deployment.
+        headers: Include descriptor names in the response; defaults to FALSE.
+        profile: Optional profile name; NULL uses the service default.
+      examples:
+      - smiles: CCO
+      tags:
+        apiStage: public
+  GET /api/toxprints/assays:
+    name: chemi_toxprints_assays
+    file: R/chemi_toxprints_assays.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  GET /api/toxprints/assays/check:
+    name: chemi_toxprints_assays_check
+    file: R/chemi_toxprints_assays_check.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints Assays Check
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/global_assays:
+    name: chemi_toxprints_global_assays
+    file: R/chemi_toxprints_global_assays.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints Global Assays
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  GET /api/toxprints/global_toxprints:
+    name: chemi_toxprints_global_toxprints
+    file: R/chemi_toxprints_global_toxprints.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints Global Toxprints
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  GET /api/toxprints/toxprints:
+    name: chemi_toxprints_toxprints
+    file: R/chemi_toxprints_toxprints.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Toxprints Toxprints
+      lifecycle: experimental
+      return: Returns a list of results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  POST /api/toxprints:
+    name: chemi_toxprints_bulk
+    file: R/chemi_toxprints.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: any
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: toxprints_canonical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: toxprints_bulk_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Toxprints
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical structure strings. SMILES work in production
+          and development; DTXSID support depends on the service deployment.
+      return: One row per chemical, with descriptor vectors and service metadata
+        retained in descriptors and info list-columns.
+      examples:
+      - query: CCO
+      tags:
+        apiStage: public
+      description: Calculates ToxPrint descriptors using the Cheminformatics service
+        without CTX authentication. Inputs are cleaned and split by batch_limit, default
+        100.
+    normalize_inputs:
+      query: .ct_legacy_query
+    batch:
+      input: query
+      split: yes
+      max_items:
+        env: batch_limit
+        default: 100
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
+      empty: .ct_empty_table
+    request_controls:
+      preserve_errors: yes
+  POST /api/toxprints/assays:
+    name: chemi_toxprints_assays_bulk
+    file: R/chemi_toxprints_assays.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      acl:
+        type: any
+        default: null
+        description: Optional parameter
+      actives:
+        type: any
+        default: null
+        description: Optional parameter
+      category:
+        type: any
+        default: null
+        description: Optional parameter
+      chemicals:
+        type: any
+        default: null
+        description: Optional parameter
+      id:
+        type: any
+        default: null
+        description: Optional parameter
+      labels:
+        type: any
+        default: null
+        description: Optional parameter
+      metrics:
+        type: any
+        default: null
+        description: Optional parameter
+      name:
+        type: any
+        default: null
+        description: Optional parameter
+      options:
+        type: any
+        default: null
+        description: Optional parameter
+      total:
+        type: any
+        default: null
+        description: Optional parameter
+    post_on_skip: false
+    post_state: parameters
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints/assays
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      parameters:
+        acl: Optional parameter
+        actives: Optional parameter
+        category: Optional parameter
+        chemicals: Optional parameter
+        id: Optional parameter
+        labels: Optional parameter
+        metrics: Optional parameter
+        name: Optional parameter
+        options: Optional parameter
+        total: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - acl: DTXSID1024122
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: true
+  GET /api/toxprints/calculate:
+    name: chemi_toxprints_calculate
+    file: R/chemi_toxprints_calculate_get.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+      labels:
+        type: logical
+        default: no
+      profile:
+        type: character
+        default: ~
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/toxprints/calculate
+        path_params:
+          value: {}
+        query:
+          object:
+            smiles:
+              from:
+              - params
+              - smiles
+            labels:
+              from:
+              - params
+              - labels
+            profile:
+              from:
+              - params
+              - profile
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: static_collected_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Toxprints Calculate
+      lifecycle: experimental
+      return: A list of decoded response records.
+      tags:
+        apiStage: public
+      parameters:
+        smiles: Required parameter
+        labels: 'Optional parameter (default: FALSE)'
+        profile: Optional parameter
+      examples:
+      - smiles: CCCC
+    request_controls:
+      preserve_errors: yes
+  POST /api/toxprints/calculate:
+    name: chemi_toxprints_calculate_bulk
+    file: R/chemi_toxprints_calculate.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: any
+      idType:
+        type: any
+        default: AnyId
+      labels:
+        type: any
+        default: ~
+      options:
+        type: any
+        default: ~
+      request.filesInfo:
+        type: any
+        default: ~
+      request.labels:
+        type: any
+        default: ~
+      request.options.OR:
+        type: any
+        default: ~
+      request.options.PV1:
+        type: any
+        default: ~
+      request.options.TP:
+        type: any
+        default: ~
+      request.options.or:
+        type: any
+        default: ~
+      request.options.profile:
+        type: any
+        default: ~
+      request.options.pv1:
+        type: any
+        default: ~
+      request.options.tp:
+        type: any
+        default: ~
+      request.resolve:
+        type: any
+        default: ~
+    private_params:
+      chemicals: ~
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/toxprints/calculate
+        path_params:
+          value: {}
+        query:
+          object:
+            request.filesInfo:
+              from:
+              - params
+              - request.filesInfo
+            request.labels:
+              from:
+              - params
+              - request.labels
+            request.options.OR:
+              from:
+              - params
+              - request.options.OR
+            request.options.PV1:
+              from:
+              - params
+              - request.options.PV1
+            request.options.TP:
+              from:
+              - params
+              - request.options.TP
+            request.options.or:
+              from:
+              - params
+              - request.options.or
+            request.options.profile:
+              from:
+              - params
+              - request.options.profile
+            request.options.pv1:
+              from:
+              - params
+              - request.options.pv1
+            request.options.tp:
+              from:
+              - params
+              - request.options.tp
+            request.resolve:
+              from:
+              - params
+              - request.resolve
+        body:
+          callback: resolved_chemical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: resolved_chemical_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: chemi toxprints calculate bulk
+      lifecycle: experimental
+      return: Decoded response records, with the configured client formatting.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        labels: Optional parameter
+        options: Optional parameter
+        request.filesInfo: Optional parameter
+        request.labels: Optional parameter
+        request.options.OR: Optional parameter
+        request.options.PV1: Optional parameter
+        request.options.TP: Optional parameter
+        request.options.or: Optional parameter
+        request.options.profile: Optional parameter
+        request.options.pv1: Optional parameter
+        request.options.tp: Optional parameter
+        request.resolve: Optional parameter
+      tags:
+        apiStage: public
+    exclude_parameters:
+    - files[]
+    - request
+    request_controls:
+      preserve_errors: yes
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
+prepare: preserve_choice_defaults

@@ -1,0 +1,260 @@
+{
+  "url": "https://hcd.rtpnc.epa.gov/api/stdizer/protocols/6a0f64e78b3b075871b2f8ab?page=0&size=10",
+  "method": "POST",
+  "time_utc": "2026-10-18T22:30:46.379754+00:00",
+  "status": 200,
+  "media": "application/json;charset=UTF-8",
+  "body": {
+    "id": "6a0f64e78b3b075871b2f8ab",
+    "options": {
+      "workflow": "qsar-ready",
+      "run": "myrunID001",
+      "recordId": "dtxsid"
+    },
+    "status": "SUCCEEDED",
+    "name": "myrunID001",
+    "recordsNumber": 4,
+    "hiddenNumber": 2,
+    "componentsNumber": 2,
+    "changedNumber": 2,
+    "passedNumber": 2,
+    "failedNumber": 0,
+    "filteredNumber": 4,
+    "records": [
+      {
+        "@id": 1,
+        "id": "6a0f64e88b3b075871b2f8ac",
+        "protocolId": "6a0f64e78b3b075871b2f8ab",
+        "original": {
+          "ordinal": 0,
+          "rid": "14f1252c25ee7f799bdca3774f29d771",
+          "properties": {},
+          "chemical": {
+            "chemId": "DTXSID8037706",
+            "cid": "DTXCID6017706",
+            "sid": "DTXSID8037706",
+            "casrn": "2795-39-3",
+            "name": "Potassium perfluorooctanesulfonate",
+            "smiles": "[K+].[O-]S(C(C(C(C(C(C(C(C(F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(=O)=O",
+            "canonicalSmiles": "[K+].[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "inchi": "InChI=1/C8HF17O3S.K/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28;/h(H,26,27,28);/q;+1/p-1/fC8F17O3S.K/q-1;m",
+            "inchiKey": "WFRUBUQWJYMMRQ-SGFZJTAPNA-M",
+            "mol": "\n  -INDIGO-05072615352D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 30 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 K 0.0 0.0 0.0 0 CHG=1\nM  V30 2 O 14.8708 0.21436 0.0 0 CHG=-1\nM  V30 3 S 15.6708 1.6 0.0 0\nM  V30 4 C 14.2851 2.4 0.0 0\nM  V30 5 C 12.8995 1.6 0.0 0\nM  V30 6 C 11.5138 2.4 0.0 0\nM  V30 7 C 10.1282 1.6 0.0 0\nM  V30 8 C 8.74256 2.4 0.0 0\nM  V30 9 C 7.35692 1.6 0.0 0\nM  V30 10 C 5.97128 2.4 0.0 0\nM  V30 11 C 4.58564 1.6 0.0 0\nM  V30 12 F 4.58564 0.0 0.0 0\nM  V30 13 F 3.2 2.4 0.0 0\nM  V30 14 F 3.2 0.8 0.0 0\nM  V30 15 F 6.58358 3.87821 0.0 0\nM  V30 16 F 5.35899 3.87821 0.0 0\nM  V30 17 F 6.74463 0.121794 0.0 0\nM  V30 18 F 7.96922 0.121794 0.0 0\nM  V30 19 F 9.35486 3.87821 0.0 0\nM  V30 20 F 8.13027 3.87821 0.0 0\nM  V30 21 F 9.51591 0.121794 0.0 0\nM  V30 22 F 10.7405 0.121794 0.0 0\nM  V30 23 F 12.1261 3.87821 0.0 0\nM  V30 24 F 10.9016 3.87821 0.0 0\nM  V30 25 F 12.2872 0.121794 0.0 0\nM  V30 26 F 13.5118 0.121794 0.0 0\nM  V30 27 F 14.8974 3.87821 0.0 0\nM  V30 28 F 13.6728 3.87821 0.0 0\nM  V30 29 O 16.4708 2.98564 0.0 0\nM  V30 30 O 17.0564 0.800002 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 2 3\nM  V30 2 1 3 4\nM  V30 3 1 4 5\nM  V30 4 1 5 6\nM  V30 5 1 6 7\nM  V30 6 1 7 8\nM  V30 7 1 8 9\nM  V30 8 1 9 10\nM  V30 9 1 10 11\nM  V30 10 1 11 12\nM  V30 11 1 11 13\nM  V30 12 1 11 14\nM  V30 13 1 10 15\nM  V30 14 1 10 16\nM  V30 15 1 9 17\nM  V30 16 1 9 18\nM  V30 17 1 8 19\nM  V30 18 1 8 20\nM  V30 19 1 7 21\nM  V30 20 1 7 22\nM  V30 21 1 6 23\nM  V30 22 1 6 24\nM  V30 23 1 5 25\nM  V30 24 1 5 26\nM  V30 25 1 4 27\nM  V30 26 1 4 28\nM  V30 27 2 3 29\nM  V30 28 2 3 30\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+            "molFormula": "C8 F17 K O3 S",
+            "averageMass": 538.2199621200562,
+            "monoisotopicMass": 537.893383026123,
+            "additionalProps": {}
+          }
+        },
+        "transformLog": [],
+        "issues": [],
+        "type": "PARENT",
+        "status": "SKIPPED"
+      },
+      {
+        "@id": 2,
+        "id": "6a0f64e98b3b075871b2f8ad",
+        "protocolId": "6a0f64e78b3b075871b2f8ab",
+        "parent": {
+          "@id": 3,
+          "id": "6a0f64e88b3b075871b2f8ac",
+          "protocolId": "6a0f64e78b3b075871b2f8ab",
+          "original": {
+            "ordinal": 0,
+            "rid": "14f1252c25ee7f799bdca3774f29d771",
+            "properties": {},
+            "chemical": {
+              "chemId": "DTXSID8037706",
+              "cid": "DTXCID6017706",
+              "sid": "DTXSID8037706",
+              "casrn": "2795-39-3",
+              "name": "Potassium perfluorooctanesulfonate",
+              "smiles": "[K+].[O-]S(C(C(C(C(C(C(C(C(F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(=O)=O",
+              "canonicalSmiles": "[K+].[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+              "inchi": "InChI=1/C8HF17O3S.K/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28;/h(H,26,27,28);/q;+1/p-1/fC8F17O3S.K/q-1;m",
+              "inchiKey": "WFRUBUQWJYMMRQ-SGFZJTAPNA-M",
+              "mol": "\n  -INDIGO-05072615352D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 30 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 K 0.0 0.0 0.0 0 CHG=1\nM  V30 2 O 14.8708 0.21436 0.0 0 CHG=-1\nM  V30 3 S 15.6708 1.6 0.0 0\nM  V30 4 C 14.2851 2.4 0.0 0\nM  V30 5 C 12.8995 1.6 0.0 0\nM  V30 6 C 11.5138 2.4 0.0 0\nM  V30 7 C 10.1282 1.6 0.0 0\nM  V30 8 C 8.74256 2.4 0.0 0\nM  V30 9 C 7.35692 1.6 0.0 0\nM  V30 10 C 5.97128 2.4 0.0 0\nM  V30 11 C 4.58564 1.6 0.0 0\nM  V30 12 F 4.58564 0.0 0.0 0\nM  V30 13 F 3.2 2.4 0.0 0\nM  V30 14 F 3.2 0.8 0.0 0\nM  V30 15 F 6.58358 3.87821 0.0 0\nM  V30 16 F 5.35899 3.87821 0.0 0\nM  V30 17 F 6.74463 0.121794 0.0 0\nM  V30 18 F 7.96922 0.121794 0.0 0\nM  V30 19 F 9.35486 3.87821 0.0 0\nM  V30 20 F 8.13027 3.87821 0.0 0\nM  V30 21 F 9.51591 0.121794 0.0 0\nM  V30 22 F 10.7405 0.121794 0.0 0\nM  V30 23 F 12.1261 3.87821 0.0 0\nM  V30 24 F 10.9016 3.87821 0.0 0\nM  V30 25 F 12.2872 0.121794 0.0 0\nM  V30 26 F 13.5118 0.121794 0.0 0\nM  V30 27 F 14.8974 3.87821 0.0 0\nM  V30 28 F 13.6728 3.87821 0.0 0\nM  V30 29 O 16.4708 2.98564 0.0 0\nM  V30 30 O 17.0564 0.800002 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 2 3\nM  V30 2 1 3 4\nM  V30 3 1 4 5\nM  V30 4 1 5 6\nM  V30 5 1 6 7\nM  V30 6 1 7 8\nM  V30 7 1 8 9\nM  V30 8 1 9 10\nM  V30 9 1 10 11\nM  V30 10 1 11 12\nM  V30 11 1 11 13\nM  V30 12 1 11 14\nM  V30 13 1 10 15\nM  V30 14 1 10 16\nM  V30 15 1 9 17\nM  V30 16 1 9 18\nM  V30 17 1 8 19\nM  V30 18 1 8 20\nM  V30 19 1 7 21\nM  V30 20 1 7 22\nM  V30 21 1 6 23\nM  V30 22 1 6 24\nM  V30 23 1 5 25\nM  V30 24 1 5 26\nM  V30 25 1 4 27\nM  V30 26 1 4 28\nM  V30 27 2 3 29\nM  V30 28 2 3 30\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+              "molFormula": "C8 F17 K O3 S",
+              "averageMass": 538.2199621200562,
+              "monoisotopicMass": 537.893383026123,
+              "additionalProps": {}
+            }
+          },
+          "transformLog": [],
+          "issues": [],
+          "type": "PARENT",
+          "status": "SKIPPED"
+        },
+        "original": {
+          "ordinal": 0,
+          "rid": "0",
+          "properties": {},
+          "chemical": {
+            "chemId": "DTXSID80108992",
+            "cid": "DTXCID80820526",
+            "sid": "DTXSID80108992",
+            "casrn": "45298-90-6",
+            "name": "Perfluorooctanesulfonate",
+            "smiles": "[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "canonicalSmiles": "[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "inchi": "InChI=1/C8HF17O3S/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28/h(H,26,27,28)/p-1/fC8F17O3S/q-1",
+            "inchiKey": "YFSUTJLHUFNCNZ-JCZGALPENA-M",
+            "mol": "\n  -INDIGO-05212620022D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 29 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 O 14.8708 0.21436 0.0 0 CHG=-1\nM  V30 2 S 15.6708 1.6 0.0 0\nM  V30 3 C 14.2851 2.4 0.0 0\nM  V30 4 C 12.8995 1.6 0.0 0\nM  V30 5 C 11.5138 2.4 0.0 0\nM  V30 6 C 10.1282 1.6 0.0 0\nM  V30 7 C 8.74256 2.4 0.0 0\nM  V30 8 C 7.35692 1.6 0.0 0\nM  V30 9 C 5.97128 2.4 0.0 0\nM  V30 10 C 4.58564 1.6 0.0 0\nM  V30 11 F 4.58564 0.0 0.0 0\nM  V30 12 F 3.2 2.4 0.0 0\nM  V30 13 F 3.2 0.8 0.0 0\nM  V30 14 F 6.58358 3.87821 0.0 0\nM  V30 15 F 5.35899 3.87821 0.0 0\nM  V30 16 F 6.74463 0.121794 0.0 0\nM  V30 17 F 7.96922 0.121794 0.0 0\nM  V30 18 F 9.35486 3.87821 0.0 0\nM  V30 19 F 8.13027 3.87821 0.0 0\nM  V30 20 F 9.51591 0.121794 0.0 0\nM  V30 21 F 10.7405 0.121794 0.0 0\nM  V30 22 F 12.1261 3.87821 0.0 0\nM  V30 23 F 10.9016 3.87821 0.0 0\nM  V30 24 F 12.2872 0.121794 0.0 0\nM  V30 25 F 13.5118 0.121794 0.0 0\nM  V30 26 F 14.8974 3.87821 0.0 0\nM  V30 27 F 13.6728 3.87821 0.0 0\nM  V30 28 O 16.4708 2.98564 0.0 0\nM  V30 29 O 17.0564 0.800002 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 1 2\nM  V30 2 1 2 3\nM  V30 3 1 3 4\nM  V30 4 1 4 5\nM  V30 5 1 5 6\nM  V30 6 1 6 7\nM  V30 7 1 7 8\nM  V30 8 1 8 9\nM  V30 9 1 9 10\nM  V30 10 1 10 11\nM  V30 11 1 10 12\nM  V30 12 1 10 13\nM  V30 13 1 9 14\nM  V30 14 1 9 15\nM  V30 15 1 8 16\nM  V30 16 1 8 17\nM  V30 17 1 7 18\nM  V30 18 1 7 19\nM  V30 19 1 6 20\nM  V30 20 1 6 21\nM  V30 21 1 5 22\nM  V30 22 1 5 23\nM  V30 23 1 4 24\nM  V30 24 1 4 25\nM  V30 25 1 3 26\nM  V30 26 1 3 27\nM  V30 27 2 2 28\nM  V30 28 2 2 29\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+            "molFormula": "C8 F17 O3 S",
+            "averageMass": 499.12166118621826,
+            "monoisotopicMass": 498.9296760559082,
+            "additionalProps": {}
+          }
+        },
+        "transformLog": [
+          {
+            "ordinal": 0,
+            "rid": "0",
+            "properties": {},
+            "chemical": {
+              "chemId": "DTXSID3031864",
+              "cid": "DTXCID1011864",
+              "sid": "DTXSID3031864",
+              "casrn": "1763-23-1",
+              "name": "Perfluorooctanesulfonic acid",
+              "smiles": "OS(C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)(=O)=O",
+              "canonicalSmiles": "OS(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+              "inchi": "InChI=1/C8HF17O3S/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28/h(H,26,27,28)/f/h26H",
+              "inchiKey": "YFSUTJLHUFNCNZ-HXTKINSTNA-N",
+              "mol": "\n  -INDIGO-05212620022D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 29 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 O -2.9641 -0.866025 0.0 0\nM  V30 2 S -3.4641 0.0 0.0 0\nM  V30 3 O -3.9641 0.866026 0.0 0\nM  V30 4 O -4.33013 -0.5 0.0 0\nM  V30 5 C -2.59808 0.5 0.0 0\nM  V30 6 C -1.73205 0.0 0.0 0\nM  V30 7 C -0.866025 0.5 0.0 0\nM  V30 8 C 0.0 0.0 0.0 0\nM  V30 9 C 0.866025 0.5 0.0 0\nM  V30 10 C 1.73205 0.0 0.0 0\nM  V30 11 C 2.59808 0.5 0.0 0\nM  V30 12 C 3.4641 0.0 0.0 0\nM  V30 13 F 3.4641 -1.0 0.0 0\nM  V30 14 F 4.33013 0.499999 0.0 0\nM  V30 15 F 4.33013 -0.500001 0.0 0\nM  V30 16 F 2.21539 1.42388 0.0 0\nM  V30 17 F 2.98076 1.42388 0.0 0\nM  V30 18 F 2.11473 -0.92388 0.0 0\nM  V30 19 F 1.34937 -0.92388 0.0 0\nM  V30 20 F 0.483342 1.42388 0.0 0\nM  V30 21 F 1.24871 1.42388 0.0 0\nM  V30 22 F 0.382683 -0.92388 0.0 0\nM  V30 23 F -0.382684 -0.92388 0.0 0\nM  V30 24 F -1.24871 1.42388 0.0 0\nM  V30 25 F -0.483342 1.42388 0.0 0\nM  V30 26 F -1.34937 -0.92388 0.0 0\nM  V30 27 F -2.11473 -0.92388 0.0 0\nM  V30 28 F -2.98076 1.42388 0.0 0\nM  V30 29 F -2.21539 1.42388 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 1 2\nM  V30 2 2 2 3\nM  V30 3 2 2 4\nM  V30 4 1 5 6\nM  V30 5 1 6 7\nM  V30 6 1 7 8\nM  V30 7 1 8 9\nM  V30 8 1 9 10\nM  V30 9 1 10 11\nM  V30 10 1 11 12\nM  V30 11 1 12 13\nM  V30 12 1 12 14\nM  V30 13 1 12 15\nM  V30 14 1 11 16\nM  V30 15 1 11 17\nM  V30 16 1 10 18\nM  V30 17 1 10 19\nM  V30 18 1 9 20\nM  V30 19 1 9 21\nM  V30 20 1 8 22\nM  V30 21 1 8 23\nM  V30 22 1 7 24\nM  V30 23 1 7 25\nM  V30 24 1 6 26\nM  V30 25 1 6 27\nM  V30 26 1 5 28\nM  V30 27 1 5 29\nM  V30 28 1 2 5\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+              "molFormula": "C8 H F17 O3 S",
+              "averageMass": 500.1296012401581,
+              "monoisotopicMass": 499.9375010728836,
+              "additionalProps": {}
+            },
+            "change": {
+              "@c": ".Change",
+              "type": "SMIRKS",
+              "value": "S([*])(=O)(=O)[O-]>>OS([*])(=O)=O |$;_R1;;;;;;_R1;;$|"
+            }
+          }
+        ],
+        "issues": [],
+        "type": "COMPONENT",
+        "status": "PASSED"
+      },
+      {
+        "@id": 4,
+        "id": "6a0f64fb8b3b075871b2f8ae",
+        "protocolId": "6a0f64e78b3b075871b2f8ab",
+        "original": {
+          "ordinal": 0,
+          "rid": "DTXSID8037706",
+          "properties": {},
+          "chemical": {
+            "chemId": "DTXSID8037706",
+            "cid": "DTXCID6017706",
+            "sid": "DTXSID8037706",
+            "casrn": "2795-39-3",
+            "name": "Potassium perfluorooctanesulfonate",
+            "smiles": "[K+].[O-]S(C(C(C(C(C(C(C(C(F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(=O)=O",
+            "canonicalSmiles": "[K+].[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "inchi": "InChI=1/C8HF17O3S.K/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28;/h(H,26,27,28);/q;+1/p-1/fC8F17O3S.K/q-1;m",
+            "inchiKey": "WFRUBUQWJYMMRQ-SGFZJTAPNA-M",
+            "mol": "\n  -INDIGO-05072615352D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 30 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 K 0.0 0.0 0.0 0 CHG=1\nM  V30 2 O 14.8708 0.21436 0.0 0 CHG=-1\nM  V30 3 S 15.6708 1.6 0.0 0\nM  V30 4 C 14.2851 2.4 0.0 0\nM  V30 5 C 12.8995 1.6 0.0 0\nM  V30 6 C 11.5138 2.4 0.0 0\nM  V30 7 C 10.1282 1.6 0.0 0\nM  V30 8 C 8.74256 2.4 0.0 0\nM  V30 9 C 7.35692 1.6 0.0 0\nM  V30 10 C 5.97128 2.4 0.0 0\nM  V30 11 C 4.58564 1.6 0.0 0\nM  V30 12 F 4.58564 0.0 0.0 0\nM  V30 13 F 3.2 2.4 0.0 0\nM  V30 14 F 3.2 0.8 0.0 0\nM  V30 15 F 6.58358 3.87821 0.0 0\nM  V30 16 F 5.35899 3.87821 0.0 0\nM  V30 17 F 6.74463 0.121794 0.0 0\nM  V30 18 F 7.96922 0.121794 0.0 0\nM  V30 19 F 9.35486 3.87821 0.0 0\nM  V30 20 F 8.13027 3.87821 0.0 0\nM  V30 21 F 9.51591 0.121794 0.0 0\nM  V30 22 F 10.7405 0.121794 0.0 0\nM  V30 23 F 12.1261 3.87821 0.0 0\nM  V30 24 F 10.9016 3.87821 0.0 0\nM  V30 25 F 12.2872 0.121794 0.0 0\nM  V30 26 F 13.5118 0.121794 0.0 0\nM  V30 27 F 14.8974 3.87821 0.0 0\nM  V30 28 F 13.6728 3.87821 0.0 0\nM  V30 29 O 16.4708 2.98564 0.0 0\nM  V30 30 O 17.0564 0.800002 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 2 3\nM  V30 2 1 3 4\nM  V30 3 1 4 5\nM  V30 4 1 5 6\nM  V30 5 1 6 7\nM  V30 6 1 7 8\nM  V30 7 1 8 9\nM  V30 8 1 9 10\nM  V30 9 1 10 11\nM  V30 10 1 11 12\nM  V30 11 1 11 13\nM  V30 12 1 11 14\nM  V30 13 1 10 15\nM  V30 14 1 10 16\nM  V30 15 1 9 17\nM  V30 16 1 9 18\nM  V30 17 1 8 19\nM  V30 18 1 8 20\nM  V30 19 1 7 21\nM  V30 20 1 7 22\nM  V30 21 1 6 23\nM  V30 22 1 6 24\nM  V30 23 1 5 25\nM  V30 24 1 5 26\nM  V30 25 1 4 27\nM  V30 26 1 4 28\nM  V30 27 2 3 29\nM  V30 28 2 3 30\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+            "molFormula": "C8 F17 K O3 S",
+            "averageMass": 538.2199621200562,
+            "monoisotopicMass": 537.893383026123,
+            "additionalProps": {}
+          }
+        },
+        "transformLog": [],
+        "issues": [],
+        "type": "PARENT",
+        "status": "SKIPPED"
+      },
+      {
+        "@id": 5,
+        "id": "6a0f64fb8b3b075871b2f8af",
+        "protocolId": "6a0f64e78b3b075871b2f8ab",
+        "parent": {
+          "@id": 6,
+          "id": "6a0f64fb8b3b075871b2f8ae",
+          "protocolId": "6a0f64e78b3b075871b2f8ab",
+          "original": {
+            "ordinal": 0,
+            "rid": "DTXSID8037706",
+            "properties": {},
+            "chemical": {
+              "chemId": "DTXSID8037706",
+              "cid": "DTXCID6017706",
+              "sid": "DTXSID8037706",
+              "casrn": "2795-39-3",
+              "name": "Potassium perfluorooctanesulfonate",
+              "smiles": "[K+].[O-]S(C(C(C(C(C(C(C(C(F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(F)F)(=O)=O",
+              "canonicalSmiles": "[K+].[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+              "inchi": "InChI=1/C8HF17O3S.K/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28;/h(H,26,27,28);/q;+1/p-1/fC8F17O3S.K/q-1;m",
+              "inchiKey": "WFRUBUQWJYMMRQ-SGFZJTAPNA-M",
+              "mol": "\n  -INDIGO-05072615352D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 30 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 K 0.0 0.0 0.0 0 CHG=1\nM  V30 2 O 14.8708 0.21436 0.0 0 CHG=-1\nM  V30 3 S 15.6708 1.6 0.0 0\nM  V30 4 C 14.2851 2.4 0.0 0\nM  V30 5 C 12.8995 1.6 0.0 0\nM  V30 6 C 11.5138 2.4 0.0 0\nM  V30 7 C 10.1282 1.6 0.0 0\nM  V30 8 C 8.74256 2.4 0.0 0\nM  V30 9 C 7.35692 1.6 0.0 0\nM  V30 10 C 5.97128 2.4 0.0 0\nM  V30 11 C 4.58564 1.6 0.0 0\nM  V30 12 F 4.58564 0.0 0.0 0\nM  V30 13 F 3.2 2.4 0.0 0\nM  V30 14 F 3.2 0.8 0.0 0\nM  V30 15 F 6.58358 3.87821 0.0 0\nM  V30 16 F 5.35899 3.87821 0.0 0\nM  V30 17 F 6.74463 0.121794 0.0 0\nM  V30 18 F 7.96922 0.121794 0.0 0\nM  V30 19 F 9.35486 3.87821 0.0 0\nM  V30 20 F 8.13027 3.87821 0.0 0\nM  V30 21 F 9.51591 0.121794 0.0 0\nM  V30 22 F 10.7405 0.121794 0.0 0\nM  V30 23 F 12.1261 3.87821 0.0 0\nM  V30 24 F 10.9016 3.87821 0.0 0\nM  V30 25 F 12.2872 0.121794 0.0 0\nM  V30 26 F 13.5118 0.121794 0.0 0\nM  V30 27 F 14.8974 3.87821 0.0 0\nM  V30 28 F 13.6728 3.87821 0.0 0\nM  V30 29 O 16.4708 2.98564 0.0 0\nM  V30 30 O 17.0564 0.800002 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 2 3\nM  V30 2 1 3 4\nM  V30 3 1 4 5\nM  V30 4 1 5 6\nM  V30 5 1 6 7\nM  V30 6 1 7 8\nM  V30 7 1 8 9\nM  V30 8 1 9 10\nM  V30 9 1 10 11\nM  V30 10 1 11 12\nM  V30 11 1 11 13\nM  V30 12 1 11 14\nM  V30 13 1 10 15\nM  V30 14 1 10 16\nM  V30 15 1 9 17\nM  V30 16 1 9 18\nM  V30 17 1 8 19\nM  V30 18 1 8 20\nM  V30 19 1 7 21\nM  V30 20 1 7 22\nM  V30 21 1 6 23\nM  V30 22 1 6 24\nM  V30 23 1 5 25\nM  V30 24 1 5 26\nM  V30 25 1 4 27\nM  V30 26 1 4 28\nM  V30 27 2 3 29\nM  V30 28 2 3 30\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+              "molFormula": "C8 F17 K O3 S",
+              "averageMass": 538.2199621200562,
+              "monoisotopicMass": 537.893383026123,
+              "additionalProps": {}
+            }
+          },
+          "transformLog": [],
+          "issues": [],
+          "type": "PARENT",
+          "status": "SKIPPED"
+        },
+        "original": {
+          "ordinal": 0,
+          "rid": "0",
+          "properties": {},
+          "chemical": {
+            "chemId": "DTXSID80108992",
+            "cid": "DTXCID80820526",
+            "sid": "DTXSID80108992",
+            "casrn": "45298-90-6",
+            "name": "Perfluorooctanesulfonate",
+            "smiles": "[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "canonicalSmiles": "[O-]S(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+            "inchi": "InChI=1/C8HF17O3S/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28/h(H,26,27,28)/p-1/fC8F17O3S/q-1",
+            "inchiKey": "YFSUTJLHUFNCNZ-JCZGALPENA-M",
+            "mol": "\n  -INDIGO-05212620032D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 29 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 O 14.8708 0.21436 0.0 0 CHG=-1\nM  V30 2 S 15.6708 1.6 0.0 0\nM  V30 3 C 14.2851 2.4 0.0 0\nM  V30 4 C 12.8995 1.6 0.0 0\nM  V30 5 C 11.5138 2.4 0.0 0\nM  V30 6 C 10.1282 1.6 0.0 0\nM  V30 7 C 8.74256 2.4 0.0 0\nM  V30 8 C 7.35692 1.6 0.0 0\nM  V30 9 C 5.97128 2.4 0.0 0\nM  V30 10 C 4.58564 1.6 0.0 0\nM  V30 11 F 4.58564 0.0 0.0 0\nM  V30 12 F 3.2 2.4 0.0 0\nM  V30 13 F 3.2 0.8 0.0 0\nM  V30 14 F 6.58358 3.87821 0.0 0\nM  V30 15 F 5.35899 3.87821 0.0 0\nM  V30 16 F 6.74463 0.121794 0.0 0\nM  V30 17 F 7.96922 0.121794 0.0 0\nM  V30 18 F 9.35486 3.87821 0.0 0\nM  V30 19 F 8.13027 3.87821 0.0 0\nM  V30 20 F 9.51591 0.121794 0.0 0\nM  V30 21 F 10.7405 0.121794 0.0 0\nM  V30 22 F 12.1261 3.87821 0.0 0\nM  V30 23 F 10.9016 3.87821 0.0 0\nM  V30 24 F 12.2872 0.121794 0.0 0\nM  V30 25 F 13.5118 0.121794 0.0 0\nM  V30 26 F 14.8974 3.87821 0.0 0\nM  V30 27 F 13.6728 3.87821 0.0 0\nM  V30 28 O 16.4708 2.98564 0.0 0\nM  V30 29 O 17.0564 0.800002 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 1 2\nM  V30 2 1 2 3\nM  V30 3 1 3 4\nM  V30 4 1 4 5\nM  V30 5 1 5 6\nM  V30 6 1 6 7\nM  V30 7 1 7 8\nM  V30 8 1 8 9\nM  V30 9 1 9 10\nM  V30 10 1 10 11\nM  V30 11 1 10 12\nM  V30 12 1 10 13\nM  V30 13 1 9 14\nM  V30 14 1 9 15\nM  V30 15 1 8 16\nM  V30 16 1 8 17\nM  V30 17 1 7 18\nM  V30 18 1 7 19\nM  V30 19 1 6 20\nM  V30 20 1 6 21\nM  V30 21 1 5 22\nM  V30 22 1 5 23\nM  V30 23 1 4 24\nM  V30 24 1 4 25\nM  V30 25 1 3 26\nM  V30 26 1 3 27\nM  V30 27 2 2 28\nM  V30 28 2 2 29\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+            "molFormula": "C8 F17 O3 S",
+            "averageMass": 499.12166118621826,
+            "monoisotopicMass": 498.9296760559082,
+            "additionalProps": {}
+          }
+        },
+        "transformLog": [
+          {
+            "ordinal": 0,
+            "rid": "0",
+            "properties": {},
+            "chemical": {
+              "chemId": "DTXSID3031864",
+              "cid": "DTXCID1011864",
+              "sid": "DTXSID3031864",
+              "casrn": "1763-23-1",
+              "name": "Perfluorooctanesulfonic acid",
+              "smiles": "OS(C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F)(=O)=O",
+              "canonicalSmiles": "OS(=O)(=O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F",
+              "inchi": "InChI=1/C8HF17O3S/c9-1(10,3(13,14)5(17,18)7(21,22)23)2(11,12)4(15,16)6(19,20)8(24,25)29(26,27)28/h(H,26,27,28)/f/h26H",
+              "inchiKey": "YFSUTJLHUFNCNZ-HXTKINSTNA-N",
+              "mol": "\n  -INDIGO-05212620032D\n\n  0  0  0  0  0  0  0  0  0  0  0 V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 29 28 0 0 0\nM  V30 BEGIN ATOM\nM  V30 1 O -2.9641 -0.866025 0.0 0\nM  V30 2 S -3.4641 0.0 0.0 0\nM  V30 3 O -3.9641 0.866026 0.0 0\nM  V30 4 O -4.33013 -0.5 0.0 0\nM  V30 5 C -2.59808 0.5 0.0 0\nM  V30 6 C -1.73205 0.0 0.0 0\nM  V30 7 C -0.866025 0.5 0.0 0\nM  V30 8 C 0.0 0.0 0.0 0\nM  V30 9 C 0.866025 0.5 0.0 0\nM  V30 10 C 1.73205 0.0 0.0 0\nM  V30 11 C 2.59808 0.5 0.0 0\nM  V30 12 C 3.4641 0.0 0.0 0\nM  V30 13 F 3.4641 -1.0 0.0 0\nM  V30 14 F 4.33013 0.499999 0.0 0\nM  V30 15 F 4.33013 -0.500001 0.0 0\nM  V30 16 F 2.21539 1.42388 0.0 0\nM  V30 17 F 2.98076 1.42388 0.0 0\nM  V30 18 F 2.11473 -0.92388 0.0 0\nM  V30 19 F 1.34937 -0.92388 0.0 0\nM  V30 20 F 0.483342 1.42388 0.0 0\nM  V30 21 F 1.24871 1.42388 0.0 0\nM  V30 22 F 0.382683 -0.92388 0.0 0\nM  V30 23 F -0.382684 -0.92388 0.0 0\nM  V30 24 F -1.24871 1.42388 0.0 0\nM  V30 25 F -0.483342 1.42388 0.0 0\nM  V30 26 F -1.34937 -0.92388 0.0 0\nM  V30 27 F -2.11473 -0.92388 0.0 0\nM  V30 28 F -2.98076 1.42388 0.0 0\nM  V30 29 F -2.21539 1.42388 0.0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30 1 1 1 2\nM  V30 2 2 2 3\nM  V30 3 2 2 4\nM  V30 4 1 5 6\nM  V30 5 1 6 7\nM  V30 6 1 7 8\nM  V30 7 1 8 9\nM  V30 8 1 9 10\nM  V30 9 1 10 11\nM  V30 10 1 11 12\nM  V30 11 1 12 13\nM  V30 12 1 12 14\nM  V30 13 1 12 15\nM  V30 14 1 11 16\nM  V30 15 1 11 17\nM  V30 16 1 10 18\nM  V30 17 1 10 19\nM  V30 18 1 9 20\nM  V30 19 1 9 21\nM  V30 20 1 8 22\nM  V30 21 1 8 23\nM  V30 22 1 7 24\nM  V30 23 1 7 25\nM  V30 24 1 6 26\nM  V30 25 1 6 27\nM  V30 26 1 5 28\nM  V30 27 1 5 29\nM  V30 28 1 2 5\nM  V30 END BOND\nM  V30 END CTAB\nM  END\n",
+              "molFormula": "C8 H F17 O3 S",
+              "averageMass": 500.1296012401581,
+              "monoisotopicMass": 499.9375010728836,
+              "additionalProps": {}
+            },
+            "change": {
+              "@c": ".Change",
+              "type": "SMIRKS",
+              "value": "S([*])(=O)(=O)[O-]>>OS([*])(=O)=O |$;_R1;;;;;;_R1;;$|"
+            }
+          }
+        ],
+        "issues": [],
+        "type": "COMPONENT",
+        "status": "PASSED"
+      }
+    ]
+  }
+}

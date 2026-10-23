@@ -1,0 +1,239 @@
+{
+  "id": "chemi-stdizer-reviewed-protocol-get",
+  "schemas": {
+    "files": [
+      "schema/chemi-stdizer-prod.json"
+    ]
+  },
+  "selection": {
+    "include": [
+      "GET /api/stdizer/protocols/{id}"
+    ]
+  },
+  "helper": ".ct_request",
+  "documentation": true,
+  "operations": {
+    "GET /api/stdizer/protocols/{id}": {
+      "name": "chemi_stdizer_protocols_by_id_get",
+      "file": "R/chemi_stdizer_protocols_by_id_get.R",
+      "implementation": "generated",
+      "server": {
+        "resolver": ".ct_server_url",
+        "key": "chemi_burl"
+      },
+      "request_controls": {
+        "preserve_errors": true
+      },
+      "docs": {
+        "title": "Read records in a standardizer protocol",
+        "lifecycle": "experimental",
+        "return": "Decoded protocol metadata and its requested page of records.",
+        "tags": {
+          "apiStage": "public"
+        },
+        "parameters": {
+          "id": "Protocol identifier returned by chemi_stdizer_protocols().",
+          "page": "Zero-based page index; NULL leaves the service default.",
+          "size": "Positive page size; NULL leaves the service default.",
+          "sort": "Character vector of sort expressions, such as c(\"type,asc\", \"id,desc\"). Each expression is sent as its own sort query field. NULL or character() omits sorting.",
+          "hidden": "Optional boolean filter; NULL leaves the service default.",
+          "components": "Optional boolean filter; NULL leaves the service default.",
+          "changed": "Optional boolean filter; NULL leaves the service default.",
+          "failed": "Optional boolean filter; NULL leaves the service default.",
+          "passed": "Optional boolean filter; NULL leaves the service default."
+        }
+      },
+      "normalize_inputs": {
+        "sort": ".ct_protocol_sort"
+      },
+      "request": {
+        "arguments": {
+          "method": {
+            "value": "GET"
+          },
+          "path": {
+            "value": "/api/stdizer/protocols/{id}"
+          },
+          "path_params": {
+            "object": {
+              "id": {
+                "from": [
+                  "params",
+                  "id"
+                ]
+              }
+            }
+          },
+          "query": {
+            "object": {
+              "hidden": {
+                "from": [
+                  "params",
+                  "hidden"
+                ]
+              },
+              "components": {
+                "from": [
+                  "params",
+                  "components"
+                ]
+              },
+              "changed": {
+                "from": [
+                  "params",
+                  "changed"
+                ]
+              },
+              "failed": {
+                "from": [
+                  "params",
+                  "failed"
+                ]
+              },
+              "passed": {
+                "from": [
+                  "params",
+                  "passed"
+                ]
+              },
+              "page": {
+                "from": [
+                  "params",
+                  "page"
+                ]
+              },
+              "size": {
+                "from": [
+                  "params",
+                  "size"
+                ]
+              },
+              "sort": {
+                "from": [
+                  "params",
+                  "sort"
+                ]
+              }
+            }
+          },
+          "body": {
+            "value": null
+          },
+          "headers": {
+            "value": {}
+          },
+          "server": {
+            "value": {
+              "url": "https://hcd.rtpnc.epa.gov"
+            }
+          },
+          "server_resolver": {
+            "value": {
+              "name": ".ct_server_url",
+              "key": "chemi_burl",
+              "relative": "/"
+            }
+          },
+          "auth": {
+            "value": []
+          },
+          "query_serialization": {
+            "value": {
+              "sort": "explode"
+            }
+          },
+          "body_media": {
+            "value": "application/json"
+          },
+          "request_controls": {
+            "value": {
+              "preserve_errors": true
+            }
+          },
+          "parameter_serialization": {
+            "value": [
+              {
+                "name": "hidden",
+                "location": "query",
+                "schema": {
+                  "type": "boolean"
+                },
+                "style": "form",
+                "explode": true,
+                "collection_format": null,
+                "required": false
+              },
+              {
+                "name": "components",
+                "location": "query",
+                "schema": {
+                  "type": "boolean"
+                },
+                "style": "form",
+                "explode": true,
+                "collection_format": null,
+                "required": false
+              },
+              {
+                "name": "changed",
+                "location": "query",
+                "schema": {
+                  "type": "boolean"
+                },
+                "style": "form",
+                "explode": true,
+                "collection_format": null,
+                "required": false
+              },
+              {
+                "name": "failed",
+                "location": "query",
+                "schema": {
+                  "type": "boolean"
+                },
+                "style": "form",
+                "explode": true,
+                "collection_format": null,
+                "required": false
+              },
+              {
+                "name": "passed",
+                "location": "query",
+                "schema": {
+                  "type": "boolean"
+                },
+                "style": "form",
+                "explode": true,
+                "collection_format": null,
+                "required": false
+              }
+            ]
+          }
+        }
+      },
+      "exclude_parameters": [
+        "pageable"
+      ],
+      "extra_parameters": {
+        "page": {
+          "type": "integer",
+          "minimum": 0,
+          "default": null
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "default": null
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      }
+    }
+  },
+  "hook_config": "inst/hook_config.yml"
+}

@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "url": "https://hcd.rtpnc.epa.gov/api/amos/safety_data_sheet_keyset_pagination/1?cursor=eyJsYXN0X2ludGVybmFsX2lkIjogIlNEUy0wMDEifQ%3D%3D",
+  "body": null
+}

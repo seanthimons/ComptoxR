@@ -44,23 +44,26 @@ ct_related <- function(query, inclusive = FALSE) {
     cli::cli_end()
   }
 
-  # Manual loop over query items - generic_request doesn't support per-item
-  # query parameters with batch_limit=1 (that appends to path, not query string)
-  # So we use batch_limit=0 (static endpoint) and pass id as query parameter
+  # Legacy Dashboard ccdapp2 route: production ctx-api does not expose this
+  # endpoint yet, and it takes the DTXSID as a query parameter, so each item
+  # is a separate unauthenticated request returning the raw JSON body.
   results <- purrr::map(
     query,
     function(dtxsid) {
-      generic_request(
-        query = NULL,
-        endpoint = "related-substances/search/by-dtxsid",
-        method = "GET",
-        batch_limit = 0,
-        # Legacy Dashboard ccdapp2 route: production ctx-api does not expose this
-        # endpoint yet. Passed directly like ct_similar, not via ctx_server().
-        server = "https://comptox.epa.gov/dashboard-api/ccdapp2/",
-        auth = FALSE,
-        tidy = FALSE,
-        id = dtxsid # Named parameter becomes query parameter
+      # One failed DTXSID warns and is skipped rather than aborting the call.
+      tryCatch(
+        .ct_request(
+          method = "GET",
+          path = "/related-substances/search/by-dtxsid",
+          path_params = list(),
+          query = list(id = dtxsid),
+          body = NULL,
+          server = list(url = "https://comptox.epa.gov/dashboard-api/ccdapp2")
+        ),
+        error = function(e) {
+          cli::cli_warn("Related substances request failed for {dtxsid}: {conditionMessage(e)}")
+          NULL
+        }
       )
     },
     .progress = run_verbose

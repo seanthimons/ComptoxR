@@ -1,0 +1,42 @@
+{
+  "staging": {
+    "at": "2026-10-18 20:01:39 UTC",
+    "url": "https://cim.sciencedataexperts.com/api",
+    "result": [
+      {
+        "sid": "DTXSID0020153",
+        "name": "Benzyl chloride",
+        "category": "B",
+        "rq_lbs": 100,
+        "rq_kgs": 45.4
+      },
+      {
+        "sid": "DTXSID0022018",
+        "name": "Disulfoton",
+        "category": "X",
+        "rq_lbs": 1,
+        "rq_kgs": 0.454
+      }
+    ]
+  },
+  "production": {
+    "at": "2026-10-18 20:01:40 UTC",
+    "url": "https://hcd.rtpnc.epa.gov/api",
+    "result": [
+      {
+        "sid": "DTXSID0020153",
+        "name": "Benzyl chloride",
+        "category": "B",
+        "rq_lbs": 100,
+        "rq_kgs": 45.4
+      },
+      {
+        "sid": "DTXSID0022018",
+        "name": "Disulfoton",
+        "category": "X",
+        "rq_lbs": 1,
+        "rq_kgs": 0.454
+      }
+    ]
+  }
+}

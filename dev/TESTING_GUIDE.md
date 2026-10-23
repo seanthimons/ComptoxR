@@ -23,6 +23,9 @@ Use `--output <temp-path-outside-repo>` when validating documentation-only chang
 
 ## Quick Commands
 
+Install the pinned toolkit and export its library as `R_LIBS` using the
+[development setup](../CONTRIBUTING.md#before-you-open-a-pr) before these commands.
+
 ```bash
 # Regenerate offline generated wrapper contract tests
 Rscript dev/generate_tests.R --generate

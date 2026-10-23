@@ -28,23 +28,49 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
+The Specmill migration uses a separate pinned development library.
+Use Air 0.11.0 for specmill, then run:
+
+```bash
+Rscript dev/install_specmill.R
+Rscript dev/generate_specmill.R --plan
+Rscript dev/generate_specmill.R --check
+```
+
+Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
+matching output; do not reuse initial adoption hashes. See the
+[current migration handoff](dev/specmill-rebuild/HANDOFF.md) for localhost verification,
+retained implementations, offline reproduction and rollback. The legacy
+commands below continue to maintain retained operations.
+
+The **Specmill Maintenance** workflow checks the generated client on every pull request,
+including changes to CI and documentation. It installs the locked source revision,
+runs native behavior suites, fixed contracts and client policy tests, and checks that regeneration
+leaves no changed or new files. Its Air 0.11.0 installation runs in a separate job
+from the legacy generator's Air 0.9.0 installation.
+
 Install the reviewed development toolkit before running schema commands:
 
 ```r
-source("dev/install_toolkit.R")
-install_toolkit()
+source("dev/install_specmill.R")
+lib <- install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
+.libPaths(c(lib, .libPaths()))
 ```
 
-The archive URL and SHA-256 are pinned in `dev/toolkit-lock.json`. The toolkit
-is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
+The specmill revision and source-archive SHA-256 are pinned in
+`dev/specmill-lock.json`; `install_specmill()` archives that revision from a local
+specmill checkout (default `../specmill`). Specmill is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
 version with this repository's `air.toml`. Public generation uses approved production
 schemas only. Keep other schemas and generated clients outside this checkout.
 Regenerate a promoted operation from its approved production schema.
+Export the pinned library in the shell so each development command and its child
+R processes can find it:
 
 ```bash
-Rscript dev/generate_stubs.R --rebuild=ct --rebuild=chemi --rebuild=epi
+export R_LIBS="$(Rscript -e 'cat(file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", jsonlite::read_json("dev/specmill-lock.json")$version))')"
+Rscript dev/generate_specmill.R --apply
 Rscript dev/generate_tests.R --generate
-Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+Rscript dev/generate_specmill.R --check
 Rscript dev/generate_tests.R --check
 Rscript dev/check_hook_config.R
 Rscript dev/check_public_api.R
@@ -61,8 +87,8 @@ Run the targeted checks for what you changed:
 devtools::document()
 
 # Targeted tests
-testthat::test_file("tests/testthat/test-generic_request.R")
-devtools::test(filter = "generic_request")
+testthat::test_file("tests/testthat/test-ct_similar.R")
+devtools::test(filter = "ct_similar")
 ```
 
 For R code, format and lint:

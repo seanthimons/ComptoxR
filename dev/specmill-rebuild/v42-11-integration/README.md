@@ -1,0 +1,25 @@
+# Eleven-operation root integration
+
+Official Specmill v0.1.42 emits the safety SID/resolver contract, eight original facades and two WebTEST exports. The root coverage ledger is 498/548 canonical operations, with held private candidates excluded. The toolkit source and helper stay at the released pin.
+
+All 704 final ownership hashes match. Fresh generation proposes only unchanged files, all 30 selected sources pass validation and the retained-test inventory is current. The facade apply keeps all 694 unrelated owners unchanged; WebTEST apply keeps all 702 preceding owners unchanged. The two root WebTEST wrappers exactly match the child bytes that passed 276 assertions. The combined root facade/safety focused replay passes 616 assertions with zero failures/errors/warnings/skips.
+
+The actual root-generated safety wrapper and existing resolver passed the benzyl chloride/disulfoton controls and omitted the missing RQ result on both staging and production. See ../issue-352/root-live-v42.json. Its no-argument error is retained; the approved SID query signature is an explicit client contract extension. Resolver availability is now required. Native hard401/config semantics remain selected through the existing decoder callback.
+
+Known inherited payload defects are preserved for the five Chemi facade projections, as required by #311. Compatibility/local generation does not certify deployed success for those payloads. No mutation/upload/auth/session request was deployed. Safety render remains a source ownership hold under Specmill61, and all other outstanding upstream/source holds remain excluded from coverage.
+
+Initial root merge mistakes and incomplete retirement of unowned manual helper tests are retained in the initial-*.txt logs. The final broad safe suite is a new run after freezing and deleting the three replaced unowned manual tests. Owned stale tests were retired through public Specmill apply_files. No generated runtime/test/helper patch is used.
+
+The broad safe suite, package gate and public maintenance CLI check are in progress at this checkpoint. Results will be added separately; this checkpoint does not claim they passed. The package gate excludes tests/examples/vignettes/manual and relaxes optional Suggests. It checks the same runtime/metadata bytes; the source snapshot still contains the three now-retired tests, which are excluded by --no-tests. The final broad suite uses the current registered tests.
+
+Reproduce generation freshness with check.R after installing the pinned development toolkit. The public dev/generate_specmill.R entrypoint now loads every callback file declared by specmill.yml and requires full source validation. The existing GET-body interoperability warning remains visible.
+
+## Maintenance gates and review follow-up
+
+Both public maintenance entrypoints pass with pinned v42. Package gate: zero errors/warnings/notes, with the exclusions above. The existing GET-body interoperability warning and raw pre-override relative-server inventory diagnostics remain visible; all thirty selected source-validation reports pass and no generation change is proposed. The full broad safe suite is still running.
+
+Independent standards/spec review is recorded separately in REVIEW.md. The one discovered hook-validator integration gap is resolved in tooling, with unchanged runtime bodies and strict rejection self-checks. No generator feature is bypassed.
+
+## Completed broad run and corrections
+
+The completed broad run has12,942 passing assertions,50 expected skips, zero failed expectations/warnings and2 errors. It is not a clean broad pass. The unchanged native GET assay fixture was inadvertently removed with selected migrated names; that exact entry is restored from the frozen parent, preserving its owned contract test. The WebTEST localhost fixture reused a connection across its204 and malformed-JSON replies; Connection:close isolates responses, matching other real wire fixtures. Runtime transport is unchanged. Both raw errors and the complete result are retained. The next broad run includes the additional reviewed standardizer preflight and explicitly selects the pinned toolkit library.

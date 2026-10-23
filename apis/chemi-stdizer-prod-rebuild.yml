@@ -1,0 +1,141 @@
+id: chemi-stdizer-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: yes
+operations:
+  POST /api/stdizer/records:
+    name: chemi_stdizer_records
+    file: R/chemi_stdizer_records.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      full:
+        type: any
+        default: null
+        description: Optional parameter
+      options:
+        type: any
+        default: null
+        description: Optional parameter
+      records:
+        type: any
+        default: null
+        description: Optional parameter
+    post_on_skip: false
+    post_state: parameters
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/stdizer/records
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: legacy_chemi_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: legacy_chemi_facade_response
+        request_controls:
+          value:
+            preserve_errors: true
+    docs:
+      title: Stdizer Records
+      lifecycle: experimental
+      parameters:
+        full: Optional parameter
+        options: Optional parameter
+        records: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - full: DTXSID1024122
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: true
+  POST /api/stdizer/chemicals:
+    name: chemi_stdizer_chemicals
+    file: R/chemi_stdizer_chemicals.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: any
+      idType:
+        type: any
+        default: AnyId
+      full:
+        type: any
+        default: ~
+      options:
+        type: any
+        default: ~
+    private_params:
+      chemicals: ~
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/stdizer/chemicals
+        path_params:
+          value: {}
+        query:
+          object: {}
+        body:
+          callback: resolved_chemical_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: resolved_chemical_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: chemi stdizer chemicals
+      lifecycle: experimental
+      return: Decoded response records, with the configured client formatting.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        full: Optional parameter
+        options: Standardizer options. Select a workflow explicitly, for example list(workflow
+          = "ms-ready"). The service rejects a missing workflow.
+      tags:
+        apiStage: public
+    request_controls:
+      preserve_errors: yes
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
+prepare: preserve_choice_defaults

@@ -1,0 +1,308 @@
+{
+  "id": "search-pilot",
+  "schemas": {
+    "files": [
+      "schema/chemi-search-prod.json"
+    ]
+  },
+  "selection": {
+    "include": [
+      "POST /api/search"
+    ]
+  },
+  "helper": ".ct_request",
+  "prepare": "preserve_choice_defaults",
+  "documentation": true,
+  "operations": {
+    "POST /api/search": {
+      "name": "chemi_search",
+      "file": "R/chemi_search.R",
+      "implementation": "generated",
+      "inputs": {
+        "query": {
+          "default": null,
+          "type": "character"
+        },
+        "search_type": {
+          "default": [
+            "exact",
+            "substructure",
+            "similar",
+            "mass",
+            "hazard",
+            "features"
+          ],
+          "type": "character"
+        },
+        "similarity_type": {
+          "default": [
+            "tanimoto",
+            "euclid",
+            "tversky"
+          ],
+          "type": "character"
+        },
+        "min_similarity": {
+          "default": 0.85,
+          "type": "numeric"
+        },
+        "hazard_name": {
+          "default": null,
+          "type": "character"
+        },
+        "min_toxicity": {
+          "default": [
+            "VH",
+            "H",
+            "M",
+            "L",
+            "A"
+          ],
+          "type": "character"
+        },
+        "min_authority": {
+          "default": [
+            "auth",
+            "screen",
+            "qsar"
+          ],
+          "type": "character"
+        },
+        "mass_type": {
+          "default": [
+            "mono",
+            "mw",
+            "abu"
+          ],
+          "type": "character"
+        },
+        "min_mass": {
+          "default": null,
+          "type": "character"
+        },
+        "max_mass": {
+          "default": null,
+          "type": "character"
+        },
+        "filter_features": {
+          "default": false,
+          "type": "logical"
+        },
+        "feature_filters": {
+          "default": null,
+          "type": "character"
+        },
+        "element_include": {
+          "default": null,
+          "type": "character"
+        },
+        "element_exclude": {
+          "default": null,
+          "type": "character"
+        },
+        "exclude_all_others": {
+          "default": false,
+          "type": "logical"
+        },
+        "limit": {
+          "default": 50,
+          "type": "numeric"
+        },
+        "all_pages": {
+          "default": false,
+          "type": "logical"
+        }
+      },
+      "request": {
+        "arguments": {
+          "method": {
+            "value": "POST"
+          },
+          "path": {
+            "value": "/search"
+          },
+          "path_params": {
+            "value": []
+          },
+          "query": {
+            "value": []
+          },
+          "body": {
+            "from": [
+              "hook_state",
+              "request",
+              "body"
+            ]
+          },
+          "body_media": {
+            "value": "application/json"
+          },
+          "headers": {
+            "value": {
+              "Accept": "application/json"
+            }
+          },
+          "server": {
+            "value": {
+              "url": "https://hcd.rtpnc.epa.gov/api"
+            }
+          },
+          "server_resolver": {
+            "value": {
+              "name": ".ct_server_url",
+              "key": "chemi_burl",
+              "relative": ""
+            }
+          },
+          "auth": {
+            "value": []
+          },
+          "response_policy": {
+            "value": ".ct_search_page_response"
+          },
+          "request_controls": {
+            "value": {
+              "preserve_errors": true
+            }
+          }
+        },
+        "pagination": {
+          "mode": "offset",
+          "when": {
+            "callback": "search_paging"
+          },
+          "parameter": [
+            "body",
+            "offset"
+          ],
+          "size_parameter": [
+            "body",
+            "params",
+            "limit"
+          ],
+          "page_size": {
+            "from": [
+              "hook_state",
+              "request",
+              "options",
+              "limit"
+            ]
+          },
+          "start": {
+            "value": 0
+          },
+          "max_pages": 100,
+          "items": ".ct_search_page_items",
+          "completed": ".ct_search_page_done",
+          "advance": ".ct_search_page_advance",
+          "metadata": false,
+          "error_policy": "partial",
+          "warn_limits": false,
+          "warn_errors": false,
+          "stop_on_empty": false
+        }
+      },
+      "post_on_skip": true,
+      "post_state": "hook_state",
+      "helper": ".ct_request",
+      "defer_inputs": [
+        "all_pages"
+      ],
+      "pre_params": [
+        "query",
+        "search_type",
+        "similarity_type",
+        "min_similarity",
+        "hazard_name",
+        "min_toxicity",
+        "min_authority",
+        "mass_type",
+        "min_mass",
+        "max_mass",
+        "filter_features",
+        "feature_filters",
+        "element_include",
+        "element_exclude",
+        "exclude_all_others",
+        "limit"
+      ],
+      "post_response_scope": "combined",
+      "result_formatter": ".ct_search_result",
+      "post_result_null": "remove",
+      "docs": {
+        "title": "Cheminformatics Search",
+        "description": "Search the cheminformatics database using various search types including exact structure, substructure, similarity, mass, hazard, and feature searches.",
+        "lifecycle": "maturing",
+        "parameters": {
+          "query": "Chemical identifier (DTXSID), SMILES string, or MOL file string. Required for exact, substructure, and similar searches. Can be NULL for mass, hazard, and features searches.",
+          "search_type": "Type of search to perform. One of: `\"exact\"` - Exact structure match `\"substructure\"` - Substructure search `\"similar\"` - Similarity search `\"mass\"` - Mass-based search `\"hazard\"` - Hazard-based search `\"features\"` - Feature-based search",
+          "similarity_type": "Similarity metric for similar searches. One of `\"tanimoto\"` (default), `\"euclid\"`, or `\"tversky\"`.",
+          "min_similarity": "Minimum similarity threshold (0-1). Defaults to 0.85.",
+          "hazard_name": "Hazard endpoint name for hazard searches. Use short names: `\"acute_oral\"`, `\"acute_inhal\"`, `\"acute_dermal\"`, `\"cancer\"`, `\"geno\"`, `\"endo\"`, `\"reprod\"`, `\"develop\"`, `\"neuro_single\"`, `\"neuro_repeat\"`, `\"sys_single\"`, `\"sys_repeat\"`, `\"skin_sens\"`, `\"skin_irr\"`, `\"eye\"`, `\"aq_acute\"`, `\"aq_chron\"`, `\"persis\"`, `\"bioacc\"`, `\"expo\"`.",
+          "min_toxicity": "Minimum toxicity level for hazard searches. One of `\"VH\"` (Very High), `\"H\"` (High), `\"M\"` (Medium), `\"L\"` (Low), or `\"A\"` (Any).",
+          "min_authority": "Minimum data authority level for hazard searches. One of `\"auth\"` (Authoritative), `\"screen\"` (Screening), or `\"qsar\"` (QSAR).",
+          "mass_type": "Type of mass for mass searches. One of `\"mono\"` (monoisotopic mass), `\"mw\"` (molecular weight), or `\"abu\"` (most abundant mass).",
+          "min_mass": "Minimum mass value for mass searches.",
+          "max_mass": "Maximum mass value for mass searches.",
+          "filter_features": "Logical; whether to apply feature filters. Defaults to FALSE.",
+          "feature_filters": "Named logical vector of feature filters to apply when `filter_features = TRUE`. Valid filter names: `\"stereo\"`, `\"chiral\"`, `\"isotopes\"`, `\"charged\"`, `\"multicomponent\"`, `\"radicals\"`, `\"salts\"`, `\"polymers\"`, `\"sgroups\"`.",
+          "element_include": "Character vector of element symbols to include in results.",
+          "element_exclude": "Character vector of element symbols to exclude from results.",
+          "exclude_all_others": "Logical; if TRUE, excludes all elements except those in `element_include`. Defaults to FALSE.",
+          "limit": "Maximum number of results to return per page. Defaults to 50.",
+          "all_pages": "Logical; if TRUE, automatically fetches all pages via offset/limit pagination. If FALSE (default), returns a single page."
+        },
+        "return": "A tibble containing search results with columns depending on search type. For similarity searches, includes a `relationship` column indicating `\"parent\"` (query compound) or `\"child\"` (similar compound).",
+        "tags": {
+          "apiStage": "public"
+        },
+        "examples": [
+          {
+            "query": "DTXSID7020182",
+            "search_type": "exact"
+          },
+          {
+            "query": "DTXSID7020182",
+            "search_type": "similar",
+            "min_similarity": 0.9
+          },
+          {
+            "query": null,
+            "search_type": "mass",
+            "mass_type": "mono",
+            "min_mass": 100,
+            "max_mass": 200
+          },
+          {
+            "query": null,
+            "search_type": "hazard",
+            "hazard_name": "cancer",
+            "min_toxicity": "H",
+            "min_authority": "auth"
+          },
+          {
+            "query": null,
+            "search_type": "features",
+            "element_include": [
+              "C",
+              "N",
+              "O"
+            ],
+            "exclude_all_others": true,
+            "limit": 100
+          }
+        ]
+      }
+    }
+  },
+  "hooks": {
+    "chemi_search": {
+      "pre_request": [
+        "chemi_search_pre_request"
+      ],
+      "post_response": [
+        "chemi_search_post_response"
+      ]
+    }
+  }
+}

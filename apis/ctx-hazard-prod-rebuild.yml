@@ -1,0 +1,662 @@
+id: ctx-hazard-prod-rebuild
+schemas:
+  files:
+  - schema/ctx-hazard-prod.json
+helper: .ct_request
+documentation: yes
+authentication:
+  api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
+operations:
+  GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_adme_ivive_search
+    file: R/ct_hazard_adme_ivive_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get ADME data for IVIVE by DTXSID with CCD projection
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_cancer_search
+    file: R/ct_hazard_cancer_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID0021125
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_genetox_details_search
+    file: R/ct_hazard_genetox_details_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get detailed data by DTXSID with CCD projection
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_genetox_search
+    file: R/ct_hazard_genetox_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get summary data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID0021125
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/hawc/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_hawc_search
+    file: R/ct_hazard_hawc_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get HAWC link by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/iris/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_iris_search
+    file: R/ct_hazard_iris_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get IRIS data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/pprtv/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_pprtv_search
+    file: R/ct_hazard_pprtv_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get PPRTV data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID2040282
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_skin_eye_search
+    file: R/ct_hazard_skin_eye_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID0021125
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_data_search
+    file: R/ct_hazard_toxref_data_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get all data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID1037806
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxref/data/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_data_search_by_study_id
+    file: R/ct_hazard_toxref_data_search_by_study_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: studyId
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get all data by Study ID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyId: 63
+    normalize_inputs:
+      studyId: .ct_legacy_query
+  GET /hazard/toxref/data/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_data_search_by_study_type
+    file: R/ct_hazard_toxref_data_search_by_study_type.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    request_controls:
+      timeout: .inf
+    batch:
+      fan_out: studyType
+      on_error: drop
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
+    docs:
+      title: Get all data by Study Type
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyType: DEV
+    normalize_inputs:
+      studyType: .ct_legacy_query
+  GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_effects_search
+    file: R/ct_hazard_toxref_effects_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get effects data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID1037806
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxref/effects/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_effects_search_by_study_id
+    file: R/ct_hazard_toxref_effects_search_by_study_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: studyId
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get effects data by Study ID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyId: 63
+    normalize_inputs:
+      studyId: .ct_legacy_query
+  GET /hazard/toxref/effects/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_effects_search_by_study_type
+    file: R/ct_hazard_toxref_effects_search_by_study_type.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    request_controls:
+      timeout: .inf
+    batch:
+      fan_out: studyType
+      on_error: drop
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
+    docs:
+      title: Get effects data by Study Type
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyType: DEV
+    normalize_inputs:
+      studyType: .ct_legacy_query
+  GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_observations_search
+    file: R/ct_hazard_toxref_observations_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get observations by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID1037806
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxref/observations/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_observations_search_by_study_id
+    file: R/ct_hazard_toxref_observations_search_by_study_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: studyId
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get observations by Study ID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyId: 63
+    normalize_inputs:
+      studyId: .ct_legacy_query
+  GET /hazard/toxref/observations/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_observations_search_by_study_type
+    file: R/ct_hazard_toxref_observations_search_by_study_type.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_paged
+    request_controls:
+      timeout: .inf
+    batch:
+      fan_out: studyType
+      on_error: drop
+    pagination:
+      mode: page
+      parameter: pageNumber
+      completed: .ct_last_page
+      max_pages: 100
+    docs:
+      title: Get observations by Study Type
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyType: DEV
+    normalize_inputs:
+      studyType: .ct_legacy_query
+  GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_search
+    file: R/ct_hazard_toxref_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get summary data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID1037806
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxref/summary/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_search_by_study_id
+    file: R/ct_hazard_toxref_search_by_study_id.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: studyId
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get summary data by Study ID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyId: 63
+    normalize_inputs:
+      studyId: .ct_legacy_query
+  GET /hazard/toxref/summary/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_search_by_study_type
+    file: R/ct_hazard_toxref_search_by_study_type.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: studyType
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get summary data by Study Type
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - studyType: DEV
+    normalize_inputs:
+      studyType: .ct_legacy_query
+  GET /hazard/toxval/search/by-category/{dtxsid}:
+    name: ct_hazard_toxval_search_by_category
+    file: R/ct_hazard_toxval_search_by_category.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get all data by dtxsid and category
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID0021125
+        category: Dose Response Summary Value
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxval/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxval_search
+    file: R/ct_hazard_toxval_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID0021125
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxval_supercategory_search
+    file: R/ct_hazard_toxval_supercategory_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get all toxval supercategories by dtxsid
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID0021125
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  POST /hazard/cancer-summary/search/by-dtxsid/:
+    name: ct_hazard_cancer_search_bulk
+    file: R/ct_hazard_cancer_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get data for a batch of DTXSIDs
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /hazard/genetox/details/search/by-dtxsid/:
+    name: ct_hazard_genetox_details_search_bulk
+    file: R/ct_hazard_genetox_details_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get detailed data for a batch of DTXSIDs
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /hazard/genetox/summary/search/by-dtxsid/:
+    name: ct_hazard_genetox_search_bulk
+    file: R/ct_hazard_genetox_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get summary data for a batch of DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /hazard/skin-eye/search/by-dtxsid/:
+    name: ct_hazard_skin_eye_search_bulk
+    file: R/ct_hazard_skin_eye_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get data for a batch of DTXSID(s)
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /hazard/toxval/search/by-dtxsid/:
+    name: ct_hazard_toxval_search_bulk
+    file: R/ct_hazard_toxval_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get data for a batch of DTXSID(s).
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID1024122
+        - DTXSID4020533
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

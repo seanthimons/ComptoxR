@@ -1,0 +1,165 @@
+id: chemi-search-services-native
+schemas:
+  files:
+  - schema/chemi-search-prod.json
+  - schema/chemi-services-prod.json
+selection:
+  include:
+  - POST /api/search/download
+  - GET /api/search/download/mol
+  - GET /api/search/download/mol-by-smiles
+  - POST /api/search/download/properties
+  - POST /api/search/download/search-result-as-sdf
+  - GET /api/search/render/png
+  - GET /api/search/render/svg
+  - POST /api/services/export
+  - POST /api/services/export_json_report
+  - POST /api/services/preflight
+  - POST /api/services/universalpreflight
+helper: .ct_request
+documentation: true
+operations:
+  POST /api/search/download:
+    name: chemi_search_download
+    file: R/chemi_search_download.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search download
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/search/download/mol:
+    name: chemi_search_download_mol
+    file: R/chemi_search_download_mol.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search download mol
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/search/download/mol-by-smiles:
+    name: chemi_search_download_mol_by_smiles
+    file: R/chemi_search_download_mol_by_smiles.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search download mol by smiles
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/search/download/properties:
+    name: chemi_search_download_properties
+    file: R/chemi_search_download_properties.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search download properties
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/search/download/search-result-as-sdf:
+    name: chemi_search_download_sdf
+    file: R/chemi_search_download_sdf.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search download sdf
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/search/render/png:
+    name: chemi_search_render_png
+    file: R/chemi_search_render_png.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search render png
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/search/render/svg:
+    name: chemi_search_render_svg
+    file: R/chemi_search_render_svg.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi search render svg
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/services/export:
+    name: chemi_services_export
+    file: R/chemi_services_export.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi services export
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public
+  POST /api/services/export_json_report:
+    name: chemi_services_export_json_report
+    file: R/chemi_services_export_json_report.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Chemi services export json report
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw bytes according to the response content type;
+        NULL for an empty response.
+      tags:
+        apiStage: public

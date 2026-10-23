@@ -87,12 +87,8 @@ Add this line to the file, replacing the placeholder with your key:
 ctx_api_key=YOUR_KEY_HERE
 ```
 
-Save the file and restart R. Confirm that R can find the key without printing
-the key in a script or report:
-
-```r
-ct_api_key()
-```
+Save the file and restart R. The startup message and `ComptoxR_package_sitrep()` report
+whether the key was found.
 
 If you only need the key for the current session, use:
 

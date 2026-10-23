@@ -1,0 +1,14 @@
+{
+  "url": "https://cim-dev.sciencedataexperts.com/api/toxprints?smiles=DTXSID7020182&headers=false",
+  "method": "GET",
+  "at": "2026-10-19T20:06:07.998869+00:00",
+  "status": 400,
+  "response": {
+    "type": "about:blank",
+    "title": "Bad Request",
+    "status": 400,
+    "detail": "Invalid chemical structure.",
+    "instance": "/api/toxprints",
+    "request_id": "c914228a-c1a0-4f98-ac6a-fff0886d9987"
+  }
+}

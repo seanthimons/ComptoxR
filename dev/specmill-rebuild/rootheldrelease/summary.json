@@ -1,0 +1,62 @@
+{
+  "status": "Client parity resolved except intentional native hard401; ready for released adoption and parent pin update",
+  "source": {
+    "package": "specmill",
+    "version": "0.1.41",
+    "source_commit": "16928dc49804d8149bbf8e126a3bd02c8a68de75",
+    "source_archive_sha256": "afc11d55ded4c1a7832b77fb0d63ac7d1eef780df376d33c199d39b56b9de3d1",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "frozen_fixture_commit": "a79a16b8",
+  "package_base_commit": "341b8526d21cf16e95576b95d44c8d9afd8a9725",
+  "unchanged_runtime_sha256": {
+    "schema/chemi-chet-prod.json": "df83f5d3fd7b59d23f556332526c330e579763d8a8858d222836931fe6321700",
+    "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
+    "R/z_specmill_request.R": "adc7106bdd4a236f6fbc69bc81da1d0dabfdc9d3c0c27951acc5045c68d5bfe7",
+    "R/hook_registry.R": "e2013fff789045d5af1d32dd726611f0ad71f2c7e7418acb0896b76d53dba981",
+    "R/input_policy.R": "ef4114664c237e3d5032383a0e24e618c83fbbfec3a2706b8bde1f7759042c00",
+    "R/batch_failure_policy.R": "b9f1d7b7982445d1a4b76f09d199e2bd9c20cf20be95162280a901bede039931",
+    "R/chemi_chet_reaction_searchcounts.R": "14838c6b8166849df62d033200a6ade5a39ac6d7fa9abf383b112f21b78664bf",
+    "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R": "4535bed188a958db028e9c7e1ebe68adf8f390848b6b263d7ba85193b77b3eeb",
+    "dev/specmill-lock.json": "291b9bca431d3e7d7c54cacfb8e7851a0f3de94aa988b2f9abf3706b831379a8",
+    "specmill.yml": "6d39a315bea7702c28787687082abbcc770caed2cdc1a6d120c19e90b0437091"
+  },
+  "authentic_baseline": {
+    "cases": 490,
+    "exact": 400,
+    "retracted_names_artifacts": 24
+  },
+  "diagnostics": {
+    "exact": 518,
+    "intentional_native_hard401": 36
+  },
+  "interpretation": "554 exact diagnostic comparisons: 518 exact matches and 36 intentional native hard401 differences; no output attributes stripped",
+  "focused_assertions": "PASS: exact scalar/blank-suffix/malformed-space/preflight parity; exact multi-result values and attributes; typed single failures, zero-HTTP preflight, normalized full params, original validator conditions, ignored return, multiple drop/count/warnings, hard 401/config.",
+  "executor_assertion": "PASS: real sequential responses are unnamed; prior lapply mock preserves names.",
+  "httr2_version": "1.3.0",
+  "generation": "official exact-archive emitter; no operation/mapping/drift diagnostics; byte-for-byte regeneration passed",
+  "files_sha256": {
+    "authentic-baseline.rds": "ed47b6e7ec965503477a696c14743556feedfecadc42ecee05b7b8c15bc1d59d",
+    "callbacks.R": "f338a9718001d3b1e36a9a155f89fd9bdcf0dd88c84a607c547d6badbbeaf20b",
+    "check.R": "f76c867ed6f8d999c555739b946a44b132c607f97f0aebf22ea8e8701356206e",
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R": "e2aba907e907cdf1d34019be6c3d0e45ba12959abc4066396d9f3299c276a5ab",
+    "chemi_chet_reaction_searchcounts.R": "f6261d2d4007e6e444b04ea540fb4b3909a232f733a23cbb515a06bcb4bc9491",
+    "executor-check.R": "06e4689e167f724a753a2c3278861b197673be9cee97f81f80961a2a3721b635",
+    "executor-check.txt": "186c5dc63cb1acf41c07d12285a11cc6e575cc3e3af3ac02bf57bdc4ac0c4f9f",
+    "focused-check.txt": "e830498a22f546d7c30b20b056c40f629cad82800390afd73d0b34b8962d8b2a",
+    "generate.R": "c7205d022f9b04a88ee6a10f717e8206b892245d708da9e6b866f49fc1343010",
+    "generation-check.txt": "7f5856f35df3db2cf0f534e3441816ddd991b8fd5e516f660bea50f3f5d72e0d",
+    "input-policy.R": "761ddc173af25dbe717993b7af1936640c92b2cd4bba7f1d4188f2275f0fbcce",
+    "install.R": "4ea8436a9f54850e67f33c4b1ee56ca45dc843683a1bd9e0dd7a11f7fffd7a68",
+    "originals.rds": "2c6b418a13a67dbe94ad7e9de7b5466348b4f551e73455fc2c8467ab80d8f802",
+    "pr167-comment.md": "f15cfc7fed1b654c66f22f4adf7b1ff7d68c6d56f412abba1d81b38fa6af2853",
+    "README.txt": "7534f7b2b25638b23280fd2bdea85452ab6c89f37adb2beddc4d6f65245b7592",
+    "results.rds": "e09676cc1b938cc5f5d89e8f77109a116360f4301e923b9022d6e44614c97378",
+    "service.yml": "a62014fac69d188cfeb2e849a37cb471a6f62e319622c11711132d68985b2968",
+    "specmill.yml": "ff438493d4d3da6b6123f00ddd71e1387ef3f365eb62a676a16e4753407ac85b",
+    "summarize.R": "0ebee75aed26effbde8793347624753968a5ac3cc5fe34dcfaec5d73f32351f2",
+    "toolkit-lock.json": "2aafdc5e0eed04c5bf136ab4caa5080dbea413b41533a76abc139d6e67c9e699",
+    "verify.R": "7ccf24d38c45fadb38af01ed8f1dd243a8948bcce56e80f116ecb1cad572e212"
+  }
+}

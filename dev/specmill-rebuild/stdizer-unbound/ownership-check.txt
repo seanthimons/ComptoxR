@@ -1,0 +1,4 @@
+Verified specmill 0.1.41 at /home/sxthi/.t3/worktrees/ComptoxR/t3-89e78e8b/dev/specmill-pilot/artifacts/toolkit-library/specmill
+Source revision: 05862bee1804806cea157ff1962300d741516301
+Source archive SHA256: 70e51d935055847ac14b26e188f38835aa68ccccb5024cefcc8f9d62d0aa0afc
+All 624 official full-client ownership hashes match the root and isolated files.

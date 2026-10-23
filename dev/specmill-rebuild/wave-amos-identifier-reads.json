@@ -1,0 +1,37 @@
+{
+  "status": "adopted_released_0.1.29",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.29",
+    "source_commit": "0f436277450801c9640e27725b0805561fd91984",
+    "source_archive_sha256": "4e97ae11f80cd248800a51689c5b795732b016c64fd068fa25fc65f3f2b87b8b",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "wrappers": [
+    "chemi_amos_record_counts",
+    "chemi_amos_mass_spectra_for_substances",
+    "chemi_amos_count_substances_in_ids"
+  ],
+  "schema": "schema/chemi-amos-prod.json",
+  "schema_sha256": "1d0ef1fbd813e2381a1e6e841d69e5070ee438e588a01dc3298b984ba7ca5f35",
+  "captures": "dev/specmill-rebuild/artifacts/amos-read",
+  "source_capture_date": "2026-10-17",
+  "evidence_scope": "Production 200 JSON for all three. count_substances_in_ids capture uses one unknown record ID and establishes only its zero-count result, not nonempty record contents.",
+  "input_normalizer": ".ct_amos_identifier_query",
+  "body_callback": "amos_identifier_body",
+  "response_policy": ".ct_amos_read_json",
+  "case_archive": "dev/specmill-rebuild/amos-identifier-read-cases.rds",
+  "verification": {
+    "captured_requests_results": "All three exact JSON projections, decoded production captures and named/positional calls pass.",
+    "input_contract": "Duplicates/blanks/NA cleanup and character lists preserved; empty and numeric identifiers fail before HTTP.",
+    "localhost": "Actual singleton array bytes pass for all three, alongside DTXSID normalization and HTTP404/500/401 failures.",
+    "public_api": "All three original public signatures/defaults match; codoc passes."
+  },
+  "ownership_review": {
+    "local_helper_names": ".ct_request added through supported local configuration.",
+    "replacement_suites": "Eleven explicitly reviewed missing test paths mapped to current native suites; three other native operations explicitly assigned their existing native tests.",
+    "legacy_generation": "Generate/check passes with44 remaining legacy wrappers; no blanket missing-file exclusion or manual manifest purge.",
+    "upstream_retirement": "https://github.com/seanthimons/specmill/pull/153"
+  }
+}

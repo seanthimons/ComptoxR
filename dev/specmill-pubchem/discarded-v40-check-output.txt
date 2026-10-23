@@ -1,0 +1,4 @@
+Error in generate_client(root = ".", config = "specmill.yml", callbacks = callbacks,  : 
+  Generated output is stale or protected; inspect plan: .specmill/manifest.json
+In addition: There were 20 warnings (use warnings() to see them)
+Execution halted

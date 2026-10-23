@@ -1,0 +1,17 @@
+{
+  "HTTP": 13,
+  "legacy_path": "/ctx-api/toxprints",
+  "canonical_path": "/api/toxprints",
+  "legacy_auth": "x-api-key",
+  "canonical_auth": "none",
+  "legacy_body": "array<string>",
+  "canonical_body": "object chemicals:array<string>",
+  "legacy_array_validator_rejected": true,
+  "GET_unchanged": true,
+  "adoption": "held: client behavior repair requires separate issue311 contract decision",
+  "assertions": 56,
+  "failures": 0,
+  "errors": 0,
+  "warnings": 0,
+  "skips": 0
+}

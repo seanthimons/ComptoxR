@@ -1,0 +1,10 @@
+{
+  "R/chemi_services_collated_report.R": {
+    "hash": "e3745e881f28dfd4e5a8da11dfd66eea64c63bcdfa6b5eb9870cdd35c64ab973",
+    "operations": "chemi-services-prod-rebuild POST /api/services/collated_report"
+  },
+  "R/chemi_services_convert.R": {
+    "hash": "8b8cb5798ccc8824e761ff617462a873d42a421c603dfe70ff32ec680eac19fd",
+    "operations": "chemi-services-prod-rebuild POST /api/services/convert"
+  }
+}

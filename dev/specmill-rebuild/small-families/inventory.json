@@ -1,0 +1,182 @@
+[
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/export",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/export-append",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "DELETE /api/alerts/groups/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "PUT /api/alerts/groups/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups/{id}/add",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "PATCH /api/alerts/groups/{id}/freeze",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups/{id}/replace",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "GET /api/alerts/render",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-descriptors-prod.json",
+    "operation": "GET /api/descriptors",
+    "disposition": "held Specmill #61; no duplicate issue"
+  },
+  {
+    "schema": "schema/chemi-descriptors-prod.json",
+    "operation": "POST /api/descriptors",
+    "disposition": "held Specmill #61; no duplicate issue"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "GET /api/hazard/download",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "POST /api/hazard/report/export",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "POST /api/hazard/report/export-append",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "POST /api/hazard/report/export2",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "GET /api/hazard/reports",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "POST /api/hazard/reports",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "GET /api/hazard/reports/check",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "DELETE /api/hazard/reports/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "GET /api/hazard/reports/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "PUT /api/hazard/reports/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "PUT /api/hazard/reports/{id}/acl",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-hazard-prod.json",
+    "operation": "POST /api/hazard/reports/{id}/export",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-opera-prod.json",
+    "operation": "POST /api/opera/file",
+    "disposition": "held Specmill #177; real localhost multipart proof uses uppercase scalar boolean query"
+  },
+  {
+    "schema": "schema/chemi-predictor_models-prod.json",
+    "operation": "GET /api/predictor_models/model/file/",
+    "disposition": "generated integration candidate; parent ownership/progress intentionally unchanged"
+  },
+  {
+    "schema": "schema/chemi-safety-prod.json",
+    "operation": "GET /api/alerts/render",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "DELETE /api/toxprints/assays/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "PUT /api/toxprints/assays/{id}",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "PUT /api/toxprints/assays/{id}/acl",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "GET /api/toxprints/download",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "POST /api/toxprints/export",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "POST /api/toxprints/export_global",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-toxprints-prod.json",
+    "operation": "GET /api/toxprints/render",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-webtest-prod.json",
+    "operation": "POST /api/webtest/export-append",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-webtest-prod.json",
+    "operation": "POST /api/webtest/predict/export",
+    "disposition": "management ownership"
+  },
+  {
+    "schema": "schema/chemi-webtest-prod.json",
+    "operation": "GET /api/webtest/report",
+    "disposition": "generated integration candidate; parent ownership/progress intentionally unchanged"
+  }
+]

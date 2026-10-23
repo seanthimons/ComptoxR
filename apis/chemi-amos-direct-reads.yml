@@ -1,0 +1,63 @@
+id: chemi-amos-direct-reads
+schemas:
+  files:
+  - schema/chemi-amos-prod.json
+selection:
+  include:
+  - GET /api/amos/additional_sources_for_substance/{dtxsid}
+  - GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}
+  - GET /api/amos/get_substance_file_for_record/{internal_id}
+helper: .ct_request
+documentation: true
+operations:
+  GET /api/amos/additional_sources_for_substance/{dtxsid}:
+    name: chemi_amos_additional_sources_for_substance
+    file: R/chemi_amos_additional_sources_for_substance.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Retrieves links for supplemental sources (e.g., Wikipedia, ChemExpo)
+        for a given DTXSID, if any are available.
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw workbook bytes according to the response
+        content type; NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}:
+    name: chemi_amos_get_pdf_metadata
+    file: R/chemi_amos_get_pdf_metadata.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Retrieves metadata associated with a PDF record.
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw workbook bytes according to the response
+        content type; NULL for an empty response.
+      tags:
+        apiStage: public
+  GET /api/amos/get_substance_file_for_record/{internal_id}:
+    name: chemi_amos_get_substance_file_for_record
+    file: R/chemi_amos_get_substance_file_for_record.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: true
+    docs:
+      title: Creates an Excel workbook listing the substances in the specified record
+        with some additional identifiers.
+      lifecycle: experimental
+      return: Decoded JSON, text, or raw workbook bytes according to the response
+        content type; NULL for an empty response.
+      tags:
+        apiStage: public
+hook_config: inst/hook_config.yml

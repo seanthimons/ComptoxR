@@ -1,0 +1,15 @@
+{
+  "full_generation": {
+    "exit_status": 1,
+    "failure": "No space left on device in shared /tmp tmpfs",
+    "log": "failed-full-generation-enospc.txt",
+    "successful_retry_log": "full-generation-output.txt"
+  },
+  "concurrent_pinned_freshness": {
+    "exit_status": 1,
+    "failure": "No stdout/stderr captured; exited during the shared /tmp ENOSPC incident",
+    "log": "failed-baseline-check-enospc.txt",
+    "retry_log": "discarded-v40-check-output.txt",
+    "accepted": false
+  }
+}

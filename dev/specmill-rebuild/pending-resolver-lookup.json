@@ -1,0 +1,94 @@
+{
+  "status": "released35_adopted",
+  "wrapper": "chemi_resolver_lookup_bulk",
+  "operation": "POST /api/resolver/lookup",
+  "schema": "schema/chemi-resolver-prod.json",
+  "schema_sha256": "e979709d6eb80598e86fcd7dacee37b9d7a63a14f9cad9be6935bae1996f80d2",
+  "positive_comparison_cases": 56,
+  "wire_comparison": [
+    "method",
+    "url",
+    "Accept",
+    "exact JSON"
+  ],
+  "formals_preserved": true,
+  "guard_capture_parity": true,
+  "live_read_only_captures": [
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "baseline",
+      "request_sha256": "f9d4403a29d63cda605a299b914fb6c7be007e74d288a1e0f2ca6736cf8d4335",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    },
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "idsType",
+      "request_sha256": "65d521d021efab48f1490c47ffca20c2b09460195f94eccd0b565d01deb813e0",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    },
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "fuzzy",
+      "request_sha256": "40fef6cda485f56fe29172bfc2502e4dafe3efaa88e784fb85159cb4b2ff57e7",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    },
+    {
+      "operation": "POST /api/resolver/lookup",
+      "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
+      "status": 200,
+      "media": "application/json",
+      "date": "2026-10-17 23:57:27 UTC",
+      "variant": "mol",
+      "request_sha256": "8594817b20460c53223863c1a6d1bc3473d83cfe70a74ce7fbccbfb81afbb6e0",
+      "response_sha256": "a04f43b898a12979023426e5396ee72fafe2d28d9a45386e54bdef783969c8dd"
+    }
+  ],
+  "archive": "dev/specmill-rebuild/pending-resolver-lookup.rds",
+  "pull_request": "https://github.com/seanthimons/specmill/pull/148",
+  "source_commit": "79b469124249bf0a0e0928478bdc8b1fc57114c3",
+  "source_archive_sha256": "4dbf24fcac3924298d4cb60230e5bd1c4fc66666f5cec295112d517f451d00a0",
+  "verification": "All 56 full-result and exact-wire cases pass; original initial guard/body-option/cleanup/tidy order, no HTTP on invalid ids, transport before tidy, once-only tidy promise, NULL/falsy/nested formatter behavior and four production NULL-body replays pass. Final whole-client generation freshness passes.",
+  "client_policy": "Pre-request hook performs cleanup only. Client body projection raises the original blank-id error outside hook wrapping. defer_inputs:[tidy] and params[[\"tidy\"]]() preserve response-only evaluation.",
+  "adoption": {
+    "status": "released35_adopted",
+    "toolkit": {
+      "package": "specmill",
+      "version": "0.1.35",
+      "source_commit": "a4a7e5249c98e9cfe7c596f2ff995c6a00a44412",
+      "source_archive_sha256": "f63b07c8d5be06262658659135925c920311d7a2bbaacecc6c5c59ca06e23020",
+      "source_repository": "https://github.com/seanthimons/specmill",
+      "archive_format": "git archive --format=tar <source_commit>"
+    },
+    "operation": "POST /api/resolver/lookup",
+    "wrapper": "chemi_resolver_lookup_bulk",
+    "verification": {
+      "request_result_cases": 56,
+      "public_formals_identical": true,
+      "guard_option_cleanup_tidy_order": true,
+      "transport_before_tidy": true,
+      "tidy_promise_memoized": true,
+      "captured_production_null_body_replays": 4,
+      "shared_resolution_callers": true,
+      "focused_lookup_toxprint_tests": true,
+      "legacy_inventory": true,
+      "documentation_signatures": true,
+      "whole_client_validation_freshness": true,
+      "new_live_calls": false
+    },
+    "retired_suite": "tests/testthat/test-contract-chemi_resolver_lookup_bulk.R",
+    "replacement_suite": "tests/testthat/test-chemi_resolver_chemical_resolution.R"
+  },
+  "resolved_blocker": "https://github.com/seanthimons/specmill/issues/147"
+}

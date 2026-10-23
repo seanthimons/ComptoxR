@@ -1,0 +1,146 @@
+[
+  {
+    "file": "test-chemi_resolver_transformations.R",
+    "test": "similarity map keeps resolver arguments, flat chemicals, omitted options and sort",
+    "nb": 36,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-chemi_resolver_transformations.R",
+    "test": "similarity map preserves exact pre/post states, partial updates and skip",
+    "nb": 10,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-chemi_resolver_transformations.R",
+    "test": "similarity map skips unresolved inputs and wraps hook errors, not transport errors",
+    "nb": 5,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-chemi_resolver_transformations.R",
+    "test": "similarity map retries resolution without idType and preserves real empty-input errors",
+    "nb": 5,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_resolved_payloads.R",
+    "test": "resolved native operations send the schema-declared chemical and option fields",
+    "nb": 72,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_resolved_payloads.R",
+    "test": "resolved native operations retain early unresolved skips and malformed JSON conditions",
+    "nb": 28,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_resolved_payloads.R",
+    "test": "default ToxPrint options serialize as an object and resolved fields survive",
+    "nb": 5,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_resolved_payloads.R",
+    "test": "resolved options reject invalid types before the target request",
+    "nb": 4,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_safety_rqcodes.R",
+    "test": "SID queries resolve once and send a flat Chemical array with RQ formatting",
+    "nb": 13,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_safety_rqcodes.R",
+    "test": "invalid SID inputs are rejected before any HTTP",
+    "nb": 11,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_safety_rqcodes.R",
+    "test": "unresolved SIDs skip safety and missing RQ codes return NULL",
+    "nb": 5,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_safety_rqcodes.R",
+    "test": "safety preserves formatting warnings, errors and typed HTTP failures",
+    "nb": 7,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_safety_rqcodes.R",
+    "test": "RQ formatting retains thousands, zero and additional fields",
+    "nb": 1,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-native_safety_rqcodes.R",
+    "test": "duplicate SIDs resolve once and transport failures propagate",
+    "nb": 2,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-retained_search_safety.R",
+    "test": "search keeps transport-only all_pages lazy and preserves full skip state",
+    "nb": 5,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  },
+  {
+    "file": "test-retained_search_safety.R",
+    "test": "search localhost requests preserve paging, partial failures and condition stages",
+    "nb": 36,
+    "failed": 0,
+    "error": false,
+    "warning": 0,
+    "skipped": false
+  }
+]

@@ -8,42 +8,39 @@ pubchem_properties(cid, properties = NULL, cache = TRUE)
 }
 \arguments{
 \item{cid}{Integer or character vector of PubChem CIDs. Does NOT accept
-compound names or DTXSIDs — use \code{\link[=pubchem_search]{pubchem_search()}} first to resolve CIDs.}
+compound names or DTXSIDs — use [pubchem_search()] first to resolve CIDs.}
 
-\item{properties}{Character vector of property names to retrieve. If \code{NULL}
+\item{properties}{Character vector of property names to retrieve. If `NULL`
 (default), returns 13 core properties: MolecularFormula, MolecularWeight,
 CanonicalSMILES, InChI, InChIKey, XLogP, TPSA, HBondDonorCount,
 HBondAcceptorCount, Complexity, ExactMass, MonoisotopicMass, HeavyAtomCount.}
 
-\item{cache}{Logical. If \code{TRUE} (default), results are cached in the session
+\item{cache}{Logical. If `TRUE` (default), results are cached in the session
 environment keyed by CID and property set, so repeated calls are instant.}
 }
 \value{
 A tibble with one row per CID and columns for each requested property
-plus a \code{CID} column. Returns an empty tibble if no results are found.
+  plus a `CID` column. Returns an empty tibble if no results are found.
 }
 \description{
 Retrieve computed physico-chemical properties for one or more PubChem
 Compound IDs (CIDs) via the PUG REST API.
-}
-\details{
+
 Property names are validated against PubChem's documented allowlist before
 the request is made. Invalid property names cause an immediate error.
 
 For multiple CIDs, requests are batched at 100 CIDs per POST request
 (PubChem's documented limit for list-based requests).
+
+Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
 }
 \examples{
 \dontrun{
-# Default properties for aspirin
-pubchem_properties(2244)
-
-# Specific properties for multiple CIDs
-pubchem_properties(c(2244, 6623), properties = c("MolecularWeight", "XLogP"))
+pubchem_properties(cid = 2244L)
+pubchem_properties(cid = 2244L, properties = "XLogP")
 }
-
 }
 \seealso{
-\code{\link[=pubchem_search]{pubchem_search()}} to find CIDs by name/structure,
-\code{\link[=ct_chemical_property_summary_search]{ct_chemical_property_summary_search()}} for CompTox Dashboard properties.
+[pubchem_search()] to find CIDs by name/structure,
+  [ct_chemical_property_summary_search()] for CompTox Dashboard properties.
 }

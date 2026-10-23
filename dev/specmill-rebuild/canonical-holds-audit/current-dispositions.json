@@ -1,0 +1,780 @@
+{
+  "root_parent_commit": "8710d770db69dca6923f85358f0926f691df23fe",
+  "canonical_total": 548,
+  "migrated": 513,
+  "remaining_identities": 35,
+  "disposition_counts": {
+    "source_contract_hold": 30,
+    "service_contract_hold": 4,
+    "client_contract_hold": 1
+  },
+  "source_audit": "dispositions.json",
+  "operations": [
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "operation": "POST /api/alerts/groups",
+      "operation_id": "groupCreatePost",
+      "source_location": "#/paths/~1api~1alerts~1groups/post",
+      "operation_sha256": "18e930ec140f5949320625301206f65e1ea3b819a1ad32aff9a93a1875757a33",
+      "disposition": "source_contract_hold",
+      "blocker": "Source mixes binary/nested query upload inputs with JSON LibraryGroup. Frontend has separate JSON and multipart callers, but existing bulk facade has different public fields and generic Chemical envelope. Held localhost projections prove serialization only, not public-formal-preserving group behavior.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_alerts_groups_bulk",
+          "file": "R/chemi_alerts_groups_bulk.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "operation": "POST /api/alerts/groups/{id}/add",
+      "operation_id": "groupAddPostMultipart",
+      "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1add/post",
+      "operation_sha256": "ce9332cad5f25ccb65ce4f3e320a09407c69a7be19668273950ffb6afac786b3",
+      "disposition": "source_contract_hold",
+      "blocker": "Binary query files[] plus nested request. Exact frontend sender appends request=JSON.stringify(...) as a string form field; supported typed multipart object uses application/json. No backend metadata-part contract establishes that correction.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "operation": "POST /api/alerts/groups/{id}/replace",
+      "operation_id": "groupReplacePostMultipart",
+      "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1replace/post",
+      "operation_sha256": "b37eaa621016a2452643ca16c90cd26894c1848dbe3916305b624a7df0547076",
+      "disposition": "source_contract_hold",
+      "blocker": "Required binary query files[]; exact frontend uses FileUploadDialog, which also appends request as JSON text. Metadata acceptance/ignored-field contract remains unverified; no body correction is promoted.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/add_aqc_spectrum/",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1add_aqc_spectrum~1/post",
+      "operation_sha256": "22000cf683a925f12efb2400b7b1ea30b63b500c18e3ea0112d615323c2ab47e",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical Swagger2 nests type:file in a JSON body and has empty responses. Archived corrected staging omits this operation; historical issue text is not an archived replacement contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/add_new_fact_sheet/",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1add_new_fact_sheet~1/post",
+      "operation_sha256": "e072e4fd146dc839d23306a462e88cbaa9ae4a1369027821c564d86ab2b64e8e",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical Swagger2 nests type:file in a JSON body and has empty responses. Archived corrected staging omits this operation; historical issue text is not an archived replacement contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/add_new_method/",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1add_new_method~1/post",
+      "operation_sha256": "b4bb8be14d69c6bffb8f99044a0f9049d426b0cf15b30362bcf4af6334825faa",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical Swagger2 nests type:file in a JSON body and has empty responses. Archived corrected staging omits this operation; historical issue text is not an archived replacement contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/add_new_product_declaration/",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1add_new_product_declaration~1/post",
+      "operation_sha256": "330df3f5f50d808b9f91cee1655de5328ec1139308cd05854c254eab41ed6019",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical Swagger2 nests type:file in a JSON body and has empty responses. Archived corrected staging omits this operation; historical issue text is not an archived replacement contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/add_new_safety_data_sheet/",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1add_new_safety_data_sheet~1/post",
+      "operation_sha256": "075aaae799f41d91c9f7bbdbc4583f8671eef8a7a6b04d21c0647c1145141513",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical Swagger2 nests type:file in a JSON body and has empty responses. Archived corrected staging omits this operation; historical issue text is not an archived replacement contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/analytical_qc_batch_search",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1analytical_qc_batch_search/post",
+      "operation_sha256": "7229d444841e75575be5d919a37338861fcbe241890b3428ad4d384d9e3a5874",
+      "disposition": "service_contract_hold",
+      "blocker": "User explicitly deferred migration of these XLSX-returning endpoints pending specialized behavior review. Fresh declared-request workbook evidence is positive on staging and on production analytical batch; production general batch remains HTTP500.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/357",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json",
+        "dev/specmill-rebuild/amos-remaining-live-review.rds",
+        "dev/specmill-rebuild/amos-full-body-live-review.rds",
+        "dev/specmill-rebuild/canonical-holds-audit/amos-batch-recheck/README.md",
+        "dev/specmill-rebuild/amos-batch-candidate/README.md"
+      ],
+      "next_step": "Resolve specialized XLSX return/file-handling behavior and explicit public contract repair before migration. Keep original wrapper; do not adopt the raw-byte proposal or count private generation.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_amos_analytical_qc_batch",
+          "file": "R/chemi_amos_analytical_qc_batch.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "POST /api/amos/batch_search",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1batch_search/post",
+      "operation_sha256": "357406b2c8c8efff070b89d256e31dceec51d496f4981605e206b478ac434b21",
+      "disposition": "service_contract_hold",
+      "blocker": "User explicitly deferred migration of these XLSX-returning endpoints pending specialized behavior review. Fresh declared-request workbook evidence is positive on staging and on production analytical batch; production general batch remains HTTP500.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/357",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json",
+        "dev/specmill-rebuild/amos-remaining-live-review.rds",
+        "dev/specmill-rebuild/amos-full-body-live-review.rds",
+        "dev/specmill-rebuild/canonical-holds-audit/amos-batch-recheck/README.md",
+        "dev/specmill-rebuild/amos-batch-candidate/README.md"
+      ],
+      "next_step": "Resolve specialized XLSX return/file-handling behavior and explicit public contract repair before migration. Keep original wrapper; do not adopt the raw-byte proposal or count private generation.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_amos_batch",
+          "file": "R/chemi_amos_batch.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1update_analytical_qc_pdf_info~1{internal_id}/put",
+      "operation_sha256": "20af7ce18534c035030a4d338c58a40ea4cd18aea123d70e978780df1d4c96ba",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical PUT declares only internal_id, no submitted body. Archived corrected staging omits this operation; similarly named update components do not identify its method/body contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "PUT /api/amos/update_fact_sheet_info/{internal_id}",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1update_fact_sheet_info~1{internal_id}/put",
+      "operation_sha256": "352defab1a87385c1901e2aa22cb771978a5381b00248caa605de17203c20870",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical PUT declares only internal_id, no submitted body. Archived corrected staging omits this operation; similarly named update components do not identify its method/body contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "PUT /api/amos/update_method_info/{internal_id}",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1update_method_info~1{internal_id}/put",
+      "operation_sha256": "31401ae28e9400e9e4f5f9645df211586d2fe13633bf88e2c44fbf9f988f46ec",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical PUT declares only internal_id, no submitted body. Archived corrected staging omits this operation; similarly named update components do not identify its method/body contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "PUT /api/amos/update_nmr_spectrum_info/{internal_id}",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1update_nmr_spectrum_info~1{internal_id}/put",
+      "operation_sha256": "610fdcc982cc6078a28fae88934fa0b86d450cdd941f623e69bd4dc48a1032ff",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical PUT declares only internal_id, no submitted body. Archived corrected staging omits this operation; similarly named update components do not identify its method/body contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "PUT /api/amos/update_product_declaration_info/{internal_id}",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1update_product_declaration_info~1{internal_id}/put",
+      "operation_sha256": "789e498df7ea85b62f974ba76a323b5bf10fc489f0b02ee43709d838634dce12",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical PUT declares only internal_id, no submitted body. Archived corrected staging omits this operation; similarly named update components do not identify its method/body contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "operation": "PUT /api/amos/update_safety_data_sheet_info/{internal_id}",
+      "operation_id": null,
+      "source_location": "#/paths/~1api~1amos~1update_safety_data_sheet_info~1{internal_id}/put",
+      "operation_sha256": "92513b2db7a9739c761004342ab866bb2c484804eb858f1ec6138130d72245ac",
+      "disposition": "source_contract_hold",
+      "blocker": "Canonical PUT declares only internal_id, no submitted body. Archived corrected staging omits this operation; similarly named update components do not identify its method/body contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/354",
+        "https://github.com/seanthimons/specmill/issues/27#issuecomment-6254000651",
+        "https://github.com/seanthimons/specmill/issues/26"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/amos-v41/inventory.json",
+        "dev/specmill-rebuild/sources/amos-staging-2026-10-18.json"
+      ],
+      "next_step": "Obtain the route-specific service-owned source/body/response contract. No invented upload/update body, Swagger2/OAS3 splice or deployed mutation probe.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /admin/errorreport",
+      "operation_id": "api.admin.errorreport_get",
+      "source_location": "#/paths/~1admin~1errorreport/get",
+      "operation_sha256": "b673e42324a7ad3bbe09a7b4a483834a371a40e057028bd70be57afa9d7f64f2",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /admin/login",
+      "operation_id": "api.admin.login_get",
+      "source_location": "#/paths/~1admin~1login/get",
+      "operation_sha256": "ac22cb5b69ccca09e9ca064d5245f82963a37840117be4e6c017705a00f37ec4",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /admin/register",
+      "operation_id": "api.admin.register_get",
+      "source_location": "#/paths/~1admin~1register/get",
+      "operation_sha256": "c2ff19df34741e92619e361f9cebb986175a32b0b116e6b2556b4378657ca530",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /admin/resolve",
+      "operation_id": "api.admin.resolve_get",
+      "source_location": "#/paths/~1admin~1resolve/get",
+      "operation_sha256": "443f3b6a9c42cf869398b35100b50e5d56c87e7f7104a2e4179ef80a596d1a70",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/login",
+      "operation_id": "api.auth.login_get",
+      "source_location": "#/paths/~1auth~1login/get",
+      "operation_sha256": "b7316a8ac8d59fe300c03c21a3afdc53556c077af1e7a30153ef91d9c87f64a4",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/register",
+      "operation_id": "api.auth.register_get",
+      "source_location": "#/paths/~1auth~1register/get",
+      "operation_sha256": "2a51b1d988884acbd0dfd695f211c45d61950f251e6b3079b6787e743f5fdacc",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /auth/report",
+      "operation_id": "api.auth.report_get",
+      "source_location": "#/paths/~1auth~1report/get",
+      "operation_sha256": "abbedd44ac95a8b9980d86af9658a00b3765211f0753a6cd4ea4f373f5ab4703",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-chet-prod.json",
+      "operation": "GET /chemicals/chemdelete",
+      "operation_id": "api.chemicals.chemdelete_get",
+      "source_location": "#/paths/~1chemicals~1chemdelete/get",
+      "operation_sha256": "bae1399a6ffb5cc4151e4a16bacbb95080631a8431c3bf68b99dc41b90615366",
+      "disposition": "source_contract_hold",
+      "blocker": "Optional OAS3.0.3 GET body is ignored by generation. Selected chemical_DL proof only establishes that download; it does not justify auth/admin or chemdelete mutations.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/355",
+        "https://github.com/seanthimons/specmill/issues/171#issuecomment-6253610857",
+        "https://github.com/seanthimons/specmill/issues/29"
+      ],
+      "evidence": [
+        "dev/chet-admin-auth/held.json",
+        "dev/chet-extra/README.md",
+        "dev/specmill-rebuild/chet-chemical-dl/provenance.json"
+      ],
+      "next_step": "Require evidence for this exact GET body/requiredness and reviewed OAS3.1 subset. No deployed auth/session/mutation calls.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/casharvest",
+      "operation_id": "postMultipartCASHarvest",
+      "source_location": "#/paths/~1api~1resolver~1casharvest/post",
+      "operation_sha256": "1a2a8b20788e5b16eb33d9423290800e65b5179e980e399256974767a2398443",
+      "disposition": "source_contract_hold",
+      "blocker": "Binary query files[] plus nested request; archived frontend has no casharvest caller. No evidenced multipart metadata contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/getpubchemlist",
+      "operation_id": "getPubchemList",
+      "source_location": "#/paths/~1api~1resolver~1getpubchemlist/post",
+      "operation_sha256": "fb9f7ca65710b2e409f176e2ff11aa54ca3708b06ec951922bc2e3a67b2fc0d3",
+      "disposition": "service_contract_hold",
+      "blocker": "Paging seams are released and root-adopted for search in v0.1.47, but old nested ChemicalRecord/options, records/totalRecordsCount and hidden controls disagree with declared flat Chemical plus five required query controls and service items/total. Localhost items/total still yields empty legacy result; cache release does not repair this contract.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/358",
+        "https://github.com/seanthimons/specmill/issues/173#issuecomment-6253439696",
+        "https://github.com/seanthimons/specmill/pull/179"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/pr179-finish-1c3e8a3/README.md",
+        "dev/specmill-rebuild/remaining-facades/pubchem-live.rds"
+      ],
+      "next_step": "Review public-formal-preserving request/query/result correction with positive service evidence, independently of release adoption.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_resolver_getpubchemlist",
+          "file": "R/chemi_resolver_getpubchemlist.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/getsimilaritylist",
+      "operation_id": "getSimilarityList",
+      "source_location": "#/paths/~1api~1resolver~1getsimilaritylist/post",
+      "operation_sha256": "e7d617b3715d4677c6186e9dcce776fb31bf0b1db0711eca7d6a373d1d71bb6e",
+      "disposition": "service_contract_hold",
+      "blocker": "Complete declared chemicals/get_chemicals/main request returns500 due to null getter; frontend uses undocumented _chemicals. Existing _chemicals controls return only200[] and prove no nonempty similarity behavior.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/358",
+        "https://github.com/seanthimons/specmill/issues/165#issuecomment-6254462836"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/wave-resolved-chemical-evidence.rds"
+      ],
+      "next_step": "Service owner must confirm fields and a positive nonempty example; frontend spelling alone does not resolve the hold.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_resolver_getsimilaritylist",
+          "file": "R/chemi_resolver_getsimilaritylist.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-resolver-prod.json",
+      "operation": "POST /api/resolver/universalharvest",
+      "operation_id": "postMultipartUniversalHarvest",
+      "source_location": "#/paths/~1api~1resolver~1universalharvest/post",
+      "operation_sha256": "1ac4abe0a9a308a0496fd903fa090d9296b05920b60c3187424b8bea53cef360",
+      "disposition": "source_contract_hold",
+      "blocker": "Binary query files[] plus nested request. Exact frontend sender appends request=JSON.stringify(...) as a string form field; supported typed multipart object uses application/json. No backend metadata-part contract establishes that correction.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "operation": "POST /api/services/caspreflight",
+      "operation_id": "postMultipartCASPreflight",
+      "source_location": "#/paths/~1api~1services~1caspreflight/post",
+      "operation_sha256": "31808e8d5e321dbc525f80798f5b05277b0a76d74e8610e030bdf360bfc4f03e",
+      "disposition": "source_contract_hold",
+      "blocker": "Required binary query files[]; archived frontend has no caspreflight caller. Evidence for preflight/universalpreflight cannot establish this route.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-services-prod.json",
+      "operation": "POST /api/services/files",
+      "operation_id": "postMultipartFiles",
+      "source_location": "#/paths/~1api~1services~1files/post",
+      "operation_sha256": "14b5eeb7a6f90013d9bbadb3b7589aed35ee1d12341080af7d63df5762fe1ed5",
+      "disposition": "source_contract_hold",
+      "blocker": "Binary query files[] plus nested request. Exact frontend sender appends request=JSON.stringify(...) as a string form field; supported typed multipart object uses application/json. No backend metadata-part contract establishes that correction.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "operation": "POST /api/stdizer",
+      "operation_id": "stdizeRequestPostMultipart",
+      "source_location": "#/paths/~1api~1stdizer/post",
+      "operation_sha256": "e00571aa35fb1af8b13c9d323dfd731997444663804a283dda2e78e8eda262b1",
+      "disposition": "source_contract_hold",
+      "blocker": "Binary files[] plus nested query request, no declared JSON body. Existing facade fails missing query/chemicals before HTTP even with every argument. No exact frontend call establishes replacement behavior.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_stdizer_bulk",
+          "file": "R/chemi_stdizer_bulk.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "operation": "POST /api/stdizer/groups",
+      "operation_id": "groupCreatePost",
+      "source_location": "#/paths/~1api~1stdizer~1groups/post",
+      "operation_sha256": "597fac920c912d6cd2f24f0c73e600e4db4f88234d9988b7b69ee4372838406a",
+      "disposition": "source_contract_hold",
+      "blocker": "Source mixes binary/nested query upload inputs with JSON LibraryGroup. Frontend has separate JSON and multipart callers, but existing bulk facade has different public fields and generic Chemical envelope. Held localhost projections prove serialization only, not public-formal-preserving group behavior.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_stdizer_groups_bulk",
+          "file": "R/chemi_stdizer_groups_bulk.R"
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "operation": "POST /api/stdizer/groups/{id}/add",
+      "operation_id": "groupAddPostMultipart",
+      "source_location": "#/paths/~1api~1stdizer~1groups~1{id}~1add/post",
+      "operation_sha256": "ce9332cad5f25ccb65ce4f3e320a09407c69a7be19668273950ffb6afac786b3",
+      "disposition": "source_contract_hold",
+      "blocker": "Binary query files[] plus nested request. Exact frontend sender appends request=JSON.stringify(...) as a string form field; supported typed multipart object uses application/json. No backend metadata-part contract establishes that correction.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-stdizer-prod.json",
+      "operation": "POST /api/stdizer/groups/{id}/replace",
+      "operation_id": "groupReplacePostMultipart",
+      "source_location": "#/paths/~1api~1stdizer~1groups~1{id}~1replace/post",
+      "operation_sha256": "b37eaa621016a2452643ca16c90cd26894c1848dbe3916305b624a7df0547076",
+      "disposition": "source_contract_hold",
+      "blocker": "Required binary query files[]; exact frontend uses FileUploadDialog, which also appends request as JSON text. Metadata acceptance/ignored-field contract remains unverified; no body correction is promoted.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/356",
+        "https://github.com/seanthimons/specmill/issues/28",
+        "https://github.com/seanthimons/specmill/issues/31"
+      ],
+      "evidence": [
+        "dev/search-services/deployed-source.json",
+        "dev/specmill-rebuild/remaining-facades/REPORT.md",
+        "dev/specmill-rebuild/stdizer-unbound/inventory.json"
+      ],
+      "next_step": "Obtain route-specific file/metadata contract and field validation. No unvalidated text escape hatch, raw alias, inferred multipart or deployed upload/mutation call.",
+      "existing_public_wrappers": []
+    },
+    {
+      "schema": "schema/chemi-toxprints-prod.json",
+      "operation": "POST /api/toxprints",
+      "operation_id": "post",
+      "source_location": "#/paths/~1api~1toxprints/post",
+      "operation_sha256": "8105456be6b32e36735438b4f45dce5a737a73048376d83dfcb2bcc322beabeb",
+      "disposition": "client_contract_hold",
+      "blocker": "Official Specmill v0.1.50 releases client-selected chunk input for canonical object bodies. The retained wrapper instead inherits CTX server/auth and sends top-level JSON arrays; canonical Cheminformatics service/object/auth selection would change public behavior and requires separate client-contract review under ComptoxR#311/#353.",
+      "links": [
+        "https://github.com/seanthimons/ComptoxR/issues/353",
+        "https://github.com/seanthimons/ComptoxR/issues/311",
+        "https://github.com/seanthimons/specmill/issues/181",
+        "https://github.com/seanthimons/specmill/pull/185"
+      ],
+      "evidence": [
+        "dev/specmill-rebuild/released-v50/toxprints-hold/hold.json",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/generation.json",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/runtime.json",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/contract-wire.rds",
+        "dev/specmill-rebuild/released-v50/toxprints-hold/legacy-default-dryrun.rds"
+      ],
+      "next_step": "Resolve intended service/auth/payload in separate ComptoxR#353 behavior-repair review; retain chemi_toxprints_bulk unchanged. Do not treat released chunk support as service validation or silently repair legacy behavior. Preserve the native GET in the shared R file.",
+      "existing_public_wrappers": [
+        {
+          "name": "chemi_toxprints_bulk",
+          "file": "R/chemi_toxprints.R"
+        }
+      ]
+    }
+  ],
+  "outside_denominator": "Three PubChem public wrappers/six HTTP operations now use root-adopted released session-cache lifecycle and native throttling under Specmill v0.1.50, with isolated and root offline behavior proofs. They remain outside the canonical 548 denominator. Separate resolver PubChem source/service mismatch remains held."
+}

@@ -4,20 +4,20 @@
 \alias{ct_chemical_synonym_search_bulk}
 \title{Get synonyms for a batch of DTXSIDs}
 \usage{
-ct_chemical_synonym_search_bulk(query)
+ct_chemical_synonym_search_bulk(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox substance identifiers. Inputs are sent in chunks using the configured call-time item limit and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_chemical_synonym_search_bulk(query = "DTXSID1024122")
+ct_chemical_synonym_search_bulk(dtxsid = list("DTXSID7020182", "DTXSID2021315"))
 }
 }
 \section{API stage}{

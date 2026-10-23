@@ -7,7 +7,7 @@ check_endpoint_artifacts <- function() {
   dir.create(expanded)
   on.exit(unlink(expanded, recursive = TRUE), add = TRUE)
   utils::untar(built$archive, exdir = expanded)
-  check_public_api(file.path(expanded, 'ComptoxR'), membership = FALSE)
+  check_public_api(file.path(expanded, 'ComptoxR'))
   result <- rcmdcheck::rcmdcheck(
     built$archive,
     args = '--no-manual',

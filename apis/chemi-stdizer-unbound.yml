@@ -1,0 +1,130 @@
+id: chemi-stdizer-unbound
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - POST /api/stdizer/protocol/export
+  - GET /api/stdizer/protocols
+  - POST /api/stdizer/protocols
+  - GET /api/stdizer/protocols/check
+  - GET /api/stdizer/protocols/{id}/changes
+  - POST /api/stdizer/protocols/{id}/export
+  - GET /api/stdizer/protocols/{id}/issues
+  - GET /api/stdizer/render
+helper: .ct_request
+documentation: true
+operations:
+  POST /api/stdizer/protocol/export:
+    name: chemi_stdizer_protocol_export_post
+    file: R/chemi_stdizer_protocol_export_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolExportPost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols:
+    name: chemi_stdizer_protocols
+    file: R/chemi_stdizer_protocols.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolsGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/protocols:
+    name: chemi_stdizer_protocols_post
+    file: R/chemi_stdizer_protocols_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolCreatePost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/check:
+    name: chemi_stdizer_protocols_check
+    file: R/chemi_stdizer_protocols_check.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolCheckGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/{id}/changes:
+    name: chemi_stdizer_protocols_by_id_changes
+    file: R/chemi_stdizer_protocols_by_id_changes.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolChangesGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  POST /api/stdizer/protocols/{id}/export:
+    name: chemi_stdizer_protocols_by_id_export_post
+    file: R/chemi_stdizer_protocols_by_id_export_post.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolExportByIdPost
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/protocols/{id}/issues:
+    name: chemi_stdizer_protocols_by_id_issues
+    file: R/chemi_stdizer_protocols_by_id_issues.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer protocolIssuesGet
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+  GET /api/stdizer/render:
+    name: chemi_stdizer_render
+    file: R/chemi_stdizer_render.R
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    docs:
+      title: Standardizer render
+      lifecycle: experimental
+      return: The decoded service response, preserving JSON structure, text or media
+        bytes.
+      tags:
+        apiStage: public
+hook_config: inst/hook_config.yml

@@ -1,0 +1,55 @@
+{
+  "wave": "inline-ct",
+  "base_commit": "b7389586922de89a09141647c8324508089f9153",
+  "worktree": "/home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/inline-ct-source/dev/specmill-pilot/artifacts/wave-inline-ct",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 3,
+  "files": [
+    "R/ct_bioactivity_assay_search_by_endpoint.R",
+    "R/ct_chemical_search_equal.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M R/ct_bioactivity_assay_search_by_endpoint.R",
+    " M R/ct_chemical_search_equal.R",
+    " M apis/ctx-bioactivity-prod-rebuild.yml",
+    " M apis/ctx-chemical-prod-rebuild.yml",
+    " M dev/specmill-rebuild/runtime-cases.rds",
+    " M tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    "?? tests/testthat/test-contract-ct_bioactivity_assay_search_by_endpoint.R",
+    "?? tests/testthat/test-contract-ct_chemical_search_equal.R",
+    "?? tests/testthat/test-contract-ct_chemical_search_equal_bulk.R"
+  ],
+  "verification": {
+    "runtime_results": "dev/specmill-rebuild/runtime-inline-ct-results.json",
+    "runtime_scope": "Three migrated CT exports, prior resolver corrections, and existing pilot/helper probes",
+    "localhost_cases": 96,
+    "candidate_failures": 0,
+    "exported_signatures": 409,
+    "helper_signatures_equal": true,
+    "contract_and_regression_tests": "passed",
+    "legacy_generator_check": "passed",
+    "documentation_and_namespace_unchanged": true,
+    "rehearsal": {
+      "commit": "12c9a72c89bbc95e848e2de3e3cf2c67dd7f116d",
+      "removed_files": 220,
+      "removed_operations": 253,
+      "byte_identical": true,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": []
+    }
+  },
+  "retired_tests": [
+    "tests/testthat/test-ct_bioactivity_assay_search_by_endpoint.R",
+    "tests/testthat/test-ct_chemical_search_equal_bulk.R",
+    "tests/testthat/test-ct_chemical_search_equal.R"
+  ]
+}

@@ -1,0 +1,101 @@
+id: chemi-stdizer-prod-full
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - GET /api/stdizer/operations
+  - GET /api/stdizer/workflows
+  - GET /api/stdizer
+helper: .ct_request
+documentation: yes
+operations:
+  GET /api/stdizer/operations:
+    name: chemi_stdizer_operations
+    file: R/chemi_stdizer_operations.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Stdizer Operations
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/stdizer/workflows:
+    name: chemi_stdizer_workflows
+    file: R/chemi_stdizer_workflows.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Stdizer Workflows
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/stdizer:
+    name: chemi_stdizer
+    file: R/chemi_stdizer.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_static_list
+    docs:
+      title: Stdizer
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - workflow: qsar-ready
+        smiles: CCO
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/stdizer
+        path_params:
+          value: {}
+        query:
+          object:
+            workflow:
+              from:
+              - params
+              - workflow
+            smiles:
+              from:
+              - params
+              - smiles
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: .ct_static_list
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

@@ -1,0 +1,72 @@
+[
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "GET /api/alerts/alerts",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/export",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/export-append",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "GET /api/alerts/groups",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "DELETE /api/alerts/groups/{id}",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "GET /api/alerts/groups/{id}",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "PUT /api/alerts/groups/{id}",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups/{id}/add",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "PATCH /api/alerts/groups/{id}/freeze",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "POST /api/alerts/groups/{id}/replace",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "GET /api/alerts/operations",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-alerts-prod.json",
+    "operation": "GET /api/alerts/render",
+    "disposition": "banned_client_scope"
+  },
+  {
+    "schema": "schema/chemi-safety-prod.json",
+    "operation": "GET /api/alerts/render",
+    "disposition": "banned_client_scope"
+  }
+]

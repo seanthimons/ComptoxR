@@ -15,29 +15,29 @@ chemi_search_similar(
 )
 }
 \arguments{
-\item{smiles}{Optional parameter}
+\item{smiles}{smiles}
 
-\item{dtxsid}{Optional parameter}
+\item{dtxsid}{dtxsid}
 
-\item{exportSmiles}{Optional parameter}
+\item{exportSmiles}{exportSmiles}
 
-\item{exportMol}{Optional parameter}
+\item{exportMol}{exportMol}
 
-\item{min}{Optional parameter}
+\item{min}{min}
 
-\item{max}{Optional parameter}
+\item{max}{max}
 
-\item{similarityType}{Optional parameter}
+\item{similarityType}{similarityType}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_search_similar(smiles = "DTXSID7020182")
+chemi_search_similar()
 }
 }
 \section{API stage}{

@@ -1,54 +1,8 @@
-#' Toxprints Calculate
+#' chemi toxprints calculate bulk
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param smiles Required parameter
-#' @param labels Optional parameter (default: FALSE)
-#' @param profile Optional parameter
-#' @return Returns a list with result object
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_toxprints_calculate(smiles = "DTXSID7020182")
-#' }
-chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(labels)) {
-    options[['labels']] <- labels
-  }
-  if (!is.null(profile)) {
-    options[['profile']] <- profile
-  }
-  result <- generic_request(
-    endpoint = "toxprints/calculate",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Toxprints Calculate
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
-#' then sends the resolved Chemical objects to the API endpoint.
-#'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param labels Optional parameter
@@ -63,14 +17,10 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 #' @param request.options.pv1 Optional parameter
 #' @param request.options.tp Optional parameter
 #' @param request.resolve Optional parameter
-#' @return Returns a list with result object
+#' @return Decoded response records, with the configured client formatting.
 #' @apiStage public
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_toxprints_calculate_bulk(query = c("50-00-0", "DTXSID7020182"))
-#' }
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_calculate_bulk <- function(
   query,
   idType = "AnyId",
@@ -87,107 +37,102 @@ chemi_toxprints_calculate_bulk <- function(
   request.options.tp = NULL,
   request.resolve = NULL
 ) {
-  chemicals <- NULL
-  req_data <- run_hook(
-    "chemi_toxprints_calculate_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `labels` = labels,
-        `options` = options,
-        `request.filesInfo` = request.filesInfo,
-        `request.labels` = request.labels,
-        `request.options.OR` = request.options.OR,
-        `request.options.PV1` = request.options.PV1,
-        `request.options.TP` = request.options.TP,
-        `request.options.or` = request.options.or,
-        `request.options.profile` = request.options.profile,
-        `request.options.pv1` = request.options.pv1,
-        `request.options.tp` = request.options.tp,
-        `request.resolve` = request.resolve,
-        `chemicals` = chemicals
+  params <- base::c(
+    base::list(
+      "query" = query,
+      "idType" = idType,
+      "labels" = labels,
+      "options" = options,
+      "request.filesInfo" = request.filesInfo,
+      "request.labels" = request.labels,
+      "request.options.OR" = request.options.OR,
+      "request.options.PV1" = request.options.PV1,
+      "request.options.TP" = request.options.TP,
+      "request.options.or" = request.options.or,
+      "request.options.profile" = request.options.profile,
+      "request.options.pv1" = request.options.pv1,
+      "request.options.tp" = request.options.tp,
+      "request.resolve" = request.resolve
+    ),
+    list(chemicals = NULL)
+  )
+  state <- run_hook("chemi_toxprints_calculate_bulk", "pre_request", base::list(params = params))
+  if (base::isTRUE(state$skip_request)) {
+    base::return(state$result)
+  }
+  changed <- base::intersect(base::names(params), base::names(state$params))
+  params[changed] <- state$params[changed]
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/toxprints/calculate",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = base::list(
+      "request.filesInfo" = params[["request.filesInfo"]],
+      "request.labels" = params[["request.labels"]],
+      "request.options.OR" = params[["request.options.OR"]],
+      "request.options.PV1" = params[["request.options.PV1"]],
+      "request.options.TP" = params[["request.options.TP"]],
+      "request.options.or" = params[["request.options.or"]],
+      "request.options.profile" = params[["request.options.profile"]],
+      "request.options.pv1" = params[["request.options.pv1"]],
+      "request.options.tp" = params[["request.options.tp"]],
+      "request.resolve" = params[["request.resolve"]]
+    ),
+    "body" = base::local({
+      chemicals <- params[["chemicals"]]
+      if (!is.list(chemicals) || !length(chemicals)) {
+        chemicals <- lapply(.ct_toxprint_query(params[["query"]]), function(id) list(sid = id))
+      }
+      c(
+        list(
+          chemicals = lapply(chemicals, function(record) {
+            if (is.list(record) && !is.null(record$chemical)) record$chemical else record
+          })
+        ),
+        Filter(
+          Negate(is.null),
+          base::list(
+            labels = params[["labels"]],
+            options = base::local({
+              options <- params[["options"]]
+              if (is.null(options)) {
+                options <- structure(list(), names = character())
+              }
+              .api_validation$body_value(
+                options,
+                structure(
+                  list(
+                    properties = list(
+                      OR = list(format = "double", type = "number"),
+                      PV1 = list(format = "double", type = "number"),
+                      TP = list(format = "int32", type = "integer"),
+                      or = list(format = "double", type = "number"),
+                      profile = list(type = "string"),
+                      pv1 = list(format = "double", type = "number"),
+                      tp = list(format = "int32", type = "integer")
+                    ),
+                    type = "object"
+                  ),
+                  specmill_id = "#/components/schemas/ToxprintsOptions"
+                )
+              )
+            })
+          )
+        )
       )
-    )
+    }),
+    "headers" = list(Accept = "application/json"),
+    "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+    "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    "auth" = list(),
+    "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
+      context$endpoint <- "toxprints/calculate"
+      .ct_chemi_result(response, context, decode, tidy = FALSE)
+    },
+    "request_controls" = list(preserve_errors = TRUE)
   )
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("idType" %in% names(req_data$params)) {
-    idType <- req_data$params[["idType"]]
-  }
-  if ("labels" %in% names(req_data$params)) {
-    labels <- req_data$params[["labels"]]
-  }
-  if ("options" %in% names(req_data$params)) {
-    options <- req_data$params[["options"]]
-  }
-  if ("request.filesInfo" %in% names(req_data$params)) {
-    request.filesInfo <- req_data$params[["request.filesInfo"]]
-  }
-  if ("request.labels" %in% names(req_data$params)) {
-    request.labels <- req_data$params[["request.labels"]]
-  }
-  if ("request.options.OR" %in% names(req_data$params)) {
-    request.options.OR <- req_data$params[["request.options.OR"]]
-  }
-  if ("request.options.PV1" %in% names(req_data$params)) {
-    request.options.PV1 <- req_data$params[["request.options.PV1"]]
-  }
-  if ("request.options.TP" %in% names(req_data$params)) {
-    request.options.TP <- req_data$params[["request.options.TP"]]
-  }
-  if ("request.options.or" %in% names(req_data$params)) {
-    request.options.or <- req_data$params[["request.options.or"]]
-  }
-  if ("request.options.profile" %in% names(req_data$params)) {
-    request.options.profile <- req_data$params[["request.options.profile"]]
-  }
-  if ("request.options.pv1" %in% names(req_data$params)) {
-    request.options.pv1 <- req_data$params[["request.options.pv1"]]
-  }
-  if ("request.options.tp" %in% names(req_data$params)) {
-    request.options.tp <- req_data$params[["request.options.tp"]]
-  }
-  if ("request.resolve" %in% names(req_data$params)) {
-    request.resolve <- req_data$params[["request.resolve"]]
-  }
-  if ("chemicals" %in% names(req_data$params)) {
-    chemicals <- req_data$params[["chemicals"]]
-  }
-
-  # Build options from additional parameters
-  extra_options <- list()
-  if (!is.null(labels)) {
-    extra_options$labels <- labels
-  }
-  if (!is.null(options)) {
-    extra_options$options <- options
-  }
-
-  result <- generic_chemi_request(
-    query = query,
-    endpoint = "toxprints/calculate",
-    options = extra_options,
-    tidy = FALSE,
-    chemicals = chemicals,
-    request.filesInfo = request.filesInfo,
-    request.labels = request.labels,
-    request.options.OR = request.options.OR,
-    request.options.PV1 = request.options.PV1,
-    request.options.TP = request.options.TP,
-    request.options.or = request.options.or,
-    request.options.profile = request.options.profile,
-    request.options.pv1 = request.options.pv1,
-    request.options.tp = request.options.tp,
-    request.resolve = request.resolve
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

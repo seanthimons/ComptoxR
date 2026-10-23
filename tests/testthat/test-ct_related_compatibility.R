@@ -4,10 +4,10 @@ test_that("ct_related uses the legacy ccdapp2 route and restores ctx server", {
 
   called_server <- NULL
   testthat::local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       # ct_related passes the legacy ccdapp2 route as an explicit `server` argument
       # (like ct_similar), not by mutating the ctx_burl env var.
-      called_server <<- list(...)[["server"]]
+      called_server <<- list(...)[["server"]][["url"]]
       list(
         data = list(
           list(dtxsid = "DTXSID7020182", relationship = "self"),
@@ -20,15 +20,15 @@ test_that("ct_related uses the legacy ccdapp2 route and restores ctx server", {
 
   result <- suppressMessages(ComptoxR::ct_related(query = "DTXSID7020182"))
 
-  expect_equal(called_server, "https://comptox.epa.gov/dashboard-api/ccdapp2/")
+  expect_equal(called_server, "https://comptox.epa.gov/dashboard-api/ccdapp2")
   expect_equal(Sys.getenv("ctx_burl"), old_server)
   expect_s3_class(result, "tbl_df")
   expect_equal(result$child, "DTXSID1020560")
 })
 
-test_that("ct_related extracts data from wrapped generic_request responses", {
+test_that("ct_related extracts data from wrapped .ct_request responses", {
   testthat::local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       list(list(
         data = list(
           list(dtxsid = "DTXSID80109469", relationship = "Searched Chemical"),
@@ -48,7 +48,7 @@ test_that("ct_related extracts data from wrapped generic_request responses", {
 
 test_that("ct_related gates payload header behind run_verbose", {
   testthat::local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       list(
         data = list(
           list(dtxsid = "DTXSID1", relationship = "Searched Chemical"),

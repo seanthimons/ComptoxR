@@ -1,0 +1,28 @@
+{
+  "commit": "b17a0856263e0179a164a9673399f221168cda6d",
+  "evidence": [
+    {
+      "path": "R/operations.R",
+      "sha256": "8b4148b77551e56c04451e5bb461557a02f14f2543a61ad555b52e6593d352f4",
+      "start_line": 1027,
+      "end_line": 1050,
+      "excerpt": "        operations <- Filter(function(x) is.null(x$parser_failure), operations)\n      }\n    }\n  }\n  ids <- vapply(operations, `[[`, character(1), 'id')\n  duplicate_ids <- unique(ids[duplicated(ids)])\n  for (id in duplicate_ids) {\n    group <- operations[ids == id]\n    contract <- function(x) x[setdiff(names(x), c('source', 'source_hash'))]\n    if (\n      !all(vapply(\n        group[-1L],\n        function(x) identical(contract(x), contract(group[[1L]])),\n        logical(1)\n      ))\n    ) {\n      stop(\n        'Conflicting duplicate operation ',\n        id,\n        ' in ',\n        paste(vapply(group, `[[`, character(1), 'source'), collapse = ', ')\n      )\n    }\n  }"
+    },
+    {
+      "path": "R/configuration.R",
+      "sha256": "731ff50c7e5e114ddbf26ff37695b822d6f064e213d7abced1bae215fd6f9da7",
+      "start_line": 623,
+      "end_line": 625,
+      "excerpt": "      next\n    }\n    parsed <- read_operations(service$files, service[['policy']])"
+    },
+    {
+      "path": "R/configuration.R",
+      "sha256": "731ff50c7e5e114ddbf26ff37695b822d6f064e213d7abced1bae215fd6f9da7",
+      "start_line": 724,
+      "end_line": 755,
+      "excerpt": "        }\n        if (length(files) != 1L) {\n          stop(\n            service$id,\n            ': route schema must identify one loaded service file: ',\n            schema\n          )\n        }\n        route <- read_route(files[[1L]], route_key)\n        for (field in c('helper', 'server', 'body_media', 'text_encoding')) {\n          if (\n            (field == 'server' && is.null(route$server$url)) ||\n              !identical(route[[field]], routes[[1L]][[field]])\n          ) {\n            stop(\n              service$id,\n              ': route ',\n              reference,\n              ' disagrees with ',\n              key,\n              ' ',\n              field\n            )\n          }\n        }\n        routes[[length(routes) + 1L]] <- route\n      }\n      services[[i]][['policy']][['routes_overrides']][[key]] <- routes\n    }\n  }\n  list(\n    services = stats::setNames(services, ids),"
+    }
+  ],
+  "source_archive_sha256": "dbd15b2509171431f00a193a648f426a02873aee5e16a73de740d30b56792351",
+  "archive_matches_root_pin": true
+}

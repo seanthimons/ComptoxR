@@ -1,0 +1,853 @@
+[
+  {
+    "operation": "POST /api/amos/add_aqc_spectrum/",
+    "bindings": [],
+    "status": "held",
+    "reason": "Upload needs multipart service contract and mutation evidence; no probe authorized."
+  },
+  {
+    "operation": "POST /api/amos/add_new_fact_sheet/",
+    "bindings": [],
+    "status": "held",
+    "reason": "Upload needs multipart service contract and mutation evidence; no probe authorized."
+  },
+  {
+    "operation": "POST /api/amos/add_new_method/",
+    "bindings": [],
+    "status": "held",
+    "reason": "Upload needs multipart service contract and mutation evidence; no probe authorized."
+  },
+  {
+    "operation": "POST /api/amos/add_new_product_declaration/",
+    "bindings": [],
+    "status": "held",
+    "reason": "Upload needs multipart service contract and mutation evidence; no probe authorized."
+  },
+  {
+    "operation": "POST /api/amos/add_new_safety_data_sheet/",
+    "bindings": [],
+    "status": "held",
+    "reason": "Upload needs multipart service contract and mutation evidence; no probe authorized."
+  },
+  {
+    "operation": "GET /api/amos/additional_sources_for_substance/{dtxsid}",
+    "bindings": [
+      {
+        "service": "chemi-amos-direct-reads",
+        "file": "R/chemi_amos_additional_sources_for_substance.R",
+        "name": "chemi_amos_additional_sources_for_substance"
+      }
+    ],
+    "status": "new",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/all_similarities_by_dtxsid/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_all_similarities.R",
+        "name": "chemi_amos_all_similarities"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/analytical_qc_batch_search",
+    "bindings": [],
+    "status": "held",
+    "reason": "Existing generic Chemi payload differs from corrected service body; both populated/minimal previous production probes returned HTTP500."
+  },
+  {
+    "operation": "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+        "name": "chemi_amos_analytical_qc_keyset_pagination"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/analytical_qc_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+        "name": "chemi_amos_analytical_qc_keyset_pagination_bulk"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/batch_search",
+    "bindings": [],
+    "status": "held",
+    "reason": "Existing generic Chemi payload differs from corrected service body; both populated/minimal previous production probes returned HTTP500."
+  },
+  {
+    "operation": "POST /api/amos/count_substances_in_ids/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_count_substances_in_ids.R",
+        "name": "chemi_amos_count_substances_in_ids"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/database_summary/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_database.R",
+        "name": "chemi_amos_database"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/dtxsids/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_dtxsids.R",
+        "name": "chemi_amos_dtxsids"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/dtxsids_from_functional_use/{functional_use}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_dtxsids_from_functional_use.R",
+        "name": "chemi_amos_dtxsids_from_functional_use"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/entropy_similarity/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_entropy_similarity.R",
+        "name": "chemi_amos_entropy_similarity"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+        "name": "chemi_amos_fact_sheet_keyset_pagination"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/fact_sheet_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+        "name": "chemi_amos_fact_sheet_keyset_pagination_bulk"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/find_dtxsids/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_find_dtxsids.R",
+        "name": "chemi_amos_find_dtxsids"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/formula_search/{formula}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_formula.R",
+        "name": "chemi_amos_formula"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/functional_class_search/{functional_class}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_functional_class.R",
+        "name": "chemi_amos_functional_class"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_functional_uses_for_dtxsid.R",
+        "name": "chemi_amos_functional_uses_for_dtxsid"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_classyfire.R",
+        "name": "chemi_classyfire"
+      },
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_get_classification_for_dtxsid.R",
+        "name": "chemi_amos_get_classification_for_dtxsid"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_data_source_info/",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_get_data_source_info.R",
+        "name": "chemi_amos_get_data_source_info"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_fact_sheet_editor_info/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_fact_sheet_editor_info.R",
+        "name": "chemi_amos_get_fact_sheet_editor_info"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_info_by_id/{internal_id}",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_get_info_by_id.R",
+        "name": "chemi_amos_get_info_by_id"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_ir_spectrum/{internal_id}",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_get_ir_spectrum.R",
+        "name": "chemi_amos_get_ir_spectrum"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_mass_spectrum/{internal_id}",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_get_mass_spectrum.R",
+        "name": "chemi_amos_get_mass_spectrum"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_method_editor_info/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_method_editor_info.R",
+        "name": "chemi_amos_get_method_editor_info"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_ms_ready_methods/{inchikey}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_ms_ready_methods.R",
+        "name": "chemi_amos_get_ms_ready_methods"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_nmr_spectrum/{internal_id}",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_get_nmr_spectrum.R",
+        "name": "chemi_amos_get_nmr_spectrum"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_nmr_spectrum_editor_info.R",
+        "name": "chemi_amos_get_nmr_spectrum_editor_info"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_pdf/{record_type}/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_pdf.R",
+        "name": "chemi_amos_get_pdf"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-direct-reads",
+        "file": "R/chemi_amos_get_pdf_metadata.R",
+        "name": "chemi_amos_get_pdf_metadata"
+      }
+    ],
+    "status": "new",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_product_declaration_editor_info/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_product_declaration_editor_info.R",
+        "name": "chemi_amos_get_product_declaration_editor_info"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_safety_data_sheet_editor_info.R",
+        "name": "chemi_amos_get_safety_data_sheet_editor_info"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_similar_structures.R",
+        "name": "chemi_amos_get_similar_structures"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_substance_file_for_record/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-direct-reads",
+        "file": "R/chemi_amos_get_substance_file_for_record.R",
+        "name": "chemi_amos_get_substance_file_for_record"
+      }
+    ],
+    "status": "new",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/get_substances_for_search_term/{search_term}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_get_substances_for_term.R",
+        "name": "chemi_amos_get_substances_for_term"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/inchikey_first_block_search/{first_block}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_inchikey_first_block.R",
+        "name": "chemi_amos_inchikey_first_block"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/list_fact_sheet_types/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_list_fact_sheet_types.R",
+        "name": "chemi_amos_list_fact_sheet_types"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/list_functional_classes",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_list_functional_classes.R",
+        "name": "chemi_amos_list_functional_classes"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/list_sources_by_record_type/{record_type}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_list_sources_by_record_type.R",
+        "name": "chemi_amos_list_sources_by_record_type"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/mass_range_search/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_mass_range.R",
+        "name": "chemi_amos_mass_range"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/mass_spectra_for_substances/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_mass_spectra_for_substances.R",
+        "name": "chemi_amos_mass_spectra_for_substances"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/mass_spectrum_similarity_search/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_mass_spectrum_similarity.R",
+        "name": "chemi_amos_mass_spectrum_similarity"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/max_similarity_by_dtxsid/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_max_similarity.R",
+        "name": "chemi_amos_max_similarity"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/method_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_method_keyset_pagination.R",
+        "name": "chemi_amos_method_keyset_pagination"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/method_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_method_keyset_pagination.R",
+        "name": "chemi_amos_method_keyset_pagination_bulk"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_method_with_spectra.R",
+        "name": "chemi_amos_method_with_spectra"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/next_level_classification/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_next_level_classification.R",
+        "name": "chemi_amos_next_level_classification"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/product_declaration_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+        "name": "chemi_amos_product_declaration_keyset_pagination"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/product_declaration_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+        "name": "chemi_amos_product_declaration_keyset_pagination_bulk"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/record_counts_by_dtxsid/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_record_counts.R",
+        "name": "chemi_amos_record_counts"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/record_id_search/{internal_id}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_record_id.R",
+        "name": "chemi_amos_record_id"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_record_ids_for_substance.R",
+        "name": "chemi_amos_record_ids_for_substance"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/record_type_count/{record_type}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_record_type_count.R",
+        "name": "chemi_amos_record_type_count"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/release_notes",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_release_notes.R",
+        "name": "chemi_amos_release_notes"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/retrieve_fact_sheets/",
+    "bindings": [
+      {
+        "service": "chemi-amos-reviewed-reads",
+        "file": "R/chemi_amos_retrieve_fact_sheets.R",
+        "name": "chemi_amos_retrieve_fact_sheets"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/retrieve_product_declarations/",
+    "bindings": [
+      {
+        "service": "chemi-amos-reviewed-reads",
+        "file": "R/chemi_amos_retrieve_product_declarations.R",
+        "name": "chemi_amos_retrieve_product_declarations"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/retrieve_safety_data_sheets/",
+    "bindings": [
+      {
+        "service": "chemi-amos-reviewed-reads",
+        "file": "R/chemi_amos_retrieve_safety_data_sheets.R",
+        "name": "chemi_amos_retrieve_safety_data_sheets"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+        "name": "chemi_amos_safety_data_sheet_keyset_pagination"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+        "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/search/{dtxsid}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos.R",
+        "name": "chemi_amos"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/search_by_text/{substr}",
+    "bindings": [
+      {
+        "service": "amos-pilot",
+        "file": "R/chemi_amos_by_text.R",
+        "name": "chemi_amos_by_text"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/search_for_document_ids/{record_type}",
+    "bindings": [
+      {
+        "service": "chemi-amos-reviewed-reads",
+        "file": "R/chemi_amos_for_document_ids.R",
+        "name": "chemi_amos_for_document_ids"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/spectral_entropy/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_spectral_entropy.R",
+        "name": "chemi_amos_spectral_entropy"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/spectrum_count_for_methodology/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_spectrum_count_for_methodology.R",
+        "name": "chemi_amos_spectrum_count_for_methodology"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/substances_for_classification/",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_substances_for_classification.R",
+        "name": "chemi_amos_substances_for_classification"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "POST /api/amos/substances_for_ids/",
+    "bindings": [
+      {
+        "service": "chemi-amos-reviewed-reads",
+        "file": "R/chemi_amos_substances_for_ids.R",
+        "name": "chemi_amos_substances_for_ids"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "GET /api/amos/substring_search/{substring}",
+    "bindings": [
+      {
+        "service": "chemi-amos-prod-full",
+        "file": "R/chemi_amos_substring.R",
+        "name": "chemi_amos_substring"
+      }
+    ],
+    "status": "existing",
+    "reason": null
+  },
+  {
+    "operation": "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}",
+    "bindings": [],
+    "status": "held",
+    "reason": "Update declares no submitted body and staging omits the operation; no mutation evidence authorized."
+  },
+  {
+    "operation": "PUT /api/amos/update_fact_sheet_info/{internal_id}",
+    "bindings": [],
+    "status": "held",
+    "reason": "Update declares no submitted body and staging omits the operation; no mutation evidence authorized."
+  },
+  {
+    "operation": "PUT /api/amos/update_method_info/{internal_id}",
+    "bindings": [],
+    "status": "held",
+    "reason": "Update declares no submitted body and staging omits the operation; no mutation evidence authorized."
+  },
+  {
+    "operation": "PUT /api/amos/update_nmr_spectrum_info/{internal_id}",
+    "bindings": [],
+    "status": "held",
+    "reason": "Update declares no submitted body and staging omits the operation; no mutation evidence authorized."
+  },
+  {
+    "operation": "PUT /api/amos/update_product_declaration_info/{internal_id}",
+    "bindings": [],
+    "status": "held",
+    "reason": "Update declares no submitted body and staging omits the operation; no mutation evidence authorized."
+  },
+  {
+    "operation": "PUT /api/amos/update_safety_data_sheet_info/{internal_id}",
+    "bindings": [],
+    "status": "held",
+    "reason": "Update declares no submitted body and staging omits the operation; no mutation evidence authorized."
+  }
+]

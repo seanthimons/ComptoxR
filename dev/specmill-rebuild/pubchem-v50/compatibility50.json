@@ -1,0 +1,72 @@
+{
+  "version": "0.1.50",
+  "source": "064478735580b54a732e3859b066b317e72d53a1",
+  "official_archive_sha256": "cb8e970df29086405206a21b8b591b848f434fbc0e78984233b0fc532c1f9deb",
+  "gitarchive_sha256": "7d1ebbac31b3ecc764e8b0cb7baf890a4a5e4ceef67b16cbd96835b1f12d0f78",
+  "portable_generation": {
+    "all_owner_hashes_match": true,
+    "owners": 13,
+    "public_wrapper_hashes": {
+      "pubchem_search.R": "c067b96ab8e3cd7ce5022b5cf9ba4574b8d02a1d417e174e616ff6fcfc816a24",
+      "pubchem_properties.R": "d5042839d847bca801c69366ea1bbe1402015b372cc32abb2e8f2ac9bd6ab497",
+      "pubchem_synonyms.R": "24a23e62a4c8665997e51d25eccc4ffb9e102d82345b79b3272fcdee317c82a0"
+    },
+    "repeated_portable_callbacks_public_bytes_identical": false,
+    "fresh": true
+  },
+  "runtime": {
+    "tests": 1,
+    "passed": 228,
+    "failed": 0,
+    "errors": 0,
+    "warnings": 0,
+    "skips": 0,
+    "specmill_runtime_loaded": false
+  },
+  "public_validation_and_caller": {
+    "tests": 9,
+    "passed": 26,
+    "failed": 0,
+    "errors": 0,
+    "warnings": 0,
+    "skips": 0,
+    "specmill_runtime_loaded": false
+  },
+  "actual_localhost_requests": 81,
+  "cold_prefix_requests": 24,
+  "cold_prefixes": [
+    "/rest/pug",
+    "/custom/pug-v2"
+  ],
+  "default_url_dryrun_routes": 6,
+  "default_url_dryrun_http": 0,
+  "total_assertions": 254,
+  "public_wrapper_change_since48": "Only server_resolver relative / -> empty string in all three wrappers; supported generator only",
+  "final_policy_ast_unchanged": true,
+  "final_full_policy_all_copies_sha256": "144d5f2f1e6f10f06136d766fb33e69f180e590c56ff8f29ba11df0681c3e08b",
+  "bundle_trailing_whitespace": false,
+  "schema_source_byte_identical": true,
+  "primary_owned_operations": 3,
+  "reviewed_get_post_routes": 6,
+  "canonical_denominator_additions": 0,
+  "new_helper_companions": [],
+  "maintenance_helper_names_additions": [],
+  "root_tracked_files_changed_by50_replay": false,
+  "deployed_calls": false,
+  "separate_hold_chemi_resolver_getpubchemlist_unchanged": true,
+  "baseline49_portable_generation_passed": true,
+  "baseline49_runtime_not_replayed": true,
+  "scaffold": {
+    "version": "0.1.50",
+    "source": "064478735580b54a732e3859b066b317e72d53a1",
+    "policy_ast_unchanged": true,
+    "scaffold_code_identical49": true,
+    "companions": [
+      "batching",
+      "pagination"
+    ],
+    "comparison": "Both official scaffold code strings normalized by established export/noRd and trailing-whitespace steps",
+    "normalized_code_sha256": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec"
+  },
+  "retained_harness_failure": "initial-dry-run-scalar-harness-failure.* records incorrect scalar assumption; supported one-element native dry-run request list now handled"
+}

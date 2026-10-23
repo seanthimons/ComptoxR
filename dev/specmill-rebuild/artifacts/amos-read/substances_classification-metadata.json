@@ -1,0 +1,8 @@
+{
+  "operation": "POST /api/amos/substances_for_classification/",
+  "definition": "ClassyFireClassificationRequest",
+  "status": 200,
+  "media": "application/json",
+  "size": 10701,
+  "date": "2026-10-18 00:10:08 UTC"
+}

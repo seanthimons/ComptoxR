@@ -1,0 +1,966 @@
+id: ctx-chemical-prod-rebuild
+schemas:
+  files:
+  - schema/ctx-chemical-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: yes
+authentication:
+  api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
+operations:
+  GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}:
+    name: ct_chemical_property_predicted_search_by_range
+    file: R/ct_chemical_property_predicted_search_by_range.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: propertyId
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get predicted properties by property and range
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - propertyId: '1'
+        start: 0.0
+        end: 100.0
+    normalize_inputs:
+      propertyId: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}
+        path_params:
+          object:
+            propertyId:
+              from:
+              - params
+              - propertyId
+            start:
+              from:
+              - params
+              - start
+            end:
+              from:
+              - params
+              - end
+        query:
+          value: []
+        body:
+          value: ~
+        response_policy:
+          callback: primary_query_response
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+  GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}:
+    name: ct_chemical_property_experimental_search_by_range
+    file: R/ct_chemical_property_experimental_search_by_range.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: propertyName
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get experimental properties by property and range
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - propertyName: Melting Point
+        start: 0.0
+        end: 100.0
+    normalize_inputs:
+      propertyName: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}
+        path_params:
+          object:
+            propertyName:
+              from:
+              - params
+              - propertyName
+            start:
+              from:
+              - params
+              - start
+            end:
+              from:
+              - params
+              - end
+        query:
+          value: []
+        body:
+          value: ~
+        response_policy:
+          callback: primary_query_response
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+  GET /chemical/list/chemicals/search/start-with/{list}/{word}:
+    name: ct_chemical_list_chemicals_search_start_with
+    file: R/ct_chemical_list_chemicals_search_start_with.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get DTXSIDs for list and containing starting string in chemical name
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: TOXCAST
+        word: bisphenol
+    normalize_inputs:
+      list: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/list/chemicals/search/start-with/{list}/{word}
+        path_params:
+          object:
+            list:
+              from:
+              - params
+              - list
+            word:
+              from:
+              - params
+              - word
+        query:
+          value: []
+        body:
+          value: ~
+        response_policy:
+          callback: primary_query_response
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+  GET /chemical/list/chemicals/search/equal/{list}/{word}:
+    name: ct_chemical_list_chemicals_search_equal
+    file: R/ct_chemical_list_chemicals_search_equal.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get DTXSIDs for list and containing exact string in chemical name
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: TOXCAST
+        word: bisphenol
+    normalize_inputs:
+      list: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/list/chemicals/search/equal/{list}/{word}
+        path_params:
+          object:
+            list:
+              from:
+              - params
+              - list
+            word:
+              from:
+              - params
+              - word
+        query:
+          value: []
+        body:
+          value: ~
+        response_policy:
+          callback: primary_query_response
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+  GET /chemical/list/chemicals/search/contain/{list}/{word}:
+    name: ct_chemical_list_chemicals_search_contain
+    file: R/ct_chemical_list_chemicals_search_contain.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get DTXSIDs for list and containing substring in chemical name
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: TOXCAST
+        word: bisphenol
+    normalize_inputs:
+      list: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/list/chemicals/search/contain/{list}/{word}
+        path_params:
+          object:
+            list:
+              from:
+              - params
+              - list
+            word:
+              from:
+              - params
+              - word
+        query:
+          value: []
+        body:
+          value: ~
+        response_policy:
+          callback: primary_query_response
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+  GET /chemical/detail/search/by-dtxcid/{dtxcid}:
+    name: ct_chemical_detail_search_by_dtxcid
+    file: R/ct_chemical_detail_search_by_dtxcid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_http_policy_ct_chemical_detail_search_by_dtxcid
+    batch:
+      fan_out: dtxcid
+      on_error:
+        single: stop
+        multiple: drop
+      empty: .ct_empty_table
+      metadata: no
+      warning: .ct_batch_http_warning
+    docs:
+      title: Get data by DTXCID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxcid: DTXCID505
+    normalize_inputs:
+      dtxcid: .ct_legacy_query
+  GET /chemical/detail/search/by-smiles/:
+    name: ct_chemical_detail_search_by_smiles
+    file: R/ct_chemical_detail_search_by_smiles.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get data by SMILES
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - smiles: CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1
+  GET /chemical/fate/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_fate_search_by_dtxsid
+    file: R/ct_chemical_fate_search_by_dtxsid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get fate data by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/fate/summary/experimental/search/:
+    name: ct_chemical_fate_experimental_search
+    file: R/ct_chemical_fate_experimental_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get experimental fate summary by DTXSID and property
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/predicted/search/:
+    name: ct_chemical_fate_predicted_search
+    file: R/ct_chemical_fate_predicted_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get predicted fate summary by DTXSID and property
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/search/:
+    name: ct_chemical_fate_summary_search
+    file: R/ct_chemical_fate_summary_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get fate summary by DTXSID and property
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_fate_summary_search_by_dtxsid
+    file: R/ct_chemical_fate_summary_search_by_dtxsid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get fate summary by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/list/chemicals/search/by-listname/{list}:
+    name: ct_chemical_list_chemicals_search_by_listname
+    file: R/ct_chemical_list_chemicals_search_by_listname.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: list
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get DTXSIDs by list
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - list: 40CFR1164
+    normalize_inputs:
+      list: .ct_legacy_query
+  GET /chemical/list/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_list_search
+    file: R/ct_chemical_list_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get lists containing DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID1020560
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/list/search/by-type/{type}:
+    name: ct_chemical_list_search_by_type
+    file: R/ct_chemical_list_search_by_type.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: type
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get lists by list type
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - type: other
+    normalize_inputs:
+      type: .ct_legacy_query
+  GET /chemical/list/type:
+    name: ct_chemical_list_type
+    file: R/ct_chemical_list_type.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get all list types
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - {}
+  GET /chemical/msready/search/by-mass/{start}/{end}:
+    name: ct_chemical_msready_search_by_mass
+    file: R/ct_chemical_msready_search_by_mass.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: start
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get MS-ready chemicals using mass range
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - start: 200.90000000000000568
+        end: 201
+    normalize_inputs:
+      start: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/msready/search/by-mass/{start}/{end}
+        path_params:
+          object:
+            start:
+              from:
+              - params
+              - start
+            end:
+              from:
+              - params
+              - end
+        query:
+          value: []
+        body:
+          value: ~
+        response_policy:
+          callback: primary_query_response
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+  GET /chemical/property/experimental/name:
+    name: ct_chemical_property_experimental_name
+    file: R/ct_chemical_property_experimental_name.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get all experimental property options
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - {}
+  GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_property_experimental_search_by_dtxsid
+    file: R/ct_chemical_property_experimental_search_by_dtxsid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get experimental properties by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/property/predicted/name:
+    name: ct_chemical_property_predicted_name
+    file: R/ct_chemical_property_predicted_name.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get all predicted property options
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - {}
+  GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_property_predicted_search_by_dtxsid
+    file: R/ct_chemical_property_predicted_search_by_dtxsid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get predicted properties by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/property/summary/experimental/search/:
+    name: ct_chemical_property_summary_experimental_search
+    file: R/ct_chemical_property_summary_experimental_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get experimental summary by DTXSID and property
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/predicted/search/:
+    name: ct_chemical_property_summary_predicted_search
+    file: R/ct_chemical_property_summary_predicted_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get predicted property summary by DTXSID and property
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/search/:
+    name: ct_chemical_property_summary_search
+    file: R/ct_chemical_property_summary_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get summary by DTXSID and property
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_property_summary_search_by_dtxsid
+    file: R/ct_chemical_property_summary_search_by_dtxsid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get summary by DTXSID
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/search/equal/{word}:
+    name: ct_chemical_search_equal
+    file: R/ct_chemical_search_equal.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: word
+      on_error: drop
+      empty: .ct_empty_table
+    post_on_skip: no
+    post_state: parameters
+    docs:
+      title: Get chemicals by exact value
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - word: DTXSID7020182
+    normalize_inputs:
+      word: .ct_legacy_query
+  POST /chemical/detail/search/by-dtxcid/:
+    name: ct_chemical_detail_search_by_dtxcid_bulk
+    file: R/ct_chemical_detail_search_by_dtxcid.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: query
+    parameter_order:
+    - query
+    - projection
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_http_policy_ct_chemical_detail_search_by_dtxcid_bulk
+    normalize_inputs:
+      query: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error:
+        single: stop
+        multiple: drop
+      empty: .ct_empty_table
+      metadata: no
+      warning: .ct_batch_http_warning
+    docs:
+      title: Get data for a batch of DTXCIDs
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - query:
+        - DTXCID505
+        - DTXCID30182
+  POST /chemical/fate/search/by-dtxsid/:
+    name: ct_chemical_fate_search_bulk
+    file: R/ct_chemical_fate_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get fate data for a batch of DTXSIDs
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /chemical/msready/search/by-mass/:
+    name: ct_chemical_msready_search_by_mass_bulk
+    file: R/ct_chemical_msready_search_by_mass.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    body:
+      name: body
+      description: A named list with integer error (mass tolerance) and a numeric
+        masses vector.
+    docs:
+      title: Get MS-ready chemicals for a batch of mass ranges
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - body:
+          error: 5
+          masses:
+          - 200.90000000000000568
+          - 201
+  POST /chemical/property/experimental/search/by-dtxsid/:
+    name: ct_chemical_property_experimental_search_bulk
+    file: R/ct_chemical_property_experimental_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get experimental properties for a batch of DTXSIDs
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /chemical/property/predicted/search/by-dtxsid/:
+    name: ct_chemical_property_predicted_search_bulk
+    file: R/ct_chemical_property_predicted_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get predicted properties for a batch of DTXSIDs
+      lifecycle: stable
+      return: Returns a tibble with results
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  POST /chemical/search/equal/:
+    name: ct_chemical_search_equal_bulk
+    file: R/ct_chemical_search_equal.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: query
+      description: Character vector of values to search for
+    parameter_order:
+    - query
+    body_media_correction:
+      from: application/json
+      to: text/plain
+      reason: Reviewed endpoint accepts newline-delimited UTF-8 identifiers.
+    text_encoding: lines
+    normalize_inputs:
+      query: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 1000
+        cap: 200
+      split: yes
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      empty: .ct_empty_table
+      warning: .ct_batch_http_warning
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_http_policy_ct_chemical_search_equal_bulk
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /chemical/search/equal/
+        path_params:
+          value: []
+        query:
+          value: []
+        body:
+          from:
+          - params
+          - query
+        headers:
+          value:
+            Accept: application/json
+        body_media:
+          value: text/plain
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: reviewed_batch_response
+    docs:
+      title: Get chemicals for a batch of exact values
+      lifecycle: stable
+      return: A tibble with search results
+      examples:
+      - query:
+        - DTXSID7020182
+        - DTXSID9020112
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

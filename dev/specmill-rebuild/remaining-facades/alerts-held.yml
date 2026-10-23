@@ -1,0 +1,103 @@
+id: remaining-alerts-facade
+schemas:
+  files:
+  - schema/chemi-alerts-prod.json
+selection:
+  include:
+  - POST /api/alerts/groups
+helper: .ct_request
+documentation: yes
+operations:
+  POST /api/alerts/groups:
+    name: chemi_alerts_groups_bulk
+    file: R/chemi_alerts_groups_bulk.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      description:
+        type: any
+        default: ~
+      frozen:
+        type: any
+        default: ~
+      id:
+        type: any
+        default: ~
+      logicType:
+        type: any
+        default: ~
+      name:
+        type: any
+        default: ~
+      operations:
+        type: any
+        default: ~
+      text:
+        type: any
+        default: ~
+      type:
+        type: any
+        default: ~
+      value:
+        type: any
+        default: ~
+    defer_inputs:
+    - description
+    - frozen
+    - id
+    - logicType
+    - name
+    - operations
+    - text
+    - type
+    - value
+    exclude_parameters:
+    - files[]
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          value: /api/alerts/groups
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          callback: remaining_facade_body
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            url: https://hcd.rtpnc.epa.gov
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          callback: remaining_facade_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    request_controls:
+      preserve_errors: yes
+    docs:
+      title: chemi alerts groups bulk
+      lifecycle: experimental
+      parameters:
+        description: Optional parameter
+        frozen: Optional parameter
+        id: Optional parameter
+        logicType: Optional parameter
+        name: Optional parameter
+        operations: Optional parameter
+        text: Optional parameter
+        type: Optional parameter
+        value: Optional parameter
+      return: Returns the decoded API result.
+      tags:
+        apiStage: public

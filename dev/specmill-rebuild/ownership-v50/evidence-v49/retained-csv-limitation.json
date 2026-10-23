@@ -1,0 +1,11 @@
+{
+  "operation": "GET/POST /api/descriptors",
+  "limitation": "Existing CSV/TSV post-response failure retained",
+  "minimal_reproduction": "data <- list(result=data.frame(Ordinal=0L, SMILES=\"CCO\", check.names=FALSE), skip_request=FALSE); validate_descriptor_response(data)",
+  "cause": "A data.frame is a list; validate_descriptor_response subsets body[c(\"error\",\"errors\",\"message\")] with undefined columns before handling a delimited table.",
+  "source": "R/hooks_descriptors.R:575",
+  "old_condition": "comptoxr_post_response_hook_error with parent message undefined columns selected",
+  "native_condition": "Same typed post-hook condition/message; supported aggregate GET response policy chooses the existing delimited decoder.",
+  "no_hook_runtime_patch": true,
+  "scope": "Separate client behavior repair, not a Specmill ownership/generator defect. No CSV success claim."
+}

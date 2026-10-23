@@ -7,17 +7,17 @@
 chemi_chet_chemicals_database_stats(total = NULL)
 }
 \arguments{
-\item{total}{Optional parameter}
+\item{total}{total}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_chemicals_database_stats(total = "DTXSID7020182")
+chemi_chet_chemicals_database_stats()
 }
 }
 \section{API stage}{

@@ -1,0 +1,7 @@
+Error in readLines(unz(p, "xl/sharedStrings.xml"), warn = FALSE) :
+  cannot open the connection
+Calls: paste -> readLines
+In addition: Warning message:
+In readLines(unz(p, "xl/sharedStrings.xml"), warn = FALSE) :
+  cannot locate file 'xl/sharedStrings.xml' in zip file '/home/sxthi/.cache/comptoxr-amos-v41/tmp/RtmpHw243U/filed2ecdf9764b0.xlsx'
+Execution halted

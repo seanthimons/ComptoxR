@@ -1,0 +1,481 @@
+[
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "POST /api/search/download",
+    "operation": {
+      "operationId": "getDownloadFile",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DownloadRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "format": "byte",
+                "type": "string"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "search-controller"
+      ]
+    },
+    "name": "chemi_search_download"
+  },
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "GET /api/search/download/mol",
+    "operation": {
+      "operationId": "getMol",
+      "parameters": [
+        {
+          "in": "query",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "format",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "search-controller"
+      ]
+    },
+    "name": "chemi_search_download_mol"
+  },
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "GET /api/search/download/mol-by-smiles",
+    "operation": {
+      "operationId": "getMol_1",
+      "parameters": [
+        {
+          "in": "query",
+          "name": "smiles",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "query",
+          "name": "format",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "search-controller"
+      ]
+    },
+    "name": "chemi_search_download_mol_by_smiles"
+  },
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "POST /api/search/download/properties",
+    "operation": {
+      "operationId": "getProperties",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DownloadRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/BingoRecord"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "search-controller"
+      ]
+    },
+    "name": "chemi_search_download_properties"
+  },
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "POST /api/search/download/search-result-as-sdf",
+    "operation": {
+      "operationId": "getSdf",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SearchRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "format": "byte",
+                "type": "string"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "search-controller"
+      ]
+    },
+    "name": "chemi_search_download_sdf"
+  },
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "GET /api/search/render/png",
+    "operation": {
+      "operationId": "renderPng",
+      "parameters": [
+        {
+          "in": "query",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "query",
+          "name": "width",
+          "required": false,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "height",
+          "required": false,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "image/png": {
+              "schema": {
+                "format": "byte",
+                "type": "string"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "render-controller"
+      ]
+    },
+    "name": "chemi_search_render_png"
+  },
+  {
+    "schema": "schema/chemi-search-prod.json",
+    "key": "GET /api/search/render/svg",
+    "operation": {
+      "operationId": "renderSvg",
+      "parameters": [
+        {
+          "in": "query",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "query",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "query",
+          "name": "width",
+          "required": false,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
+          "in": "query",
+          "name": "height",
+          "required": false,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "content": {
+            "image/svg+xml": {
+              "schema": {
+                "format": "byte",
+                "type": "string"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "render-controller"
+      ]
+    },
+    "name": "chemi_search_render_svg"
+  },
+  {
+    "schema": "schema/chemi-services-prod.json",
+    "key": "POST /api/services/export",
+    "operation": {
+      "operationId": "exportAssayPost",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ExportRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "services-controller"
+      ]
+    },
+    "name": "chemi_services_export"
+  },
+  {
+    "schema": "schema/chemi-services-prod.json",
+    "key": "POST /api/services/export_json_report",
+    "operation": {
+      "operationId": "exportJsonReport",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ExportRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "services-controller"
+      ]
+    },
+    "name": "chemi_services_export_json_report"
+  },
+  {
+    "schema": "schema/chemi-services-reviewed-preflight.json",
+    "key": "POST /api/services/preflight",
+    "operation": {
+      "operationId": "postMultipartPreflight",
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/PreflightResponse"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "services-controller"
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files[]"
+              ],
+              "properties": {
+                "files[]": {
+                  "items": {
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "encoding": {
+              "files[]": {
+                "style": "form",
+                "explode": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "name": "chemi_services_preflight",
+    "canonical_schema": "schema/chemi-services-prod.json"
+  },
+  {
+    "schema": "schema/chemi-services-reviewed-preflight.json",
+    "key": "POST /api/services/universalpreflight",
+    "operation": {
+      "operationId": "postMultipartUniversalPreflight",
+      "responses": {
+        "200": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/PreflightResponse"
+              }
+            }
+          },
+          "description": "OK"
+        }
+      },
+      "tags": [
+        "services-controller"
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files[]"
+              ],
+              "properties": {
+                "files[]": {
+                  "items": {
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "encoding": {
+              "files[]": {
+                "style": "form",
+                "explode": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "name": "chemi_services_universalpreflight",
+    "canonical_schema": "schema/chemi-services-prod.json"
+  }
+]

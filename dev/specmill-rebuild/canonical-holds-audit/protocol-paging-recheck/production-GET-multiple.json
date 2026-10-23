@@ -1,0 +1,47 @@
+{
+  "environment": "production",
+  "url": "https://hcd.rtpnc.epa.gov/api/stdizer/protocols/6a0f64e78b3b075871b2f8ab?page=0&size=10&sort=type%2Casc&sort=id%2Cdesc",
+  "method": "GET",
+  "case": "multiple",
+  "query_pairs": [
+    [
+      "page",
+      "0"
+    ],
+    [
+      "size",
+      "10"
+    ],
+    [
+      "sort",
+      "type,asc"
+    ],
+    [
+      "sort",
+      "id,desc"
+    ]
+  ],
+  "request_body": null,
+  "time_utc": "2026-10-18T22:31:28.560103+00:00",
+  "status": 200,
+  "media": "application/json;charset=UTF-8",
+  "records": [
+    {
+      "id": "6a0f64fb8b3b075871b2f8af",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "6a0f64e98b3b075871b2f8ad",
+      "type": "COMPONENT"
+    },
+    {
+      "id": "6a0f64fb8b3b075871b2f8ae",
+      "type": "PARENT"
+    },
+    {
+      "id": "6a0f64e88b3b075871b2f8ac",
+      "type": "PARENT"
+    }
+  ],
+  "filteredNumber": 4
+}

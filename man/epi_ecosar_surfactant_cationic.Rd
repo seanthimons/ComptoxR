@@ -4,17 +4,34 @@
 \alias{epi_ecosar_surfactant_cationic}
 \title{Estimate a cationic surfactant}
 \usage{
-epi_ecosar_surfactant_cationic()
+epi_ecosar_surfactant_cationic(
+  carbonChainLength,
+  waterSolubility = NULL,
+  cas = NULL,
+  chemicalName = NULL,
+  smiles = NULL
+)
+}
+\arguments{
+\item{carbonChainLength}{carbonChainLength}
+
+\item{waterSolubility}{waterSolubility}
+
+\item{cas}{cas}
+
+\item{chemicalName}{chemicalName}
+
+\item{smiles}{smiles}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_surfactant_cationic()
+epi_ecosar_surfactant_cationic(carbonChainLength = 1L)
 }
 }
 \section{API stage}{

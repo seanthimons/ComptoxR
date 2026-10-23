@@ -12,23 +12,23 @@ chemi_predictor_models_predict(
 )
 }
 \arguments{
-\item{model_id}{Model ID to use}
+\item{model_id}{model_id}
 
-\item{smiles}{SMILES to generate predictions for}
+\item{smiles}{smiles}
 
-\item{identifier}{identifier to generate predictions for}
+\item{identifier}{identifier}
 
-\item{report_format}{which format to return (default: json)}
+\item{report_format}{report_format}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_predictor_models_predict(smiles = "DTXSID7020182")
+chemi_predictor_models_predict(model_id = 1L)
 }
 }
 \section{API stage}{

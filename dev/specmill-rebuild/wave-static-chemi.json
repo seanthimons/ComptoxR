@@ -1,0 +1,46 @@
+{
+  "specmill_version": "0.1.24",
+  "sources": {
+    "schema/chemi-alerts-prod.json": "aabd653b436d793b92a84b09e61f033d5282b2877d5834bd908173e4a959002d",
+    "schema/chemi-stdizer-prod.json": "178680219fccf31ecd6778532e69deff196e3767e3f8b6b3558d1cc3256f12ec"
+  },
+  "retained_neighbors": {
+    "chemi_alerts_groups": {
+      "retained_function": "chemi_alerts_groups_bulk",
+      "file": "R/chemi_alerts_groups_bulk.R",
+      "body_unchanged": true
+    },
+    "chemi_stdizer_groups": {
+      "retained_function": "chemi_stdizer_groups_bulk",
+      "file": "R/chemi_stdizer_groups_bulk.R",
+      "body_unchanged": true
+    },
+    "chemi_stdizer": {
+      "retained_function": "chemi_stdizer_bulk",
+      "file": "R/chemi_stdizer_bulk.R",
+      "body_unchanged": true
+    }
+  },
+  "live": [
+    {
+      "url": "https://hcd.rtpnc.epa.gov/api/alerts/groups",
+      "status": 502,
+      "content_type": "text/html",
+      "body_sha256": "e2bbdc4119d9f9417edcba1d2034d4a977e3c22c26d93e9a5bc0c8972b46f566"
+    },
+    {
+      "url": "https://hcd.rtpnc.epa.gov/api/stdizer/groups",
+      "status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "body_sha256": "ad19d2ad2aa11dee2b63219253e8b06726968d5dfb6eb4b5bb2fa3df3b9841f1"
+    },
+    {
+      "url": "https://hcd.rtpnc.epa.gov/api/stdizer?workflow=qsar-ready&smiles=CCO",
+      "status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "body_sha256": "ae31b1fb22aee571d2f08b5a8e2ed1b1d5349ac65f95081d699b3a971e9a18c0"
+    }
+  ],
+  "mocked_validation": "Exact legacy/native URL, Accept header, empty GET body and list formatting; named/array/NULL/empty response cases.",
+  "alerts_live_limit": "502 returned; no successful live result claimed."
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_substances_for_classification.R
 \name{chemi_amos_substances_for_classification}
 \alias{chemi_amos_substances_for_classification}
-\title{Returns a list of substances in the database which match the specified top four levels of a ClassyFire classification.}
+\title{chemi amos substances for classification}
 \usage{
 chemi_amos_substances_for_classification(
   kingdom = NULL,
@@ -21,14 +21,14 @@ chemi_amos_substances_for_classification(
 \item{superklass}{Superclass-level (second-highest) classification of a substance.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_substances_for_classification(kingdom = "DTXSID1024122")
+chemi_amos_substances_for_classification(kingdom = "Organic compounds", klass = "Organic metal salts", subklass = "Organic calcium salts", superklass = "Organic salts")
 }
 }
 \section{API stage}{

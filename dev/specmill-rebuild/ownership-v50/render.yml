@@ -1,0 +1,40 @@
+{
+  "id": "chemi-management",
+  "schemas": {
+    "files": [
+      "schema/chemi-alerts-prod.json",
+      "schema/chemi-safety-prod.json"
+    ]
+  },
+  "selection": {
+    "include": [
+      "GET /api/alerts/render"
+    ]
+  },
+  "helper": ".ct_request",
+  "documentation": true,
+  "operations": {
+    "GET /api/alerts/render": {
+      "name": "chemi_alerts_render",
+      "file": "R/chemi_alerts_render.R",
+      "helper": ".ct_request",
+      "implementation": "generated",
+      "server": {
+        "resolver": ".ct_server_url",
+        "key": "chemi_burl"
+      },
+      "docs": {
+        "title": "Render an alerts chemical or reaction",
+        "lifecycle": "experimental",
+        "return": "The decoded service response, preserving JSON structure, text or media bytes.",
+        "tags": {
+          "apiStage": "public"
+        }
+      },
+      "duplicate_response": {
+        "source": "chemi-alerts-prod.json",
+        "reason": "Reviewed declared PNG/SVG responses for the identical shared alerts/safety render request; preserve the existing chemi_alerts_render wrapper and both source contracts."
+      }
+    }
+  }
+}

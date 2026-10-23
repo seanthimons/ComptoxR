@@ -1,27 +1,28 @@
 #' Returns a list of release notes for AMOS.
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @return Returns a tibble with results
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amos_release_notes()
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_amos_release_notes <- function() {
-  result <- generic_request(
-    endpoint = "amos/release_notes",
+  params <- base::list()
+  result <- .ct_request(
     method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE
+    path = "/api/amos/release_notes",
+    path_params = base::list(),
+    query = base::list(),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Swagger host/scheme requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list()
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

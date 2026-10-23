@@ -1,0 +1,20 @@
+{
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.27",
+    "source_commit": "6eb0d557b92603862180d170079068db53a124b5",
+    "source_archive_sha256": "3cdcc95937b0d7645d39673aa7b35ba54234a3597fc2e892d6eee636a689c62f",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operation": {
+    "name": "chemi_resolver_ghs_list_count",
+    "method": "GET",
+    "path": "/api/resolver/ghs-list-count",
+    "schema": "schema/chemi-resolver-prod.json"
+  },
+  "review": "https://github.com/seanthimons/specmill/pull/132",
+  "contract": "Reviewed optional bodyless subset; no supplied-body semantics asserted.",
+  "verification": "Exact old/native values, attributes and warnings for five JSON shapes and 79-record production response; GET path, Accept JSON, zero body, no CTX authentication and zero public formals. Real localhost HTTP500 and native 404/500, credential and transport checks preserve hard errors.",
+  "verification_correction": "Earlier received-response mocks bypassed httr2 automatic HTTP errors and incorrectly treated static 404/500 as empty results. Corrected client policy after a real localhost comparison; no helper/template changes."
+}

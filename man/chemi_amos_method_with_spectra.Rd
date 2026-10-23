@@ -4,22 +4,22 @@
 \alias{chemi_amos_method_with_spectra}
 \title{Returns information about a method with linked spectra, given an ID for either a spectrum or a method.}
 \usage{
-chemi_amos_method_with_spectra(search_type, internal_id = NULL)
+chemi_amos_method_with_spectra(search_type, internal_id)
 }
 \arguments{
-\item{search_type}{How to search the database.  Valid values are "spectrum" and "method".}
+\item{search_type}{How to search the database.  Valid values are "spectrum" and "method". Accepts a vector: one request is sent per element and the results are combined.}
 
 \item{internal_id}{Unique ID of the spectrum or method of interest.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_method_with_spectra(search_type = "DTXSID7020182")
+chemi_amos_method_with_spectra(search_type = "method", internal_id = "1")
 }
 }
 \section{API stage}{

@@ -1,0 +1,158 @@
+[
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /admin/database",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /admin/errorreport",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /admin/errorreport",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /admin/login",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /admin/login",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /admin/register",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /admin/register",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /admin/resolve",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /admin/resolve",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/errorpage",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/errorpage",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/errorpage/complete/{idnum}",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/errorpage/complete/{idnum}",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/errorpage/{showhide}",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/errorpage/{showhide}",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/login",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/login",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/logout",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/register",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/register",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/report",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/report",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /auth/testpage",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /auth/testpage",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "GET /chemicals/chemdelete",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  },
+  {
+    "schema": "schema/chemi-chet-prod.json",
+    "operation": "POST /chemicals/chemdelete",
+    "disposition": "banned_client_scope",
+    "reason": "User bans CheT auth, admin and chemdelete routes for every method."
+  }
+]

@@ -1,0 +1,98 @@
+{
+  "canonical": "schema/chemi-stdizer-prod.json",
+  "canonical_sha256": "178680219fccf31ecd6778532e69deff196e3767e3f8b6b3558d1cc3256f12ec",
+  "output": "schema/chemi-stdizer-reviewed-protocol-search.json",
+  "output_sha256": "f872c1b6bf23478d69292a7a6a14f7ad5ddc3aae638ec0d271033e318847de88",
+  "source_url": "https://hcd.rtpnc.epa.gov/api/stdizer/api-docs",
+  "production_source_retrieval": "dev/specmill-rebuild/canonical-holds-audit/protocol-paging-recheck/source-retrieval.json",
+  "derivation": {
+    "operations": [
+      "POST /api/stdizer/protocols/{id}"
+    ],
+    "reviewed_semantic_corrections": [
+      "Replace required nested pageable query declaration with optional flat page,size,sort parameters, matching actual GET/POST controls.",
+      "Declare sort form/explode true, preserving repeated query fields and percent-encoded commas.",
+      "Explicitly select production origin.",
+      "Allow empty sort value explicitly: sort= returns the baseline result on both services and methods."
+    ],
+    "parameters_before": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "pageable",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Pageable"
+        }
+      }
+    ],
+    "parameters_after": [
+      {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "page",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      {
+        "in": "query",
+        "name": "size",
+        "required": false,
+        "schema": {
+          "format": "int32",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      {
+        "in": "query",
+        "name": "sort",
+        "required": false,
+        "schema": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": "form",
+        "explode": true,
+        "allowEmptyValue": true
+      }
+    ],
+    "body_and_response_verbatim": true,
+    "component_refs": [
+      "#/components/schemas/ACL",
+      "#/components/schemas/Change",
+      "#/components/schemas/Chemical",
+      "#/components/schemas/ChemicalRecord",
+      "#/components/schemas/Issue",
+      "#/components/schemas/Protocol",
+      "#/components/schemas/ProtocolRecord",
+      "#/components/schemas/ProtocolSearchRequest",
+      "#/components/schemas/StdizerOptions",
+      "#/components/schemas/StdizerRecord"
+    ],
+    "dialect_unchanged": "3.1.0",
+    "service_evidence": "dev/specmill-rebuild/canonical-holds-audit/protocol-paging-recheck/service-proof.json"
+  },
+  "client_input_policy": "Normalize exactly character() sort to NULL, selecting omission through supported normalize_inputs. No URI-template representation is assumed for an empty array.",
+  "client_routing_policy": "Complete supported native request mapping retains the explicit production server and selects server_resolver.relative=/, matching canonical /api-prefixed operation paths and the existing default chemi_burl ending /api. No server helper patch."
+}

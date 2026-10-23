@@ -21,7 +21,7 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_predictor_models_predict_bulk(model_id = "DTXSID1024122")
+chemi_predictor_models_predict_bulk(model_id = 1065L, smiles = c("CCO", "CCCC"))
 }
 }
 \section{API stage}{

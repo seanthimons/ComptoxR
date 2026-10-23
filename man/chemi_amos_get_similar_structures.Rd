@@ -2,24 +2,24 @@
 % Please edit documentation in R/chemi_amos_get_similar_structures.R
 \name{chemi_amos_get_similar_structures}
 \alias{chemi_amos_get_similar_structures}
-\title{Returns lists of documents, each of which contain at least one substance of sufficient similarity to the searched}
+\title{chemi amos get similar structures}
 \usage{
-chemi_amos_get_similar_structures(identifier_type, identifier = NULL)
+chemi_amos_get_similar_structures(identifier_type, identifier)
 }
 \arguments{
-\item{identifier_type}{Primary query parameter}
+\item{identifier_type}{identifier_type Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{identifier}{Optional parameter}
+\item{identifier}{identifier}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_get_similar_structures(identifier_type = "DTXSID7020182")
+chemi_amos_get_similar_structures(identifier_type = "DTXSID", identifier = "DTXSID7020182")
 }
 }
 \section{API stage}{

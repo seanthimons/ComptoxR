@@ -1,0 +1,620 @@
+id: ctx-chemical-prod-full
+schemas:
+  files:
+  - schema/ctx-chemical-prod.json
+selection:
+  include:
+  - GET /chemical/count/by-exact-formula/{formula}
+  - GET /chemical/count/by-msready-formula/{formula}
+  - POST /chemical/extra-data/search/by-dtxsid/
+  - GET /chemical/extra-data/search/by-dtxsid/{dtxsid}
+  - GET /chemical/file/image/search/by-dtxcid/{dtxcid}
+  - GET /chemical/file/image/search/by-gsid/{gsid}
+  - GET /chemical/file/image/search/by-dtxsid/{dtxsid}
+  - GET /chemical/file/mol/search/by-dtxcid/{dtxcid}
+  - GET /chemical/file/mol/search/by-dtxsid/{dtxsid}
+  - POST /chemical/msready/search/by-dtxcid/
+  - GET /chemical/msready/search/by-dtxcid/{dtxcid}
+  - GET /chemical/msready/search/by-formula/{formula}
+  - GET /chemical/search/by-exact-formula/{formula}
+  - POST /chemical/search/by-msready-formula/
+  - GET /chemical/search/by-msready-formula/{formula}
+  - GET /chemical/search/contain/{word}
+  - GET /chemical/search/start-with/{word}
+  - POST /chemical/synonym/search/by-dtxsid/
+  - GET /chemical/synonym/search/by-dtxsid/{dtxsid}
+helper: .ct_request
+documentation: yes
+authentication:
+  api_key: ctx
+defaults:
+  batch:
+    max_items: 100
+    split: yes
+    on_error: drop
+operations:
+  GET /chemical/count/by-exact-formula/{formula}:
+    name: ct_chemical_count_by_exact_formula
+    file: R/ct_chemical_count_by_exact_formula.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get chemical count by exact formula
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
+    normalize_inputs:
+      formula: .ct_legacy_query
+  GET /chemical/count/by-msready-formula/{formula}:
+    name: ct_chemical_count_by_msready_formula
+    file: R/ct_chemical_count_by_msready_formula.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get chemical count by MS-ready formula
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
+    normalize_inputs:
+      formula: .ct_legacy_query
+  POST /chemical/extra-data/search/by-dtxsid/:
+    name: ct_chemical_extra_data_search_bulk
+    file: R/ct_chemical_extra_data_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get data for a batch of DTXSIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /chemical/extra-data/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_extra_data_search
+    file: R/ct_chemical_extra_data_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get data by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID101296374
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  GET /chemical/file/image/search/by-dtxcid/{dtxcid}:
+    name: ct_chemical_file_image_search_by_dtxcid
+    file: R/ct_chemical_file_image_search_by_dtxcid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    batch:
+      fan_out: dtxcid
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
+    docs:
+      title: Get structure image by DTXCID
+      lifecycle: experimental
+      return: An image object or raw bytes for one identifier, or an unnamed list for
+        multiple identifiers.
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid: DTXCID505
+    normalize_inputs:
+      dtxcid: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/file/image/search/by-dtxcid/{dtxcid}
+        path_params:
+          object:
+            dtxcid:
+              from:
+              - params
+              - dtxcid
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: image/png
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: collected_response
+    result_formatter: format_image_results
+  GET /chemical/file/image/search/by-gsid/{gsid}:
+    name: ct_chemical_file_image_search_by_gsid
+    file: R/ct_chemical_file_image_search_by_gsid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    batch:
+      fan_out: gsid
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
+    docs:
+      title: Get structure image by GSID
+      lifecycle: experimental
+      return: An image object or raw bytes for one identifier, or an unnamed list for
+        multiple identifiers.
+      tags:
+        apiStage: public
+      examples:
+      - gsid: '20182'
+    normalize_inputs:
+      gsid: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/file/image/search/by-gsid/{gsid}
+        path_params:
+          object:
+            gsid:
+              from:
+              - params
+              - gsid
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: image/png
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: collected_response
+    result_formatter: format_image_results
+  GET /chemical/file/image/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_file_image_search
+    file: R/ct_chemical_file_image_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    batch:
+      fan_out: dtxsid
+      on_error:
+        single: stop
+        multiple: drop
+      metadata: no
+      warning: no
+    docs:
+      title: Get structure image by DTXSID
+      lifecycle: experimental
+      return: An image object or raw bytes for one identifier, or an unnamed list for
+        multiple identifiers.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /chemical/file/image/search/by-dtxsid/{dtxsid}
+        path_params:
+          object:
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: image/png
+        server:
+          value:
+            url: https://comptox.epa.gov/ctx-api
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: ctx_burl
+        auth:
+          value:
+          - - scheme: ctx
+              type: apiKey
+              location: header
+              name: x-api-key
+              envvar: ctx_api_key
+        response_policy:
+          callback: collected_response
+    result_formatter: format_image_results
+  GET /chemical/file/mol/search/by-dtxcid/{dtxcid}:
+    name: ct_chemical_file_mol_search_by_dtxcid
+    file: R/ct_chemical_file_mol_search_by_dtxcid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: dtxcid
+      on_error: drop
+    docs:
+      title: Get mol file by DTXCID
+      lifecycle: experimental
+      return: Returns a list of mol file strings, one per identifier
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid: DTXCID505
+    normalize_inputs:
+      dtxcid: .ct_legacy_query
+  GET /chemical/file/mol/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_file_mol_search
+    file: R/ct_chemical_file_mol_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_file
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+    docs:
+      title: Get mol file by DTXSID
+      lifecycle: experimental
+      return: Returns a list of mol file strings, one per identifier
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+  POST /chemical/msready/search/by-dtxcid/:
+    name: ct_chemical_msready_search_by_dtxcid_bulk
+    file: R/ct_chemical_msready_search_by_dtxcid.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxcid
+      description: DSSTox compound identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get MS-ready chemicals for a batch of DTXCIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid:
+        - DTXCID30182
+        - DTXCID505
+    normalize_inputs:
+      dtxcid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /chemical/msready/search/by-dtxcid/{dtxcid}:
+    name: ct_chemical_msready_search_by_dtxcid
+    file: R/ct_chemical_msready_search_by_dtxcid.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxcid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get MS-ready chemicals by DTXCID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid: DTXCID30182
+    normalize_inputs:
+      dtxcid: .ct_legacy_query
+  GET /chemical/msready/search/by-formula/{formula}:
+    name: ct_chemical_msready_search_by_formula
+    file: R/ct_chemical_msready_search_by_formula.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get MS-ready chemicals by formula
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - formula: C16H24N2O5S
+    normalize_inputs:
+      formula: .ct_legacy_query
+  GET /chemical/search/by-exact-formula/{formula}:
+    name: ct_chemical_search_by_exact_formula
+    file: R/ct_chemical_search_by_exact_formula.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get chemicals by exact formula
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
+    normalize_inputs:
+      formula: .ct_legacy_query
+  POST /chemical/search/by-msready-formula/:
+    name: ct_chemical_search_by_msready_formula_bulk
+    file: R/ct_chemical_search_by_msready_formula.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: formula
+      description: MS-ready molecular formulas.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get chemicals for a batch of  MS-ready formulas
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - formula:
+        - C15H16O2
+        - C6H6
+    normalize_inputs:
+      formula: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /chemical/search/by-msready-formula/{formula}:
+    name: ct_chemical_search_by_msready_formula
+    file: R/ct_chemical_search_by_msready_formula.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: formula
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get chemicals by MS-ready formula
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
+    normalize_inputs:
+      formula: .ct_legacy_query
+  GET /chemical/search/contain/{word}:
+    name: ct_chemical_search_contain
+    file: R/ct_chemical_search_contain.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: word
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get chemicals by substring value
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - word: DTXSID7020182
+    normalize_inputs:
+      word: .ct_legacy_query
+  GET /chemical/search/start-with/{word}:
+    name: ct_chemical_search_start_with
+    file: R/ct_chemical_search_start_with.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: word
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get chemicals by starting value
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - word: DTXSID7020182
+    normalize_inputs:
+      word: .ct_legacy_query
+  POST /chemical/synonym/search/by-dtxsid/:
+    name: ct_chemical_synonym_search_bulk
+    file: R/ct_chemical_synonym_search.R
+    helper: .ct_request
+    implementation: generated
+    body:
+      name: dtxsid
+      description: DSSTox substance identifiers.
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    docs:
+      title: Get synonyms for a batch of DTXSIDs
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid:
+        - DTXSID7020182
+        - DTXSID2021315
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+    batch:
+      max_items:
+        env: batch_limit
+        default: 100
+      split: yes
+      on_error: drop
+      empty: .ct_empty_table
+  GET /chemical/synonym/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_synonym_search
+    file: R/ct_chemical_synonym_search.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: ctx_burl
+    response_policy: .ct_tidy
+    batch:
+      fan_out: dtxsid
+      on_error: drop
+      empty: .ct_empty_table
+    docs:
+      title: Get synonyms by DTXSID
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+    normalize_inputs:
+      dtxsid: .ct_legacy_query
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

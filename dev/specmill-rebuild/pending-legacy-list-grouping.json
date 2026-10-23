@@ -1,0 +1,16 @@
+{
+  "status": "historical_subset_superseded",
+  "cases": 60,
+  "wrappers": [
+    "chemi_amos_get_info_by_id",
+    "chemi_alerts_groups_by_id"
+  ],
+  "scope": "Actual generated calls: single/multiple successful or failed HTTP responses, objects/arrays/null/[]/{}, numeric batch names, NULL placeholders. No transport parity claim.",
+  "blocked_by": [
+    "https://github.com/seanthimons/specmill/issues/142",
+    "https://github.com/seanthimons/specmill/issues/145"
+  ],
+  "archive": "dev/specmill-rebuild/pending-legacy-list-grouping.rds",
+  "current_candidate": "dev/specmill-rebuild/pending-request-count-policy.rds",
+  "note": "Initial returned-response-only grouping proof is historical; adopt the corrected count-policy candidate with real HTTP error handling verification."
+}

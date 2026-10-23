@@ -1,0 +1,126 @@
+{
+  "checked_at": "2026-10-01 20:57:00 UTC",
+  "results": {
+    "chemi_chet_chemicals_counts": {
+      "urls": [
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/counts?page=1&size=1000",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/counts?size=1000&page=2",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/counts?size=1000&page=3",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/counts?size=1000&page=4",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/counts?size=1000&page=5",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/counts?size=1000&page=6"
+      ],
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "page_rows": [
+        1000,
+        1000,
+        1000,
+        1000,
+        420,
+        0
+      ],
+      "returned_rows": 4420,
+      "advertised_total": null,
+      "final_page_empty": true,
+      "returned_rows_match_responses": true,
+      "unique_id_field": "chemical_ID/lib_ID"
+    },
+    "chemi_chet_chemicals_database": {
+      "urls": [
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/database?page=1&size=1000",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/database?size=1000&page=2",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/database?size=1000&page=3",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/database?size=1000&page=4",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/database?size=1000&page=5",
+        "https://hcd.rtpnc.epa.gov/api/chet/chemicals/database?size=1000&page=6"
+      ],
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "page_rows": [
+        1000,
+        1000,
+        1000,
+        1000,
+        28,
+        0
+      ],
+      "returned_rows": 4028,
+      "advertised_total": 4028,
+      "final_page_empty": true,
+      "returned_rows_match_responses": true,
+      "unique_id_field": "chemical_ID"
+    },
+    "chemi_chet_reaction_database": {
+      "urls": [
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?page=1&size=1000",
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?size=1000&page=2",
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?size=1000&page=3",
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?size=1000&page=4",
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?size=1000&page=5",
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?size=1000&page=6",
+        "https://hcd.rtpnc.epa.gov/api/chet/reaction/database?size=1000&page=7"
+      ],
+      "statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "page_rows": [
+        1000,
+        1000,
+        1000,
+        1000,
+        1000,
+        152,
+        0
+      ],
+      "returned_rows": 5152,
+      "advertised_total": 5152,
+      "final_page_empty": true,
+      "returned_rows_match_responses": true,
+      "unique_id_field": "reaction_ID/lib_ID"
+    }
+  }
+}

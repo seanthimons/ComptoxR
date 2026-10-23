@@ -1,0 +1,52 @@
+{
+  "chemi-management GET /api/alerts/render": {
+    "selected": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v50-candidate/project/schema/chemi-alerts-prod.json",
+    "reason": "Reviewed declared PNG/SVG responses for the identical shared alerts/safety render request; preserve the existing chemi_alerts_render wrapper and both source contracts.",
+    "sources": [
+      {
+        "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v50-candidate/project/schema/chemi-alerts-prod.json",
+        "source_hash": "b8d8db67175063f97aec2b5ac708610f",
+        "content_type": "image/png, image/svg+xml",
+        "response_schema_type": "binary",
+        "response": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        }
+      },
+      {
+        "source": "/home/sxthi/.cache/comptoxr-specmill-finish/ownership-v50-candidate/project/schema/chemi-safety-prod.json",
+        "source_hash": "2a6da521a5458182f4baaf1ce2342d42",
+        "content_type": "*/*",
+        "response_schema_type": "unknown",
+        "response": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        }
+      }
+    ]
+  }
+}

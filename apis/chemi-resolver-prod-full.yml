@@ -1,0 +1,185 @@
+id: chemi-resolver-prod-full
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  include:
+  - GET /api/resolver/ccte-lists
+  - GET /api/resolver/getallannotations
+  - GET /api/resolver/getdatasources
+  - GET /api/resolver/ghs/classes
+  - GET /api/resolver/ghs/hcodes
+  - GET /api/resolver/ghs/pcodes
+  - GET /api/resolver/hcodes
+  - GET /api/resolver/ghs-list-count
+helper: .ct_request
+documentation: yes
+operations:
+  GET /api/resolver/ccte-lists:
+    name: chemi_resolver_ccte_lists
+    file: R/chemi_resolver_ccte_lists.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Ccte Lists
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/getallannotations:
+    name: chemi_resolver_getallannotations
+    file: R/chemi_resolver_getallannotations.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Getallannotations
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/getdatasources:
+    name: chemi_resolver_getdatasources
+    file: R/chemi_resolver_getdatasources.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Getdatasources
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/classes:
+    name: chemi_resolver_ghs_classes
+    file: R/chemi_resolver_ghs_classes.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Ghs Classes
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/hcodes:
+    name: chemi_resolver_ghs_hcodes
+    file: R/chemi_resolver_ghs_hcodes.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Ghs Hcodes
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/pcodes:
+    name: chemi_resolver_ghs_pcodes
+    file: R/chemi_resolver_ghs_pcodes.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Ghs Pcodes
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/hcodes:
+    name: chemi_resolver_hcodes
+    file: R/chemi_resolver_hcodes.R
+    helper: .ct_request
+    implementation: generated
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_list
+    docs:
+      title: Resolver Hcodes
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs-list-count:
+    name: chemi_resolver_ghs_list_count
+    file: R/chemi_resolver_ghs_list_count.R
+    helper: .ct_request
+    implementation: generated
+    request_body_correction:
+      omit: yes
+      reason: Reviewed bodyless production GET returns the existing count records.
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    response_policy: .ct_ghs_count_response
+    docs:
+      title: Resolver Ghs List Count
+      lifecycle: experimental
+      return: Returns a list of results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          value: /api/resolver/ghs-list-count
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          value: ~
+        headers:
+          value:
+            Accept: application/json
+        server:
+          value:
+            diagnostic: Relative server URL requires a recorded origin or explicit
+              base URL override
+        server_resolver:
+          value:
+            name: .ct_server_url
+            key: chemi_burl
+            relative: /
+        auth:
+          value: []
+        response_policy:
+          value: .ct_ghs_count_response
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

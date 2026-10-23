@@ -1,0 +1,74 @@
+{
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.37",
+    "source_commit": "ac1fa3389dbce30d22236bdf470105647fe69ca8",
+    "source_archive_sha256": "b238b68c18909484245de4dc1f475d50e548abae5574c6fb305709e9da9be536",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "retirements": [
+    {
+      "wrapper": "chemi_amos_method_with_spectra",
+      "retired_path": "tests/testthat/test-contract-chemi_amos_method_with_spectra.R",
+      "replacement": "tests/testthat/test-native_normalization.R"
+    },
+    {
+      "wrapper": "chemi_amos_record_ids_for_substance",
+      "retired_path": "tests/testthat/test-contract-chemi_amos_record_ids_for_substance.R",
+      "replacement": "tests/testthat/test-native_normalization.R"
+    },
+    {
+      "wrapper": "ct_chemical_detail_search_bulk",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_detail_search_bulk.R",
+      "replacement": "tests/testthat/test-native_normalization.R"
+    },
+    {
+      "wrapper": "ct_chemical_detail_search_by_dtxcid_bulk",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_detail_search_by_dtxcid_bulk.R",
+      "replacement": "tests/testthat/test-native_normalization.R"
+    },
+    {
+      "wrapper": "ct_chemical_list_all",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_list_all.R",
+      "replacement": "tests/testthat/test-native_ctx_list_all.R"
+    },
+    {
+      "wrapper": "ct_chemical_list_chemicals_search_contain",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_list_chemicals_search_contain.R",
+      "replacement": "tests/testthat/test-native_additional_gets.R"
+    },
+    {
+      "wrapper": "ct_chemical_list_chemicals_search_equal",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_list_chemicals_search_equal.R",
+      "replacement": "tests/testthat/test-native_normalization.R"
+    },
+    {
+      "wrapper": "ct_chemical_list_chemicals_search_start_with",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_list_chemicals_search_start_with.R",
+      "replacement": "tests/testthat/test-native_normalization.R"
+    },
+    {
+      "wrapper": "ct_chemical_msready_search_by_mass",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_msready_search_by_mass.R",
+      "replacement": "tests/testthat/test-ctx_native_special_requests.R"
+    },
+    {
+      "wrapper": "ct_chemical_property_experimental_search_by_range",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_property_experimental_search_by_range.R",
+      "replacement": "tests/testthat/test-native_additional_gets.R"
+    },
+    {
+      "wrapper": "ct_chemical_property_predicted_search_by_range",
+      "retired_path": "tests/testthat/test-contract-ct_chemical_property_predicted_search_by_range.R",
+      "replacement": "tests/testthat/test-native_additional_gets.R"
+    }
+  ],
+  "verification": {
+    "plan_read_only": true,
+    "only_selected_ownership_removed": true,
+    "unrelated_records_identical": true,
+    "idempotent": true
+  },
+  "coverage": "Native normalization/parameter/path/body guards and transport captures; dedicated list-all projection/hook and mass/path/array suites. Complete failure-policy review is tracked separately."
+}

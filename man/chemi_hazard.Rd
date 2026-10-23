@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_hazard.R
 \name{chemi_hazard}
 \alias{chemi_hazard}
-\title{Hazard}
+\title{chemi hazard}
 \usage{
 chemi_hazard(query, full = TRUE, format = c("compact", "tidy", "raw"))
 }
@@ -14,15 +14,10 @@ chemi_hazard(query, full = TRUE, format = c("compact", "tidy", "raw"))
 \item{format}{Output format. One of 'compact', 'tidy', or 'raw'}
 }
 \value{
-Returns a tibble with results
+Decoded response records, with the configured client formatting.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\examples{
-\dontrun{
-chemi_hazard(query = "DTXSID7020182")
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

@@ -1,27 +1,28 @@
 #' Toxprints Enrichments
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @return Returns a list with result object
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_toxprints_enrichments()
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_enrichments <- function() {
-  result <- generic_request(
-    endpoint = "toxprints/enrichments",
+  params <- base::list()
+  result <- .ct_request(
     method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE
+    path = "/api/toxprints/enrichments",
+    path_params = base::list(),
+    query = base::list(),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list()
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

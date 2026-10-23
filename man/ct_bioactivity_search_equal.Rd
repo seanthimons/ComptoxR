@@ -7,10 +7,10 @@
 ct_bioactivity_search_equal(value)
 }
 \arguments{
-\item{value}{Exact match of search value. Type: string}
+\item{value}{value Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

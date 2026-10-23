@@ -1,0 +1,228 @@
+id: chemi-padel-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-padel-prod.json
+selection:
+  unclaimed: true
+helper: .ct_request
+documentation: yes
+operations:
+  GET /api/padel:
+    name: chemi_padel
+    file: R/chemi_padel.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: One SMILES string or resolvable chemical identifier
+      x2d:
+        type: logical
+        default: yes
+        description: 'Calculate two-dimensional descriptors (default: TRUE)'
+      x3d:
+        type: logical
+        default: no
+        description: 'Calculate three-dimensional descriptors (default: FALSE)'
+      fp:
+        type: logical
+        default: no
+        description: 'Calculate fingerprints (default: FALSE)'
+      headers:
+        type: logical
+        default: no
+        description: 'Request upstream descriptor headers (default: FALSE)'
+      timeout:
+        type: character
+        default: ~
+        description: Optional upstream calculation timeout
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        method:
+          value: GET
+        path:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        path_params:
+          value: {}
+        query:
+          from:
+          - hook_state
+          - request
+          - options
+        body:
+          value: ~
+        headers:
+          object:
+            Accept:
+              from:
+              - hook_state
+              - request
+              - content_type
+        server:
+          object:
+            url:
+              from:
+              - hook_state
+              - request
+              - server
+        auth:
+          value: []
+        response_policy:
+          callback: descriptor_get_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Padel
+      lifecycle: experimental
+      parameters:
+        smiles: One SMILES string or resolvable chemical identifier
+        x2d: 'Calculate two-dimensional descriptors (default: TRUE)'
+        x3d: 'Calculate three-dimensional descriptors (default: FALSE)'
+        fp: 'Calculate fingerprints (default: FALSE)'
+        headers: 'Request upstream descriptor headers (default: FALSE)'
+        timeout: Optional upstream calculation timeout
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
+  POST /api/padel:
+    name: chemi_padel_bulk
+    file: R/chemi_padel.R
+    helper: .ct_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Chemical structures or resolvable identifiers
+      x2d:
+        type: logical
+        default: yes
+        description: Calculate two-dimensional descriptors
+      x3d:
+        type: logical
+        default: no
+        description: Calculate three-dimensional descriptors
+      fp:
+        type: logical
+        default: no
+        description: Calculate fingerprints
+      headers:
+        type: logical
+        default: no
+        description: Request descriptor headers
+      timeout:
+        type: character
+        default: ~
+        description: Optional upstream calculation timeout
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        method:
+          value: POST
+        path:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        path_params:
+          value: {}
+        query:
+          value: {}
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        headers:
+          object:
+            Accept:
+              from:
+              - hook_state
+              - request
+              - content_type
+        server:
+          object:
+            url:
+              from:
+              - hook_state
+              - request
+              - server
+        auth:
+          value: []
+        response_policy:
+          callback: descriptor_post_response
+        request_controls:
+          value:
+            preserve_errors: yes
+    docs:
+      title: Padel
+      lifecycle: experimental
+      parameters:
+        query: Chemical structures or resolvable identifiers
+        x2d: Calculate two-dimensional descriptors
+        x3d: Calculate three-dimensional descriptors
+        fp: Calculate fingerprints
+        headers: Request descriptor headers
+        timeout: Optional upstream calculation timeout
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - query: DTXSID1024122
+      tags:
+        apiStage: public
+    server:
+      resolver: .ct_server_url
+      key: chemi_burl
+    request_controls:
+      preserve_errors: yes
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hooks:
+  chemi_padel:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_padel_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  chemi_padel_bulk:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_padel_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+prepare: preserve_choice_defaults

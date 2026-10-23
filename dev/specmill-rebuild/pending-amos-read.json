@@ -1,0 +1,54 @@
+{
+  "status": "adopted_released_0.1.29",
+  "pull_request": "https://github.com/seanthimons/specmill/pull/134",
+  "source_commit": "2031e26e32dad52b55974ef6b503dcb834e83f4b",
+  "source_archive_sha256": "348343a0c83d0c12ef0ccd13818354b19be36edd52b55f3f1d3753ec039b8096",
+  "wrappers": [
+    "chemi_amos_spectral_entropy",
+    "chemi_amos_entropy_similarity",
+    "chemi_amos_spectrum_count_for_methodology",
+    "chemi_amos_mass_range",
+    "chemi_amos_next_level_classification",
+    "chemi_amos_substances_for_classification",
+    "chemi_amos_all_similarities",
+    "chemi_amos_max_similarity",
+    "chemi_amos_mass_spectrum_similarity"
+  ],
+  "operations": [
+    "POST /api/amos/spectral_entropy/",
+    "POST /api/amos/entropy_similarity/",
+    "POST /api/amos/spectrum_count_for_methodology/",
+    "POST /api/amos/mass_range_search/",
+    "POST /api/amos/next_level_classification/",
+    "POST /api/amos/substances_for_classification/",
+    "POST /api/amos/all_similarities_by_dtxsid/",
+    "POST /api/amos/max_similarity_by_dtxsid/",
+    "POST /api/amos/mass_spectrum_similarity_search/"
+  ],
+  "schema": "schema/chemi-amos-prod.json",
+  "archive": "dev/specmill-rebuild/pending-amos-read.rds",
+  "captures": "dev/specmill-rebuild/artifacts/amos-read",
+  "verification": "All nine read-only production POSTs returned 200 application/json. Actual generated wrappers preserve exact JSON body, named/positional invocation, production response values, request method/path/Accept/no CTX auth, 404/500 hard errors and 401 credential errors. Whole-client check with validation=TRUE passes zero diagnostics/mapping/drift and no file changes; source archives unchanged. Released v0.1.29 root generation and captured request/result regressions pass. HTTP mocks honor request error policy; DTXSID route separately verifies actual localhost HTTP errors and JSON bytes.",
+  "validation_scope": "Raw source validation findings and hashes remain archived unchanged. Nine selected operations use reviewed missing JSON media; selected DTXSID operation also uses an empty-response declaration correction. Unrelated invalid declarations remain visible.",
+  "unproven_routes": [
+    {
+      "operation": "POST /api/amos/analytical_qc_batch_search",
+      "status": 500,
+      "media": "text/html; charset=utf-8"
+    },
+    {
+      "operation": "POST /api/amos/batch_search",
+      "status": 500,
+      "media": "text/html; charset=utf-8"
+    }
+  ],
+  "unproven_reason": "Archived example projections returned server 500 HTML. These are service/contract evidence gaps; no generator defect asserted and no migration adoption.",
+  "released_pin": {
+    "package": "specmill",
+    "version": "0.1.29",
+    "source_commit": "0f436277450801c9640e27725b0805561fd91984",
+    "source_archive_sha256": "4e97ae11f80cd248800a51689c5b795732b016c64fd068fa25fc65f3f2b87b8b",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  }
+}

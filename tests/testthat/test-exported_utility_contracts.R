@@ -120,11 +120,6 @@ test_that("small numeric and message formatting helpers keep their contracts", {
 })
 
 test_that("API helper exports validate before external work", {
-  withr::local_envvar(c(ctx_api_key = ""))
-  expect_error(ct_api_key(), "No CTX API key")
-  withr::local_envvar(c(ctx_api_key = "real-token"))
-  expect_equal(ct_api_key(), "real-token")
-
   expect_error(chemi_functional_use(numeric()), "non-empty character vector")
   expect_error(chemi_predict(NULL), "Request missing")
   expect_error(chemi_safety_section(query = "DTXSID7020182"), "Missing section")

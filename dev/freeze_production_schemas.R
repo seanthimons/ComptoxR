@@ -1,5 +1,6 @@
 # Acquire approved production inputs without changing generation or configuration.
 freeze_production_schemas <- function(root = '.migration-evidence/production') {
+  source('R/schema.R', local = TRUE)
   dir.create(root, recursive = TRUE, showWarnings = FALSE)
   files <- list.files('schema', pattern = '^chemi-.*-prod[.]json$', full.names = FALSE)
   components <- sub('^chemi-(.*)-prod[.]json$', '\\1', files)
@@ -24,7 +25,7 @@ freeze_production_schemas <- function(root = '.migration-evidence/production') {
     valid <- is.list(schema) && length(schema$paths) > 0L && (!is.null(schema$openapi) || !is.null(schema$swagger))
     path <- file.path(root, names(urls)[[i]])
     if (valid) {
-      writeBin(httr2::resp_body_raw(response), path)
+      .write_downloaded_schema(httr2::resp_body_raw(response), path)
     }
     data.frame(
       file = names(urls)[[i]],

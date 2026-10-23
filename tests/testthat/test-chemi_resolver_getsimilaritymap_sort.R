@@ -32,7 +32,7 @@ test_that("chemi_resolver_getsimilaritymap sends flat Chemical records", {
         )
       ))
     },
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       resolver_similarity_map_payload()
     },
@@ -45,12 +45,11 @@ test_that("chemi_resolver_getsimilaritymap sends flat Chemical records", {
     hclust_method = "single"
   )
 
-  expect_equal(captured$endpoint, "resolver/getsimilaritymap")
-  expect_equal(captured$sort, "false")
-  expect_false(captured$tidy)
-  expect_equal(captured$options$section, "PubChem")
-  expect_equal(captured$chemicals[[1]]$sid, "DTXSID1")
-  expect_null(captured$chemicals[[1]]$chemical)
+  expect_equal(captured$path, "/api/resolver/getsimilaritymap")
+  expect_equal(captured$query$sort, "false")
+  expect_equal(captured$body$section, "PubChem")
+  expect_equal(captured$body$chemicals[[1]]$sid, "DTXSID1")
+  expect_null(captured$body$chemicals[[1]]$chemical)
   expect_true(is.matrix(result$similarity))
   expect_identical(rownames(result$similarity), c("DTXSID-A", "DTXSID-B"))
   expect_identical(colnames(result$similarity), c("DTXSID-A", "DTXSID-B"))

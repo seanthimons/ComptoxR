@@ -1,0 +1,17 @@
+{
+  "search.yml": "4272bfe0e144f8a798d1e8f651e23e2babaf8cd7631c8e3fc2b380757dbfd070",
+  "search_policy.R": "26ecb9da2dc7b39ae399f3aa0b78fdd10733ecd7c2c56a77e1f99b4d179b2fb0",
+  "callbacks.R": "5ffed256e42f601750685654e93da48668afc8b03ffd6755fd8180774869aadb",
+  "docs.json": "8938d0d07bb6aa62207c3ecd3dc30c5ace40337c45b714b243dbca81cc8c1b06",
+  "chemi_search.R.txt": "381013ba203ba273de28725880bc1cab28af98544291b4205a83f718bfbc5fc1",
+  "chemi_search.Rd.txt": "6e2a498c45107dd7f8eef2c24a65628588bde4a6e70383390908af0ede931bdf",
+  "test-chemi_search.R": "4c4f9bf36977061752a520a626201bb5fd8d633007cc996ff0fe3f18bd5d6781",
+  "test-native_chemi_search.R": "93bfefa58ad34285fe65f96004d421c663d859f43a943a97fc5a9c753e3125e9",
+  "portable-tests/test-native_chemi_search.R": "93bfefa58ad34285fe65f96004d421c663d859f43a943a97fc5a9c753e3125e9",
+  "old-chemi_search.R.txt": "3f7325fd341fd323fdb0875727892fe4174e64a1b5c57b1778ba132993c73fce",
+  "import-plan.json": "8d693e8304144ecf58539f0ebd40a06fcb9f6368c7bb5ebd5e100e6438018cb9",
+  "import-files.R": "ab7e7610bc5bb5450f52d065b9e7d0d9ae62ce21807f5c1c50b47661c24b6819",
+  "README.md": "e7cb0f57c14ce7135bb00f996e15a5e6cb5ac930750288b77e650aa73e80c057",
+  "regenerate-lifecycle.R": "2ee52c971a738669672ac6723517ea5a6c11de35d85d9adacce27b23df0401a7",
+  "verify-lifecycle-change.R": "846992085b7a587482600a44202503fef46d179ab3ce0994cc91d857636a7eaf"
+}

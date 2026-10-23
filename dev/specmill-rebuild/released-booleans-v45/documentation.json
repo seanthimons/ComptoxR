@@ -1,0 +1,12 @@
+{
+  "config_sha256": "491b4bd3a0c918015b7ead7bdad2e6cf547c71b1c594ce6430cfcd7b4700c2f7",
+  "validation": true,
+  "documentation": "PASS",
+  "manual_sha256": {
+    "chemi_alerts_groups_freeze_by_id.Rd": "6584bd919c5a5edb6e913a6f5dedfb52fa7b819a4e3691ef464f45120bab366c",
+    "chemi_stdizer_groups_by_id_freeze_patch.Rd": "ce83221898a62746781e9324cdc1bcdf6e2e22974c5fc0ed04dd79f06b41e33d",
+    "chemi_resolver_exportsimilaritylist.Rd": "b549b7ffc36c2d04a95988217ec4e936d2da3f354f6eefcd775d68b42740dc8b",
+    "chemi_resolver_exportsimilaritymap.Rd": "327d5c7d6c07bee18417c2d82056a526d9fd9eb3624c0b3cd6cb39e64e27df58",
+    "chemi_opera_file.Rd": "390d47f230f94691f742a75abf85b18f2c403547887d9308d0e144c8bb0e0c21"
+  }
+}
