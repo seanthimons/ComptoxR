@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+- Remove `chemi_toxprint()`. Its operation (`POST /api/toxprints/calculate`) is
+  covered by `chemi_toxprints_calculate_bulk()`, which takes Chemical records.
+
 - Rebuild `chemi_toxprints_bulk(query)` with Specmill against the canonical
   Cheminformatics object request, without CTX authentication. Preserve input
   cleanup and environment-controlled chunks. Results have one row per chemical,

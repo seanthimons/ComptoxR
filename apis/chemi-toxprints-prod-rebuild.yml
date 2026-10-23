@@ -3,17 +3,7 @@ schemas:
   files:
   - schema/chemi-toxprints-prod.json
 selection:
-  include:
-  - GET /api/toxprints
-  - GET /api/toxprints/assays
-  - GET /api/toxprints/assays/check
-  - GET /api/toxprints/global_assays
-  - GET /api/toxprints/global_toxprints
-  - GET /api/toxprints/toxprints
-  - POST /api/toxprints
-  - POST /api/toxprints/assays
-  - GET /api/toxprints/calculate
-  - POST /api/toxprints/calculate
+  unclaimed: true
 helper: generic_request
 documentation: yes
 operations:

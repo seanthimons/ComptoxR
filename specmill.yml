@@ -65,7 +65,6 @@ services:
 - apis/chemi-predictor_models-prod-rebuild.yml
 - apis/epi-suite-prod-rebuild.yml
 - apis/chemi-safety-prod-rebuild.yml
-- apis/chemi-toxprint-prod-rebuild.yml
 - apis/chemi-hazard-prod-rebuild.yml
 - apis/ctx-list-name.yml
 - apis/chemi-chet-direct-reads.yml

@@ -8,50 +8,6 @@ custom_json_response <- function(body) {
 }
 custom_safety_json <- '{"swr":[{"section":{"Section":[{"TOCHeading":"Hazards","Information":[{"Value":{"StringWithMarkup":[{"String":"Danger","Markup":[{"start":0}]}]}}]}]}}]}'
 
-test_that('ToxPrint keeps ordered NULL options, defaults, falsy values and helper visibility', {
-  call <- NULL
-  local_mocked_bindings(
-    .ct_request = function(...) {
-      call <<- list(...)
-      invisible(list(score = 0, flag = FALSE))
-    },
-    run_hook = function(...) stop('no hooks'),
-    .package = 'ComptoxR'
-  )
-  value <- withVisible(chemi_toxprint('one'))
-  expect_false(value$visible)
-  expect_identical(value$value, list(score = 0, flag = FALSE))
-  expect_identical(
-    call$body,
-    list(chemicals = list(list(sid = 'one')), options = list(OR = 3L, PV1 = .05, TP = 3))
-  )
-  for (x in list(NULL, FALSE, 0, list(), 'unknown')) {
-    chemi_toxprint('one', odds_ratio = x, p_val = x, true_pos = x)
-    expect_identical(call$body$options, list(OR = x, PV1 = x, TP = x))
-  }
-  expect_error(chemi_toxprint(), 'argument "query" is missing', fixed = TRUE)
-})
-
-test_that('ToxPrint rejects queries before forcing options and propagates helper failures', {
-  for (q in list(NULL, character(), '', NA_character_, c('', NA_character_))) {
-    for (option in c('odds_ratio', 'p_val', 'true_pos')) {
-      args <- list(q)
-      args[option] <- list(quote(stop('option evaluated')))
-      expect_error(
-        eval(as.call(c(list(as.name('chemi_toxprint')), args))),
-        'Either query or chemicals parameter must be provided.', fixed = TRUE
-      )
-    }
-  }
-  for (option in c('odds_ratio', 'p_val', 'true_pos')) {
-    args <- setNames(list(quote(stop('option evaluated'))), option)
-    expect_error(eval(as.call(c(list(as.name('chemi_toxprint')), args))),
-      'argument "query" is missing', fixed = TRUE)
-  }
-  local_mocked_bindings(.ct_request = function(...) stop('transport sentinel'), .package = 'ComptoxR')
-  expect_error(chemi_toxprint('one'), 'transport sentinel', fixed = TRUE)
-})
-
 test_that('direct wrappers retain request ordering, duplicates, policies and all-failed results', {
   withr::local_envvar(c(chemi_burl = 'http://127.0.0.1:9999/chemi', run_debug = 'FALSE'))
   captured <- NULL
@@ -203,19 +159,3 @@ test_that('latent transformations retain named aggregation, sections and falsy d
 })
 
 
-test_that('ToxPrint freezes formals, option forcing order, warnings and response classes', {
-  expect_identical(formals(chemi_toxprint), as.pairlist(alist(query = , odds_ratio = 3L, p_val = 0.05, true_pos = 3)))
-  forced <- character()
-  mark <- function(name, value) { forced <<- c(forced, name); value }
-  response <- structure(list(flag = FALSE, count = 0, absent = NULL), class = 'original_toxprint')
-  local_mocked_bindings(.ct_request = function(...) {
-    call <- list(...)
-    expect_identical(call$body$options, list(OR = NULL, PV1 = FALSE, TP = 0))
-    warning('helper warning')
-    invisible(response)
-  }, .package = 'ComptoxR')
-  expect_warning(value <- withVisible(chemi_toxprint(mark('query', 'one'),
-    mark('OR', NULL), mark('PV1', FALSE), mark('TP', 0))), 'helper warning')
-  expect_identical(forced, c('query', 'OR', 'PV1', 'TP'))
-  expect_identical(value, list(value = response, visible = FALSE))
-})

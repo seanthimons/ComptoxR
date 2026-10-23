@@ -1,5 +1,5 @@
 {
-  "commit": "08cd96db8c9975183bdf55baacae02c43f38e9af",
+  "commit": "1383a450eca1fbe84fc5182dbf1006f5cc14aebf",
   "legacy_callers": [
     {
       "wrapper": "ct_related",
@@ -3092,15 +3092,6 @@
       "wrapper": "chemi_safety_rqcodes",
       "file": "R/chemi_safety_rqcodes.R",
       "suite": "tests/testthat/test-native_safety_rqcodes.R",
-      "migrated": true
-    },
-    {
-      "schema": "schema/chemi-toxprints-prod.json",
-      "binding_schema": "schema/chemi-toxprints-prod.json",
-      "operation": "POST /api/toxprints/calculate",
-      "wrapper": "chemi_toxprint",
-      "file": "R/chemi_toxprint.R",
-      "suite": "tests/testthat/test-native_toxprint.R",
       "migrated": true
     },
     {
