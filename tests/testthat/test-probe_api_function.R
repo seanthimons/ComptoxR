@@ -138,63 +138,10 @@ test_that("probe reports wrappers whose HTTP status cannot be observed", {
 })
 
 test_that("probe rejects unsupported and non-wrapper names", {
-  expect_error(probe_api_function("generic_request"), "must name an exported")
   expect_error(probe_api_function("chemi_not_real"), "No exported ComptoxR function")
   expect_error(probe_api_function("chemi_server"), "not an API wrapper")
   expect_error(probe_api_function("ct_api_key"), "not an API wrapper")
   expect_error(probe_api_function(character()), "one non-empty function name")
-})
-
-test_that("response observer sees batched and paginated helper responses", {
-  statuses <- integer()
-  had_observer <- exists("probe_observer", envir = .ComptoxREnv, inherits = FALSE)
-  old_observer <- if (had_observer) .ComptoxREnv$probe_observer else NULL
-  on.exit(
-    {
-      if (had_observer) {
-        .ComptoxREnv$probe_observer <- old_observer
-      } else if (exists("probe_observer", envir = .ComptoxREnv, inherits = FALSE)) {
-        rm("probe_observer", envir = .ComptoxREnv)
-      }
-    },
-    add = TRUE
-  )
-  .ComptoxREnv$probe_observer <- function(response) {
-    statuses <<- c(statuses, httr2::resp_status(response))
-  }
-
-  testthat::local_mocked_bindings(
-    req_perform_sequential = function(reqs, ...) {
-      lapply(reqs, probe_json_response)
-    },
-    .package = "httr2"
-  )
-  generic_request(c("A", "B"), "endpoint", method = "POST", batch_limit = 1)
-  expect_identical(statuses, c(200L, 200L))
-
-  statuses <- integer()
-  # Paging sends one request per page through httr2::req_perform().
-  pages <- c(
-    '{"totalRecordsCount":2,"recordsCount":1,"offset":0,"records":[{"id":1}]}',
-    '{"totalRecordsCount":2,"recordsCount":1,"offset":1,"records":[{"id":2}]}'
-  )
-  testthat::local_mocked_bindings(
-    req_perform = function(req, ...) {
-      page <- pages[[1]]
-      pages <<- pages[-1]
-      probe_json_response(req, body = page)
-    },
-    .package = "httr2"
-  )
-  result <- generic_chemi_request(
-    query = "EXACT",
-    endpoint = "search",
-    options = list(limit = 1),
-    paginate = TRUE,
-    pagination_strategy = "offset_limit"
-  )
-  expect_identical(statuses, c(200L, 200L))
-  expect_equal(nrow(result), 2L)
 })
 
 

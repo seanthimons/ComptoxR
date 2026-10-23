@@ -11,7 +11,6 @@ batch_limit(limit = 200)
 }
 \description{
 Sets the global batch limit for POST requests. Defaults to 200.
-Only wrappers still built on \code{generic_request()} read this limit. Wrappers
-generated with the native Specmill helper split requests at a fixed size
-set per API (100 items for CTX) and ignore it.
+Only wrappers that read the \code{batch_limit} setting use it. Wrappers that
+split requests at a fixed size set per API (100 items for CTX) ignore it.
 }

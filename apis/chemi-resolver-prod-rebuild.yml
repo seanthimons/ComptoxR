@@ -8,7 +8,7 @@ schemas:
 # compliant, so no wrapper is generated until upstream changes it.
 selection:
   unclaimed: true
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/resolver/ccte-list:

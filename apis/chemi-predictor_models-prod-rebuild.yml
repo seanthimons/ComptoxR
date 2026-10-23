@@ -4,7 +4,7 @@ schemas:
   - schema/chemi-predictor_models-prod.json
 selection:
   unclaimed: true
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/predictor_models/predict:

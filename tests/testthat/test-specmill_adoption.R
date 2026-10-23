@@ -92,29 +92,4 @@ test_that("adopted decoder and paginator handle ChET responses on localhost", {
       expect_s3_class(result, "magick-image")
     }
   }
-  observed <- NULL
-  testthat::with_mocked_bindings(
-    {
-      expect_no_warning(
-        result <- generic_request(
-          endpoint = "partial",
-          method = "GET",
-          batch_limit = 0,
-          server = "chemi_burl",
-          auth = FALSE,
-          tidy = FALSE,
-          paginate = TRUE,
-          pagination_strategy = "page_number",
-          pageNumber = 1
-        )
-      )
-      expect_identical(result, list(list(id = 1L)))
-    },
-    observe_api_responses = function(responses) {
-      observed <<- responses
-    },
-    .package = "ComptoxR"
-  )
-  expect_length(observed, 2L)
-  expect_s3_class(observed[[2L]], "httr2_error")
 })

@@ -2,7 +2,7 @@ id: ctx-hazard-prod-rebuild
 schemas:
   files:
   - schema/ctx-hazard-prod.json
-helper: generic_request
+helper: .ct_request
 documentation: yes
 authentication:
   api_key: ctx

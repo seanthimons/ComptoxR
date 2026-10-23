@@ -7,7 +7,7 @@ selection:
   - GET /api/stdizer/operations
   - GET /api/stdizer/workflows
   - GET /api/stdizer
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/stdizer/operations:

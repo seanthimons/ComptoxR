@@ -11,7 +11,7 @@ selection:
   - GET /reaction/libraries
   - GET /reaction/mappositions/{map_id}
   - GET /reaction/maps
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /chemicals/database-old:

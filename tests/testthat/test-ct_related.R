@@ -11,13 +11,13 @@ test_that("ct_related passes request metadata to helper", {
   calls <- list()
   mock_helper <- function(...) {
     captured <- list(...)
-    captured$.helper <- "generic_request"
+    captured$.helper <- ".ct_request"
     calls[[length(calls) + 1L]] <<- captured
-    generated_contract_response(...)
+    list()
   }
 
   testthat::local_mocked_bindings(
-    generic_request = mock_helper,
+    .ct_request = mock_helper,
     .package = "ComptoxR"
   )
 
@@ -25,12 +25,29 @@ test_that("ct_related passes request metadata to helper", {
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
-  expect_equal(call$.helper, "generic_request")
-  expect_null(call[["query"]])
-  expect_equal(call[["endpoint"]], "related-substances/search/by-dtxsid")
+  expect_equal(call$.helper, ".ct_request")
   expect_equal(call[["method"]], "GET")
-  expect_equal(call[["batch_limit"]], 0)
-  expect_equal(call[["server"]], "https://comptox.epa.gov/dashboard-api/ccdapp2/")
-  expect_equal(call[["auth"]], FALSE)
-  expect_equal(call[["tidy"]], FALSE)
+  expect_equal(call[["path"]], "/related-substances/search/by-dtxsid")
+  expect_equal(call[["query"]], list(id = "DTXSID7020182"))
+  expect_equal(call[["server"]], list(url = "https://comptox.epa.gov/dashboard-api/ccdapp2"))
+  expect_null(call[["auth"]])
+  expect_null(call[["response_policy"]])
+})
+
+test_that("ct_related warns and skips an item whose request fails", {
+  testthat::local_mocked_bindings(
+    .ct_request = function(...) {
+      if (identical(list(...)$query$id, "DTXSID_BAD")) stop("HTTP 404")
+      list(data = list(
+        list(dtxsid = "DTXSID1", relationship = "Searched Chemical"),
+        list(dtxsid = "DTXSID2", relationship = "related")
+      ))
+    },
+    .package = "ComptoxR"
+  )
+  expect_warning(
+    result <- suppressMessages(ct_related(c("DTXSID_BAD", "DTXSID1"))),
+    "DTXSID_BAD"
+  )
+  expect_equal(result$child, "DTXSID2")
 })

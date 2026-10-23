@@ -4,7 +4,7 @@ schemas:
   - schema/ctx-exposure-prod.json
 selection:
   unclaimed: true
-helper: generic_request
+helper: .ct_request
 documentation: yes
 authentication:
   api_key: ctx

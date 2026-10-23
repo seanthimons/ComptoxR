@@ -12,7 +12,7 @@ selection:
   - GET /api/resolver/ghs/pcodes
   - GET /api/resolver/hcodes
   - GET /api/resolver/ghs-list-count
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/resolver/ccte-lists:

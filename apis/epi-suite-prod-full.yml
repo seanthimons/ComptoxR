@@ -16,7 +16,7 @@ selection:
   - GET /api/submit
   - GET /api
   - GET /api/download
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/ecosar/polymer/amphoteric:

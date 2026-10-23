@@ -4,7 +4,7 @@ schemas:
   - schema/chemi-mordred-prod.json
 selection:
   unclaimed: true
-helper: generic_request
+helper: .ct_request
 documentation: true
 operations:
   GET /api/mordred:

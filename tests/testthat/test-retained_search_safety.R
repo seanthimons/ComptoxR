@@ -6,7 +6,7 @@ test_that('search keeps transport-only all_pages lazy and preserves full skip st
     stages[[length(stages) + 1L]] <<- list(stage = stage, data = data)
     if (stage == 'pre_request') return(state)
     data
-  }, generic_chemi_request = function(...) stop('transport must be skipped'))
+  }, .ct_request = function(...) stop('transport must be skipped'))
   result <- chemi_search(all_pages = stop('all_pages forced on skip'))
   expect_identical(vapply(stages, `[[`, '', 'stage'), c('pre_request', 'post_response'))
   expect_identical(names(stages[[1L]]$data$params), setdiff(names(formals(chemi_search)), 'all_pages'))

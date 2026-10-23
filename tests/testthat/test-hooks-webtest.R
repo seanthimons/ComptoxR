@@ -1,7 +1,7 @@
 # Hook-only baseline facades; native wire and hook-state parity are tested separately.
 four_baseline <- readRDS(test_path("fixtures/native-four-calculations-contracts.rds"))
 for (name in c("chemi_webtest_predict", "chemi_webtest_predict_bulk")) {
-  assign(name, eval(four_baseline[[name]][[3L]], asNamespace("ComptoxR")))
+  assign(name, eval_baseline_facade(four_baseline[[name]][[3L]]))
 }
 
 webtest_prediction_result <- function(
@@ -40,11 +40,11 @@ test_that("WebTEST prediction interfaces retain generated public contracts", {
       collapse = "\n"
     )
     expect_true(
-      regexpr('"pre_request"', body_text, fixed = TRUE)[[1]] < regexpr("generic_", body_text, fixed = TRUE)[[1]],
+      regexpr('"pre_request"', body_text, fixed = TRUE)[[1]] < regexpr(".ct_request", body_text, fixed = TRUE)[[1]],
       info = fn_name
     )
     expect_true(
-      regexpr("generic_", body_text, fixed = TRUE)[[1]] < regexpr('"post_response"', body_text, fixed = TRUE)[[1]],
+      regexpr(".ct_request", body_text, fixed = TRUE)[[1]] < regexpr('"post_response"', body_text, fixed = TRUE)[[1]],
       info = fn_name
     )
   }
@@ -67,7 +67,7 @@ test_that("scalar prediction sends exact GET state and returns wide rows", {
         )
       ))
     },
-    generic_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       list(upstream)
     },
@@ -109,7 +109,7 @@ test_that("scalar prediction sends exact GET state and returns wide rows", {
 test_that("bulk prediction sends the exact flat JSON body", {
   captured <- NULL
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       webtest_prediction_result(
         chemicals = list(
@@ -155,7 +155,7 @@ test_that("wide prediction preserves duplicates and emits one row per failure", 
     chemi_resolver_lookup_bulk = function(ids, idsType, tidy) {
       list(list(result = "NOT_FOUND"))
     },
-    generic_chemi_request = function(...) upstream,
+    .ct_request = function(...) upstream,
     .package = "ComptoxR"
   )
 
@@ -184,7 +184,7 @@ test_that("all-invalid prediction skips HTTP and still formats error rows", {
     chemi_resolver_lookup_bulk = function(ids, idsType, tidy) {
       lapply(ids, function(id) list(result = "NOT_FOUND"))
     },
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       called <<- TRUE
       stop("must not be called")
     },
@@ -210,7 +210,7 @@ test_that("all-invalid prediction skips HTTP and still formats error rows", {
 test_that("raw prediction preserves the unfiltered PredictionResult", {
   upstream <- webtest_prediction_result()
   local_mocked_bindings(
-    generic_chemi_request = function(...) upstream,
+    .ct_request = function(...) upstream,
     .package = "ComptoxR"
   )
 
@@ -234,7 +234,7 @@ test_that("raw prediction preserves the unfiltered PredictionResult", {
 
 test_that("bulk methods NULL retains every returned method in wide output", {
   local_mocked_bindings(
-    generic_chemi_request = function(...) webtest_prediction_result(),
+    .ct_request = function(...) webtest_prediction_result(),
     .package = "ComptoxR"
   )
 
@@ -246,7 +246,7 @@ test_that("bulk methods NULL retains every returned method in wide output", {
 test_that("WebTEST request validation throws identifiable pre-request conditions", {
   called <- FALSE
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       called <<- TRUE
       stop("must not be called")
     },
@@ -281,7 +281,7 @@ test_that("WebTEST request validation throws identifiable pre-request conditions
 
 test_that("generic request failures propagate without WebTEST conversion", {
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       rlang::abort("transport failure", class = "sentinel_http_error")
     },
     .package = "ComptoxR"
@@ -297,7 +297,7 @@ test_that("generic request failures propagate without WebTEST conversion", {
 
 test_that("malformed responses throw post-response conditions with parents", {
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       list(id = "malformed", chemicals = "not-a-list")
     },
     .package = "ComptoxR"

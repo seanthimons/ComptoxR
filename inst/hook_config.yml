@@ -624,7 +624,7 @@ chemi_webtest_predict_bulk:
       path: req_data$request$endpoint
       body: req_data$request$body
 # EPI Suite (epi_*) response shaping. epi_* wrappers return the raw list
-# (generic_request tidy = FALSE); these hooks unwrap the static-endpoint
+# (untidied response policy); these hooks unwrap the static-endpoint
 # envelope and give each endpoint its expected shape.
 epi_search:
   post_response:

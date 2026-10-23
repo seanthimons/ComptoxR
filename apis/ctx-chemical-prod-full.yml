@@ -23,7 +23,7 @@ selection:
   - GET /chemical/search/start-with/{word}
   - POST /chemical/synonym/search/by-dtxsid/
   - GET /chemical/synonym/search/by-dtxsid/{dtxsid}
-helper: generic_request
+helper: .ct_request
 documentation: yes
 authentication:
   api_key: ctx

@@ -87,8 +87,8 @@ Run the targeted checks for what you changed:
 devtools::document()
 
 # Targeted tests
-testthat::test_file("tests/testthat/test-generic_request.R")
-devtools::test(filter = "generic_request")
+testthat::test_file("tests/testthat/test-ct_similar.R")
+devtools::test(filter = "ct_similar")
 ```
 
 For R code, format and lint:

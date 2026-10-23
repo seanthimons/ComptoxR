@@ -193,8 +193,8 @@ Optional Codecov upload token used by coverage workflows.
 Run targeted tests during development:
 
 ```r
-testthat::test_file("tests/testthat/test-generic_request.R")
-devtools::test(filter = "generic_request")
+testthat::test_file("tests/testthat/test-ct_similar.R")
+devtools::test(filter = "ct_similar")
 ```
 
 Run the readiness audit:

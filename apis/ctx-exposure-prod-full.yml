@@ -25,7 +25,7 @@ selection:
   - GET /exposure/product-data/search/by-dtxsid/{dtxsid}
   - POST /exposure/seem/general/search/by-dtxsid/
   - GET /exposure/seem/general/search/by-dtxsid/{dtxsid}
-helper: generic_request
+helper: .ct_request
 documentation: yes
 authentication:
   api_key: ctx

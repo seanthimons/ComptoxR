@@ -1,14 +1,14 @@
 # Hook-only baseline facades; native wire and hook-state parity are tested separately.
 four_baseline <- readRDS(test_path("fixtures/native-four-calculations-contracts.rds"))
 for (name in c("chemi_mordred", "chemi_mordred_bulk")) {
-  assign(name, eval(four_baseline[[name]][[3L]], asNamespace("ComptoxR")))
+  assign(name, eval_baseline_facade(four_baseline[[name]][[3L]]))
 }
 
 # Keep the hook-only helper tests on frozen baseline facades. Native integration
 # and complete hook-state parity are covered by test-native_calculation.R.
 baseline_calculation <- readRDS(test_path("fixtures/native-calculation-contracts.rds"))
 for (name in names(baseline_calculation)) {
-  assign(name, eval(baseline_calculation[[name]][[3L]], asNamespace("ComptoxR")))
+  assign(name, eval_baseline_facade(baseline_calculation[[name]][[3L]]))
 }
 
 descriptor_public_signatures <- list(
@@ -52,7 +52,7 @@ test_that("scalar descriptor wrappers call generic_request with prepared GET sta
   withr::local_envvar(chemi_burl = "https://configured.example/api")
   calls <- list()
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       call <- list(...)
       calls[[length(calls) + 1L]] <<- call
       descriptors <- if (identical(call$endpoint, "rdkit")) 1:4 else c(1, 2)
@@ -90,7 +90,7 @@ test_that("bulk descriptor wrappers call generic_chemi_request with exact bodies
   withr::local_envvar(chemi_burl = "https://configured.example/api")
   calls <- list()
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       call <- list(...)
       calls[[length(calls) + 1L]] <<- call
       records <- lapply(seq_along(call$body$chemicals), function(index) {
@@ -147,7 +147,7 @@ test_that("bulk descriptor wrappers call generic_chemi_request with exact bodies
 test_that("bulk wide output preserves duplicates, invalid inputs, and ordinals", {
   captured <- NULL
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       descriptor_contract_response(
         records = list(
@@ -181,7 +181,7 @@ test_that("large descriptor responses map once by ordinal and identifier", {
   count <- 5000L
   inputs <- sprintf("input-%05d", seq_len(count))
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       descriptor_contract_response(
         records = rev(lapply(seq_len(count), function(index) {
           descriptor_contract_record(
@@ -210,7 +210,7 @@ test_that("large descriptor responses map once by ordinal and identifier", {
 test_that("all-invalid input skips HTTP but still runs descriptor post-hooks", {
   called <- FALSE
   local_mocked_bindings(
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       called <<- TRUE
       stop("must not be called")
     },
@@ -236,7 +236,7 @@ test_that("header mismatches and empty successful responses become explicit rows
   )
   call_index <- 0L
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       call_index <<- call_index + 1L
       responses[[call_index]]
     },
@@ -257,7 +257,7 @@ test_that("header mismatches and empty successful responses become explicit rows
 test_that("CSV and TSV successful responses use the same wide contract", {
   content_types <- character()
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       call <- list(...)
       content_types <<- c(content_types, call$content_type)
       separator <- if (identical(call$content_type, "text/tab-separated-values")) "\t" else ","
@@ -282,7 +282,7 @@ test_that("CSV and TSV successful responses use the same wide contract", {
 test_that("raw descriptor output retains actual route provenance", {
   payload <- list(info = list(name = "padel"), chemicals = list())
   local_mocked_bindings(
-    generic_request = function(...) payload,
+    .ct_request = function(...) payload,
     .package = "ComptoxR"
   )
   withr::local_envvar(chemi_burl = "https://configured.example/api")
@@ -305,7 +305,7 @@ test_that("descriptor routing stays on the effective production or explicit host
   withr::local_envvar(chemi_burl = production)
   calls <- list()
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       call <- list(...)
       calls[[length(calls) + 1L]] <<- call
       descriptor_contract_response(
@@ -336,7 +336,7 @@ test_that("descriptor routing stays on the effective production or explicit host
 
 test_that("successful embedded service failures become descriptor status rows", {
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       descriptor_contract_response(
         records = list(list(smiles = "invalid[", error = list(message = "invalid structure"))),
         headers = c("a")
@@ -353,7 +353,7 @@ test_that("successful embedded service failures become descriptor status rows", 
 
 test_that("generic-helper failures propagate without descriptor conversion", {
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       rlang::abort("transport failure", class = "sentinel_http_error")
     },
     .package = "ComptoxR"
@@ -376,7 +376,7 @@ test_that("identifier resolution preserves original queries and duplicate positi
         )
       })
     },
-    generic_chemi_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       descriptor_contract_response(
         records = lapply(seq_along(captured$body$chemicals), function(index) {

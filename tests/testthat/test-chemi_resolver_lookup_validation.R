@@ -1,7 +1,7 @@
 test_that("resolver queries fail validation before requesting", {
   calls <- 0L
   testthat::local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       calls <<- calls + 1L
       stop("unexpected request")
     },

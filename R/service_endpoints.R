@@ -138,7 +138,7 @@
   stop(error)
 }
 
-# Specmill response policy: the same tibble output as generic_request(tidy = TRUE).
+# Specmill response policy: the same tibble output as the legacy tidy = TRUE output.
 .ct_tidy <- function(response, context, decode) {
   tryCatch({
     # probe_api_function() reads HTTP statuses through this observer.

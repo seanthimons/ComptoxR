@@ -1,7 +1,7 @@
 # Post-response hooks for EPI Suite (epi_*) wrappers.
 #
-# epi_* functions route through generic_request with tidy = FALSE, so the raw
-# response is returned as a nested list. generic_request wraps a single
+# epi_* functions return the raw (untidied) response, so the
+# response is a nested list. The request helper wraps a single
 # static-endpoint response in a length-1, unnamed list (carrying a
 # query = "_static_" attribute). These hooks unwrap that envelope and give each
 # endpoint the shape callers expect, mirroring the ct_*/chemi_* convention of
@@ -11,7 +11,7 @@
 #' Unwrap a single EPI Suite result object
 #'
 #' Post-response hook for epi_submit and the epi_ecosar_* endpoints. Strips the
-#' length-1 static-endpoint envelope generic_request adds and drops the internal
+#' length-1 static-endpoint envelope the request helper adds and drops the internal
 #' `query` attribute, returning the named list of result modules.
 #'
 #' @param data Hook data structure: list(result = ..., params = list(...)).

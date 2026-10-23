@@ -5,7 +5,7 @@ schemas:
 selection:
   include:
   - GET /api/search
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/search:

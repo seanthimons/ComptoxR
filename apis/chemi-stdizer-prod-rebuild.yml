@@ -4,7 +4,7 @@ schemas:
   - schema/chemi-stdizer-prod.json
 selection:
   unclaimed: true
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   POST /api/stdizer/records:

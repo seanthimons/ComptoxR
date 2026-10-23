@@ -11,13 +11,13 @@ test_that("ct_similar passes request metadata to helper", {
   calls <- list()
   mock_helper <- function(...) {
     captured <- list(...)
-    captured$.helper <- "generic_request"
+    captured$.helper <- ".ct_request"
     calls[[length(calls) + 1L]] <<- captured
-    generated_contract_response(...)
+    tibble::tibble()
   }
 
   testthat::local_mocked_bindings(
-    generic_request = mock_helper,
+    .ct_request = mock_helper,
     .package = "ComptoxR"
   )
 
@@ -25,10 +25,9 @@ test_that("ct_similar passes request metadata to helper", {
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
-  expect_equal(call$.helper, "generic_request")
-  expect_equal(call[["query"]], "DTXSID7020182")
-  expect_equal(call[["endpoint"]], "similar-compound/by-dtxsid/")
+  expect_equal(call$.helper, ".ct_request")
   expect_equal(call[["method"]], "GET")
-  expect_equal(call[["batch_limit"]], 1)
-  expect_equal(call[["server"]], "https://comptox.epa.gov/dashboard-api/")
+  expect_equal(call[["path"]], "/similar-compound/by-dtxsid/{query}/{similarity}")
+  expect_equal(call[["path_params"]], list(query = "DTXSID7020182", similarity = 0.8))
+  expect_equal(call[["server"]], list(url = "https://comptox.epa.gov/dashboard-api"))
 })

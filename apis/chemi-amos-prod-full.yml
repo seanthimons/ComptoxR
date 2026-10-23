@@ -61,7 +61,7 @@ selection:
   - POST /api/amos/product_declaration_keyset_pagination/{limit}
   - GET /api/amos/safety_data_sheet_keyset_pagination/{limit}
   - POST /api/amos/safety_data_sheet_keyset_pagination/{limit}
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}:

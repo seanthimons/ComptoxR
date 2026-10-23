@@ -89,11 +89,16 @@
       "archive_format": "git archive --format=tar <source_commit>"
     },
     "adopted_sha256": {
-      "R/z_generic_request.R": "1820895b86e8f69f8bfd8ca06f88707211546d8dfc503707a50530d766a9a905",
       "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
       "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
     },
-    "review": "Official 0.1.56 scaffold emission and provenance checked by verify.R; adds opt-in prune of retired operation outputs, no helper or facade change."
+    "review": "Official 0.1.56 scaffold emission and provenance checked by verify.R; adds opt-in prune of retired operation outputs, no helper or facade change. Retired generic_request/generic_chemi_request (PR #345); ct_related and ct_similar call .ct_request directly.",
+    "facades_retired": [
+      "generic_request",
+      "generic_chemi_request",
+      "generic_search_request",
+      "generic_pubchem_request"
+    ]
   },
   "adoption_history": [
     {

@@ -4,6 +4,12 @@
 
 ## Unreleased
 
+- **Breaking:** remove the exported legacy transport helpers `generic_request()`
+  and `generic_chemi_request()` (and the unexported `generic_search_request()` and
+  `generic_pubchem_request()`). `ct_related()` and `ct_similar()` now call the
+  native `.ct_request()` directly with unchanged signatures and output. Shared
+  response helpers moved to `R/response_helpers.R`; `batch_limit()` is kept.
+
 - Remove `chemi_toxprint()`. Its operation (`POST /api/toxprints/calculate`) is
   covered by `chemi_toxprints_calculate_bulk()`, which takes Chemical records.
 

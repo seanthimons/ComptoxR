@@ -5,7 +5,7 @@ schemas:
 selection:
   include:
   - POST /api/alerts
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   POST /api/alerts:

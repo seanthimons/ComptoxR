@@ -8,7 +8,7 @@ selection:
   - POST /api/toxprints/chemicals_categories
   - GET /api/toxprints/enrichments
   - POST /api/toxprints/toxprints_categories
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/toxprints/assays/{name}:

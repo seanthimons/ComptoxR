@@ -1,4 +1,4 @@
-# Match the input cleanup of the retained generic_request facade before validation.
+# Match the input cleanup of the retired generic_request facade before validation.
 .ct_legacy_query <- function(query) {
   if (purrr::is_list(query) && !is.data.frame(query)) {
     query <- as.character(unlist(query, use.names = FALSE))

@@ -6,7 +6,7 @@ selection:
   include:
   - GET /api/services/cim_component_info
   - GET /api/services/release_notes
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/services/cim_component_info:

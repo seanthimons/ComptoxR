@@ -12,9 +12,9 @@ test_that("NULL descriptor cells retain every chemical and raw payload", {
       lapply(seq_along(values), function(i) descriptor_contract_record(
         smiles = c("CCO", "CCC", "CCCC")[[i]], descriptors = values[[i]], ordinal = i - 1L)),
       headers = headers)
-    local_mocked_bindings(generic_chemi_request = function(...) payload, .package = "ComptoxR")
+    local_mocked_bindings(.ct_request = function(...) payload, .package = "ComptoxR")
     inputs <- c("CCO", "CCC", "CCCC")[seq_len(count)]
-    fn <- eval(readRDS(test_path("fixtures/native-four-calculations-contracts.rds"))$chemi_mordred_bulk[[3L]], asNamespace("ComptoxR"))
+    fn <- eval_baseline_facade(readRDS(test_path("fixtures/native-four-calculations-contracts.rds"))$chemi_mordred_bulk[[3L]])
     result <- fn(inputs)
     expect_identical(nrow(result), count)
     expect_identical(result$query, inputs)

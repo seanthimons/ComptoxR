@@ -7,7 +7,7 @@ selection:
   - GET /chemical/detail/search/by-dtxsid/{dtxsid}
   - POST /chemical/detail/search/by-dtxsid/
   - GET /chemical/list/all
-helper: generic_request
+helper: .ct_request
 authentication:
   api_key: ctx
 documentation: yes

@@ -12,7 +12,7 @@ selection:
   - GET /api/amos/get_info_by_id/{internal_id}
   - GET /api/amos/get_classification_for_dtxsid/{dtxsid}
   - GET /api/amos/search_by_text/{substr}
-helper: generic_request
+helper: .ct_request
 documentation: yes
 operations:
   GET /api/amos/release_notes:
