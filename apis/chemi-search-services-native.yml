@@ -1,8 +1,8 @@
 id: chemi-search-services-native
 schemas:
   files:
-  - schema/chemi-search-prod.json
-  - schema/chemi-services-prod.json
+  - schema/chemi_search_prod.json
+  - schema/chemi_services_prod.json
 selection:
   include:
   - POST /api/search/download

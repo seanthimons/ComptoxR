@@ -1,7 +1,7 @@
 id: chemi-stdizer-prod-rebuild
 schemas:
   files:
-  - schema/chemi-stdizer-prod.json
+  - schema/chemi_stdizer_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

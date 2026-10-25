@@ -1,8 +1,8 @@
 id: chemi-small-families
 schemas:
   files:
-  - schema/chemi-predictor_models-prod.json
-  - schema/chemi-webtest-prod.json
+  - schema/chemi_predictor_models_prod.json
+  - schema/chemi_webtest_prod.json
 selection:
   include:
   - GET /api/predictor_models/model/file/

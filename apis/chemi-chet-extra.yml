@@ -1,23 +1,20 @@
 id: chemi-chet-extra
 schemas:
   files:
-  - schema/chemi-chet-prod.json
+  - schema/chemi_chet_prod.json
 selection:
   include:
-  - POST /chemicals/chemical_DL
   - POST /chemicals/newchemfile
   - POST /chemicals/newchemical
   - POST /chemicals/template_DL
   - POST /curators/change-password
   - GET /curators/detail-sets
   - POST /curators/details
-  - POST /curators/libraries
   - GET /curators/libraries/detail-options
   - GET /curators/libraries/{lib_id}
   - POST /curators/login
   - POST /curators/logout
   - GET /curators/units
-  - POST /curators/units
   - GET /reaction/download_DB_backup
   - POST /reaction/editor/check-existing
   - POST /reaction/editor/check-existing-map
@@ -26,7 +23,6 @@ selection:
   - POST /reaction/editor/load-reactions
   - POST /reaction/editor/save-scheme
   - GET /reaction/editor/{reaction_id}
-  - POST /reaction/editor/{reaction_id}
   - POST /reaction/map_DL
   - POST /reaction/mapfix/{map_id}
   - POST /reaction/newlibrary
@@ -39,22 +35,6 @@ selection:
 helper: .ct_request
 documentation: true
 operations:
-  POST /chemicals/chemical_DL:
-    name: chemi_chet_chemicals_chemical_dl_post
-    file: R/chemi_chet_chemicals_chemical_dl_post.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Download chemical list (POST)
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
   POST /chemicals/newchemfile:
     name: chemi_chet_chemicals_newchemfile
     file: R/chemi_chet_chemicals_newchemfile.R
@@ -152,22 +132,6 @@ operations:
         NULL for an empty response.
       tags:
         apiStage: public
-  POST /curators/libraries:
-    name: chemi_chet_curators_libraries
-    file: R/chemi_chet_curators_libraries.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Create a reaction library from curator mode
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
   GET /curators/libraries/detail-options:
     name: chemi_chet_curators_libraries_detail_options
     file: R/chemi_chet_curators_libraries_detail_options.R
@@ -243,22 +207,6 @@ operations:
       preserve_errors: true
     docs:
       title: List reusable unit definitions for curator editors
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
-  POST /curators/units:
-    name: chemi_chet_curators_units_create
-    file: R/chemi_chet_curators_units_create.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Create or update a reusable unit definition
       lifecycle: experimental
       return: Decoded JSON, text, or raw bytes according to the response content type;
         NULL for an empty response.
@@ -388,22 +336,6 @@ operations:
       preserve_errors: true
     docs:
       title: Fetch curator reaction editor payload
-      lifecycle: experimental
-      return: Decoded JSON, text, or raw bytes according to the response content type;
-        NULL for an empty response.
-      tags:
-        apiStage: public
-  POST /reaction/editor/{reaction_id}:
-    name: chemi_chet_reaction_editor_by_reaction_id_create
-    file: R/chemi_chet_reaction_editor_by_reaction_id_create.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    request_controls:
-      preserve_errors: true
-    docs:
-      title: Save curator reaction editor changes
       lifecycle: experimental
       return: Decoded JSON, text, or raw bytes according to the response content type;
         NULL for an empty response.

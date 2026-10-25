@@ -1,7 +1,7 @@
 id: epi-suite-prod-full
 schemas:
   files:
-  - schema/epi-suite-prod.json
+  - schema/epi_suite_prod.json
 selection:
   include:
   - GET /api/ecosar/polymer/amphoteric

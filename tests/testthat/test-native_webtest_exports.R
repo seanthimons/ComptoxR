@@ -1,5 +1,5 @@
 webtest_export_cases <- function() {
-  source <- 'schema/chemi-webtest-prod.json'
+  source <- 'schema/chemi_webtest_prod.json'
   hash <- 'cf70437924a4074476c8802f78e6442ddc1b9d4be7311ccd442b6f4c294eca26'
   list(
     chemi_webtest_predict_export = list(

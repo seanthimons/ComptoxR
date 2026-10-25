@@ -1,7 +1,7 @@
 id: ctx-exposure-prod-rebuild
 schemas:
   files:
-  - schema/ctx-exposure-prod.json
+  - schema/ctx_exposure_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

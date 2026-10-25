@@ -1,7 +1,7 @@
 id: ctx-bioactivity-prod-rebuild
 schemas:
   files:
-  - schema/ctx-bioactivity-prod.json
+  - schema/ctx_bioactivity_prod.json
 helper: .ct_request
 documentation: yes
 authentication:

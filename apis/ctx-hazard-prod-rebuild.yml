@@ -1,7 +1,7 @@
 id: ctx-hazard-prod-rebuild
 schemas:
   files:
-  - schema/ctx-hazard-prod.json
+  - schema/ctx_hazard_prod.json
 helper: .ct_request
 documentation: yes
 authentication:

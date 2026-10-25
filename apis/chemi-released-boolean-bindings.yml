@@ -2,10 +2,10 @@
   "id": "chemi-released-boolean-bindings",
   "schemas": {
     "files": [
-      "schema/chemi-opera-prod.json",
-      "schema/chemi-resolver-prod.json",
-      "schema/chemi-alerts-prod.json",
-      "schema/chemi-stdizer-prod.json"
+      "schema/chemi_opera_prod.json",
+      "schema/chemi_resolver_prod.json",
+      "schema/chemi_alerts_prod.json",
+      "schema/chemi_stdizer_prod.json"
     ]
   },
   "selection": {

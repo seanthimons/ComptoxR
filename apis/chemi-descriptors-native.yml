@@ -2,8 +2,8 @@
   "id": "chemi-descriptors-native",
   "schemas": {
     "files": [
-      "schema/chemi-descriptors-prod.json",
-      "schema/chemi-rdkit-prod.json"
+      "schema/chemi_descriptors_prod.json",
+      "schema/chemi_rdkit_prod.json"
     ]
   },
   "selection": {
@@ -154,7 +154,7 @@
         "preserve_errors": true
       },
       "routes": [
-        "chemi-rdkit-prod.json GET /api/rdkit"
+        "chemi_rdkit_prod.json GET /api/rdkit"
       ]
     },
     "POST /api/descriptors": {
@@ -295,7 +295,7 @@
         "preserve_errors": true
       },
       "routes": [
-        "chemi-rdkit-prod.json POST /api/rdkit"
+        "chemi_rdkit_prod.json POST /api/rdkit"
       ]
     }
   },

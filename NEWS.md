@@ -4,6 +4,15 @@
 
 ## Unreleased
 
+- **Breaking:** stop wrapping eight write, export or duplicated endpoints and remove
+  `chemi_chet_chemicals_chemical_dl_post()`, `chemi_chet_curators_libraries()`,
+  `chemi_chet_curators_units_create()`, `chemi_chet_reaction_editor_by_reaction_id_create()`,
+  `chemi_hazard_reports_create()`, `chemi_resolver_export_post()`,
+  `chemi_resolver_export_section_post()` and `chemi_stdizer_protocols_post()`. The routes are
+  banned in `specmill.yml`.
+- Schema files are now named `chemi_<x>_prod.json`, `ctx_<x>_prod.json` and
+  `epi_suite_prod.json` so the names are valid R identifiers; the downloader writes them.
+
 - **Breaking:** remove `ct_api_key()`. Wrappers and the startup/sitrep checks read the
   `ctx_api_key` environment variable directly.
 - **Breaking:** remove the exported legacy transport helpers `generic_request()`
@@ -28,7 +37,7 @@
 
 - Remove `chemi_chet_chemicals_chemical_dl()`. The production schema marks the GET body
   optional but the deployed service rejects a bodyless GET, so it is deferred in Specmill.
-  `chemi_chet_chemicals_chemical_dl_post()` is unchanged.
+  `chemi_chet_chemicals_chemical_dl_post()` is removed too (see below).
 
 - Remove `chemi_services_preflight()` and `chemi_services_universalpreflight()`. The production
   schema describes their multipart `files[]` upload as a binary query parameter, so they are

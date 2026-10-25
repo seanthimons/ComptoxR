@@ -1,7 +1,7 @@
 id: chemi-amnb_nate-prod-rebuild
 schemas:
   files:
-  - schema/chemi-amnb_nate-prod.json
+  - schema/chemi_amnb_nate_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

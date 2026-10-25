@@ -22,6 +22,15 @@ selection:
   - '^/api/services/(caspreflight|files)/?$'
   # #357: AMOS XLSX batch exports and write routes; JSON searches stay.
   - '^/api/amos/(add_aqc_spectrum|add_new_fact_sheet|add_new_method|add_new_product_declaration|add_new_safety_data_sheet|analytical_qc_batch_search|batch_search)/?$'
+  # Curator-mode and protocol writes are not user-facing reads.
+  - 'POST ^/curators/(libraries|units)/?$'
+  - 'POST ^/reaction/editor/\{[^/]+\}$'
+  - 'POST ^/api/stdizer/protocols/?$'
+  # Resolver file exports; duplicated by the JSON routes.
+  - 'POST ^/api/resolver/export(-section)?/?$'
+  # Replaced by existing wrappers (chemical list download, hazard reports).
+  - 'POST ^/chemicals/chemical_DL/?$'
+  - 'POST ^/api/hazard/reports/?$'
   # ChET login, admin and delete pages are not API.
   - '^/(auth|admin)/'
   - '^/chemicals/chemdelete/?$'

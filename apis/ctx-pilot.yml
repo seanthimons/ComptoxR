@@ -1,7 +1,7 @@
 id: ctx-pilot
 schemas:
   files:
-  - schema/ctx-chemical-prod.json
+  - schema/ctx_chemical_prod.json
 selection:
   include:
   - GET /chemical/detail/search/by-dtxsid/{dtxsid}

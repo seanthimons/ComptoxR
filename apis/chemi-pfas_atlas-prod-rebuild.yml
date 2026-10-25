@@ -1,7 +1,7 @@
 id: chemi-pfas_atlas-prod-rebuild
 schemas:
   files:
-  - schema/chemi-pfas_atlas-prod.json
+  - schema/chemi_pfas_atlas_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

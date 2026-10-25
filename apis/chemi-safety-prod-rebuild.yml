@@ -1,7 +1,7 @@
 id: chemi-safety-prod-rebuild
 schemas:
   files:
-  - schema/chemi-safety-prod.json
+  - schema/chemi_safety_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

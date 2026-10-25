@@ -1,7 +1,7 @@
 id: chemi-webtest-prod-rebuild
 schemas:
   files:
-  - schema/chemi-webtest-prod.json
+  - schema/chemi_webtest_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

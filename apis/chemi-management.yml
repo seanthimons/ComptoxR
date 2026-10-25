@@ -1,10 +1,10 @@
 id: chemi-management
 schemas:
   files:
-  - schema/chemi-alerts-prod.json
-  - schema/chemi-safety-prod.json
-  - schema/chemi-hazard-prod.json
-  - schema/chemi-toxprints-prod.json
+  - schema/chemi_alerts_prod.json
+  - schema/chemi_safety_prod.json
+  - schema/chemi_hazard_prod.json
+  - schema/chemi_toxprints_prod.json
 selection:
   include:
   - GET /api/hazard/download
@@ -12,7 +12,6 @@ selection:
   - POST /api/hazard/report/export-append
   - POST /api/hazard/report/export2
   - GET /api/hazard/reports
-  - POST /api/hazard/reports
   - GET /api/hazard/reports/check
   - GET /api/hazard/reports/{id}
   - POST /api/hazard/reports/{id}/export
@@ -93,21 +92,6 @@ operations:
       key: chemi_burl
     docs:
       title: List hazard report protocols
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  POST /api/hazard/reports:
-    name: chemi_hazard_reports_create
-    file: R/chemi_hazard_reports_create.R
-    helper: .ct_request
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Create a hazard report
       lifecycle: experimental
       return: The decoded service response, preserving JSON structure, text or media
         bytes.

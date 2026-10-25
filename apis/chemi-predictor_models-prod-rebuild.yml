@@ -1,7 +1,7 @@
 id: chemi-predictor_models-prod-rebuild
 schemas:
   files:
-  - schema/chemi-predictor_models-prod.json
+  - schema/chemi_predictor_models_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

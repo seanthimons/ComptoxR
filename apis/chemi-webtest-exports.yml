@@ -1,7 +1,7 @@
 id: chemi-webtest-exports
 schemas:
   files:
-  - schema/chemi-webtest-prod.json
+  - schema/chemi_webtest_prod.json
 selection:
   include:
   - POST /api/webtest/predict/export

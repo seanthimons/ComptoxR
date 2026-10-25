@@ -1,7 +1,7 @@
 id: ctx-list-name
 schemas:
   files:
-  - schema/ctx-chemical-prod.json
+  - schema/ctx_chemical_prod.json
 selection:
   include:
   - GET /chemical/list/search/by-name/{listName}

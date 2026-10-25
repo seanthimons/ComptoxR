@@ -1,7 +1,7 @@
 id: chemi-arn_cats-prod-rebuild
 schemas:
   files:
-  - schema/chemi-arn_cats-prod.json
+  - schema/chemi_arn_cats_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

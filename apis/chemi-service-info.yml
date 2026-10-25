@@ -1,26 +1,26 @@
 id: chemi-service-info
 schemas:
   files:
-  - schema/chemi-alerts-prod.json
-  - schema/chemi-amnb_nate-prod.json
-  - schema/chemi-arn_cats-prod.json
-  - schema/chemi-descriptors-prod.json
-  - schema/chemi-hazard-prod.json
-  - schema/chemi-mordred-prod.json
-  - schema/chemi-ncc_cats-prod.json
-  - schema/chemi-opera-prod.json
-  - schema/chemi-padel-prod.json
-  - schema/chemi-pfas_atlas-prod.json
-  - schema/chemi-pfas_cats-prod.json
-  - schema/chemi-predictor_models-prod.json
-  - schema/chemi-rdkit-prod.json
-  - schema/chemi-resolver-prod.json
-  - schema/chemi-safety-prod.json
-  - schema/chemi-search-prod.json
-  - schema/chemi-services-prod.json
-  - schema/chemi-stdizer-prod.json
-  - schema/chemi-toxprints-prod.json
-  - schema/chemi-webtest-prod.json
+  - schema/chemi_alerts_prod.json
+  - schema/chemi_amnb_nate_prod.json
+  - schema/chemi_arn_cats_prod.json
+  - schema/chemi_descriptors_prod.json
+  - schema/chemi_hazard_prod.json
+  - schema/chemi_mordred_prod.json
+  - schema/chemi_ncc_cats_prod.json
+  - schema/chemi_opera_prod.json
+  - schema/chemi_padel_prod.json
+  - schema/chemi_pfas_atlas_prod.json
+  - schema/chemi_pfas_cats_prod.json
+  - schema/chemi_predictor_models_prod.json
+  - schema/chemi_rdkit_prod.json
+  - schema/chemi_resolver_prod.json
+  - schema/chemi_safety_prod.json
+  - schema/chemi_search_prod.json
+  - schema/chemi_services_prod.json
+  - schema/chemi_stdizer_prod.json
+  - schema/chemi_toxprints_prod.json
+  - schema/chemi_webtest_prod.json
 selection:
   include:
   - GET /api/alerts/metadata

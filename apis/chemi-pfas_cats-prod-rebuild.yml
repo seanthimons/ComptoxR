@@ -1,7 +1,7 @@
 id: chemi-pfas_cats-prod-rebuild
 schemas:
   files:
-  - schema/chemi-pfas_cats-prod.json
+  - schema/chemi_pfas_cats_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

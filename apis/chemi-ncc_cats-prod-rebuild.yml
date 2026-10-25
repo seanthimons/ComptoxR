@@ -1,7 +1,7 @@
 id: chemi-ncc_cats-prod-rebuild
 schemas:
   files:
-  - schema/chemi-ncc_cats-prod.json
+  - schema/chemi_ncc_cats_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

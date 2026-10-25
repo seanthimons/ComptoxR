@@ -17,6 +17,6 @@ Invisibly returns \code{NULL}.
 }
 \description{
 This function downloads and validates the production EPI Suite OpenAPI
-document. The schema is saved as \code{epi-suite-prod.json} in \code{schema_dir}.
+document. The schema is saved as \code{epi_suite_prod.json} in \code{schema_dir}.
 }
 \keyword{internal}

@@ -1,7 +1,7 @@
 id: ctx-chemical-prod-rebuild
 schemas:
   files:
-  - schema/ctx-chemical-prod.json
+  - schema/ctx_chemical_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

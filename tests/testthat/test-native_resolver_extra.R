@@ -1,10 +1,8 @@
 resolver_extra_wrappers <- c(
   'chemi_resolver_export',
-  'chemi_resolver_export_post',
   'chemi_resolver_export_append',
   'chemi_resolver_export_records',
   'chemi_resolver_export_section',
-  'chemi_resolver_export_section_post',
   'chemi_resolver_export_classyfire',
   'chemi_resolver_exportpubchemlist',
   'chemi_resolver_getintegrityreports',

@@ -1,7 +1,6 @@
 stdizer_unbound_wrappers <- c(
   'chemi_stdizer_protocol_export_post',
   'chemi_stdizer_protocols',
-  'chemi_stdizer_protocols_post',
   'chemi_stdizer_protocols_check',
   'chemi_stdizer_protocols_by_id_changes',
   'chemi_stdizer_protocols_by_id_export_post',

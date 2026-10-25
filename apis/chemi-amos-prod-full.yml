@@ -1,7 +1,7 @@
 id: chemi-amos-prod-full
 schemas:
   files:
-  - schema/chemi-amos-prod.json
+  - schema/chemi_amos_prod.json
 # #357: XLSX site exports are banned until a concrete end-user need is reviewed:
 # POST /api/amos/analytical_qc_batch_search and POST /api/amos/batch_search.
 # Keep JSON search and analytical QC pagination routes available.

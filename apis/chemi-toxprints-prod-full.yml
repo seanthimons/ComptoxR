@@ -1,7 +1,7 @@
 id: chemi-toxprints-prod-full
 schemas:
   files:
-  - schema/chemi-toxprints-prod.json
+  - schema/chemi_toxprints_prod.json
 selection:
   include:
   - GET /api/toxprints/assays/{name}

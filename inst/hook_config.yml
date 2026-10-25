@@ -979,8 +979,6 @@ chemi_hazard_report_export2:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports:
   bespoke_test: tests/testthat/test-native_management.R
-chemi_hazard_reports_create:
-  bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports_check:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports_by_id:
@@ -996,8 +994,6 @@ chemi_toxprints_export_global:
 chemi_toxprints_render:
   bespoke_test: tests/testthat/test-native_management.R
 
-chemi_chet_chemicals_chemical_dl_post:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_chemicals_newchemfile:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_chemicals_newchemical:
@@ -1010,8 +1006,6 @@ chemi_chet_curators_detail_sets:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_details:
   bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_curators_libraries:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_libraries_detail_options:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_libraries_by_lib_id:
@@ -1021,8 +1015,6 @@ chemi_chet_curators_login:
 chemi_chet_curators_logout:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_units:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_curators_units_create:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_download_db_backup:
   bespoke_test: tests/testthat/test-native_chet_extra.R
@@ -1039,8 +1031,6 @@ chemi_chet_reaction_editor_load_reactions:
 chemi_chet_reaction_editor_save_scheme:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_editor_by_reaction_id:
-  bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_reaction_editor_by_reaction_id_create:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_map_dl:
   bespoke_test: tests/testthat/test-native_chet_extra.R
@@ -1099,9 +1089,6 @@ chemi_services_collated_report:
 chemi_resolver_export:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
 
-chemi_resolver_export_post:
-  bespoke_test: tests/testthat/test-native_resolver_extra.R
-
 chemi_resolver_export_append:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
 
@@ -1109,9 +1096,6 @@ chemi_resolver_export_records:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
 
 chemi_resolver_export_section:
-  bespoke_test: tests/testthat/test-native_resolver_extra.R
-
-chemi_resolver_export_section_post:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
 
 chemi_resolver_export_classyfire:
@@ -1152,10 +1136,6 @@ chemi_stdizer_protocol_export_post:
   reason: Native standardizer route with real localhost wire and error coverage.
 
 chemi_stdizer_protocols:
-  bespoke_test: tests/testthat/test-native_stdizer_unbound.R
-  reason: Native standardizer route with real localhost wire and error coverage.
-
-chemi_stdizer_protocols_post:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 

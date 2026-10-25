@@ -36,7 +36,7 @@ ct_schema <- function(timeout = 30) {
         # Sets the path
 
         url <- paste0(.endpoint_default('ctx_burl'), 'docs/', endpoint, '.json')
-        destfile <- here::here('schema', paste0("ctx-", endpoint, '-', server, '.json'))
+        destfile <- here::here('schema', paste0("ctx_", endpoint, '_', server, '.json'))
 
         tryCatch(
           {
@@ -179,7 +179,7 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
       '.json'
     }
 
-    destfile <- here::here('schema', paste0('chemi-', endpoint, '-', server, ext))
+    destfile <- here::here('schema', paste0('chemi_', endpoint, '_', server, ext))
     .write_downloaded_schema(body_raw, destfile, pretty = ext == '.json')
     return(list(success = TRUE, status = status))
   }
@@ -309,7 +309,7 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
 #'
 #' @description
 #' This function downloads and validates the production EPI Suite OpenAPI
-#' document. The schema is saved as `epi-suite-prod.json` in `schema_dir`.
+#' document. The schema is saved as `epi_suite_prod.json` in `schema_dir`.
 #'
 #' @param timeout Maximum time, in seconds, to wait for the download. Default: 30.
 #' @param schema_dir Directory in which to save the schema. Default:
@@ -366,7 +366,7 @@ epi_schema <- function(
   if (!dir.exists(schema_dir)) {
     dir.create(schema_dir, recursive = TRUE)
   }
-  writeBin(body_raw, file.path(schema_dir, "epi-suite-prod.json"))
+  writeBin(body_raw, file.path(schema_dir, "epi_suite_prod.json"))
   cli::cli_alert_success("Downloaded EPI Suite schema from production server")
 
   invisible(NULL)

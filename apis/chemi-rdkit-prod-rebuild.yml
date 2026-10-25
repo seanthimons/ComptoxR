@@ -1,7 +1,7 @@
 id: chemi-rdkit-prod-rebuild
 schemas:
   files:
-  - schema/chemi-rdkit-prod.json
+  - schema/chemi_rdkit_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

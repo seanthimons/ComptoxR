@@ -1,7 +1,7 @@
 id: chemi-services-prod-rebuild
 schemas:
   files:
-  - schema/chemi-services-prod.json
+  - schema/chemi_services_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

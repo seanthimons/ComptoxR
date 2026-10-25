@@ -65,8 +65,8 @@ test_that('chemi_schema normalizes freshly downloaded JSON and YAML', {
   testthat::local_mocked_bindings(req_perform = perform, .package = 'ComptoxR')
   suppressMessages(log <- chemi_schema(record = TRUE))
   expect_true(all(log$success))
-  json <- jsonlite::read_json(file.path(root, 'schema/chemi-mordred-prod.json'))
-  yaml <- yaml::read_yaml(file.path(root, 'schema/chemi-rdkit-prod.yaml'))
+  json <- jsonlite::read_json(file.path(root, 'schema/chemi_mordred_prod.json'))
+  yaml <- yaml::read_yaml(file.path(root, 'schema/chemi_rdkit_prod.yaml'))
   schema$basePath <- '/'
   expect_identical(json, schema)
   expect_identical(yaml, schema)

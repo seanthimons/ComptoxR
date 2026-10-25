@@ -1,7 +1,7 @@
 id: chemi-toxprints-prod-rebuild
 schemas:
   files:
-  - schema/chemi-toxprints-prod.json
+  - schema/chemi_toxprints_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

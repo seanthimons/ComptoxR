@@ -1,7 +1,7 @@
 id: rootheldrelease
 schemas:
   files:
-  - schema/chemi-chet-prod.json
+  - schema/chemi_chet_prod.json
 selection:
   include:
   - GET /reaction/searchcounts/{search_input}/{search_type}

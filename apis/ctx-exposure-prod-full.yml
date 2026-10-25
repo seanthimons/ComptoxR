@@ -1,7 +1,7 @@
 id: ctx-exposure-prod-full
 schemas:
   files:
-  - schema/ctx-exposure-prod.json
+  - schema/ctx_exposure_prod.json
 selection:
   include:
   - GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}

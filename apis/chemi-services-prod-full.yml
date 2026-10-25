@@ -1,7 +1,7 @@
 id: chemi-services-prod-full
 schemas:
   files:
-  - schema/chemi-services-prod.json
+  - schema/chemi_services_prod.json
 selection:
   include:
   - GET /api/services/cim_component_info

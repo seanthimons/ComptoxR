@@ -1,7 +1,7 @@
 id: chemi-mordred-prod-rebuild
 schemas:
   files:
-  - schema/chemi-mordred-prod.json
+  - schema/chemi_mordred_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

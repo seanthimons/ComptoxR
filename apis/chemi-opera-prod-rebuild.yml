@@ -1,7 +1,7 @@
 id: chemi-opera-prod-rebuild
 schemas:
   files:
-  - schema/chemi-opera-prod.json
+  - schema/chemi_opera_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

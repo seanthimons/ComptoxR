@@ -2,7 +2,7 @@
   "id": "search-pilot",
   "schemas": {
     "files": [
-      "schema/chemi-search-prod.json"
+      "schema/chemi_search_prod.json"
     ]
   },
   "selection": {

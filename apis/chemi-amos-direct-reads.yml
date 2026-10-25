@@ -1,12 +1,9 @@
 id: chemi-amos-direct-reads
 schemas:
   files:
-  - schema/chemi-amos-prod.json
+  - schema/chemi_amos_prod.json
 selection:
-  include:
-  - GET /api/amos/additional_sources_for_substance/{dtxsid}
-  - GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}
-  - GET /api/amos/get_substance_file_for_record/{internal_id}
+  unclaimed: true
 helper: .ct_request
 documentation: true
 operations:

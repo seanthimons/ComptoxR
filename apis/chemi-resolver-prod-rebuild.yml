@@ -1,7 +1,7 @@
 id: chemi-resolver-prod-rebuild
 schemas:
   files:
-  - schema/chemi-resolver-prod.json
+  - schema/chemi_resolver_prod.json
 # #358: POST /api/resolver/getpubchemlist is banned by the exclude rule in specmill.yml
 # without an established end-user purpose or reviewed implementation. POST getsimilaritylist
 # is selected (unclaimed) but enrolled as deferred (#165): the prod schema's body is not

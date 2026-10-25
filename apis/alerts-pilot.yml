@@ -1,10 +1,9 @@
 id: alerts-pilot
 schemas:
   files:
-  - schema/chemi-alerts-prod.json
+  - schema/chemi_alerts_prod.json
 selection:
-  include:
-  - POST /api/alerts
+  unclaimed: true
 helper: .ct_request
 documentation: yes
 operations:

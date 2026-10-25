@@ -1,7 +1,7 @@
 id: chemi-chet-prod-full
 schemas:
   files:
-  - schema/chemi-chet-prod.json
+  - schema/chemi_chet_prod.json
 selection:
   include:
   - GET /chemicals/database-old

@@ -2,7 +2,7 @@
   "id": "chemi-stdizer-reviewed-protocol-get",
   "schemas": {
     "files": [
-      "schema/chemi-stdizer-prod.json"
+      "schema/chemi_stdizer_prod.json"
     ]
   },
   "selection": {

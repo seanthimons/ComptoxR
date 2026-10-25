@@ -1,12 +1,11 @@
 id: chemi-stdizer-unbound
 schemas:
   files:
-  - schema/chemi-stdizer-prod.json
+  - schema/chemi_stdizer_prod.json
 selection:
   include:
   - POST /api/stdizer/protocol/export
   - GET /api/stdizer/protocols
-  - POST /api/stdizer/protocols
   - GET /api/stdizer/protocols/check
   - GET /api/stdizer/protocols/{id}/changes
   - POST /api/stdizer/protocols/{id}/export
@@ -38,20 +37,6 @@ operations:
       key: chemi_burl
     docs:
       title: Standardizer protocolsGet
-      lifecycle: experimental
-      return: The decoded service response, preserving JSON structure, text or media
-        bytes.
-      tags:
-        apiStage: public
-  POST /api/stdizer/protocols:
-    name: chemi_stdizer_protocols_post
-    file: R/chemi_stdizer_protocols_post.R
-    implementation: generated
-    server:
-      resolver: .ct_server_url
-      key: chemi_burl
-    docs:
-      title: Standardizer protocolCreatePost
       lifecycle: experimental
       return: The decoded service response, preserving JSON structure, text or media
         bytes.

@@ -1,7 +1,7 @@
 id: epi-suite-prod-rebuild
 schemas:
   files:
-  - schema/epi-suite-prod.json
+  - schema/epi_suite_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

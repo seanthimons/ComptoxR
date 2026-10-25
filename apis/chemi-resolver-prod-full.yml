@@ -1,7 +1,7 @@
 id: chemi-resolver-prod-full
 schemas:
   files:
-  - schema/chemi-resolver-prod.json
+  - schema/chemi_resolver_prod.json
 selection:
   include:
   - GET /api/resolver/ccte-lists

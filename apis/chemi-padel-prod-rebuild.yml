@@ -1,7 +1,7 @@
 id: chemi-padel-prod-rebuild
 schemas:
   files:
-  - schema/chemi-padel-prod.json
+  - schema/chemi_padel_prod.json
 selection:
   unclaimed: true
 helper: .ct_request

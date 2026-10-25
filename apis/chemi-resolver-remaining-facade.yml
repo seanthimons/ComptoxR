@@ -1,7 +1,7 @@
 id: remaining-resolver-facade
 schemas:
   files:
-  - schema/chemi-resolver-prod.json
+  - schema/chemi_resolver_prod.json
 selection:
   include:
   - POST /api/resolver/safety-flags

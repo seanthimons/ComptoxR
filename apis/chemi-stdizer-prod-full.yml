@@ -1,7 +1,7 @@
 id: chemi-stdizer-prod-full
 schemas:
   files:
-  - schema/chemi-stdizer-prod.json
+  - schema/chemi_stdizer_prod.json
 selection:
   include:
   - GET /api/stdizer/operations

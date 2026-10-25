@@ -139,7 +139,7 @@ jobs:
             json <- jsonlite::fromJSON(f, simplifyVector = FALSE)
             # Keep the exact EPI example values. The default four digits can
             # round a valid upstream change back to the committed value.
-            digits <- if (startsWith(basename(f), "epi-")) NA else 4
+            digits <- if (startsWith(basename(f), "epi_")) NA else 4
             jsonlite::write_json(sort_keys(json), f, pretty = TRUE, auto_unbox = TRUE, digits = digits)
           }
           cli::cli_alert_info("Pretty-printed {length(schema_files)} schema files")
@@ -178,7 +178,7 @@ jobs:
           results <- specmill::schema_diff(
             "schema_old",
             "schema",
-            pattern = "-prod[.]json$",
+            pattern = "_prod[.]json$",
             stage_priority = "prod",
             exclude_pattern = "ui|coverage_baseline|schema_hashes"
           )
