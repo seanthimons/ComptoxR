@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_search_equal completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["ct_bioactivity_search_equal"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["ct_bioactivity_search_equal"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /bioactivity/search/equal/{value}"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

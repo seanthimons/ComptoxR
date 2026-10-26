@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_msready_search_by_dtxcid completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[[
-    "ct_chemical_msready_search_by_dtxcid"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["ct_chemical_msready_search_by_dtxcid"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /chemical/msready/search/by-dtxcid/{dtxcid}"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_hazard_adme_ivive_search completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["ct_hazard_adme_ivive_search"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["ct_hazard_adme_ivive_search"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_services_cim_component_info completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[[
-    "chemi_services_cim_component_info"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["chemi_services_cim_component_info"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/services/cim_component_info"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

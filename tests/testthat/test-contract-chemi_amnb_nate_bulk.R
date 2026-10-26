@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_amnb_nate_bulk completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["chemi_amnb_nate_bulk"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["chemi_amnb_nate_bulk"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["POST /api/amnb_nate"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

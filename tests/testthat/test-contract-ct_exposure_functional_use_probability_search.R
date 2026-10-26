@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_exposure_functional_use_probability_search completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[[
-    "ct_exposure_functional_use_probability_search"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["ct_exposure_functional_use_probability_search"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

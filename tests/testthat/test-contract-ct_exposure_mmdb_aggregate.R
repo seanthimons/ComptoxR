@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_exposure_mmdb_aggregate completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[["ct_exposure_mmdb_aggregate"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["ct_exposure_mmdb_aggregate"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

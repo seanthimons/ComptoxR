@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("epi_submit completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[["epi_submit"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["epi_submit"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/submit"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

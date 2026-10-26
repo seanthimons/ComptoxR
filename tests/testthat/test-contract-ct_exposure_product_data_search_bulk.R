@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_exposure_product_data_search_bulk completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[[
-    "ct_exposure_product_data_search_bulk"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["ct_exposure_product_data_search_bulk"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["POST /exposure/product-data/search/by-dtxsid/"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   names(contract$inputs)[names(contract$inputs) == "body"] <- "dtxsid"
   captured <- list()

@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_amos_record_id completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[["chemi_amos_record_id"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["chemi_amos_record_id"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/amos/record_id_search/{internal_id}"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

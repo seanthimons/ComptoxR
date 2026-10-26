@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_fate_search_bulk completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["ct_chemical_fate_search_bulk"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["ct_chemical_fate_search_bulk"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["POST /chemical/fate/search/by-dtxsid/"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   names(contract$inputs)[names(contract$inputs) == "body"] <- "dtxsid"
   captured <- list()

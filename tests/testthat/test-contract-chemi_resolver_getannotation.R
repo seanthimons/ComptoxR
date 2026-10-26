@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_resolver_getannotation completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["chemi_resolver_getannotation"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["chemi_resolver_getannotation"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/resolver/getannotation"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

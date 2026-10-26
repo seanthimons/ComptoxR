@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_amos_by_text completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-pilot-contracts.rds"))[["chemi_amos_by_text"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-pilot-contracts.rds"))
+  contract <- fixtures[["chemi_amos_by_text"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/amos/search_by_text/{substr}"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

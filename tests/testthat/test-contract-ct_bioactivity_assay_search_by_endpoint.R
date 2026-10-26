@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_assay_search_by_endpoint completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[[
-    "ct_bioactivity_assay_search_by_endpoint"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["ct_bioactivity_assay_search_by_endpoint"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /bioactivity/assay/search/by-endpoint/"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

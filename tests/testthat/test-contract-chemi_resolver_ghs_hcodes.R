@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_resolver_ghs_hcodes completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[["chemi_resolver_ghs_hcodes"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["chemi_resolver_ghs_hcodes"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/resolver/ghs/hcodes"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

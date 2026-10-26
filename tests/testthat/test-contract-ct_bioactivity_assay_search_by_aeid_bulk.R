@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_assay_search_by_aeid_bulk completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[[
-    "ct_bioactivity_assay_search_by_aeid_bulk"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["ct_bioactivity_assay_search_by_aeid_bulk"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["POST /bioactivity/assay/search/by-aeid/"]]
+  }
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   names(contract$inputs)[names(contract$inputs) == "body"] <- "aeid"
   captured <- list()

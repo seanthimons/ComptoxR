@@ -1,8 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_toxprints_global_toxprints completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[[
-    "chemi_toxprints_global_toxprints"
-  ]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["chemi_toxprints_global_toxprints"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/toxprints/global_toxprints"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

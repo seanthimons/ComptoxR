@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_pfas_atlas completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))[["chemi_pfas_atlas"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  contract <- fixtures[["chemi_pfas_atlas"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/pfas_atlas"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)

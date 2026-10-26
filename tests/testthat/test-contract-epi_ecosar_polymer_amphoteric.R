@@ -1,6 +1,10 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("epi_ecosar_polymer_amphoteric completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))[["epi_ecosar_polymer_amphoteric"]]
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  contract <- fixtures[["epi_ecosar_polymer_amphoteric"]]
+  if (is.null(contract)) {
+    contract <- fixtures[["GET /api/ecosar/polymer/amphoteric"]]
+  }
   captured <- list()
   mock_for <- function(name) {
     force(name)
