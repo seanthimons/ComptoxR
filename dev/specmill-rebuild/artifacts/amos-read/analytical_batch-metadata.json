@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/analytical_qc_batch_search",
-  "definition": "analytical_qc_batch_search_request",
-  "status": 500,
-  "media": "text/html; charset=utf-8",
-  "size": 265,
-  "date": "2026-10-18 00:22:59 UTC"
-}

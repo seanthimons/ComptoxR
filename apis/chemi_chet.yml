@@ -1,0 +1,1320 @@
+# chemi_chet: every operation in schema/chemi_chet_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_chet
+schemas:
+  files:
+  - schema/chemi_chet_prod.json
+groups:
+  chemi_chet:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /chemicals/{chemical_id}/image: chemi_chet_chemicals_image
+      GET /chemicals/alias: chemi_chet_chemicals_alias
+      GET /chemicals/chemset: chemi_chet_chemicals_chemset
+      GET /chemicals/chemtemp/{type}/{value}: chemi_chet_chemicals_chemtemp
+      GET /chemicals/counts: chemi_chet_chemicals_counts
+      GET /chemicals/database: chemi_chet_chemicals_database
+      GET /chemicals/database-old: chemi_chet_chemicals_database_old
+      GET /chemicals/database/stats: chemi_chet_chemicals_database_stats
+      GET /chemicals/maps: chemi_chet_chemicals_maps
+      GET /chemicals/singlechemical: chemi_chet_chemicals_singlechemical
+      GET /chemicals/suggest: chemi_chet_chemicals_suggest
+      GET /chemicals/verify/{dtxsid}: chemi_chet_chemicals_verify
+      GET /curators/detail-sets: chemi_chet_curators_detail_sets
+      GET /curators/libraries/{lib_id}: chemi_chet_curators_libraries
+      GET /curators/libraries/detail-options: chemi_chet_curators_libraries_detail_options
+      GET /curators/me: chemi_chet_curators_me
+      GET /curators/units: chemi_chet_curators_units
+      GET /metadata: chemi_chet_metadata
+      GET /reaction/database: chemi_chet_reaction_database
+      GET /reaction/database_old: chemi_chet_reaction_database_old
+      GET /reaction/database-old/{pagenum}/{searchterm}: chemi_chet_reaction_database_old_by_pagenum_and_searchterm  # why: path name collides with a sibling route; disambiguated by its path parameter
+      GET /reaction/database/stats: chemi_chet_reaction_database_stats
+      GET /reaction/dbcounts: chemi_chet_reaction_dbcounts
+      GET /reaction/details: chemi_chet_reaction_details
+      GET /reaction/download_DB_backup: chemi_chet_reaction_download_db_backup
+      GET /reaction/editor/{reaction_id}: chemi_chet_reaction_editor
+      GET /reaction/editor/library-details: chemi_chet_reaction_editor_library_details
+      GET /reaction/libraries: chemi_chet_reaction_libraries
+      GET /reaction/mapid: chemi_chet_reaction_mapid
+      GET /reaction/mappositions/{map_id}: chemi_chet_reaction_mappositions
+      GET /reaction/maps: chemi_chet_reaction_maps
+      GET /reaction/react_maps: chemi_chet_reaction_react_maps
+      GET /reaction/reactionmap: chemi_chet_reaction_reactionmap
+      GET /reaction/search: chemi_chet_reaction_search
+      GET /reaction/searchcounts/{search_input}/{search_type}: chemi_chet_reaction_searchcounts
+      GET /reaction/singlereaction: chemi_chet_reaction_singlereaction
+      GET /reaction/table: chemi_chet_reaction_table
+      GET /version: chemi_chet_version
+      POST /chemicals/newchemfile: chemi_chet_chemicals_newchemfile
+      POST /chemicals/newchemical: chemi_chet_chemicals_newchemical
+      POST /chemicals/template_DL: chemi_chet_chemicals_template_dl
+      POST /curators/change-password: chemi_chet_curators_change_password
+      POST /curators/details: chemi_chet_curators_details
+      POST /curators/login: chemi_chet_curators_login
+      POST /curators/logout: chemi_chet_curators_logout
+      POST /reaction/batchsearch: chemi_chet_reaction_batchsearch
+      POST /reaction/editor/check-existing: chemi_chet_reaction_editor_check_existing
+      POST /reaction/editor/check-existing-map: chemi_chet_reaction_editor_check_existing_map
+      POST /reaction/editor/load-map: chemi_chet_reaction_editor_load_map
+      POST /reaction/editor/load-reactions: chemi_chet_reaction_editor_load_reactions
+      POST /reaction/editor/save-scheme: chemi_chet_reaction_editor_save_scheme
+      POST /reaction/map_DL: chemi_chet_reaction_map_dl
+      POST /reaction/mapfix/{map_id}: chemi_chet_reaction_mapfix
+      POST /reaction/newlibrary: chemi_chet_reaction_newlibrary
+      POST /reaction/newreactfile: chemi_chet_reaction_newreactfile
+      POST /reaction/newreaction: chemi_chet_reaction_newreaction
+      POST /reaction/reaction_dl: chemi_chet_reaction_reaction_dl
+      POST /reaction/reactiondelete: chemi_chet_reaction_reactiondelete
+      POST /reaction/template_DL: chemi_chet_reaction_template_dl
+      POST /reaction/visibility: chemi_chet_reaction_visibility
+    operations:
+      # why: inputs keep released argument names/defaults; accepts the released identifier/query input forms; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /chemicals/{chemical_id}/image:
+        inputs:
+          chemical_id:
+            type: any
+          width:
+            default: ~
+            type: any
+          height:
+            default: ~
+            type: any
+          format:
+            default: png
+            type: any
+        normalize_inputs:
+          chemical_id: .ct_single_path_query
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/chet/chemicals/{chemical_id}/image
+            path_params:
+              object:
+                chemical_id:
+                  from:
+                    - params
+                    - chemical_id
+            query:
+              object:
+                width:
+                  from:
+                    - params
+                    - width
+                height:
+                  from:
+                    - params
+                    - height
+                format:
+                  from:
+                    - params
+                    - format
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/pdf, image/png, image/svg+xml
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: chet_image_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Render a chemical structure image
+          lifecycle: experimental
+          return: A magick image for PNG or SVG, or raw bytes for PDF.
+          tags:
+            apiStage: public
+          examples:
+            - chemical_id: 1.0
+          parameters:
+            chemical_id: 'ChET chemical ID. Type: integer.'
+            width: Optional parameter
+            height: Optional parameter
+            format: 'Optional parameter. Options: png, svg, pdf (default: png)'
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/alias:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Fetch aliases for a chemical
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/chemset:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List chemicals by library
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /chemicals/chemtemp/{type}/{value}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Fetch temporary chemical details
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw download bytes according to the response content
+            type; NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; pagination matches the server's paging contract; docs keep the released title, return and examples; request arguments pin the released wire call; hooks/extra arguments come from inst/hook_config.yml
+      GET /chemicals/counts:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_chemi_page
+        pagination:
+          mode: page
+          parameter: page
+          start: 1
+          completed: .ct_chemi_done
+          max_pages: 100
+          metadata: no
+          error_policy: partial
+          warn_errors: no
+          warn_limits: yes
+          on_limit: .ct_keyset_limit_warning
+          stop_on_empty: no
+        docs:
+          title: Chemical counts by library
+          lifecycle: experimental
+          return: A list of records.
+          examples:
+            - page: 1
+              all_pages: no
+              max_pages: 2
+          tags:
+            apiStage: public
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /chemicals/counts
+            path_params:
+              value: []
+            query:
+              object:
+                page:
+                  from:
+                    - params
+                    - page
+                size:
+                  from:
+                    - params
+                    - size
+            body:
+              value: ~
+            response_policy:
+              callback: page_response_policy
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /api/chet
+            auth:
+              value: []
+            headers:
+              value:
+                Accept: application/json
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; pagination matches the server's paging contract; docs keep the released title, return and examples; request arguments pin the released wire call; hooks/extra arguments come from inst/hook_config.yml
+      GET /chemicals/database:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_chemi_page
+        pagination:
+          mode: page
+          parameter: page
+          start: 1
+          completed: .ct_chemi_done
+          max_pages: 100
+          metadata: no
+          error_policy: partial
+          warn_errors: no
+          warn_limits: yes
+          on_limit: .ct_keyset_limit_warning
+          stop_on_empty: no
+        docs:
+          title: Search chemicals
+          lifecycle: experimental
+          return: A list of records.
+          examples:
+            - page: 1
+              all_pages: no
+              max_pages: 2
+          tags:
+            apiStage: public
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /chemicals/database
+            path_params:
+              value: []
+            query:
+              object:
+                page:
+                  from:
+                    - params
+                    - page
+                size:
+                  from:
+                    - params
+                    - size
+                query:
+                  from:
+                    - params
+                    - query
+                exact_search:
+                  from:
+                    - params
+                    - exact_search
+                lib_name:
+                  from:
+                    - params
+                    - lib_name
+                only_in_reactions:
+                  from:
+                    - params
+                    - only_in_reactions
+            body:
+              value: ~
+            response_policy:
+              callback: page_response_policy
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /api/chet
+            auth:
+              value: []
+            headers:
+              value:
+                Accept: application/json
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/database-old:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List all chemicals (legacy)
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/database/stats:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Chemical stats and library names
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/maps:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Map list for a chemical
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/singlechemical:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Fetch a single chemical
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /chemicals/suggest:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Suggest CheT chemicals for look-ahead search
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - query: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; batching keeps the released vector fan-out and error handling; docs keep the released title, return and examples; accepts the released identifier/query input forms
+      GET /chemicals/verify/{dtxsid}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        batch:
+          fan_out: dtxsid
+          on_error: drop
+        docs:
+          title: Verify a DTXSID against DSSTOX
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - dtxsid: DTXSID7020182
+        normalize_inputs:
+          dtxsid: .ct_legacy_query
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /curators/detail-sets:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: List reusable detail sets with their detail definitions
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_chet_curators_libraries_by_lib_id
+      GET /curators/libraries/{lib_id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Return one library and its editable details
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /curators/libraries/detail-options:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: List deduplicated detail definitions available to curator library editor
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /curators/me:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Inspect the current CheT curator session
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw download bytes according to the response content
+            type; NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /curators/units:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: List reusable unit definitions for curator editors
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Read CheT service metadata
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw download bytes according to the response content
+            type; NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; pagination matches the server's paging contract; docs keep the released title, return and examples; request arguments pin the released wire call; hooks/extra arguments come from inst/hook_config.yml
+      GET /reaction/database:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_chemi_page
+        pagination:
+          mode: page
+          parameter: page
+          start: 1
+          completed: .ct_chemi_done
+          max_pages: 100
+          metadata: no
+          error_policy: partial
+          warn_errors: no
+          warn_limits: yes
+          on_limit: .ct_keyset_limit_warning
+          stop_on_empty: no
+        docs:
+          title: Search reactions
+          lifecycle: experimental
+          return: A list of records.
+          examples:
+            - page: 1
+              all_pages: no
+              max_pages: 2
+          tags:
+            apiStage: public
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /reaction/database
+            path_params:
+              value: []
+            query:
+              object:
+                page:
+                  from:
+                    - params
+                    - page
+                size:
+                  from:
+                    - params
+                    - size
+                query:
+                  from:
+                    - params
+                    - query
+                lib_name:
+                  from:
+                    - params
+                    - lib_name
+                reaction_process:
+                  from:
+                    - params
+                    - reaction_process
+                reaction_type:
+                  from:
+                    - params
+                    - reaction_type
+                reaction_scheme:
+                  from:
+                    - params
+                    - reaction_scheme
+                reaction_phase:
+                  from:
+                    - params
+                    - reaction_phase
+                craccm_id:
+                  from:
+                    - params
+                    - craccm_id
+            body:
+              value: ~
+            response_policy:
+              callback: page_response_policy
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /api/chet
+            auth:
+              value: []
+            headers:
+              value:
+                Accept: application/json
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/database_old:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List all reactions (legacy)
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: inputs keep released argument names/defaults; input validation matches the released wrapper; accepts the released identifier/query input forms; batching keeps the released vector fan-out and error handling; request arguments pin the released wire call; request controls keep the released error behaviour; result formatter keeps the released output; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /reaction/database-old/{pagenum}/{searchterm}:
+        inputs:
+          pagenum:
+            type: any
+          searchterm:
+            type: any
+            default: ~
+            required: no
+        validate_inputs: .chet_validate_inputs
+        normalize_inputs:
+          pagenum: .ct_legacy_query
+        batch:
+          fan_out: pagenum
+          on_error:
+            single: stop
+            multiple: drop
+          metadata: no
+          warning: no
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              callback: chet_search_path
+            path_params:
+              object:
+                pagenum:
+                  from:
+                    - params
+                    - pagenum
+            query:
+              value: {}
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: chet_search_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        request_controls:
+          preserve_errors: yes
+        result_formatter: format_legacy_list_result
+        docs:
+          title: Search reactions (legacy)
+          lifecycle: experimental
+          return: Returns a list with result object
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/database/stats:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Reaction stats and filters
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/dbcounts:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Count chemicals and reactions
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/details:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List details for a library
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /reaction/download_DB_backup:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Download DB backup
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_chet_reaction_editor_by_reaction_id
+      GET /reaction/editor/{reaction_id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Fetch curator reaction editor payload
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /reaction/editor/library-details:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Return details attached to a library through detail sets for ChemReg reaction
+            editor
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples
+      GET /reaction/libraries:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: List reaction libraries
+          lifecycle: experimental
+          return: Returns a tibble with results (array of objects)
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/mapid:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List reactions for a map
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; batching keeps the released vector fan-out and error handling; docs keep the released title, return and examples; accepts the released identifier/query input forms
+      GET /reaction/mappositions/{map_id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        batch:
+          fan_out: map_id
+          on_error: drop
+        docs:
+          title: Fetch stored reaction-map node positions
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - map_id: DTXSID7020182
+        normalize_inputs:
+          map_id: .ct_legacy_query
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/maps:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List maps
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/react_maps:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: List maps for a reaction
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/reactionmap:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Build reaction map
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; renamed from chemi_chet_reaction
+      GET /reaction/search:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Search reactions and chemicals
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; input validation matches the released wrapper; accepts the released identifier/query input forms; batching keeps the released vector fan-out and error handling; request arguments pin the released wire call; request controls keep the released error behaviour; result formatter keeps the released output; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /reaction/searchcounts/{search_input}/{search_type}:
+        inputs:
+          search_input:
+            type: any
+          search_type:
+            type: any
+            default: ~
+            required: no
+        validate_inputs: .chet_validate_inputs
+        normalize_inputs:
+          search_input: .ct_legacy_query
+        batch:
+          fan_out: search_input
+          on_error:
+            single: stop
+            multiple: drop
+          metadata: no
+          warning: no
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              callback: chet_search_path
+            path_params:
+              object:
+                search_input:
+                  from:
+                    - params
+                    - search_input
+            query:
+              value: {}
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: chet_search_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        request_controls:
+          preserve_errors: yes
+        result_formatter: format_legacy_list_result
+        docs:
+          title: Count search results
+          lifecycle: experimental
+          return: Returns a list with result object
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/singlereaction:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Fetch a single reaction
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /reaction/table:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Fetch reaction detail table
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Read CheT service version
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw download bytes according to the response content
+            type; NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /chemicals/newchemfile:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Add chemicals from a file
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /chemicals/newchemical:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Add a new chemical
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /chemicals/template_DL:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Download chemical template
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /curators/change-password:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Change the logged-in curator password
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /curators/details:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Create a reusable detail definition and optionally attach it to library default
+            detail sets
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /curators/login:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Login curator user
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /curators/logout:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Logout curator user
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; defers inputs to hooks; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/batchsearch:
+        inputs:
+          dtxsids:
+            type: any
+          search_level:
+            type: any
+        defer_inputs:
+          - dtxsids
+          - search_level
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/chet/reaction/batchsearch
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: chet_batch_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: chet_batch_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Batch search reactions and chemicals
+          lifecycle: experimental
+          return: A list of decoded response records.
+          parameters:
+            dtxsids: Required parameter
+            search_level: 'Required parameter. Options: chemical, reaction'
+          tags:
+            apiStage: public
+          examples:
+            - dtxsids: DTXSID7020182
+              search_level: chemical
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/editor/check-existing:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Check whether a ChemReg canvas connection already exists in CheT
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/editor/check-existing-map:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Check whether a set of reactions already exists as a CheT reaction map
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/editor/load-map:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Load an existing CheT reaction map into the ChemReg reaction editor
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/editor/load-reactions:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Load existing CheT reactions into the ChemReg reaction editor
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/editor/save-scheme:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Save a full ChemReg reaction scheme map to CheT
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/map_DL:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Download map reaction list
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_chet_reaction_mapfix_by_map_id
+      POST /reaction/mapfix/{map_id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Store map element positions
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/newlibrary:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Add a new reaction library
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/newreactfile:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Add reactions from a file
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/newreaction:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Add a new reaction
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/reaction_dl:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Download reaction list
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/reactiondelete:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Delete a reaction
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/template_DL:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Download reaction template
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /reaction/visibility:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Update curator-editable reaction visibility
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public

@@ -1,0 +1,1240 @@
+# chemi_resolver: every operation in schema/chemi_resolver_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_resolver
+schemas:
+  files:
+  - schema/chemi_resolver_prod.json
+groups:
+  chemi_resolver:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/resolver/ccte-list: chemi_resolver_ccte_list
+      GET /api/resolver/ccte-lists: chemi_resolver_ccte_lists
+      GET /api/resolver/classyfire: chemi_resolver_classyfire
+      GET /api/resolver/export: chemi_resolver_export
+      GET /api/resolver/export-section: chemi_resolver_export_section
+      GET /api/resolver/getallannotations: chemi_resolver_getallannotations
+      GET /api/resolver/getannotation: chemi_resolver_getannotation
+      GET /api/resolver/getannotationslist: chemi_resolver_getannotationslist
+      GET /api/resolver/getdatasources: chemi_resolver_getdatasources
+      GET /api/resolver/getintegrityreports: chemi_resolver_getintegrityreports
+      GET /api/resolver/getsubstance: chemi_resolver_getsubstance
+      GET /api/resolver/ghs-list: chemi_resolver_ghs_list
+      GET /api/resolver/ghs-list-count: chemi_resolver_ghs_list_count
+      GET /api/resolver/ghs/classes: chemi_resolver_ghs_classes
+      GET /api/resolver/ghs/hcodes: chemi_resolver_ghs_hcodes
+      GET /api/resolver/ghs/pcodes: chemi_resolver_ghs_pcodes
+      GET /api/resolver/hcodes: chemi_resolver_hcodes
+      GET /api/resolver/links: chemi_resolver_links
+      GET /api/resolver/lookup: chemi_resolver_lookup
+      GET /api/resolver/lookupCASRN: chemi_resolver_lookup_casrn
+      GET /api/resolver/mesh: chemi_resolver_mesh
+      GET /api/resolver/metadata: chemi_resolver_metadata
+      GET /api/resolver/pubchem-section: chemi_resolver_pubchem_section
+      GET /api/resolver/render: chemi_resolver_render
+      GET /api/resolver/safety-flags: chemi_resolver_safety_flags
+      GET /api/resolver/version: chemi_resolver_version
+      POST /api/resolver/export_classyfire: chemi_resolver_export_classyfire
+      POST /api/resolver/export-append: chemi_resolver_export_append
+      POST /api/resolver/export-records: chemi_resolver_export_records
+      POST /api/resolver/exportpubchemlist: chemi_resolver_exportpubchemlist
+      POST /api/resolver/exportsimilaritylist: chemi_resolver_exportsimilaritylist
+      POST /api/resolver/exportsimilaritymap: chemi_resolver_exportsimilaritymap
+      POST /api/resolver/getsimilaritymap: chemi_resolver_getsimilaritymap
+      POST /api/resolver/ghs-list-count: chemi_resolver_ghs_list_count_bulk
+      POST /api/resolver/lookup: chemi_resolver_lookup_bulk
+      POST /api/resolver/orderBySimilarity: chemi_resolver_order_by_similarity
+      POST /api/resolver/pubchem-section: chemi_resolver_pubchem_section_bulk
+      POST /api/resolver/resolve: chemi_resolver_resolve
+      POST /api/resolver/safety-flags: chemi_resolver_safety_flags_bulk
+      POST /api/resolver/universalharvest_cart: chemi_resolver_universalharvest_cart
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/ccte-list:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Ccte List
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - name: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/ccte-lists:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Ccte Lists
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; pagination matches the server's paging contract; docs keep the released title, return and examples; request arguments pin the released wire call; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/classyfire:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_chemi_page
+        pagination:
+          mode: page
+          parameter: page
+          start: 0
+          completed: .ct_chemi_done
+          max_pages: 100
+          metadata: no
+          error_policy: partial
+          warn_errors: no
+          warn_limits: yes
+          on_limit: .ct_keyset_limit_warning
+          stop_on_empty: no
+        docs:
+          title: Resolver Classyfire
+          lifecycle: experimental
+          return: A list of records.
+          examples:
+            - query: DTXSID7020182
+              all_pages: no
+              max_pages: 2
+          tags:
+            apiStage: public
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/resolver/classyfire
+            path_params:
+              value: []
+            query:
+              object:
+                query:
+                  from:
+                    - params
+                    - query
+                idType:
+                  from:
+                    - params
+                    - idType
+                fuzzy:
+                  from:
+                    - params
+                    - fuzzy
+                kingdom:
+                  from:
+                    - params
+                    - kingdom
+                superklass:
+                  from:
+                    - params
+                    - superklass
+                klass:
+                  from:
+                    - params
+                    - klass
+                subklass:
+                  from:
+                    - params
+                    - subklass
+                directParent:
+                  from:
+                    - params
+                    - directParent
+                geometricDescriptor:
+                  from:
+                    - params
+                    - geometricDescriptor
+                alternativeParent:
+                  from:
+                    - params
+                    - alternativeParent
+                substituent:
+                  from:
+                    - params
+                    - substituent
+                page:
+                  from:
+                    - params
+                    - page
+                size:
+                  from:
+                    - params
+                    - size
+            body:
+              value: ~
+            response_policy:
+              callback: page_response_policy
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            headers:
+              value:
+                Accept: application/json
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: export (GET)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/export-section:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: export section (GET)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/getallannotations:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Getallannotations
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/getannotation:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Getannotation
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - name: DTXSID7020182
+              heading: benzene
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/getannotationslist:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Getannotationslist
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - name: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/getdatasources:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Getdatasources
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/getintegrityreports:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: getintegrityreports (GET)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/getsubstance:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Getsubstance
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - name: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/ghs-list:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Ghs List
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - name: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: corrects the schema's request body; server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; request arguments pin the released wire call; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/ghs-list-count:
+        request_body_correction:
+          omit: yes
+          reason: Reviewed bodyless production GET returns the existing count records.
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_ghs_count_response
+        docs:
+          title: Resolver Ghs List Count
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/resolver/ghs-list-count
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              value: .ct_ghs_count_response
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/ghs/classes:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Ghs Classes
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/ghs/hcodes:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Ghs Hcodes
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/ghs/pcodes:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Ghs Pcodes
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/hcodes:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Resolver Hcodes
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/links:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Links
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - query: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/lookup:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_tidy
+        docs:
+          title: Resolver Lookup
+          lifecycle: stable
+          return: Returns a tibble with results
+          examples:
+            - query: DTXSID7020182
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; renamed from chemi_resolver_lookupCASRN
+      GET /api/resolver/lookupCASRN:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver lookupCASRN
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - query: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/resolver/mesh:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Resolver Mesh
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - query: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve resolver metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/pubchem-section:
+        inputs:
+          query:
+            type: character
+          idType:
+            type: character
+            default: AnyId
+          section:
+            type: character
+            default: ~
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/resolver/pubchem-section
+            path_params:
+              value: {}
+            query:
+              object:
+                query:
+                  from:
+                    - params
+                    - query
+                idType:
+                  from:
+                    - params
+                    - idType
+                section:
+                  from:
+                    - params
+                    - section
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: static_collected_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Resolver Pubchem Section
+          lifecycle: experimental
+          return: A list of decoded response records.
+          tags:
+            apiStage: public
+          parameters:
+            query: Required parameter
+            idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+            section: Optional parameter
+          examples:
+            - query: DTXSID7020182
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/render:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: render (GET)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/safety-flags:
+        inputs:
+          query:
+            type: character
+          idType:
+            type: character
+            default: AnyId
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/resolver/safety-flags
+            path_params:
+              value: {}
+            query:
+              object:
+                query:
+                  from:
+                    - params
+                    - query
+                idType:
+                  from:
+                    - params
+                    - idType
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: static_collected_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Resolver Safety Flags
+          lifecycle: experimental
+          return: A list of decoded response records.
+          tags:
+            apiStage: public
+          parameters:
+            query: Required parameter
+            idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+          examples:
+            - query: DTXSID7020182
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/resolver/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve resolver version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/export_classyfire:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: export classyfire (POST)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/export-append:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: export append (POST)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/export-records:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: export records (POST)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/exportpubchemlist:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: exportpubchemlist (POST)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/exportsimilaritylist:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: chemi_resolver_exportsimilaritylist
+          lifecycle: experimental
+          tags:
+            apiStage: public
+          return: Decoded JSON or text, raw binary bytes, or NULL for an empty response.
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/exportsimilaritymap:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: chemi_resolver_exportsimilaritymap
+          lifecycle: experimental
+          tags:
+            apiStage: public
+          return: Decoded JSON or text, raw binary bytes, or NULL for an empty response.
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; hides internal parameters from the public signature; passes released arguments to post-processing; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/getsimilaritymap:
+        inputs:
+          query:
+            type: character
+            required: yes
+          idType:
+            type: character
+            default: AnyId
+          section:
+            type: character
+            default: ~
+          sort:
+            type: logical
+            default: no
+          hclust_method:
+            type: character
+            default: complete
+          format:
+            type: character
+            default:
+              - cluster
+              - long
+              - raw
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/resolver/getsimilaritymap
+            path_params:
+              value: {}
+            query:
+              callback: similaritymap_query
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        private_params:
+          chemicals: ~
+        post_params:
+          - query
+          - idType
+          - section
+          - sort
+          - hclust_method
+          - format
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_resolver_ghs_list_count_post
+      POST /api/resolver/ghs-list-count:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: ghs list count (POST)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; accepts the released identifier/query input forms; docs keep the released title, return and examples; defers inputs to hooks; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/lookup:
+        inputs:
+          ids:
+            type: character
+            required: yes
+          idsType:
+            type: character
+            default: AnyId
+          fuzzy:
+            type: character
+            default: Not
+          mol:
+            type: logical
+            default: no
+          filters:
+            type: character
+            default: ~
+          format:
+            type: character
+            default: ~
+          tidy:
+            type: logical
+            default: yes
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/resolver/lookup
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: lookup_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: lookup_response
+        normalize_inputs:
+          ids: .ct_lookup_ids
+        docs:
+          title: Resolver Lookup (Bulk)
+          lifecycle: stable
+          return: A tibble when tidy is TRUE, otherwise the decoded JSON response.
+          examples:
+            - ids:
+                - DTXSID7020182
+                - 50-00-0
+          parameters:
+            ids: Character vector of chemical identifiers to look up. All identifiers must
+              be of the same type or type should be AnyId.
+            idsType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+            fuzzy: 'Fuzzy lookup setting. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+              CloseSemantic (default: Not)'
+            mol: 'If TRUE, MOL is requested as a result (default: FALSE)'
+            filters: Optional filters object
+            format: 'Optional format specification. Options: UNKNOWN, SDF, SMI, MOL, CSV,
+              TSV, JSON, XLSX, PDF, HTML, XML, DOCX'
+            tidy: Logical; if TRUE (default), return a tibble. If FALSE, return a cleaned
+              list.
+          description: Performs bulk lookup of chemical identifiers via POST endpoint.
+        defer_inputs: tidy
+      # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_resolver_orderBySimilarity
+      POST /api/resolver/orderBySimilarity:
+        inputs:
+          query:
+            type: any
+          idType:
+            type: any
+            default: AnyId
+          fingerprintName:
+            type: any
+            default: ~
+          get_chemicals:
+            type: any
+            default: ~
+          main:
+            type: any
+            default: ~
+          padelCompute2D:
+            type: any
+            default: ~
+          padelCompute3D:
+            type: any
+            default: ~
+          padelComputeFingerprints:
+            type: any
+            default: ~
+          rdkitBits:
+            type: any
+            default: ~
+          rdkitRadius:
+            type: any
+            default: ~
+          rdkitType:
+            type: any
+            default: ~
+          scoreName:
+            type: any
+            default: ~
+          toxprintsProfile:
+            type: any
+            default: ~
+          tverskyI:
+            type: any
+            default: ~
+        private_params:
+          chemicals: ~
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/resolver/orderBySimilarity
+            path_params:
+              value: {}
+            query:
+              object: {}
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi resolver orderBySimilarity
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+              etc.)
+            idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default)'
+            fingerprintName: Optional parameter
+            get_chemicals: Optional parameter
+            main: Reference Chemical object for similarity ordering; supply sid and smiles.
+              The service requires this reference.
+            padelCompute2D: Optional parameter
+            padelCompute3D: Optional parameter
+            padelComputeFingerprints: Optional parameter
+            rdkitBits: Optional parameter
+            rdkitRadius: Optional parameter
+            rdkitType: Optional parameter
+            scoreName: Optional parameter
+            toxprintsProfile: Optional parameter
+            tverskyI: Optional parameter
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+      # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/pubchem-section:
+        inputs:
+          query:
+            type: any
+          idType:
+            type: any
+            default: AnyId
+          section:
+            type: any
+            default: ~
+        private_params:
+          chemicals: ~
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/resolver/pubchem-section
+            path_params:
+              value: {}
+            query:
+              object: {}
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi resolver pubchem section bulk
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+              etc.)
+            idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default)'
+            section: Optional parameter
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/resolve:
+        inputs:
+          mol:
+            type: any
+            default: ~
+            description: Optional parameter
+          queries:
+            type: any
+            default: ~
+            description: Optional parameter
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/resolver/resolve
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: legacy_chemi_facade_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: legacy_chemi_facade_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Resolver Resolve
+          lifecycle: experimental
+          parameters:
+            mol: Optional parameter
+            queries: Optional parameter
+          return: Returns a list with result object
+          examples:
+            - mol: DTXSID1024122
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+      # why: inputs keep released argument names/defaults; defers inputs to hooks; drops schema parameters the released wrapper never exposed; request arguments pin the released wire call; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/safety-flags:
+        inputs:
+          additionalProps:
+            type: any
+            default: ~
+          averageMass:
+            type: any
+            default: ~
+          canonicalSmiles:
+            type: any
+            default: ~
+          casrn:
+            type: any
+            default: ~
+          chemId:
+            type: any
+            default: ~
+          cid:
+            type: any
+            default: ~
+          id:
+            type: any
+            default: ~
+          image:
+            type: any
+            default: ~
+          inchi:
+            type: any
+            default: ~
+          inchiKey:
+            type: any
+            default: ~
+          mol:
+            type: any
+            default: ~
+          molFormula:
+            type: any
+            default: ~
+          monoisotopicMass:
+            type: any
+            default: ~
+          name:
+            type: any
+            default: ~
+          sid:
+            type: any
+            default: ~
+          smiles:
+            type: any
+            default: ~
+          request.filesInfo:
+            type: any
+            default: ~
+        defer_inputs:
+          - additionalProps
+          - averageMass
+          - canonicalSmiles
+          - casrn
+          - chemId
+          - cid
+          - id
+          - image
+          - inchi
+          - inchiKey
+          - mol
+          - molFormula
+          - monoisotopicMass
+          - name
+          - sid
+          - smiles
+          - request.filesInfo
+        exclude_parameters:
+          - files[]
+          - request
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/resolver/safety-flags
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: remaining_facade_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Resolver Safety Flags
+          lifecycle: experimental
+          parameters:
+            additionalProps: Chemical metadata map. Supply a nonempty map together with the
+              chemical fields.
+            averageMass: Optional parameter
+            canonicalSmiles: Optional parameter
+            casrn: Optional parameter
+            chemId: Optional parameter
+            cid: Optional parameter
+            id: Optional parameter
+            image: Optional parameter
+            inchi: Optional parameter
+            inchiKey: Optional parameter
+            mol: Optional parameter
+            molFormula: Optional parameter
+            monoisotopicMass: Optional parameter
+            name: Optional parameter
+            sid: Optional parameter
+            smiles: Optional parameter
+            request.filesInfo: Optional parameter
+          return: Returns a list with result object
+          tags:
+            apiStage: public
+          examples:
+            - additionalProps:
+                source: ComptoxR
+              sid: DTXSID7020182
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/resolver/universalharvest_cart:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: universalharvest cart (POST)
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public

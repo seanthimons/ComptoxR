@@ -1,7 +1,0 @@
-<environment: namespace:specmill>
-[1] TRUE TRUE
-[1] TRUE
-Generating five actual held routes with validation TRUE.
-Validated five wrappers; initial apply/check and all owner hashes passed.
-Wire, validation, native errors and real pool checks passed; checking declarative throttle generation.
-PASS: 210 assertion groups; 65 localhost requests; 5 actual wrappers; both private manifests current.

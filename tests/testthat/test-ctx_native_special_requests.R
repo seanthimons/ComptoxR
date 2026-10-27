@@ -23,7 +23,7 @@ test_that("native CTX lookups preserve query values and paired mass bounds", {
   expect_error(ct_chemical_msready_search_by_mass(200.9, c(201, 202)), "Invalid")
   expect_length(requests, count)
 
-  result <- ct_chemical_detail_search(c("DTXSID7020182", "DTXSID9020112"), "compact")
+  result <- ct_chemical_detail_search_by_dtxsid(c("DTXSID7020182", "DTXSID9020112"), "compact")
   expect_equal(nrow(result), 2)
   expect_true(endsWith(httr2::url_parse(requests[[4]]$url)$path, "/DTXSID7020182"))
   expect_true(endsWith(httr2::url_parse(requests[[5]]$url)$path, "/DTXSID9020112"))

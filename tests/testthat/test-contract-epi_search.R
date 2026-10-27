@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("epi_search completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-pilot-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["epi_search"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /api/search"]]

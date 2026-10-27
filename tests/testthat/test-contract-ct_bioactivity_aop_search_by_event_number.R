@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_aop_search_by_event_number completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_bioactivity_aop_search_by_event_number"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /bioactivity/aop/search/by-event-number/{eventNumber}"]]

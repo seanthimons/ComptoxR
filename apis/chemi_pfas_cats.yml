@@ -1,0 +1,115 @@
+# chemi_pfas_cats: every operation in schema/chemi_pfas_cats_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_pfas_cats
+schemas:
+  files:
+  - schema/chemi_pfas_cats_prod.json
+groups:
+  chemi_pfas_cats:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/pfas_cats: chemi_pfas_cats
+      GET /api/pfas_cats/metadata: chemi_pfas_cats_metadata
+      GET /api/pfas_cats/version: chemi_pfas_cats_version
+      POST /api/pfas_cats: chemi_pfas_cats_bulk
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/pfas_cats:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Generate PFAS categories for one molecule
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - smiles: FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/pfas_cats/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve pfas cats metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/pfas_cats/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve pfas cats version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option
+      POST /api/pfas_cats:
+        inputs:
+          chemicals:
+            type: character
+            default: ~
+            description: Either an array of input chemicals with optional id and required
+              smiles, or an array of SMILES strings for backward compatibility.
+          smiles:
+            type: character
+            default: ~
+            description: Array of SMILES strings, kept for backward compatibility with the
+              previous PFAS Cats POST format.
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/pfas_cats
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: classifier_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: ''
+            auth:
+              value: ~
+            response_policy:
+              value: .ct_prediction
+        docs:
+          title: Generate PFAS categories for multiple molecules
+          lifecycle: experimental
+          parameters:
+            chemicals: Either an array of input chemicals with optional id and required smiles,
+              or an array of SMILES strings for backward compatibility.
+            smiles: Array of SMILES strings, kept for backward compatibility with the previous
+              PFAS Cats POST format.
+          return: Returns a list with result object
+          examples:
+            - chemicals: DTXSID1024122
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl

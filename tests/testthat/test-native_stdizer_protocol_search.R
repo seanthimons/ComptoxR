@@ -1,7 +1,7 @@
 testthat::test_that('protocol search sends reviewed paging fields and preserves native behavior', {
   testthat::skip_if_not_installed('httpuv')
   testthat::skip_if_not_installed('callr')
-  fn <- chemi_stdizer_protocols_by_id_post
+  fn <- chemi_stdizer_protocols_by_id_bulk
   testthat::expect_identical(names(formals(fn)), c('id', 'page', 'size', 'sort', 'body'))
   directory <- tempfile('protocol-search-')
   dir.create(directory)

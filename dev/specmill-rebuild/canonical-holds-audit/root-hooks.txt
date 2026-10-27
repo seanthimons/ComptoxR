@@ -1,1 +1,0 @@
-Hook config validation passed: 272 function(s), 123 hook(s), 34 extra param(s)

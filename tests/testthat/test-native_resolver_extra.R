@@ -6,7 +6,7 @@ resolver_extra_wrappers <- c(
   'chemi_resolver_export_classyfire',
   'chemi_resolver_exportpubchemlist',
   'chemi_resolver_getintegrityreports',
-  'chemi_resolver_ghs_list_count_post',
+  'chemi_resolver_ghs_list_count_bulk',
   'chemi_resolver_render',
   'chemi_resolver_universalharvest_cart')
 

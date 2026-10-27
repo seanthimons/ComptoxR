@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_amos_get_ir_spectrum completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-pilot-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["chemi_amos_get_ir_spectrum"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /api/amos/get_ir_spectrum/{internal_id}"]]

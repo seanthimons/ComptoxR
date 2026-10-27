@@ -1,8 +1,0 @@
-{
-  "passed": 204,
-  "failed": 0,
-  "errors": 0,
-  "warnings": 0,
-  "skipped": 0,
-  "suites": ["test-native_received_http.R", "test-native_small_families.R", "test-specmill_adoption.R"]
-}

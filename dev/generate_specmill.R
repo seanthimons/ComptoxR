@@ -29,34 +29,22 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL, 
   print(plan)
   # An explicitly included or mapped operation that a policy rule drops is a configuration error;
   # other excluded operations (opt-out services) stay quietly excluded.
+  # Each API file's group key is the service id.
   configured <- unlist(lapply(yaml::read_yaml("specmill.yml")$services, function(file) {
-    service <- yaml::read_yaml(file)
-    paste(service$id, union(service$selection$include, names(service$operations)))
+    groups <- yaml::read_yaml(file)$groups
+    lapply(names(groups), function(id) {
+      paste(id, union(unlist(groups[[id]]$selection$include), names(groups[[id]]$operations)))
+    })
   }))
   stopifnot(!any(vapply(plan$excluded, function(x) x$id, "") %in% configured))
   # 'invalid' is allowed only because located errors become per-operation diagnostics that
   # deferral can absorb; document-level and unsupported findings still fail below.
   stopifnot(length(plan$validation) > 0L,
     all(vapply(plan$validation, function(report) report$status %in% c("passed", "invalid"), FALSE)))
-  # Reviewed retained ToxPrint facade, not an assertion about server schema validity.
-  # Any change to source, schema, mapping or diagnostics requires a new review.
-  retained <- plan$retained_diagnostics
-  if (length(retained)) {
-    review <- jsonlite::read_json("dev/specmill-rebuild/wave-toxprint.json")
-    hashes <- review$reviewed_contract_sha256
-    actual <- lapply(names(hashes), function(path) digest::digest(file = path, algo = "sha256"))
-    names(actual) <- names(hashes)
-    normalized <- lapply(retained, function(d) {
-      d$source <- sub(paste0(normalizePath("."), "/"), "", d$source, fixed = TRUE)
-      d
-    })
-    stopifnot(identical(actual, hashes), identical(normalized, review$reviewed_retained_diagnostics))
-    retained <- list()
-  }
   if (
     length(plan$diagnostics) ||
       length(plan$mapping_diagnostics) ||
-      length(retained) ||
+      length(plan$retained_diagnostics) ||
       length(plan$drift)
   ) {
     stop("Pilot contract drift or unsupported operation: review the plan before applying.")

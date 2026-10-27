@@ -1,4 +1,0 @@
-config_version: 1
-package: ComptoxR
-services:
-- dev/specmill-rebuild/remaining-facades/pubchem-held.yml

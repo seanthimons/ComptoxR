@@ -3,7 +3,7 @@ search_services_wrappers <- c(
   'chemi_search_download_mol',
   'chemi_search_download_mol_by_smiles',
   'chemi_search_download_properties',
-  'chemi_search_download_sdf',
+  'chemi_search_download_search_result_as_sdf',
   'chemi_search_render_png',
   'chemi_search_render_svg',
   'chemi_services_export',

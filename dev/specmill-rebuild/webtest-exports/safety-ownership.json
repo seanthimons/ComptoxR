@@ -1,9 +1,0 @@
-{
-  "error": "Conflicting duplicate operation chemi-management GET /api/alerts/render in /home/sxthi/.cache/comptoxr-specmill-finish/proof/schema/chemi-alerts-prod.json, /home/sxthi/.cache/comptoxr-specmill-finish/proof/schema/chemi-safety-prod.json",
-  "same_server": true,
-  "same_parameters": true,
-  "alerts_media": ["image/png", "image/svg+xml"],
-  "safety_media": "*/*",
-  "disposition": "Retain existing chemi_alerts_render; safety source identity held on specmill#61",
-  "source_commit": "b17a0856263e0179a164a9673399f221168cda6d"
-}

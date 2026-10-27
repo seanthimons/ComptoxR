@@ -1,0 +1,278 @@
+# chemi_services: every operation in schema/chemi_services_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_services
+schemas:
+  files:
+  - schema/chemi_services_prod.json
+groups:
+  chemi_services:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/services/cim_component_info: chemi_services_cim_component_info
+      GET /api/services/layout: chemi_services_layout
+      GET /api/services/metadata: chemi_services_metadata
+      GET /api/services/release_notes: chemi_services_release_notes
+      GET /api/services/smirks2rxn: chemi_services_smirks2rxn
+      GET /api/services/version: chemi_services_version
+      POST /api/services/collated_report: chemi_services_collated_report
+      POST /api/services/convert: chemi_services_convert
+      POST /api/services/export: chemi_services_export
+      POST /api/services/export_json_report: chemi_services_export_json_report
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/services/cim_component_info:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Services Cim Component Info
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/services/layout:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Services Layout
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - smiles: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/services/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve services metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/services/release_notes:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Services Release Notes
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/services/smirks2rxn:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Services Smirks2rxn
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - smirks: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/services/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve services version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/services/collated_report:
+        inputs:
+          alertRequest:
+            type: any
+            default: ~
+            description: JSON string for the report field.
+          chemicals:
+            type: any
+            default: ~
+            description: JSON string for the report field.
+          exportAlerts:
+            type: any
+            default: ~
+            description: Logical export flag.
+          exportHazard:
+            type: any
+            default: ~
+            description: Logical export flag.
+          exportHazard2:
+            type: any
+            default: ~
+            description: Logical export flag.
+          exportPrediction:
+            type: any
+            default: ~
+            description: Logical export flag.
+          exportSafety:
+            type: any
+            default: ~
+            description: Logical export flag.
+          hazardRequest:
+            type: any
+            default: ~
+            description: JSON string for the report field.
+          predictionRequest:
+            type: any
+            default: ~
+            description: JSON string for the report field.
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/services/collated_report
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: services_body
+            headers:
+              value:
+                Accept: '*/*'
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Services Collated Report
+          lifecycle: experimental
+          parameters:
+            alertRequest: JSON string for the report field.
+            chemicals: JSON string for the report field.
+            exportAlerts: Logical export flag.
+            exportHazard: Logical export flag.
+            exportHazard2: Logical export flag.
+            exportPrediction: Logical export flag.
+            exportSafety: Logical export flag.
+            hazardRequest: JSON string for the report field.
+            predictionRequest: JSON string for the report field.
+          return: Decoded JSON, text, or raw report bytes according to the response content
+            type.
+          examples: []
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/services/convert:
+        inputs:
+          content:
+            type: any
+            default: ~
+            description: Input structure content.
+          type:
+            type: any
+            default: ~
+            description: Conversion type.
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/services/convert
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: services_body
+            headers:
+              value:
+                Accept: '*/*'
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            request_controls:
+              value:
+                preserve_errors: yes
+            response_policy:
+              value: .ct_services_convert_response
+        docs:
+          title: Services Convert
+          lifecycle: experimental
+          parameters:
+            content: Input structure content.
+            type: Conversion type.
+          return: Converted text.
+          examples: []
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/services/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Chemi services export
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/services/export_json_report:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Chemi services export json report
+          lifecycle: experimental
+          return: Decoded JSON, text, or raw bytes according to the response content type;
+            NULL for an empty response.
+          tags:
+            apiStage: public

@@ -107,36 +107,6 @@ test_that("probe reports empty, non-200, redirected, and thrown results", {
   expect_true(all(errors$error == 'request exploded'))
 })
 
-test_that("probe reports wrappers whose HTTP status cannot be observed", {
-  legacy_wrapper <- function(...) {
-    observe_api_responses(list(
-      httr2::response(
-        status_code = 200L,
-        url = paste0(Sys.getenv("chemi_burl"), "/nested-helper")
-      )
-    ))
-    tibble::tibble(ok = TRUE)
-  }
-  testthat::local_mocked_bindings(
-    chemi_functional_use = legacy_wrapper,
-    chemi_predict = legacy_wrapper,
-    chemi_safety_section = legacy_wrapper,
-    .package = "ComptoxR"
-  )
-
-  results <- lapply(
-    c("chemi_functional_use", "chemi_predict", "chemi_safety_section"),
-    probe_api_function,
-    query = "DTXSID7020182"
-  )
-
-  for (result in results) {
-    expect_false(any(result$valid))
-    expect_true(all(result$error == "HTTP status not observable."))
-    expect_true(all(lengths(result$status_codes) == 0L))
-  }
-})
-
 test_that("probe rejects unsupported and non-wrapper names", {
   expect_error(probe_api_function("chemi_not_real"), "No exported ComptoxR function")
   expect_error(probe_api_function("chemi_server"), "not an API wrapper")

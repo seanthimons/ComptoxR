@@ -1,9 +1,0 @@
-config_version: 1
-package: ComptoxR
-formatter:
-  name: air
-  version: 0.11.0
-services:
-- dev/specmill-rebuild/released-facades-v42/chet.yml
-- dev/specmill-rebuild/released-facades-v42/recursive.yml
-- dev/specmill-rebuild/released-facades-v42/chemi.yml

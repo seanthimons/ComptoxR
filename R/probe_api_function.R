@@ -40,12 +40,6 @@ probe_api_function <- function(function_name, ...) {
   }
 
   wrapper <- getExportedValue("ComptoxR", function_name)
-  legacy_direct <- function_name %in%
-    c(
-      "chemi_functional_use",
-      "chemi_predict",
-      "chemi_safety_section"
-    )
   server_ids <- 1L
   envvar <- if (family == 'chemi') 'chemi_burl' else 'ctx_burl'
   configured_urls <- .endpoint_target(envvar)
@@ -97,11 +91,6 @@ probe_api_function <- function(function_name, ...) {
       if (is.null(call_error) && length(request_errors) && all(status_codes == 200L)) {
         call_error <- paste(unlist(request_errors, use.names = FALSE), collapse = "; ")
       }
-      if (legacy_direct) {
-        observed_urls <<- character()
-        status_codes <<- integer()
-      }
-
       nonempty <- if (is.data.frame(result)) nrow(result) > 0L else length(result) > 0L
       configured_base <- sub("/+$", "", configured_url)
       urls_match <- length(observed_urls) == length(status_codes) &&

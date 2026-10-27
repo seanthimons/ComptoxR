@@ -9,7 +9,7 @@ test_that("native MOL wrappers return captured CTX text without JSON parsing", {
       httr2::response(status_code = response$status,
         headers = list(`Content-Type` = response$media), body = response$body)
     }, .package = "httr2")
-    fn <- if (i == 1L) ct_chemical_file_mol_search else ct_chemical_file_mol_search_by_dtxcid
+    fn <- if (i == 1L) ct_chemical_file_mol_search_by_dtxsid else ct_chemical_file_mol_search_by_dtxcid
     ids <- if (i == 1L) c("DTXSID7020182", "DTXSID7020183") else c("DTXCID505", "DTXCID506")
     expect_identical(fn(ids[[1L]]), list(rawToChar(response$body)))
     expect_identical(fn(ids), rep(list(rawToChar(response$body)), 2L))

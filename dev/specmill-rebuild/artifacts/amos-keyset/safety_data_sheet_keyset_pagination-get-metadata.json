@@ -1,7 +1,0 @@
-{
-  "operation": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
-  "status": 200,
-  "media": "application/json",
-  "size": 414,
-  "date": "2026-10-18 00:26:15 UTC"
-}

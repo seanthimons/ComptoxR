@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_exposure_list_presence_tags completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_exposure_list_presence_tags"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /exposure/list-presence/tags"]]

@@ -7,7 +7,7 @@ test_that("resolver queries fail validation before requesting", {
     },
     .package = "ComptoxR"
   )
-  for (fun in list(chemi_resolver_lookup, chemi_resolver_lookupCASRN)) {
+  for (fun in list(chemi_resolver_lookup, chemi_resolver_lookup_casrn)) {
     expect_error(fun(), "query")
     for (query in list(NULL, character(), "", NA_character_, c("one", "two"))) {
       expect_error(fun(query), "query")

@@ -1,0 +1,700 @@
+# chemi_toxprints: every operation in schema/chemi_toxprints_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_toxprints
+schemas:
+  files:
+  - schema/chemi_toxprints_prod.json
+groups:
+  chemi_toxprints:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/toxprints: chemi_toxprints
+      GET /api/toxprints/assays: chemi_toxprints_assays
+      GET /api/toxprints/assays/{name}: chemi_toxprints_assays_by_name  # why: path name collides with a sibling route; disambiguated by its path parameter
+      GET /api/toxprints/assays/check: chemi_toxprints_assays_check
+      GET /api/toxprints/calculate: chemi_toxprints_calculate
+      GET /api/toxprints/download: chemi_toxprints_download
+      GET /api/toxprints/enrichments: chemi_toxprints_enrichments
+      GET /api/toxprints/global_assays: chemi_toxprints_global_assays
+      GET /api/toxprints/global_toxprints: chemi_toxprints_global_toxprints
+      GET /api/toxprints/metadata: chemi_toxprints_metadata
+      GET /api/toxprints/render: chemi_toxprints_render
+      GET /api/toxprints/toxprints: chemi_toxprints_toxprints
+      GET /api/toxprints/version: chemi_toxprints_version
+      POST /api/toxprints: chemi_toxprints_bulk
+      POST /api/toxprints/assays: chemi_toxprints_assays_bulk
+      POST /api/toxprints/calculate: chemi_toxprints_calculate_bulk
+      POST /api/toxprints/chemicals_categories: chemi_toxprints_chemicals_categories
+      POST /api/toxprints/export: chemi_toxprints_export
+      POST /api/toxprints/export_global: chemi_toxprints_export_global
+      POST /api/toxprints/toxprints_categories: chemi_toxprints_toxprints_categories
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints
+          lifecycle: experimental
+          return: A list containing the API response envelope with service metadata, chemicals
+            and optional descriptor headers.
+          description: Calculates ToxPrint descriptors for one structure and preserves the
+            API response envelope. Use chemi_toxprints_bulk for a row-per-chemical table.
+          parameters:
+            smiles: One SMILES string. DTXSID acceptance depends on the service deployment.
+            headers: Include descriptor names in the response; defaults to FALSE.
+            profile: Optional profile name; NULL uses the service default.
+          examples:
+            - smiles: CCO
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints/assays:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints Assays
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; batching keeps the released vector fan-out and error handling; docs keep the released title, return and examples; accepts the released identifier/query input forms
+      GET /api/toxprints/assays/{name}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        batch:
+          fan_out: name
+          on_error: drop
+        docs:
+          title: Toxprints Assays
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - name: DTXSID7020182
+        normalize_inputs:
+          name: .ct_legacy_query
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/toxprints/assays/check:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints Assays Check
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - name: DTXSID7020182
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints/calculate:
+        inputs:
+          smiles:
+            type: character
+          labels:
+            type: logical
+            default: no
+          profile:
+            type: character
+            default: ~
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/toxprints/calculate
+            path_params:
+              value: {}
+            query:
+              object:
+                smiles:
+                  from:
+                    - params
+                    - smiles
+                labels:
+                  from:
+                    - params
+                    - labels
+                profile:
+                  from:
+                    - params
+                    - profile
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: static_collected_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Toxprints Calculate
+          lifecycle: experimental
+          return: A list of decoded response records.
+          tags:
+            apiStage: public
+          parameters:
+            smiles: Required parameter
+            labels: 'Optional parameter (default: FALSE)'
+            profile: Optional parameter
+          examples:
+            - smiles: CCCC
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints/download:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Download a ToxPrints file
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/toxprints/enrichments:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints Enrichments
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/toxprints/global_assays:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints Global Assays
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/toxprints/global_toxprints:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints Global Toxprints
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve toxprints metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints/render:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Render a ToxPrints chemical
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/toxprints/toxprints:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Toxprints Toxprints
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - {}
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/toxprints/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve toxprints version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; accepts the released identifier/query input forms; batching keeps the released vector fan-out and error handling; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints:
+        inputs:
+          query:
+            type: any
+            required: yes
+            description: Character vector of strings to send in request body
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/toxprints
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: toxprints_canonical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: toxprints_bulk_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Toxprints
+          lifecycle: experimental
+          parameters:
+            query: Character vector of chemical structure strings. SMILES work in production
+              and development; DTXSID support depends on the service deployment.
+          return: One row per chemical, with descriptor vectors and service metadata retained
+            in descriptors and info list-columns.
+          examples:
+            - query: CCO
+          tags:
+            apiStage: public
+          description: Calculates ToxPrint descriptors using the Cheminformatics service without
+            CTX authentication. Inputs are cleaned and split by batch_limit, default 100.
+        normalize_inputs:
+          query: .ct_legacy_query
+        batch:
+          input: query
+          split: yes
+          max_items:
+            env: batch_limit
+            default: 100
+          on_error:
+            single: stop
+            multiple: drop
+          metadata: no
+          warning: no
+          empty: .ct_empty_table
+        request_controls:
+          preserve_errors: yes
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints/assays:
+        inputs:
+          acl:
+            type: any
+            default: ~
+            description: Optional parameter
+          actives:
+            type: any
+            default: ~
+            description: Optional parameter
+          category:
+            type: any
+            default: ~
+            description: Optional parameter
+          chemicals:
+            type: any
+            default: ~
+            description: Optional parameter
+          id:
+            type: any
+            default: ~
+            description: Optional parameter
+          labels:
+            type: any
+            default: ~
+            description: Optional parameter
+          metrics:
+            type: any
+            default: ~
+            description: Optional parameter
+          name:
+            type: any
+            default: ~
+            description: Optional parameter
+          options:
+            type: any
+            default: ~
+            description: Optional parameter
+          total:
+            type: any
+            default: ~
+            description: Optional parameter
+        post_on_skip: no
+        post_state: parameters
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/toxprints/assays
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: legacy_chemi_facade_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: legacy_chemi_facade_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Toxprints Assays
+          lifecycle: experimental
+          parameters:
+            acl: Optional parameter
+            actives: Optional parameter
+            category: Optional parameter
+            chemicals: Optional parameter
+            id: Optional parameter
+            labels: Optional parameter
+            metrics: Optional parameter
+            name: Optional parameter
+            options: Optional parameter
+            total: Optional parameter
+          return: Returns a list with result object
+          examples:
+            - acl: DTXSID1024122
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+      # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; drops schema parameters the released wrapper never exposed; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints/calculate:
+        inputs:
+          query:
+            type: any
+          idType:
+            type: any
+            default: AnyId
+          labels:
+            type: any
+            default: ~
+          options:
+            type: any
+            default: ~
+          request.filesInfo:
+            type: any
+            default: ~
+          request.labels:
+            type: any
+            default: ~
+          request.options.OR:
+            type: any
+            default: ~
+          request.options.PV1:
+            type: any
+            default: ~
+          request.options.TP:
+            type: any
+            default: ~
+          request.options.or:
+            type: any
+            default: ~
+          request.options.profile:
+            type: any
+            default: ~
+          request.options.pv1:
+            type: any
+            default: ~
+          request.options.tp:
+            type: any
+            default: ~
+          request.resolve:
+            type: any
+            default: ~
+        private_params:
+          chemicals: ~
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/toxprints/calculate
+            path_params:
+              value: {}
+            query:
+              object:
+                request.filesInfo:
+                  from:
+                    - params
+                    - request.filesInfo
+                request.labels:
+                  from:
+                    - params
+                    - request.labels
+                request.options.OR:
+                  from:
+                    - params
+                    - request.options.OR
+                request.options.PV1:
+                  from:
+                    - params
+                    - request.options.PV1
+                request.options.TP:
+                  from:
+                    - params
+                    - request.options.TP
+                request.options.or:
+                  from:
+                    - params
+                    - request.options.or
+                request.options.profile:
+                  from:
+                    - params
+                    - request.options.profile
+                request.options.pv1:
+                  from:
+                    - params
+                    - request.options.pv1
+                request.options.tp:
+                  from:
+                    - params
+                    - request.options.tp
+                request.resolve:
+                  from:
+                    - params
+                    - request.resolve
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi toxprints calculate bulk
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+              etc.)
+            idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default)'
+            labels: Optional parameter
+            options: Optional parameter
+            request.filesInfo: Optional parameter
+            request.labels: Optional parameter
+            request.options.OR: Optional parameter
+            request.options.PV1: Optional parameter
+            request.options.TP: Optional parameter
+            request.options.or: Optional parameter
+            request.options.profile: Optional parameter
+            request.options.pv1: Optional parameter
+            request.options.tp: Optional parameter
+            request.resolve: Optional parameter
+          tags:
+            apiStage: public
+        exclude_parameters:
+          - files[]
+          - request
+        request_controls:
+          preserve_errors: yes
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints/chemicals_categories:
+        inputs:
+          chemicals:
+            type: any
+            default: ~
+            description: Optional parameter
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/toxprints/chemicals_categories
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: legacy_chemi_facade_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: legacy_chemi_facade_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Toxprints Chemicals Categories
+          lifecycle: experimental
+          parameters:
+            chemicals: Optional parameter
+          return: Returns a list with result object
+          tags:
+            apiStage: public
+          examples:
+            - chemicals: DTXSID1024122
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Export a ToxPrints assay
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints/export_global:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Export global ToxPrints assays
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/toxprints/toxprints_categories:
+        inputs:
+          chemical:
+            type: any
+            default: ~
+            description: Optional parameter
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/toxprints/toxprints_categories
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: legacy_chemi_facade_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: legacy_chemi_facade_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Toxprints Toxprints Categories
+          lifecycle: experimental
+          parameters:
+            chemical: Optional parameter
+          return: Returns a list with result object
+          tags:
+            apiStage: public
+          examples:
+            - chemical: DTXSID1024122
+        request_controls:
+          preserve_errors: yes

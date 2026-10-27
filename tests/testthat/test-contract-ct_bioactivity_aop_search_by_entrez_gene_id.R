@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_aop_search_by_entrez_gene_id completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_bioactivity_aop_search_by_entrez_gene_id"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}"]]

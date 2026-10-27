@@ -19,3 +19,6 @@ Decoded JSON or text, raw binary bytes, or NULL for an empty response.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}

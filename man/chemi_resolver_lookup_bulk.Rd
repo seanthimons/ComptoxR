@@ -30,7 +30,7 @@ chemi_resolver_lookup_bulk(
 \item{tidy}{Logical; if TRUE (default), return a tibble. If FALSE, return a cleaned list.}
 }
 \value{
-Returns a list with result object
+A tibble when tidy is TRUE, otherwise the decoded JSON response.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

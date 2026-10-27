@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_exposure_mmdb_aggregate_by_medium completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_exposure_mmdb_aggregate_by_medium"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /exposure/mmdb/aggregate/by-medium"]]

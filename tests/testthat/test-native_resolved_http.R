@@ -57,7 +57,7 @@ test_that('resolved native wrappers preserve actual HTTP response conditions', {
     chemi_hazard_bulk = list('one', format = 'raw'),
     chemi_alerts = list('one'),
     chemi_resolver_getsimilaritymap = list('one', format = 'raw'),
-    chemi_resolver_orderBySimilarity = list('one'),
+    chemi_resolver_order_by_similarity = list('one'),
     chemi_resolver_pubchem_section_bulk = list('one'),
     chemi_stdizer_chemicals = list('one'),
     chemi_toxprints_calculate_bulk = list('one')
@@ -71,7 +71,7 @@ test_that('resolved native wrappers preserve actual HTTP response conditions', {
     if (name == 'chemi_stdizer_chemicals') {
       args$options <- list(workflow = 'ms-ready')
     }
-    if (name == 'chemi_resolver_orderBySimilarity') {
+    if (name == 'chemi_resolver_order_by_similarity') {
       args$main <- list(sid = 'REF', smiles = 'CC')
     }
     expect_identical(do.call(get(name, asNamespace('ComptoxR')), args), list(list(value = 1L)))
@@ -92,7 +92,7 @@ test_that('resolved native wrappers preserve actual HTTP response conditions', {
     if (name == 'chemi_stdizer_chemicals') {
       expect_identical(body$options$workflow, 'ms-ready')
     }
-    if (name == 'chemi_resolver_orderBySimilarity') {
+    if (name == 'chemi_resolver_order_by_similarity') {
       expect_identical(body$main$sid, 'REF')
     }
     if (name == 'chemi_toxprints_calculate_bulk') expect_identical(body$options, structure(list(), names = character()))

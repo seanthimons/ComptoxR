@@ -26,12 +26,12 @@ check_specmill_fixes <- function(live = FALSE) {
   )
   out <- httr2::with_mocked_responses(
     function(req) json(rows[[basename(req$url)]]),
-    ns$ct_hazard_toxref_effects_search(c("DTXSID1", "DTXSID2"))
+    ns$ct_hazard_toxref_effects_search_by_dtxsid(c("DTXSID1", "DTXSID2"))
   )
   check(100, "fan-out keeps character values", identical(out$sex, c("F", "M")), paste(out$sex, collapse = ","))
   check(100, "fan-out keeps numeric values", is.numeric(out$doseLevel), class(out$doseLevel)[1])
   if (live) {
-    live_out <- ns$ct_hazard_toxref_effects_search(c("DTXSID1037806", "DTXSID7020182"))
+    live_out <- ns$ct_hazard_toxref_effects_search_by_dtxsid(c("DTXSID1037806", "DTXSID7020182"))
     counts <- table(live_out$sex)
     expected <- c(F = 70L, M = 25L, MF = 135L)
     check(100, "live toxref sex counts", identical(as.integer(counts[names(expected)]), unname(expected)) && !"FALSE" %in% live_out$sex,
@@ -84,7 +84,8 @@ check_specmill_fixes <- function(live = FALSE) {
   services <- lapply(Sys.glob("apis/*.yml"), yaml::read_yaml)
   report <- utils::capture.output(cov <- source("dev/update_coverage.R")$value)
   for (group in names(policy$groups)) {
-    members <- Filter(function(s) grepl(policy$groups[[group]]$services, s$id), services)
+    # Each API file's group keys are its service ids.
+    members <- Filter(function(s) any(grepl(policy$groups[[group]]$services, names(s$groups))), services)
     files <- unique(unlist(lapply(members, function(s) s$schemas$files)))
     ops <- unique(unlist(lapply(files, function(f) {
       paths <- jsonlite::read_json(f)$paths

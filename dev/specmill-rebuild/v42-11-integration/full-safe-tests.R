@@ -1,6 +1,0 @@
-r <- devtools::test('.',reporter='summary',stop_on_failure=FALSE)
-saveRDS(r,'/tmp/specmill-finish/full-v42-11-final-tests.rds')
-f <- as.data.frame(r)
-write.csv(f[,intersect(c('file','context','test','nb','failed','skipped','error','warning','passed','real'),names(f))],'/tmp/specmill-finish/full-v42-11-final-tests.csv',row.names=FALSE)
-print(colSums(f[,c('failed','error','warning','passed','skipped')]))
-stopifnot(sum(f$failed)==0L,!any(f$error),sum(f$warning)==0L)

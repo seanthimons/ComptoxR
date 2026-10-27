@@ -1,7 +1,0 @@
-{
-  "operation": "POST /api/resolver/lookup",
-  "url": "https://hcd.rtpnc.epa.gov/api/resolver/lookup",
-  "status": 200,
-  "media": "application/json",
-  "date": "2026-10-17 23:57:27 UTC"
-}

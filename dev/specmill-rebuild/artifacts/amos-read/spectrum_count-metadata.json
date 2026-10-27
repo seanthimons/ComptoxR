@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/spectrum_count_for_methodology/",
-  "definition": "spectrum_count_for_methodology_request",
-  "status": 200,
-  "media": "application/json",
-  "size": 13,
-  "date": "2026-10-18 00:10:07 UTC"
-}

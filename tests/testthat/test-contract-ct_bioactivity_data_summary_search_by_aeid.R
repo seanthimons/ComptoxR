@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_data_summary_search_by_aeid completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_bioactivity_data_summary_search_by_aeid"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /bioactivity/data/summary/search/by-aeid/{aeid}"]]

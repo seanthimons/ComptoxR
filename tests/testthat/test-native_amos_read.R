@@ -2,12 +2,12 @@
 # chemi_amos_spectral_entropy
 # chemi_amos_entropy_similarity
 # chemi_amos_spectrum_count_for_methodology
-# chemi_amos_mass_range
+# chemi_amos_mass_range_search
 # chemi_amos_next_level_classification
 # chemi_amos_substances_for_classification
-# chemi_amos_all_similarities
-# chemi_amos_max_similarity
-# chemi_amos_mass_spectrum_similarity
+# chemi_amos_all_similarities_by_dtxsid
+# chemi_amos_max_similarity_by_dtxsid
+# chemi_amos_mass_spectrum_similarity_search
 test_that("reviewed AMOS JSON operations preserve captured requests and results", {
   requests <- list()
   bytes <- raw()
@@ -59,7 +59,7 @@ test_that("AMOS read HTTP, credential and transport errors remain hard", {
     "HTTP request failed before a response")
 })
 
-# chemi_amos_record_counts
+# chemi_amos_record_counts_by_dtxsid
 
 # chemi_amos_mass_spectra_for_substances
 
@@ -72,7 +72,7 @@ test_that("AMOS identifier reads clean inputs before body encoding", {
     httr2::response(status_code = 200L,
       headers = list(`Content-Type` = "application/json"), body = charToRaw('{}'))
   }, .package = "httr2")
-  for (fn in list(chemi_amos_record_counts, chemi_amos_mass_spectra_for_substances,
+  for (fn in list(chemi_amos_record_counts_by_dtxsid, chemi_amos_mass_spectra_for_substances,
     chemi_amos_count_substances_in_ids)) {
     suppressMessages(fn(c("one", "one", "", NA_character_, "café")))
     request <- tail(requests, 1L)[[1L]]

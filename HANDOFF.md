@@ -2,8 +2,9 @@
 
 ## Resume the full API migration, 18 October 2026
 
-Read [the current Specmill migration handoff](dev/specmill-rebuild/HANDOFF.md)
-before continuing API generation, retained-wrapper adoption, or contract review.
+Each `apis/<schema>.yml` file records why its operations are named, changed or
+hooked; [dev/specmill-333/SELECTION.md](dev/specmill-333/SELECTION.md) explains
+the layout. Read both before continuing API generation or contract review.
 The implementation checkpoint is local commit `3829b114` on
 `feat/specmill-migration-pilot`, pinned to released Specmill v0.1.38.
 Full API migration remains incomplete; ComptoxR is local-only with no push.

@@ -1,8 +1,0 @@
-work <- path.expand('~/.cache/comptoxr-specmill-finish/protocol-get-candidate')
-env <- new.env(parent=globalenv())
-for(file in c('api_validation.R','z_specmill_request.R','service_endpoints.R','api_auth.R','stdizer_protocol_policy.R','chemi_stdizer_protocols_by_id_get.R'))sys.source(file.path(work,'R',file),env)
-result <- testthat::test_file(file.path(work,'test-get.R'),env=env,reporter='summary')
-saveRDS(result,file.path(work,'evidence/tests.rds'))
-frame <- as.data.frame(result);summary<-colSums(frame[,c('passed','failed','error','warning','skipped')]);print(summary)
-jsonlite::write_json(as.list(summary),file.path(work,'evidence/tests.json'),auto_unbox=TRUE,pretty=TRUE)
-stopifnot(summary[['passed']]>150,all(summary[c('failed','error','warning','skipped')]==0L))

@@ -120,9 +120,6 @@ test_that("small numeric and message formatting helpers keep their contracts", {
 })
 
 test_that("API helper exports validate before external work", {
-  expect_error(chemi_functional_use(numeric()), "non-empty character vector")
-  expect_error(chemi_predict(NULL), "Request missing")
-  expect_error(chemi_safety_section(query = "DTXSID7020182"), "Missing section")
   expect_error(util_classyfire(), "query")
 })
 

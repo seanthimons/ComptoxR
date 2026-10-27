@@ -4,8 +4,115 @@
 
 ## Unreleased
 
+- **Breaking:** API configuration is now one `apis/<schema>.yml` file per schema, with a
+  `# why:` note on every operation that is renamed, changed or hooked. Wrappers follow
+  path naming (`naming: path`; POST siblings of a GET get `_bulk`) and are written one
+  per file. Behaviour is unchanged, but the wrappers below are renamed. `chemi_classyfire()`
+  keeps its name. Moving owned wrappers between files is blocked by
+  [specmill#213](https://github.com/seanthimons/specmill/issues/213), so the old
+  generated files were purged with Specmill's `prune = "all"` and regenerated.
+
+  | Old name | New name |
+  | --- | --- |
+  | `chemi_amos()` | `chemi_amos_search()` |
+  | `chemi_amos_all_similarities()` | `chemi_amos_all_similarities_by_dtxsid()` |
+  | `chemi_amos_by_text()` | `chemi_amos_search_by_text()` |
+  | `chemi_amos_database()` | `chemi_amos_database_summary()` |
+  | `chemi_amos_formula()` | `chemi_amos_formula_search()` |
+  | `chemi_amos_functional_class()` | `chemi_amos_functional_class_search()` |
+  | `chemi_amos_get_substances_for_term()` | `chemi_amos_get_substances_for_search_term()` |
+  | `chemi_amos_inchikey_first_block()` | `chemi_amos_inchikey_first_block_search()` |
+  | `chemi_amos_mass_range()` | `chemi_amos_mass_range_search()` |
+  | `chemi_amos_mass_spectrum_similarity()` | `chemi_amos_mass_spectrum_similarity_search()` |
+  | `chemi_amos_max_similarity()` | `chemi_amos_max_similarity_by_dtxsid()` |
+  | `chemi_amos_record_counts()` | `chemi_amos_record_counts_by_dtxsid()` |
+  | `chemi_amos_record_id()` | `chemi_amos_record_id_search()` |
+  | `chemi_amos_substring()` | `chemi_amos_substring_search()` |
+  | `chemi_chet_curators_libraries_by_lib_id()` | `chemi_chet_curators_libraries()` |
+  | `chemi_chet_reaction()` | `chemi_chet_reaction_search()` |
+  | `chemi_chet_reaction_editor_by_reaction_id()` | `chemi_chet_reaction_editor()` |
+  | `chemi_chet_reaction_mapfix_by_map_id()` | `chemi_chet_reaction_mapfix()` |
+  | `chemi_hazard_reports_export_by_id()` | `chemi_hazard_reports_export()` |
+  | `chemi_resolver_ghs_list_count_post()` | `chemi_resolver_ghs_list_count_bulk()` |
+  | `chemi_resolver_lookupCASRN()` | `chemi_resolver_lookup_casrn()` |
+  | `chemi_resolver_orderBySimilarity()` | `chemi_resolver_order_by_similarity()` |
+  | `chemi_search_download_sdf()` | `chemi_search_download_search_result_as_sdf()` |
+  | `chemi_stdizer_protocol_export_post()` | `chemi_stdizer_protocol_export()` |
+  | `chemi_stdizer_protocols_by_id_changes()` | `chemi_stdizer_protocols_changes()` |
+  | `chemi_stdizer_protocols_by_id_export_post()` | `chemi_stdizer_protocols_export()` |
+  | `chemi_stdizer_protocols_by_id_get()` | `chemi_stdizer_protocols_by_id()` |
+  | `chemi_stdizer_protocols_by_id_issues()` | `chemi_stdizer_protocols_issues()` |
+  | `chemi_stdizer_protocols_by_id_post()` | `chemi_stdizer_protocols_by_id_bulk()` |
+  | `ct_bioactivity_analyticalqc_search()` | `ct_bioactivity_analyticalqc_search_by_dtxsid()` |
+  | `ct_bioactivity_data_aed_search()` | `ct_bioactivity_data_aed_search_by_dtxsid()` |
+  | `ct_bioactivity_data_aed_search_bulk()` | `ct_bioactivity_data_aed_search_by_dtxsid_bulk()` |
+  | `ct_bioactivity_data_search_bulk()` | `ct_bioactivity_data_search_by_dtxsid_bulk()` |
+  | `ct_bioactivity_data_search_by_tissue()` | `ct_bioactivity_data_summary_search_by_tissue()` |
+  | `ct_chemical_detail_search()` | `ct_chemical_detail_search_by_dtxsid()` |
+  | `ct_chemical_detail_search_bulk()` | `ct_chemical_detail_search_by_dtxsid_bulk()` |
+  | `ct_chemical_extra_data_search()` | `ct_chemical_extra_data_search_by_dtxsid()` |
+  | `ct_chemical_extra_data_search_bulk()` | `ct_chemical_extra_data_search_by_dtxsid_bulk()` |
+  | `ct_chemical_fate_experimental_search()` | `ct_chemical_fate_summary_experimental_search()` |
+  | `ct_chemical_fate_predicted_search()` | `ct_chemical_fate_summary_predicted_search()` |
+  | `ct_chemical_fate_search_bulk()` | `ct_chemical_fate_search_by_dtxsid_bulk()` |
+  | `ct_chemical_file_image_search()` | `ct_chemical_file_image_search_by_dtxsid()` |
+  | `ct_chemical_file_mol_search()` | `ct_chemical_file_mol_search_by_dtxsid()` |
+  | `ct_chemical_list_search()` | `ct_chemical_list_search_by_dtxsid()` |
+  | `ct_chemical_property_experimental_search_bulk()` | `ct_chemical_property_experimental_search_by_dtxsid_bulk()` |
+  | `ct_chemical_property_predicted_search_bulk()` | `ct_chemical_property_predicted_search_by_dtxsid_bulk()` |
+  | `ct_chemical_synonym_search()` | `ct_chemical_synonym_search_by_dtxsid()` |
+  | `ct_chemical_synonym_search_bulk()` | `ct_chemical_synonym_search_by_dtxsid_bulk()` |
+  | `ct_exposure_ccd_chem_weight_fractions_search()` | `ct_exposure_ccd_chem_weight_fractions_search_by_dtxsid()` |
+  | `ct_exposure_ccd_functional_use_search()` | `ct_exposure_ccd_functional_use_search_by_dtxsid()` |
+  | `ct_exposure_ccd_keywords_search()` | `ct_exposure_ccd_keywords_search_by_dtxsid()` |
+  | `ct_exposure_ccd_monitoring_data_search()` | `ct_exposure_ccd_monitoring_data_search_by_dtxsid()` |
+  | `ct_exposure_ccd_production_volume_search()` | `ct_exposure_ccd_production_volume_search_by_dtxsid()` |
+  | `ct_exposure_ccd_puc_search()` | `ct_exposure_ccd_puc_search_by_dtxsid()` |
+  | `ct_exposure_functional_use_probability_search()` | `ct_exposure_functional_use_probability_search_by_dtxsid()` |
+  | `ct_exposure_functional_use_search()` | `ct_exposure_functional_use_search_by_dtxsid()` |
+  | `ct_exposure_functional_use_search_bulk()` | `ct_exposure_functional_use_search_by_dtxsid_bulk()` |
+  | `ct_exposure_httk_search()` | `ct_exposure_httk_search_by_dtxsid()` |
+  | `ct_exposure_httk_search_bulk()` | `ct_exposure_httk_search_by_dtxsid_bulk()` |
+  | `ct_exposure_list_presence_search()` | `ct_exposure_list_presence_search_by_dtxsid()` |
+  | `ct_exposure_list_presence_search_bulk()` | `ct_exposure_list_presence_search_by_dtxsid_bulk()` |
+  | `ct_exposure_mmdb_aggregate()` | `ct_exposure_mmdb_aggregate_by_dtxsid()` |
+  | `ct_exposure_mmdb_single_sample()` | `ct_exposure_mmdb_single_sample_by_dtxsid()` |
+  | `ct_exposure_product_data_search()` | `ct_exposure_product_data_search_by_dtxsid()` |
+  | `ct_exposure_product_data_search_bulk()` | `ct_exposure_product_data_search_by_dtxsid_bulk()` |
+  | `ct_exposure_seem_demographic_search()` | `ct_exposure_seem_demographic_search_by_dtxsid()` |
+  | `ct_exposure_seem_demographic_search_bulk()` | `ct_exposure_seem_demographic_search_by_dtxsid_bulk()` |
+  | `ct_exposure_seem_general_search()` | `ct_exposure_seem_general_search_by_dtxsid()` |
+  | `ct_exposure_seem_general_search_bulk()` | `ct_exposure_seem_general_search_by_dtxsid_bulk()` |
+  | `ct_hazard_adme_ivive_search()` | `ct_hazard_adme_ivive_search_by_dtxsid()` |
+  | `ct_hazard_cancer_search()` | `ct_hazard_cancer_summary_search_by_dtxsid()` |
+  | `ct_hazard_cancer_search_bulk()` | `ct_hazard_cancer_summary_search_by_dtxsid_bulk()` |
+  | `ct_hazard_genetox_details_search()` | `ct_hazard_genetox_details_search_by_dtxsid()` |
+  | `ct_hazard_genetox_details_search_bulk()` | `ct_hazard_genetox_details_search_by_dtxsid_bulk()` |
+  | `ct_hazard_genetox_search()` | `ct_hazard_genetox_summary_search_by_dtxsid()` |
+  | `ct_hazard_genetox_search_bulk()` | `ct_hazard_genetox_summary_search_by_dtxsid_bulk()` |
+  | `ct_hazard_hawc_search()` | `ct_hazard_hawc_search_by_dtxsid()` |
+  | `ct_hazard_iris_search()` | `ct_hazard_iris_search_by_dtxsid()` |
+  | `ct_hazard_pprtv_search()` | `ct_hazard_pprtv_search_by_dtxsid()` |
+  | `ct_hazard_skin_eye_search()` | `ct_hazard_skin_eye_search_by_dtxsid()` |
+  | `ct_hazard_skin_eye_search_bulk()` | `ct_hazard_skin_eye_search_by_dtxsid_bulk()` |
+  | `ct_hazard_toxref_data_search()` | `ct_hazard_toxref_data_search_by_dtxsid()` |
+  | `ct_hazard_toxref_effects_search()` | `ct_hazard_toxref_effects_search_by_dtxsid()` |
+  | `ct_hazard_toxref_observations_search()` | `ct_hazard_toxref_observations_search_by_dtxsid()` |
+  | `ct_hazard_toxref_search()` | `ct_hazard_toxref_summary_search_by_dtxsid()` |
+  | `ct_hazard_toxref_search_by_study_id()` | `ct_hazard_toxref_summary_search_by_study_id()` |
+  | `ct_hazard_toxref_search_by_study_type()` | `ct_hazard_toxref_summary_search_by_study_type()` |
+  | `ct_hazard_toxval_search()` | `ct_hazard_toxval_search_by_dtxsid()` |
+  | `ct_hazard_toxval_search_bulk()` | `ct_hazard_toxval_search_by_dtxsid_bulk()` |
+  | `ct_hazard_toxval_supercategory_search()` | `ct_hazard_toxval_supercategory_search_by_dtxsid()` |
+  | `epi_api()` | `epi()` |
+
+- **Breaking:** remove three hand-written duplicates of generated wrappers:
+  `chemi_functional_use()` (use `chemi_amos_functional_uses_for_dtxsid()`),
+  `chemi_predict()` (use `chemi_webtest_predict_bulk()`) and
+  `chemi_safety_section()` (use `chemi_resolver_pubchem_section()`).
+
 - **Breaking:** stop wrapping eight write, export or duplicated endpoints and remove
-  `chemi_chet_chemicals_chemical_dl_post()`, `chemi_chet_curators_libraries()`,
+  `chemi_chet_chemicals_chemical_dl_post()`, `chemi_chet_curators_libraries()` (the name now belongs to the renamed `GET /curators/libraries/{lib_id}` wrapper),
   `chemi_chet_curators_units_create()`, `chemi_chet_reaction_editor_by_reaction_id_create()`,
   `chemi_hazard_reports_create()`, `chemi_resolver_export_post()`,
   `chemi_resolver_export_section_post()` and `chemi_stdizer_protocols_post()`. The routes are

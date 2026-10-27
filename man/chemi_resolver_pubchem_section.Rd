@@ -14,7 +14,7 @@ chemi_resolver_pubchem_section(query, idType = "AnyId", section = NULL)
 \item{section}{Optional parameter}
 }
 \value{
-Returns a tibble with results (array of objects)
+A list of decoded response records.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

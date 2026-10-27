@@ -99,7 +99,7 @@ chemi_resolver_getsimilaritymap:
   post_response:
     - format_similarity_map_result
 
-chemi_resolver_orderBySimilarity:
+chemi_resolver_order_by_similarity:
   bespoke_test: "tests/testthat/test-native_resolved_payloads.R"
   pre_request:
     - resolve_query_to_chemical_records
@@ -656,7 +656,7 @@ chemi_amos_entropy_similarity:
 chemi_amos_spectrum_count_for_methodology:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
-chemi_amos_mass_range:
+chemi_amos_mass_range_search:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
 chemi_amos_next_level_classification:
@@ -665,16 +665,16 @@ chemi_amos_next_level_classification:
 chemi_amos_substances_for_classification:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
-chemi_amos_all_similarities:
+chemi_amos_all_similarities_by_dtxsid:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
-chemi_amos_max_similarity:
+chemi_amos_max_similarity_by_dtxsid:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
-chemi_amos_mass_spectrum_similarity:
+chemi_amos_mass_spectrum_similarity_search:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
-chemi_amos_record_counts:
+chemi_amos_record_counts_by_dtxsid:
   bespoke_test: "tests/testthat/test-native_amos_read.R"
 
 chemi_amos_mass_spectra_for_substances:
@@ -690,7 +690,7 @@ chemi_amos_method_with_spectra:
 chemi_amos_record_ids_for_substance:
   bespoke_test: "tests/testthat/test-native_normalization.R"
 
-ct_chemical_detail_search_bulk:
+ct_chemical_detail_search_by_dtxsid_bulk:
   bespoke_test: "tests/testthat/test-native_normalization.R"
 
 ct_chemical_detail_search_by_dtxcid_bulk:
@@ -822,7 +822,7 @@ chemi_chet_chemicals_image:
 chemi_chet_reaction_batchsearch:
   bespoke_test: "tests/testthat/test-native_static_media.R"
 
-ct_chemical_file_image_search:
+ct_chemical_file_image_search_by_dtxsid:
   bespoke_test: tests/testthat/test-native_collection_responses.R
 
 ct_chemical_file_image_search_by_dtxcid:
@@ -831,7 +831,7 @@ ct_chemical_file_image_search_by_dtxcid:
 ct_chemical_file_image_search_by_gsid:
   bespoke_test: tests/testthat/test-native_collection_responses.R
 
-epi_api:
+epi:
   bespoke_test: tests/testthat/test-native_epi_distribution.R
 
 epi_download:
@@ -983,7 +983,7 @@ chemi_hazard_reports_check:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_hazard_reports_by_id:
   bespoke_test: tests/testthat/test-native_management.R
-chemi_hazard_reports_export_by_id:
+chemi_hazard_reports_export:
   bespoke_test: tests/testthat/test-native_management.R
 chemi_toxprints_download:
   bespoke_test: tests/testthat/test-native_management.R
@@ -1008,7 +1008,7 @@ chemi_chet_curators_details:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_libraries_detail_options:
   bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_curators_libraries_by_lib_id:
+chemi_chet_curators_libraries:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_curators_login:
   bespoke_test: tests/testthat/test-native_chet_extra.R
@@ -1030,11 +1030,11 @@ chemi_chet_reaction_editor_load_reactions:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_editor_save_scheme:
   bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_reaction_editor_by_reaction_id:
+chemi_chet_reaction_editor:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_map_dl:
   bespoke_test: tests/testthat/test-native_chet_extra.R
-chemi_chet_reaction_mapfix_by_map_id:
+chemi_chet_reaction_mapfix:
   bespoke_test: tests/testthat/test-native_chet_extra.R
 chemi_chet_reaction_newlibrary:
   bespoke_test: tests/testthat/test-native_chet_extra.R
@@ -1065,7 +1065,7 @@ chemi_search_download_mol_by_smiles:
 chemi_search_download_properties:
   bespoke_test: tests/testthat/test-native_search_services.R
 
-chemi_search_download_sdf:
+chemi_search_download_search_result_as_sdf:
   bespoke_test: tests/testthat/test-native_search_services.R
 
 chemi_search_render_png:
@@ -1107,7 +1107,7 @@ chemi_resolver_exportpubchemlist:
 chemi_resolver_getintegrityreports:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
 
-chemi_resolver_ghs_list_count_post:
+chemi_resolver_ghs_list_count_bulk:
   bespoke_test: tests/testthat/test-native_resolver_extra.R
 
 chemi_resolver_render:
@@ -1131,7 +1131,7 @@ chemi_predictor_models_model_file:
 chemi_webtest_report:
   bespoke_test: tests/testthat/test-native_small_families.R
 
-chemi_stdizer_protocol_export_post:
+chemi_stdizer_protocol_export:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 
@@ -1143,15 +1143,15 @@ chemi_stdizer_protocols_check:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 
-chemi_stdizer_protocols_by_id_changes:
+chemi_stdizer_protocols_changes:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 
-chemi_stdizer_protocols_by_id_export_post:
+chemi_stdizer_protocols_export:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 
-chemi_stdizer_protocols_by_id_issues:
+chemi_stdizer_protocols_issues:
   bespoke_test: tests/testthat/test-native_stdizer_unbound.R
   reason: Native standardizer route with real localhost wire and error coverage.
 
@@ -1190,7 +1190,7 @@ chemi_webtest_export_append:
 chemi_webtest_predict_export:
   bespoke_test: tests/testthat/test-native_webtest_exports.R
 
-chemi_stdizer_protocols_by_id_post:
+chemi_stdizer_protocols_by_id_bulk:
   bespoke_test: tests/testthat/test-native_stdizer_protocol_search.R
 
 chemi_opera_file:
@@ -1202,7 +1202,7 @@ chemi_resolver_exportsimilaritylist:
 chemi_resolver_exportsimilaritymap:
   bespoke_test: tests/testthat/test-native_released_booleans_v45.R
 
-chemi_stdizer_protocols_by_id_get:
+chemi_stdizer_protocols_by_id:
   bespoke_test: tests/testthat/test-native_stdizer_protocol_get.R
 
 chemi_opera:

@@ -1,0 +1,126 @@
+# chemi_alerts: every operation in schema/chemi_alerts_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_alerts
+schemas:
+  files:
+  - schema/chemi_alerts_prod.json
+groups:
+  chemi_alerts:
+    hook_config: inst/hook_config.yml
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/alerts/metadata: chemi_alerts_metadata
+      GET /api/alerts/version: chemi_alerts_version
+      POST /api/alerts: chemi_alerts
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/alerts/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve alerts metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/alerts/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve alerts version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; drops schema parameters the released wrapper never exposed; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/alerts:
+        inputs:
+          query:
+            type: any
+          idType:
+            type: any
+            default: AnyId
+          options:
+            type: any
+            default: ~
+          request.filesInfo:
+            type: any
+            default: ~
+          request.options.alerts:
+            type: any
+            default: ~
+          request.options.resolve:
+            type: any
+            default: ~
+        private_params:
+          chemicals: ~
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/alerts
+            path_params:
+              value: {}
+            query:
+              object:
+                request.filesInfo:
+                  from:
+                    - params
+                    - request.filesInfo
+                request.options.alerts:
+                  from:
+                    - params
+                    - request.options.alerts
+                request.options.resolve:
+                  from:
+                    - params
+                    - request.options.resolve
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi alerts
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+              etc.)
+            idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default)'
+            options: Optional parameter
+            request.filesInfo: Optional parameter
+            request.options.alerts: Optional parameter
+            request.options.resolve: Optional parameter
+          tags:
+            apiStage: public
+        exclude_parameters:
+          - files[]
+          - request
+        request_controls:
+          preserve_errors: yes

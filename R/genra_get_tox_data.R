@@ -37,7 +37,7 @@
 #'   \item If no usable records: activity = NA
 #' }
 #'
-#' @seealso [ct_hazard_toxval_search_bulk()], [genra_predict()]
+#' @seealso [ct_hazard_toxval_search_by_dtxsid_bulk()], [genra_predict()]
 #'
 #' @export
 #'
@@ -60,7 +60,7 @@ genra_get_tox_data <- function(dtxsids, study_filter = NULL) {
   }
 
   # Fetch ToxValDB data
-  toxval_df <- ct_hazard_toxval_search_bulk(dtxsids)
+  toxval_df <- ct_hazard_toxval_search_by_dtxsid_bulk(dtxsids)
 
   # Parse into activity labels
   result <- .parse_toxval_activity(toxval_df, study_filter = study_filter)
@@ -81,7 +81,7 @@ genra_get_tox_data <- function(dtxsids, study_filter = NULL) {
 #' @description
 #' Internal function to classify ToxValDB records into binary activity values.
 #'
-#' @param toxval_df Data frame returned from ct_hazard_toxval_search_bulk().
+#' @param toxval_df Data frame returned from ct_hazard_toxval_search_by_dtxsid_bulk().
 #' @param study_filter Optional regex pattern to filter by studyType.
 #'
 #' @return Tibble with dtxsid, activity, n_records.

@@ -5,7 +5,7 @@ resolved_payloads <- list(
   ),
   chemi_alerts = list(flat = TRUE, args = list(options = list(alerts = 'group'))),
   chemi_hazard_bulk = list(flat = FALSE, args = list(empty = TRUE, options = list(noRecords = TRUE), format = 'raw')),
-  chemi_resolver_orderBySimilarity = list(flat = FALSE, args = list(fingerprintName = 'TP', rdkitBits = 64L)),
+  chemi_resolver_order_by_similarity = list(flat = FALSE, args = list(fingerprintName = 'TP', rdkitBits = 64L)),
   chemi_resolver_pubchem_section_bulk = list(flat = TRUE, args = list(section = 'Toxicity')),
   chemi_stdizer_chemicals = list(
     flat = TRUE,

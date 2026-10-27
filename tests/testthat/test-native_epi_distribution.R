@@ -50,11 +50,11 @@ test_that('EPI specification and distribution preserve declared JSON and binary 
     comptoxr_native.request = list(max_retries = 0L, timeout = 5)
   ))
   ns <- asNamespace('ComptoxR')
-  for (name in c('epi_api', 'epi_download')) {
+  for (name in c('epi', 'epi_download')) {
     fn <- get(name, ns)
-    expected_path <- if (name == 'epi_api') '/api' else '/api/download'
+    expected_path <- if (name == 'epi') '/api' else '/api/download'
     value <- fn()
-    if (name == 'epi_api') {
+    if (name == 'epi') {
       expect_identical(value, list(openapi = '3.0.3', `x-epi-health` = list(ready = TRUE)))
     } else {
       expect_identical(value, binary)

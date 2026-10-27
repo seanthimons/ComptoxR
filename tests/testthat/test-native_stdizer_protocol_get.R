@@ -1,5 +1,5 @@
 testthat::test_that('reviewed protocol GET preserves schema boolean and paging wire contracts', {
-  fn <- chemi_stdizer_protocols_by_id_get
+  fn <- chemi_stdizer_protocols_by_id
   flags <- c('hidden','components','changed','failed','passed')
   testthat::expect_identical(names(formals(fn)),c('id',flags,'page','size','sort'))
   directory <- tempfile('protocol-get-');dir.create(directory)

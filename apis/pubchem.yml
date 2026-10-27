@@ -1,0 +1,368 @@
+# pubchem: every operation in schema/pubchem-reviewed.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: pubchem
+schemas:
+  files:
+  - schema/pubchem-reviewed.json
+groups:
+  pubchem:
+    # why: reviewed PubChem overlay; only the three released PUG REST reads are generated.
+    selection:
+      include:
+        - GET /compound/{namespace}/{query}/cids/JSON
+        - GET /compound/cid/{cid}/property/{properties}/JSON
+        - GET /compound/cid/{cid}/synonyms/JSON
+    hook_config: inst/hook_config.yml
+    prepare: preserve_pubchem_docs
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /compound/{namespace}/{query}/cids/JSON: pubchem_search
+      GET /compound/cid/{cid}/property/{properties}/JSON: pubchem_properties
+      GET /compound/cid/{cid}/synonyms/JSON: pubchem_synonyms
+    operations:
+      # why: inputs keep released argument names/defaults; accepts the released identifier/query input forms; caches the released static lookup; result formatter keeps the released output; request arguments pin the released wire call; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /compound/{namespace}/{query}/cids/JSON:
+        inputs:
+          query:
+            type: any
+          type:
+            type: character
+            default:
+              - name
+              - smiles
+              - inchi
+              - inchikey
+              - formula
+          cache:
+            type: any
+            default: yes
+        normalize_inputs:
+          type: .ct_pc_type
+          query: .ct_pc_query
+        cache:
+          mode: call
+          enabled:
+            from:
+              - params
+              - cache
+          environment:
+            callback: pc_owner
+          name: pubchem_search_cache
+          key: .ct_pc_search_key
+        result_formatter: .ct_pc_search_result
+        request:
+          arguments:
+            query:
+              value: []
+            headers:
+              callback: pc_headers
+            server:
+              value:
+                url: https://pubchem.ncbi.nlm.nih.gov/rest/pug
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: pubchem_burl
+                relative: ''
+            auth:
+              value: []
+            body_media:
+              value: application/x-www-form-urlencoded
+            request_controls:
+              value:
+                timeout: .inf
+                max_retries: 3
+                retry_writes: yes
+                retry_policy: .ct_pc_retry
+                preserve_errors: yes
+                throttle:
+                  capacity: 4
+                  fill_time_s: 1.0
+            method:
+              callback: pc_search_method
+            path:
+              callback: pc_search_path
+            path_params:
+              callback: pc_search_path_params
+            body:
+              callback: pc_search_body
+            form_schema:
+              value:
+                type: object
+                properties:
+                  smiles:
+                    type: string
+                  inchi:
+                    type: string
+                additionalProperties: no
+            response_policy:
+              callback: pc_search_response
+            parameter_serialization:
+              callback: pc_search_parameters
+        docs:
+          title: Search PubChem for compound CIDs
+          description: |-
+            Search the PubChem PUG REST API by compound name, SMILES, InChI, InChIKey,
+            or molecular formula and return matching PubChem Compound IDs (CIDs).
+        
+            SMILES and InChI inputs are automatically sent via POST to avoid URL encoding
+            issues with special characters (`/`, `#`, `+`).
+        
+            PubChem may return multiple CIDs for a single name query (e.g., different
+            stereoisomers). If more than 10 CIDs are returned, a message is displayed
+            with the count.
+        
+            For structure-based searches (SMILES, InChI), the query is sent as a POST
+            form body rather than in the URL path. This is required because
+            `httr2::req_url_path_append()` does not percent-encode path segments,
+            and characters like `/` and `#` in SMILES notation would corrupt the URL.
+        
+            Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
+          parameters:
+            query: |-
+              Character string. The search term (compound name, SMILES, InChI,
+                InChIKey, or molecular formula).
+            type: |-
+              Character string. The type of identifier in `query`. One of
+                `"name"` (default), `"smiles"`, `"inchi"`, `"inchikey"`, or `"formula"`.
+            cache: |-
+              Logical. If `TRUE` (default), results are cached in the session
+                environment so repeated searches for the same query and type are instant.
+          return: |-
+            A tibble with a single column `cid` containing integer PubChem CIDs.
+              Returns a zero-row tibble if no matches are found.
+          tags:
+            seealso: |-
+              [pubchem_properties()] to fetch properties for CIDs,
+                [pubchem_synonyms()] to fetch synonym lists,
+                [ct_chemical_detail_search_by_dtxsid()] for CompTox Dashboard chemical search.
+          examples:
+            - query: aspirin
+            - query: CC(=O)O
+              type: smiles
+      # why: inputs keep released argument names/defaults; accepts the released identifier/query input forms; caches the released static lookup; result formatter keeps the released output; request arguments pin the released wire call; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /compound/cid/{cid}/property/{properties}/JSON:
+        inputs:
+          cid:
+            type: any
+          properties:
+            type: any
+            default: ~
+          cache:
+            type: any
+            default: yes
+        normalize_inputs:
+          properties: .ct_pc_properties
+          cid: .ct_pc_cid
+        cache:
+          mode: items
+          enabled:
+            from:
+              - params
+              - cache
+          environment:
+            callback: pc_owner
+          name: pubchem_props_cache
+          key: .ct_pc_property_key
+          input: cid
+          max_items: 100
+          entries: .ct_pc_property_entries
+          combine: .ct_pc_property_combine
+        result_formatter: .ct_pc_properties_result
+        request:
+          arguments:
+            query:
+              value: []
+            headers:
+              callback: pc_headers
+            server:
+              value:
+                url: https://pubchem.ncbi.nlm.nih.gov/rest/pug
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: pubchem_burl
+                relative: ''
+            auth:
+              value: []
+            body_media:
+              value: application/x-www-form-urlencoded
+            request_controls:
+              value:
+                timeout: .inf
+                max_retries: 3
+                retry_writes: yes
+                retry_policy: .ct_pc_retry
+                preserve_errors: yes
+                throttle:
+                  capacity: 4
+                  fill_time_s: 1.0
+            method:
+              callback: pc_items_method
+            path:
+              callback: pc_properties_path
+            path_params:
+              callback: pc_items_path_params
+            body:
+              callback: pc_items_body
+            form_schema:
+              value:
+                type: object
+                properties:
+                  cid:
+                    type: string
+                additionalProperties: no
+                required:
+                  - cid
+            response_policy:
+              callback: pc_properties_response
+        docs:
+          title: Fetch computed properties from PubChem
+          description: |-
+            Retrieve computed physico-chemical properties for one or more PubChem
+            Compound IDs (CIDs) via the PUG REST API.
+        
+            Property names are validated against PubChem's documented allowlist before
+            the request is made. Invalid property names cause an immediate error.
+        
+            For multiple CIDs, requests are batched at 100 CIDs per POST request
+            (PubChem's documented limit for list-based requests).
+        
+            Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
+          parameters:
+            cid: |-
+              Integer or character vector of PubChem CIDs. Does NOT accept
+                compound names or DTXSIDs — use [pubchem_search()] first to resolve CIDs.
+            properties: |-
+              Character vector of property names to retrieve. If `NULL`
+                (default), returns 13 core properties: MolecularFormula, MolecularWeight,
+                CanonicalSMILES, InChI, InChIKey, XLogP, TPSA, HBondDonorCount,
+                HBondAcceptorCount, Complexity, ExactMass, MonoisotopicMass, HeavyAtomCount.
+            cache: |-
+              Logical. If `TRUE` (default), results are cached in the session
+                environment keyed by CID and property set, so repeated calls are instant.
+          return: |-
+            A tibble with one row per CID and columns for each requested property
+              plus a `CID` column. Returns an empty tibble if no results are found.
+          tags:
+            seealso: |-
+              [pubchem_search()] to find CIDs by name/structure,
+                [ct_chemical_property_summary_search()] for CompTox Dashboard properties.
+          examples:
+            - cid: 2244
+            - cid: 2244
+              properties: XLogP
+      # why: inputs keep released argument names/defaults; accepts the released identifier/query input forms; defers inputs to hooks; caches the released static lookup; result formatter keeps the released output; request arguments pin the released wire call; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /compound/cid/{cid}/synonyms/JSON:
+        inputs:
+          cid:
+            type: any
+          tidy:
+            type: any
+            default: yes
+          cache:
+            type: any
+            default: yes
+        normalize_inputs:
+          cid: .ct_pc_cid
+        defer_inputs: tidy
+        cache:
+          mode: items
+          enabled:
+            from:
+              - params
+              - cache
+          environment:
+            callback: pc_owner
+          name: pubchem_syns_cache
+          key: .ct_pc_synonym_key
+          input: cid
+          max_items: 100
+          entries: .ct_pc_synonym_entries
+          combine: .ct_pc_synonym_combine
+          project: .ct_pc_synonyms_project
+        result_formatter: .ct_pc_synonyms_result
+        request:
+          arguments:
+            query:
+              value: []
+            headers:
+              callback: pc_headers
+            server:
+              value:
+                url: https://pubchem.ncbi.nlm.nih.gov/rest/pug
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: pubchem_burl
+                relative: ''
+            auth:
+              value: []
+            body_media:
+              value: application/x-www-form-urlencoded
+            request_controls:
+              value:
+                timeout: .inf
+                max_retries: 3
+                retry_writes: yes
+                retry_policy: .ct_pc_retry
+                preserve_errors: yes
+                throttle:
+                  capacity: 4
+                  fill_time_s: 1.0
+            method:
+              callback: pc_items_method
+            path:
+              callback: pc_synonyms_path
+            path_params:
+              callback: pc_items_path_params
+            body:
+              callback: pc_items_body
+            form_schema:
+              value:
+                type: object
+                properties:
+                  cid:
+                    type: string
+                additionalProperties: no
+                required:
+                  - cid
+            response_policy:
+              callback: pc_synonyms_response
+        docs:
+          title: Fetch synonyms from PubChem
+          description: |-
+            Retrieve the synonym list for one or more PubChem Compound IDs (CIDs) via
+            the PUG REST API. Synonyms include IUPAC names, common names, CAS numbers,
+            DTXSIDs, trade names, and other identifiers.
+        
+            For multiple CIDs, requests are batched at 100 CIDs per POST request.
+            This is significantly faster than per-CID GET requests (e.g., 500 CIDs
+            requires 5 POST requests instead of 500 GET requests).
+        
+            Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
+          parameters:
+            cid: Integer or character vector of PubChem CIDs.
+            tidy: |-
+              Logical. If `TRUE` (default), returns a long-format tibble with
+                `cid` and `synonym` columns. If `FALSE`, returns a list of lists with
+                `CID` and `Synonym` elements.
+            cache: |-
+              Logical. If `TRUE` (default), results are cached in the session
+                environment keyed by CID, so repeated calls for the same CIDs are instant.
+          return: |-
+            When `tidy = TRUE`: a tibble with columns `cid` (integer) and
+              `synonym` (character). When `tidy = FALSE`: a list where each element
+              contains `CID` and `Synonym` fields. Returns an empty tibble/list for
+              invalid CIDs.
+          tags:
+            seealso: |-
+              [pubchem_search()] to find CIDs,
+                [util_pubchem_resolve_dtxsid()] to extract DTXSIDs from synonym lists,
+                [ct_chemical_synonym_search_by_dtxsid()] for CompTox Dashboard synonyms.
+          examples:
+            - cid: 2244
+            - cid: 2244
+              tidy: no

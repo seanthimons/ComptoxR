@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_search_exact completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["chemi_search_exact"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /api/search/exact"]]

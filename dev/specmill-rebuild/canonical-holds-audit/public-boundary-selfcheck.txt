@@ -1,2 +1,0 @@
-Public boundary passed: 1 text files scanned.
-Source evidence allowed; runtime and built-artifact non-production URLs still rejected PASS

@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_hazard_toxref_data_search_by_study_type completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_hazard_toxref_data_search_by_study_type"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /hazard/toxref/data/search/by-study-type/{studyType}"]]

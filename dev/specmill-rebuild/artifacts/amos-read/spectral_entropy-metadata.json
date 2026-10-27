@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/spectral_entropy/",
-  "definition": "spectral_entropy_request",
-  "status": 200,
-  "media": "application/json",
-  "size": 32,
-  "date": "2026-10-18 00:10:07 UTC"
-}

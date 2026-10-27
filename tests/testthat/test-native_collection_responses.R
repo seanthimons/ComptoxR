@@ -1,4 +1,4 @@
-collection_wrappers <- c("ct_chemical_file_image_search",
+collection_wrappers <- c("ct_chemical_file_image_search_by_dtxsid",
   "ct_chemical_file_image_search_by_dtxcid", "ct_chemical_file_image_search_by_gsid",
   "chemi_amos_get_info_by_id")
 

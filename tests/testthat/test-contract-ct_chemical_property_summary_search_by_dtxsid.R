@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_property_summary_search_by_dtxsid completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_chemical_property_summary_search_by_dtxsid"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /chemical/property/summary/search/by-dtxsid/{dtxsid}"]]

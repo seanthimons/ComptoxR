@@ -38,10 +38,9 @@ Rscript dev/generate_specmill.R --check
 ```
 
 Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
-matching output; do not reuse initial adoption hashes. See the
-[current migration handoff](dev/specmill-rebuild/HANDOFF.md) for localhost verification,
-retained implementations, offline reproduction and rollback. The legacy
-commands below continue to maintain retained operations.
+matching output; do not reuse initial adoption hashes. See
+[dev/specmill-333/SELECTION.md](dev/specmill-333/SELECTION.md) for the `apis/` layout.
+The legacy commands below continue to maintain retained operations.
 
 The **Specmill Maintenance** workflow checks the generated client on every pull request,
 including changes to CI and documentation. It installs the locked source revision,

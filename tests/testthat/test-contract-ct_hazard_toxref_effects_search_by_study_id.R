@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_hazard_toxref_effects_search_by_study_id completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_hazard_toxref_effects_search_by_study_id"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /hazard/toxref/effects/search/by-study-id/{studyId}"]]

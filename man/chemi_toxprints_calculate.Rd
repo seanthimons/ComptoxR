@@ -14,14 +14,14 @@ chemi_toxprints_calculate(smiles, labels = FALSE, profile = NULL)
 \item{profile}{Optional parameter}
 }
 \value{
-Returns a list with result object
+A list of decoded response records.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_toxprints_calculate(smiles = "DTXSID7020182")
+chemi_toxprints_calculate(smiles = "CCCC")
 }
 }
 \section{API stage}{

@@ -1,8 +1,0 @@
-{
-  "passed": 276,
-  "failed": 0,
-  "errors": 0,
-  "warnings": 0,
-  "skipped": 0,
-  "suites": ["test-hooks-webtest.R", "test-native_small_families.R", "test-native_webtest_exports.R"]
-}

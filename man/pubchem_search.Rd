@@ -51,5 +51,5 @@ pubchem_search(query = "CC(=O)O", type = "smiles")
 \seealso{
 [pubchem_properties()] to fetch properties for CIDs,
   [pubchem_synonyms()] to fetch synonym lists,
-  [ct_chemical_detail_search()] for CompTox Dashboard chemical search.
+  [ct_chemical_detail_search_by_dtxsid()] for CompTox Dashboard chemical search.
 }

@@ -42,5 +42,5 @@ pubchem_synonyms(cid = 2244L, tidy = FALSE)
 \seealso{
 [pubchem_search()] to find CIDs,
   [util_pubchem_resolve_dtxsid()] to extract DTXSIDs from synonym lists,
-  [ct_chemical_synonym_search()] for CompTox Dashboard synonyms.
+  [ct_chemical_synonym_search_by_dtxsid()] for CompTox Dashboard synonyms.
 }

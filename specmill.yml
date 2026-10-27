@@ -3,6 +3,9 @@ package: ComptoxR
 # CTX credential name -> environment variable read by the generated auth.
 authentication:
   ctx: ctx_api_key
+# Every API uses the package request helper and gets roxygen documentation.
+helper: .ct_request
+documentation: true
 formatter:
   name: air
   version: 0.11.0
@@ -36,66 +39,36 @@ selection:
   - '^/chemicals/chemdelete/?$'
   # #356: alerts are limited to POST /api/alerts, GET /api/alerts/metadata and /version.
   - '^/api/alerts(?!/(metadata|version)/?$|/?$)'
+# One file per API schema; each file explains its names and per-operation settings.
 services:
-- apis/epi-pilot.yml
-- apis/alerts-pilot.yml
-- apis/amos-pilot.yml
-- apis/ctx-pilot.yml
-- apis/search-pilot.yml
-- apis/chemi-amos-prod-full.yml
-- apis/chemi-chet-prod-full.yml
-- apis/chemi-resolver-prod-full.yml
-- apis/chemi-services-prod-full.yml
-- apis/chemi-stdizer-prod-full.yml
-- apis/chemi-toxprints-prod-full.yml
-- apis/ctx-chemical-prod-full.yml
-- apis/ctx-exposure-prod-full.yml
-- apis/epi-suite-prod-full.yml
-- apis/ctx-hazard-prod-rebuild.yml
-- apis/ctx-bioactivity-prod-rebuild.yml
-- apis/ctx-chemical-prod-rebuild.yml
-- apis/ctx-exposure-prod-rebuild.yml
-- apis/chemi-amnb_nate-prod-rebuild.yml
-- apis/chemi-arn_cats-prod-rebuild.yml
-- apis/chemi-chet-prod-rebuild.yml
-- apis/chemi-ncc_cats-prod-rebuild.yml
-- apis/chemi-opera-prod-rebuild.yml
-- apis/chemi-pfas_atlas-prod-rebuild.yml
-- apis/chemi-pfas_cats-prod-rebuild.yml
-- apis/chemi-resolver-prod-rebuild.yml
-- apis/chemi-search-prod-rebuild.yml
-- apis/chemi-services-prod-rebuild.yml
-- apis/chemi-toxprints-prod-rebuild.yml
-- apis/chemi-padel-prod-rebuild.yml
-- apis/chemi-mordred-prod-rebuild.yml
-- apis/chemi-rdkit-prod-rebuild.yml
-- apis/chemi-webtest-prod-rebuild.yml
-- apis/chemi-stdizer-prod-rebuild.yml
-- apis/chemi-predictor_models-prod-rebuild.yml
-- apis/epi-suite-prod-rebuild.yml
-- apis/chemi-safety-prod-rebuild.yml
-- apis/chemi-hazard-prod-rebuild.yml
-- apis/ctx-list-name.yml
-- apis/chemi-chet-direct-reads.yml
-- apis/chemi-service-info.yml
-- apis/chemi-management.yml
-- apis/chemi-chet-extra.yml
-- apis/chemi-resolver-remaining-facade.yml
-- apis/chemi-search-services-native.yml
-- apis/chemi-resolver-extra.yml
-- apis/chemi-amos-direct-reads.yml
-- apis/chemi-small-families.yml
-- apis/chemi-stdizer-unbound.yml
-- apis/chemi-released-chet-facades.yml
-- apis/chemi-webtest-exports.yml
-- apis/chemi-stdizer-reviewed-protocol-search.yml
-- apis/chemi-released-boolean-bindings.yml
-- apis/chemi-stdizer-reviewed-protocol-get.yml
-- apis/chemi-descriptors-native.yml
-- apis/pubchem-reviewed.yml
+- apis/chemi_alerts.yml
+- apis/chemi_amnb_nate.yml
+- apis/chemi_amos.yml
+- apis/chemi_arn_cats.yml
+- apis/chemi_chet.yml
+- apis/chemi_descriptors.yml
+- apis/chemi_hazard.yml
+- apis/chemi_mordred.yml
+- apis/chemi_ncc_cats.yml
+- apis/chemi_opera.yml
+- apis/chemi_padel.yml
+- apis/chemi_pfas_atlas.yml
+- apis/chemi_pfas_cats.yml
+- apis/chemi_predictor_models.yml
+- apis/chemi_rdkit.yml
+- apis/chemi_resolver.yml
+- apis/chemi_safety.yml
+- apis/chemi_search.yml
+- apis/chemi_services.yml
+- apis/chemi_stdizer.yml
+- apis/chemi_toxprints.yml
+- apis/chemi_webtest.yml
+- apis/ctx_bioactivity.yml
+- apis/ctx_chemical.yml
+- apis/ctx_exposure.yml
+- apis/ctx_hazard.yml
+- apis/epi_suite.yml
+- apis/pubchem.yml
 callback_files:
 - dev/specmill_callbacks.R
-- dev/specmill-rebuild/remaining-facades/callbacks.R
-- dev/specmill-rebuild/rootheldrelease/callbacks.R
-- dev/specmill-rebuild/released-facades-v42/callbacks.R
 - dev/specmill_pubchem_callbacks.R

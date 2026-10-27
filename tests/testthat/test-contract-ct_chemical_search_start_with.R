@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_search_start_with completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_chemical_search_start_with"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /chemical/search/start-with/{word}"]]

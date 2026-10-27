@@ -1,9 +1,0 @@
-{
-  "test_file": "tests/testthat/test-retained_search_safety.R",
-  "original_file_sha256": "a8eab187777cc28053141d94915c1af7a3f6d2aa29856fef3eb57a80a4560f9f",
-  "archived_case": "retired-search-helper-case.R.txt.gz",
-  "reason": "Obsolete generic_chemi_request-only interception after native search migration. Full original all_pages/partial hook state behavior is covered by test-native_chemi_search.R actual localhost comparisons. Other retained search cases remain.",
-  "replacement_suite": "tests/testthat/test-native_chemi_search.R",
-  "runtime_changes": false,
-  "archived_case_uncompressed_sha256": "14b7d37570f02ad3d20253ca5c85101804f8b0bd3562b6c63f314222fa3cc143"
-}

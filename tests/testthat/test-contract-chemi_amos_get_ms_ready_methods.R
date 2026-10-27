@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_amos_get_ms_ready_methods completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["chemi_amos_get_ms_ready_methods"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /api/amos/get_ms_ready_methods/{inchikey}"]]

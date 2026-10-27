@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/mass_spectrum_similarity_search/",
-  "definition": "mass_spectrum_similarity_search_request",
-  "status": 200,
-  "media": "application/json",
-  "size": 78,
-  "date": "2026-10-18 00:22:59 UTC"
-}

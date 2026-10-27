@@ -9,10 +9,11 @@ test_that('banned endpoints cannot be selected or exported', {
   }
   expect_setequal(config$selection$methods, c('GET', 'POST'))
   for (file in config$services) {
-    service <- yaml::read_yaml(file.path(root, file))
-    selected <- union(service$selection$include, names(service$operations))
-    expect_true(all(sub(' .*', '', selected) %in% config$selection$methods), info = file)
-    expect_false(any(mapply(excluded, sub('^[^ ]+ ', '', selected), sub(' .*', '', selected))), info = file)
+    for (service in yaml::read_yaml(file.path(root, file))$groups) {
+      selected <- union(unlist(service$selection$include), c(names(service$operations), names(service$names)))
+      expect_true(all(sub(' .*', '', selected) %in% config$selection$methods), info = file)
+      expect_false(any(mapply(excluded, sub('^[^ ]+ ', '', selected), sub(' .*', '', selected))), info = file)
+    }
   }
   expect_false(any(excluded(c('/api/alerts', '/api/alerts/metadata', '/api/alerts/version'))))
   expect_true(all(excluded(c('/api/alerts/groups', '/api/alerts/export', '/api/alerts/render'))))
@@ -41,18 +42,12 @@ test_that('banned endpoints cannot be selected or exported', {
   expect_false(any(excluded(
     c('/chemicals/chemical_DL', '/curators/login', '/chemicals/chemdelete-other'))))
   expect_true(all(excluded(c('/api/amos/analytical_qc_batch_search', '/api/amos/batch_search'))))
-  expect_true(all(c('chemi_amos', 'chemi_amos_analytical_qc_keyset_pagination_bulk') %in%
+  expect_true(all(c('chemi_amos_search', 'chemi_amos_analytical_qc_keyset_pagination_bulk') %in%
     getNamespaceExports('ComptoxR')))
   expect_true(excluded('/api/resolver/getpubchemlist'))
   expect_false(excluded('/api/resolver/getsimilaritylist'))
-  removed <- c(
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-358/removed-bindings.json')),
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-357/removed-bindings.json')),
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-354/removed-bindings.json')),
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-355/removed-bindings.json')),
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-356/alerts-removed-bindings.json')),
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-356/stdizer-management-removed-bindings.json')),
-    jsonlite::read_json(file.path(root, 'dev/specmill-rebuild/issue-356/stdizer-upload-removed-bindings.json')))
+  removed <- do.call(c,
+    lapply(list.files(test_path('fixtures/removed-bindings'), full.names = TRUE), jsonlite::read_json))
   for (binding in removed) {
     expect_false(binding$name %in% getNamespaceExports('ComptoxR'))
     expect_false(file.exists(file.path(root, binding$file)))

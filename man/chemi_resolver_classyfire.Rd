@@ -16,52 +16,52 @@ chemi_resolver_classyfire(
   geometricDescriptor = NULL,
   alternativeParent = NULL,
   substituent = NULL,
-  page = 0,
-  size = 1000,
+  page = 0L,
+  size = 1000L,
   all_pages = TRUE,
-  max_pages = 100
+  max_pages = 100L
 )
 }
 \arguments{
-\item{query}{Optional parameter}
+\item{query}{query}
 
-\item{idType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
+\item{idType}{idType}
 
-\item{fuzzy}{Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)}
+\item{fuzzy}{fuzzy}
 
-\item{kingdom}{Optional parameter}
+\item{kingdom}{kingdom}
 
-\item{superklass}{Optional parameter}
+\item{superklass}{superklass}
 
-\item{klass}{Optional parameter}
+\item{klass}{klass}
 
-\item{subklass}{Optional parameter}
+\item{subklass}{subklass}
 
-\item{directParent}{Optional parameter}
+\item{directParent}{directParent}
 
-\item{geometricDescriptor}{Optional parameter}
+\item{geometricDescriptor}{geometricDescriptor}
 
-\item{alternativeParent}{Optional parameter}
+\item{alternativeParent}{alternativeParent}
 
-\item{substituent}{Optional parameter}
+\item{substituent}{substituent}
 
-\item{page}{Optional parameter (default: 0)}
+\item{page}{page}
 
-\item{size}{Optional parameter (default: 1000)}
+\item{size}{size}
 
-\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+\item{all_pages}{TRUE (the default) requests page after page, starting at page, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in page.}
 
-\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
+\item{max_pages}{Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning.}
 }
 \value{
-Returns a list with result object
+A list of records.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_resolver_classyfire(query = "DTXSID7020182")
+chemi_resolver_classyfire(query = "DTXSID7020182", all_pages = FALSE, max_pages = 2L)
 }
 }
 \section{API stage}{

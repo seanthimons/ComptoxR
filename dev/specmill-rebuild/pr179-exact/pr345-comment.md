@@ -1,3 +1,0 @@
-Exact PR179 candidate replay against the two held public facades found three remaining upstream gaps at `5566da87ae5acc7a95e10eaa209dbc18a290f498`: search hook updates overwrite the original deferred all_pages callable; NULL skipped results retain a key the old facade removes; PubChem cannot bind the public/hook-updated max_pages to request.pagination. Minimal actual-facade reproductions are on [Specmill PR179](https://github.com/seanthimons/specmill/pull/179#issuecomment-6254290135).
-
-Private proof only, no root runtime/config/pin/helper adoption or push. PubChem's separate payload/query/response source mismatch remains held. Released-only adoption is unchanged.

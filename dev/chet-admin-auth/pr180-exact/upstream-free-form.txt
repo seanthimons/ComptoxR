@@ -1,1 +1,0 @@
-Free-form fields: declared additionalProperties scalars encode exactly; empty, declared constraints, closed forms and ambiguous values remain protected; localhost URL-encoded/multipart and freshness passed.

@@ -1,0 +1,234 @@
+# chemi_descriptors: every operation in schema/chemi_descriptors_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_descriptors
+schemas:
+  files:
+  - schema/chemi_descriptors_prod.json
+  # why: the aggregate descriptor wrappers fall back to RDKit, so its routes must be loaded.
+  - schema/chemi_rdkit_prod.json
+groups:
+  chemi_descriptors:
+    selection:
+      exclude:
+        - ^/api/rdkit
+    hook_config: inst/hook_config.yml
+    prepare: preserve_choice_defaults
+    # why: routed sibling endpoints take their server from group defaults, not the calling operation.
+    defaults:
+      server:
+        resolver: .ct_server_url
+        key: chemi_burl
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/descriptors: chemi_descriptors
+      GET /api/descriptors/metadata: chemi_descriptors_metadata
+      GET /api/descriptors/version: chemi_descriptors_version
+      POST /api/descriptors: chemi_descriptors_bulk
+    operations:
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; routes keep released sibling-endpoint dispatch; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/descriptors:
+        inputs:
+          smiles:
+            type: character
+            required: yes
+            description: One SMILES string or resolvable chemical identifier
+          type:
+            type: character
+            required: yes
+            description: 'Descriptor engine: padel, rdkit, mordred, or webtest'
+          headers:
+            type: logical
+            default: no
+            description: Request descriptor headers.
+          format:
+            type: character
+            default: JSON
+            description: 'Response format: JSON, CSV or TSV.'
+          timeout:
+            type: any
+            default: ~
+            description: Optional upstream calculation timeout.
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: validated wide tibble or raw payload.'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              from:
+                - hook_state
+                - request
+                - options
+            body:
+              value: ~
+            headers:
+              object:
+                Accept:
+                  from:
+                    - hook_state
+                    - request
+                    - content_type
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_aggregate_get_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Descriptors
+          lifecycle: experimental
+          parameters:
+            smiles: One SMILES string or resolvable chemical identifier
+            type: 'Descriptor engine: padel, rdkit, mordred, or webtest'
+            headers: Request descriptor headers.
+            format: 'Response format: JSON, CSV or TSV.'
+            timeout: Optional upstream calculation timeout.
+            output: 'Output contract: validated wide tibble or raw payload.'
+          return: Returns a tibble with results
+          examples:
+            - smiles: CCO
+              type: rdkit
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+        routes:
+          - chemi_rdkit_prod.json GET /api/rdkit
+      # why: docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/descriptors/metadata:
+        docs:
+          title: Retrieve descriptors metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/descriptors/version:
+        docs:
+          title: Retrieve descriptors version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; routes keep released sibling-endpoint dispatch; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/descriptors:
+        inputs:
+          query:
+            type: character
+            required: yes
+            description: Chemical identifiers or structures
+          type:
+            type: character
+            required: yes
+            description: 'Descriptor engine: padel, rdkit, mordred, or webtest'
+          chemIdType:
+            type: character
+            default: AnyId
+            description: 'Input identifier type: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI,
+              InChIKey, InChIKey_1 or AnyId.'
+          headers:
+            type: logical
+            default: no
+            description: Request descriptor headers.
+          format:
+            type: character
+            default: JSON
+            description: 'Response format: JSON, CSV or TSV.'
+          timeout:
+            type: any
+            default: ~
+            description: Optional upstream calculation timeout.
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: validated wide tibble or raw payload.'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              from:
+                - hook_state
+                - request
+                - body
+            headers:
+              object:
+                Accept:
+                  from:
+                    - hook_state
+                    - request
+                    - content_type
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_post_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Descriptors
+          lifecycle: experimental
+          parameters:
+            query: Chemical identifiers or structures
+            type: 'Descriptor engine: padel, rdkit, mordred, or webtest'
+            chemIdType: 'Input identifier type: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI,
+              InChIKey, InChIKey_1 or AnyId.'
+            headers: Request descriptor headers.
+            format: 'Response format: JSON, CSV or TSV.'
+            timeout: Optional upstream calculation timeout.
+            output: 'Output contract: validated wide tibble or raw payload.'
+          return: Returns a tibble with results
+          examples:
+            - query: CCO
+              type: rdkit
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+        routes:
+          - chemi_rdkit_prod.json POST /api/rdkit

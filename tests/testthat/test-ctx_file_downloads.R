@@ -16,7 +16,7 @@ test_that("CTX file downloads decode each identifier's image or mol text", {
     .package = "httr2"
   )
   images <- list(
-    ct_chemical_file_image_search = c("DTXSID7020182", "DTXSID1024122"),
+    ct_chemical_file_image_search_by_dtxsid = c("DTXSID7020182", "DTXSID1024122"),
     ct_chemical_file_image_search_by_dtxcid = c("DTXCID505", "DTXCID30182"),
     ct_chemical_file_image_search_by_gsid = c("1", "2")
   )
@@ -31,7 +31,7 @@ test_that("CTX file downloads decode each identifier's image or mol text", {
     expect_true(all(endsWith(tail(paths, 2), images[[name]])))
     expect_length(do.call(get(name), list(images[[name]][1])), 1)
   }
-  expect_identical(ct_chemical_file_mol_search(c("DTXSID7020182", "DTXSID1024122")), list(mol, mol))
+  expect_identical(ct_chemical_file_mol_search_by_dtxsid(c("DTXSID7020182", "DTXSID1024122")), list(mol, mol))
   expect_identical(ct_chemical_file_mol_search_by_dtxcid("DTXCID505"), list(mol))
 })
 

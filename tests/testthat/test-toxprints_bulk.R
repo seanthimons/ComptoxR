@@ -1,7 +1,7 @@
-# chemi_toxprints_bulk live behavior is verified by dev/specmill-rebuild/issue-353/live.R.
+# Compares chemi_toxprints with the pre-replacement GET sibling recorded for #353.
 test_that('ToxPrint bulk replacement preserves its GET sibling', {
   root <- test_path('../..')
-  path <- file.path(root, 'dev/specmill-rebuild/issue-353/before.json')
+  path <- test_path('fixtures/toxprints-bulk-before.json')
   skip_if_not(file.exists(path))
   before <- jsonlite::read_json(path)
   old <- eval(parse(text = before$GET_prefix, keep.source = FALSE)[[1L]][[3L]], baseenv())

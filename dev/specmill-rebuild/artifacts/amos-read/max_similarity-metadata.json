@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/max_similarity_by_dtxsid/",
-  "definition": "max_similarity_by_dtxsid_request",
-  "status": 200,
-  "media": "application/json",
-  "size": 809,
-  "date": "2026-10-18 00:22:59 UTC"
-}

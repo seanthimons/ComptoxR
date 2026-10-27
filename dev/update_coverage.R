@@ -2,7 +2,7 @@
 source("dev/install_specmill.R", local = TRUE)
 verify_specmill()
 callbacks <- new.env(parent = baseenv())
-sys.source("dev/specmill_callbacks.R", envir = callbacks)
+for (file in yaml::read_yaml("specmill.yml")$callback_files) sys.source(file, envir = callbacks)
 specmill::coverage_report(
   normalizePath("."),
   file.path(normalizePath("."), "dev/coverage.yml"),

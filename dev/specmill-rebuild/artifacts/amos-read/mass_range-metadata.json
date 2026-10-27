@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/mass_range_search/",
-  "definition": "MassRangeSubstanceSearchRequest",
-  "status": 200,
-  "media": "application/json",
-  "size": 18,
-  "date": "2026-10-18 00:10:07 UTC"
-}

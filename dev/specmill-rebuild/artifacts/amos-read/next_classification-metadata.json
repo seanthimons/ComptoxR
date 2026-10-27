@@ -1,8 +1,0 @@
-{
-  "operation": "POST /api/amos/next_level_classification/",
-  "definition": "ClassyFireLevelRequest",
-  "status": 200,
-  "media": "application/json",
-  "size": 239,
-  "date": "2026-10-18 00:10:08 UTC"
-}

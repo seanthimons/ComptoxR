@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_search_by_msready_formula_bulk completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-full-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_chemical_search_by_msready_formula_bulk"]]
   if (is.null(contract)) {
     contract <- fixtures[["POST /chemical/search/by-msready-formula/"]]

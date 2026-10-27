@@ -1,6 +1,6 @@
 # Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_detail_search_by_smiles completes the fixed call sequence", {
-  fixtures <- readRDS(testthat::test_path("fixtures/specmill-rebuild-contracts.rds"))
+  fixtures <- readRDS(testthat::test_path("fixtures/specmill-contracts.rds"))
   contract <- fixtures[["ct_chemical_detail_search_by_smiles"]]
   if (is.null(contract)) {
     contract <- fixtures[["GET /chemical/detail/search/by-smiles/"]]

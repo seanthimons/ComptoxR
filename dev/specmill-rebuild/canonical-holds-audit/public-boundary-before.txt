@@ -1,8 +1,0 @@
-Error in check_public_api(if (length(args)) args[[1]] else ".") :
-  Non-production address found: /home/sxthi/Documents/Projects/ComptoxR/.planning/quick/260928-specmill-mirror-selection/260928-specmill-mirror-selection-PLAN.md, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/REPORT.md, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/amos-reviewed-source.json, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/bundle_amos_reads.R, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/issue-352/live-results.json, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/issue-352/live.R, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/issue-352/root-live-v42.json, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/remaining-facades/probe-group-sources.R, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/remaining-facades/probe-native-safety.R, /home/sxthi/Documents/Projects/ComptoxR/dev/specmill-rebuild/remaining-facades/probe-pubchem.R, /home/sxthi/Documents/Projec
-In addition: Warning messages:
-1: In grepl(forbidden_host, readLines(f, warn = FALSE), ignore.case = TRUE) :
-  unable to translate '<ff><fe>R' to a wide string
-2: In grepl(forbidden_host, readLines(f, warn = FALSE), ignore.case = TRUE) :
-  input string 1 is invalid
-Execution halted

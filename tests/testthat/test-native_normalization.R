@@ -66,7 +66,7 @@ test_that("detail arrays normalize and split using the current batch setting", {
       headers = list(`Content-Type` = "application/json"),
       body = charToRaw('[{"value":"ok"}]'))
   }, .package = "httr2")
-  for (name in c("ct_chemical_detail_search_bulk", "ct_chemical_detail_search_by_dtxcid_bulk")) {
+  for (name in c("ct_chemical_detail_search_by_dtxsid_bulk", "ct_chemical_detail_search_by_dtxcid_bulk")) {
     requests <- list()
     fn <- get(name, asNamespace("ComptoxR"))
     result <- fn(list("one", "", NA_character_, "one", "café", "three"), "compact")
@@ -96,7 +96,7 @@ test_that("object attribution follows each fan-out input", {
     list(structure(list(id = 1L), query = "one"), structure(list(id = 1L), query = "two")))
   expect_identical(ct_chemical_list_chemicals_search_equal(c("one", "two"), "chemical")$query,
                    c("one", "two"))
-  for (fn in list(ct_chemical_detail_search_bulk, ct_chemical_detail_search_by_dtxcid_bulk)) {
+  for (fn in list(ct_chemical_detail_search_by_dtxsid_bulk, ct_chemical_detail_search_by_dtxcid_bulk)) {
     expect_identical(fn("one"), tibble::tibble(query = "one", id = 1L))
   }
 })

@@ -1,4 +1,0 @@
-
-── Generated Wrapper Contract Tests ────────────────────────────────────────────
-ℹ Discovered 16 exported API wrapper function(s)
-✔ Generated tests are current and passed static validation

@@ -2,7 +2,7 @@ management_wrappers <- c(
   'chemi_hazard_download', 'chemi_hazard_report_export',
   'chemi_hazard_report_export_append', 'chemi_hazard_report_export2',
   'chemi_hazard_reports', 'chemi_hazard_reports_check', 'chemi_hazard_reports_by_id',
-  'chemi_hazard_reports_export_by_id',
+  'chemi_hazard_reports_export',
   'chemi_toxprints_download', 'chemi_toxprints_export', 'chemi_toxprints_export_global',
   'chemi_toxprints_render')
 

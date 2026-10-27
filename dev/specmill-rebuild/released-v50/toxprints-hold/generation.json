@@ -1,8 +1,0 @@
-{
-  "version": "0.1.50",
-  "validation": true,
-  "freshness": true,
-  "owners": 11,
-  "unchanged_GET_lines": 62,
-  "status": "private behavior-repair candidate; NOT adoption-approved"
-}

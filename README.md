@@ -103,20 +103,20 @@ Use a chemical identifier to retrieve a compound record:
 ```r
 library(ComptoxR)
 
-ct_chemical_detail_search("DTXSID7020182")
+ct_chemical_detail_search_by_dtxsid("DTXSID7020182")
 ```
 
 For several identifiers, use the bulk function:
 
 ```r
-result <- ct_chemical_detail_search_bulk(
+result <- ct_chemical_detail_search_by_dtxsid_bulk(
   query = c("DTXSID7020182", "DTXSID7020192")
 )
 dplyr::glimpse(result)
 ```
 
-Use `ct_chemical_detail_search()` for one chemical and
-`ct_chemical_detail_search_bulk()` for a vector of identifiers.
+Use `ct_chemical_detail_search_by_dtxsid()` for one chemical and
+`ct_chemical_detail_search_by_dtxsid_bulk()` for a vector of identifiers.
 
 The package site has examples for searching, hazard data, properties, batch
 requests, and local database tools. API-dependent examples are marked so that

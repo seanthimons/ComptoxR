@@ -28,7 +28,7 @@
 #'   Returns a zero-row tibble if no matches are found.
 #' @seealso [pubchem_properties()] to fetch properties for CIDs,
 #'   [pubchem_synonyms()] to fetch synonym lists,
-#'   [ct_chemical_detail_search()] for CompTox Dashboard chemical search.
+#'   [ct_chemical_detail_search_by_dtxsid()] for CompTox Dashboard chemical search.
 #' @export
 #' @examples
 #' \dontrun{

@@ -16,7 +16,7 @@
 test_that("chemi_search builds the search body and passes pagination args", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(
@@ -47,7 +47,7 @@ test_that("chemi_search builds the search body and passes pagination args", {
 test_that("chemi_search all_pages = TRUE requests offset/limit pagination", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -63,7 +63,7 @@ test_that("chemi_search all_pages = TRUE requests offset/limit pagination", {
 
 test_that("chemi_search tags similarity results with relationship", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       list(
         totalRecordsCount = 2,
@@ -91,7 +91,7 @@ test_that("chemi_search tags similarity results with relationship", {
 test_that("chemi_search exact: fetches MOL exactly once for a DTXSID query", {
   n_fetch <- 0
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) {
       n_fetch <<- n_fetch + 1
       "MOCK\nM  END\n"
     },
@@ -108,7 +108,7 @@ test_that("chemi_search exact: fetches MOL exactly once for a DTXSID query", {
 test_that("chemi_search substructure: resolves query to MOL", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -125,7 +125,7 @@ test_that("chemi_search substructure: resolves query to MOL", {
 test_that("chemi_search similar: maps all similarity types and min-similarity", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -154,7 +154,7 @@ test_that("chemi_search similar: maps all similarity types and min-similarity", 
 
 test_that("chemi_search similar: tags parent/child from response similarity", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       list(
         totalRecordsCount = 2,
@@ -174,7 +174,7 @@ test_that("chemi_search similar: tags parent/child from response similarity", {
 test_that("chemi_search mass: drops query, maps all mass types, carries range + elements", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -209,7 +209,7 @@ test_that("chemi_search mass: drops query, maps all mass types, carries range + 
 test_that("chemi_search hazard: empty MOL, maps all names/toxicity/authority", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -260,7 +260,7 @@ test_that("chemi_search hazard: empty MOL, maps all names/toxicity/authority", {
 test_that("chemi_search features: empty MOL, sweeps feature filters, element filters", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -299,7 +299,7 @@ test_that("chemi_search features: empty MOL, sweeps feature filters, element fil
 test_that("chemi_search: limit feeds both body params and pagination options", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
@@ -316,7 +316,7 @@ test_that("chemi_search: does not re-fetch a query that is already a MOL", {
   n_fetch <- 0
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) {
       n_fetch <<- n_fetch + 1
       "FETCHED\nM  END\n"
     },
@@ -335,7 +335,7 @@ test_that("chemi_search: does not re-fetch a query that is already a MOL", {
 
 test_that("chemi_search: empty response warns and returns a 0-row tibble", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       list(totalRecordsCount = 0, records = list())
     }),
@@ -354,7 +354,7 @@ test_that("chemi_search: empty response warns and returns a 0-row tibble", {
 
 test_that("chemi_search: validation failures surface as wrapped pre-request hook errors", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
     .ct_request = .search_test_transport(function(...) {
       list(totalRecordsCount = 0, records = list())
     }),

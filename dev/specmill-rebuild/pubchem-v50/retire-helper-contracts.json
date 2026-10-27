@@ -1,8 +1,0 @@
-{
-  "retire_using": "specmill::apply_files with reviewed hashes; never hand-edit ownership metadata",
-  "paths_sha256": {
-    "tests/testthat/test-pubchem_properties.R": "5df371a3f579771d24e3a9402b63fb3e318960e687d4a489239321eefc647667",
-    "tests/testthat/test-pubchem_search.R": "59fc586d5230c02117a742c4bc43b6729c4af512be0f5c42b119705f0d3b0865",
-    "tests/testthat/test-pubchem_synonyms.R": "fca2918e154c3d1a713c0684c7deb57b7288b88264e079249367f8a75b49d5a7"
-  }
-}

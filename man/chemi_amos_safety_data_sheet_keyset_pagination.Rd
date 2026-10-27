@@ -3,35 +3,32 @@
 %   R/chemi_amos_safety_data_sheet_keyset_pagination.R
 \name{chemi_amos_safety_data_sheet_keyset_pagination}
 \alias{chemi_amos_safety_data_sheet_keyset_pagination}
-\title{Returns information on a batch of safety data sheets using keyset pagination.}
+\title{chemi amos safety data sheet keyset pagination}
 \usage{
 chemi_amos_safety_data_sheet_keyset_pagination(
   limit,
   cursor = NULL,
   all_pages = TRUE,
-  max_pages = 100
+  max_pages = 100L
 )
 }
 \arguments{
-\item{limit}{Limit of records to return.}
+\item{limit}{limit}
 
-\item{cursor}{Optional keyset cursor returned by a previous response.}
+\item{cursor}{cursor}
 
-\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+\item{all_pages}{TRUE (the default) requests page after page, starting at cursor, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in cursor.}
 
-\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
+\item{max_pages}{Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning.}
 }
 \value{
-Returns a tibble with results
+A list of records when all_pages is TRUE, otherwise the original response envelope.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_safety_data_sheet_keyset_pagination(limit = "DTXSID7020182")
+chemi_amos_safety_data_sheet_keyset_pagination(limit = 1L, all_pages = FALSE, max_pages = 2L)
 }
-}
-\section{API stage}{
-  This wrapper was generated from the \strong{public} API schema.
 }
