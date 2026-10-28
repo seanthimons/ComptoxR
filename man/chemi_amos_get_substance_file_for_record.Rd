@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_substance_file_for_record.R
 \name{chemi_amos_get_substance_file_for_record}
 \alias{chemi_amos_get_substance_file_for_record}
-\title{Creates an Excel workbook listing the substances in the specified record with some additional identifiers.}
+\title{Creates an Excel workbook listing the substances in the specified record with some additional identifiers}
 \usage{
 chemi_amos_get_substance_file_for_record(internal_id)
 }

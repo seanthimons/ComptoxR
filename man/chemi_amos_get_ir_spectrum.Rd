@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_ir_spectrum.R
 \name{chemi_amos_get_ir_spectrum}
 \alias{chemi_amos_get_ir_spectrum}
-\title{Returns an IR spectrum by database ID.}
+\title{Returns an IR spectrum by database ID}
 \usage{
 chemi_amos_get_ir_spectrum(internal_id)
 }

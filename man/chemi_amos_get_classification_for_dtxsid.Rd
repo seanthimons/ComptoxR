@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_classification_for_dtxsid.R
 \name{chemi_amos_get_classification_for_dtxsid}
 \alias{chemi_amos_get_classification_for_dtxsid}
-\title{Returns the top four levels of a ClassyFire classification of a given substance.}
+\title{Returns the top four levels of a ClassyFire classification of a given substance}
 \usage{
 chemi_amos_get_classification_for_dtxsid(dtxsid)
 }

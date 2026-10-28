@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_dtxsids_from_functional_use.R
 \name{chemi_amos_dtxsids_from_functional_use}
 \alias{chemi_amos_dtxsids_from_functional_use}
-\title{Returns all substances associated with the specified functional use classification.}
+\title{Returns all substances associated with the specified functional use classification}
 \usage{
 chemi_amos_dtxsids_from_functional_use(functional_use)
 }

@@ -1,4 +1,4 @@
-#' Returns a list of substances that have the given molecular formula.
+#' Returns a list of substances that have the given molecular formula
 #'
 #' @md
 #' @description

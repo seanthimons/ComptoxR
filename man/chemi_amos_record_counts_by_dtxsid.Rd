@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_record_counts_by_dtxsid.R
 \name{chemi_amos_record_counts_by_dtxsid}
 \alias{chemi_amos_record_counts_by_dtxsid}
-\title{Returns a dictionary containing the counts of record types that are present in the database for each supplied DTXSID.}
+\title{Returns a dictionary containing the counts of record types that are present in the database for each supplied DTXSID}
 \usage{
 chemi_amos_record_counts_by_dtxsid(dtxsids = NULL)
 }

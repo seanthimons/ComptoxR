@@ -1,4 +1,4 @@
-#' Retrieves a list of methods that contain the MS-Ready forms of a given substance but not the substance itself.
+#' Retrieves a list of methods that contain the MS-Ready forms of a given substance but not the substance itself
 #'
 #' @md
 #' @description

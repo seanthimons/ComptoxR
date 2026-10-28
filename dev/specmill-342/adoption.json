@@ -78,13 +78,13 @@
     "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
   },
   "current_adoption": {
-    "reviewed_at": "2026-10-26",
-    "base_commit": "af4c0f71caa13c918cb8a783106a86de8cf40251",
+    "reviewed_at": "2026-10-28",
+    "base_commit": "8cf345b3c76ee3b4f991cf0d4329a2a28ca8b81d",
     "toolkit": {
       "package": "specmill",
-      "version": "0.1.57",
-      "source_commit": "ebcf7e103e35f47100d786a44c81278a9c74fd4f",
-      "source_archive_sha256": "09b8db61971c68d2adcfb4c24ec2d1674fbb59af753b834907dbd916192577e6",
+      "version": "0.1.59",
+      "source_commit": "142f5e2bbc8fee38211522828d21cf6667d51a5a",
+      "source_archive_sha256": "7a82f11cd059950ec2559b115b98ea21891afde2f96e2e815f53bc2b3981b4b7",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
@@ -92,7 +92,7 @@
       "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
       "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
     },
-    "review": "Official 0.1.57 scaffold emission and provenance checked by verify.R; adds route-derived naming, readable route-keyed contract fixtures and regeneration_report, no helper or facade change. Retired generic_request/generic_chemi_request (PR #345); ct_related and ct_similar call .ct_request directly.",
+    "review": "Specmill 0.1.59 (fixes #212-#214, #216-#218: path naming, owned-file splits, coverage service exclusion, title periods, policy partial-match, manual test scaffolding); helper output unchanged.",
     "facades_retired": [
       "generic_request",
       "generic_chemi_request",
@@ -550,6 +550,23 @@
         "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
       },
       "review": "Official 0.1.55 scaffold emission and provenance checked by verify.R; adds extra_parameters minimum/maximum/items validation, no helper or facade change."
+    },
+    {
+      "reviewed_at": "2026-10-26",
+      "base_commit": "af4c0f71caa13c918cb8a783106a86de8cf40251",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.1.57",
+        "source_commit": "ebcf7e103e35f47100d786a44c81278a9c74fd4f",
+        "source_archive_sha256": "09b8db61971c68d2adcfb4c24ec2d1674fbb59af753b834907dbd916192577e6",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_specmill_request.R": "a417551f00719035355d5130dfdfd27421846f857800a01a5218534552f87cec",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Official 0.1.57 scaffold emission and provenance checked by verify.R; adds route-derived naming, readable route-keyed contract fixtures and regeneration_report, no helper or facade change. Retired generic_request/generic_chemi_request (PR #345); ct_related and ct_similar call .ct_request directly."
     }
   ]
 }

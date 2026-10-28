@@ -1,4 +1,4 @@
-#' Returns information about a method with linked spectra, given an ID for either a spectrum or a method.
+#' Returns information about a method with linked spectra, given an ID for either a spectrum or a method
 #'
 #' @md
 #' @description

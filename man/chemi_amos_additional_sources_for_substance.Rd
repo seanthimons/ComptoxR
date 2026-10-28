@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_additional_sources_for_substance.R
 \name{chemi_amos_additional_sources_for_substance}
 \alias{chemi_amos_additional_sources_for_substance}
-\title{Retrieves links for supplemental sources (e.g., Wikipedia, ChemExpo) for a given DTXSID, if any are available.}
+\title{Retrieves links for supplemental sources (e.g., Wikipedia, ChemExpo) for a given DTXSID, if any are available}
 \usage{
 chemi_amos_additional_sources_for_substance(dtxsid)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_count_substances_in_ids.R
 \name{chemi_amos_count_substances_in_ids}
 \alias{chemi_amos_count_substances_in_ids}
-\title{Counts the number of unique substances seen in a set of records.}
+\title{Counts the number of unique substances seen in a set of records}
 \usage{
 chemi_amos_count_substances_in_ids(internal_id_list = NULL)
 }

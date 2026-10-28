@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_list_fact_sheet_types.R
 \name{chemi_amos_list_fact_sheet_types}
 \alias{chemi_amos_list_fact_sheet_types}
-\title{Returns a list of all unique fact sheet types, coming from the document_type field of the fact sheet table.}
+\title{Returns a list of all unique fact sheet types, coming from the document_type field of the fact sheet table}
 \usage{
 chemi_amos_list_fact_sheet_types()
 }

@@ -1,4 +1,4 @@
-#' Creates an Excel workbook listing the substances in the specified record with some additional identifiers.
+#' Creates an Excel workbook listing the substances in the specified record with some additional identifiers
 #'
 #' @md
 #' @description

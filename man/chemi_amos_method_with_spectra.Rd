@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_method_with_spectra.R
 \name{chemi_amos_method_with_spectra}
 \alias{chemi_amos_method_with_spectra}
-\title{Returns information about a method with linked spectra, given an ID for either a spectrum or a method.}
+\title{Returns information about a method with linked spectra, given an ID for either a spectrum or a method}
 \usage{
 chemi_amos_method_with_spectra(search_type, internal_id)
 }

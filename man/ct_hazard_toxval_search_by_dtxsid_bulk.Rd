@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_hazard_toxval_search_by_dtxsid_bulk.R
 \name{ct_hazard_toxval_search_by_dtxsid_bulk}
 \alias{ct_hazard_toxval_search_by_dtxsid_bulk}
-\title{Get data for a batch of DTXSID(s).}
+\title{Get data for a batch of DTXSID(s)}
 \usage{
 ct_hazard_toxval_search_by_dtxsid_bulk(dtxsid)
 }

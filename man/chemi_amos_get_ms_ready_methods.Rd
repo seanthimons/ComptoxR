@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_ms_ready_methods.R
 \name{chemi_amos_get_ms_ready_methods}
 \alias{chemi_amos_get_ms_ready_methods}
-\title{Retrieves a list of methods that contain the MS-Ready forms of a given substance but not the substance itself.}
+\title{Retrieves a list of methods that contain the MS-Ready forms of a given substance but not the substance itself}
 \usage{
 chemi_amos_get_ms_ready_methods(inchikey)
 }

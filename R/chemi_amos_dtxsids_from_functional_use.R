@@ -1,4 +1,4 @@
-#' Returns all substances associated with the specified functional use classification.
+#' Returns all substances associated with the specified functional use classification
 #'
 #' @md
 #' @description

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_functional_class_search.R
 \name{chemi_amos_functional_class_search}
 \alias{chemi_amos_functional_class_search}
-\title{Returns a list of DTXSIDs for the given functional use.}
+\title{Returns a list of DTXSIDs for the given functional use}
 \usage{
 chemi_amos_functional_class_search(functional_class)
 }

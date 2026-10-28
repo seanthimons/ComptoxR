@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_pdf_metadata.R
 \name{chemi_amos_get_pdf_metadata}
 \alias{chemi_amos_get_pdf_metadata}
-\title{Retrieves metadata associated with a PDF record.}
+\title{Retrieves metadata associated with a PDF record}
 \usage{
 chemi_amos_get_pdf_metadata(record_type, internal_id)
 }

@@ -1,4 +1,4 @@
-#' Retrieves a list of records from the database that contain a searched DTXSID.
+#' Retrieves a list of records from the database that contain a searched DTXSID
 #'
 #' @md
 #' @description

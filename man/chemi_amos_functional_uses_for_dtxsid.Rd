@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_functional_uses_for_dtxsid.R
 \name{chemi_amos_functional_uses_for_dtxsid}
 \alias{chemi_amos_functional_uses_for_dtxsid}
-\title{Returns a list of functional use classifications for a substance.}
+\title{Returns a list of functional use classifications for a substance}
 \usage{
 chemi_amos_functional_uses_for_dtxsid(dtxsid)
 }

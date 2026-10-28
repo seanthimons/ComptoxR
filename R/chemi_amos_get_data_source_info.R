@@ -1,4 +1,4 @@
-#' Returns a list of major data sources in AMOS with some supplemental information.
+#' Returns a list of major data sources in AMOS with some supplemental information
 #'
 #' @md
 #' @description

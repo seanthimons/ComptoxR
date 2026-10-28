@@ -1,4 +1,4 @@
-#' Returns the top four levels of a ClassyFire classification of a given substance.
+#' Returns the top four levels of a ClassyFire classification of a given substance
 #'
 #' @md
 #' @description

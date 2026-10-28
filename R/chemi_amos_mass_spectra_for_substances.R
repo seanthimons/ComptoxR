@@ -1,4 +1,4 @@
-#' Given a list of DTXSIDs, return all mass spectra for those substances.
+#' Given a list of DTXSIDs, return all mass spectra for those substances
 #'
 #' @md
 #' @description

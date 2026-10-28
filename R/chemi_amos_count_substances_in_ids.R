@@ -1,4 +1,4 @@
-#' Counts the number of unique substances seen in a set of records.
+#' Counts the number of unique substances seen in a set of records
 #'
 #' @md
 #' @description

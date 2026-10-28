@@ -1,4 +1,4 @@
-#' Searches for a record in the database by ID.
+#' Searches for a record in the database by ID
 #'
 #' @md
 #' @description

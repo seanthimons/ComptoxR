@@ -1,5 +1,7 @@
 # Schema coverage badge policy for specmill::coverage_report(); see dev/update_coverage.R.
 baseline: dev/coverage-baseline.json
+# External API with no production schema; see pubchem-reviewed.json.
+exclude_services: ['^pubchem']
 groups:
   ccd:
     services: '^ctx_'

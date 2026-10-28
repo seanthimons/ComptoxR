@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_inchikey_first_block_search.R
 \name{chemi_amos_inchikey_first_block_search}
 \alias{chemi_amos_inchikey_first_block_search}
-\title{Returns a list of substances found by InChIKey.}
+\title{Returns a list of substances found by InChIKey}
 \usage{
 chemi_amos_inchikey_first_block_search(first_block)
 }

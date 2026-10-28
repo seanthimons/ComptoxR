@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_search.R
 \name{chemi_amos_search}
 \alias{chemi_amos_search}
-\title{Retrieves a list of records from the database that contain a searched DTXSID.}
+\title{Retrieves a list of records from the database that contain a searched DTXSID}
 \usage{
 chemi_amos_search(dtxsid)
 }

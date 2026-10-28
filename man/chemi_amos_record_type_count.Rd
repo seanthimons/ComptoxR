@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_record_type_count.R
 \name{chemi_amos_record_type_count}
 \alias{chemi_amos_record_type_count}
-\title{Returns the number of records of the given type.}
+\title{Returns the number of records of the given type}
 \usage{
 chemi_amos_record_type_count(record_type)
 }

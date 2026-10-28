@@ -1,4 +1,4 @@
-#' Returns a list of all functional use classes that are assigned to at least one substance.
+#' Returns a list of all functional use classes that are assigned to at least one substance
 #'
 #' @md
 #' @description

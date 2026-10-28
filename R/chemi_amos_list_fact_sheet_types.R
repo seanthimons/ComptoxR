@@ -1,4 +1,4 @@
-#' Returns a list of all unique fact sheet types, coming from the document_type field of the fact sheet table.
+#' Returns a list of all unique fact sheet types, coming from the document_type field of the fact sheet table
 #'
 #' @md
 #' @description

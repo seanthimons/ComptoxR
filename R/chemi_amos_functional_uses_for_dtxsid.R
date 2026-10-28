@@ -1,4 +1,4 @@
-#' Returns a list of functional use classifications for a substance.
+#' Returns a list of functional use classifications for a substance
 #'
 #' @md
 #' @description

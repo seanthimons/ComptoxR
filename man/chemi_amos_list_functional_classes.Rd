@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_list_functional_classes.R
 \name{chemi_amos_list_functional_classes}
 \alias{chemi_amos_list_functional_classes}
-\title{Returns a list of all functional use classes that are assigned to at least one substance.}
+\title{Returns a list of all functional use classes that are assigned to at least one substance}
 \usage{
 chemi_amos_list_functional_classes()
 }

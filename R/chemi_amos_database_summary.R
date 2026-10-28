@@ -1,4 +1,4 @@
-#' Returns a summary of the records in the database, organized by record types, methodologies, and sources.
+#' Returns a summary of the records in the database, organized by record types, methodologies, and sources
 #'
 #' @md
 #' @description

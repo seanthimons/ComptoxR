@@ -1,4 +1,4 @@
-#' Returns the number of records of the given type.
+#' Returns the number of records of the given type
 #'
 #' @md
 #' @description

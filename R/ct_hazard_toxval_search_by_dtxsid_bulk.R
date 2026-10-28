@@ -1,4 +1,4 @@
-#' Get data for a batch of DTXSID(s).
+#' Get data for a batch of DTXSID(s)
 #'
 #' @md
 #' @description

@@ -1,4 +1,4 @@
-#' Returns general information about a record by ID.
+#' Returns general information about a record by ID
 #'
 #' @md
 #' @description

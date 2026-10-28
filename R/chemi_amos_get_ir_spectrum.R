@@ -1,4 +1,4 @@
-#' Returns an IR spectrum by database ID.
+#' Returns an IR spectrum by database ID
 #'
 #' @md
 #' @description

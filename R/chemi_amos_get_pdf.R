@@ -1,4 +1,4 @@
-#' Retrieves a PDF from the database by the internal ID and type of record.
+#' Retrieves a PDF from the database by the internal ID and type of record
 #'
 #' @md
 #' @description

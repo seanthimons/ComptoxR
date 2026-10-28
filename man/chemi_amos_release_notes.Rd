@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_release_notes.R
 \name{chemi_amos_release_notes}
 \alias{chemi_amos_release_notes}
-\title{Returns a list of release notes for AMOS.}
+\title{Returns a list of release notes for AMOS}
 \usage{
 chemi_amos_release_notes()
 }

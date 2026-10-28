@@ -1,4 +1,4 @@
-#' Retrieves links for supplemental sources (e.g., Wikipedia, ChemExpo) for a given DTXSID, if any are available.
+#' Retrieves links for supplemental sources (e.g., Wikipedia, ChemExpo) for a given DTXSID, if any are available
 #'
 #' @md
 #' @description

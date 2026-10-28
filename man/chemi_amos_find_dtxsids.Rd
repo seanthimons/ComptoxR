@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_find_dtxsids.R
 \name{chemi_amos_find_dtxsids}
 \alias{chemi_amos_find_dtxsids}
-\title{Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information.}
+\title{Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information}
 \usage{
 chemi_amos_find_dtxsids(internal_id)
 }

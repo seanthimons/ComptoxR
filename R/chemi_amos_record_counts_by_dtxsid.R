@@ -1,4 +1,4 @@
-#' Returns a dictionary containing the counts of record types that are present in the database for each supplied DTXSID.
+#' Returns a dictionary containing the counts of record types that are present in the database for each supplied DTXSID
 #'
 #' @md
 #' @description

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_info_by_id.R
 \name{chemi_amos_get_info_by_id}
 \alias{chemi_amos_get_info_by_id}
-\title{Returns general information about a record by ID.}
+\title{Returns general information about a record by ID}
 \usage{
 chemi_amos_get_info_by_id(internal_id)
 }

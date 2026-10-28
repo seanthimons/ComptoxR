@@ -11,6 +11,5 @@ Rscript dev/update_coverage.R          # print coverage
 Rscript dev/update_coverage.R --apply  # write the badges and dev/coverage-baseline.json
 ```
 
-> These files are frozen until seanthimons/specmill#102 lands. `coverage_report()`
-> currently measures against the operations selected in `apis/`, so it reports
-> 100% for every group. These badges were computed against all schema operations.
+> Coverage is measured against all schema operations (`denominator: schema` in
+> `dev/coverage.yml`); pubchem is excluded via `exclude_services`.

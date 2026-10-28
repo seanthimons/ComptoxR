@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_nmr_spectrum.R
 \name{chemi_amos_get_nmr_spectrum}
 \alias{chemi_amos_get_nmr_spectrum}
-\title{Endpoint for retrieving a specified NMR spectrum from the database.}
+\title{Endpoint for retrieving a specified NMR spectrum from the database}
 \usage{
 chemi_amos_get_nmr_spectrum(internal_id)
 }

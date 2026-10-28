@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_mass_spectra_for_substances.R
 \name{chemi_amos_mass_spectra_for_substances}
 \alias{chemi_amos_mass_spectra_for_substances}
-\title{Given a list of DTXSIDs, return all mass spectra for those substances.}
+\title{Given a list of DTXSIDs, return all mass spectra for those substances}
 \usage{
 chemi_amos_mass_spectra_for_substances(dtxsids = NULL)
 }

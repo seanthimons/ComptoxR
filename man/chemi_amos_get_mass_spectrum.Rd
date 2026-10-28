@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_mass_spectrum.R
 \name{chemi_amos_get_mass_spectrum}
 \alias{chemi_amos_get_mass_spectrum}
-\title{Retrieves a mass spectrum by its ID in AMOS's database with supporting information.}
+\title{Retrieves a mass spectrum by its ID in AMOS's database with supporting information}
 \usage{
 chemi_amos_get_mass_spectrum(internal_id)
 }

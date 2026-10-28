@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_record_id_search.R
 \name{chemi_amos_record_id_search}
 \alias{chemi_amos_record_id_search}
-\title{Searches for a record in the database by ID.}
+\title{Searches for a record in the database by ID}
 \usage{
 chemi_amos_record_id_search(internal_id)
 }

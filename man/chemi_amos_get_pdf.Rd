@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_pdf.R
 \name{chemi_amos_get_pdf}
 \alias{chemi_amos_get_pdf}
-\title{Retrieves a PDF from the database by the internal ID and type of record.}
+\title{Retrieves a PDF from the database by the internal ID and type of record}
 \usage{
 chemi_amos_get_pdf(record_type, internal_id)
 }

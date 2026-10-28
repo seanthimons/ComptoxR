@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_formula_search.R
 \name{chemi_amos_formula_search}
 \alias{chemi_amos_formula_search}
-\title{Returns a list of substances that have the given molecular formula.}
+\title{Returns a list of substances that have the given molecular formula}
 \usage{
 chemi_amos_formula_search(formula)
 }

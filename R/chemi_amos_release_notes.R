@@ -1,4 +1,4 @@
-#' Returns a list of release notes for AMOS.
+#' Returns a list of release notes for AMOS
 #'
 #' @md
 #' @description

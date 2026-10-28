@@ -1,4 +1,4 @@
-#' Endpoint for retrieving a specified NMR spectrum from the database.
+#' Endpoint for retrieving a specified NMR spectrum from the database
 #'
 #' @md
 #' @description

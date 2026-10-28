@@ -1,4 +1,4 @@
-#' Returns a list of substances found by InChIKey.
+#' Returns a list of substances found by InChIKey
 #'
 #' @md
 #' @description

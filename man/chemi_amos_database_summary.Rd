@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_database_summary.R
 \name{chemi_amos_database_summary}
 \alias{chemi_amos_database_summary}
-\title{Returns a summary of the records in the database, organized by record types, methodologies, and sources.}
+\title{Returns a summary of the records in the database, organized by record types, methodologies, and sources}
 \usage{
 chemi_amos_database_summary()
 }

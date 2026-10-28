@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_substring_search.R
 \name{chemi_amos_substring_search}
 \alias{chemi_amos_substring_search}
-\title{Returns information on substances where the specified substring is in or equal to a name.}
+\title{Returns information on substances where the specified substring is in or equal to a name}
 \usage{
 chemi_amos_substring_search(substring)
 }

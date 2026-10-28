@@ -1,4 +1,4 @@
-#' Retrieves metadata associated with a PDF record.
+#' Retrieves metadata associated with a PDF record
 #'
 #' @md
 #' @description

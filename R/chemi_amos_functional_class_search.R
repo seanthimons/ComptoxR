@@ -1,4 +1,4 @@
-#' Returns a list of DTXSIDs for the given functional use.
+#' Returns a list of DTXSIDs for the given functional use
 #'
 #' @md
 #' @description

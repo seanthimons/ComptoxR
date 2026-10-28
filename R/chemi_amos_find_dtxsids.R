@@ -1,4 +1,4 @@
-#' Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information.
+#' Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information
 #'
 #' @md
 #' @description

@@ -1,4 +1,4 @@
-#' Returns information on substances where the specified substring is in or equal to a name.
+#' Returns information on substances where the specified substring is in or equal to a name
 #'
 #' @md
 #' @description

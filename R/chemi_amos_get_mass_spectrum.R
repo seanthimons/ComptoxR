@@ -1,4 +1,4 @@
-#' Retrieves a mass spectrum by its ID in AMOS's database with supporting information.
+#' Retrieves a mass spectrum by its ID in AMOS's database with supporting information
 #'
 #' @md
 #' @description
