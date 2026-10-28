@@ -3,6 +3,7 @@
 **Generated**: 2026-09-08 10:30 -04:00
 **Branch**: `fix/workflow-production-gaps` (ComptoxR)
 **Status**: Initial extraction released. Configuration-driven generalization is not implemented.
+**Note**: `dev/migration-evidence/` and `dev/reports/migration/` were removed in the dev cleanup; read them at commit `0499401f`.
 
 ## Goal
 

@@ -1,9 +1,9 @@
-#' Data frame of DTXSIDs to test things with.
+#' Data frame of DTXSIDs to test things with
 #'
 #' A data frame of several DTXSIDs to test functions with.
 'testing_chemicals'
 
-#' Table of GenRA function endpoints.
+#' Table of GenRA function endpoints
 #'
 #' A tibble of possible choices for GenRA functions.
 #'
@@ -14,7 +14,7 @@
 #'
 'toxprint_ID_key'
 
-#' Table of ToxPrint Enrichment table values to build against.
+#' Table of ToxPrint Enrichment table values to build against
 #'
 #' A tibble of possible Chemotypers Toxprints that have been enriched against in-vitro assay results
 #'

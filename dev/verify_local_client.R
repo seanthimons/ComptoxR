@@ -71,7 +71,7 @@ verify_local_client <- function(root = '.') {
   jsonlite::write_json(document, file.path(input, 'unsupported.json'), auto_unbox = TRUE)
   diagnostic <- generate(tempfile('local-unsupported-'), 'unsupported.json')
   stopifnot(length(diagnostic$operations) == 4L, length(diagnostic$diagnostics) == 1L)
-  runner <- file.path(root, 'dev/migration-evidence/verify-local-client.R')
+  runner <- file.path(root, 'dev/verify_local_client.R')
   status <- system2(
     file.path(R.home('bin'), if (.Platform$OS.type == 'windows') 'Rscript.exe' else 'Rscript'),
     c('--vanilla', shQuote(runner), '--runtime', shQuote(file.path(output, 'client.R')))
@@ -140,7 +140,7 @@ if (sys.nframe() == 0L) {
   } else if (length(args) && args[[1]] == '--alerts') {
     verify_frozen_alerts_runtime(args[[2]])
   } else if (length(args) && args[[1]] == '--install-alerts') {
-    verify_local_install(args[[2]], normalizePath('dev/migration-evidence/verify-local-client.R'), args[[3]])
+    verify_local_install(args[[2]], normalizePath('dev/verify_local_client.R'), args[[3]])
   } else if (length(args) && args[[1]] == '--installed') {
     .libPaths(c(args[[2]], .Library))
     stopifnot(!requireNamespace('specmill', quietly = TRUE), !requireNamespace('ComptoxR', quietly = TRUE))

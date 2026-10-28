@@ -95,8 +95,8 @@ jobs:
           Rscript -e '
             files <- c(
               "tests/testthat/test-chemi_search.R",
-              "tests/testthat/test-ct_chemical_detail_search.R",
-              "tests/testthat/test-pubchem_search.R"
+              "tests/testthat/test-contract-ct_chemical_detail_search_by_dtxsid.R",
+              "tests/testthat/test-pubchem_offline.R"
             )
             for (file in files) {
               testthat::test_file(file)

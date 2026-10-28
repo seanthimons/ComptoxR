@@ -3,7 +3,7 @@
 \docType{data}
 \name{toxprint_dict}
 \alias{toxprint_dict}
-\title{Table of ToxPrint Enrichment table values to build against.}
+\title{Table of ToxPrint Enrichment table values to build against}
 \format{
 \code{toxprint_dict}
 }

@@ -9,6 +9,11 @@ batch_limit(limit = 200)
 \arguments{
 \item{limit}{Numeric number}
 }
+\value{
+Called for its side effect of setting the \code{batch_limit}
+environment variable; returns the result of \code{\link[=Sys.setenv]{Sys.setenv()}} invisibly.
+Warns and returns \code{NULL} for non-numeric input.
+}
 \description{
 Sets the global batch limit for POST requests. Defaults to 200.
 Only wrappers that read the \code{batch_limit} setting use it. Wrappers that

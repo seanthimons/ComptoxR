@@ -1,4 +1,4 @@
-#' Get related substances from the EPA CompTox dashboard.
+#' Get related substances from the EPA CompTox dashboard
 #'
 #' @description
 #' `r lifecycle::badge("questioning")`

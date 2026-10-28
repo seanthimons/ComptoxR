@@ -1,5 +1,9 @@
 # Project handoff
 
+Historical evidence cited below (`dev/reports/migration/`, `dev/migration-evidence/`,
+`dev/migrations/`, `dev/specmill-pilot/*.md`, `dev/validate_migration_release.R`) was
+removed from the tree in the dev cleanup; read it at commit `0499401f`.
+
 ## Resume the full API migration, 18 October 2026
 
 Each `apis/<schema>.yml` file records why its operations are named, changed or

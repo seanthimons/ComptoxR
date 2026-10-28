@@ -38,8 +38,8 @@ Rscript dev/unit_test_readiness_audit.R --check-exports
 Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
 
 # Run targeted tests
-Rscript -e "testthat::test_file('tests/testthat/test-generic_request.R')"
-Rscript -e "devtools::test(filter = 'generic_request')"
+Rscript -e "testthat::test_file('tests/testthat/test-chemi_search.R')"
+Rscript -e "devtools::test(filter = 'chemi_search')"
 
 # Run the CRAN-safe readiness lane when the change has broad impact
 Rscript dev/cran_readiness.R

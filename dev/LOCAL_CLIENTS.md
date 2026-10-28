@@ -55,7 +55,7 @@ automatic authentication, pagination or chemical resolution. Those behaviors
 need separately reviewed local helper code. Keep generated clients local;
 public operations must be regenerated from approved production schemas.
 
-Verification: `Rscript dev/migration-evidence/verify-local-client.R` generates
+Verification: `Rscript dev/verify_local_client.R` generates
 the four-operation catalogue twice, compares both output hashes, rejects public
 output and replacement of existing files, reports an unsupported header, and
 starts a fresh R process. It also installs the generated package in a separate
@@ -78,11 +78,11 @@ The frozen alerts output also passed a fresh-process mocked GET for
 `groupGet('a/b')`, with the fixed expected URL
 `https://local.invalid/api/alerts/groups/a%2Fb` and a parsed JSON response.
 Repeat that check with
-`Rscript --vanilla dev/migration-evidence/verify-local-client.R --alerts <absolute_client.R>`.
+`Rscript --vanilla dev/verify_local_client.R --alerts <absolute_client.R>`.
 The actual alerts package also passed installation and the same mocked GET in
 the separate `migration-516dfd4/library-localalerts-json` library, with specmill
 and ComptoxR absent. Repeat with
-`Rscript dev/migration-evidence/verify-local-client.R --install-alerts <package_root> <new_local_library>`.
+`Rscript dev/verify_local_client.R --install-alerts <package_root> <new_local_library>`.
 Install output reports no man pages: these are minimal local packages, not
 packages prepared for public release.
 All verification commands passed with no skips. Air and Jarl passed for the

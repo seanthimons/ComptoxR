@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_related.R
 \name{ct_related}
 \alias{ct_related}
-\title{Get related substances from the EPA CompTox dashboard.}
+\title{Get related substances from the EPA CompTox dashboard}
 \usage{
 ct_related(query, inclusive = FALSE)
 }
