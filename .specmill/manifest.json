@@ -6098,7 +6098,7 @@
     "chemi_chet GET /chemicals/chemical_DL": {
       "key": "GET /chemicals/chemical_DL",
       "source": "schema/chemi_chet_prod.json",
-      "reason": "Prod marks the GET body optional but the deployed service returns 400 on a bodyless GET; POST wrapper covers the download",
+      "reason": "Prod marks the GET body optional but the deployed service returns 400 on a bodyless GET; the POST route is banned (write/export endpoint), so the chemical list download wrappers cover it",
       "fingerprint": "v1:8a8d665221ab88743f4b6db69129625e56bb0795367d07e1a0cabb282dd8b9cb",
       "version": 1,
       "functions": "api.chemicals.chemical_dl_get"

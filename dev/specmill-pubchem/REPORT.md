@@ -42,8 +42,8 @@ There was no existing PUG REST config or schema. `pug-rest-original.md` preserve
 verbatim bytes from the [official NCBI Markdown source](https://pubchem.ncbi.nlm.nih.gov/pcfe/docs/markdown/pug-rest.md).
 The HTML docs failed Firecrawl retrieval; the official Markdown URL succeeded
 with HTTP200. `source-ledger.json` records URL, retrieval timestamp and SHA256 of
-both original and derived source. `build_source.py` reproduces the complete,
-self-contained OAS3.0.3 `pubchem-reviewed.json`. This is a client-authored prose
+both original and derived source. The complete, self-contained OAS3.0.3
+`schema/pubchem-reviewed.json` was built by `build_source.py` (since removed). This is a client-authored prose
 translation, not an NCBI-published OpenAPI snapshot. Its full text is the exact
 reviewable proposed source addition; no canonical source edits are involved.
 
@@ -132,10 +132,7 @@ a dedicated persistent directory before launching R:
 ```sh
 mkdir -p /home/sxthi/.cache/comptoxr-pubchem-345/tmp /home/sxthi/.cache/comptoxr-pubchem-345/check
 export TMPDIR=/home/sxthi/.cache/comptoxr-pubchem-345/tmp
-python3 dev/specmill-pubchem/build_source.py
 Rscript dev/specmill-pubchem/check_pinned.R /path/to/library-matching-dev-specmill-lock
-Rscript dev/specmill-pubchem/verify.R /path/to/official-v41-library
-Rscript dev/specmill-pubchem/verify.R /path/to/official-v41-library --source-only
 Rscript dev/specmill-pubchem/probe_transport.R /path/to/official-v41-library
 Rscript -e 'testthat::test_local(filter="pubchem", stop_on_failure=TRUE)'
 ```

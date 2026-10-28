@@ -39,7 +39,7 @@ test_that('legacy service formals, corrected bodies and actual HTTP conditions a
   for (name in legacy_services_wrappers) {
     old_env <- new.env(parent = asNamespace('ComptoxR'))
     old_file <- testthat::test_path('../..', 'dev/search-services/legacy-before', paste0(name, '.R'))
-    skip_if_not(file.exists(old_file), 'Maintainer fixture is excluded from the CRAN source tarball.')
+    skip_if_not(file.exists(old_file), 'Legacy fixture was removed with dev/search-services; rebuild it to restore this check.')
     sys.source(old_file, old_env)
     old <- old_env[[name]]
     native <- get(name, asNamespace('ComptoxR'))
