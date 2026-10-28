@@ -41,6 +41,7 @@ tg_metadata_for_wrapper <- function(record, helper_names = tg_config$helper_name
     helper_call = primary_call,
     helper_args = tg_named_call_args(primary_call),
     formals = tg_formal_records(record$expr),
+    test_args = fn_hook_config$test_args,
     call_names = record$call_names,
     resolver_helpers = resolver_helpers,
     uses_resolve_query_hook = uses_resolve_query_hook,

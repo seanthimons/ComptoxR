@@ -1081,10 +1081,13 @@ chemi_services_export_json_report:
   bespoke_test: tests/testthat/test-native_search_services.R
 
 chemi_services_convert:
-  bespoke_test: tests/testthat/test-native_services_legacy.R
+  test_args:
+    content: CCCC
+    type: smiles
 
 chemi_services_collated_report:
-  bespoke_test: tests/testthat/test-native_services_legacy.R
+  test_args:
+    chemicals: DTXSID7020182
 
 chemi_resolver_export:
   bespoke_test: tests/testthat/test-native_resolver_extra.R

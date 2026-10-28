@@ -91,6 +91,13 @@ tg_build_wrapper_call_args <- function(metadata) {
     args[[formal$name]] <- tg_r_literal(value)
   }
 
+  # Wrappers whose callbacks reject empty input declare example arguments in
+  # inst/hook_config.yml under test_args.
+  for (name in names(metadata$test_args)) {
+    values[[name]] <- metadata$test_args[[name]]
+    args[[name]] <- tg_r_literal(values[[name]])
+  }
+
   if (metadata$function_name %in% c("chemi_opera_bulk", "chemi_predictor_models_predict_bulk")) {
     values[["smiles"]] <- "CCCC"
     args[["smiles"]] <- '"CCCC"'

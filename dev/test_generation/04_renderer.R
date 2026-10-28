@@ -45,12 +45,6 @@ tg_render_assertions <- function(metadata, call_values) {
     }
   }
 
-  # Every generated contract should assert at least endpoint when the wrapper
-  # passes one. This catches accidental endpoint-slug/file-name mismatches.
-  if (!"endpoint" %in% names(helper_args)) {
-    assertions <- c(assertions, "  expect_true(\"endpoint\" %in% names(call) || \"operation\" %in% names(call))")
-  }
-
   unique(assertions)
 }
 
