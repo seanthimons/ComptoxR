@@ -3295,7 +3295,7 @@
     "R/hook_registry.R": "50648a4d4e5acd32f1356a7f1437f5fc0b6362c4f7ca9f90045f735a1a1b7048",
     "R/hooks_classyfire.R": "c4de723661190d22865e2793afce1367e8e2348a4882c1e94ba1b570c119b6ba",
     "R/hooks_compound.R": "473c89ad98f3d21385353808d49dac21cc7f5d9591b0a5ef28e8f94558231ab5",
-    "R/hooks_descriptors.R": "e153b008d740759455c896efd6ec19676d6e7b77b84ee5b13c8a2252e354f2cb",
+    "R/hooks_descriptors.R": "72ff07cbdbbded8ea6c16fc06339bd23ae1370933893ed32f8e8bce2648b3389",
     "R/hooks_epi.R": "2d73c60fe7b12ec5a5a0e4b398c39af42779bb05338d081f26e071719f7d772f",
     "R/hooks_hazard.R": "52ccb3a00880c5f70ec1e3639abc24c4adbbd6736a846c8cf72ae3a085694f3e",
     "R/hooks_list.R": "6f92d7ba988fd37d68006f50eed0286854c56c2a81597c3d9ca04bb1c2be4167",
