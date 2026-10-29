@@ -51,9 +51,9 @@ jobs:
 
       - name: Run core tests
         run: |
-          # Run only core template tests for quick feedback
-          testthat::test_file("tests/testthat/test-ct_similar.R")
-          testthat::test_file("tests/testthat/test-ct_related.R")
+          # Run only core template tests for quick feedback; devtools::test()
+          # loads the package, which the test helpers need.
+          devtools::test(filter = "^ct_(similar|related)$", stop_on_failure = TRUE)
         shell: Rscript {0}
 
       - name: Check syntax
