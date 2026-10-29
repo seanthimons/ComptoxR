@@ -45,8 +45,8 @@ The legacy commands below continue to maintain retained operations.
 The **Specmill Maintenance** workflow checks the generated client on every pull request,
 including changes to CI and documentation. It installs the locked source revision,
 runs native behavior suites, fixed contracts and client policy tests, and checks that regeneration
-leaves no changed or new files. Its Air 0.11.0 installation runs in a separate job
-from the legacy generator's Air 0.9.0 installation.
+leaves no changed or new files. Every workflow installs Air 0.11.0, the version pinned in
+`specmill.yml`.
 
 Install the reviewed development toolkit before running schema commands:
 
@@ -58,7 +58,7 @@ lib <- install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
 
 The specmill revision and source-archive SHA-256 are pinned in
 `dev/specmill-lock.json`; `install_specmill()` archives that revision from a local
-specmill checkout (default `../specmill`). Specmill is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
+specmill checkout (default `../specmill`). Specmill is not a runtime dependency. Install Air 0.11.0 for generation; CI uses that
 version with this repository's `air.toml`. Public generation uses approved production
 schemas only. Keep other schemas and generated clients outside this checkout.
 Regenerate a promoted operation from its approved production schema.

@@ -72,7 +72,7 @@ install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
 .libPaths(c("dev/specmill-pilot/artifacts/toolkit-library", .libPaths()))
 ```
 
-Use Air 0.9.0 for generation, as CI does. The toolkit is a development
+Use Air 0.11.0 for generation, as CI does. The toolkit is a development
 dependency; installed ComptoxR clients do not need it. Runtime hooks and
 manual wrappers stay in ComptoxR. Follow the generation and validation
 commands in
