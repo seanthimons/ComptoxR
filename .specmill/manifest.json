@@ -3930,7 +3930,7 @@
     "schema/ctx_chemical_prod.json": "bb45195d49c9bec334449f4c7d23283f609523120f3b075982e99acd56414f9e",
     "schema/ctx_exposure_prod.json": "1af4a35e7998d2a1a00a675ae3da850164b2afa2dd595f4be6cb3b4b37ed582d",
     "schema/ctx_hazard_prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
-    "schema/epi_suite_prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
+    "schema/epi_suite_prod.json": "c54cb985fee935161980723cef12e98558841183e5fa1a9c0a96195a4b88cc4f",
     "schema/pubchem-reviewed.json": "ec4ee5c2c6b10c63248dfaa2f6f1b3198b6b6ebe9cfb11422d52de3adead5a9e",
     "specmill.yml": "7eeb4118c993f4a57611e1ec804f314f53f655343d61ba422e22a9635499c77b",
     "tests/testthat/fixtures/specmill-contracts.rds": "6bd3f36764ee03f7e18d86b93c5db67be3a06e8f88b7d14b543cc70e94c9f26e"
