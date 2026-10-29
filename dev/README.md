@@ -8,7 +8,7 @@ Maintainer scripts and the configuration they read. Run from the package root.
 - `install_specmill.R` + `specmill-lock.json`: install and verify the pinned Specmill toolkit (`verify_specmill()`); the library lives in the ignored `specmill-pilot/artifacts/`.
 - `generate_specmill.R`: plan, apply or check wrappers generated from `specmill.yml` and `apis/*.yml`.
 - `specmill_callbacks.R`, `specmill_pubchem_callbacks.R`: generation callbacks listed in `specmill.yml`.
-- `specmill-333/`: `SELECTION.md` (the `apis/` layout and keep-or-convert record) and `verify.R` (opt-out discovery check, CI).
+- `specmill-333/`: `SELECTION.md` (the `apis/` layout, keep-or-convert record, unresolved contracts and what is still outside Specmill) and `verify.R` (opt-out discovery check, CI).
 - `specmill-342/`: `verify.R`, `emit.R`, `adoption.json` (native helper adoption check, CI).
 - `check_specmill_fixes.R`: acceptance checks for specmill#100-#102 after re-pinning.
 - `remove_experimental.R`: delete generated wrapper files by prefix so they can be rebuilt.

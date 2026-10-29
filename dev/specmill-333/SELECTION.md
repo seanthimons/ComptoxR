@@ -47,3 +47,16 @@ reasons are recorded in `.specmill/manifest.json`:
 - `chemi_chet`: `GET /chemicals/chemical_DL`
 - `chemi_resolver`: `POST /api/resolver/getsimilaritylist`
 - `chemi_services`: `preflight` and `universalpreflight`
+
+## Unresolved schema contracts (#328)
+
+Gaps between the production schemas and what Specmill can generate:
+
+- **Deferred operations.** The ten operations above stay deferred, and each one retries automatically when its schema fingerprint changes. Resolver `getsimilaritylist` is also tracked upstream as specmill#165. The `preflight` routes need multipart upload support (specmill#28).
+- **No production schema.** `ct_related()` and `ct_similar()` call legacy dashboard routes that no production schema describes. They are hand-written and call `.ct_request()` directly. PubChem has no production schema, so it is generated from the first-party overlay `schema/pubchem-reviewed.json`.
+- **Relative or missing schema servers.** Many chemi and EPI schemas give either a relative server URL or a Swagger `host` without a usable origin. Specmill reports this as "requires a recorded origin or explicit base URL override". This is not a defect: generated wrappers resolve the base URL at runtime from the `chemi_burl`/`epi_burl` settings, which `chemi_server()` and `epi_server()` set.
+
+## What is still outside Specmill (#328)
+
+- **Hand-written code.** Client utilities (`ct_api_key`, `chemi_server`, `epi_server`), the runtime hooks (`R/hooks_*.R`, `inst/hook_config.yml`), response and input policies, and `ct_related`/`ct_similar`. Specmill records the hashes of hooks and callbacks in `.specmill/manifest.json`, so edit them and then run `dev/generate_specmill.R --apply`.
+- **`dev/generate_tests.R`.** This is the last legacy generator. It writes offline contract tests only for exported wrappers whose tests Specmill doesn't generate. Today it generates `test-chemi_services_convert.R` and `test-chemi_services_collated_report.R` from `test_args:` in `inst/hook_config.yml`, and skips two wrappers that have manual tests. CI runs its `--check`. `stub_specs.R`, `chemi_endpoint_eval.R` and `generic_request()` are gone.
