@@ -540,7 +540,7 @@
           },
           {
             "source": "schema/chemi_rdkit_prod.json",
-            "source_hash": "885c6ec76e6282a9689484392cfd9915",
+            "source_hash": "a3ca86b50663044b4724591711c6bde6",
             "key": "GET /api/rdkit",
             "helper": ".ct_request",
             "server": {
@@ -580,7 +580,7 @@
           },
           {
             "source": "schema/chemi_rdkit_prod.json",
-            "source_hash": "885c6ec76e6282a9689484392cfd9915",
+            "source_hash": "a3ca86b50663044b4724591711c6bde6",
             "key": "POST /api/rdkit",
             "helper": ".ct_request",
             "server": {
@@ -3911,14 +3911,14 @@
     "schema/chemi_chet_prod.json": "a92a5bb5b616f268f87bb980e75339d31ec26b3eaa14f3a0bdc3f6ad8636abcd",
     "schema/chemi_descriptors_prod.json": "de4cb57c30a72ed8e545ed66f0ad2fa21d22f0aa51b2a1d0f3b3237a8c45165f",
     "schema/chemi_hazard_prod.json": "fbf8dd15dee4b2053bc2b56f0a01cc49ab62cc472fed2cc1eb5807eed9786641",
-    "schema/chemi_mordred_prod.json": "9f3a56994ea2663f620b03c3d941a52bf6cbe1b3c22ad1a9b2e3e601621a5881",
+    "schema/chemi_mordred_prod.json": "45c92d9acf99cf5e1bd64356160b3ccf3606173f3e610d5353b88eab80dec9a7",
     "schema/chemi_ncc_cats_prod.json": "db617be49fd53baf2f6ad6a2eefae5d0fba61ab46bfc61a301324deabbc9d200",
     "schema/chemi_opera_prod.json": "5ce86ab409b4e077fc0d6f3df3545d196edbd2fc7532dee3e5ce9c01bb7aab54",
     "schema/chemi_padel_prod.json": "7728f336f6a26177454bb8cf2d4f0bc75677afbd1c352f0b29875a419bbf59be",
     "schema/chemi_pfas_atlas_prod.json": "a609b3852f2c7695e923dd7df0ff2ecf88dbe8f8ea0facb56a7605429dba8ea5",
     "schema/chemi_pfas_cats_prod.json": "be02fbac79d03746521bdfe8067042535795370aa8019c58ad08a543643d0855",
     "schema/chemi_predictor_models_prod.json": "0a532b11aa276c3bec6c2bb79b95419d102afcf8639b51e6ca084ca50c3b5c52",
-    "schema/chemi_rdkit_prod.json": "51ee6ddb5658d436e4e05d407bb909df7b3d6692230fd7a3c8a1506574f90e6b",
+    "schema/chemi_rdkit_prod.json": "e6a53ef4e9c5f6d14b8d5ea30d706673a0f1da34de6fa43c224d158066ccc7fd",
     "schema/chemi_resolver_prod.json": "7d79ad2a089ee69934275717dfce241f0b650ff707a5538bb4465bfcae9d8766",
     "schema/chemi_safety_prod.json": "692b6b22c765f3c2b749a47c42930d12a338b338693254dbbc3bb96a8d0c0efa",
     "schema/chemi_search_prod.json": "b23315d3dfaf35c7f62c5e646ec55d835d027b72e61e3b83843a2f3c8cf49526",
@@ -4573,10 +4573,10 @@
     },
     "schema/chemi_rdkit_prod.json": {
       "keys": [
-        "GET /api/rdkit/version",
-        "GET /api/rdkit/metadata",
         "GET /api/rdkit",
-        "POST /api/rdkit"
+        "POST /api/rdkit",
+        "GET /api/rdkit/metadata",
+        "GET /api/rdkit/version"
       ],
       "functions": {
         "GET /api/rdkit": [
@@ -4587,11 +4587,11 @@
           "chemi_descriptors_bulk",
           "chemi_rdkit_bulk"
         ],
-        "GET /api/rdkit/version": [
-          "chemi_rdkit_version"
-        ],
         "GET /api/rdkit/metadata": [
           "chemi_rdkit_metadata"
+        ],
+        "GET /api/rdkit/version": [
+          "chemi_rdkit_version"
         ]
       }
     },
@@ -4655,23 +4655,23 @@
     },
     "schema/chemi_mordred_prod.json": {
       "keys": [
-        "GET /api/mordred/version",
-        "GET /api/mordred/metadata",
         "GET /api/mordred",
-        "POST /api/mordred"
+        "POST /api/mordred",
+        "GET /api/mordred/metadata",
+        "GET /api/mordred/version"
       ],
       "functions": {
-        "GET /api/mordred/version": [
-          "chemi_mordred_version"
-        ],
-        "GET /api/mordred/metadata": [
-          "chemi_mordred_metadata"
-        ],
         "GET /api/mordred": [
           "chemi_mordred"
         ],
         "POST /api/mordred": [
           "chemi_mordred_bulk"
+        ],
+        "GET /api/mordred/metadata": [
+          "chemi_mordred_metadata"
+        ],
+        "GET /api/mordred/version": [
+          "chemi_mordred_version"
         ]
       }
     },
