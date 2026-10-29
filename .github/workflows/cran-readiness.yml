@@ -93,6 +93,8 @@ jobs:
         run: |
           Rscript dev/generate_tests.R --check
           Rscript -e '
+            # Test helpers resolve asNamespace("ComptoxR"); the package is not installed yet.
+            pkgload::load_all(quiet = TRUE)
             files <- c(
               "tests/testthat/test-chemi_search.R",
               "tests/testthat/test-contract-ct_chemical_detail_search_by_dtxsid.R",
