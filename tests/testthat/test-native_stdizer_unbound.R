@@ -5,6 +5,7 @@ stdizer_unbound_wrappers <- c(
   'chemi_stdizer_protocols_changes',
   'chemi_stdizer_protocols_export',
   'chemi_stdizer_protocols_issues',
+  'chemi_stdizer_records',
   'chemi_stdizer_render')
 
 test_that('standardizer bindings validate inputs and preserve actual localhost wire contracts', {
@@ -84,7 +85,7 @@ test_that('standardizer bindings validate inputs and preserve actual localhost w
     if ('body' %in% names(case$args)) {
       invalid <- case$args
       property <- switch(name,
-        chemi_stdizer_records_post_native = 'options',
+        chemi_stdizer_records = 'options',
         names(invalid$body)[[1L]])
       invalid$body[[property]] <- 1L
       expect_error(do.call(fn, invalid), info = name)

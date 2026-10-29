@@ -37,6 +37,10 @@ selection:
   # ChET login, admin and delete pages are not API.
   - '^/(auth|admin)/'
   - '^/chemicals/chemdelete/?$'
+  # #330: ChET legacy database-old pages, superseded by the current search routes.
+  - '^/(chemicals|reaction)/database[-_]old(/|$)'
+  # #330: assay creation is a write route.
+  - 'POST ^/api/toxprints/assays/?$'
   # #356: alerts are limited to POST /api/alerts, GET /api/alerts/metadata and /version.
   - '^/api/alerts(?!/(metadata|version)/?$|/?$)'
 # One file per API schema; each file explains its names and per-operation settings.

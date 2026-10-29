@@ -27,7 +27,6 @@ groups:
       GET /api/toxprints/toxprints: chemi_toxprints_toxprints
       GET /api/toxprints/version: chemi_toxprints_version
       POST /api/toxprints: chemi_toxprints_bulk
-      POST /api/toxprints/assays: chemi_toxprints_assays_bulk
       POST /api/toxprints/calculate: chemi_toxprints_calculate_bulk
       POST /api/toxprints/chemicals_categories: chemi_toxprints_chemicals_categories
       POST /api/toxprints/export: chemi_toxprints_export
@@ -336,102 +335,6 @@ groups:
           metadata: no
           warning: no
           empty: .ct_empty_table
-        request_controls:
-          preserve_errors: yes
-      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
-      POST /api/toxprints/assays:
-        inputs:
-          acl:
-            type: any
-            default: ~
-            description: Optional parameter
-          actives:
-            type: any
-            default: ~
-            description: Optional parameter
-          category:
-            type: any
-            default: ~
-            description: Optional parameter
-          chemicals:
-            type: any
-            default: ~
-            description: Optional parameter
-          id:
-            type: any
-            default: ~
-            description: Optional parameter
-          labels:
-            type: any
-            default: ~
-            description: Optional parameter
-          metrics:
-            type: any
-            default: ~
-            description: Optional parameter
-          name:
-            type: any
-            default: ~
-            description: Optional parameter
-          options:
-            type: any
-            default: ~
-            description: Optional parameter
-          total:
-            type: any
-            default: ~
-            description: Optional parameter
-        post_on_skip: no
-        post_state: parameters
-        request:
-          arguments:
-            method:
-              value: POST
-            path:
-              value: /api/toxprints/assays
-            path_params:
-              value: {}
-            query:
-              value: {}
-            body:
-              callback: legacy_chemi_facade_body
-            headers:
-              value:
-                Accept: application/json
-            server:
-              value:
-                url: https://hcd.rtpnc.epa.gov
-            server_resolver:
-              value:
-                name: .ct_server_url
-                key: chemi_burl
-                relative: /
-            auth:
-              value: []
-            response_policy:
-              callback: legacy_chemi_facade_response
-            request_controls:
-              value:
-                preserve_errors: yes
-        docs:
-          title: Toxprints Assays
-          lifecycle: experimental
-          parameters:
-            acl: Optional parameter
-            actives: Optional parameter
-            category: Optional parameter
-            chemicals: Optional parameter
-            id: Optional parameter
-            labels: Optional parameter
-            metrics: Optional parameter
-            name: Optional parameter
-            options: Optional parameter
-            total: Optional parameter
-          return: Returns a list with result object
-          examples:
-            - acl: DTXSID1024122
-          tags:
-            apiStage: public
         request_controls:
           preserve_errors: yes
       # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; drops schema parameters the released wrapper never exposed; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml

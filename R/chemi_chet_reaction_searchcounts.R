@@ -3,13 +3,17 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param search_input search_input Accepts a vector: one request is sent per element and the results are combined.
-#' @param search_type search_type
+#' @param search_input Value to count matches for, such as a library id or a reaction type name. Values are case-sensitive. Accepts a vector: one request is sent per element and the results are combined.
+#' @param search_type Field to match search_input against: one of "lib_id", "reaction_process", "reaction_type", "reaction_scheme" or "reaction_phase".
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
+#' @examples
+#' \dontrun{
+#' chemi_chet_reaction_searchcounts(search_input = "Hydrolysis", search_type = "reaction_type")
+#' }
 # Generated with specmill; do not edit by hand.
-chemi_chet_reaction_searchcounts <- function(search_input, search_type = NULL) {
+chemi_chet_reaction_searchcounts <- function(search_input, search_type) {
   search_input <- base::get(
     ".ct_legacy_query",
     envir = base::parent.env(base::environment()),

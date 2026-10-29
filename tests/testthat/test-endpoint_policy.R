@@ -44,6 +44,12 @@ test_that('banned endpoints cannot be selected or exported', {
   expect_true(all(excluded(c('/api/amos/analytical_qc_batch_search', '/api/amos/batch_search'))))
   expect_true(all(c('chemi_amos_search', 'chemi_amos_analytical_qc_keyset_pagination_bulk') %in%
     getNamespaceExports('ComptoxR')))
+  expect_true(all(excluded(
+    c('/chemicals/database-old', '/reaction/database_old', '/reaction/database-old/1/x'))))
+  expect_false(any(excluded(
+    c('/chemicals/database', '/chemicals/database/stats', '/reaction/database', '/reaction/database/stats'))))
+  expect_true(excluded('/api/toxprints/assays', 'POST'))
+  expect_false(excluded('/api/toxprints/assays', 'GET'))
   expect_true(excluded('/api/resolver/getpubchemlist'))
   expect_false(excluded('/api/resolver/getsimilaritylist'))
   removed <- do.call(c,

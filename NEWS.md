@@ -123,6 +123,22 @@
   `chemi_hazard_reports_create()`, `chemi_resolver_export_post()`,
   `chemi_resolver_export_section_post()` and `chemi_stdizer_protocols_post()`. The routes are
   banned in `specmill.yml`.
+- **Breaking (#330):** remove the ChET legacy database-old wrappers
+  `chemi_chet_chemicals_database_old()`, `chemi_chet_reaction_database_old()` and
+  `chemi_chet_reaction_database_old_by_pagenum_and_searchterm()` (use
+  `chemi_chet_chemicals_database()` and `chemi_chet_reaction_database()`), and
+  `chemi_toxprints_assays_bulk()`, which created assays. The routes are banned in
+  `specmill.yml`.
+- **Breaking (#330):** `chemi_chet_reaction_searchcounts()` now requires `search_type`, one
+  of `"lib_id"`, `"reaction_process"`, `"reaction_type"`, `"reaction_scheme"` or
+  `"reaction_phase"`. The service returns 404 without a type and an empty list for an
+  unknown one. A vector `search_input` now fans out with a type.
+- **Breaking (#330):** `chemi_stdizer_records()` takes one `body` argument holding the
+  schema request (`records`, `options`, `full`), for example
+  `list(options = list(workflow = "qsar-ready"), records = list(list(rid = "a", chemical = list(smiles = "CCO"))))`.
+  The old `full`/`options`/`records` arguments built a `chemicals` payload that the
+  service always rejected with HTTP 500. It now returns the decoded service response
+  and raises standard HTTP errors.
 - Schema files are now named `chemi_<x>_prod.json`, `ctx_<x>_prod.json` and
   `epi_suite_prod.json` so the names are valid R identifiers; the downloader writes them.
 

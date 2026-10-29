@@ -14,7 +14,6 @@ test_that('released legacy facades preserve their values, inputs, wire and failu
       saveRDS(list(path = req$PATH_INFO, query = req$QUERY_STRING, method = req$REQUEST_METHOD,
         accept = req$HTTP_ACCEPT, body = body), file.path(directory, paste0(count, '.rds')))
       reply <- readRDS(file.path(directory, 'reply.rds'))
-      if (isTRUE(reply$mixed) && (grepl('bad', req$PATH_INFO) || grepl('bad', rawToChar(body)))) reply$status <- 500L
       list(status = reply$status, headers = list(`Content-Type` = 'application/json', Connection = 'close', `Retry-After` = '0'), body = reply$body)
     }))
     saveRDS(port, file.path(directory, 'ready.rds'))
@@ -33,13 +32,9 @@ test_that('released legacy facades preserve their values, inputs, wire and failu
   ns <- asNamespace('ComptoxR')
   frozen <- readRDS(test_path('fixtures/released-facades-v42-legacy.rds'))
   cases <- list(
-    chemi_chet_reaction_searchcounts = list('one'),
-    chemi_chet_reaction_database_old_by_pagenum_and_searchterm = list('one'),
     chemi_resolver_resolve = list('one', list(list(query = 'x'))),
-    chemi_toxprints_assays_bulk = list(acl = 'one', actives = 0, category = 'category', chemicals = list(list(sid = 'record')), options = list(flag = FALSE), total = 0),
     chemi_toxprints_chemicals_categories = list('one'),
-    chemi_toxprints_toxprints_categories = list('one'),
-    chemi_stdizer_records = list(full = 'one', options = list(flag = FALSE), records = list(list(sid = 'record'))))
+    chemi_toxprints_toxprints_categories = list('one'))
   count <- 0L
   signature <- function(e) {
     if (is.null(e)) return(NULL)
@@ -76,26 +71,11 @@ test_that('released legacy facades preserve their values, inputs, wire and failu
       }
     }
     reply$status <- 200L
-    if (grepl('^chemi_chet_reaction_', name)) {
-      saveRDS(reply, file.path(directory, 'reply.rds'))
-      for (input in list('one', c('one', 'two'))) {
-        for (trailing in list('', 'a b', list('a', 'b'))) {
-          expect_identical(capture(fn, list(input, trailing)), capture(old, list(input, trailing)), info = name)
-        }
-      }
-    }
     for (body in c('null', '[]', '{}', '[{"value":1,"empty":null}]', '{')) {
       reply$body <- body; saveRDS(reply, file.path(directory, 'reply.rds'))
       expect_identical(capture(fn, args), capture(old, args), info = paste(name, body))
     }
     reply$body <- '{"data":[{"value":1,"empty":null}]}'
-    if (name %in% c('chemi_stdizer_records', 'chemi_toxprints_assays_bulk')) {
-      for (value in list(NULL, list(), list(flag = FALSE, count = 0, nested = list(label = 'caller')), FALSE, 0)) {
-        supplied <- args; supplied['options'] <- list(value)
-        saveRDS(reply, file.path(directory, 'reply.rds'))
-        expect_identical(capture(fn, supplied), capture(old, supplied), info = name)
-      }
-    }
     reply$status <- 401L; saveRDS(reply, file.path(directory, 'reply.rds'))
     expect_error(do.call(fn, args), class = 'specmill_call_error', info = name)
     # Drain the real request made by the hard-401 assertion.
@@ -113,11 +93,5 @@ test_that('released legacy facades preserve their values, inputs, wire and failu
       expect_identical(b$warnings, a$warnings, info = name)
       expect_identical(b$value, a$value, info = name)
     })
-  }
-  for (name in names(cases)[c(1L, 2L)]) {
-    reply$mixed <- TRUE; saveRDS(reply, file.path(directory, 'reply.rds'))
-    args <- list(c('one', 'bad', 'two'))
-    expect_identical(capture(get(name, ns), args), capture(eval(frozen[[name]], ns), args), info = name)
-    reply$mixed <- FALSE
   }
 })

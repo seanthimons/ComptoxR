@@ -4,24 +4,20 @@
 \alias{chemi_stdizer_records}
 \title{Stdizer Records}
 \usage{
-chemi_stdizer_records(full = NULL, options = NULL, records = NULL)
+chemi_stdizer_records(body)
 }
 \arguments{
-\item{full}{Optional parameter}
-
-\item{options}{Optional parameter}
-
-\item{records}{Optional parameter}
+\item{body}{Named list with records (a list of records, each list(rid = \if{html}{\out{<id>}}, chemical = list(smiles = \if{html}{\out{<SMILES>}}))), options (for example list(workflow = "qsar-ready")) and optional full (TRUE or FALSE).}
 }
 \value{
-Returns a tibble with results
+The standardized records, one per input record.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_stdizer_records(full = "DTXSID1024122")
+chemi_stdizer_records(body = list(options = list(workflow = "qsar-ready"), records = list(list(rid = "ethanol", chemical = list(smiles = "CCO")))))
 }
 }
 \section{API stage}{

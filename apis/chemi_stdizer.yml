@@ -515,64 +515,26 @@ groups:
           return: The decoded service response, preserving JSON structure, text or media bytes.
           tags:
             apiStage: public
-      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      # why: server resolver keeps the user-overridable base URL option; body description documents the schema request; docs keep the released title
       POST /api/stdizer/records:
-        inputs:
-          full:
-            type: any
-            default: ~
-            description: Optional parameter
-          options:
-            type: any
-            default: ~
-            description: Optional parameter
-          records:
-            type: any
-            default: ~
-            description: Optional parameter
-        post_on_skip: no
-        post_state: parameters
-        request:
-          arguments:
-            method:
-              value: POST
-            path:
-              value: /api/stdizer/records
-            path_params:
-              value: {}
-            query:
-              value: {}
-            body:
-              callback: legacy_chemi_facade_body
-            headers:
-              value:
-                Accept: application/json
-            server:
-              value:
-                url: https://hcd.rtpnc.epa.gov
-            server_resolver:
-              value:
-                name: .ct_server_url
-                key: chemi_burl
-                relative: /
-            auth:
-              value: []
-            response_policy:
-              callback: legacy_chemi_facade_response
-            request_controls:
-              value:
-                preserve_errors: yes
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        body:
+          description: 'Named list with records (a list of records, each list(rid = <id>, chemical
+            = list(smiles = <SMILES>))), options (for example list(workflow = "qsar-ready"))
+            and optional full (TRUE or FALSE).'
         docs:
           title: Stdizer Records
           lifecycle: experimental
-          parameters:
-            full: Optional parameter
-            options: Optional parameter
-            records: Optional parameter
-          return: Returns a tibble with results
+          return: The standardized records, one per input record.
           examples:
-            - full: DTXSID1024122
+            - body:
+                options:
+                  workflow: qsar-ready
+                records:
+                  - rid: ethanol
+                    chemical:
+                      smiles: CCO
           tags:
             apiStage: public
-        request_controls:
-          preserve_errors: yes

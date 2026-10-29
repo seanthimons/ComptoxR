@@ -369,9 +369,9 @@ chet_search_response <- function(operation) {
 # Preserve existing facade payloads; repairing their schema mismatch is separate work.
 legacy_chemi_facade_body <- function(operation) {
   primary <- switch(operation$path,
-    '/api/resolver/resolve' = 'mol', '/api/toxprints/assays' = 'acl',
+    '/api/resolver/resolve' = 'mol',
     '/api/toxprints/chemicals_categories' = 'chemicals',
-    '/api/toxprints/toxprints_categories' = 'chemical', '/api/stdizer/records' = 'full')
+    '/api/toxprints/toxprints_categories' = 'chemical')
   fields <- setdiff(vapply(operation$parameters, `[[`, '', 'name'), primary)
   options <- as.call(c(list(quote(base::list)), stats::setNames(lapply(fields, function(field)
     call('[[', as.name('params'), field)), fields)))
