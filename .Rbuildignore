@@ -20,7 +20,6 @@ data-raw/
 ^AGENTS[.]md$
 ^CLAUDE[.]md$
 ^cran-comments[.]md$
-^PRD-schema-check-false-positives[.]md$
 ^codecov[.]yml$
 ^LICENSE[.]md$
 ^ComptoxR[.]Rcheck$
@@ -31,10 +30,5 @@ data-raw/
 ^_pkgdown[.]yml$
 ^pkgdown$
 ^vignettes/articles$
-^HANDOFF[.]md$
-^wrapmaint-generalization-handoff[.]md$
-^endpoint-migration-plan[.]md$
-^schema-tooling-extraction-plan[.]md$
-^lifestage-migration-plan[.]md$
 ^specmill[.]yml$
 ^apis$

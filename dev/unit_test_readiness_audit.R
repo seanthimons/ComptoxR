@@ -750,7 +750,7 @@ audit_coverage_signals <- function(root = ".") {
 }
 
 audit_testing_docs <- function(root = ".", current_test_files = NULL, generated_header_test_files = NULL) {
-  docs <- c(".planning/codebase/TESTING.md", "dev/TESTING_GUIDE.md")
+  docs <- "dev/TESTING_GUIDE.md"
   records <- list()
 
   for (doc in docs) {
@@ -868,9 +868,7 @@ build_unit_test_readiness_audit <- function(root = ".") {
       ".github/badges/chemi-coverage.json"
     )
   ))])
-  docs <- sort(c(".planning/codebase/TESTING.md", "dev/TESTING_GUIDE.md")[
-    file.exists(audit_file_path(root, c(".planning/codebase/TESTING.md", "dev/TESTING_GUIDE.md")))
-  ])
+  docs <- "dev/TESTING_GUIDE.md"[file.exists(audit_file_path(root, "dev/TESTING_GUIDE.md"))]
 
   style <- audit_test_style(root, test_files)
   exclusions <- read_export_exclusions(root)

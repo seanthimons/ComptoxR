@@ -1,6 +1,6 @@
 # GitHub Actions Workflows
 
-This directory contains CI, coverage, data, release, and manual recording workflows. Testing workflows follow the same three-lane model documented in `dev/TESTING_GUIDE.md`, `.planning/codebase/TESTING.md`, and `tests/README.md`.
+This directory contains CI, coverage, data, release, and manual recording workflows. Testing workflows follow the same three-lane model documented in `dev/TESTING_GUIDE.md` and `tests/README.md`.
 
 ## Test Lanes
 

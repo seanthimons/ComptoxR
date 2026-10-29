@@ -8,7 +8,6 @@ on:
       - 'NEWS.md'
       - '**/*.md'
       - '.github/**'
-      - '.planning/**'
       - 'DESCRIPTION'
       - '_pkgdown.yml'
       - 'NAMESPACE'
