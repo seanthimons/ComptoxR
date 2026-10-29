@@ -94,6 +94,7 @@ jobs:
         shell: Rscript {0}
         run: |
           source("dev/normalize_news.R")
+          notes <- read_release_notes()
           an <- autonewsmd::autonewsmd$new(
             repo_name = "${{ steps.metadata.outputs.package }}",
             repo_path = getwd()
@@ -102,6 +103,7 @@ jobs:
           normalize_autonewsmd_repo_list(an)
           an$write(force = TRUE)
           normalize_news_file()
+          insert_release_notes(notes)
 
       - name: Commit NEWS.md and finalize tag
         env:

@@ -4,18 +4,7 @@ name: Quick Tests
 on:
   workflow_dispatch:
   pull_request:
-    branches: [main, dev]
-    paths-ignore:
-      - 'NEWS.md'
-      - '**/*.md'
-      - '.github/**'
-      - 'DESCRIPTION'
-      - '_pkgdown.yml'
-      - 'NAMESPACE'
-      - 'man/**'
-      - 'vignettes/**'
-  push:
-    branches: [dev-*]
+    branches: [main, integration]
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
@@ -46,25 +35,21 @@ jobs:
           r-version: 'release'
           use-public-rspm: true
 
-      - name: Cache R packages
-        uses: actions/cache@v6
+      # setup-r-dependencies also installs system libraries (ImageMagick for
+      # magick) and caches the R library.
+      - name: Setup R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ hashFiles('**/DESCRIPTION') }}
-          restore-keys: |
-            ${{ runner.os }}-r-
-
-      - name: Install dependencies
-        run: |
-          install.packages(c("devtools", "remotes", "testthat", "vcr", "covr"))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
+          extra-packages: |
+            any::devtools
+            any::testthat
+            any::vcr
 
       - name: Run core tests
         run: |
-          # Run only core template tests for quick feedback
-          testthat::test_file("tests/testthat/test-ct_similar.R")
-          testthat::test_file("tests/testthat/test-ct_related.R")
+          # Run only core template tests for quick feedback; devtools::test()
+          # loads the package, which the test helpers need.
+          devtools::test(filter = "^ct_(similar|related)$", stop_on_failure = TRUE)
         shell: Rscript {0}
 
       - name: Check syntax

@@ -10,8 +10,6 @@ Maintainer scripts and the configuration they read. Run from the package root.
 - `specmill_callbacks.R`, `specmill_pubchem_callbacks.R`: generation callbacks listed in `specmill.yml`.
 - `specmill-333/`: `SELECTION.md` (the `apis/` layout, keep-or-convert record, unresolved contracts and what is still outside Specmill) and `verify.R` (opt-out discovery check, CI).
 - `specmill-342/`: `verify.R`, `emit.R`, `adoption.json` (native helper adoption check, CI).
-- `check_specmill_fixes.R`: acceptance checks for specmill#100-#102 after re-pinning.
-- `remove_experimental.R`: delete generated wrapper files by prefix so they can be rebuilt.
 - `freeze_production_schemas.R`: download approved production schemas into `.migration-evidence/production`.
 - `generate_local_client.R`, `verify_local_client.R`, `LOCAL_CLIENTS.md`: generate and verify a local, non-public client package.
 
@@ -33,7 +31,6 @@ Maintainer scripts and the configuration they read. Run from the package root.
 - `coverage.yml` + `update_coverage.R`: schema coverage badges (`--apply` to write).
 - `db_smoke_check.R`: smoke-test built DSSTox/ECOTOX/ToxVal databases (workflows).
 - `build.R`: local pre-release steps (document, find missing globals).
-- `build_stable.R`: build the stable-only package variant (workflow).
 - `build_testing_chemicals.R`: refresh `data/testing_chemicals.rda`.
 - `normalize_news.R`: normalise `NEWS.md` during release.
 - `checkpoint.R`, `load_packages.R`: personal session bootstrap (schema hash checkpoint, package loader).

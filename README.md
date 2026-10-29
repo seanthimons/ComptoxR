@@ -61,8 +61,9 @@ eco_server(2) # Shipped localhost Plumber server
 Selectors still set their environment variables. Call a selector with no
 argument to clear that setting; an option still takes precedence. Use
 `url_only = TRUE` to inspect a target without changing settings or connections.
-Explicit HTTP(S) URLs remain supported. Removed development numeric choices
-now give a configuration error. Public browser sites are not REST APIs.
+Explicit HTTP(S) URLs remain supported. Numeric choices outside each
+selector's documented options give a configuration error. Public browser sites
+are not REST APIs.
 
 Update ComptoxR and the local Plumber server together, then restart the server.
 Keep existing local databases and mapping evidence. ECOTOX results contain

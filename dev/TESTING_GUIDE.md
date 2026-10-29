@@ -73,7 +73,7 @@ directly; they must not call endpoint slugs or backticked generated names.
 
 Minimum generated-contract assertions:
 
-- the wrapper crosses the expected shared helper boundary, such as `generic_request()` or service-specific helpers
+- the wrapper crosses the expected shared helper boundary, usually `.ct_request()`
 - the expected endpoint or path and HTTP method are passed to the helper
 - query and body parameters are mapped from wrapper arguments, including omitted or defaulted parameters when relevant
 - relevant options, server selection, and API-key behavior are passed through or intentionally absent

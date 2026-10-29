@@ -149,6 +149,12 @@
   `generic_pubchem_request()`). `ct_related()` and `ct_similar()` now call the
   native `.ct_request()` directly with unchanged signatures and output. Shared
   response helpers moved to `R/response_helpers.R`; `batch_limit()` is kept.
+- **Breaking:** most bulk CTX wrappers name their input after the identifier they
+  take (`dtxsid`, `dtxcid`, `aeid`, `spid`, `formula`) instead of `query`, for
+  example `ct_hazard_toxval_search_by_dtxsid_bulk(dtxsid = ids)`. Calls that pass
+  the IDs by position are unaffected. `ct_chemical_detail_search_by_dtxsid_bulk()`,
+  `ct_chemical_detail_search_by_dtxcid_bulk()` and `ct_chemical_search_equal_bulk()`
+  still take `query`; `ct_chemical_msready_search_by_mass_bulk()` takes `body`.
 
 - Remove `chemi_toxprint()`. Its operation (`POST /api/toxprints/calculate`) is
   covered by `chemi_toxprints_calculate_bulk()`, which takes Chemical records.

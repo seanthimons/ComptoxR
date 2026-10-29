@@ -79,7 +79,7 @@ AMOS method discovery returns analytical method records. It is not a chemical
 lookup.
 
 ```{r}
-methods <- chemi_amos_method_list()
+methods <- chemi_amos_method_keyset_pagination(limit = 20, all_pages = FALSE)
 glimpse(methods)
 head(methods)
 ```
