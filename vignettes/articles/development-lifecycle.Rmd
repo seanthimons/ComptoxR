@@ -160,7 +160,10 @@ The workflow then, on `main`:
 
 Because `NEWS.md` is generated from commit history, the first line of each
 commit message is the release-note text — write it as the note you want to
-appear.
+appear. Changes that need more than a subject line (breaking changes, renames,
+removals) go by hand under `## Unreleased` at the top of `NEWS.md`. The release
+keeps that section and moves it under the new version heading as "Release
+notes", where later releases keep it.
 
 ### Other build/publish workflows
 

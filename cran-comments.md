@@ -48,5 +48,5 @@ secrets, HTTP error cassettes, or YAML parse errors.
 * `R CMD build . --no-resave-data` builds `ComptoxR_1.5.0.tar.gz`.
 * `R CMD check --as-cran ComptoxR_1.5.0.tar.gz` passes locally with 0 errors, 0 warnings, and the two notes listed
   above.
-* Source tarball review found no local-only `.github`, `.planning`, `dev`, `schema`, `data-raw`, `cran-comments.md`, log,
+* Source tarball review found no local-only `.github`, `dev`, `schema`, `data-raw`, `cran-comments.md`, log,
   check, or scratch paths across 1,156 tarball entries.

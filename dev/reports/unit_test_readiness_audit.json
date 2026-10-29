@@ -1,9 +1,9 @@
 {
   "artifact_schema": "unit_test_readiness_audit/v1",
   "metadata": {
-    "generated_at_utc": "2026-10-29T22:29:35Z",
+    "generated_at_utc": "2026-10-29T22:59:25Z",
     "source_branch": "chore/docs-staging-cleanup",
-    "source_commit": "7aa24b069ac3def57e317ba8683810f09ee20bc0",
+    "source_commit": "77b68b745bfb3f6cf2b895bf1b60ca458a4ced00",
     "issue": {
       "github_issue": 180,
       "bean": "ComptoxR-wsxo",
@@ -44,7 +44,7 @@
     "files": {
       "r_files": 507,
       "rd_files": 545,
-      "test_files": 341,
+      "test_files": 342,
       "test_helpers": 8,
       "test_tool_files": 0,
       "fixture_yaml_files": 0,
@@ -52,7 +52,7 @@
     },
     "test_style": {
       "generated_header_test_files": 2,
-      "non_generated_header_test_files": 339,
+      "non_generated_header_test_files": 340,
       "backticked_endpoint_call_files": 61,
       "generated_backticked_endpoint_call_files": 0,
       "non_generated_backticked_endpoint_call_files": 61,
@@ -99,6 +99,7 @@
         "exported": 1,
         "generate": 1,
         "local": 1,
+        "normalize": 1,
         "package": 1,
         "plumber": 1,
         "prediction": 1,
