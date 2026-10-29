@@ -254,31 +254,6 @@ test_that("header mismatches and empty successful responses become explicit rows
   expect_match(empty$error, "empty response")
 })
 
-test_that("CSV and TSV successful responses use the same wide contract", {
-  content_types <- character()
-  local_mocked_bindings(
-    .ct_request = function(...) {
-      call <- list(...)
-      content_types <<- c(content_types, call$content_type)
-      separator <- if (identical(call$content_type, "text/tab-separated-values")) "\t" else ","
-      paste0(
-        paste(c("Ordinal", "SMILES", "InChI", "InChIKey", "exact Header"), collapse = separator),
-        "\n",
-        paste(c("0", "CCO", "mock-inchi", "mock-key", "1.5"), collapse = separator)
-      )
-    },
-    .package = "ComptoxR"
-  )
-
-  csv <- chemi_descriptors("CCO", type = "padel", format = "CSV")
-  tsv <- chemi_descriptors("CCO", type = "padel", format = "TSV")
-
-  expect_identical(content_types, c("text/csv", "text/tab-separated-values"))
-  expect_true("exact Header" %in% names(csv))
-  expect_equal(csv[["exact Header"]], 1.5)
-  expect_equal(tsv[["exact Header"]], 1.5)
-})
-
 test_that("raw descriptor output retains actual route provenance", {
   payload <- list(info = list(name = "padel"), chemicals = list())
   local_mocked_bindings(

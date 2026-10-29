@@ -43,15 +43,6 @@ chemi_mordred_bulk <- function(chemicals, options = NULL, headers = NULL, inchi 
         if (context$status >= 400L) {
           decode()
         }
-        if (
-          context$status >= 200L &&
-            context$status < 300L &&
-            grepl("^text/(csv|tab-separated-values|tsv)", state$request$content_type, ignore.case = TRUE)
-        ) {
-          observe_api_responses(list(response))
-          value <- .ct_response_delimited(response, context, decode)
-          return(if (!length(value)) list() else value)
-        }
         context$endpoint <- state$request$endpoint
         .ct_chemi_result(response, context, decode, tidy = FALSE)
       },

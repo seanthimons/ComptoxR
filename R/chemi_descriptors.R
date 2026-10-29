@@ -6,7 +6,7 @@
 #' @param smiles One SMILES string or resolvable chemical identifier
 #' @param type Descriptor engine: padel, rdkit, mordred, or webtest
 #' @param headers Request descriptor headers.
-#' @param format Response format: JSON, CSV or TSV.
+#' @param format Deprecated; responses are always JSON.
 #' @param timeout Optional upstream calculation timeout.
 #' @param output Output contract: validated wide tibble or raw payload.
 #' @return Returns a tibble with results
@@ -49,19 +49,6 @@ chemi_descriptors <- function(
       "server" = base::list("url" = state[["request"]][["server"]]),
       "auth" = list(),
       "response_policy" = function(response, context, decode) {
-        if (context$status >= 400L) {
-          decode()
-        }
-        if (grepl("^text/(csv|tab-separated-values|tsv)", state$request$content_type, ignore.case = TRUE)) {
-          observe_api_responses(list(response))
-          return(
-            if (!startsWith(tolower(state$request$content_type), context$media)) {
-              parse_delimited_response(httr2::resp_body_string(response), state$request$content_type)
-            } else {
-              .ct_response_delimited(response, context, decode)
-            }
-          )
-        }
         .ct_static_json_result(response, context, decode, state$request$endpoint)
       },
       "request_controls" = list(preserve_errors = TRUE)

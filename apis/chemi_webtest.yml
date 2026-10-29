@@ -237,8 +237,7 @@ groups:
           format:
             type: character
             default: JSON
-            description: 'Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default:
-              JSON)'
+            description: 'Deprecated; responses are always JSON.'
           output:
             type: character
             default:
@@ -293,8 +292,7 @@ groups:
             query: Chemical structures or resolvable identifiers
             chemIdType: 'Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
               Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
-            format: 'Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default:
-              JSON)'
+            format: 'Deprecated; responses are always JSON.'
             headers: Request descriptor headers
             output: 'Output contract: validated wide tibble or raw payload'
           return: Returns a tibble with results

@@ -7,7 +7,7 @@
 #' @param type Descriptor engine: padel, rdkit, mordred, or webtest
 #' @param chemIdType Input identifier type: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1 or AnyId.
 #' @param headers Request descriptor headers.
-#' @param format Response format: JSON, CSV or TSV.
+#' @param format Deprecated; responses are always JSON.
 #' @param timeout Optional upstream calculation timeout.
 #' @param output Output contract: validated wide tibble or raw payload.
 #' @return Returns a tibble with results
@@ -54,15 +54,6 @@ chemi_descriptors_bulk <- function(
       "response_policy" = function(response, context, decode) {
         if (context$status >= 400L) {
           decode()
-        }
-        if (
-          context$status >= 200L &&
-            context$status < 300L &&
-            grepl("^text/(csv|tab-separated-values|tsv)", state$request$content_type, ignore.case = TRUE)
-        ) {
-          observe_api_responses(list(response))
-          value <- .ct_response_delimited(response, context, decode)
-          return(if (!length(value)) list() else value)
         }
         context$endpoint <- state$request$endpoint
         .ct_chemi_result(response, context, decode, tidy = FALSE)

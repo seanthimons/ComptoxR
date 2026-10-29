@@ -117,7 +117,7 @@ format_image_results <- function(data) {
             result = .ct_collect_response(response, context, decode, 1L, "chet/chemicals"))))
     }
     observe_api_responses(list(response))
-    value <- .ct_response_delimited(response, context, decode)
+    value <- decode(format = "delimited", check_status = FALSE)
     if (startsWith(context$media, "image/")) {
         return(tryCatch(magick::image_read(httr2::resp_body_raw(response)), error = function(e) value))
     }

@@ -121,14 +121,23 @@ descriptor_validate_common_request <- function(data) {
 
   format_wrappers <- c("chemi_descriptors", "chemi_descriptors_bulk", "chemi_webtest_bulk")
   if (fn_name %in% format_wrappers) {
-    params$format <- descriptor_validate_choice(
+    format <- descriptor_validate_choice(
       params$format %||% "JSON",
       c("JSON", "CSV", "TSV"),
       "format"
     )
-  } else {
-    params$format <- "JSON"
+    # ponytail: CSV/TSV never worked end to end; revisit with #343 if a consumer appears.
+    if (!identical(format, "JSON")) {
+      lifecycle::deprecate_warn(
+        "3.0.0",
+        paste0(fn_name, "(format)"),
+        details = "Responses are always JSON; CSV/TSV output is no longer supported.",
+        # Raised inside a hook; attribute to the caller, not to ComptoxR.
+        user_env = globalenv()
+      )
+    }
   }
+  params$format <- "JSON"
 
   if ("headers" %in% names(params)) {
     params$headers <- descriptor_validate_logical(params$headers %||% FALSE, "headers")
@@ -386,17 +395,6 @@ descriptor_request_chem_id_type <- function(params) {
   }
 }
 
-descriptor_accept_type <- function(format) {
-  switch(
-    toupper(format),
-    CSV = "text/csv",
-    TSV = "text/tab-separated-values",
-    PDF = "application/pdf",
-    HTML = "text/html",
-    "application/json"
-  )
-}
-
 descriptor_eligible_values <- function(params) {
   vapply(
     params$.input_map[params$.eligible_index],
@@ -422,7 +420,7 @@ descriptor_refresh_request <- function(data) {
     endpoint = route$endpoint,
     server = route$server,
     method = if (is_bulk) "POST" else "GET",
-    content_type = descriptor_accept_type(route$format),
+    content_type = "application/json",
     format = route$format,
     options = list(),
     body = NULL
@@ -581,17 +579,6 @@ validate_descriptor_response <- function(data) {
   data
 }
 
-descriptor_parse_delimited <- function(text, format) {
-  parse_delimited_response(
-    text,
-    if (identical(toupper(format), "TSV")) {
-      "text/tab-separated-values"
-    } else {
-      "text/csv"
-    }
-  )
-}
-
 descriptor_json_records <- function(body) {
   records <- body$chemicals %||% list()
   if (is.data.frame(records)) {
@@ -606,29 +593,6 @@ descriptor_json_records <- function(body) {
     records <- list(records)
   }
   records
-}
-
-descriptor_delimited_records <- function(body, format) {
-  table <- if (is.data.frame(body)) body else descriptor_parse_delimited(body, format)
-
-  metadata_names <- c("ordinal", "id", "smiles", "inchi", "inchikey")
-  descriptor_columns <- names(table)[!tolower(names(table)) %in% metadata_names]
-  records <- lapply(seq_len(nrow(table)), function(i) {
-    row <- table[i, , drop = FALSE]
-    get_column <- function(name) {
-      index <- match(tolower(name), tolower(names(row)))
-      if (is.na(index)) NULL else row[[index]][[1]]
-    }
-    list(
-      ordinal = get_column("ordinal"),
-      id = get_column("id"),
-      smiles = get_column("smiles"),
-      inchi = get_column("inchi"),
-      inchiKey = get_column("inchikey"),
-      descriptors = unname(as.list(row[descriptor_columns]))
-    )
-  })
-  list(records = records, headers = descriptor_columns)
 }
 
 descriptor_rdkit_headers <- function(params, records) {
@@ -646,12 +610,7 @@ descriptor_rdkit_headers <- function(params, records) {
 }
 
 descriptor_response_records <- function(data) {
-  format <- toupper(data$request$format)
   body <- descriptor_result_body(data$result)
-  if (format %in% c("CSV", "TSV") && (is.character(body) || is.data.frame(body))) {
-    parsed <- descriptor_delimited_records(body, format)
-    return(parsed)
-  }
   list(
     records = descriptor_json_records(body),
     headers = as.character(unlist(body$headers %||% character(), use.names = FALSE))

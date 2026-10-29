@@ -78,23 +78,24 @@ test_that('calculation HTTP and transport errors keep received conditions and ha
   }
 })
 
-test_that('WebTEST bulk keeps its CSV and TSV output contract', {
-  withr::local_options(list(ComptoxR.chemi_burl = 'https://calculation.invalid/api'))
-  for (format in c('CSV', 'TSV')) local({
-    media <- if (format == 'CSV') 'text/csv' else 'text/tab-separated-values'
-    separator <- if (format == 'CSV') ',' else '\t'
-    payload <- paste0(paste(c('Ordinal','SMILES','a','b'), collapse = separator), '\n',
-      paste(c('0','CCO','1','2'), collapse = separator), '\n')
-    local_mocked_bindings(req_perform = function(req, ...) {
-      expect_identical(req$headers$Accept, media)
-      httr2::response(status_code = 200L, headers = list(`Content-Type` = media), body = charToRaw(payload))
-    }, .package = 'httr2')
-    for (output in c('wide','raw')) {
-      args <- list('CCO', format = format, output = output)
-      expect_identical(calculation_capture(chemi_webtest_bulk, args),
-        calculation_capture(calculation_frozen('chemi_webtest_bulk'), args))
+test_that('format = CSV/TSV is deprecated and still requests JSON', {
+  withr::local_options(list(ComptoxR.chemi_burl = 'https://calculation.invalid/api', lifecycle_verbosity = 'warning'))
+  accepts <- character()
+  local_mocked_bindings(req_perform = function(req, ...) {
+    accepts <<- c(accepts, req$headers$Accept)
+    httr2::response(status_code = 200L, headers = list(`Content-Type` = 'application/json'),
+      body = charToRaw('{"chemicals":[{"smiles":"CCO","descriptors":[1,2]}],"headers":["a","b"]}'))
+  }, .package = 'httr2')
+  for (name in c('chemi_descriptors', 'chemi_descriptors_bulk', 'chemi_webtest_bulk')) {
+    fn <- get(name, asNamespace('ComptoxR')); args <- calculation_args(name)
+    json <- do.call(fn, args)
+    for (format in c('CSV', 'TSV')) {
+      accepts <- character()
+      lifecycle::expect_deprecated(value <- do.call(fn, c(args, format = format)))
+      expect_identical(value, json, info = paste(name, format))
+      expect_identical(accepts, 'application/json', info = paste(name, format))
     }
-  })
+  }
 })
 
 test_that('calculation facades preserve actual localhost wire and received HTTP errors', {

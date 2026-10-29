@@ -119,33 +119,6 @@ is_transient_error <- function(resp) {
   status == 429 || status >= 500
 }
 
-parse_delimited_response <- function(text, content_type) {
-  if (!nzchar(text)) {
-    return(data.frame())
-  }
-  separator <- if (
-    grepl(
-      "^(text/tab-separated-values|text/tsv)",
-      content_type,
-      ignore.case = TRUE
-    )
-  ) {
-    "\t"
-  } else {
-    ","
-  }
-  utils::read.table(
-    text = text,
-    header = TRUE,
-    sep = separator,
-    quote = "\"",
-    comment.char = "",
-    check.names = FALSE,
-    stringsAsFactors = FALSE,
-    fill = FALSE
-  )
-}
-
 unwrap_collection_envelope <- function(body) {
   collection_fields <- c("results", "records", "data", "content")
   if (
@@ -169,17 +142,6 @@ unwrap_collection_envelope <- function(body) {
       })
     } else {
       httr2::resp_body_json(response, simplifyVector = FALSE)
-    }
-  })
-}
-
-# Native strict CSV decoding is preferred; preserve legacy malformed-table errors.
-.ct_response_delimited <- function(response, context, decode) {
-  tryCatch(decode(format = "delimited", check_status = FALSE), error = function(e) {
-    if (context$media %in% c("text/csv", "application/csv", "text/tab-separated-values", "text/tsv")) {
-      parse_delimited_response(httr2::resp_body_string(response), context$media)
-    } else {
-      stop(e)
     }
   })
 }

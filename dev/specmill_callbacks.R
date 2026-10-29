@@ -45,12 +45,6 @@ descriptor_get_response <- function(operation) quote(function(response, context,
 
 descriptor_post_response <- function(operation) quote(function(response, context, decode) {
   if (context$status >= 400L) decode()
-  if (context$status >= 200L && context$status < 300L &&
-      grepl("^text/(csv|tab-separated-values|tsv)", state$request$content_type, ignore.case = TRUE)) {
-    observe_api_responses(list(response))
-    value <- .ct_response_delimited(response, context, decode)
-    return(if (!length(value)) list() else value)
-  }
   context$endpoint <- state$request$endpoint
   .ct_chemi_result(response, context, decode, tidy = FALSE)
 })
@@ -304,18 +298,6 @@ services_body <- function(operation) {
 }
 
 search_paging <- function(operation) quote(params[["all_pages"]]())
-
-# Aggregate GET also supports the existing delimited response contract.
-descriptor_aggregate_get_response <- function(operation) quote(function(response, context, decode) {
-  if (context$status >= 400L) decode()
-  if (grepl('^text/(csv|tab-separated-values|tsv)', state$request$content_type, ignore.case = TRUE)) {
-    observe_api_responses(list(response))
-    return(if (!startsWith(tolower(state$request$content_type), context$media)) {
-      parse_delimited_response(httr2::resp_body_string(response), state$request$content_type)
-    } else .ct_response_delimited(response, context, decode))
-  }
-  .ct_static_json_result(response, context, decode, state$request$endpoint)
-})
 
 # Canonical ToxPrint bulk body, validated after each client-side input chunk.
 toxprints_canonical_body <- function(operation) {

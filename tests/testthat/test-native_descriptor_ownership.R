@@ -35,17 +35,6 @@ testthat::test_that('released ownership declarations preserve real descriptor be
   testthat::expect_identical(b$wires[[1]]$path,'/api/descriptors')
   testthat::expect_identical(b$wires[[1]]$method,if(name=='chemi_descriptors')'GET'else'POST')
  }
- for(name in c('chemi_descriptors','chemi_descriptors_bulk'))for(format in c('CSV','TSV')){
-  separator<-if(format=='CSV')','else'\t'
-  r<-list(status=200L,media=if(format=='CSV')'text/csv'else'text/tab-separated-values',body=charToRaw(paste0(paste(c('Ordinal','SMILES','InChI','InChIKey','exact Header'),collapse=separator),'\n',paste(c('0','CCO','mock-inchi','mock-key','1.5'),collapse=separator))))
-  saveRDS(r,file.path(directory,'reply.rds'));args<-list('CCO',type='padel',format=format)
-  a<-invoke(old[[name]],args);b<-invoke(get(name,ns),args)
-  observations[[paste(name,format)]]<-list(old=a,candidate=b)
-  signature<-function(x)list(class=class(x),message=conditionMessage(x),parent_class=class(x$parent),parent_message=conditionMessage(x$parent))
-  testthat::expect_s3_class(a$value,'comptoxr_post_response_hook_error');testthat::expect_identical(signature(a$value),signature(b$value));testthat::expect_identical(a$wires,b$wires)
-  testthat::expect_match(conditionMessage(b$value$parent),'undefined columns selected',fixed=TRUE)
- }
- saveRDS(reply,file.path(directory,'reply.rds'))
  for(name in c('chemi_descriptors','chemi_descriptors_bulk'))for(input in list(c(NA_character_,''),character(),NULL)){
   args<-list(type='padel');args[if(name=='chemi_descriptors')'smiles'else'query']<-list(input)
   a<-invoke(old[[name]],args);b<-invoke(get(name,ns),args)

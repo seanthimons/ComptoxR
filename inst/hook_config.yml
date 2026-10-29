@@ -142,7 +142,7 @@ chemi_descriptors:
       order: 3
     format:
       default: "JSON"
-      description: "Response format: JSON, CSV, or TSV"
+      description: "Deprecated; responses are always JSON"
       order: 4
     timeout:
       default: null
@@ -200,7 +200,7 @@ chemi_descriptors_bulk:
       order: 3
     format:
       default: "JSON"
-      description: "Response format: JSON, CSV, or TSV"
+      description: "Deprecated; responses are always JSON"
       order: 5
     options:
       exclude: true
@@ -537,7 +537,7 @@ chemi_webtest_bulk:
       order: 2
     format:
       default: "JSON"
-      description: "Response format: JSON, CSV, or TSV"
+      description: "Deprecated; responses are always JSON"
       order: 4
     options:
       exclude: true

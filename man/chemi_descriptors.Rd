@@ -20,7 +20,7 @@ chemi_descriptors(
 
 \item{headers}{Request descriptor headers.}
 
-\item{format}{Response format: JSON, CSV or TSV.}
+\item{format}{Deprecated; responses are always JSON.}
 
 \item{timeout}{Optional upstream calculation timeout.}
 

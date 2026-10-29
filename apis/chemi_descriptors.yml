@@ -45,7 +45,7 @@ groups:
           format:
             type: character
             default: JSON
-            description: 'Response format: JSON, CSV or TSV.'
+            description: 'Deprecated; responses are always JSON.'
           timeout:
             type: any
             default: ~
@@ -93,7 +93,7 @@ groups:
             auth:
               value: []
             response_policy:
-              callback: descriptor_aggregate_get_response
+              callback: descriptor_get_response
             request_controls:
               value:
                 preserve_errors: yes
@@ -104,7 +104,7 @@ groups:
             smiles: One SMILES string or resolvable chemical identifier
             type: 'Descriptor engine: padel, rdkit, mordred, or webtest'
             headers: Request descriptor headers.
-            format: 'Response format: JSON, CSV or TSV.'
+            format: 'Deprecated; responses are always JSON.'
             timeout: Optional upstream calculation timeout.
             output: 'Output contract: validated wide tibble or raw payload.'
           return: Returns a tibble with results
@@ -158,7 +158,7 @@ groups:
           format:
             type: character
             default: JSON
-            description: 'Response format: JSON, CSV or TSV.'
+            description: 'Deprecated; responses are always JSON.'
           timeout:
             type: any
             default: ~
@@ -219,7 +219,7 @@ groups:
             chemIdType: 'Input identifier type: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI,
               InChIKey, InChIKey_1 or AnyId.'
             headers: Request descriptor headers.
-            format: 'Response format: JSON, CSV or TSV.'
+            format: 'Deprecated; responses are always JSON.'
             timeout: Optional upstream calculation timeout.
             output: 'Output contract: validated wide tibble or raw payload.'
           return: Returns a tibble with results

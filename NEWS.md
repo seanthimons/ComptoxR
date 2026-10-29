@@ -4,6 +4,12 @@
 
 ## Unreleased
 
+- The `format` argument of `chemi_descriptors()`, `chemi_descriptors_bulk()` and
+  `chemi_webtest_bulk()` is deprecated. `"CSV"` and `"TSV"` never worked end to end
+  (descriptor parsing failed and WebTEST answered 406), so requests are always sent as
+  JSON and return the same tibble. A delimited parser is deferred until someone needs
+  one (#343).
+
 - **Breaking:** API configuration is now one `apis/<schema>.yml` file per schema, with a
   `# why:` note on every operation that is renamed, changed or hooked. Wrappers follow
   path naming (`naming: path`; POST siblings of a GET get `_bulk`) and are written one

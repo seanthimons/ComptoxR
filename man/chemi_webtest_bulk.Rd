@@ -19,7 +19,7 @@ chemi_webtest_bulk(
 
 \item{headers}{Request descriptor headers}
 
-\item{format}{Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)}
+\item{format}{Deprecated; responses are always JSON.}
 
 \item{output}{Output contract: validated wide tibble or raw payload}
 }
