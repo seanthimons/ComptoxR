@@ -72,9 +72,6 @@ temp.R
 # Temporary schema diff artifacts (CI workflow)
 schema_old/
 
-# Planning docs
-!.planning
-
 # Reviewed specmill ownership is source; isolated builds are disposable.
 !.specmill/
 !.specmill/**
