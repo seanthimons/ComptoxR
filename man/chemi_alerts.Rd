@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_alerts.R
 \name{chemi_alerts}
 \alias{chemi_alerts}
-\title{Alerts}
+\title{chemi alerts}
 \usage{
 chemi_alerts(
   query,
@@ -27,18 +27,10 @@ chemi_alerts(
 \item{request.options.resolve}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Decoded response records, with the configured client formatting.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
-then sends the resolved Chemical objects to the API endpoint.
-}
-\examples{
-\dontrun{
-chemi_alerts(query = c("50-00-0", "DTXSID7020182"))
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

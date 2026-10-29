@@ -2,15 +2,15 @@
 % Please edit documentation in R/chemi_amos_record_type_count.R
 \name{chemi_amos_record_type_count}
 \alias{chemi_amos_record_type_count}
-\title{Returns the number of records of the given type.}
+\title{Returns the number of records of the given type}
 \usage{
 chemi_amos_record_type_count(record_type)
 }
 \arguments{
-\item{record_type}{Record type.  Accepted values are "analytical_qc", "fact_sheets", and "methods".}
+\item{record_type}{Record type.  Accepted values are "analytical_qc", "fact_sheets", and "methods". Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

@@ -1,112 +1,79 @@
 #' Resolver Lookup
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#'
-#' @param query Required parameter
-#' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
-#' @param fuzzy Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)
-#' @param mol Optional parameter (default: FALSE)
-#' @return Returns a tibble with results (array of objects)
+#' @param query query
+#' @param idType idType
+#' @param fuzzy fuzzy
+#' @param mol mol
+#' @return Returns a tibble with results
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_resolver_lookup(query = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = FALSE) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
+  if (base::is.null(query)) {
+    base::stop("Required input: query")
   }
-  if (!is.null(fuzzy)) {
-    options[['fuzzy']] <- fuzzy
+  .api_validation$parameter_values(
+    base::list("query" = query, "idType" = idType, "fuzzy" = fuzzy, "mol" = mol),
+    list(
+      query = list(type = "string"),
+      idType = list(
+        default = "AnyId",
+        enum = list("DTXSID", "DTXCID", "SMILES", "MOL", "CAS", "Name", "InChI", "InChIKey", "InChIKey_1", "AnyId"),
+        type = "string"
+      ),
+      fuzzy = list(
+        default = "Not",
+        enum = list("Not", "Anywhere", "Start", "Word", "CloseSyntactic", "CloseSemantic"),
+        type = "string"
+      ),
+      mol = list(default = FALSE, type = "boolean")
+    ),
+    .api_validation$body_value,
+    c(query = "query", idType = "query", fuzzy = "query", mol = "query")
+  )
+  params <- base::list("query" = query, "idType" = idType, "fuzzy" = fuzzy, "mol" = mol)
+  if (base::is.character(params[["query"]]) && base::any(!base::nzchar(params[["query"]]))) {
+    base::stop("Empty query parameter: query")
   }
-  if (!is.null(mol)) {
-    options[['mol']] <- mol
+  if (base::is.character(params[["idType"]]) && base::any(!base::nzchar(params[["idType"]]))) {
+    base::stop("Empty query parameter: idType")
   }
-  result <- generic_request(
-    query = query,
-    endpoint = "resolver/lookup",
+  if (base::is.character(params[["fuzzy"]]) && base::any(!base::nzchar(params[["fuzzy"]]))) {
+    base::stop("Empty query parameter: fuzzy")
+  }
+  if (base::is.character(params[["mol"]]) && base::any(!base::nzchar(params[["mol"]]))) {
+    base::stop("Empty query parameter: mol")
+  }
+  result <- .ct_request(
     method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = TRUE,
-    options = options
+    path = "/api/resolver/lookup",
+    path_params = base::list(),
+    query = base::list(
+      "query" = params[["query"]],
+      "idType" = params[["idType"]],
+      "fuzzy" = params[["fuzzy"]],
+      "mol" = params[["mol"]]
+    ),
+    body = NULL,
+    response_policy = ".ct_tidy",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list(),
+    parameter_serialization = list(list(
+      name = "mol",
+      location = "query",
+      schema = list(default = FALSE, type = "boolean"),
+      style = "form",
+      explode = TRUE,
+      collection_format = NULL,
+      required = FALSE
+    ))
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-
-#' Resolver Lookup (Bulk)
-#'
-#' @description
-#' `r lifecycle::badge("stable")`
-#'
-#' Performs bulk lookup of chemical identifiers via POST endpoint.
-#'
-#' @param ids Character vector of chemical identifiers to look up. All identifiers must be of the same type or type should be AnyId.
-#' @param idsType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
-#' @param fuzzy Fuzzy lookup setting. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)
-#' @param mol If TRUE, MOL is requested as a result (default: FALSE)
-#' @param filters Optional filters object
-#' @param format Optional format specification. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX
-#' @param tidy Logical; if TRUE (default), return a tibble. If FALSE, return a cleaned list.
-#' @return Returns a list with result object
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_resolver_lookup_bulk(ids = c("DTXSID7020182", "50-00-0"))
-#' }
-chemi_resolver_lookup_bulk <- function(
-  ids,
-  idsType = "AnyId",
-  fuzzy = "Not",
-  mol = FALSE,
-  filters = NULL,
-  format = NULL,
-  tidy = TRUE
-) {
-  # Input validation
-  if (is.null(ids) || length(ids) == 0) {
-    cli::cli_abort("ids must be a non-empty character vector")
-  }
-
-  # Convert to character vector if needed
-  ids <- as.character(ids)
-
-  # Build options list with all parameters
-  options <- list(
-    idsType = idsType,
-    fuzzy = fuzzy,
-    mol = mol
-  )
-
-  # Add truly optional parameters
-  if (!is.null(filters)) {
-    options$filters <- filters
-  }
-  if (!is.null(format)) {
-    options$format <- format
-  }
-
-  # Use generic_chemi_request with array_payload format
-  result <- generic_chemi_request(
-    query = ids,
-    endpoint = "resolver/lookup",
-    options = options,
-    sid_label = "ids",
-    array_payload = TRUE,
-    tidy = tidy
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

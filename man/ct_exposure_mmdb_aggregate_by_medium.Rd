@@ -6,22 +6,22 @@
 \usage{
 ct_exposure_mmdb_aggregate_by_medium(
   medium,
-  pageNumber = 1,
+  pageNumber = 1L,
   all_pages = TRUE,
-  max_pages = 100
+  max_pages = 100L
 )
 }
 \arguments{
-\item{medium}{harmonized medium}
+\item{medium}{medium}
 
-\item{pageNumber}{Optional parameter (default: 1)}
+\item{pageNumber}{pageNumber}
 
-\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+\item{all_pages}{TRUE (the default) requests page after page, starting at pageNumber, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in pageNumber.}
 
-\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
+\item{max_pages}{Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning; attr(result, 'pagination')$stop_reason records why paging stopped.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

@@ -6,7 +6,7 @@ generated_contract_ensure_package()
 test_that("ct_chemical_list_all maps return_dtxsid to the DTXSID projection before request", {
   captured <- NULL
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       tibble::tibble(listName = "TEST", dtxsids = "DTXSID1,DTXSID2")
     },
@@ -16,14 +16,14 @@ test_that("ct_chemical_list_all maps return_dtxsid to the DTXSID projection befo
   result <- suppressMessages(ComptoxR::ct_chemical_list_all(return_dtxsid = TRUE))
 
   expect_s3_class(result, "tbl_df")
-  expect_identical(captured$endpoint, "chemical/list/all")
-  expect_identical(captured$projection, "chemicallistwithdtxsids")
+  expect_identical(captured$path, "/chemical/list/all")
+  expect_identical(captured$query$projection, "chemicallistwithdtxsids")
 })
 
 test_that("ct_chemical_list_all keeps explicit projection when return_dtxsid is FALSE", {
   captured <- NULL
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       captured <<- list(...)
       tibble::tibble(listName = "TEST")
     },
@@ -32,12 +32,12 @@ test_that("ct_chemical_list_all keeps explicit projection when return_dtxsid is 
 
   suppressMessages(ComptoxR::ct_chemical_list_all(projection = "chemicallistname"))
 
-  expect_identical(captured$projection, "chemicallistname")
+  expect_identical(captured$query$projection, "chemicallistname")
 })
 
 test_that("ct_chemical_list_all post hook coerces DTXSID strings when requested", {
   local_mocked_bindings(
-    generic_request = function(...) {
+    .ct_request = function(...) {
       tibble::tibble(
         listName = c("LIST_A", "LIST_B"),
         dtxsids = c("DTXSID1,DTXSID2", "DTXSID3")

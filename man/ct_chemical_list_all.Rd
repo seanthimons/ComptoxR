@@ -11,14 +11,14 @@ ct_chemical_list_all(
 )
 }
 \arguments{
-\item{projection}{Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)}
+\item{projection}{Projection options for chemical lists: chemicallistall, chemicallistwithdtxsids, chemicallistname, or ccdchemicaldetaillists.}
 
-\item{return_dtxsid}{Return all DTXSIDs contained within each list}
+\item{return_dtxsid}{Return all DTXSIDs contained within each list.}
 
-\item{coerce}{Coerce DTXSID strings per list to list-column (requires return_dtxsid = TRUE)}
+\item{coerce}{Split DTXSID strings into per-list vectors when return_dtxsid is TRUE.}
 }
 \value{
-Returns a scalar value
+A tibble of chemical lists, or a named list when both return_dtxsid and coerce are TRUE.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

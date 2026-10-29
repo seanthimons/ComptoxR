@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_resolver_getsimilaritymap.R
 \name{chemi_resolver_getsimilaritymap}
 \alias{chemi_resolver_getsimilaritymap}
-\title{Resolver Getsimilaritymap}
+\title{chemi_resolver_getsimilaritymap}
 \usage{
 chemi_resolver_getsimilaritymap(
   query,
@@ -14,32 +14,21 @@ chemi_resolver_getsimilaritymap(
 )
 }
 \arguments{
-\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
+\item{query}{query}
 
-\item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+\item{idType}{idType}
 
-\item{section}{Optional parameter}
+\item{section}{section}
 
-\item{sort}{Logical value controlling API result ordering (default: FALSE)}
+\item{sort}{sort}
 
-\item{hclust_method}{Hierarchical clustering method passed to stats::hclust()}
+\item{hclust_method}{hclust_method}
 
-\item{format}{Output format: cluster result, long-form similarities, or raw API response}
+\item{format}{format}
 }
 \value{
-A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by \code{format}
+Decoded response returned by the client request helper.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
-then sends the resolved Chemical objects to the API endpoint.
-}
-\examples{
-\dontrun{
-chemi_resolver_getsimilaritymap(query = c("50-00-0", "DTXSID7020182"))
-}
-}
-\section{API stage}{
-  This wrapper was generated from the \strong{public} API schema.
+chemi_resolver_getsimilaritymap
 }

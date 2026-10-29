@@ -20,15 +20,15 @@ library(dplyr)
 
 dtxsid <- "DTXSID7020182"
 
-ccd_toxval <- ct_hazard_toxval_search(dtxsid)
+ccd_toxval <- ct_hazard_toxval_search_by_dtxsid(dtxsid)
 ccd_toxval |>
   select(dtxsid, source, toxvalType, toxvalTypeSuperCategory,
          toxvalNumeric, toxvalUnits, speciesCommon, studyType,
          quality, qcCategory)
 
-ct_hazard_genetox_search(dtxsid)
-ct_hazard_cancer_search(dtxsid)
-ct_hazard_toxref_data_search(dtxsid)
+ct_hazard_genetox_summary_search_by_dtxsid(dtxsid)
+ct_hazard_cancer_summary_search_by_dtxsid(dtxsid)
+ct_hazard_toxref_data_search_by_dtxsid(dtxsid)
 ```
 
 Use the CCD path for quick profile work and bulk screening. Keep source, value

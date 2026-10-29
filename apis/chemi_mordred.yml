@@ -1,0 +1,208 @@
+# chemi_mordred: every operation in schema/chemi_mordred_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_mordred
+schemas:
+  files:
+  - schema/chemi_mordred_prod.json
+groups:
+  chemi_mordred:
+    hook_config: inst/hook_config.yml
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/mordred: chemi_mordred
+      GET /api/mordred/metadata: chemi_mordred_metadata
+      GET /api/mordred/version: chemi_mordred_version
+      POST /api/mordred: chemi_mordred_bulk
+    operations:
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/mordred:
+        inputs:
+          smiles:
+            type: character
+            required: yes
+            description: One SMILES string or resolvable chemical identifier
+          headers:
+            type: character
+            default: ~
+            description: Request upstream descriptor headers
+          inchi:
+            type: character
+            default: ~
+            description: Include InChI identifiers
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: validated wide tibble or raw payload'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              from:
+                - hook_state
+                - request
+                - options
+            body:
+              value: ~
+            headers:
+              object:
+                Accept:
+                  from:
+                    - hook_state
+                    - request
+                    - content_type
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_get_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Generate descriptors for one molecule
+          lifecycle: experimental
+          parameters:
+            smiles: One SMILES string or resolvable chemical identifier
+            headers: Request upstream descriptor headers
+            inchi: Include InChI identifiers
+            output: 'Output contract: validated wide tibble or raw payload'
+          return: Returns a tibble with results
+          examples:
+            - smiles: DTXSID7020182
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/mordred/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve mordred metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/mordred/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve mordred version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/mordred:
+        inputs:
+          chemicals:
+            type: character
+            required: yes
+            description: Chemical structures or resolvable identifiers
+          options:
+            type: character
+            default: ~
+            description: Named list of additional dedicated Mordred options
+          headers:
+            type: character
+            default: ~
+            description: Request descriptor headers
+          inchi:
+            type: character
+            default: ~
+            description: Include InChI identifiers
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: validated wide tibble or raw payload'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              from:
+                - hook_state
+                - request
+                - body
+            headers:
+              object:
+                Accept:
+                  from:
+                    - hook_state
+                    - request
+                    - content_type
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_post_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Generate descriptors for multiple molecules
+          lifecycle: experimental
+          parameters:
+            chemicals: Chemical structures or resolvable identifiers
+            options: Named list of additional dedicated Mordred options
+            headers: Request descriptor headers
+            inchi: Include InChI identifiers
+            output: 'Output contract: validated wide tibble or raw payload'
+          return: Returns a tibble with results
+          examples:
+            - chemicals: DTXSID1024122
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes

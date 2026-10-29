@@ -102,13 +102,26 @@ Informational coverage workflow.
 - Does not block merges on coverage percentage.
 - Must not auto-record cassettes from production APIs.
 
+### `specmill-maintenance.yml`
+
+Offline checks for the specmill-maintained portion of the client, on every pull
+request, pushes to `main` and `integration`, and manual dispatch.
+
+- Reads the specmill revision from `dev/specmill-lock.json`, checks out that
+  commit, and uses the existing installer to verify its archive checksum and
+  installed namespace provenance.
+- Uses Air 0.11.0, the version pinned in `specmill.yml`, like every other workflow.
+- Checks wrapper and test freshness, runs fixed contracts and client policy
+  tests, and requires regeneration to leave no modified or untracked files.
+- Needs no API credentials or sibling repository checkout on the runner.
+
 ### `schema-check.yml`
 
 Scheduled and manual schema update workflow.
 
 - Downloads and compares only production CompTox Dashboard, Cheminformatics,
   and EPI Suite schemas. EPI Suite uses the approved `https://episuite.dev/api`.
-- Installs the checksum-pinned `wrapmaint` development toolkit.
+- Installs the checksum-pinned `specmill` development toolkit.
 - Safely rebuilds experimental `ct_*`, `chemi_*`, and `epi_*` wrappers.
 - Reports `ok` and a comma-separated `failed_families` list from the download
   step.
@@ -180,8 +193,8 @@ Optional Codecov upload token used by coverage workflows.
 Run targeted tests during development:
 
 ```r
-testthat::test_file("tests/testthat/test-generic_request.R")
-devtools::test(filter = "generic_request")
+testthat::test_file("tests/testthat/test-ct_similar.R")
+devtools::test(filter = "ct_similar")
 ```
 
 Run the readiness audit:

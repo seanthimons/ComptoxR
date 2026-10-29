@@ -2,15 +2,15 @@
 % Please edit documentation in R/chemi_amos_functional_uses_for_dtxsid.R
 \name{chemi_amos_functional_uses_for_dtxsid}
 \alias{chemi_amos_functional_uses_for_dtxsid}
-\title{Returns a list of functional use classifications for a substance.}
+\title{Returns a list of functional use classifications for a substance}
 \usage{
 chemi_amos_functional_uses_for_dtxsid(dtxsid)
 }
 \arguments{
-\item{dtxsid}{The DTXSID for the substance of interest.}
+\item{dtxsid}{The DTXSID for the substance of interest. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

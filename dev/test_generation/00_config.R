@@ -1,4 +1,4 @@
-wrapmaint::bind_tools("test_helpers", environment())
+specmill::bind_tools("test_helpers", environment())
 # Configuration and small helpers for generated wrapper contract tests.
 
 tg_config <- list(
@@ -8,7 +8,9 @@ tg_config <- list(
   helper_names = c(
     "generic_request",
     "generic_chemi_request",
-    "generic_pubchem_request"
+    "generic_pubchem_request",
+    ".ct_request",
+    ".ct_request_pages"
   ),
   resolver_helper_names = c(
     "chemi_resolver_lookup",

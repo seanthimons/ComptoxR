@@ -65,8 +65,8 @@ jobs:
       - name: Run core tests
         run: |
           # Run only core template tests for quick feedback
-          testthat::test_file("tests/testthat/test-generic_request.R")
-          testthat::test_file("tests/testthat/test-generic_chemi_request.R")
+          testthat::test_file("tests/testthat/test-ct_similar.R")
+          testthat::test_file("tests/testthat/test-ct_related.R")
         shell: Rscript {0}
 
       - name: Check syntax

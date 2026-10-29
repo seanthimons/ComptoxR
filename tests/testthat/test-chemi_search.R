@@ -1,33 +1,45 @@
+# Native request-seam adaptation of the existing14 bespoke tests.
+.search_test_transport <- function(callback) {
+  force(callback)
+  function(...) {
+    value <- callback(...)
+    structure(list(method = "POST", url = "http://localhost/api/search", status_code = 200L,
+      headers = list(`content-type` = "application/json"),
+      body = charToRaw(jsonlite::toJSON(value, auto_unbox = TRUE, null = "null"))),
+      class = "httr2_response")
+  }
+}
+
 # Bespoke contract tests for the composed, hook-based chemi_search().
 # Replaces the generated stub contract test.
 
 test_that("chemi_search builds the search body and passes pagination args", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(
         totalRecordsCount = 1,
         records = list(list(sid = "DTXSID7020182"))
       )
-    },
+    }),
     .package = "ComptoxR"
   )
 
   result <- suppressMessages(chemi_search("DTXSID7020182", "exact"))
 
-  expect_identical(captured$endpoint, "search")
-  expect_identical(captured$tidy, FALSE)
-  expect_identical(captured$paginate, FALSE)
-  expect_identical(captured$pagination_strategy, "offset_limit")
+  expect_identical(captured$path, "/search")
+  expect_identical(captured$method, "POST")
+  expect_null(captured$body$offset)
+  expect_identical(captured$body_media, "application/json")
 
   body <- captured$body
   expect_identical(body$inputType, "MOL")
   expect_identical(body$searchType, "EXACT")
   expect_identical(body$query, "MOCK\nM  END\n")
   expect_identical(body$params$limit, 50)
-  expect_identical(captured$options$limit, 50)
+  expect_true(captured$request_controls$preserve_errors)
 
   expect_s3_class(result, "tbl_df")
 })
@@ -35,24 +47,24 @@ test_that("chemi_search builds the search body and passes pagination args", {
 test_that("chemi_search all_pages = TRUE requests offset/limit pagination", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
   suppressMessages(chemi_search("DTXSID7020182", "exact", all_pages = TRUE))
 
-  expect_identical(captured$paginate, TRUE)
-  expect_identical(captured$pagination_strategy, "offset_limit")
+  expect_equal(captured$body$offset, 0)
+  expect_identical(captured$body_media, "application/json")
 })
 
 test_that("chemi_search tags similarity results with relationship", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       list(
         totalRecordsCount = 2,
         records = list(
@@ -60,7 +72,7 @@ test_that("chemi_search tags similarity results with relationship", {
           list(sid = "DTXSID1024122", similarity = 0.9)
         )
       )
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -79,13 +91,13 @@ test_that("chemi_search tags similarity results with relationship", {
 test_that("chemi_search exact: fetches MOL exactly once for a DTXSID query", {
   n_fetch <- 0
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) {
       n_fetch <<- n_fetch + 1
       "MOCK\nM  END\n"
     },
-    generic_chemi_request = function(...) {
+    .ct_request = .search_test_transport(function(...) {
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -96,11 +108,11 @@ test_that("chemi_search exact: fetches MOL exactly once for a DTXSID query", {
 test_that("chemi_search substructure: resolves query to MOL", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -113,11 +125,11 @@ test_that("chemi_search substructure: resolves query to MOL", {
 test_that("chemi_search similar: maps all similarity types and min-similarity", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -142,8 +154,8 @@ test_that("chemi_search similar: maps all similarity types and min-similarity", 
 
 test_that("chemi_search similar: tags parent/child from response similarity", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       list(
         totalRecordsCount = 2,
         records = list(
@@ -151,7 +163,7 @@ test_that("chemi_search similar: tags parent/child from response similarity", {
           list(sid = "DTXSID1024122", similarity = 0.9)
         )
       )
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -162,11 +174,11 @@ test_that("chemi_search similar: tags parent/child from response similarity", {
 test_that("chemi_search mass: drops query, maps all mass types, carries range + elements", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -197,11 +209,11 @@ test_that("chemi_search mass: drops query, maps all mass types, carries range + 
 test_that("chemi_search hazard: empty MOL, maps all names/toxicity/authority", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -248,11 +260,11 @@ test_that("chemi_search hazard: empty MOL, maps all names/toxicity/authority", {
 test_that("chemi_search features: empty MOL, sweeps feature filters, element filters", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -287,31 +299,31 @@ test_that("chemi_search features: empty MOL, sweeps feature filters, element fil
 test_that("chemi_search: limit feeds both body params and pagination options", {
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
   suppressWarnings(suppressMessages(chemi_search("DTXSID7020182", "exact", limit = 25)))
   expect_identical(captured$body$params$limit, 25)
-  expect_identical(captured$options$limit, 25)
+  expect_true(captured$request_controls$preserve_errors)
 })
 
 test_that("chemi_search: does not re-fetch a query that is already a MOL", {
   n_fetch <- 0
   captured <- NULL
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) {
       n_fetch <<- n_fetch + 1
       "FETCHED\nM  END\n"
     },
-    generic_chemi_request = function(...) {
+    .ct_request = .search_test_transport(function(...) {
       captured <<- list(...)
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -323,10 +335,10 @@ test_that("chemi_search: does not re-fetch a query that is already a MOL", {
 
 test_that("chemi_search: empty response warns and returns a 0-row tibble", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 
@@ -342,10 +354,10 @@ test_that("chemi_search: empty response warns and returns a 0-row tibble", {
 
 test_that("chemi_search: validation failures surface as wrapped pre-request hook errors", {
   local_mocked_bindings(
-    ct_chemical_file_mol_search = function(...) "MOCK\nM  END\n",
-    generic_chemi_request = function(...) {
+    ct_chemical_file_mol_search_by_dtxsid = function(...) "MOCK\nM  END\n",
+    .ct_request = .search_test_transport(function(...) {
       list(totalRecordsCount = 0, records = list())
-    },
+    }),
     .package = "ComptoxR"
   )
 

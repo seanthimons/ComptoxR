@@ -10,7 +10,7 @@ mock_toxval_records <- function(dtxsids) {
 
 test_that("genra_get_tox_data parses ToxVal activity offline", {
   testthat::local_mocked_bindings(
-    ct_hazard_toxval_search_bulk = mock_toxval_records,
+    ct_hazard_toxval_search_by_dtxsid_bulk = mock_toxval_records,
     .package = "ComptoxR"
   )
 
@@ -35,7 +35,7 @@ test_that("genra_get_tox_data handles empty input without calling API helpers", 
 
 test_that("genra_get_tox_data applies study filters before activity classification", {
   testthat::local_mocked_bindings(
-    ct_hazard_toxval_search_bulk = mock_toxval_records,
+    ct_hazard_toxval_search_by_dtxsid_bulk = mock_toxval_records,
     .package = "ComptoxR"
   )
 

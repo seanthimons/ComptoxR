@@ -27,13 +27,30 @@ ct_similar <- function(query, similarity = 0.8) {
     similarity <- req_data$params[["similarity"]]
   }
 
-  result <- generic_request(
-    query = query,
-    endpoint = "similar-compound/by-dtxsid/",
-    method = "GET",
-    batch_limit = 1,
-    server = "https://comptox.epa.gov/dashboard-api/",
-    similarity
+  query <- .ct_legacy_query(query)
+  result <- .ct_request_each(
+    function(chunk) {
+      .ct_request(
+        method = "GET",
+        path = "/similar-compound/by-dtxsid/{query}/{similarity}",
+        path_params = list(query = chunk, similarity = similarity),
+        query = list(),
+        body = NULL,
+        response_policy = ".ct_tidy",
+        server = list(url = "https://comptox.epa.gov/dashboard-api"),
+        auth = list(list(list(
+          scheme = "ctx",
+          type = "apiKey",
+          location = "header",
+          name = "x-api-key",
+          envvar = "ctx_api_key"
+        )))
+      )
+    },
+    query,
+    1L,
+    on_error = "drop",
+    empty = .ct_empty_table
   )
 
   return(result)

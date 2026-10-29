@@ -12,21 +12,19 @@ hook_first_non_null <- function(...) {
 }
 
 chemical_record_from_resolver_item <- function(item) {
-  chem <- item$chemical
-  if (is.null(chem)) {
-    chem <- list()
+  chemical <- item$chemical
+  if (is.null(chemical)) {
+    chemical <- list()
   }
-
-  list(
-    chemical = list(
-      sid = hook_first_non_null(chem$chemId, chem$sid),
-      smiles = hook_first_non_null(chem$canonicalSmiles, chem$smiles),
-      casrn = chem$casrn,
-      inchi = chem$inchi,
-      inchiKey = chem$inchiKey,
-      name = chem$name
-    )
+  record <- list(
+    sid = hook_first_non_null(chemical$chemId, chemical$sid),
+    smiles = hook_first_non_null(chemical$canonicalSmiles, chemical$smiles),
+    casrn = chemical$casrn,
+    inchi = chemical$inchi,
+    inchiKey = chemical$inchiKey,
+    name = chemical$name
   )
+  list(chemical = c(record, chemical[setdiff(names(chemical), names(record))]))
 }
 
 #' Resolve query identifiers to ChemicalRecord payloads

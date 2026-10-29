@@ -1,0 +1,58 @@
+[
+  {
+    "service": "alerts-pilot",
+    "operation": "GET /api/alerts/groups/{id}",
+    "name": "chemi_alerts_groups_by_id",
+    "file": "R/chemi_alerts_groups_by_id.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "alerts-pilot",
+    "operation": "GET /api/alerts/alerts",
+    "name": "chemi_alerts_alerts",
+    "file": "R/chemi_alerts_alerts.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "alerts-pilot",
+    "operation": "GET /api/alerts/operations",
+    "name": "chemi_alerts_operations",
+    "file": "R/chemi_alerts_operations.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "alerts-pilot",
+    "operation": "GET /api/alerts/groups",
+    "name": "chemi_alerts_groups",
+    "file": "R/chemi_alerts_groups.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "POST /api/alerts/export",
+    "name": "chemi_alerts_export",
+    "file": "R/chemi_alerts_export.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "POST /api/alerts/export-append",
+    "name": "chemi_alerts_export_append",
+    "file": "R/chemi_alerts_export_append.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "chemi-management",
+    "operation": "GET /api/alerts/render",
+    "name": "chemi_alerts_render",
+    "file": "R/chemi_alerts_render.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "legacy",
+    "operation": "POST /api/alerts/groups",
+    "name": "chemi_alerts_groups_bulk",
+    "file": "R/chemi_alerts_groups_bulk.R",
+    "implementation": "legacy"
+  }
+]

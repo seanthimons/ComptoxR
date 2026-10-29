@@ -19,7 +19,7 @@ library(ComptoxR)
 library(dplyr)
 
 dtxsid <- "DTXSID7020182"
-detail <- ct_chemical_detail_search(dtxsid)
+detail <- ct_chemical_detail_search_by_dtxsid(dtxsid)
 
 glimpse(detail)
 detail |>
@@ -74,11 +74,11 @@ bcf_summary <- ct_chemical_fate_summary_search(
   dtxsid,
   propName = "Bioconcentration Factor"
 )
-bcf_experimental <- ct_chemical_fate_experimental_search(
+bcf_experimental <- ct_chemical_fate_summary_experimental_search(
   dtxsid,
   propName = "Bioconcentration Factor"
 )
-bcf_predicted <- ct_chemical_fate_predicted_search(
+bcf_predicted <- ct_chemical_fate_summary_predicted_search(
   dtxsid,
   propName = "Bioconcentration Factor"
 )
@@ -99,7 +99,7 @@ The CCD ToxVal endpoint is a fast public API path. Select a small set of fields
 and keep the evidence metadata.
 
 ```{r}
-toxval <- ct_hazard_toxval_search(dtxsid)
+toxval <- ct_hazard_toxval_search_by_dtxsid(dtxsid)
 
 toxval |>
   filter(toxvalTypeSuperCategory %in% c("Point of Departure", "Reference Value")) |>
@@ -107,9 +107,9 @@ toxval |>
          toxvalNumeric, toxvalUnits, speciesCommon, studyType,
          quality, qcCategory)
 
-genetox <- ct_hazard_genetox_search(dtxsid)
-cancer <- ct_hazard_cancer_search(dtxsid)
-toxref <- ct_hazard_toxref_data_search(dtxsid)
+genetox <- ct_hazard_genetox_summary_search_by_dtxsid(dtxsid)
+cancer <- ct_hazard_cancer_summary_search_by_dtxsid(dtxsid)
+toxref <- ct_hazard_toxref_data_search_by_dtxsid(dtxsid)
 ```
 
 `toxvalNumeric` has meaning only with `toxvalUnits`. `toxvalType` states the
@@ -120,7 +120,7 @@ fields help a reviewer judge the evidence.
 ## Retrieve IVIVE parameters
 
 ```{r}
-ivive <- ct_hazard_adme_ivive_search(dtxsid)
+ivive <- ct_hazard_adme_ivive_search_by_dtxsid(dtxsid)
 ivive |>
   select(dtxsid, description, measured, predicted, unit, model,
          species, reference)
@@ -134,11 +134,11 @@ The current response separates measured and predicted values. Keep `unit`,
 SEEM general exposure is the primary compact exposure result.
 
 ```{r}
-seem <- ct_exposure_seem_general_search(dtxsid)
+seem <- ct_exposure_seem_general_search_by_dtxsid(dtxsid)
 seem |>
   select(dtxsid, productionVolume, units, starts_with("probability"))
 
-production <- ct_exposure_ccd_production_volume_search(dtxsid)
+production <- ct_exposure_ccd_production_volume_search_by_dtxsid(dtxsid)
 production |> select(dtxsid, name, amount)
 ```
 

@@ -7,10 +7,10 @@
 ct_bioactivity_assay(projection = "assay-all")
 }
 \arguments{
-\item{projection}{Optional parameter (default: assay-all)}
+\item{projection}{projection}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

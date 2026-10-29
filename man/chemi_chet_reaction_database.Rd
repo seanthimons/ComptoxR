@@ -5,7 +5,7 @@
 \title{Search reactions}
 \usage{
 chemi_chet_reaction_database(
-  page = 0,
+  page = 1L,
   size = NULL,
   query = NULL,
   lib_name = NULL,
@@ -15,41 +15,41 @@ chemi_chet_reaction_database(
   reaction_phase = NULL,
   craccm_id = NULL,
   all_pages = TRUE,
-  max_pages = 100
+  max_pages = 100L
 )
 }
 \arguments{
-\item{page}{Optional parameter}
+\item{page}{page}
 
-\item{size}{Optional parameter}
+\item{size}{size}
 
-\item{query}{Optional parameter}
+\item{query}{query}
 
-\item{lib_name}{Optional parameter}
+\item{lib_name}{lib_name}
 
-\item{reaction_process}{Optional parameter}
+\item{reaction_process}{reaction_process}
 
-\item{reaction_type}{Optional parameter}
+\item{reaction_type}{reaction_type}
 
-\item{reaction_scheme}{Optional parameter}
+\item{reaction_scheme}{reaction_scheme}
 
-\item{reaction_phase}{Optional parameter}
+\item{reaction_phase}{reaction_phase}
 
-\item{craccm_id}{Optional parameter}
+\item{craccm_id}{craccm_id}
 
-\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+\item{all_pages}{TRUE (the default) requests page after page, starting at page, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in page.}
 
-\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
+\item{max_pages}{Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning.}
 }
 \value{
-Returns a list with result object
+A list of records.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_database(page = "DTXSID7020182")
+chemi_chet_reaction_database(page = 1L, all_pages = FALSE, max_pages = 2L)
 }
 }
 \section{API stage}{

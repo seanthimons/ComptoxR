@@ -221,3 +221,28 @@ test_that("resolve_smiles_identifier errors when identifier cannot resolve", {
     "Unable to resolve chemical identifier"
   )
 })
+
+test_that('chemical resolution preserves fields needed by downstream services', {
+  local_mocked_bindings(chemi_resolver_lookup_bulk = function(...) list(list(
+    result = 'FOUND', chemical = list(chemId = 'ONE', canonicalSmiles = 'C',
+      cid = 'compound', mol = 'molecule bytes', additionalProps = list(source = 'resolver'))
+  )), .package = 'ComptoxR')
+  result <- resolve_query_to_chemical_records(list(params = list(query = 'one')))
+  chemical <- result$params$chemicals[[1L]]$chemical
+  expect_identical(chemical$sid, 'ONE')
+  expect_identical(chemical$smiles, 'C')
+  expect_identical(chemical$chemId, 'ONE')
+  expect_identical(chemical$cid, 'compound')
+  expect_identical(chemical$mol, 'molecule bytes')
+  expect_identical(chemical$additionalProps, list(source = 'resolver'))
+})
+
+
+test_that("resolved chemical projection retains original nullable slots", {
+  project <- get("chemical_record_from_resolver_item", asNamespace("ComptoxR"))
+  expect_identical(project(list(chemical = NULL)), list(chemical = list(
+    sid = NULL, smiles = NULL, casrn = NULL, inchi = NULL, inchiKey = NULL, name = NULL)))
+  record <- project(list(chemical = list(sid = "ONE", mol = "MOL")))$chemical
+  expect_identical(names(record), c("sid", "smiles", "casrn", "inchi", "inchiKey", "name", "mol"))
+  expect_identical(record$mol, "MOL")
+})

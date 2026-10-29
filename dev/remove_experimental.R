@@ -217,7 +217,7 @@ remove_experimental_main <- function(args = commandArgs(trailingOnly = TRUE)) {
       "  --help, -h      Show this help.\n\n",
       "Examples:\n",
       "  --prefix=ct                  matches ct_*.R, not cts_*.R\n",
-      "  --prefix=chemi_amos          matches the AMOS service\n",
+      "  --prefix=chemi_amos                 matches the AMOS service\n",
       "  --prefix=chemi_amos_method   matches that endpoint and variants\n",
       sep = ""
     )

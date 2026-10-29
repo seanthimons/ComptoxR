@@ -7,7 +7,7 @@
 chemi_resolver_ghs_pcodes()
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

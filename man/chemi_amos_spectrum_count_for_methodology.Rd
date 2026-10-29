@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_spectrum_count_for_methodology.R
 \name{chemi_amos_spectrum_count_for_methodology}
 \alias{chemi_amos_spectrum_count_for_methodology}
-\title{Returns the number of spectra that have a specified methodology.}
+\title{chemi amos spectrum count for methodology}
 \usage{
 chemi_amos_spectrum_count_for_methodology(dtxsid = NULL, spectrum_type = NULL)
 }
@@ -12,14 +12,14 @@ chemi_amos_spectrum_count_for_methodology(dtxsid = NULL, spectrum_type = NULL)
 \item{spectrum_type}{Analytical methodology to search for.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID1024122")
+chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID9020112", spectrum_type = "GC/MS")
 }
 }
 \section{API stage}{

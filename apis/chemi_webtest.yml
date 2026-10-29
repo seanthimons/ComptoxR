@@ -1,0 +1,419 @@
+# chemi_webtest: every operation in schema/chemi_webtest_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_webtest
+schemas:
+  files:
+  - schema/chemi_webtest_prod.json
+groups:
+  chemi_webtest:
+    hook_config: inst/hook_config.yml
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/webtest: chemi_webtest
+      GET /api/webtest/metadata: chemi_webtest_metadata
+      GET /api/webtest/predict: chemi_webtest_predict
+      GET /api/webtest/report: chemi_webtest_report
+      GET /api/webtest/version: chemi_webtest_version
+      POST /api/webtest: chemi_webtest_bulk
+      POST /api/webtest/export-append: chemi_webtest_export_append
+      POST /api/webtest/predict: chemi_webtest_predict_bulk
+      POST /api/webtest/predict/export: chemi_webtest_predict_export
+    operations:
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/webtest:
+        inputs:
+          smiles:
+            type: character
+            required: yes
+            description: One SMILES string or resolvable chemical identifier
+          headers:
+            type: logical
+            default: no
+            description: 'Request upstream descriptor headers (default: FALSE)'
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: validated wide tibble or raw payload'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              from:
+                - hook_state
+                - request
+                - options
+            body:
+              value: ~
+            headers:
+              object:
+                Accept:
+                  from:
+                    - hook_state
+                    - request
+                    - content_type
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_get_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Webtest
+          lifecycle: experimental
+          parameters:
+            smiles: One SMILES string or resolvable chemical identifier
+            headers: 'Request upstream descriptor headers (default: FALSE)'
+            output: 'Output contract: validated wide tibble or raw payload'
+          return: Returns a tibble with results
+          examples:
+            - smiles: DTXSID7020182
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/webtest/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve webtest metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/webtest/predict:
+        inputs:
+          smiles:
+            type: character
+            required: yes
+            description: Required parameter
+          endpoint:
+            type: character
+            required: yes
+            missing_as_null: yes
+            description: Optional parameter
+          method:
+            type: character
+            default: consensus
+            description: 'Optional parameter (default: consensus)'
+          format:
+            type: character
+            default: JSON
+            description: 'Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON,
+              XLSX, PDF, HTML, XML, DOCX'
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: normalized wide tibble or raw PredictionResult'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              from:
+                - hook_state
+                - request
+                - options
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_get_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Webtest Predict
+          lifecycle: experimental
+          parameters:
+            smiles: Required parameter
+            endpoint: Optional parameter
+            method: 'Optional parameter (default: consensus)'
+            format: 'Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON,
+              XLSX, PDF, HTML, XML, DOCX'
+            output: 'Output contract: normalized wide tibble or raw PredictionResult'
+          return: Returns a tibble with results
+          examples:
+            - smiles: DTXSID7020182
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/webtest/report:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Retrieve a previously generated WebTEST report
+          lifecycle: experimental
+          tags:
+            apiStage: public
+          return: Decoded JSON or text, raw binary bytes, or NULL for an empty response.
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/webtest/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve webtest version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/webtest:
+        inputs:
+          query:
+            type: character
+            required: yes
+            description: Chemical structures or resolvable identifiers
+          chemIdType:
+            type: character
+            default: AnyId
+            description: 'Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+              Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+          headers:
+            type: logical
+            default: no
+            description: Request descriptor headers
+          format:
+            type: character
+            default: JSON
+            description: 'Deprecated; responses are always JSON.'
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: validated wide tibble or raw payload'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              from:
+                - hook_state
+                - request
+                - body
+            headers:
+              object:
+                Accept:
+                  from:
+                    - hook_state
+                    - request
+                    - content_type
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: descriptor_post_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Webtest
+          lifecycle: experimental
+          parameters:
+            query: Chemical structures or resolvable identifiers
+            chemIdType: 'Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+              Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+            format: 'Deprecated; responses are always JSON.'
+            headers: Request descriptor headers
+            output: 'Output contract: validated wide tibble or raw payload'
+          return: Returns a tibble with results
+          examples:
+            - query: DTXSID1024122
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/webtest/export-append:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Append WebTEST predictions to an uploaded report
+          lifecycle: experimental
+          tags:
+            apiStage: public
+          return: Decoded JSON or text, raw binary bytes, or NULL for an empty response.
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/webtest/predict:
+        inputs:
+          structures:
+            type: character
+            required: yes
+            description: Molecule expressed as SMILES or MOL
+          endpoints:
+            type: character
+            required: yes
+            missing_as_null: yes
+            description: Endpoint to predict
+          methods:
+            type: character
+            default: ~
+            description: 'Prediction method: hc (Hierarchical Clustering), sm (Single Model),
+              nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)'
+          format:
+            type: character
+            default: JSON
+            description: 'Report type: JSON, HTML or PDF. Options: UNKNOWN, SDF, SMI, MOL,
+              CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX'
+          output:
+            type: character
+            default:
+              - wide
+              - raw
+            description: 'Output contract: normalized wide tibble or raw PredictionResult'
+        post_on_skip: yes
+        post_state: hook_state
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              from:
+                - hook_state
+                - request
+                - endpoint
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              from:
+                - hook_state
+                - request
+                - body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              object:
+                url:
+                  from:
+                    - hook_state
+                    - request
+                    - server
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: Webtest Predict
+          lifecycle: experimental
+          parameters:
+            endpoints: Endpoint to predict
+            format: 'Report type: JSON, HTML or PDF. Options: UNKNOWN, SDF, SMI, MOL, CSV,
+              TSV, JSON, XLSX, PDF, HTML, XML, DOCX'
+            methods: 'Prediction method: hc (Hierarchical Clustering), sm (Single Model),
+              nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)'
+            structures: Molecule expressed as SMILES or MOL
+            output: 'Output contract: normalized wide tibble or raw PredictionResult'
+          return: Returns a tibble with results
+          examples:
+            - endpoints: DTXSID1024122
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/webtest/predict/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Export WebTEST predictions
+          lifecycle: experimental
+          tags:
+            apiStage: public
+          return: Decoded JSON or text, raw binary bytes, or NULL for an empty response.

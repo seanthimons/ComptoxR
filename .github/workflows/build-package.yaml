@@ -52,7 +52,7 @@ jobs:
         shell: Rscript {0}
         run: |
           source('dev/check_public_api.R')
-          check_public_api('.', membership = FALSE)
+          check_public_api('.')
 
       - name: Build source package
         id: build

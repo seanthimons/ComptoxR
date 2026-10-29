@@ -128,12 +128,12 @@ jobs:
         shell: Rscript {0}
         run: |
           source('dev/check_public_api.R')
-          check_public_api('.', membership = FALSE)
+          check_public_api('.')
           expanded <- tempfile('release-source-')
           dir.create(expanded)
           archive <- paste0(Sys.getenv('PACKAGE'), '_', Sys.getenv('VERSION'), '.tar.gz')
           utils::untar(archive, exdir = expanded)
-          check_public_api(file.path(expanded, Sys.getenv('PACKAGE')), membership = FALSE)
+          check_public_api(file.path(expanded, Sys.getenv('PACKAGE')))
 
       - name: Push commits and tag
         env:

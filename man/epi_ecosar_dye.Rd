@@ -4,17 +4,37 @@
 \alias{epi_ecosar_dye}
 \title{Estimate a cationic dye}
 \usage{
-epi_ecosar_dye()
+epi_ecosar_dye(
+  ethoxylate = 0L,
+  molecularWeight = NULL,
+  waterSolubility = NULL,
+  cas = NULL,
+  chemicalName = NULL,
+  smiles = NULL
+)
+}
+\arguments{
+\item{ethoxylate}{ethoxylate}
+
+\item{molecularWeight}{molecularWeight}
+
+\item{waterSolubility}{waterSolubility}
+
+\item{cas}{cas}
+
+\item{chemicalName}{chemicalName}
+
+\item{smiles}{smiles}
 }
 \value{
-Returns a tibble with results
+Returns a named list of result modules
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_dye()
+epi_ecosar_dye(molecularWeight = 300, waterSolubility = 100)
 }
 }
 \section{API stage}{

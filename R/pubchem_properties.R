@@ -1,71 +1,17 @@
-# PubChem property name allowlist -------------------------------------------
-
-# All valid PubChem computed property names (prevents path injection)
-.pubchem_valid_properties <- c(
-  "MolecularFormula",
-  "MolecularWeight",
-  "CanonicalSMILES",
-  "IsomericSMILES",
-  "InChI",
-  "InChIKey",
-  "IUPACName",
-  "XLogP",
-  "ExactMass",
-  "MonoisotopicMass",
-  "TPSA",
-  "Complexity",
-  "Charge",
-  "HBondDonorCount",
-  "HBondAcceptorCount",
-  "RotatableBondCount",
-  "HeavyAtomCount",
-  "IsotopeAtomCount",
-  "AtomStereoCount",
-  "DefinedAtomStereoCount",
-  "UndefinedAtomStereoCount",
-  "BondStereoCount",
-  "DefinedBondStereoCount",
-  "UndefinedBondStereoCount",
-  "CovalentUnitCount",
-  "Volume3D",
-  "XStericQuadrupole3D",
-  "YStericQuadrupole3D",
-  "ZStericQuadrupole3D",
-  "FeatureCount3D",
-  "FeatureAcceptorCount3D",
-  "FeatureDonorCount3D",
-  "FeatureAnionCount3D",
-  "FeatureCationCount3D",
-  "FeatureRingCount3D",
-  "FeatureHydrophobeCount3D",
-  "ConformerModelRMSD3D",
-  "EffectiveRotorCount3D",
-  "ConformerCount3D",
-  "Fingerprint2D"
-)
-
-# Default property set for pubchem_properties()
-.pubchem_default_properties <- c(
-  "MolecularFormula",
-  "MolecularWeight",
-  "CanonicalSMILES",
-  "InChI",
-  "InChIKey",
-  "XLogP",
-  "TPSA",
-  "HBondDonorCount",
-  "HBondAcceptorCount",
-  "Complexity",
-  "ExactMass",
-  "MonoisotopicMass",
-  "HeavyAtomCount"
-)
-
 #' Fetch computed properties from PubChem
 #'
+#' @noMd
+#' @description
 #' Retrieve computed physico-chemical properties for one or more PubChem
 #' Compound IDs (CIDs) via the PUG REST API.
 #'
+#' Property names are validated against PubChem's documented allowlist before
+#' the request is made. Invalid property names cause an immediate error.
+#'
+#' For multiple CIDs, requests are batched at 100 CIDs per POST request
+#' (PubChem's documented limit for list-based requests).
+#'
+#' Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
 #' @param cid Integer or character vector of PubChem CIDs. Does NOT accept
 #'   compound names or DTXSIDs — use [pubchem_search()] first to resolve CIDs.
 #' @param properties Character vector of property names to retrieve. If `NULL`
@@ -74,108 +20,205 @@
 #'   HBondAcceptorCount, Complexity, ExactMass, MonoisotopicMass, HeavyAtomCount.
 #' @param cache Logical. If `TRUE` (default), results are cached in the session
 #'   environment keyed by CID and property set, so repeated calls are instant.
-#'
 #' @return A tibble with one row per CID and columns for each requested property
 #'   plus a `CID` column. Returns an empty tibble if no results are found.
-#'
-#' @details
-#' Property names are validated against PubChem's documented allowlist before
-#' the request is made. Invalid property names cause an immediate error.
-#'
-#' For multiple CIDs, requests are batched at 100 CIDs per POST request
-#' (PubChem's documented limit for list-based requests).
-#'
 #' @seealso [pubchem_search()] to find CIDs by name/structure,
 #'   [ct_chemical_property_summary_search()] for CompTox Dashboard properties.
-#'
+#' @export
 #' @examples
 #' \dontrun{
-#' # Default properties for aspirin
-#' pubchem_properties(2244)
-#'
-#' # Specific properties for multiple CIDs
-#' pubchem_properties(c(2244, 6623), properties = c("MolecularWeight", "XLogP"))
+#' pubchem_properties(cid = 2244L)
+#' pubchem_properties(cid = 2244L, properties = "XLogP")
 #' }
-#'
-#' @export
+# Generated with specmill; do not edit by hand.
 pubchem_properties <- function(cid, properties = NULL, cache = TRUE) {
-  if (is.null(properties)) {
-    properties <- .pubchem_default_properties
-  }
-
-  # Allowlist validation — prevents path injection
-  invalid <- setdiff(properties, .pubchem_valid_properties)
-  if (length(invalid) > 0) {
-    cli::cli_abort("Invalid PubChem property name{?s}: {.val {invalid}}")
-  }
-
-  cid <- as.integer(cid)
-  cid <- cid[!is.na(cid)]
-  if (length(cid) == 0) {
-    cli::cli_abort("{.arg cid} must contain at least one valid integer CID.")
-  }
-
-  props_csv <- paste(sort(properties), collapse = ",")
-
-  # --- Session cache: per-CID, keyed by property set ---
-  if (cache) {
-    if (!exists("pubchem_props_cache", envir = .ComptoxREnv)) {
-      .ComptoxREnv$pubchem_props_cache <- new.env(hash = TRUE, parent = emptyenv())
+  properties <- base::get(
+    ".ct_pc_properties",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = TRUE
+  )(properties)
+  cid <- base::get(".ct_pc_cid", envir = base::parent.env(base::environment()), mode = "function", inherits = TRUE)(cid)
+  params <- base::list("cid" = cid, "properties" = properties, "cache" = cache)
+  cache_state <- base::list(
+    params = params,
+    enabled = params[["cache"]],
+    cached = base::list(),
+    pending = params[["cid"]]
+  )
+  if (cache_state$enabled) {
+    cache_environment <- .ComptoxREnv
+    if (!base::is.environment(cache_environment)) {
+      base::stop("cache.environment must select an environment", call. = FALSE)
     }
-    cache_env <- .ComptoxREnv$pubchem_props_cache
-
-    cached_rows <- list()
-    uncached_cids <- integer(0)
-    for (id in cid) {
-      key <- paste0(id, "|", props_csv)
-      if (exists(key, envir = cache_env)) {
-        cached_rows <- c(cached_rows, list(get(key, envir = cache_env)))
+    if (!base::exists("pubchem_props_cache", envir = cache_environment, inherits = FALSE)) {
+      base::assign(
+        "pubchem_props_cache",
+        base::new.env(hash = TRUE, parent = base::emptyenv()),
+        envir = cache_environment
+      )
+    }
+    cache_state$store <- base::get("pubchem_props_cache", envir = cache_environment, inherits = FALSE)
+    if (!base::is.environment(cache_state$store)) {
+      base::stop("Named cache must be an environment", call. = FALSE)
+    }
+    cache_missing <- base::integer()
+    for (cache_index in base::seq_along(cache_state$pending)) {
+      cache_key <- base::get(
+        ".ct_pc_property_key",
+        envir = base::parent.env(base::environment()),
+        mode = "function",
+        inherits = FALSE
+      )(base::list(input = cache_state$pending[[cache_index]], params = cache_state$params))
+      if (
+        !base::is.character(cache_key) ||
+          base::length(cache_key) != 1L ||
+          base::is.na(cache_key) ||
+          !base::nzchar(cache_key)
+      ) {
+        base::stop("cache.key must return one nonempty string", call. = FALSE)
+      }
+      if (base::exists(cache_key, envir = cache_state$store, inherits = FALSE)) {
+        cache_state$cached[base::length(cache_state$cached) + 1L] <- base::list(base::get(
+          cache_key,
+          envir = cache_state$store,
+          inherits = FALSE
+        ))
       } else {
-        uncached_cids <- c(uncached_cids, id)
+        cache_missing <- base::c(cache_missing, cache_index)
       }
     }
-
-    if (length(uncached_cids) == 0) {
-      return(dplyr::bind_rows(cached_rows))
-    }
-  } else {
-    uncached_cids <- cid
-    cached_rows <- list()
+    cache_state$pending <- cache_state$pending[cache_missing]
   }
-
-  # --- Fetch uncached CIDs ---
-  if (length(uncached_cids) > 1) {
-    cid_batches <- split(uncached_cids, ceiling(seq_along(uncached_cids) / 100))
-    results <- purrr::map(cid_batches, function(batch) {
-      generic_pubchem_request(
-        namespace = "cid",
-        operation = paste0("property/", props_csv),
-        method = "POST",
-        body = list(cid = paste(batch, collapse = ",")),
-        pluck_path = c("PropertyTable", "Properties"),
-        tidy = TRUE
-      )
-    })
-    fresh <- dplyr::bind_rows(purrr::compact(results))
-  } else {
-    fresh <- generic_pubchem_request(
-      query = uncached_cids,
-      namespace = "cid",
-      operation = paste0("property/", props_csv),
-      pluck_path = c("PropertyTable", "Properties"),
-      tidy = TRUE
+  if (!base::length(cache_state$pending)) {
+    result <- NULL
+    result <- base::get(
+      ".ct_pc_property_combine",
+      envir = base::parent.env(base::environment()),
+      mode = "function",
+      inherits = FALSE
+    )(base::list(result = result, cached = cache_state$cached, params = cache_state$params))
+    base::return(result)
+  }
+  params[["cid"]] <- cache_state$pending
+  send <- function(params) {
+    result <- .ct_request(
+      "query" = list(),
+      "headers" = .ct_pc_headers(),
+      "server" = list(url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug"),
+      "server_resolver" = list(name = ".ct_server_url", key = "pubchem_burl", relative = ""),
+      "auth" = list(),
+      "body_media" = "application/x-www-form-urlencoded",
+      "request_controls" = list(
+        timeout = Inf,
+        max_retries = 3L,
+        retry_writes = TRUE,
+        retry_policy = ".ct_pc_retry",
+        preserve_errors = TRUE,
+        throttle = list(capacity = 4L, fill_time_s = 1)
+      ),
+      "method" = if (length(cache_state$pending) > 1L) "POST" else "GET",
+      "path" = paste0(
+        if (length(cache_state$pending) > 1L) {
+          "/compound/cid/property/"
+        } else {
+          "/compound/cid/{cid}/property/"
+        },
+        paste(sort(params[["properties"]]), collapse = ","),
+        "/JSON"
+      ),
+      "path_params" = if (length(cache_state$pending) > 1L) {
+        list()
+      } else {
+        list(cid = as.character(params[["cid"]]))
+      },
+      "body" = if (length(cache_state$pending) > 1L) {
+        list(cid = paste(params[["cid"]], collapse = ","))
+      } else {
+        NULL
+      },
+      "form_schema" = list(
+        type = "object",
+        properties = list(cid = list(type = "string")),
+        additionalProperties = FALSE,
+        required = list("cid")
+      ),
+      "response_policy" = function(response, context, decode) {
+        .ct_pc_response(
+          response,
+          context,
+          decode,
+          paste0("property/", paste(sort(params[["properties"]]), collapse = ",")),
+          c("PropertyTable", "Properties"),
+          TRUE
+        )
+      }
     )
+    result
   }
-
-  # --- Store each row in cache ---
-  if (cache && nrow(fresh) > 0) {
-    cache_env <- .ComptoxREnv$pubchem_props_cache
-    for (i in seq_len(nrow(fresh))) {
-      row <- fresh[i, , drop = FALSE]
-      key <- paste0(row$CID, "|", props_csv)
-      assign(key, row, envir = cache_env)
+  if (base::length(cache_state$pending) > 1L) {
+    cache_chunks <- base::split(cache_state$pending, base::ceiling(base::seq_along(cache_state$pending) / 100L))
+    result <- base::tryCatch(
+      purrr::map(cache_chunks, function(chunk) {
+        params[["cid"]] <- chunk
+        send(params)
+      }),
+      error = function(e) {
+        if (base::inherits(e, "purrr_error_indexed") && base::inherits(e$parent, "specmill_call_error")) {
+          base::stop(e$parent)
+        }
+        base::stop(e)
+      }
+    )
+  } else {
+    result <- send(params)
+  }
+  if (
+    base::inherits(result, "httr2_request") ||
+      (base::is.list(result) &&
+        base::length(result) &&
+        base::all(base::vapply(result, base::inherits, base::logical(1), "httr2_request")))
+  ) {
+    base::return(result)
+  }
+  params <- cache_state$params
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  result <- base::get(
+    ".ct_pc_properties_result",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = FALSE
+  )(base::list(result = result, params = params, pending = cache_state$pending))
+  if (base::inherits(result, "httr2_request")) {
+    base::return(result)
+  }
+  if (cache_state$enabled) {
+    cache_entries <- base::get(
+      ".ct_pc_property_entries",
+      envir = base::parent.env(base::environment()),
+      mode = "function",
+      inherits = FALSE
+    )(base::list(result = result, params = cache_state$params))
+    if (
+      !base::is.list(cache_entries) ||
+        (base::length(cache_entries) &&
+          (base::is.null(base::names(cache_entries)) ||
+            base::anyNA(base::names(cache_entries)) ||
+            base::any(!base::nzchar(base::names(cache_entries)))))
+    ) {
+      base::stop("cache.entries must return a list with nonempty keys", call. = FALSE)
+    }
+    for (cache_index in base::seq_along(cache_entries)) {
+      base::assign(base::names(cache_entries)[[cache_index]], cache_entries[[cache_index]], envir = cache_state$store)
     }
   }
-
-  dplyr::bind_rows(cached_rows, fresh)
+  result <- base::get(
+    ".ct_pc_property_combine",
+    envir = base::parent.env(base::environment()),
+    mode = "function",
+    inherits = FALSE
+  )(base::list(result = result, cached = cache_state$cached, params = cache_state$params))
+  result
 }

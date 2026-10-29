@@ -7,20 +7,15 @@
 chemi_services_convert(content = NULL, type = NULL)
 }
 \arguments{
-\item{content}{Optional parameter}
+\item{content}{Input structure content.}
 
-\item{type}{Optional parameter}
+\item{type}{Conversion type.}
 }
 \value{
-Returns a tibble with results
+Converted text.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\examples{
-\dontrun{
-chemi_services_convert(content = "DTXSID1024122")
-}
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.

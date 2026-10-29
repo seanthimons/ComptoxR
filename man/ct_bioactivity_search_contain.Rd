@@ -4,15 +4,15 @@
 \alias{ct_bioactivity_search_contain}
 \title{Search by substring value}
 \usage{
-ct_bioactivity_search_contain(value, top = 0)
+ct_bioactivity_search_contain(value, top = 0L)
 }
 \arguments{
-\item{value}{Substring of search word. Type: string}
+\item{value}{value Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{top}{Optional parameter (default: 0)}
+\item{top}{top}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

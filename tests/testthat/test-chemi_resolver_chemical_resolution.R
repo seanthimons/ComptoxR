@@ -1,171 +1,89 @@
-# Handwritten CRAN-safe tests for chemi_resolver_lookup_bulk.
-#
-# chemi_resolver_lookup_bulk is the shared resolution root that the
-# resolve-then-POST resolver/stdizer wrappers route through. Its trust-boundary
-# input validation and helper-boundary contract are behavior the generated
-# single-call contract test cannot express (it only drives a valid id vector).
-# The collaborator generic_chemi_request is mocked; no network, no API key.
-#
-# The resolve-then-POST cluster (alerts, hazard_bulk, orderBySimilarity,
-# getsimilaritylist, getsimilaritymap, pubchem_section_bulk, getpubchemlist,
-# stdizer_chemicals, toxprints_calculate_bulk) is covered
-# below against the real branch contract (#219):
-# each wrapper resolves via chemi_resolver_lookup_bulk, keeps result=="FOUND"
-# entries, maps them to a nested list(chemical = list(sid = chem$chemId %||%
-# chem$sid, ...)) payload, and POSTs via generic_chemi_request(tidy = FALSE).
-# An empty/all-non-FOUND resolution short-circuits to NULL + warning without
-# touching the request helper. Both collaborators are mocked; no network, no key.
+# CRAN-safe checks for the shared chemi_resolver_lookup_bulk boundary.
 
-if (!exists("generated_contract_ensure_package", mode = "function")) {
-  source(file.path("tests", "testthat", "helper-generated-contracts.R"))
-}
-generated_contract_ensure_package()
-
-test_that("chemi_resolver_lookup_bulk aborts on empty/NULL ids before any request", {
-  expect_error(chemi_resolver_lookup_bulk(NULL), "non-empty character vector")
-  expect_error(chemi_resolver_lookup_bulk(character(0)), "non-empty character vector")
+test_that("bulk resolver validates ids before options and HTTP", {
+  called <- FALSE
+  local_mocked_bindings(req_perform = function(...) {
+    called <<- TRUE
+    stop("HTTP must not run")
+  }, .package = "httr2")
+  for (ids in list(NULL, character(), list(), integer())) {
+    expect_error(chemi_resolver_lookup_bulk(ids, idsType = stop("Options must not be evaluated")),
+      "ids must be a non-empty character vector", fixed = TRUE, class = "rlang_error")
+    expect_false(called)
+  }
+  expect_error(chemi_resolver_lookup_bulk(), 'argument "ids" is missing', fixed = TRUE)
+  expect_error(chemi_resolver_lookup_bulk(c("", NA), idsType = stop("idsType evaluated")),
+               "idsType evaluated", fixed = TRUE)
+  expect_error(chemi_resolver_lookup_bulk(c("", NA), tidy = stop("tidy evaluated")),
+               "Either query or chemicals parameter must be provided.", fixed = TRUE)
+  expect_false(called)
 })
 
-test_that("chemi_resolver_lookup_bulk coerces ids to character and crosses the helper boundary", {
-  captured <- NULL
-  local_mocked_bindings(
-    generic_chemi_request = function(...) {
-      captured <<- list(...)
-      "SENTINEL"
-    },
-    .package = "ComptoxR"
-  )
-
-  res <- chemi_resolver_lookup_bulk(ids = c(1L, 2L))
-
-  expect_identical(res, "SENTINEL")
-  expect_type(captured$query, "character")
-  expect_identical(captured$query, c("1", "2"))
-  expect_identical(captured$endpoint, "resolver/lookup")
-  expect_identical(captured$sid_label, "ids")
-  expect_true(captured$array_payload)
-})
-
-# ---- resolve-then-POST cluster (#219) ------------------------------------
-
-# Endpoint each wrapper must POST to after resolution.
-resolver_cluster <- list(
-  chemi_alerts = "alerts",
-  chemi_hazard_bulk = "hazard",
-  chemi_resolver_orderBySimilarity = "resolver/orderBySimilarity",
-  chemi_resolver_getsimilaritylist = "resolver/getsimilaritylist",
-  chemi_resolver_getsimilaritymap = "resolver/getsimilaritymap",
-  chemi_resolver_pubchem_section_bulk = "resolver/pubchem-section",
-  chemi_resolver_getpubchemlist = "resolver/getpubchemlist",
-  chemi_stdizer_chemicals = "stdizer/chemicals",
-  chemi_toxprints_calculate_bulk = "toxprints/calculate"
-)
-
-# A FOUND-shaped lookup record whose chemical carries the canonical chemId key.
-found_record <- function(chem_id = "DTXSID-A") {
-  list(
-    result = "FOUND",
-    chemical = list(
-      chemId = chem_id,
-      canonicalSmiles = "C",
-      casrn = "50-00-0",
-      inchi = "InChI=1S/CH2O",
-      inchiKey = "WSFSSNUMVMOOMR-UHFFFAOYSA-N",
-      name = "formaldehyde"
-    )
-  )
-}
-
-# A FOUND record missing chemId, so sid must come from the %||% fallback.
-sid_only_record <- function(sid = "SID-ONLY") {
-  list(result = "FOUND", chemical = list(sid = sid, smiles = "CC"))
-}
-
-for (wrapper_name in names(resolver_cluster)) {
-  local({
-    nm <- wrapper_name
-    endpoint <- resolver_cluster[[nm]]
-
-    test_that(paste0(nm, " resolves, maps sid via chemId %||% sid, and POSTs to ", endpoint), {
-      captured <- NULL
-      local_mocked_bindings(
-        chemi_resolver_lookup_bulk = function(...) list(found_record(), sid_only_record()),
-        generic_chemi_request = function(...) {
-          captured <<- list(...)
-          if (nm == "chemi_resolver_getsimilaritymap") {
-            return(list(
-              order = list(
-                list(chemical = list(sid = "DTXSID-A", name = "A")),
-                list(chemical = list(sid = "SID-ONLY", name = "B"))
-              ),
-              similarity = list(
-                list(list(sim = 0), list(sim = 0.25)),
-                list(list(sim = 0.25), list(sim = 0))
-              )
-            ))
-          }
-          "SENTINEL"
-        },
-        .package = "ComptoxR"
-      )
-
-      res <- get(nm, envir = asNamespace("ComptoxR"))(query = c("50-00-0", "x"))
-
-      # Post-response formatters transform the raw helper result.
-      if (nm == "chemi_resolver_getsimilaritymap") {
-        expect_s3_class(res$hc, "hclust")
-      } else if (nm != "chemi_hazard_bulk") {
-        expect_identical(res, "SENTINEL")
-      }
-      expect_identical(captured$endpoint, endpoint)
-      expect_false(captured$tidy)
-      expect_length(captured$chemicals, 2L)
-      if (nm == "chemi_resolver_getsimilaritymap") {
-        expect_identical(captured$chemicals[[1]]$sid, "DTXSID-A")
-        expect_identical(captured$chemicals[[2]]$sid, "SID-ONLY")
-      } else {
-        expect_identical(captured$chemicals[[1]]$chemical$sid, "DTXSID-A")
-        expect_identical(captured$chemicals[[2]]$chemical$sid, "SID-ONLY")
-      }
-    })
-
-    test_that(paste0(nm, " short-circuits to NULL + warning when nothing resolves"), {
-      called <- FALSE
-      local_mocked_bindings(
-        chemi_resolver_lookup_bulk = function(...) {
-          list(list(result = "NOT_FOUND"), list(result = "ERROR"))
-        },
-        generic_chemi_request = function(...) {
-          called <<- TRUE
-          "SHOULD-NOT-RUN"
-        },
-        .package = "ComptoxR"
-      )
-
-      expect_warning(
-        res <- get(nm, envir = asNamespace("ComptoxR"))(query = "nope"),
-        "No chemicals could be resolved"
-      )
-      expect_null(res)
-      expect_false(called)
-    })
+test_that("bulk resolver preserves captured results and complete JSON requests", {
+  cases <- readRDS(test_path("fixtures/native-resolver-lookup.rds"))
+  withr::local_options(ComptoxR.chemi_burl = "https://hcd.rtpnc.epa.gov")
+  for (case in cases) local({
+    requests <- list()
+    local_mocked_bindings(req_perform = function(req, ...) {
+      requests[[length(requests) + 1L]] <<- req
+      httr2::response(status_code = 200L,
+        headers = list(`Content-Type` = "application/json"), body = charToRaw(case$json))
+    }, .package = "httr2")
+    expect_identical(do.call(chemi_resolver_lookup_bulk, case$args), case$result)
+    expect_length(requests, 1L)
+    req <- requests[[1L]]
+    wire <- list(method = req$method, url = req$url, accept = req$headers$Accept,
+      body = jsonlite::toJSON(req$body$data, auto_unbox = TRUE, null = "null", digits = 22))
+    expect_identical(wire, case$wire)
   })
-}
+})
 
-test_that("chemi_resolver_getpubchemlist forwards pagination args to generic_chemi_request", {
+test_that("bulk resolver evaluates tidy only after transport and memoizes its promise", {
+  failed <- TRUE
+  requests <- 0L
+  local_mocked_bindings(req_perform = function(req, ...) {
+    requests <<- requests + 1L
+    if (failed) stop("transport sentinel")
+    httr2::response(status_code = 200L,
+      headers = list(`Content-Type` = "application/json"), body = charToRaw('[{"value":1}]'))
+  }, .package = "httr2")
+  error <- tryCatch(chemi_resolver_lookup_bulk("one", tidy = stop("tidy evaluated")),
+                    error = identity)
+  expect_s3_class(error, "error")
+  expect_false(grepl("tidy evaluated", conditionMessage(error), fixed = TRUE))
+  expect_identical(requests, 1L)
+  failed <- FALSE
+  count <- 0L
+  result <- chemi_resolver_lookup_bulk("one", tidy = { count <- count + 1L; TRUE })
+  expect_identical(count, 1L)
+  expect_identical(result, tibble::tibble(dtxsid = "one", value = 1L))
+})
+
+test_that("bulk resolver preserves coercion, NULL option slots and unbatched projection", {
   captured <- NULL
-  local_mocked_bindings(
-    chemi_resolver_lookup_bulk = function(...) list(found_record()),
-    generic_chemi_request = function(...) {
-      captured <<- list(...)
-      "SENTINEL"
-    },
-    .package = "ComptoxR"
-  )
-
-  chemi_resolver_getpubchemlist(query = "50-00-0")
-
-  expect_true(captured$paginate)
-  expect_identical(captured$max_pages, 100)
-  expect_identical(captured$pagination_strategy, "page_size")
+  local_mocked_bindings(.ct_request = function(...) {
+    captured <<- list(...)
+    "SENTINEL"
+  }, .package = "ComptoxR")
+  for (ids in list(c(1L, 2L), 0, FALSE, TRUE, factor(c("b", "a")), list("one", "two"),
+    c("one", "one", NA_character_, ""), "caf\u00e9 +/&")) {
+    expect_identical(chemi_resolver_lookup_bulk(ids), "SENTINEL")
+    clean <- unique(as.character(ids))
+    clean <- clean[!is.na(clean) & clean != ""]
+    expect_identical(captured$body, list(ids = as.list(clean),
+      idsType = "AnyId", fuzzy = "Not", mol = FALSE))
+  }
+  for (value in list(NULL, FALSE, 0, "unknown-enum", list())) {
+    chemi_resolver_lookup_bulk("one", idsType = value, fuzzy = value, mol = value,
+      filters = value, format = value, tidy = FALSE)
+    expected <- list(ids = list("one"), idsType = value, fuzzy = value, mol = value)
+    if (!is.null(value)) expected <- c(expected, list(filters = value, format = value))
+    expect_identical(captured$body, expected)
+  }
+  for (setting in c(NA_character_, "0", "2", "1000")) {
+    withr::with_envvar(c(batch_limit = setting), {
+      chemi_resolver_lookup_bulk(c("one", "two", "three"))
+      expect_identical(captured$body$ids, list("one", "two", "three"))
+    })
+  }
 })

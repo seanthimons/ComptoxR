@@ -2,15 +2,15 @@
 % Please edit documentation in R/chemi_amos_find_dtxsids.R
 \name{chemi_amos_find_dtxsids}
 \alias{chemi_amos_find_dtxsids}
-\title{Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information.}
+\title{Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information}
 \usage{
 chemi_amos_find_dtxsids(internal_id)
 }
 \arguments{
-\item{internal_id}{Unique ID of the record of interest.}
+\item{internal_id}{Unique ID of the record of interest. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

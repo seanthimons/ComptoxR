@@ -2,15 +2,15 @@
 % Please edit documentation in R/chemi_amos_dtxsids_from_functional_use.R
 \name{chemi_amos_dtxsids_from_functional_use}
 \alias{chemi_amos_dtxsids_from_functional_use}
-\title{Returns all substances associated with the specified functional use classification.}
+\title{Returns all substances associated with the specified functional use classification}
 \usage{
 chemi_amos_dtxsids_from_functional_use(functional_use)
 }
 \arguments{
-\item{functional_use}{Functional use classification to search for.}
+\item{functional_use}{Functional use classification to search for. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

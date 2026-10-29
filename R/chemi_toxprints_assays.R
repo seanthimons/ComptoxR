@@ -1,114 +1,42 @@
 #' Toxprints Assays
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param category Optional parameter
-#' @param label Optional parameter
-#' @return Returns a list with result object
+#' @param category category
+#' @param label label
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_assays(category = "DTXSID7020182")
+#' chemi_toxprints_assays()
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_assays <- function(category = NULL, label = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(category)) {
-    options[['category']] <- category
+  .api_validation$parameter_values(
+    base::list("category" = category, "label" = label),
+    list(category = list(type = "string"), label = list(type = "string")),
+    .api_validation$body_value,
+    c(category = "query", label = "query")
+  )
+  params <- base::list("category" = category, "label" = label)
+  if (base::is.character(params[["category"]]) && base::any(!base::nzchar(params[["category"]]))) {
+    base::stop("Empty query parameter: category")
   }
-  if (!is.null(label)) {
-    options[['label']] <- label
+  if (base::is.character(params[["label"]]) && base::any(!base::nzchar(params[["label"]]))) {
+    base::stop("Empty query parameter: label")
   }
-  result <- generic_request(
-    endpoint = "toxprints/assays",
+  result <- .ct_request(
     method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    path = "/api/toxprints/assays",
+    path_params = base::list(),
+    query = base::list("category" = params[["category"]], "label" = params[["label"]]),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list()
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Toxprints Assays
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param acl Optional parameter
-#' @param actives Optional parameter
-#' @param category Optional parameter
-#' @param chemicals Optional parameter
-#' @param id Optional parameter
-#' @param labels Optional parameter
-#' @param metrics Optional parameter
-#' @param name Optional parameter
-#' @param options Optional parameter
-#' @param total Optional parameter
-#' @return Returns a list with result object
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_toxprints_assays_bulk(acl = "DTXSID1024122")
-#' }
-chemi_toxprints_assays_bulk <- function(
-  acl = NULL,
-  actives = NULL,
-  category = NULL,
-  chemicals = NULL,
-  id = NULL,
-  labels = NULL,
-  metrics = NULL,
-  name = NULL,
-  options = NULL,
-  total = NULL
-) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(actives)) {
-    options$actives <- actives
-  }
-  if (!is.null(category)) {
-    options$category <- category
-  }
-  if (!is.null(chemicals)) {
-    options$chemicals <- chemicals
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(labels)) {
-    options$labels <- labels
-  }
-  if (!is.null(metrics)) {
-    options$metrics <- metrics
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(options)) {
-    options$options <- options
-  }
-  if (!is.null(total)) {
-    options$total <- total
-  }
-  result <- generic_chemi_request(
-    query = acl,
-    endpoint = "toxprints/assays",
-    options = options,
-    tidy = FALSE
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

@@ -1,67 +1,41 @@
 #' Amnb Nate
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @param smiles SMILES to generate predictions for
-#' @return Returns a list with result object
+#' @param smiles smiles
+#' @return Returns a list of results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amnb_nate(smiles = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_amnb_nate <- function(smiles) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
+  if (base::is.null(smiles)) {
+    base::stop("Required input: smiles")
   }
-  result <- generic_request(
-    endpoint = "amnb_nate",
+  .api_validation$parameter_values(
+    base::list("smiles" = smiles),
+    list(smiles = list(type = "string")),
+    .api_validation$body_value,
+    c(smiles = "query")
+  )
+  params <- base::list("smiles" = smiles)
+  if (base::is.character(params[["smiles"]]) && base::any(!base::nzchar(params[["smiles"]]))) {
+    base::stop("Empty query parameter: smiles")
+  }
+  result <- .ct_request(
     method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    path = "/api/amnb_nate",
+    path_params = base::list(),
+    query = base::list("smiles" = params[["smiles"]]),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = ""),
+    auth = list()
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Generate predictions for multiple molecules
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param chemicals Optional parameter
-#' @param smiles Optional parameter
-#' @return Returns a list with result object
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_amnb_nate_bulk(chemicals = "DTXSID1024122")
-#' }
-chemi_amnb_nate_bulk <- function(chemicals = NULL, smiles = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
-  }
-  result <- generic_chemi_request(
-    query = chemicals,
-    endpoint = "amnb_nate",
-    options = options,
-    tidy = FALSE
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

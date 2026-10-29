@@ -11,25 +11,31 @@ test_that("chemi_services_convert passes request metadata to helper", {
   calls <- list()
   mock_helper <- function(...) {
     captured <- list(...)
-    captured$.helper <- "generic_chemi_request"
+    captured$.helper <- ".ct_request"
     calls[[length(calls) + 1L]] <<- captured
     generated_contract_response(...)
   }
 
   testthat::local_mocked_bindings(
-    generic_chemi_request = mock_helper,
+    .ct_request = mock_helper,
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_services_convert())), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_services_convert(content = "CCCC", type = "smiles"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
-  expect_equal(call$.helper, "generic_chemi_request")
+  expect_equal(call$.helper, ".ct_request")
+  expect_equal(call[["method"]], "POST")
+  expect_equal(call[["path"]], "/api/services/convert")
+  expect_true("path_params" %in% names(call))
+  expect_true(is.null(call[["path_params"]]) || length(call[["path_params"]]) >= 0)
   expect_true("query" %in% names(call))
   expect_true(is.null(call[["query"]]) || length(call[["query"]]) >= 0)
-  expect_equal(call[["endpoint"]], "services/convert")
-  expect_true("options" %in% names(call))
-  expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
-  expect_equal(call[["tidy"]], FALSE)
+  expect_true("body" %in% names(call))
+  expect_true(is.null(call[["body"]]) || length(call[["body"]]) >= 0)
+  expect_equal(call[["response_policy"]], ".ct_services_convert_response")
 })

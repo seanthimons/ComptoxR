@@ -24,23 +24,28 @@ for (wrapper_name in descriptor_smiles_wrappers) {
             chemical = list(canonicalSmiles = "c1ccccc1")
           ))
         },
-        generic_request = function(...) {
-          captured <<- list(...)
-          descriptor_contract_response(
+        .package = "ComptoxR"
+      )
+      local_mocked_bindings(
+        req_perform = function(req, ...) {
+          captured <<- httr2::url_parse(req$url)$query
+          payload <- descriptor_contract_response(
             records = list(descriptor_contract_record(
               smiles = "c1ccccc1",
-              descriptors = if (identical(captured$endpoint, "rdkit")) 1:1024 else c(1, 2)
+              descriptors = if (identical(nm, "chemi_rdkit")) 1:1024 else c(1, 2)
             )),
-            headers = if (identical(captured$endpoint, "rdkit")) character() else c("a", "b")
+            headers = if (identical(nm, "chemi_rdkit")) character() else c("a", "b")
           )
+          httr2::response(status_code = 200L, headers = list(`Content-Type` = "application/json"),
+            body = charToRaw(jsonlite::toJSON(payload, auto_unbox = TRUE)))
         },
-        .package = "ComptoxR"
+        .package = "httr2"
       )
 
       get(nm, envir = asNamespace("ComptoxR"))(smiles = "DTXSID7020182")
 
-      expect_identical(captured$options$smiles, "c1ccccc1")
-      expect_false(identical(captured$options$smiles, "DTXSID7020182"))
+      expect_identical(captured$smiles, "c1ccccc1")
+      expect_false(identical(captured$smiles, "DTXSID7020182"))
     })
   })
 }

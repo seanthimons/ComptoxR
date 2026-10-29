@@ -59,10 +59,31 @@ jobs:
       - name: Install pinned formatter
         uses: posit-dev/setup-air@v1
         with:
-          version: '0.9.0'
+          version: '0.11.0'
 
-      - name: Install pinned development toolkit
-        run: Rscript dev/install_toolkit.R
+      - name: Read reviewed specmill revision
+        id: specmill-pin
+        shell: Rscript {0}
+        run: |
+          pin <- jsonlite::read_json("dev/specmill-lock.json")
+          stopifnot(grepl("^[0-9a-f]{40}$", pin$source_commit))
+          cat(paste0("revision=", pin$source_commit, "\n"),
+              file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          cat(paste0("R_LIBS=", file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", pin$version), "\n"),
+              file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+
+      - name: Check out pinned specmill source
+        uses: actions/checkout@v7
+        with:
+          repository: seanthimons/specmill
+          ref: ${{ steps.specmill-pin.outputs.revision }}
+          path: dev/specmill-pilot/artifacts/toolkit-source
+          persist-credentials: false
+
+      - name: Install and verify pinned specmill
+        env:
+          SPECMILL_SOURCE_REPO: dev/specmill-pilot/artifacts/toolkit-source
+        run: Rscript dev/install_specmill.R
 
       - name: Check coverage meets threshold
         run: |

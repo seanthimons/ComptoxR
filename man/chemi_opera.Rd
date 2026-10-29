@@ -7,14 +7,14 @@
 chemi_opera(smiles, format = "json", standardize = FALSE)
 }
 \arguments{
-\item{smiles}{SMILES to generate predictions for}
+\item{smiles}{smiles}
 
-\item{format}{Format to return predictions in (json, csv, xlsx) (default: json)}
+\item{format}{format}
 
-\item{standardize}{Standardize chemical before calculating predictions (default: FALSE)}
+\item{standardize}{standardize}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

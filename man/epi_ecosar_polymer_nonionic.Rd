@@ -4,17 +4,37 @@
 \alias{epi_ecosar_polymer_nonionic}
 \title{Estimate a nonionic polymer}
 \usage{
-epi_ecosar_polymer_nonionic()
+epi_ecosar_polymer_nonionic(
+  solubilityType,
+  averageMolecularWeight = NULL,
+  mw500Percentage = NULL,
+  mw1000Percentage = NULL,
+  cas = NULL,
+  chemicalName = NULL
+)
+}
+\arguments{
+\item{solubilityType}{solubilityType}
+
+\item{averageMolecularWeight}{averageMolecularWeight}
+
+\item{mw500Percentage}{mw500Percentage}
+
+\item{mw1000Percentage}{mw1000Percentage}
+
+\item{cas}{cas}
+
+\item{chemicalName}{chemicalName}
 }
 \value{
-Returns a tibble with results
+Returns a named list of result modules
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_polymer_nonionic()
+epi_ecosar_polymer_nonionic(solubilityType = "INSOLUBLE", averageMolecularWeight = 5000, mw500Percentage = 5, mw1000Percentage = 10)
 }
 }
 \section{API stage}{

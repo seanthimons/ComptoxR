@@ -11,9 +11,9 @@ ct_chemical_list_search_by_name(
 )
 }
 \arguments{
-\item{listName}{Chemical List Name. Type: string}
+\item{listName}{listName Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{projection}{Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)}
+\item{projection}{Projection options for chemical List APIs}
 
 \item{extract_dtxsids}{Extract DTXSIDs from results into character vector (requires projection = 'chemicallistwithdtxsids')}
 }

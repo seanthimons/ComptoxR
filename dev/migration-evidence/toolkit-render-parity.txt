@@ -1,2 +1,0 @@
-Compared 387 generated/protected files
-Differences: 0

@@ -36,7 +36,7 @@ ct_schema <- function(timeout = 30) {
         # Sets the path
 
         url <- paste0(.endpoint_default('ctx_burl'), 'docs/', endpoint, '.json')
-        destfile <- here::here('schema', paste0("ctx-", endpoint, '-', server, '.json'))
+        destfile <- here::here('schema', paste0("ctx_", endpoint, '_', server, '.json'))
 
         tryCatch(
           {
@@ -179,21 +179,8 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
       '.json'
     }
 
-    destfile <- here::here('schema', paste0('chemi-', endpoint, '-', server, ext))
-    # Pretty-print JSON for readable diffs; fall back to raw bytes for YAML/errors
-    if (ext == '.json') {
-      parsed <- tryCatch(
-        jsonlite::fromJSON(text_preview, simplifyVector = FALSE),
-        error = function(e) NULL
-      )
-      if (!is.null(parsed)) {
-        jsonlite::write_json(parsed, destfile, pretty = TRUE, auto_unbox = TRUE)
-      } else {
-        writeBin(body_raw, destfile)
-      }
-    } else {
-      writeBin(body_raw, destfile)
-    }
+    destfile <- here::here('schema', paste0('chemi_', endpoint, '_', server, ext))
+    .write_downloaded_schema(body_raw, destfile, pretty = ext == '.json')
     return(list(success = TRUE, status = status))
   }
 
@@ -294,11 +281,35 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
   invisible(NULL)
 }
 
+# Shared by schema downloads and development freeze/fallback acquisition (#344).
+.write_downloaded_schema <- function(bytes, path, pretty = FALSE) {
+  json <- grepl('[.]json$', path, ignore.case = TRUE)
+  schema <- tryCatch(
+    if (json) jsonlite::fromJSON(rawToChar(bytes), simplifyVector = FALSE) else
+      yaml::yaml.load(rawToChar(bytes), eval.expr = FALSE),
+    error = function(e) NULL
+  )
+  normalized <- is.list(schema) && identical(schema$swagger, '2.0') && identical(schema$basePath, '')
+  if (normalized) {
+    # Operation paths already carry the service prefix; the root adds none.
+    schema$basePath <- '/'
+    cli::cli_alert_info('Normalized empty Swagger 2.0 basePath in {basename(path)} to /.')
+  }
+  if (json && !is.null(schema) && (pretty || normalized)) {
+    jsonlite::write_json(schema, path, pretty = TRUE, auto_unbox = TRUE)
+  } else if (normalized) {
+    writeLines(yaml::as.yaml(schema), path, useBytes = TRUE)
+  } else {
+    writeBin(bytes, path)
+  }
+  invisible(normalized)
+}
+
 #' Download the EPI Suite API schema
 #'
 #' @description
 #' This function downloads and validates the production EPI Suite OpenAPI
-#' document. The schema is saved as `epi-suite-prod.json` in `schema_dir`.
+#' document. The schema is saved as `epi_suite_prod.json` in `schema_dir`.
 #'
 #' @param timeout Maximum time, in seconds, to wait for the download. Default: 30.
 #' @param schema_dir Directory in which to save the schema. Default:
@@ -355,7 +366,7 @@ epi_schema <- function(
   if (!dir.exists(schema_dir)) {
     dir.create(schema_dir, recursive = TRUE)
   }
-  writeBin(body_raw, file.path(schema_dir, "epi-suite-prod.json"))
+  writeBin(body_raw, file.path(schema_dir, "epi_suite_prod.json"))
   cli::cli_alert_success("Downloaded EPI Suite schema from production server")
 
   invisible(NULL)

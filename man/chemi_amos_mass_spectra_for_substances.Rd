@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_mass_spectra_for_substances.R
 \name{chemi_amos_mass_spectra_for_substances}
 \alias{chemi_amos_mass_spectra_for_substances}
-\title{Given a list of DTXSIDs, return all mass spectra for those substances.}
+\title{Given a list of DTXSIDs, return all mass spectra for those substances}
 \usage{
 chemi_amos_mass_spectra_for_substances(dtxsids = NULL)
 }
@@ -10,14 +10,14 @@ chemi_amos_mass_spectra_for_substances(dtxsids = NULL)
 \item{dtxsids}{List of DTXSIDs to search for.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID1024122")
+chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID7020182")
 }
 }
 \section{API stage}{

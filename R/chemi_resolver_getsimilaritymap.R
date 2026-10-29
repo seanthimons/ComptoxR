@@ -1,25 +1,15 @@
-#' Resolver Getsimilaritymap
+#' chemi_resolver_getsimilaritymap
 #'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
-#' then sends the resolved Chemical objects to the API endpoint.
-#'
-#' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
-#' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
-#' @param section Optional parameter
-#' @param sort Logical value controlling API result ordering (default: FALSE)
-#' @param hclust_method Hierarchical clustering method passed to stats::hclust()
-#' @param format Output format: cluster result, long-form similarities, or raw API response
-#' @return A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by `format`
-#' @apiStage public
+#' @noMd
+#' @param query query
+#' @param idType idType
+#' @param section section
+#' @param sort sort
+#' @param hclust_method hclust_method
+#' @param format format
+#' @return Decoded response returned by the client request helper.
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_resolver_getsimilaritymap(query = c("50-00-0", "DTXSID7020182"))
-#' }
+# Generated with specmill; do not edit by hand.
 chemi_resolver_getsimilaritymap <- function(
   query,
   idType = "AnyId",
@@ -28,78 +18,59 @@ chemi_resolver_getsimilaritymap <- function(
   hclust_method = "complete",
   format = c("cluster", "long", "raw")
 ) {
-  chemicals <- NULL
-  req_data <- run_hook(
-    "chemi_resolver_getsimilaritymap",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `sort` = sort,
-        `hclust_method` = hclust_method,
-        `format` = format,
-        `chemicals` = chemicals
+  params <- base::c(
+    base::list(
+      "query" = query,
+      "idType" = idType,
+      "section" = section,
+      "sort" = sort,
+      "hclust_method" = hclust_method,
+      "format" = format
+    ),
+    list(chemicals = NULL)
+  )
+  state <- run_hook("chemi_resolver_getsimilaritymap", "pre_request", base::list(params = params))
+  if (base::isTRUE(state$skip_request)) {
+    base::return(state$result)
+  }
+  changed <- base::intersect(base::names(params), base::names(state$params))
+  params[changed] <- state$params[changed]
+  result <- .ct_request(
+    "method" = "POST",
+    "path" = "/api/resolver/getsimilaritymap",
+    "path_params" = structure(list(), names = character(0)),
+    "query" = list(sort = if (!is.null(params[["sort"]])) tolower(as.character(params[["sort"]])) else NULL),
+    "body" = base::local({
+      chemicals <- params[["chemicals"]]
+      if (!is.list(chemicals) || !length(chemicals)) {
+        chemicals <- lapply(.ct_toxprint_query(params[["query"]]), function(id) list(sid = id))
+      }
+      c(
+        list(
+          chemicals = lapply(chemicals, function(record) {
+            if (is.list(record) && !is.null(record$chemical)) record$chemical else record
+          })
+        ),
+        Filter(Negate(is.null), base::list(section = params[["section"]]))
       )
-    )
+    }),
+    "headers" = list(Accept = "application/json"),
+    "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+    "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    "auth" = list(),
+    "response_policy" = function(response, context, decode) {
+      if (context$status >= 400L) {
+        decode()
+      }
+      context$endpoint <- "resolver/getsimilaritymap"
+      .ct_chemi_result(response, context, decode, tidy = FALSE)
+    },
+    "request_controls" = list(preserve_errors = TRUE)
   )
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("idType" %in% names(req_data$params)) {
-    idType <- req_data$params[["idType"]]
-  }
-  if ("section" %in% names(req_data$params)) {
-    section <- req_data$params[["section"]]
-  }
-  if ("sort" %in% names(req_data$params)) {
-    sort <- req_data$params[["sort"]]
-  }
-  if ("hclust_method" %in% names(req_data$params)) {
-    hclust_method <- req_data$params[["hclust_method"]]
-  }
-  if ("format" %in% names(req_data$params)) {
-    format <- req_data$params[["format"]]
-  }
-  if ("chemicals" %in% names(req_data$params)) {
-    chemicals <- req_data$params[["chemicals"]]
-  }
-
-  # Build options from additional parameters
-  extra_options <- list()
-  if (!is.null(section)) {
-    extra_options$section <- section
-  }
-
-  result <- generic_chemi_request(
-    query = query,
-    endpoint = "resolver/getsimilaritymap",
-    options = extra_options,
-    tidy = FALSE,
-    chemicals = chemicals,
-    sort = if (!is.null(sort)) tolower(as.character(sort)) else NULL
-  )
-
   result <- run_hook(
     "chemi_resolver_getsimilaritymap",
     "post_response",
-    list(
-      result = result,
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `sort` = sort,
-        `hclust_method` = hclust_method,
-        `format` = format
-      )
-    )
+    base::list(result = result, params = params[c("query", "idType", "section", "sort", "hclust_method", "format")])
   )
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

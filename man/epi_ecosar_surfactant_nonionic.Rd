@@ -4,17 +4,55 @@
 \alias{epi_ecosar_surfactant_nonionic}
 \title{Estimate a nonionic surfactant}
 \usage{
-epi_ecosar_surfactant_nonionic()
+epi_ecosar_surfactant_nonionic(
+  mainCarbons,
+  branchedCarbons = 0L,
+  branches = 0L,
+  propoxyGroups = 0,
+  ethoxylate = 0L,
+  waterSolubility = NULL,
+  logKow = NULL,
+  molecularWeight = NULL,
+  cas = NULL,
+  chemicalName = NULL,
+  smiles = NULL,
+  useSmiles = FALSE
+)
+}
+\arguments{
+\item{mainCarbons}{mainCarbons}
+
+\item{branchedCarbons}{branchedCarbons}
+
+\item{branches}{branches}
+
+\item{propoxyGroups}{propoxyGroups}
+
+\item{ethoxylate}{ethoxylate}
+
+\item{waterSolubility}{waterSolubility}
+
+\item{logKow}{logKow}
+
+\item{molecularWeight}{molecularWeight}
+
+\item{cas}{cas}
+
+\item{chemicalName}{chemicalName}
+
+\item{smiles}{smiles}
+
+\item{useSmiles}{useSmiles}
 }
 \value{
-Returns a tibble with results
+Returns a named list of result modules
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_surfactant_nonionic()
+epi_ecosar_surfactant_nonionic(mainCarbons = 12L, waterSolubility = 100, logKow = 3, molecularWeight = 250)
 }
 }
 \section{API stage}{

@@ -7,10 +7,10 @@
 chemi_amos_get_safety_data_sheet_editor_info(internal_id)
 }
 \arguments{
-\item{internal_id}{Unique ID of the safety data sheet.}
+\item{internal_id}{Unique ID of the safety data sheet. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

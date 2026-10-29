@@ -9,44 +9,38 @@ pubchem_synonyms(cid, tidy = TRUE, cache = TRUE)
 \arguments{
 \item{cid}{Integer or character vector of PubChem CIDs.}
 
-\item{tidy}{Logical. If \code{TRUE} (default), returns a long-format tibble with
-\code{cid} and \code{synonym} columns. If \code{FALSE}, returns a list of lists with
-\code{CID} and \code{Synonym} elements.}
+\item{tidy}{Logical. If `TRUE` (default), returns a long-format tibble with
+`cid` and `synonym` columns. If `FALSE`, returns a list of lists with
+`CID` and `Synonym` elements.}
 
-\item{cache}{Logical. If \code{TRUE} (default), results are cached in the session
+\item{cache}{Logical. If `TRUE` (default), results are cached in the session
 environment keyed by CID, so repeated calls for the same CIDs are instant.}
 }
 \value{
-When \code{tidy = TRUE}: a tibble with columns \code{cid} (integer) and
-\code{synonym} (character). When \code{tidy = FALSE}: a list where each element
-contains \code{CID} and \code{Synonym} fields. Returns an empty tibble/list for
-invalid CIDs.
+When `tidy = TRUE`: a tibble with columns `cid` (integer) and
+  `synonym` (character). When `tidy = FALSE`: a list where each element
+  contains `CID` and `Synonym` fields. Returns an empty tibble/list for
+  invalid CIDs.
 }
 \description{
 Retrieve the synonym list for one or more PubChem Compound IDs (CIDs) via
 the PUG REST API. Synonyms include IUPAC names, common names, CAS numbers,
 DTXSIDs, trade names, and other identifiers.
-}
-\details{
+
 For multiple CIDs, requests are batched at 100 CIDs per POST request.
 This is significantly faster than per-CID GET requests (e.g., 500 CIDs
 requires 5 POST requests instead of 500 GET requests).
+
+Native credential and configuration errors stop the call; other PubChem Faults retain their warning and empty-result behavior.
 }
 \examples{
 \dontrun{
-# Single CID
-pubchem_synonyms(2244)
-
-# Multiple CIDs (uses bulk POST)
-pubchem_synonyms(c(2244, 6623))
-
-# Raw list format
-pubchem_synonyms(2244, tidy = FALSE)
+pubchem_synonyms(cid = 2244L)
+pubchem_synonyms(cid = 2244L, tidy = FALSE)
 }
-
 }
 \seealso{
-\code{\link[=pubchem_search]{pubchem_search()}} to find CIDs,
-\code{\link[=util_pubchem_resolve_dtxsid]{util_pubchem_resolve_dtxsid()}} to extract DTXSIDs from synonym lists,
-\code{\link[=ct_chemical_synonym_search]{ct_chemical_synonym_search()}} for CompTox Dashboard synonyms.
+[pubchem_search()] to find CIDs,
+  [util_pubchem_resolve_dtxsid()] to extract DTXSIDs from synonym lists,
+  [ct_chemical_synonym_search_by_dtxsid()] for CompTox Dashboard synonyms.
 }

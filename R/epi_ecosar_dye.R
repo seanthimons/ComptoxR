@@ -1,28 +1,101 @@
 #' Estimate a cationic dye
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
-#' @return Returns a tibble with results
+#' @param ethoxylate ethoxylate
+#' @param molecularWeight molecularWeight
+#' @param waterSolubility waterSolubility
+#' @param cas cas
+#' @param chemicalName chemicalName
+#' @param smiles smiles
+#' @return Returns a named list of result modules
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
-#' epi_ecosar_dye()
+#' epi_ecosar_dye(molecularWeight = 300, waterSolubility = 100)
 #' }
-epi_ecosar_dye <- function() {
-  result <- generic_request(
-    endpoint = "ecosar/dye",
-    method = "GET",
-    batch_limit = 0,
-    server = "epi_burl",
-    auth = FALSE,
-    tidy = FALSE
+# Generated with specmill; do not edit by hand.
+epi_ecosar_dye <- function(
+  ethoxylate = 0L,
+  molecularWeight = NULL,
+  waterSolubility = NULL,
+  cas = NULL,
+  chemicalName = NULL,
+  smiles = NULL
+) {
+  .api_validation$parameter_values(
+    base::list(
+      "ethoxylate" = ethoxylate,
+      "molecularWeight" = molecularWeight,
+      "waterSolubility" = waterSolubility,
+      "cas" = cas,
+      "chemicalName" = chemicalName,
+      "smiles" = smiles
+    ),
+    list(
+      ethoxylate = list(default = 0L, minimum = 0L, type = "integer"),
+      molecularWeight = list(exclusiveMinimum = TRUE, minimum = 0L, type = "number"),
+      waterSolubility = list(exclusiveMinimum = TRUE, minimum = 0L, type = "number"),
+      cas = list(type = "string"),
+      chemicalName = list(type = "string"),
+      smiles = list(type = "string")
+    ),
+    .api_validation$body_value,
+    c(
+      ethoxylate = "query",
+      molecularWeight = "query",
+      waterSolubility = "query",
+      cas = "query",
+      chemicalName = "query",
+      smiles = "query"
+    )
   )
-
-  result <- run_hook("epi_ecosar_dye", "post_response", list(result = result, params = list()))
-  # Additional post-processing can be added here
-
-  return(result)
+  params <- base::list(
+    "ethoxylate" = ethoxylate,
+    "molecularWeight" = molecularWeight,
+    "waterSolubility" = waterSolubility,
+    "cas" = cas,
+    "chemicalName" = chemicalName,
+    "smiles" = smiles
+  )
+  if (base::is.character(params[["ethoxylate"]]) && base::any(!base::nzchar(params[["ethoxylate"]]))) {
+    base::stop("Empty query parameter: ethoxylate")
+  }
+  if (base::is.character(params[["molecularWeight"]]) && base::any(!base::nzchar(params[["molecularWeight"]]))) {
+    base::stop("Empty query parameter: molecularWeight")
+  }
+  if (base::is.character(params[["waterSolubility"]]) && base::any(!base::nzchar(params[["waterSolubility"]]))) {
+    base::stop("Empty query parameter: waterSolubility")
+  }
+  if (base::is.character(params[["cas"]]) && base::any(!base::nzchar(params[["cas"]]))) {
+    base::stop("Empty query parameter: cas")
+  }
+  if (base::is.character(params[["chemicalName"]]) && base::any(!base::nzchar(params[["chemicalName"]]))) {
+    base::stop("Empty query parameter: chemicalName")
+  }
+  if (base::is.character(params[["smiles"]]) && base::any(!base::nzchar(params[["smiles"]]))) {
+    base::stop("Empty query parameter: smiles")
+  }
+  result <- .ct_request(
+    method = "GET",
+    path = "/api/ecosar/dye",
+    path_params = base::list(),
+    query = base::list(
+      "ethoxylate" = params[["ethoxylate"]],
+      "molecularWeight" = params[["molecularWeight"]],
+      "waterSolubility" = params[["waterSolubility"]],
+      "cas" = params[["cas"]],
+      "chemicalName" = params[["chemicalName"]],
+      "smiles" = params[["smiles"]]
+    ),
+    body = NULL,
+    response_policy = ".ct_static_list",
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "epi_burl", relative = "/"),
+    auth = list()
+  )
+  result <- run_hook("epi_ecosar_dye", "post_response", base::list(result = result, params = params))
+  result
 }

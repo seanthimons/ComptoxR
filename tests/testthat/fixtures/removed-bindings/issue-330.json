@@ -1,0 +1,26 @@
+[
+  {
+    "service": "chemi_chet",
+    "operation": "GET /chemicals/database-old",
+    "name": "chemi_chet_chemicals_database_old",
+    "file": "R/chemi_chet_chemicals_database_old.R"
+  },
+  {
+    "service": "chemi_chet",
+    "operation": "GET /reaction/database_old",
+    "name": "chemi_chet_reaction_database_old",
+    "file": "R/chemi_chet_reaction_database_old.R"
+  },
+  {
+    "service": "chemi_chet",
+    "operation": "GET /reaction/database-old/{pagenum}/{searchterm}",
+    "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
+    "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R"
+  },
+  {
+    "service": "chemi_toxprints",
+    "operation": "POST /api/toxprints/assays",
+    "name": "chemi_toxprints_assays_bulk",
+    "file": "R/chemi_toxprints_assays_bulk.R"
+  }
+]
