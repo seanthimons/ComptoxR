@@ -26,19 +26,19 @@ Feature branches feed two long-lived branches:
 
 ```
 feature branch  ->  integration  ->  main  ->  Release (tag + GitHub release)
-(feat/ fix/         (light            (trunk;      (manual, version-bumped)
- chore/ docs/)       staging)          full gate)
+(feat/ fix/         (where PRs        (trunk;      (manual, version-bumped)
+ chore/ docs/)       land)             full gate)
 ```
 
 - **Feature branches** (`feat/`, `fix/`, `chore/`, `docs/`, ...) are cut from
   `integration`. All day-to-day work happens here.
-- **`integration`** is light staging. Merges land here first so several
-  features can settle together. This is a branch role, not an API server.
-  Pushes run secret scanning and the integration package publisher. The
-  publisher requires a `.9000` development version; stable metadata stops
-  publication. It does not change the version itself.
-- **`main`** is the trunk. The full check suite runs on every pull request that
-  **targets `main`**, so `main` stays release-ready at all times.
+- **`integration`** is where feature PRs merge. Several changes settle
+  together here before going to `main`. Pushes run secret scanning, Specmill
+  maintenance, and the integration package publisher. The publisher requires
+  a `.9000` development version; stable metadata stops publication. It does
+  not change the version itself.
+- **`main`** is the trunk. `integration` reaches `main` through a pull
+  request, which runs the full check suite, so `main` stays release-ready.
 - **Release** is a manual step run from `main`. It bumps the version, tags,
   regenerates `NEWS.md`, and cuts a GitHub release.
 
@@ -93,16 +93,15 @@ close a change is to release.
 
 | Event | Workflows that run |
 | --- | --- |
-| Push to any branch (incl. `integration`) | Gitleaks Secret Scan |
-| Push to `integration` | Publish Integration Package; requires a `.9000` version |
-| Push to `dev-*` | Quick Tests |
-| Push to `main` / `dev` | Test Coverage and Coverage Check (+ R-CMD-check on `main`) |
-| **PR targeting `main`** | R-CMD-check, CRAN Readiness, Pipeline Integration Tests, Quick Tests, Test Coverage, Coverage Check, Commit Lint, documentation build |
+| Push to `integration` | Gitleaks Secret Scan, Specmill Maintenance, Publish Integration Package (requires a `.9000` version) |
+| Push to `main` | Gitleaks Secret Scan, Specmill Maintenance, Test Coverage, Coverage Check, R-CMD-check, documentation build |
+| PR targeting `integration` | Gitleaks Secret Scan, Specmill Maintenance, CRAN Readiness, Quick Tests |
+| **PR targeting `main`** | Gitleaks Secret Scan, R-CMD-check, CRAN Readiness, Specmill Maintenance, Pipeline Integration Tests, Quick Tests, Test Coverage, Coverage Check, Commit Lint, documentation build |
 | PR review **approved** | Rebase branches on PR approval (rebases open WIP branches) |
 
 Path filters can skip code checks for documentation-only changes. The workflow
-files define the exact triggers. The heavy R gate lives on the **PR into `main`**. `CRAN Readiness` is the
-blocking one: it runs the CRAN-safe test lane (`COMPTOXR_CRAN_SAFE_TESTS=true`,
+files define the exact triggers. The heavy R gate lives on the **PR into `main`**. `CRAN Readiness` runs on
+every PR and is the blocking one: it runs the CRAN-safe test lane (`COMPTOXR_CRAN_SAFE_TESTS=true`,
 `NOT_CRAN=false`) with no API key, no live network, and no local database, so a
 green PR means the package is CRAN-clean.
 
@@ -122,8 +121,11 @@ Several workflows run on a cron and open PRs or refresh data on their own:
 | Build & Upload ToxValDB Database | Mon 10:00 | Rebuilds and uploads the ToxValDB database |
 | API compatibility probe | Mon 12:00 | Tests direct and wrapper contracts at the effective configured URLs, which default to production |
 
-Treat an `automated/schema-update` PR like any other change: review the diff,
-let the `main` gate run, then merge.
+The schema check runs against `integration`, so its `automated/schema-update`
+PR targets `integration`. Treat it like any other change: review the diff, let
+the checks run, then merge. The scheduled run reads the workflow file from
+`main`, so a change to `schema-check.yml` takes effect on the schedule only
+once `main` has it.
 
 Schema checks use the pinned toolkit and detect added, changed, and removed
 schemas. They update documentation and tests for every schema change and
@@ -204,9 +206,11 @@ stable release. Documentation builds check the rendered site as well.
 A typical change:
 
 1. `git switch integration && git switch -c feat/my-change`
-2. Commit with Conventional Commits; push. Gitleaks runs.
-3. Open a PR into `main` (directly, or via `integration` first for staged
-   work). The full gate runs; `CRAN Readiness` must be green.
+2. Commit with Conventional Commits; push.
+3. Open a PR into `integration`. Gitleaks runs; `CRAN Readiness` and Specmill Maintenance
+   must be green.
 4. Merge once checks pass.
-5. When ready to ship, run the **Release** workflow from `main` with the right
+5. When `integration` is ready, open a PR from `integration` into `main`. The
+   full gate runs.
+6. When ready to ship, run the **Release** workflow from `main` with the right
    `version_type`.

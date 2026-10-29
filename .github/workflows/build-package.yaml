@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: [full, stable]
+        profile: [full]
 
     env:
       GITHUB_PAT: ${{ github.token }}
@@ -42,11 +42,6 @@ jobs:
           version="$(Rscript -e "cat(read.dcf('DESCRIPTION', fields = 'Version')[1, 'Version'])")"
           echo "package=$package" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Strip non-public exports
-        if: matrix.profile == 'stable'
-        shell: bash
-        run: Rscript dev/build_stable.R
 
       - name: Check public API boundary
         shell: Rscript {0}

@@ -4,7 +4,7 @@ name: Test Coverage
 on:
   workflow_dispatch:
   push:
-    branches: [main, dev, dev-*]
+    branches: [main]
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
@@ -16,7 +16,7 @@ on:
       - 'vignettes/**'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches: [main, dev]
+    branches: [main]
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
