@@ -366,7 +366,14 @@ epi_schema <- function(
   if (!dir.exists(schema_dir)) {
     dir.create(schema_dir, recursive = TRUE)
   }
-  writeBin(body_raw, file.path(schema_dir, "epi_suite_prod.json"))
+  path <- file.path(schema_dir, "epi_suite_prod.json")
+  if (is.null(schema[["x-epi-health"]])) {
+    writeBin(body_raw, path)
+  } else {
+    # Live server health counters change on every request; keep them out of the contract.
+    schema[["x-epi-health"]] <- NULL
+    jsonlite::write_json(schema, path, pretty = TRUE, auto_unbox = TRUE, digits = NA)
+  }
   cli::cli_alert_success("Downloaded EPI Suite schema from production server")
 
   invisible(NULL)

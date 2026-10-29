@@ -42,6 +42,21 @@ test_that("epi_schema downloads and validates the production schema", {
   expect_identical(Sys.getenv("epi_burl"), "epi-sentinel")
 })
 
+test_that("epi_schema drops the volatile x-epi-health block", {
+  schema_dir <- withr::local_tempdir()
+  body <- '{"openapi":"3.0.3","paths":{"/api/submit":{"post":{}}},"x-epi-health":{"unexpectedFailureCount":11}}'
+  testthat::local_mocked_bindings(
+    req_perform = function(req) epi_schema_response(req, body),
+    .package = "httr2"
+  )
+
+  epi_schema(schema_dir = schema_dir)
+  saved <- jsonlite::read_json(file.path(schema_dir, "epi_suite_prod.json"))
+
+  expect_null(saved[["x-epi-health"]])
+  expect_identical(names(saved$paths), "/api/submit")
+})
+
 test_that("epi_schema preserves an existing file after an HTTP error", {
   schema_dir <- withr::local_tempdir()
   schema_file <- file.path(schema_dir, "epi_suite_prod.json")
