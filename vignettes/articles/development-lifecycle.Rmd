@@ -63,28 +63,10 @@ A URL override changes the target of existing wrappers. It does not add
 operations that are absent from the public package. Loading the package does
 not switch endpoint settings based on the date.
 
-Install the checksum-pinned `specmill` toolkit from `dev/specmill-lock.json`
-before running development generation or validation:
-
-```{r}
-source("dev/install_specmill.R")
-install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
-.libPaths(c("dev/specmill-pilot/artifacts/toolkit-library", .libPaths()))
-```
-
-Use Air 0.11.0 for generation, as CI does. The toolkit is a development
-dependency; installed ComptoxR clients do not need it. Runtime hooks and
-manual wrappers stay in ComptoxR. Follow the generation and validation
-commands in
-[CONTRIBUTING.md](https://github.com/seanthimons/ComptoxR/blob/main/CONTRIBUTING.md),
-including `dev/check_public_api.R` before proposing a change.
-
-Keep development and staging schemas and generated clients outside every
-public ComptoxR checkout. For a separate local client, source
-`dev/generate_local_client.R` and call `generate_local_client()` with explicit
-input and output roots, a schema file, a base URL, and a distinct package name.
-Promote an operation by regenerating it from its approved production schema.
-Do not copy a local generated client into the public package.
+Wrappers are generated from the approved production schemas with the pinned
+`specmill` toolkit. [Building ComptoxR from schemas](building-from-schemas.html)
+covers the toolkit, generation, tests, local clients and the Specmill pin.
+Run `dev/check_public_api.R` before proposing a change.
 
 ## Which checks run, and when
 
@@ -101,7 +83,7 @@ close a change is to release.
 
 Path filters can skip code checks for documentation-only changes. The workflow
 files define the exact triggers. The heavy R gate lives on the **PR into `main`**. `CRAN Readiness` runs on
-every PR and is the blocking one: it runs the CRAN-safe test lane (`COMPTOXR_CRAN_SAFE_TESTS=true`,
+every ready-for-review PR that touches code and is the blocking one: it runs the CRAN-safe test lane (`COMPTOXR_CRAN_SAFE_TESTS=true`,
 `NOT_CRAN=false`) with no API key, no live network, and no local database, so a
 green PR means the package is CRAN-clean.
 

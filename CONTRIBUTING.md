@@ -28,56 +28,26 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
-The Specmill migration uses a separate pinned development library.
-Use Air 0.11.0 for specmill, then run:
+Most wrappers are generated. Never hand-edit a generated `R/` file; change
+`apis/*.yml`, `specmill.yml`, a hook or a callback and regenerate.
+[Building ComptoxR from schemas](vignettes/articles/building-from-schemas.Rmd)
+explains the whole pipeline. The short version, with the pinned toolkit
+installed (`Rscript dev/install_specmill.R`) and Air 0.11.0 on the path:
 
 ```bash
-Rscript dev/install_specmill.R
-Rscript dev/generate_specmill.R --plan
-Rscript dev/generate_specmill.R --check
-```
-
-Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
-matching output; do not reuse initial adoption hashes. See
-[dev/specmill-333/SELECTION.md](dev/specmill-333/SELECTION.md) for the `apis/` layout.
-The legacy commands below continue to maintain retained operations.
-
-The **Specmill Maintenance** workflow checks the generated client on every pull request,
-including changes to CI and documentation. It installs the locked source revision,
-runs native behavior suites, fixed contracts and client policy tests, and checks that regeneration
-leaves no changed or new files. Every workflow installs Air 0.11.0, the version pinned in
-`specmill.yml`.
-
-Install the reviewed development toolkit before running schema commands:
-
-```r
-source("dev/install_specmill.R")
-lib <- install_specmill() # or set SPECMILL_SOURCE_REPO to a specmill checkout
-.libPaths(c(lib, .libPaths()))
-```
-
-The specmill revision and source-archive SHA-256 are pinned in
-`dev/specmill-lock.json`; `install_specmill()` archives that revision from a local
-specmill checkout (default `../specmill`). Specmill is not a runtime dependency. Install Air 0.11.0 for generation; CI uses that
-version with this repository's `air.toml`. Public generation uses approved production
-schemas only. Keep other schemas and generated clients outside this checkout.
-Regenerate a promoted operation from its approved production schema.
-Export the pinned library in the shell so each development command and its child
-R processes can find it:
-
-```bash
-export R_LIBS="$(Rscript -e 'cat(file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", jsonlite::read_json("dev/specmill-lock.json")$version))')"
+export R_LIBS="$PWD/dev/specmill-pilot/artifacts/toolkit-library/$(Rscript -e 'cat(jsonlite::read_json("dev/specmill-lock.json")$version)')"
 Rscript dev/generate_specmill.R --apply
-Rscript dev/generate_tests.R --generate
+Rscript -e 'devtools::document()'
+Rscript dev/generate_specmill.R --apply
 Rscript dev/generate_specmill.R --check
 Rscript dev/generate_tests.R --check
 Rscript dev/check_hook_config.R
 Rscript dev/check_public_api.R
 ```
 
-Generation validates isolated output before it changes owned files. Manual
-files and runtime hooks stay in this repository. To roll back the toolkit,
-restore its previous pin and the matching generated output together.
+Any edit under `R/`, `schema/`, the hooks or the callbacks changes
+`.specmill/manifest.json`; commit the refreshed manifest, or the
+**Specmill Maintenance** check fails.
 
 Run the targeted checks for what you changed:
 
@@ -106,10 +76,11 @@ Rscript dev/cran_readiness.R
 
 ## Pull requests
 
-Open PRs against `main` (directly, or via `integration` first for staged work).
-The full check suite — including the blocking **CRAN Readiness** gate — runs on
-PRs targeting `main`. A green PR means the package is CRAN-clean. Never commit
-directly to `main`.
+Open PRs against `integration`. **Specmill Maintenance** runs on every PR,
+and **CRAN Readiness** on every ready-for-review PR that touches code; both
+must be green. `integration` reaches `main`
+through its own PR, which runs the full check suite. Never commit directly to
+`main` or `integration`.
 
 ## Releases and versioning
 
