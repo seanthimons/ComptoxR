@@ -52,6 +52,9 @@ jobs:
           extra-packages: |
             any::covr
             any::testthat
+            any::yaml12
+            any::jsonvalidate
+            any::V8
             any::vcr
 
       - name: Install pinned formatter
