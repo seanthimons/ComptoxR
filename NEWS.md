@@ -2,6 +2,19 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- New `db_installed_version()` reports, offline, the upstream release recorded inside
+  the installed ECOTOX, ToxValDB or DSSTox database (for example
+  `"ecotox_ascii_09_15_2026.zip"`).
+
+- `eco_install()`, `toxval_install()` and `dss_install()` now rewrite the `<db>.version`
+  file from the installed database on every install path, and remove it when no version
+  is recorded. Before, downloads and `source =` installs left an older build's file in
+  place, so it could name the wrong release. They also close the session's cached
+  connection before replacing the file, and stop if `source =` cannot be copied.
+  `toxval_install()` now errors, like the other two, when no database file is produced.
+
 ## v4.0.0 (2026-10-30)
 
 #### Release notes
