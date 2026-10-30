@@ -2,7 +2,9 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.0 (2026-10-30)
+
+#### Release notes
 
 - The `format` argument of `chemi_descriptors()`, `chemi_descriptors_bulk()` and
   `chemi_webtest_bulk()` is deprecated. `"CSV"` and `"TSV"` never worked end to end
@@ -213,6 +215,409 @@
   generation now permits only GET and POST and excludes the five AMOS `add_*`
   uploads tracked in #354.
 
+<!-- end release notes -->
+
+#### Breaking changes
+
+- move interim Specmill overrides into Specmill-owned apis/<schema>.yml
+  ([331c628](https://github.com/seanthimons/ComptoxR/tree/331c62893c68ec61b3c8d7a43ba7301cb5dfa966))
+- underscore schema names, ban eight write/export endpoints
+  ([25a62cc](https://github.com/seanthimons/ComptoxR/tree/25a62cce6c256654fd6302cc71813643eeb91a5c))
+- remove ct_api_key(); read ctx_api_key from the environment directly
+  ([9c1ce01](https://github.com/seanthimons/ComptoxR/tree/9c1ce016d0a54dda883fbc9f28ccb801a7ade0ef))
+- remove generic_request helpers, port ct_related/ct_similar to
+  .ct_request
+  ([b5b220c](https://github.com/seanthimons/ComptoxR/tree/b5b220cff793358bf7bab1845ae372025aafb261))
+- migrate four CTX query and mass-search wrappers to native requests
+  ([8daebed](https://github.com/seanthimons/ComptoxR/tree/8daebed24cd1d71bb7ac86254cbf3430b0da1b7d))
+- send CTX structure image and mol downloads through Specmill
+  ([f7d445c](https://github.com/seanthimons/ComptoxR/tree/f7d445cb6135d8dd924ec77654f0eccc1bf827ed))
+- send the 23 CTX bulk POSTs through the native Specmill helper
+  ([c677da1](https://github.com/seanthimons/ComptoxR/tree/c677da1c75a82ec6ea8e05129bfe26fa48e9c660))
+- remove the legacy stub generator
+  ([be4f5f6](https://github.com/seanthimons/ComptoxR/tree/be4f5f6cbb81b13d3acbc8658f7febc418c334fa))
+- send the toxval DTXSID wrappers through the native Specmill helper
+  ([c567d92](https://github.com/seanthimons/ComptoxR/tree/c567d9258939121bf2adfdf40d217219f8aa7647))
+
+#### New features
+
+- adopt 0.1.53 method-qualified exclude and unclaimed selection
+  ([578acd2](https://github.com/seanthimons/ComptoxR/tree/578acd2e85febd3a9533e00eb550d1b71bcfc964))
+- opt-out endpoint selection with deferral passthrough
+  ([f0fbc7d](https://github.com/seanthimons/ComptoxR/tree/f0fbc7d43f27ee292b9358d0fd7cb8e249f8d1dd))
+- rebuild bulk wrapper with Specmill
+  ([3b49067](https://github.com/seanthimons/ComptoxR/tree/3b49067d530b905b8779eddad2476b0a1d4db019))
+- adopt released portable safety response ownership
+  ([64943f5](https://github.com/seanthimons/ComptoxR/tree/64943f529c802e97de46e2238ab885668fc6cdb5))
+- generate descriptor and PubChem clients with Specmill v50
+  ([dbaafea](https://github.com/seanthimons/ComptoxR/tree/dbaafea25834dfcc4ddf708a50b596157f69a88a))
+- generate search pagination and CheT form bindings
+  ([253c38a](https://github.com/seanthimons/ComptoxR/tree/253c38a2e50bce1ddaf9580772167d606af4138d))
+- adopt released boolean bindings and protocol reads
+  ([354401c](https://github.com/seanthimons/ComptoxR/tree/354401ceb76f24d1647e0eab4082978c359c1c50))
+- generate reviewed standardizer protocol search endpoint
+  ([ca02237](https://github.com/seanthimons/ComptoxR/tree/ca02237f98bfa3f056b3c06967b2584c6959bb77))
+- generate reviewed standardizer group preflight
+  ([b53685b](https://github.com/seanthimons/ComptoxR/tree/b53685bd825c5150835beb58efd54cb69f6b50e3))
+- migrate eleven safety, facade and WebTEST operations
+  ([3a3fd61](https://github.com/seanthimons/ComptoxR/tree/3a3fd61ae2b5298bc5cc0712e192fe406ab0bdd7))
+- adopt released Specmill v42 and migrate 22 operations
+  ([3ea6140](https://github.com/seanthimons/ComptoxR/tree/3ea6140c10af5a589aabf28fa86d588aa9acbcbf))
+- migrate 39 search, resolver and CheT bindings
+  ([cd34efb](https://github.com/seanthimons/ComptoxR/tree/cd34efb464a0d370c5c30dcd9db2886737adc317))
+- migrate 65 validated Specmill endpoint bindings
+  ([810d688](https://github.com/seanthimons/ComptoxR/tree/810d688fcec26f9e8ba4f0901452c227743eb93c))
+- adopt 53 native Specmill endpoints on released v41
+  ([0935bb8](https://github.com/seanthimons/ComptoxR/tree/0935bb802321aca8631ab5a4fbdd78fb95871f67))
+- adopt released native keyset and page pagers
+  ([f796264](https://github.com/seanthimons/ComptoxR/tree/f7962644622c6af091b36308f7f2dafc276beea5))
+- adopt released deferred native resolver lookup
+  ([9ade2e9](https://github.com/seanthimons/ComptoxR/tree/9ade2e9e01d537c023cfb3f4c7d9fb2abf34fa15))
+- adopt released native line and batch failure policies
+  ([286f5e5](https://github.com/seanthimons/ComptoxR/tree/286f5e52ab023fd9d6628622421ced98ef338c72))
+- adopt released Specmill toxprint JSON visibility contract
+  ([ac93100](https://github.com/seanthimons/ComptoxR/tree/ac9310052a7609455a9cdeafeb28566c035afd51))
+- migrate evidenced AMOS identifier reads and select native tests
+  ([ee88910](https://github.com/seanthimons/ComptoxR/tree/ee8891081ad72372217e85c5ac5fdf549dabfe94))
+- adopt released Specmill AMOS JSON read contracts
+  ([0a904f8](https://github.com/seanthimons/ComptoxR/tree/0a904f8306e93ee4b86ca91aebdd9c4a1cae91af))
+- adopt Specmill 0.1.18; page toxref study types per item, no page
+  timeout
+  ([3cd6e3b](https://github.com/seanthimons/ComptoxR/tree/3cd6e3b3235fd71a1f97515d938e91b58a071556))
+- page the two mmdb by-medium GETs through the native Specmill helper
+  ([05e6cae](https://github.com/seanthimons/ComptoxR/tree/05e6caed187628d20dda74c240fd1c535d83a1c2))
+- send 53 fan-out CTX GETs through the native Specmill helper
+  ([1208f5b](https://github.com/seanthimons/ComptoxR/tree/1208f5bcc0bfb9a36aa0e061162fe2607f38ab49))
+- adopt Specmill 0.1.17 and its typed tables, paging and body names
+  ([b6e6f0b](https://github.com/seanthimons/ComptoxR/tree/b6e6f0b7dee6fe98c428ef524756b2a74b14753e))
+- send the single-request CTX GET wrappers through the native Specmill
+  helper
+  ([c07bacf](https://github.com/seanthimons/ComptoxR/tree/c07bacf8f90a5be71492af97242b6b71f57dc0d9))
+- send the single-ID hazard GET wrappers through the native Specmill
+  helper
+  ([7960a1a](https://github.com/seanthimons/ComptoxR/tree/7960a1a18adf164b8e4b7052233599a139304b48))
+- send the ChET libraries wrapper through the native Specmill helper
+  ([c0be48d](https://github.com/seanthimons/ComptoxR/tree/c0be48d53b27918ab4e5e4ed99c721fe107aea2d))
+- add offline CTX identifier mock backed by the local DSSTox database
+  ([e7bae2f](https://github.com/seanthimons/ComptoxR/tree/e7bae2ffd6f656383578e879ca45e7420d2920c6))
+- adopt pinned Specmill request helpers and verify compatibility (#342)
+  ([b18e687](https://github.com/seanthimons/ComptoxR/tree/b18e68738a2a9dae96a1c1533c7130d516e5dbc9))
+- verify retained resolver and safety transformations (#337)
+  ([7d10d98](https://github.com/seanthimons/ComptoxR/tree/7d10d98fea29dbbd348783bf02cc85740e255e62))
+- verify retained bulk resolver specmill mapping (#337)
+  ([7cfeeaf](https://github.com/seanthimons/ComptoxR/tree/7cfeeafb3233eb05dc4dff1e11579a1aec33d932))
+- migrate verified explicit request-body builders (#337)
+  ([b53fd06](https://github.com/seanthimons/ComptoxR/tree/b53fd06307769ccd5b9b4f36371debb997e07561))
+- complete four verified specmill migration waves (#337)
+  ([8838470](https://github.com/seanthimons/ComptoxR/tree/8838470ce9ea0e9846ad5d9f99a1de6f3477ea3d))
+- generate ten fixed-route hook-owned wrappers (#340)
+  ([5bab21b](https://github.com/seanthimons/ComptoxR/tree/5bab21b5b1390ac6cba1cef992a1b1a8ef6e05d8))
+- generate 14 vector-example wrappers in the vector-examples wave
+  ([30a4dc4](https://github.com/seanthimons/ComptoxR/tree/30a4dc4912ae67cc655807c05796acf84e36c404))
+- map literal c() vector examples as sequence examples
+  ([4c5755e](https://github.com/seanthimons/ComptoxR/tree/4c5755e93a51e6ecdd9d002824b895017ee9bc91))
+- map literal c() vector examples as sequence examples
+  ([469b559](https://github.com/seanthimons/ComptoxR/tree/469b559b55a1251e5fcaeb809834945cd7b2e262))
+- generate 52 optional-options wrappers in the options-batch wave
+  ([b851a6c](https://github.com/seanthimons/ComptoxR/tree/b851a6cd7d8af1c133a74c98fbe8ba8e548dfbd8))
+- disposition ledger script for #310-#314 checklist exports
+  ([ed7b468](https://github.com/seanthimons/ComptoxR/tree/ed7b468cb5af4b0fc430aaa26f307e225183d7dc))
+- map optional-options preludes to compact_object in rebuild waves
+  ([9856b69](https://github.com/seanthimons/ComptoxR/tree/9856b692916f1c2833c41191f47df009788b7562))
+- generate 67 stable ctx wrappers with specmill (#310 stable-batch wave)
+  ([0fb6f4d](https://github.com/seanthimons/ComptoxR/tree/0fb6f4d5abd87b9a166caf477b2c825d6a9551a0))
+- generate five stable hazard wrappers with specmill (#310 hazard-pilot
+  wave)
+  ([77de2d6](https://github.com/seanthimons/ComptoxR/tree/77de2d69da2dd4d3fd858ba605797fe6f78d3f87))
+- add rebuild-wave verification script
+  ([a06a840](https://github.com/seanthimons/ComptoxR/tree/a06a8402ef97b06b91aea01dc896832f6a58ed83))
+- include rebuild-wave cases in the localhost runtime verifier
+  ([772c8d1](https://github.com/seanthimons/ComptoxR/tree/772c8d1444ad12d8b5af6d0ee3ebd9db964d8441))
+- add lifecycle-preserving specmill wave staging script
+  ([3134232](https://github.com/seanthimons/ComptoxR/tree/3134232f48eda1311bbd8a15f5d616aa6423fa14))
+- add specmill preservation inventory and removal allowlist (#326)
+  ([71ca167](https://github.com/seanthimons/ComptoxR/tree/71ca1678615e8bdbaac855b91df080e17e251a54))
+- adopt 89 verified wrappers from whole-client specmill pass
+  ([1444ca5](https://github.com/seanthimons/ComptoxR/tree/1444ca5f7ac4c519f8a6b723c766bc7ea67c61a0))
+- migrate ten additional Alerts and AMOS lookups
+  ([73ffb2d](https://github.com/seanthimons/ComptoxR/tree/73ffb2d618918accbe8a4a07acdfa4228bcac68b))
+- migrate a six-operation maintenance pilot to pinned specmill
+  ([0cba7cd](https://github.com/seanthimons/ComptoxR/tree/0cba7cda4e9701c950ae7afedd50bb8b8fcc849c))
+
+#### Bug fixes
+
+- force LF in the specmill source archive so the checksum matches on
+  Windows
+  ([8dfc2d3](https://github.com/seanthimons/ComptoxR/tree/8dfc2d3e0a78d6dd3fd0e9807681965aacaaa5ac))
+- drop volatile x-epi-health block from the saved schema (#332)
+  ([c51daf9](https://github.com/seanthimons/ComptoxR/tree/c51daf9b0a42f3dc9801f0297e0d6b766d6dadeb))
+- deprecate CSV and TSV response formats
+  ([ca1b401](https://github.com/seanthimons/ComptoxR/tree/ca1b40129621089603e27eb92f7256a1200915a2))
+- preserve assay contract and isolate WebTEST fixture responses
+  ([c544320](https://github.com/seanthimons/ComptoxR/tree/c544320763cb122ff79ea647213e73bd29e31749))
+- validate hooks from every parsed package function
+  ([e6cf6cd](https://github.com/seanthimons/ComptoxR/tree/e6cf6cd190bc0a2350f5fbee811c90df2aeaceb4))
+- use the pinned versioned specmill library in development callers
+  ([7b0e526](https://github.com/seanthimons/ComptoxR/tree/7b0e5263ba2c974bb1dbd9c81cc9e44d2935b2ac))
+- give the toxref data-by-study-type pages a 300 s timeout
+  ([c9de4fd](https://github.com/seanthimons/ComptoxR/tree/c9de4fdb1a6fcd760ff2d7932a41fed6d2923829))
+- let probe_api_function observe responses from native wrappers
+  ([5556a5f](https://github.com/seanthimons/ComptoxR/tree/5556a5f0ba0ed7334fab94beff01ca16cd6429df))
+- send ChET mapped requests below the schema's /chet server path (#339)
+  ([e1a32e2](https://github.com/seanthimons/ComptoxR/tree/e1a32e202883ea198b0efdf1e13858edb9ba8af7))
+- verify complete ChET pagination through production service routes
+  (#331)
+  ([c9aa874](https://github.com/seanthimons/ComptoxR/tree/c9aa874af7f790f0d3e6c52be0f8fe758f81490d))
+- refresh schemas for specmill offline validation (#344)
+  ([080fc7e](https://github.com/seanthimons/ComptoxR/tree/080fc7ea860a4b0a085a338b608b25b4fad0baf9))
+- map retained ToxPrint contract with reviewed diagnostics (#337)
+  ([d996565](https://github.com/seanthimons/ComptoxR/tree/d996565e9a8ae91e499e6c0a818cdf80173d0703))
+- supply chemi query input for observed option wrappers
+  ([47ca892](https://github.com/seanthimons/ComptoxR/tree/47ca892b66aa6558c7a2bef3caa4c5a8f4055a8b))
+- type-aware explicit option values and runtime probes on omitted inputs
+  ([f826410](https://github.com/seanthimons/ComptoxR/tree/f826410f6d546ead64e600a9a63ab6d667b8dd59))
+- compare no-argument errors when screening wave candidates
+  ([17d555c](https://github.com/seanthimons/ComptoxR/tree/17d555c2f39346b3775cc53be0b86508444adb11))
+- replace option-bound inputs by name and reject shadowed options
+  arguments
+  ([a8eb738](https://github.com/seanthimons/ComptoxR/tree/a8eb73834308c1816438a2fc3f9d3fe96d2e41d2))
+- empty sample inputs and skip batch probes for paginated wrappers
+  ([867eba0](https://github.com/seanthimons/ComptoxR/tree/867eba04fcc393b3a41e21bab2718fa21a81fa06))
+- distinct sample inputs and bounded pagination probes only when exposed
+  ([ffb92f2](https://github.com/seanthimons/ComptoxR/tree/ffb92f22de7a521bbe78a05fb3c76cbcc02fbcdc))
+- keep single schema file as a sequence when extending a rebuild service
+  ([09b8c05](https://github.com/seanthimons/ComptoxR/tree/09b8c05f9506693ac41ac1b67486ddd58680ff05))
+- restore DESCRIPTION after wave roxygen checks
+  ([dccbe50](https://github.com/seanthimons/ComptoxR/tree/dccbe50758743ffd867ef0473527d5067d6e5856))
+- hash only Rd files in wave documentation check
+  ([18696a4](https://github.com/seanthimons/ComptoxR/tree/18696a47b60f092ce3fd0b922d74fbc548eb3150))
+- compare wave documentation against a roxygen baseline
+  ([01b6a1f](https://github.com/seanthimons/ComptoxR/tree/01b6a1f721b1983b488aa235b1dce2b7a385cfca))
+- keep wave review configs inside the project root
+  ([15d2cf0](https://github.com/seanthimons/ComptoxR/tree/15d2cf0b2181d91efec55e8419a8b9a6f816bd64))
+- align schema and publication workflows with production APIs (#309)
+  ([4fd720b](https://github.com/seanthimons/ComptoxR/tree/4fd720b97fb2f7f2abf131925e9270b0c11b057a))
+
+#### Refactorings
+
+- remove chemi_toxprint, move toxprints service to unclaimed selection
+  ([bf43009](https://github.com/seanthimons/ComptoxR/tree/bf43009eb5d13a9df81712f4c1386a96b7aa573a))
+- defer services preflight on prod schema, drop preflight overlays
+  ([af4c0f7](https://github.com/seanthimons/ComptoxR/tree/af4c0f71caa13c918cb8a783106a86de8cf40251))
+- defer CheT GET chemical_DL on prod schema, drop overlay
+  ([bee83c4](https://github.com/seanthimons/ComptoxR/tree/bee83c4a587b3bc6d0003a14263dd7605fa4ef7f))
+- move AMOS to prod schema, defer six defective ops, drop overlays
+  ([5a809f9](https://github.com/seanthimons/ComptoxR/tree/5a809f97dc855feee35d30589789a491c4a31c5b))
+
+#### Performance
+
+- backport vectorized is_cas and as_cas from concert
+  ([be9b8fd](https://github.com/seanthimons/ComptoxR/tree/be9b8fd463ea97a54be556fc50476723df6b6a6b))
+
+#### Build
+
+- pin Specmill 0.1.12 and emit shared request validators
+  ([01eaccb](https://github.com/seanthimons/ComptoxR/tree/01eaccbc12c752e48869c0a97ab767910bbadb56))
+- install the pinned specmill source in place of the wrapmaint toolkit
+  ([4f6101a](https://github.com/seanthimons/ComptoxR/tree/4f6101abe90c23beffe1a9bfa923a4f8c1d723b5))
+- re-pin specmill to v0.1.8 for data-literal rendering and adoption
+  tooling
+  ([304cb18](https://github.com/seanthimons/ComptoxR/tree/304cb18db15a76ccc2f3a0b70202dabee401db5d))
+- re-pin specmill to v0.1.6 for manifest-owned stable wrappers
+  ([ab76ba6](https://github.com/seanthimons/ComptoxR/tree/ab76ba6cdeaf2d0260a510aacef345454251bbd2))
+
+#### Tests
+
+- skip source-checkout tests under R CMD check
+  ([45fb889](https://github.com/seanthimons/ComptoxR/tree/45fb8897e9d55cb3c7f310d793d402a27c2831bc))
+- retire dormant native_services_legacy test via generator test_args
+  ([bea4210](https://github.com/seanthimons/ComptoxR/tree/bea42103b45b143d4ae22d30f432f61a440e0fa1))
+- repoint native\_\* fixtures at underscore schemas and drop banned
+  wrappers
+  ([0499401](https://github.com/seanthimons/ComptoxR/tree/0499401fee5d0941731035a32d5864bbd1c11691))
+- mark ct_related/ct_similar tests hand-written so generate_tests –check
+  passes
+  ([040de0a](https://github.com/seanthimons/ComptoxR/tree/040de0a3ed52a93ac605c780f4051c978fffe6cd))
+- verify safety RQ input contract for issue 352
+  ([c224265](https://github.com/seanthimons/ComptoxR/tree/c224265ca6ea003fc92b2cd38184b806b5f8c15a))
+- validate v50 migration checkpoint and record remaining holds
+  ([8710d77](https://github.com/seanthimons/ComptoxR/tree/8710d770db69dca6923f85358f0926f691df23fe))
+- revalidate positive AMOS batch workbook contracts
+  ([b80b886](https://github.com/seanthimons/ComptoxR/tree/b80b886c3a86bf99fa262d0d9d81179997a97bf8))
+- record clean full migration behavior suite
+  ([bb77a33](https://github.com/seanthimons/ComptoxR/tree/bb77a330dad3189ceef7532521e471ccab869372))
+- record independent held Specmill contract replays
+  ([84d5c05](https://github.com/seanthimons/ComptoxR/tree/84d5c05c8ba056b40b9080d7e1096927564760ce))
+- record corrected file and list review blocked by specmill 154
+  ([fa93f64](https://github.com/seanthimons/ComptoxR/tree/fa93f64b5dae45e23598f0a4c11f50c8b230bf1b))
+- verify final integrated fourteen-pager candidate
+  ([7b4707e](https://github.com/seanthimons/ComptoxR/tree/7b4707e8c05b0d563e71975671ddcabda232a472))
+- verify combined line batching warnings and failure policies
+  ([b16a29f](https://github.com/seanthimons/ComptoxR/tree/b16a29fe901dc1459733318100a6848a5ebbc32e))
+- mock req_perform for the paging probe so it stays offline
+  ([0f6553c](https://github.com/seanthimons/ComptoxR/tree/0f6553ce38c9bec7c56085188297b7aad3666e0a))
+- check specmill#101 pagination against the CTX page envelope
+  ([44bbd31](https://github.com/seanthimons/ComptoxR/tree/44bbd3126ef90f723af48b47532870ff5432725e))
+- add acceptance checks for specmill#100-#102
+  ([4d1fd4d](https://github.com/seanthimons/ComptoxR/tree/4d1fd4da42deb7d76cc406d8bab18697e23e4859))
+- record byte-identical ToxPrint wave verification (#337)
+  ([551e3ee](https://github.com/seanthimons/ComptoxR/tree/551e3ee58d1560c8dc83cd3d0ef96ba82bbd14f8))
+- retain prediction and classifier contracts, exclude related scraper
+  (#337)
+  ([cef28d1](https://github.com/seanthimons/ComptoxR/tree/cef28d1d5caeb87c521fa07713aa00dfde8df165))
+- map retained direct transformations and record ToxPrint blocker (#337)
+  ([3ddbe3f](https://github.com/seanthimons/ComptoxR/tree/3ddbe3f3df100c22cf51c91ba7e66a71e66f4e05))
+- verify specmill pilot compatibility and document rollback
+  ([62cb6b7](https://github.com/seanthimons/ComptoxR/tree/62cb6b77eec563e48e912f0d3ca2ce54cffc6f06))
+
+#### CI
+
+- install specmill's R dependencies in coverage, pipeline and CRAN
+  readiness workflows
+  ([7f0f355](https://github.com/seanthimons/ComptoxR/tree/7f0f355ebec57f8bfa3cf2147a4d75e3193bfd1b))
+- install Quick Tests dependencies with setup-r-dependencies
+  ([17a7f15](https://github.com/seanthimons/ComptoxR/tree/17a7f157ae140685e500f8df44cc73d3c8d9e2bc))
+- load the package before running Quick Tests
+  ([86cbcdc](https://github.com/seanthimons/ComptoxR/tree/86cbcdca1c6887fce380dba6eed4f31267a362bd))
+- pin Air 0.11.0 in every workflow to match specmill.yml
+  ([bb6ff02](https://github.com/seanthimons/ComptoxR/tree/bb6ff02f13d4d7e526f05ad0535d0fe0966e8585))
+- commit manifest and apis from schema updates, drop stub-era PR body
+  ([a36c0ee](https://github.com/seanthimons/ComptoxR/tree/a36c0eeb94954cdd170d9aebb4890a0651e2aa2d))
+- gate native Specmill behavior and public artifacts
+  ([a7986f9](https://github.com/seanthimons/ComptoxR/tree/a7986f989d8eb247ecdc2489e0cf5d1eb390bf0f))
+- defer package checks while pull requests are drafts
+  ([e5995b6](https://github.com/seanthimons/ComptoxR/tree/e5995b6ca1cfb9e978db5c7f0a0f8d2dd49c19cc))
+- install Specmill validation dependencies and record checksum scan
+  exceptions
+  ([4576094](https://github.com/seanthimons/ComptoxR/tree/45760949c25c915834fc20f76fb764f23a1abc15))
+- verify specmill migration freshness and fixed contracts
+  ([418128b](https://github.com/seanthimons/ComptoxR/tree/418128bd81573adadbbe59b520a5e68106fe581a))
+
+#### Docs
+
+- keep hand-written NEWS across releases, add 4.0 migration article
+  ([62773ff](https://github.com/seanthimons/ComptoxR/tree/62773ff722e2797da2fa8bd159e9a0c78c14487c))
+- add 'Building ComptoxR from schemas' maintainer article
+  ([77b68b7](https://github.com/seanthimons/ComptoxR/tree/77b68b745bfb3f6cf2b895bf1b60ca458a4ced00))
+- record unresolved schema contracts and remaining legacy generator
+  (#328)
+  ([36d388c](https://github.com/seanthimons/ComptoxR/tree/36d388c95089305c71219d99c967903fe2d92218))
+- fix stale pubchem report, skip message and chemical_DL deferral reason
+  ([5c3669d](https://github.com/seanthimons/ComptoxR/tree/5c3669d9694947ab48252ce2b74bdeb412472b60))
+- track remaining migration contract groups in dedicated issues
+  ([a52e4b2](https://github.com/seanthimons/ComptoxR/tree/a52e4b243b16190e8ecdacc4b57fa6783828ee49))
+- record v51 migration checkpoint comment
+  ([9d89f78](https://github.com/seanthimons/ComptoxR/tree/9d89f78b62da822d94ac20f5c99cbcbd3d447085))
+- preserve deferred diagnostic logs as compressed evidence
+  ([8dd6e51](https://github.com/seanthimons/ComptoxR/tree/8dd6e513d54bd4d54278874dee4063ab87e5f846))
+- defer AMOS workbook migration for specialized behavior review
+  ([cfbf970](https://github.com/seanthimons/ComptoxR/tree/cfbf9706384d64ab6e73f9519c61056daa765517))
+- record newly evidenced AMOS batch candidate
+  ([78b82de](https://github.com/seanthimons/ComptoxR/tree/78b82deae4b1fa0dddcf3dfd097cf2a1f834071f))
+- plan upstream schema mirroring
+  ([83a96ec](https://github.com/seanthimons/ComptoxR/tree/83a96ec7aebba3d8d29e9e0c683a3a48a06713c0))
+- file Specmill gaps upstream without asking first
+  ([4aebcfd](https://github.com/seanthimons/ComptoxR/tree/4aebcfdcfb97dfc3226830f2b216b79cb561dcf2))
+- give the toxval by-category example a valid category
+  ([07f7c2b](https://github.com/seanthimons/ComptoxR/tree/07f7c2be93daa319d2f7a5479a6f7ec21dfdabc7))
+- record Specmill issue closeout and retained maintenance policies
+  ([fc8360f](https://github.com/seanthimons/ComptoxR/tree/fc8360fce6b96250c75a956db1ca3a3caaeec8e6))
+- record specmill 0.1.8 re-pin, vector-examples wave and 212-file
+  rebuild rehearsal
+  ([912eae8](https://github.com/seanthimons/ComptoxR/tree/912eae89bbaa63952e303c4b0fe8277814e152c8))
+- disposition ledger after vector-examples adoption
+  ([ee7a80c](https://github.com/seanthimons/ComptoxR/tree/ee7a80c6b7144d1f5d26ed25750b4d5e17862df8))
+- refresh preservation inventory after vector-examples adoption
+  ([ce70261](https://github.com/seanthimons/ComptoxR/tree/ce7026122b5d9b6d1fe8dd0b9fdf46a9c74fc26b))
+- record screening before vector-examples adoption at specmill 0.1.8
+  ([151ad6c](https://github.com/seanthimons/ComptoxR/tree/151ad6c68219a3bddcc49a9c3e98f2cd07f58465))
+- link client defect issues
+  ([4ccba11](https://github.com/seanthimons/ComptoxR/tree/4ccba110b1b6f7a3254684bd117af75f37e7346b))
+- restore full rebuild rehearsal section
+  ([04fc7c5](https://github.com/seanthimons/ComptoxR/tree/04fc7c5f0a8fa5afde95b738fb9d2b6329f913d6))
+- correct hook blocker analysis and link specmill issues
+  ([b84bf40](https://github.com/seanthimons/ComptoxR/tree/b84bf407577c186f6486c85429c6f85c2a2e64c5))
+- record v0.1.6 waves, defects, dispositions and full rebuild rehearsal
+  ([99fb506](https://github.com/seanthimons/ComptoxR/tree/99fb50644b7be5fcd608461d9d841eaf12fe9ae0))
+- disposition ledger for #310-#314 after options-batch
+  ([a542bb4](https://github.com/seanthimons/ComptoxR/tree/a542bb405b9bf025fcbadee4ae0800a23f3305a4))
+- record screening with vector examples
+  ([be54be2](https://github.com/seanthimons/ComptoxR/tree/be54be23990a2a64e2d57d0abc15650b025386ca))
+- record screening after options-batch adoption
+  ([a503da3](https://github.com/seanthimons/ComptoxR/tree/a503da3a98891d725afc0849c8908db3e0c71088))
+- refresh preservation inventory after options-batch adoption
+  ([ec28687](https://github.com/seanthimons/ComptoxR/tree/ec28687bf865299fede84821c33c7dd8d0ee695d))
+- record screening before options-batch adoption
+  ([013ad1b](https://github.com/seanthimons/ComptoxR/tree/013ad1b4666019da9b951526a09789bde6a60566))
+- record screening after stable-batch adoption
+  ([ad219d0](https://github.com/seanthimons/ComptoxR/tree/ad219d0bb485c57b26b55f78449635c9e08fcf81))
+- record screening after hazard-pilot adoption
+  ([3e3f222](https://github.com/seanthimons/ComptoxR/tree/3e3f2227121df3580b56e5145f31edcf33754795))
+- record lifecycle-aware screening of 246 unmapped wrappers
+  ([e9e723f](https://github.com/seanthimons/ComptoxR/tree/e9e723f0aa4c714ae8dc9ff68e5af0835a544a87))
+- record preservation inventory and 101-wrapper rebuild rehearsal (#326,
+  #327)
+  ([9e31b76](https://github.com/seanthimons/ComptoxR/tree/9e31b76610a2357bd9ec582335519369f1161dbd))
+- track specmill migration review categories in GitHub issues
+  ([b67790c](https://github.com/seanthimons/ComptoxR/tree/b67790cdb93993bd5226755fdc35e77124d8ab8b))
+- record whole-client migration results and remaining work
+  ([6e7b02a](https://github.com/seanthimons/ComptoxR/tree/6e7b02a37428b3842269598d40e95d9cbb9a1cc5))
+- audit all production schemas and explain migration results
+  ([697f15c](https://github.com/seanthimons/ComptoxR/tree/697f15c9ecd009abfac3cb0957af9cf795d65279))
+- record completed migration releases and verification (#308)
+  ([8bda3d6](https://github.com/seanthimons/ComptoxR/tree/8bda3d623a2b926269bc7eee7772c6040956c3ba))
+
+#### Other changes
+
+- bump version to 4.0.0 \[skip ci\]
+  ([b63f244](https://github.com/seanthimons/ComptoxR/tree/b63f24437e8c1f7e6e4d200cdc996f47bab7c829))
+- drop staging-era build scripts and dev triggers; fix lifecycle docs
+  ([05d692d](https://github.com/seanthimons/ComptoxR/tree/05d692dfc51944a8c3e3c73aefd6f30ba7f6dd88))
+- refresh manifest input hash for R/util_cas.R
+  ([1879011](https://github.com/seanthimons/ComptoxR/tree/18790110a1d336296a22ad0ecb56cceaf6e10ba4))
+- remove .planning and stale root planning/handoff docs
+  ([83beb37](https://github.com/seanthimons/ComptoxR/tree/83beb37a1abc4f5f11e25961b4bc3e069e886e86))
+- refresh manifest hash for hooks_descriptors.R
+  ([bca5148](https://github.com/seanthimons/ComptoxR/tree/bca51486b58a14536b7c18cc64113155b9a3856d))
+- pin 0.1.59, exclude pubchem from coverage, refresh badges
+  ([ec6e678](https://github.com/seanthimons/ComptoxR/tree/ec6e678c289c79c653fba5d4e13314e341d60bb8))
+- clean dev/ down to maintainer-facing scripts, fix cran-readiness smoke
+  tests
+  ([8cf345b](https://github.com/seanthimons/ComptoxR/tree/8cf345b3c76ee3b4f991cf0d4329a2a28ca8b81d))
+- pin 0.1.57
+  ([0b2a274](https://github.com/seanthimons/ComptoxR/tree/0b2a2740ce7209dbe4d7b93edcc73f8f8bd6e53e))
+- refresh manifest input hash for ct_related
+  ([5ac34e7](https://github.com/seanthimons/ComptoxR/tree/5ac34e7360b33aa73443c24fc33b214c810db836))
+- opt resolver and stdizer into unclaimed selection
+  ([1383a45](https://github.com/seanthimons/ComptoxR/tree/1383a450eca1fbe84fc5182dbf1006f5cc14aebf))
+- adopt 0.1.56, add –prune, drop stale ownership records
+  ([08cd96d](https://github.com/seanthimons/ComptoxR/tree/08cd96db8c9975183bdf55baacae02c43f38e9af))
+- adopt 0.1.55, drop stdizer overlays, defer resolver getsimilaritylist
+  ([9e5a297](https://github.com/seanthimons/ComptoxR/tree/9e5a297a36bced828c9153fa779095fe45a8049b))
+- adopt 0.1.54 and opt chet and services out of include lists
+  ([0f54d16](https://github.com/seanthimons/ComptoxR/tree/0f54d1614bcca84e9ec331add3ad6e46541913bc))
+- adopt released 0.1.52
+  ([bd7149b](https://github.com/seanthimons/ComptoxR/tree/bd7149bb5179ce73d4fdd66f1fe641402d32f8c1))
+- refresh adoption provenance
+  ([a812abf](https://github.com/seanthimons/ComptoxR/tree/a812abfb54b80a86048f6b78f077ae85103d1431))
+- pin specmill v0.1.37 and retire reviewed ownership
+  ([beffc07](https://github.com/seanthimons/ComptoxR/tree/beffc072d035bcb241cce397671c3082af8ceaeb))
+- pin specmill v0.1.33 and verify final batch policies
+  ([e500d1c](https://github.com/seanthimons/ComptoxR/tree/e500d1c4443a4b02a591c071001049303469dd1c))
+- pin released line runtime and retain bulk failure-policy hold
+  ([c5e58ec](https://github.com/seanthimons/ComptoxR/tree/c5e58ecfd87256047105091da9bafbd11a55ccb7))
+- regenerate validators with released Specmill whitespace fix
+  ([f7cf844](https://github.com/seanthimons/ComptoxR/tree/f7cf84465e89f5d62da795de0c6774d086064298))
+- send Specmill gaps upstream and compute coverage with Specmill
+  ([8fa2fb2](https://github.com/seanthimons/ComptoxR/tree/8fa2fb2d146c618030abcae6836c94e8626aa168))
+- refresh rebuild inventory after stable-batch wave
+  ([840e9ee](https://github.com/seanthimons/ComptoxR/tree/840e9ee2b9dbf3a2456272327bb5311463464685))
+- refresh rebuild inventory after hazard-pilot wave
+  ([8842f71](https://github.com/seanthimons/ComptoxR/tree/8842f71c15609c4717843d519cdc8c1e4408009e))
+
+Full set of changes:
+[`v3.0.0...v4.0.0`](https://github.com/seanthimons/ComptoxR/compare/v3.0.0...v4.0.0)
+
 ## v3.0.0 (2026-09-08)
 
 #### Breaking changes
@@ -220,6 +625,11 @@
 - restrict public APIs to production and extract development tooling
   (#307)
   ([35e0d0c](https://github.com/seanthimons/ComptoxR/tree/35e0d0c952429a9bf2ae24ff9097e5df985ccd85))
+
+#### Docs
+
+- update NEWS.md for v3.0.0 \[skip ci\]
+  ([e2de0aa](https://github.com/seanthimons/ComptoxR/tree/e2de0aa9a39380990bbda446838bf888448469ac))
 
 #### Other changes
 
