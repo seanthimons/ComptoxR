@@ -7,17 +7,17 @@
 chemi_chet_chemicals_chemset(setid = NULL)
 }
 \arguments{
-\item{setid}{Optional parameter}
+\item{setid}{setid}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_chemicals_chemset(setid = "DTXSID7020182")
+chemi_chet_chemicals_chemset()
 }
 }
 \section{API stage}{

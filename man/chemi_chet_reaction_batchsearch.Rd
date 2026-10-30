@@ -12,14 +12,14 @@ chemi_chet_reaction_batchsearch(dtxsids, search_level)
 \item{search_level}{Required parameter. Options: chemical, reaction}
 }
 \value{
-Returns a list with result object
+A list of decoded response records.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_batchsearch(dtxsids = "DTXSID1024122")
+chemi_chet_reaction_batchsearch(dtxsids = "DTXSID7020182", search_level = "chemical")
 }
 }
 \section{API stage}{

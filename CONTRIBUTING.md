@@ -28,31 +28,26 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
-Install the reviewed development toolkit before running schema commands:
-
-```r
-source("dev/install_toolkit.R")
-install_toolkit()
-```
-
-The archive URL and SHA-256 are pinned in `dev/toolkit-lock.json`. The toolkit
-is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
-version with this repository's `air.toml`. Public generation uses approved production
-schemas only. Keep other schemas and generated clients outside this checkout.
-Regenerate a promoted operation from its approved production schema.
+Most wrappers are generated. Never hand-edit a generated `R/` file; change
+`apis/*.yml`, `specmill.yml`, a hook or a callback and regenerate.
+[Building ComptoxR from schemas](vignettes/articles/building-from-schemas.Rmd)
+explains the whole pipeline. The short version, with the pinned toolkit
+installed (`Rscript dev/install_specmill.R`) and Air 0.11.0 on the path:
 
 ```bash
-Rscript dev/generate_stubs.R --rebuild=ct --rebuild=chemi --rebuild=epi
-Rscript dev/generate_tests.R --generate
-Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+export R_LIBS="$PWD/dev/specmill-pilot/artifacts/toolkit-library/$(Rscript -e 'cat(jsonlite::read_json("dev/specmill-lock.json")$version)')"
+Rscript dev/generate_specmill.R --apply
+Rscript -e 'devtools::document()'
+Rscript dev/generate_specmill.R --apply
+Rscript dev/generate_specmill.R --check
 Rscript dev/generate_tests.R --check
 Rscript dev/check_hook_config.R
 Rscript dev/check_public_api.R
 ```
 
-Generation validates isolated output before it changes owned files. Manual
-files and runtime hooks stay in this repository. To roll back the toolkit,
-restore its previous pin and the matching generated output together.
+Any edit under `R/`, `schema/`, the hooks or the callbacks changes
+`.specmill/manifest.json`; commit the refreshed manifest, or the
+**Specmill Maintenance** check fails.
 
 Run the targeted checks for what you changed:
 
@@ -61,8 +56,8 @@ Run the targeted checks for what you changed:
 devtools::document()
 
 # Targeted tests
-testthat::test_file("tests/testthat/test-generic_request.R")
-devtools::test(filter = "generic_request")
+testthat::test_file("tests/testthat/test-ct_similar.R")
+devtools::test(filter = "ct_similar")
 ```
 
 For R code, format and lint:
@@ -81,10 +76,11 @@ Rscript dev/cran_readiness.R
 
 ## Pull requests
 
-Open PRs against `main` (directly, or via `integration` first for staged work).
-The full check suite — including the blocking **CRAN Readiness** gate — runs on
-PRs targeting `main`. A green PR means the package is CRAN-clean. Never commit
-directly to `main`.
+Open PRs against `integration`. **Specmill Maintenance** runs on every PR,
+and **CRAN Readiness** on every ready-for-review PR that touches code; both
+must be green. `integration` reaches `main`
+through its own PR, which runs the full check suite. Never commit directly to
+`main` or `integration`.
 
 ## Releases and versioning
 

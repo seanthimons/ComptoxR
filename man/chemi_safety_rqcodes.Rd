@@ -2,18 +2,21 @@
 % Please edit documentation in R/chemi_safety_rqcodes.R
 \name{chemi_safety_rqcodes}
 \alias{chemi_safety_rqcodes}
-\title{Safety Rqcodes}
+\title{Safety RQ codes}
 \usage{
-chemi_safety_rqcodes()
+chemi_safety_rqcodes(query = NULL)
+}
+\arguments{
+\item{query}{Character vector of DTXSIDs, resolved before requesting RQ codes.}
 }
 \value{
-Returns a tibble with results (array of objects)
+A tibble of available RQ codes with numeric rq_lbs and rq_kgs, or NULL when none are available.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{
-chemi_safety_rqcodes()
+chemi_safety_rqcodes(query = "DTXSID0020153")
 }
 }

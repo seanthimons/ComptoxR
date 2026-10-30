@@ -35,17 +35,11 @@ probe_api_function <- function(function_name, ...) {
     cli::cli_abort("{.arg function_name} must name an exported {.code chemi_*} or {.code ct_*} wrapper.")
   }
 
-  if (function_name %in% c("chemi_server", "ct_api_key", "ct_classify")) {
+  if (function_name %in% c("chemi_server", "ct_classify")) {
     cli::cli_abort("{.val {function_name}} is not an API wrapper.")
   }
 
   wrapper <- getExportedValue("ComptoxR", function_name)
-  legacy_direct <- function_name %in%
-    c(
-      "chemi_functional_use",
-      "chemi_predict",
-      "chemi_safety_section"
-    )
   server_ids <- 1L
   envvar <- if (family == 'chemi') 'chemi_burl' else 'ctx_burl'
   configured_urls <- .endpoint_target(envvar)
@@ -93,11 +87,10 @@ probe_api_function <- function(function_name, ...) {
           NULL
         }
       )
-      if (legacy_direct) {
-        observed_urls <<- character()
-        status_codes <<- integer()
+      request_errors <- attr(result, "failed", exact = TRUE)
+      if (is.null(call_error) && length(request_errors) && all(status_codes == 200L)) {
+        call_error <- paste(unlist(request_errors, use.names = FALSE), collapse = "; ")
       }
-
       nonempty <- if (is.data.frame(result)) nrow(result) > 0L else length(result) > 0L
       configured_base <- sub("/+$", "", configured_url)
       urls_match <- length(observed_urls) == length(status_codes) &&

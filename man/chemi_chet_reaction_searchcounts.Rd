@@ -4,22 +4,22 @@
 \alias{chemi_chet_reaction_searchcounts}
 \title{Count search results}
 \usage{
-chemi_chet_reaction_searchcounts(search_input, search_type = NULL)
+chemi_chet_reaction_searchcounts(search_input, search_type)
 }
 \arguments{
-\item{search_input}{Primary query parameter. Type: string}
+\item{search_input}{Value to count matches for, such as a library id or a reaction type name. Values are case-sensitive. Accepts a vector: one request is sent per element and the results are combined.}
 
-\item{search_type}{Optional parameter. Type: string}
+\item{search_type}{Field to match search_input against: one of "lib_id", "reaction_process", "reaction_type", "reaction_scheme" or "reaction_phase".}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_searchcounts(search_input = "DTXSID7020182")
+chemi_chet_reaction_searchcounts(search_input = "Hydrolysis", search_type = "reaction_type")
 }
 }
 \section{API stage}{

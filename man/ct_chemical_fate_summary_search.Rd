@@ -7,12 +7,12 @@
 ct_chemical_fate_summary_search(dtxsid, propName)
 }
 \arguments{
-\item{dtxsid}{Required parameter}
+\item{dtxsid}{dtxsid}
 
-\item{propName}{Required parameter}
+\item{propName}{propName}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

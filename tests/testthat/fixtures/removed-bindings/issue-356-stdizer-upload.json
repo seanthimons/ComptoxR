@@ -1,0 +1,9 @@
+[
+  {
+    "service": "legacy",
+    "operation": "POST /api/stdizer",
+    "name": "chemi_stdizer_bulk",
+    "file": "R/chemi_stdizer_bulk.R",
+    "implementation": "legacy"
+  }
+]

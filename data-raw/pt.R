@@ -122,7 +122,7 @@ element_list <- ct_chemical_list_search_by_name(
   extract_dtxsids = TRUE
 ) %>%
   pluck(., 1) %>%
-  ct_chemical_detail_search_bulk(query = ., projection = 'chemicaldetailall') %>%
+  ct_chemical_detail_search_by_dtxsid_bulk(query = ., projection = 'chemicaldetailall') %>%
   select(dtxsid, inchikey, inchiString, smiles) %>%
   mutate(
     molFormula = str_remove_all(inchiString, pattern = "InChI=1S/") %>%

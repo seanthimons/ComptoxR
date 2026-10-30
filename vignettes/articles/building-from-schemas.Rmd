@@ -1,0 +1,256 @@
+---
+title: "Building ComptoxR from schemas"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+Most of ComptoxR's exported wrappers are generated. The
+[`specmill`](https://github.com/seanthimons/specmill) toolkit reads the saved
+production OpenAPI schemas and a set of YAML files that say which operations
+to wrap and how, then writes one `R/<wrapper>.R` file per operation, its
+roxygen documentation, and its offline contract tests. This article walks
+through that pipeline end to end for maintainers. Branches, CI and releases are
+covered in [Development lifecycle](development-lifecycle.html); test lanes are
+in
+[`dev/TESTING_GUIDE.md`](https://github.com/seanthimons/ComptoxR/blob/main/dev/TESTING_GUIDE.md);
+every maintainer script is indexed in
+[`dev/README.md`](https://github.com/seanthimons/ComptoxR/blob/main/dev/README.md).
+
+```
+schema/*_prod.json  ─┐
+specmill.yml         ├─>  generate_specmill.R --apply  ─>  R/<wrapper>.R
+apis/<service>.yml   │                                     tests/testthat/
+inst/hook_config.yml │                                     .specmill/manifest.json
+dev/*_callbacks.R   ─┘                 devtools::document()  ─>  man/, NAMESPACE
+```
+
+Run every command below from the package root.
+
+## 1. Install the pinned toolkit
+
+Specmill is a development dependency only; installed ComptoxR does not need it.
+The exact revision is pinned in `dev/specmill-lock.json` (version, source
+commit and source-archive SHA-256). `install_specmill()` archives that commit
+from a local Specmill checkout, checks the archive hash, and installs it into
+the ignored `dev/specmill-pilot/artifacts/toolkit-library/<version>/`.
+
+```bash
+git clone https://github.com/seanthimons/specmill ../specmill  # once
+Rscript dev/install_specmill.R   # or set SPECMILL_SOURCE_REPO to another checkout
+```
+
+Point `R_LIBS` at the versioned library so every script, and every R process
+it starts, finds the pinned toolkit:
+
+```bash
+export R_LIBS="$PWD/dev/specmill-pilot/artifacts/toolkit-library/$(Rscript -e 'cat(jsonlite::read_json("dev/specmill-lock.json")$version)')"
+```
+
+Also install [Air](https://posit-dev.github.io/air/) 0.11.0 (the formatter
+pinned in `specmill.yml`; generated code is formatted with it and CI compares
+byte for byte) and roxygen2 8.1.x (`Config/roxygen2/version` in
+`DESCRIPTION`; older roxygen2 rewrites all of `man/`).
+
+## 2. Refresh the production schemas
+
+Saved schemas live in `schema/` as `<service>_prod.json`. Three functions
+download them from the approved production servers:
+
+```r
+pkgload::load_all()
+ct_schema()     # CompTox Dashboard: ctx_chemical, ctx_hazard, ctx_bioactivity, ctx_exposure
+chemi_schema()  # Cheminformatics services
+epi_schema()    # EPI Suite (drops the volatile x-epi-health block before saving)
+```
+
+You rarely need to run these by hand. The **Schema Update Check** workflow
+runs them on a schedule, regenerates everything below, and opens an
+`automated/schema-update` PR when a schema changed (see
+[Scheduled automation](development-lifecycle.html#scheduled-automation)).
+Schema files are hashed into `.specmill/manifest.json`, so a changed schema
+must always be followed by `--apply`.
+
+PubChem has no production schema. Its wrappers come from the first-party
+overlay `schema/pubchem-reviewed.json`, which is edited by hand.
+
+## 3. Say what to wrap: `specmill.yml` and `apis/`
+
+`specmill.yml` holds project-wide settings: the request helper
+(`.ct_request`), the CTX credential (`ctx_api_key`), the formatter, the list of
+service files, and the callback files.
+
+Selection is **opt-out**. Every GET and POST operation in a listed schema is
+generated unless a `selection.exclude` rule in `specmill.yml` matches it, or
+the group narrows itself with `selection.include` (as `pubchem` and
+`chemi_classyfire` do). Each
+rule is a path regex, optionally prefixed with a method (`'POST ^/api/stdizer/?$'`)
+to exclude that method only. Comment each rule with the reason or issue
+number.
+
+Each schema has one file, `apis/<service>.yml`:
+
+- `schemas.files` names the saved schema.
+- `defaults` holds service-wide settings, such as CTX batching
+  (`max_items: 100`, `split: true`, `on_error: drop`).
+- `groups.<service>.names` maps every route to its wrapper name. Names follow
+  the path in snake_case with a `ct_`, `chemi_` or `epi_` prefix; a POST that
+  shares a GET's path gets `_bulk`. Any departure from that default carries a
+  `# why` comment.
+- `groups.<service>.operations` holds per-operation settings: server
+  resolver, response policy, input forms, batching, pagination, docs and
+  request arguments. Each entry has a `# why:` line saying what behaviour it
+  keeps.
+
+[`dev/specmill-333/SELECTION.md`](https://github.com/seanthimons/ComptoxR/blob/main/dev/specmill-333/SELECTION.md)
+records the naming rules, the non-default groups, and every deferral in
+detail.
+
+### Hooks and callbacks
+
+Behaviour that YAML can't express lives in ComptoxR, not in generated files:
+
+- **Runtime hooks** (`R/hooks_*.R`), wired to wrappers by name in
+  `inst/hook_config.yml`. `Rscript dev/check_hook_config.R` validates that
+  file.
+- **Generation callbacks** (`dev/specmill_callbacks.R`,
+  `dev/specmill_pubchem_callbacks.R`), named by `prepare:` and similar keys in
+  the API files.
+- **The native request helper** `R/z_specmill_request.R`, emitted from the
+  pinned toolkit by `dev/specmill-342/emit.R` and checked in CI by
+  `dev/specmill-342/verify.R`.
+
+## 4. Generate
+
+```bash
+Rscript dev/generate_specmill.R --plan    # preview; changes nothing
+Rscript dev/generate_specmill.R --apply   # write wrappers, tests and manifest
+Rscript -e 'devtools::document()'        # man/ and NAMESPACE
+Rscript dev/generate_specmill.R --apply   # again, so the manifest records man/ and NAMESPACE
+Rscript dev/generate_specmill.R --check   # must exit 0
+```
+
+Read the `--plan` output before applying. Generation refuses to run while the
+plan reports signature **drift** (a wrapper's arguments would change) or an
+unsupported operation. Review the change; deleting the old `R/` file clears
+drift for a deliberate rename.
+
+`.specmill/manifest.json` records a hash of every owned output **and every
+package input**, including all of `R/`, `schema/`, the hooks and the
+callbacks. Any edit to those files, even a hand-written utility, makes the
+manifest stale, and the **Specmill Maintenance** check fails with "Generated
+output is stale or protected". Fix it by running `--apply` and committing the
+manifest. That check also regenerates from scratch and fails on any changed or
+new file, so never hand-edit a generated wrapper: change the YAML, hook or
+callback and regenerate.
+
+Operation lifecycle flags:
+
+```bash
+# Placeholders: substitute a real service id, method and path.
+# Defer an operation whose production schema is broken (reason is recorded)
+Rscript dev/generate_specmill.R --apply --enroll="<service> <METHOD> <path>=<reason>"
+# Lift a deferral
+Rscript dev/generate_specmill.R --apply --clear="<service> <METHOD> <path>"
+# Remove the generated output of a retired operation
+Rscript dev/generate_specmill.R --apply --prune="<service> <METHOD> <path>"
+```
+
+Deferred operations are retried automatically when their schema fingerprint
+changes.
+
+## 5. Tests
+
+Specmill writes offline contract tests for the wrappers it generates. Their
+fixed request contracts live in
+`tests/testthat/fixtures/specmill-contracts.rds`. `dev/generate_tests.R` is
+the one remaining legacy generator; it covers exported wrappers whose tests
+Specmill doesn't write, from `test_args:` in `inst/hook_config.yml`.
+
+```bash
+Rscript dev/detect_test_gaps.R          # wrappers without tests
+Rscript dev/generate_tests.R --generate
+Rscript dev/generate_tests.R --check
+Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
+```
+
+The readiness audit regenerates `dev/reports/unit_test_readiness_audit.json`;
+commit it when it changes. `dev/export_test_exclusions.json` lists exports
+deliberately without tests, and `dev/vcr_test_classification.json` classifies
+any test that uses a cassette. Live recording is opt-in and needs a real
+`ctx_api_key`; see `dev/TESTING_GUIDE.md`.
+
+## 6. Check before you push
+
+```bash
+Rscript dev/generate_specmill.R --check
+Rscript dev/check_hook_config.R
+Rscript dev/check_public_api.R   # public code and docs use production APIs only
+Rscript dev/cran_readiness.R     # CRAN-safe lane: no key, no network, no databases
+```
+
+`dev/update_coverage.R --apply` refreshes the schema coverage badges from
+`dev/coverage.yml` when the set of wrapped operations changes.
+
+## What stays hand-written
+
+- **Client utilities**: the `*_server()` selectors, `run_setup()`,
+  `run_verbose()`, `run_debug()`, `batch_limit()` and the `util_*` helpers.
+- **Local database clients**: the `dss_*`, `eco_*` and `toxval_*` functions
+  and their Plumber servers.
+- **`ct_related()` and `ct_similar()`**: they call dashboard routes that no
+  production schema describes, and call `.ct_request()` directly.
+- **Deferred operations**: ten operations, listed in `SELECTION.md`, have no
+  wrapper until their production schemas are fixed.
+
+If Specmill can't express a feature, or can't reproduce an existing wrapper's
+behaviour, **fix it upstream**. Open an issue in
+[seanthimons/specmill](https://github.com/seanthimons/specmill/issues) (or
+comment on the open Specmill PR that is meant to fix it) with the wrapper, the
+operation (method, path and schema file), what the old wrapper did versus what
+Specmill produces, and a minimal reproduction. Leave the wrapper on its
+current implementation until the fix is released and the pin is updated. Do
+not work around a gap with a hand-written wrapper or a patched helper.
+
+## Updating the Specmill pin
+
+1. Edit `dev/specmill-lock.json`: `version`, `source_commit`, and
+   `source_archive_sha256` (from `git archive --format=tar <commit> | sha256sum`).
+2. `Rscript dev/install_specmill.R` and re-export `R_LIBS` for the new
+   version.
+3. Re-emit the native helper. In R, `source("dev/specmill-342/emit.R")` and
+   run `emit_issue342(mode = "check")`. If it fails, review the new helper
+   and run `emit_issue342(mode = "apply")`. When the helper code itself
+   changed, also pass
+   `adopt = <SHA-256 of the current R/z_specmill_request.R>`. This rewrites `R/z_specmill_request.R` and
+   `.specmill/helpers/.ct_request.json`.
+4. Record the adoption in `dev/specmill-342/adoption.json`: append the
+   existing `current_adoption` to `adoption_history`, then set a new
+   `current_adoption` whose `toolkit` is an exact copy of
+   `dev/specmill-lock.json` and whose `adopted_sha256` holds the new hashes of
+   `R/z_specmill_request.R` and `dev/specmill-342/emit.R`. Add a short
+   `review` note.
+5. `Rscript dev/specmill-342/verify.R` must pass; it checks both the lock
+   match and the helper hash.
+6. Run steps 4 to 6 above. Expect every generated file's header and the
+   manifest to change.
+7. Commit the lock, `adoption.json`, the helper and its
+   `.specmill/helpers/` record, the manifest and the regenerated output
+   together. To roll back, restore the previous pin and its matching output
+   together.
+
+## A separate local client
+
+Development or staging schemas, and clients generated from them, stay outside
+every public ComptoxR checkout. To build one, source
+`dev/generate_local_client.R` and call `generate_local_client()` with explicit
+input and output roots, a schema file, a base URL, and a distinct package
+name; `dev/verify_local_client.R` checks the result. See
+[`dev/LOCAL_CLIENTS.md`](https://github.com/seanthimons/ComptoxR/blob/main/dev/LOCAL_CLIENTS.md).
+To promote an operation into ComptoxR, regenerate it here from its approved
+production schema; never copy a local client's files into the package.

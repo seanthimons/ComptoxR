@@ -23,6 +23,9 @@ Use `--output <temp-path-outside-repo>` when validating documentation-only chang
 
 ## Quick Commands
 
+Install the pinned toolkit and export its library as `R_LIBS` using the
+[development setup](../CONTRIBUTING.md#before-you-open-a-pr) before these commands.
+
 ```bash
 # Regenerate offline generated wrapper contract tests
 Rscript dev/generate_tests.R --generate
@@ -35,8 +38,8 @@ Rscript dev/unit_test_readiness_audit.R --check-exports
 Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
 
 # Run targeted tests
-Rscript -e "testthat::test_file('tests/testthat/test-generic_request.R')"
-Rscript -e "devtools::test(filter = 'generic_request')"
+Rscript -e "testthat::test_file('tests/testthat/test-chemi_search.R')"
+Rscript -e "devtools::test(filter = 'chemi_search')"
 
 # Run the CRAN-safe readiness lane when the change has broad impact
 Rscript dev/cran_readiness.R
@@ -70,7 +73,7 @@ directly; they must not call endpoint slugs or backticked generated names.
 
 Minimum generated-contract assertions:
 
-- the wrapper crosses the expected shared helper boundary, such as `generic_request()` or service-specific helpers
+- the wrapper crosses the expected shared helper boundary, usually `.ct_request()`
 - the expected endpoint or path and HTTP method are passed to the helper
 - query and body parameters are mapped from wrapper arguments, including omitted or defaulted parameters when relevant
 - relevant options, server selection, and API-key behavior are passed through or intentionally absent

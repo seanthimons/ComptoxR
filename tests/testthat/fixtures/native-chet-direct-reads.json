@@ -1,0 +1,21 @@
+{
+  "chemi_chet_metadata": {
+    "path": "/api/chet/metadata",
+    "args": {}
+  },
+  "chemi_chet_version": {
+    "path": "/api/chet/version",
+    "args": {}
+  },
+  "chemi_chet_chemicals_chemtemp": {
+    "path": "/api/chet/chemicals/chemtemp/type%2Fone/value%20%2F%3F%23%25",
+    "args": {
+      "type": "type/one",
+      "value": "value /?#%"
+    }
+  },
+  "chemi_chet_curators_me": {
+    "path": "/api/chet/curators/me",
+    "args": {}
+  }
+}

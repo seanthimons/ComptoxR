@@ -7,19 +7,19 @@
 chemi_toxprints_toxprints(category = NULL, label = NULL)
 }
 \arguments{
-\item{category}{Optional parameter}
+\item{category}{category}
 
-\item{label}{Optional parameter}
+\item{label}{label}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_toxprints_toxprints(category = "DTXSID7020182")
+chemi_toxprints_toxprints()
 }
 }
 \section{API stage}{

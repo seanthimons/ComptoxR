@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_next_level_classification.R
 \name{chemi_amos_next_level_classification}
 \alias{chemi_amos_next_level_classification}
-\title{Returns a list of categories for the specified level of ClassyFire classification, given the higher levels of classification.}
+\title{chemi amos next level classification}
 \usage{
 chemi_amos_next_level_classification(
   kingdom = NULL,
@@ -18,14 +18,14 @@ chemi_amos_next_level_classification(
 \item{superklass}{Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_next_level_classification(kingdom = "DTXSID1024122")
+chemi_amos_next_level_classification(kingdom = "Organic compounds", klass = "Organic metal salts", superklass = "Organic salts")
 }
 }
 \section{API stage}{

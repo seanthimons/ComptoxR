@@ -1,4 +1,4 @@
-wrapmaint::bind_tools("ast", environment())
+specmill::bind_tools("ast", environment())
 # Metadata extraction from exported wrapper functions.
 
 tg_read_hook_config <- function(root = ".") {
@@ -41,6 +41,7 @@ tg_metadata_for_wrapper <- function(record, helper_names = tg_config$helper_name
     helper_call = primary_call,
     helper_args = tg_named_call_args(primary_call),
     formals = tg_formal_records(record$expr),
+    test_args = fn_hook_config$test_args,
     call_names = record$call_names,
     resolver_helpers = resolver_helpers,
     uses_resolve_query_hook = uses_resolve_query_hook,
@@ -51,7 +52,14 @@ tg_metadata_for_wrapper <- function(record, helper_names = tg_config$helper_name
 tg_collect_wrapper_metadata <- function(root = ".") {
   wrappers <- tg_inventory_wrappers(root)
   hook_config <- tg_read_hook_config(root)
-  metadata <- lapply(wrappers, tg_metadata_for_wrapper, hook_config = hook_config)
+  # Fixed contracts already own these wrappers; their generated validators need no legacy scan.
+  suites <- tg_bespoke_contracts(root)
+  metadata <- lapply(wrappers, function(record) {
+    if (record$function_name %in% names(suites)) {
+      return(list(function_name = record$function_name))
+    }
+    tg_metadata_for_wrapper(record, hook_config = hook_config)
+  })
   metadata <- metadata[!vapply(metadata, is.null, logical(1))]
   metadata[sort(names(metadata))]
 }
@@ -60,6 +68,13 @@ tg_bespoke_contracts <- function(root = ".") {
   config <- tg_read_hook_config(root)
   suites <- lapply(config, `[[`, "bespoke_test")
   suites <- suites[!vapply(suites, is.null, logical(1))]
+  # Fixed specmill contracts replace legacy metadata-derived tests for the pilot.
+  manifest <- file.path(root, ".specmill/manifest.json")
+  if (file.exists(manifest)) {
+    paths <- grep("^tests/testthat/test-contract-.*[.]R$", names(jsonlite::read_json(manifest)$files), value = TRUE)
+    names(paths) <- sub("[.]R$", "", sub("^test-contract-", "", basename(paths)))
+    suites <- c(suites, as.list(paths[setdiff(names(paths), names(suites))]))
+  }
   vapply(suites, as.character, character(1))
 }
 

@@ -64,3 +64,13 @@ webtest_contract_prediction <- function(
     )
   )
 }
+
+# Frozen baseline facades were written against the removed generic_* helpers;
+# point their transport calls at `.ct_request` so tests can mock one binding.
+eval_baseline_facade <- function(expr) {
+  expr <- do.call(substitute, list(expr, list(
+    generic_request = quote(.ct_request),
+    generic_chemi_request = quote(.ct_request)
+  )))
+  eval(expr, asNamespace("ComptoxR"))
+}

@@ -3,7 +3,7 @@
 \docType{data}
 \name{genra_engine}
 \alias{genra_engine}
-\title{Table of GenRA function endpoints.}
+\title{Table of GenRA function endpoints}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 5 rows and 4 columns.
 }

@@ -51,7 +51,6 @@ ctx_api_key=YOUR_KEY_HERE
 Save the file and restart R. Then check the setup:
 
 ```{r}
-ct_api_key()
 run_setup()
 ```
 
@@ -63,7 +62,7 @@ Many functions accept a DTXSID, CAS number, chemical name, or another chemical
 identifier. For example:
 
 ```{r}
-benzene <- ct_chemical_detail_search("DTXSID7020182")
+benzene <- ct_chemical_detail_search_by_dtxsid("DTXSID7020182")
 dplyr::glimpse(benzene)
 ```
 
@@ -71,7 +70,7 @@ The DTXSID is the stable join key for the workflows in this series. For several
 identifiers, use the bulk function:
 
 ```{r}
-chemicals <- ct_chemical_detail_search_bulk(
+chemicals <- ct_chemical_detail_search_by_dtxsid_bulk(
   query = c("DTXSID7020182", "DTXSID9020243")
 )
 dplyr::glimpse(chemicals)
@@ -84,8 +83,8 @@ columns and rows:
 head(chemicals)
 ```
 
-Use `ct_chemical_detail_search()` when you need one chemical record. Use
-`ct_chemical_detail_search_bulk()` for a vector of identifiers.
+Use `ct_chemical_detail_search_by_dtxsid()` when you need one chemical record. Use
+`ct_chemical_detail_search_by_dtxsid_bulk()` for a vector of identifiers.
 
 Continue with [Building a CCD Chemical Profile](chemical-search.html) to add
 properties, fate, hazard, exposure, and bioactivity evidence.

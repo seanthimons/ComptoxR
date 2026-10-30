@@ -79,7 +79,7 @@ AMOS method discovery returns analytical method records. It is not a chemical
 lookup.
 
 ```{r}
-methods <- chemi_amos_method_list()
+methods <- chemi_amos_method_keyset_pagination(limit = 20, all_pages = FALSE)
 glimpse(methods)
 head(methods)
 ```
@@ -125,16 +125,6 @@ class_members <- chemi_amos_substances_for_classification(
   klass = classification$klass[[1]],
   subklass = classification$subklass[[1]]
 )
-```
-
-Request ClassyFire fields for several DTXSIDs with the AMOS batch workflow.
-
-```{r}
-amos_batch <- chemi_amos_batch(
-  dtxsids = c("DTXSID7020182", "DTXSID0020319", "DTXSID9020243"),
-  include_classyfire = TRUE
-)
-glimpse(amos_batch)
 ```
 
 ClassyFire describes chemical structure classes. ChemFuncT describes

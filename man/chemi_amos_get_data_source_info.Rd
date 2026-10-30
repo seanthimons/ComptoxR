@@ -2,12 +2,12 @@
 % Please edit documentation in R/chemi_amos_get_data_source_info.R
 \name{chemi_amos_get_data_source_info}
 \alias{chemi_amos_get_data_source_info}
-\title{Returns a list of major data sources in AMOS with some supplemental information.}
+\title{Returns a list of major data sources in AMOS with some supplemental information}
 \usage{
 chemi_amos_get_data_source_info()
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

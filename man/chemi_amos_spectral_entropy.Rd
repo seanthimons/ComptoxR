@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_spectral_entropy.R
 \name{chemi_amos_spectral_entropy}
 \alias{chemi_amos_spectral_entropy}
-\title{Calculates the spectral entropy for a single spectrum.}
+\title{chemi amos spectral entropy}
 \usage{
 chemi_amos_spectral_entropy(spectrum = NULL)
 }
@@ -10,14 +10,14 @@ chemi_amos_spectral_entropy(spectrum = NULL)
 \item{spectrum}{Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read or calculation operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_spectral_entropy(spectrum = "DTXSID1024122")
+chemi_amos_spectral_entropy(spectrum = list(list(10.5, 20L), list(20L, 100L), list(50L, 1L)))
 }
 }
 \section{API stage}{

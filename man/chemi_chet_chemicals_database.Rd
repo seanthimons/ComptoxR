@@ -5,42 +5,42 @@
 \title{Search chemicals}
 \usage{
 chemi_chet_chemicals_database(
-  page = 0,
+  page = 1L,
   size = NULL,
   query = NULL,
   exact_search = NULL,
   lib_name = NULL,
   only_in_reactions = NULL,
   all_pages = TRUE,
-  max_pages = 100
+  max_pages = 100L
 )
 }
 \arguments{
-\item{page}{Optional parameter}
+\item{page}{page}
 
-\item{size}{Optional parameter}
+\item{size}{size}
 
-\item{query}{Optional parameter}
+\item{query}{query}
 
-\item{exact_search}{Optional parameter}
+\item{exact_search}{exact_search}
 
-\item{lib_name}{Optional parameter}
+\item{lib_name}{lib_name}
 
-\item{only_in_reactions}{Optional parameter}
+\item{only_in_reactions}{only_in_reactions}
 
-\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+\item{all_pages}{TRUE (the default) requests page after page, starting at page, until a page comes back empty or the client says it was the last or max_pages is reached, and returns the pages combined. FALSE requests only the page given in page.}
 
-\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
+\item{max_pages}{Maximum number of pages requested when all_pages is TRUE. Reaching it stops paging with a warning.}
 }
 \value{
-Returns a list with result object
+A list of records.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_chemicals_database(page = "DTXSID7020182")
+chemi_chet_chemicals_database(page = 1L, all_pages = FALSE, max_pages = 2L)
 }
 }
 \section{API stage}{

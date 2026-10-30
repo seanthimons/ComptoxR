@@ -1,0 +1,16 @@
+[
+  {
+    "service": "legacy",
+    "operation": "POST /api/amos/analytical_qc_batch_search",
+    "name": "chemi_amos_analytical_qc_batch",
+    "file": "R/chemi_amos_analytical_qc_batch.R",
+    "implementation": "legacy"
+  },
+  {
+    "service": "legacy",
+    "operation": "POST /api/amos/batch_search",
+    "name": "chemi_amos_batch",
+    "file": "R/chemi_amos_batch.R",
+    "implementation": "legacy"
+  }
+]

@@ -1,0 +1,540 @@
+# chemi_stdizer: every operation in schema/chemi_stdizer_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_stdizer
+schemas:
+  files:
+  - schema/chemi_stdizer_prod.json
+groups:
+  chemi_stdizer:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/stdizer: chemi_stdizer
+      GET /api/stdizer/metadata: chemi_stdizer_metadata
+      GET /api/stdizer/operations: chemi_stdizer_operations
+      GET /api/stdizer/protocols: chemi_stdizer_protocols
+      GET /api/stdizer/protocols/{id}: chemi_stdizer_protocols_by_id  # why: path name collides with a sibling route; disambiguated by its path parameter
+      GET /api/stdizer/protocols/{id}/changes: chemi_stdizer_protocols_changes
+      GET /api/stdizer/protocols/{id}/issues: chemi_stdizer_protocols_issues
+      GET /api/stdizer/protocols/check: chemi_stdizer_protocols_check
+      GET /api/stdizer/render: chemi_stdizer_render
+      GET /api/stdizer/version: chemi_stdizer_version
+      GET /api/stdizer/workflows: chemi_stdizer_workflows
+      POST /api/stdizer/chemicals: chemi_stdizer_chemicals
+      POST /api/stdizer/protocol/export: chemi_stdizer_protocol_export
+      POST /api/stdizer/protocols/{id}: chemi_stdizer_protocols_by_id_bulk  # why: path name collides with a sibling route; disambiguated by its path parameter
+      POST /api/stdizer/protocols/{id}/export: chemi_stdizer_protocols_export
+      POST /api/stdizer/records: chemi_stdizer_records
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples; request arguments pin the released wire call
+      GET /api/stdizer:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Stdizer
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - workflow: qsar-ready
+              smiles: CCO
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/stdizer
+            path_params:
+              value: {}
+            query:
+              object:
+                workflow:
+                  from:
+                    - params
+                    - workflow
+                smiles:
+                  from:
+                    - params
+                    - smiles
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              value: .ct_static_list
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/stdizer/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve stdizer metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/stdizer/operations:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Stdizer Operations
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/stdizer/protocols:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer protocolsGet
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; accepts the released identifier/query input forms; request arguments pin the released wire call; drops schema parameters the released wrapper never exposed; adds released convenience arguments; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_stdizer_protocols_by_id_get
+      GET /api/stdizer/protocols/{id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Read records in a standardizer protocol
+          lifecycle: experimental
+          return: Decoded protocol metadata and its requested page of records.
+          tags:
+            apiStage: public
+          parameters:
+            id: Protocol identifier returned by chemi_stdizer_protocols().
+            page: Zero-based page index; NULL leaves the service default.
+            size: Positive page size; NULL leaves the service default.
+            sort: Character vector of sort expressions, such as c("type,asc", "id,desc").
+              Each expression is sent as its own sort query field. NULL or character() omits
+              sorting.
+            hidden: Optional boolean filter; NULL leaves the service default.
+            components: Optional boolean filter; NULL leaves the service default.
+            changed: Optional boolean filter; NULL leaves the service default.
+            failed: Optional boolean filter; NULL leaves the service default.
+            passed: Optional boolean filter; NULL leaves the service default.
+        normalize_inputs:
+          sort: .ct_protocol_sort
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/stdizer/protocols/{id}
+            path_params:
+              object:
+                id:
+                  from:
+                    - params
+                    - id
+            query:
+              object:
+                hidden:
+                  from:
+                    - params
+                    - hidden
+                components:
+                  from:
+                    - params
+                    - components
+                changed:
+                  from:
+                    - params
+                    - changed
+                failed:
+                  from:
+                    - params
+                    - failed
+                passed:
+                  from:
+                    - params
+                    - passed
+                page:
+                  from:
+                    - params
+                    - page
+                size:
+                  from:
+                    - params
+                    - size
+                sort:
+                  from:
+                    - params
+                    - sort
+            body:
+              value: ~
+            headers:
+              value: {}
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            query_serialization:
+              value:
+                sort: explode
+            body_media:
+              value: application/json
+            request_controls:
+              value:
+                preserve_errors: yes
+            parameter_serialization:
+              value:
+                - name: hidden
+                  location: query
+                  schema:
+                    type: boolean
+                  style: form
+                  explode: yes
+                  collection_format: ~
+                  required: no
+                - name: components
+                  location: query
+                  schema:
+                    type: boolean
+                  style: form
+                  explode: yes
+                  collection_format: ~
+                  required: no
+                - name: changed
+                  location: query
+                  schema:
+                    type: boolean
+                  style: form
+                  explode: yes
+                  collection_format: ~
+                  required: no
+                - name: failed
+                  location: query
+                  schema:
+                    type: boolean
+                  style: form
+                  explode: yes
+                  collection_format: ~
+                  required: no
+                - name: passed
+                  location: query
+                  schema:
+                    type: boolean
+                  style: form
+                  explode: yes
+                  collection_format: ~
+                  required: no
+        exclude_parameters:
+          - pageable
+        extra_parameters:
+          page:
+            type: integer
+            minimum: 0
+            default: ~
+          size:
+            type: integer
+            minimum: 1
+            default: ~
+          sort:
+            type: array
+            items:
+              type: string
+            default: ~
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_stdizer_protocols_by_id_changes
+      GET /api/stdizer/protocols/{id}/changes:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer protocolChangesGet
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_stdizer_protocols_by_id_issues
+      GET /api/stdizer/protocols/{id}/issues:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer protocolIssuesGet
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/stdizer/protocols/check:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer protocolCheckGet
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/stdizer/render:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer render
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/stdizer/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve stdizer version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/stdizer/workflows:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_list
+        docs:
+          title: Stdizer Workflows
+          lifecycle: experimental
+          return: Returns a list of results
+          tags:
+            apiStage: public
+          examples:
+            - {}
+      # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/stdizer/chemicals:
+        inputs:
+          query:
+            type: any
+          idType:
+            type: any
+            default: AnyId
+          full:
+            type: any
+            default: ~
+          options:
+            type: any
+            default: ~
+        private_params:
+          chemicals: ~
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/stdizer/chemicals
+            path_params:
+              value: {}
+            query:
+              object: {}
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi stdizer chemicals
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+              etc.)
+            idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default)'
+            full: Optional parameter
+            options: Standardizer options. Select a workflow explicitly, for example list(workflow
+              = "ms-ready"). The service rejects a missing workflow.
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_stdizer_protocol_export_post
+      POST /api/stdizer/protocol/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer protocolExportPost
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; accepts the released identifier/query input forms; request arguments pin the released wire call; drops schema parameters the released wrapper never exposed; adds released convenience arguments; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_stdizer_protocols_by_id_post
+      POST /api/stdizer/protocols/{id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Search records in a standardizer protocol
+          lifecycle: experimental
+          return: Decoded protocol metadata and its requested page of records.
+          tags:
+            apiStage: public
+          parameters:
+            id: Protocol identifier returned by chemi_stdizer_protocols().
+            page: Zero-based page index; NULL leaves the service default.
+            size: Positive page size; NULL leaves the service default.
+            sort: Character vector of sort expressions, such as c("type,asc", "id,desc").
+              Each expression is sent as its own sort query field. NULL or character() omits
+              sorting.
+          description: Search criteria as a named list. Use list() for an unfiltered search;
+            optional flags include hidden, components, changed, failed and passed.
+        normalize_inputs:
+          sort: .ct_protocol_sort
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/stdizer/protocols/{id}
+            path_params:
+              object:
+                id:
+                  from:
+                    - params
+                    - id
+            query:
+              object:
+                page:
+                  from:
+                    - params
+                    - page
+                size:
+                  from:
+                    - params
+                    - size
+                sort:
+                  from:
+                    - params
+                    - sort
+            body:
+              from:
+                - params
+                - body
+            headers:
+              value: {}
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            query_serialization:
+              value:
+                sort: explode
+            body_media:
+              value: application/json
+            request_controls:
+              value:
+                preserve_errors: yes
+        exclude_parameters:
+          - pageable
+        extra_parameters:
+          page:
+            type: integer
+            minimum: 0
+            default: ~
+          size:
+            type: integer
+            minimum: 1
+            default: ~
+          sort:
+            type: array
+            items:
+              type: string
+            default: ~
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_stdizer_protocols_by_id_export_post
+      POST /api/stdizer/protocols/{id}/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Standardizer protocolExportByIdPost
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; body description documents the schema request; docs keep the released title
+      POST /api/stdizer/records:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        body:
+          description: 'Named list with records (a list of records, each list(rid = <id>, chemical
+            = list(smiles = <SMILES>))), options (for example list(workflow = "qsar-ready"))
+            and optional full (TRUE or FALSE).'
+        docs:
+          title: Stdizer Records
+          lifecycle: experimental
+          return: The standardized records, one per input record.
+          examples:
+            - body:
+                options:
+                  workflow: qsar-ready
+                records:
+                  - rid: ethanol
+                    chemical:
+                      smiles: CCO
+          tags:
+            apiStage: public

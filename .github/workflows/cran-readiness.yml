@@ -2,11 +2,11 @@ name: CRAN Readiness
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
       - '.github/**'
-      - '.planning/**'
       - 'DESCRIPTION'
       - '_pkgdown.yml'
       - 'NAMESPACE'
@@ -16,7 +16,7 @@ on:
 
 jobs:
   cran-readiness:
-    if: github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     name: CRAN-safe Test Readiness
     timeout-minutes: 30
@@ -49,6 +49,9 @@ jobs:
             any::jsonlite
             any::pkgload
             any::testthat
+            any::yaml12
+            any::jsonvalidate
+            any::V8
             any::vcr
             any::withr
           needs: check
@@ -56,14 +59,35 @@ jobs:
       - name: Install pinned formatter
         uses: posit-dev/setup-air@v1
         with:
-          version: '0.9.0'
+          version: '0.11.0'
 
-      - name: Install pinned development toolkit
-        run: Rscript dev/install_toolkit.R
+      - name: Read reviewed specmill revision
+        id: specmill-pin
+        shell: Rscript {0}
+        run: |
+          pin <- jsonlite::read_json("dev/specmill-lock.json")
+          stopifnot(grepl("^[0-9a-f]{40}$", pin$source_commit))
+          cat(paste0("revision=", pin$source_commit, "\n"),
+              file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          cat(paste0("R_LIBS=", file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", pin$version), "\n"),
+              file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+
+      - name: Check out pinned specmill source
+        uses: actions/checkout@v7
+        with:
+          repository: seanthimons/specmill
+          ref: ${{ steps.specmill-pin.outputs.revision }}
+          path: dev/specmill-pilot/artifacts/toolkit-source
+          persist-credentials: false
+
+      - name: Install and verify pinned specmill
+        env:
+          SPECMILL_SOURCE_REPO: dev/specmill-pilot/artifacts/toolkit-source
+        run: Rscript dev/install_specmill.R
 
       - name: Check generation and hooks
         run: |
-          Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+          Rscript dev/generate_specmill.R --check
           Rscript dev/check_hook_config.R
           Rscript dev/check_public_api.R
 
@@ -71,10 +95,12 @@ jobs:
         run: |
           Rscript dev/generate_tests.R --check
           Rscript -e '
+            # Test helpers resolve asNamespace("ComptoxR"); the package is not installed yet.
+            pkgload::load_all(quiet = TRUE)
             files <- c(
               "tests/testthat/test-chemi_search.R",
-              "tests/testthat/test-ct_chemical_detail_search.R",
-              "tests/testthat/test-pubchem_search.R"
+              "tests/testthat/test-contract-ct_chemical_detail_search_by_dtxsid.R",
+              "tests/testthat/test-pubchem_offline.R"
             )
             for (file in files) {
               testthat::test_file(file)

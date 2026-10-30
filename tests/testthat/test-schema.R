@@ -32,7 +32,7 @@ test_that("epi_schema downloads and validates the production schema", {
   )
 
   result <- epi_schema(timeout = 17, schema_dir = schema_dir)
-  schema_file <- file.path(schema_dir, "epi-suite-prod.json")
+  schema_file <- file.path(schema_dir, "epi_suite_prod.json")
 
   expect_null(result)
   expect_identical(requested_url, epi_server(1, url_only = TRUE))
@@ -42,9 +42,24 @@ test_that("epi_schema downloads and validates the production schema", {
   expect_identical(Sys.getenv("epi_burl"), "epi-sentinel")
 })
 
+test_that("epi_schema drops the volatile x-epi-health block", {
+  schema_dir <- withr::local_tempdir()
+  body <- '{"openapi":"3.0.3","paths":{"/api/submit":{"post":{}}},"x-epi-health":{"unexpectedFailureCount":11}}'
+  testthat::local_mocked_bindings(
+    req_perform = function(req) epi_schema_response(req, body),
+    .package = "httr2"
+  )
+
+  epi_schema(schema_dir = schema_dir)
+  saved <- jsonlite::read_json(file.path(schema_dir, "epi_suite_prod.json"))
+
+  expect_null(saved[["x-epi-health"]])
+  expect_identical(names(saved$paths), "/api/submit")
+})
+
 test_that("epi_schema preserves an existing file after an HTTP error", {
   schema_dir <- withr::local_tempdir()
-  schema_file <- file.path(schema_dir, "epi-suite-prod.json")
+  schema_file <- file.path(schema_dir, "epi_suite_prod.json")
   writeLines("existing schema", schema_file, useBytes = TRUE)
   existing <- readBin(schema_file, what = "raw", n = file.info(schema_file)$size)
 
@@ -68,7 +83,7 @@ test_that("epi_schema preserves an existing file after an HTTP error", {
 
 test_that("epi_schema preserves an existing file after invalid JSON", {
   schema_dir <- withr::local_tempdir()
-  schema_file <- file.path(schema_dir, "epi-suite-prod.json")
+  schema_file <- file.path(schema_dir, "epi_suite_prod.json")
   writeLines("existing schema", schema_file, useBytes = TRUE)
   existing <- readBin(schema_file, what = "raw", n = file.info(schema_file)$size)
 
@@ -102,7 +117,7 @@ test_that("epi_schema removes invalid control bytes", {
   )
 
   epi_schema(schema_dir = schema_dir)
-  schema_file <- file.path(schema_dir, "epi-suite-prod.json")
+  schema_file <- file.path(schema_dir, "epi_suite_prod.json")
   expected <- gsub(intToUtf8(23L), "", body, fixed = TRUE)
 
   expect_identical(
@@ -114,7 +129,7 @@ test_that("epi_schema removes invalid control bytes", {
 
 test_that("epi_schema requires OpenAPI 3 and a non-empty paths object", {
   schema_dir <- withr::local_tempdir()
-  schema_file <- file.path(schema_dir, "epi-suite-prod.json")
+  schema_file <- file.path(schema_dir, "epi_suite_prod.json")
   writeLines("existing schema", schema_file, useBytes = TRUE)
   existing <- readBin(schema_file, what = "raw", n = file.info(schema_file)$size)
   response_body <- NULL

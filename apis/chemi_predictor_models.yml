@@ -1,0 +1,140 @@
+# chemi_predictor_models: every operation in schema/chemi_predictor_models_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_predictor_models
+schemas:
+  files:
+  - schema/chemi_predictor_models_prod.json
+groups:
+  chemi_predictor_models:
+    hook_config: inst/hook_config.yml
+    contracts_file: tests/testthat/fixtures/specmill-contracts.rds
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/predictor_models/metadata: chemi_predictor_models_metadata
+      GET /api/predictor_models/model/file/: chemi_predictor_models_model_file
+      GET /api/predictor_models/predict: chemi_predictor_models_predict
+      GET /api/predictor_models/version: chemi_predictor_models_version
+      POST /api/predictor_models/predict: chemi_predictor_models_predict_bulk
+    operations:
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/predictor_models/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve predictor models metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; request controls keep the released error behaviour; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/predictor_models/model/file/:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        request_controls:
+          preserve_errors: yes
+        docs:
+          title: Retrieve a predictor model file
+          lifecycle: experimental
+          tags:
+            apiStage: public
+          return: Decoded JSON or text, raw binary bytes, or NULL for an empty response.
+      # why: keeps the released argument order; server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; docs keep the released title, return and examples
+      GET /api/predictor_models/predict:
+        parameter_order:
+          - model_id
+          - smiles
+          - identifier
+          - report_format
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        response_policy: .ct_static_list
+        docs:
+          title: Predictor Models Predict
+          lifecycle: experimental
+          return: Returns a list of results
+          examples:
+            - model_id: 1
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/predictor_models/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve predictor models version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; post-processing still runs when a hook skips the request; post-processing state carries hook data; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option
+      POST /api/predictor_models/predict:
+        inputs:
+          model_id:
+            type: character
+            required: yes
+            description: Required parameter
+          smiles:
+            type: character
+            default: ~
+            description: Optional parameter
+          chemicals:
+            type: character
+            default: ~
+            description: Optional parameter
+        post_on_skip: no
+        post_state: parameters
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/predictor_models/predict
+            path_params:
+              value: {}
+            query:
+              value: {}
+            body:
+              callback: prediction_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                diagnostic: Relative server URL requires a recorded origin or explicit base
+                  URL override
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: ''
+            auth:
+              value: []
+            response_policy:
+              value: .ct_prediction
+        docs:
+          title: Generate predictions for multiple molecules
+          lifecycle: experimental
+          parameters:
+            model_id: Required parameter
+            smiles: Optional parameter
+            chemicals: Optional parameter
+          return: Returns a tibble with results
+          examples:
+            - model_id: 1065
+              smiles:
+                - CCO
+                - CCCC
+          tags:
+            apiStage: public
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl

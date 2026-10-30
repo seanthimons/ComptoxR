@@ -1,0 +1,335 @@
+# chemi_hazard: every operation in schema/chemi_hazard_prod.json that passes the project selection in specmill.yml.
+# One group per API; wrappers are written one per file (R/<name>.R).
+# Per-operation settings below carry the released wrapper behaviour; each lists why.
+api: chemi_hazard
+schemas:
+  files:
+  - schema/chemi_hazard_prod.json
+groups:
+  chemi_hazard:
+    hook_config: inst/hook_config.yml
+    prepare: preserve_choice_defaults
+    # Route -> wrapper name. Defaults follow naming='path' (see dev/specmill-333/SELECTION.md);
+    # entries marked '# why' deviate from that default.
+    names:
+      GET /api/hazard: chemi_hazard
+      GET /api/hazard/download: chemi_hazard_download
+      GET /api/hazard/metadata: chemi_hazard_metadata
+      GET /api/hazard/reports: chemi_hazard_reports
+      GET /api/hazard/reports/{id}: chemi_hazard_reports_by_id  # why: path name collides with a sibling route; disambiguated by its path parameter
+      GET /api/hazard/reports/check: chemi_hazard_reports_check
+      GET /api/hazard/version: chemi_hazard_version
+      POST /api/hazard: chemi_hazard_bulk
+      POST /api/hazard/report/export: chemi_hazard_report_export
+      POST /api/hazard/report/export-append: chemi_hazard_report_export_append
+      POST /api/hazard/report/export2: chemi_hazard_report_export2
+      POST /api/hazard/reports/{id}/export: chemi_hazard_reports_export
+    operations:
+      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard:
+        inputs:
+          query:
+            type: any
+          full:
+            type: any
+            default: yes
+          format:
+            type: character
+            default:
+              - compact
+              - tidy
+              - raw
+        request:
+          arguments:
+            method:
+              value: GET
+            path:
+              value: /api/hazard
+            path_params:
+              value: {}
+            query:
+              object:
+                query:
+                  from:
+                    - params
+                    - query
+                full:
+                  from:
+                    - params
+                    - full
+            body:
+              value: ~
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: static_collected_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi hazard
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Required parameter
+            full: 'Optional parameter (default: TRUE)'
+            format: Output format. One of 'compact', 'tidy', or 'raw'
+          tags:
+            apiStage: public
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard/download:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Download a hazard report file
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard/metadata:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve hazard metadata
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard/reports:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: List hazard report protocols
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard/reports/{id}:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Get a hazard report
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard/reports/check:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Check a hazard report name
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      GET /api/hazard/version:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Retrieve hazard version
+          lifecycle: experimental
+          return: The decoded service response, preserving its declared JSON structure or
+            media bytes.
+          tags:
+            apiStage: public
+      # why: inputs keep released argument names/defaults; hides internal parameters from the public signature; request arguments pin the released wire call; docs keep the released title, return and examples; passes released arguments to post-processing; drops schema parameters the released wrapper never exposed; request controls keep the released error behaviour; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/hazard:
+        inputs:
+          query:
+            type: any
+          idType:
+            type: any
+            default: AnyId
+          empty:
+            type: any
+            default: ~
+          options:
+            type: any
+            default: ~
+          request.filesInfo:
+            type: any
+            default: ~
+          request.options.analogsSearchType:
+            type: any
+            default: ~
+          request.options.cts:
+            type: any
+            default: ~
+          request.options.minSimilarity:
+            type: any
+            default: ~
+          request.options.noRecords:
+            type: any
+            default: ~
+          request.options.usePredictions:
+            type: any
+            default: ~
+          format:
+            type: character
+            default:
+              - compact
+              - tidy
+              - raw
+        private_params:
+          chemicals: ~
+        request:
+          arguments:
+            method:
+              value: POST
+            path:
+              value: /api/hazard
+            path_params:
+              value: {}
+            query:
+              object:
+                request.filesInfo:
+                  from:
+                    - params
+                    - request.filesInfo
+                request.options.analogsSearchType:
+                  from:
+                    - params
+                    - request.options.analogsSearchType
+                request.options.cts:
+                  from:
+                    - params
+                    - request.options.cts
+                request.options.minSimilarity:
+                  from:
+                    - params
+                    - request.options.minSimilarity
+                request.options.noRecords:
+                  from:
+                    - params
+                    - request.options.noRecords
+                request.options.usePredictions:
+                  from:
+                    - params
+                    - request.options.usePredictions
+            body:
+              callback: resolved_chemical_body
+            headers:
+              value:
+                Accept: application/json
+            server:
+              value:
+                url: https://hcd.rtpnc.epa.gov
+            server_resolver:
+              value:
+                name: .ct_server_url
+                key: chemi_burl
+                relative: /
+            auth:
+              value: []
+            response_policy:
+              callback: resolved_chemical_response
+            request_controls:
+              value:
+                preserve_errors: yes
+        docs:
+          title: chemi hazard bulk
+          lifecycle: experimental
+          return: Decoded response records, with the configured client formatting.
+          parameters:
+            query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+              etc.)
+            idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+              InChI, InChIKey, InChIKey_1, AnyId (default)'
+            empty: Optional parameter
+            options: Optional parameter
+            request.filesInfo: Optional parameter
+            request.options.analogsSearchType: 'Optional parameter. Options: EXACT, SUBSTRUCTURE,
+              SIMILAR, TOXPRINTS, FORMULA, MASS, FEATURES, HAZARD, ADVANCED'
+            request.options.cts: Optional parameter
+            request.options.minSimilarity: Optional parameter
+            request.options.noRecords: Optional parameter
+            request.options.usePredictions: Optional parameter
+            format: Output format. One of 'compact', 'tidy', or 'raw'
+          tags:
+            apiStage: public
+        post_params:
+          - query
+          - idType
+          - empty
+          - options
+          - request.filesInfo
+          - request.options.analogsSearchType
+          - request.options.cts
+          - request.options.minSimilarity
+          - request.options.noRecords
+          - request.options.usePredictions
+          - format
+        exclude_parameters:
+          - files[]
+          - request
+        request_controls:
+          preserve_errors: yes
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/hazard/report/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Export a hazard report
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/hazard/report/export-append:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Append hazard results to an uploaded report
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml
+      POST /api/hazard/report/export2:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Export a hazard report with the alternate exporter
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title, return and examples; hooks/extra arguments come from inst/hook_config.yml; renamed from chemi_hazard_reports_export_by_id
+      POST /api/hazard/reports/{id}/export:
+        server:
+          resolver: .ct_server_url
+          key: chemi_burl
+        docs:
+          title: Export a saved hazard report
+          lifecycle: experimental
+          return: The decoded service response, preserving JSON structure, text or media bytes.
+          tags:
+            apiStage: public

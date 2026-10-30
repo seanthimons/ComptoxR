@@ -1,0 +1,21 @@
+{
+  "chemi_amos_additional_sources_for_substance": {
+    "args": {
+      "dtxsid": "DTXSID7020182"
+    },
+    "path": "/api/amos/additional_sources_for_substance/{dtxsid}"
+  },
+  "chemi_amos_get_pdf_metadata": {
+    "args": {
+      "record_type": "Fact Sheet",
+      "internal_id": "FS-10313"
+    },
+    "path": "/api/amos/get_pdf_metadata/{record_type}/{internal_id}"
+  },
+  "chemi_amos_get_substance_file_for_record": {
+    "args": {
+      "internal_id": "FS-10313"
+    },
+    "path": "/api/amos/get_substance_file_for_record/{internal_id}"
+  }
+}

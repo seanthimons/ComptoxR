@@ -2,6 +2,217 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- The `format` argument of `chemi_descriptors()`, `chemi_descriptors_bulk()` and
+  `chemi_webtest_bulk()` is deprecated. `"CSV"` and `"TSV"` never worked end to end
+  (descriptor parsing failed and WebTEST answered 406), so requests are always sent as
+  JSON and return the same tibble. A delimited parser is deferred until someone needs
+  one (#343).
+
+- **Breaking:** API configuration is now one `apis/<schema>.yml` file per schema, with a
+  `# why:` note on every operation that is renamed, changed or hooked. Wrappers follow
+  path naming (`naming: path`; POST siblings of a GET get `_bulk`) and are written one
+  per file. Behaviour is unchanged, but the wrappers below are renamed. `chemi_classyfire()`
+  keeps its name. Moving owned wrappers between files is blocked by
+  [specmill#213](https://github.com/seanthimons/specmill/issues/213), so the old
+  generated files were purged with Specmill's `prune = "all"` and regenerated.
+
+  | Old name | New name |
+  | --- | --- |
+  | `chemi_amos()` | `chemi_amos_search()` |
+  | `chemi_amos_all_similarities()` | `chemi_amos_all_similarities_by_dtxsid()` |
+  | `chemi_amos_by_text()` | `chemi_amos_search_by_text()` |
+  | `chemi_amos_database()` | `chemi_amos_database_summary()` |
+  | `chemi_amos_formula()` | `chemi_amos_formula_search()` |
+  | `chemi_amos_functional_class()` | `chemi_amos_functional_class_search()` |
+  | `chemi_amos_get_substances_for_term()` | `chemi_amos_get_substances_for_search_term()` |
+  | `chemi_amos_inchikey_first_block()` | `chemi_amos_inchikey_first_block_search()` |
+  | `chemi_amos_mass_range()` | `chemi_amos_mass_range_search()` |
+  | `chemi_amos_mass_spectrum_similarity()` | `chemi_amos_mass_spectrum_similarity_search()` |
+  | `chemi_amos_max_similarity()` | `chemi_amos_max_similarity_by_dtxsid()` |
+  | `chemi_amos_record_counts()` | `chemi_amos_record_counts_by_dtxsid()` |
+  | `chemi_amos_record_id()` | `chemi_amos_record_id_search()` |
+  | `chemi_amos_substring()` | `chemi_amos_substring_search()` |
+  | `chemi_chet_curators_libraries_by_lib_id()` | `chemi_chet_curators_libraries()` |
+  | `chemi_chet_reaction()` | `chemi_chet_reaction_search()` |
+  | `chemi_chet_reaction_editor_by_reaction_id()` | `chemi_chet_reaction_editor()` |
+  | `chemi_chet_reaction_mapfix_by_map_id()` | `chemi_chet_reaction_mapfix()` |
+  | `chemi_hazard_reports_export_by_id()` | `chemi_hazard_reports_export()` |
+  | `chemi_resolver_ghs_list_count_post()` | `chemi_resolver_ghs_list_count_bulk()` |
+  | `chemi_resolver_lookupCASRN()` | `chemi_resolver_lookup_casrn()` |
+  | `chemi_resolver_orderBySimilarity()` | `chemi_resolver_order_by_similarity()` |
+  | `chemi_search_download_sdf()` | `chemi_search_download_search_result_as_sdf()` |
+  | `chemi_stdizer_protocol_export_post()` | `chemi_stdizer_protocol_export()` |
+  | `chemi_stdizer_protocols_by_id_changes()` | `chemi_stdizer_protocols_changes()` |
+  | `chemi_stdizer_protocols_by_id_export_post()` | `chemi_stdizer_protocols_export()` |
+  | `chemi_stdizer_protocols_by_id_get()` | `chemi_stdizer_protocols_by_id()` |
+  | `chemi_stdizer_protocols_by_id_issues()` | `chemi_stdizer_protocols_issues()` |
+  | `chemi_stdizer_protocols_by_id_post()` | `chemi_stdizer_protocols_by_id_bulk()` |
+  | `ct_bioactivity_analyticalqc_search()` | `ct_bioactivity_analyticalqc_search_by_dtxsid()` |
+  | `ct_bioactivity_data_aed_search()` | `ct_bioactivity_data_aed_search_by_dtxsid()` |
+  | `ct_bioactivity_data_aed_search_bulk()` | `ct_bioactivity_data_aed_search_by_dtxsid_bulk()` |
+  | `ct_bioactivity_data_search_bulk()` | `ct_bioactivity_data_search_by_dtxsid_bulk()` |
+  | `ct_bioactivity_data_search_by_tissue()` | `ct_bioactivity_data_summary_search_by_tissue()` |
+  | `ct_chemical_detail_search()` | `ct_chemical_detail_search_by_dtxsid()` |
+  | `ct_chemical_detail_search_bulk()` | `ct_chemical_detail_search_by_dtxsid_bulk()` |
+  | `ct_chemical_extra_data_search()` | `ct_chemical_extra_data_search_by_dtxsid()` |
+  | `ct_chemical_extra_data_search_bulk()` | `ct_chemical_extra_data_search_by_dtxsid_bulk()` |
+  | `ct_chemical_fate_experimental_search()` | `ct_chemical_fate_summary_experimental_search()` |
+  | `ct_chemical_fate_predicted_search()` | `ct_chemical_fate_summary_predicted_search()` |
+  | `ct_chemical_fate_search_bulk()` | `ct_chemical_fate_search_by_dtxsid_bulk()` |
+  | `ct_chemical_file_image_search()` | `ct_chemical_file_image_search_by_dtxsid()` |
+  | `ct_chemical_file_mol_search()` | `ct_chemical_file_mol_search_by_dtxsid()` |
+  | `ct_chemical_list_search()` | `ct_chemical_list_search_by_dtxsid()` |
+  | `ct_chemical_property_experimental_search_bulk()` | `ct_chemical_property_experimental_search_by_dtxsid_bulk()` |
+  | `ct_chemical_property_predicted_search_bulk()` | `ct_chemical_property_predicted_search_by_dtxsid_bulk()` |
+  | `ct_chemical_synonym_search()` | `ct_chemical_synonym_search_by_dtxsid()` |
+  | `ct_chemical_synonym_search_bulk()` | `ct_chemical_synonym_search_by_dtxsid_bulk()` |
+  | `ct_exposure_ccd_chem_weight_fractions_search()` | `ct_exposure_ccd_chem_weight_fractions_search_by_dtxsid()` |
+  | `ct_exposure_ccd_functional_use_search()` | `ct_exposure_ccd_functional_use_search_by_dtxsid()` |
+  | `ct_exposure_ccd_keywords_search()` | `ct_exposure_ccd_keywords_search_by_dtxsid()` |
+  | `ct_exposure_ccd_monitoring_data_search()` | `ct_exposure_ccd_monitoring_data_search_by_dtxsid()` |
+  | `ct_exposure_ccd_production_volume_search()` | `ct_exposure_ccd_production_volume_search_by_dtxsid()` |
+  | `ct_exposure_ccd_puc_search()` | `ct_exposure_ccd_puc_search_by_dtxsid()` |
+  | `ct_exposure_functional_use_probability_search()` | `ct_exposure_functional_use_probability_search_by_dtxsid()` |
+  | `ct_exposure_functional_use_search()` | `ct_exposure_functional_use_search_by_dtxsid()` |
+  | `ct_exposure_functional_use_search_bulk()` | `ct_exposure_functional_use_search_by_dtxsid_bulk()` |
+  | `ct_exposure_httk_search()` | `ct_exposure_httk_search_by_dtxsid()` |
+  | `ct_exposure_httk_search_bulk()` | `ct_exposure_httk_search_by_dtxsid_bulk()` |
+  | `ct_exposure_list_presence_search()` | `ct_exposure_list_presence_search_by_dtxsid()` |
+  | `ct_exposure_list_presence_search_bulk()` | `ct_exposure_list_presence_search_by_dtxsid_bulk()` |
+  | `ct_exposure_mmdb_aggregate()` | `ct_exposure_mmdb_aggregate_by_dtxsid()` |
+  | `ct_exposure_mmdb_single_sample()` | `ct_exposure_mmdb_single_sample_by_dtxsid()` |
+  | `ct_exposure_product_data_search()` | `ct_exposure_product_data_search_by_dtxsid()` |
+  | `ct_exposure_product_data_search_bulk()` | `ct_exposure_product_data_search_by_dtxsid_bulk()` |
+  | `ct_exposure_seem_demographic_search()` | `ct_exposure_seem_demographic_search_by_dtxsid()` |
+  | `ct_exposure_seem_demographic_search_bulk()` | `ct_exposure_seem_demographic_search_by_dtxsid_bulk()` |
+  | `ct_exposure_seem_general_search()` | `ct_exposure_seem_general_search_by_dtxsid()` |
+  | `ct_exposure_seem_general_search_bulk()` | `ct_exposure_seem_general_search_by_dtxsid_bulk()` |
+  | `ct_hazard_adme_ivive_search()` | `ct_hazard_adme_ivive_search_by_dtxsid()` |
+  | `ct_hazard_cancer_search()` | `ct_hazard_cancer_summary_search_by_dtxsid()` |
+  | `ct_hazard_cancer_search_bulk()` | `ct_hazard_cancer_summary_search_by_dtxsid_bulk()` |
+  | `ct_hazard_genetox_details_search()` | `ct_hazard_genetox_details_search_by_dtxsid()` |
+  | `ct_hazard_genetox_details_search_bulk()` | `ct_hazard_genetox_details_search_by_dtxsid_bulk()` |
+  | `ct_hazard_genetox_search()` | `ct_hazard_genetox_summary_search_by_dtxsid()` |
+  | `ct_hazard_genetox_search_bulk()` | `ct_hazard_genetox_summary_search_by_dtxsid_bulk()` |
+  | `ct_hazard_hawc_search()` | `ct_hazard_hawc_search_by_dtxsid()` |
+  | `ct_hazard_iris_search()` | `ct_hazard_iris_search_by_dtxsid()` |
+  | `ct_hazard_pprtv_search()` | `ct_hazard_pprtv_search_by_dtxsid()` |
+  | `ct_hazard_skin_eye_search()` | `ct_hazard_skin_eye_search_by_dtxsid()` |
+  | `ct_hazard_skin_eye_search_bulk()` | `ct_hazard_skin_eye_search_by_dtxsid_bulk()` |
+  | `ct_hazard_toxref_data_search()` | `ct_hazard_toxref_data_search_by_dtxsid()` |
+  | `ct_hazard_toxref_effects_search()` | `ct_hazard_toxref_effects_search_by_dtxsid()` |
+  | `ct_hazard_toxref_observations_search()` | `ct_hazard_toxref_observations_search_by_dtxsid()` |
+  | `ct_hazard_toxref_search()` | `ct_hazard_toxref_summary_search_by_dtxsid()` |
+  | `ct_hazard_toxref_search_by_study_id()` | `ct_hazard_toxref_summary_search_by_study_id()` |
+  | `ct_hazard_toxref_search_by_study_type()` | `ct_hazard_toxref_summary_search_by_study_type()` |
+  | `ct_hazard_toxval_search()` | `ct_hazard_toxval_search_by_dtxsid()` |
+  | `ct_hazard_toxval_search_bulk()` | `ct_hazard_toxval_search_by_dtxsid_bulk()` |
+  | `ct_hazard_toxval_supercategory_search()` | `ct_hazard_toxval_supercategory_search_by_dtxsid()` |
+  | `epi_api()` | `epi()` |
+
+- **Breaking:** remove three hand-written duplicates of generated wrappers:
+  `chemi_functional_use()` (use `chemi_amos_functional_uses_for_dtxsid()`),
+  `chemi_predict()` (use `chemi_webtest_predict_bulk()`) and
+  `chemi_safety_section()` (use `chemi_resolver_pubchem_section()`).
+
+- **Breaking:** stop wrapping eight write, export or duplicated endpoints and remove
+  `chemi_chet_chemicals_chemical_dl_post()`, `chemi_chet_curators_libraries()` (the name now belongs to the renamed `GET /curators/libraries/{lib_id}` wrapper),
+  `chemi_chet_curators_units_create()`, `chemi_chet_reaction_editor_by_reaction_id_create()`,
+  `chemi_hazard_reports_create()`, `chemi_resolver_export_post()`,
+  `chemi_resolver_export_section_post()` and `chemi_stdizer_protocols_post()`. The routes are
+  banned in `specmill.yml`.
+- **Breaking (#330):** remove the ChET legacy database-old wrappers
+  `chemi_chet_chemicals_database_old()`, `chemi_chet_reaction_database_old()` and
+  `chemi_chet_reaction_database_old_by_pagenum_and_searchterm()` (use
+  `chemi_chet_chemicals_database()` and `chemi_chet_reaction_database()`), and
+  `chemi_toxprints_assays_bulk()`, which created assays. The routes are banned in
+  `specmill.yml`.
+- **Breaking (#330):** `chemi_chet_reaction_searchcounts()` now requires `search_type`, one
+  of `"lib_id"`, `"reaction_process"`, `"reaction_type"`, `"reaction_scheme"` or
+  `"reaction_phase"`. The service returns 404 without a type and an empty list for an
+  unknown one. A vector `search_input` now fans out with a type.
+- **Breaking (#330):** `chemi_stdizer_records()` takes one `body` argument holding the
+  schema request (`records`, `options`, `full`), for example
+  `list(options = list(workflow = "qsar-ready"), records = list(list(rid = "a", chemical = list(smiles = "CCO"))))`.
+  The old `full`/`options`/`records` arguments built a `chemicals` payload that the
+  service always rejected with HTTP 500. It now returns the decoded service response
+  and raises standard HTTP errors.
+- Schema files are now named `chemi_<x>_prod.json`, `ctx_<x>_prod.json` and
+  `epi_suite_prod.json` so the names are valid R identifiers; the downloader writes them.
+
+- **Breaking:** remove `ct_api_key()`. Wrappers and the startup/sitrep checks read the
+  `ctx_api_key` environment variable directly.
+- **Breaking:** remove the exported legacy transport helpers `generic_request()`
+  and `generic_chemi_request()` (and the unexported `generic_search_request()` and
+  `generic_pubchem_request()`). `ct_related()` and `ct_similar()` now call the
+  native `.ct_request()` directly with unchanged signatures and output. Shared
+  response helpers moved to `R/response_helpers.R`; `batch_limit()` is kept.
+- **Breaking:** most bulk CTX wrappers name their input after the identifier they
+  take (`dtxsid`, `dtxcid`, `aeid`, `spid`, `formula`) instead of `query`, for
+  example `ct_hazard_toxval_search_by_dtxsid_bulk(dtxsid = ids)`. Calls that pass
+  the IDs by position are unaffected. `ct_chemical_detail_search_by_dtxsid_bulk()`,
+  `ct_chemical_detail_search_by_dtxcid_bulk()` and `ct_chemical_search_equal_bulk()`
+  still take `query`; `ct_chemical_msready_search_by_mass_bulk()` takes `body`.
+
+- Remove `chemi_toxprint()`. Its operation (`POST /api/toxprints/calculate`) is
+  covered by `chemi_toxprints_calculate_bulk()`, which takes Chemical records.
+
+- Rebuild `chemi_toxprints_bulk(query)` with Specmill against the canonical
+  Cheminformatics object request, without CTX authentication. Preserve input
+  cleanup and environment-controlled chunks. Results have one row per chemical,
+  with numeric descriptor vectors retained in a list-column (#353).
+
+- Remove six AMOS wrappers whose production schema is defective (`chemi_amos_dtxsids`,
+  `chemi_amos_substances_for_ids`, `chemi_amos_retrieve_fact_sheets`,
+  `chemi_amos_retrieve_product_declarations`, `chemi_amos_retrieve_safety_data_sheets`,
+  `chemi_amos_for_document_ids`). They are deferred in Specmill until the upstream
+  schema is fixed; no hand-edited schema overlays are kept for them.
+
+- Remove `chemi_chet_chemicals_chemical_dl()`. The production schema marks the GET body
+  optional but the deployed service rejects a bodyless GET, so it is deferred in Specmill.
+  `chemi_chet_chemicals_chemical_dl_post()` is removed too (see below).
+
+- Remove `chemi_services_preflight()` and `chemi_services_universalpreflight()`. The production
+  schema describes their multipart `files[]` upload as a binary query parameter, so they are
+  deferred in Specmill until upstream corrects it. The hand-edited preflight overlay schemas are
+  deleted. `schema/pubchem-reviewed.json` stays as the first-party PubChem schema.
+
+- Remove `chemi_resolver_getsimilaritylist`: the production schema's request body
+  is not compliant, so the operation is deferred in Specmill until upstream
+  fixes it (seanthimons/specmill#165). No wrapper is generated meanwhile.
+
+- Exclude resolver `getpubchemlist` and remove its public wrapper pending an
+  established end-user purpose (#358).
+
+- Exclude the two AMOS XLSX batch exports pending a concrete end-user need,
+  removing `chemi_amos_batch` and `chemi_amos_analytical_qc_batch` (#357).
+  JSON substance search and analytical QC pagination remain available.
+
+- Exclude server-side file standardization at `POST /api/stdizer` and remove
+  `chemi_stdizer_bulk`. GET standardization and JSON chemical/record inputs
+  remain available. All eleven #356 endpoint decisions are now resolved as bans.
+
+- Exclude saved standardizer rule-group management under `/api/stdizer/groups`,
+  removing five wrappers. Calculation, workflow lookup and protocol-result APIs
+  remain available.
+
+- Limit alerts to `POST /api/alerts`, metadata and version. Remove eight
+  wrappers for library management, exports and rendering, including the held
+  `chemi_alerts_groups_bulk` facade.
+
+- Exclude `/add` and `/replace` routes plus resolver `casharvest` and
+  `universalharvest` and service `caspreflight` and `files` endpoints from
+  client generation.
+
+- Exclude every CheT `/auth/*`, `/admin/*` and `/chemicals/chemdelete` route,
+  removing 18 generated wrappers and resolving the eight endpoint decisions in #355.
+
+- Remove 21 generated wrappers using PUT, PATCH, DELETE or OPTIONS. Client
+  generation now permits only GET and POST and excludes the five AMOS `add_*`
+  uploads tracked in #354.
+
 ## v3.0.0 (2026-09-08)
 
 #### Breaking changes

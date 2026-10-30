@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_count_substances_in_ids.R
 \name{chemi_amos_count_substances_in_ids}
 \alias{chemi_amos_count_substances_in_ids}
-\title{Counts the number of unique substances seen in a set of records.}
+\title{Counts the number of unique substances seen in a set of records}
 \usage{
 chemi_amos_count_substances_in_ids(internal_id_list = NULL)
 }
@@ -10,14 +10,14 @@ chemi_amos_count_substances_in_ids(internal_id_list = NULL)
 \item{internal_id_list}{Array of record IDs.}
 }
 \value{
-Returns a tibble with results
+The decoded JSON result from the AMOS read operation.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_count_substances_in_ids(internal_id_list = "DTXSID1024122")
+chemi_amos_count_substances_in_ids(internal_id_list = "NO_SUCH_INTERNAL_ID")
 }
 }
 \section{API stage}{

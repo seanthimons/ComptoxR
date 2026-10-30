@@ -7,19 +7,19 @@
 chemi_opera_report(dtxsid, modelId)
 }
 \arguments{
-\item{dtxsid}{DSSTox substance identifier}
+\item{dtxsid}{dtxsid}
 
-\item{modelId}{Dashboard model ID for the OPERA endpoint}
+\item{modelId}{modelId}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_opera_report(dtxsid = "DTXSID7020182")
+chemi_opera_report(dtxsid = "DTXSID7020182", modelId = 1L)
 }
 }
 \section{API stage}{

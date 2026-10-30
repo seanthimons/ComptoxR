@@ -25,9 +25,11 @@ articles:
       - articles/ecotox
       - articles/risk-evidence-compilation
       - articles/local-databases
+      - articles/migrating-to-4-0
   - title: Contributor guides
     contents:
       - articles/development-lifecycle
+      - articles/building-from-schemas
 
 reference:
   - title: CompTox Chemical Dashboard

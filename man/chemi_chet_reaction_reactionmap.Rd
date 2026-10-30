@@ -7,19 +7,19 @@
 chemi_chet_reaction_reactionmap(id = NULL, searchtype = NULL)
 }
 \arguments{
-\item{id}{Optional parameter}
+\item{id}{id}
 
-\item{searchtype}{Optional parameter}
+\item{searchtype}{searchtype}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_reactionmap(id = "DTXSID7020182")
+chemi_chet_reaction_reactionmap()
 }
 }
 \section{API stage}{

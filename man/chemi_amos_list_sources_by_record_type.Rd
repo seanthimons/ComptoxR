@@ -2,19 +2,22 @@
 % Please edit documentation in R/chemi_amos_list_sources_by_record_type.R
 \name{chemi_amos_list_sources_by_record_type}
 \alias{chemi_amos_list_sources_by_record_type}
-\title{Returns a list of all unique source names in the database for a specific record type.}
+\title{chemi amos list sources by record type}
 \usage{
-chemi_amos_list_sources_by_record_type()
+chemi_amos_list_sources_by_record_type(record_type)
+}
+\arguments{
+\item{record_type}{record_type Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amos_list_sources_by_record_type()
+chemi_amos_list_sources_by_record_type(record_type = "method")
 }
 }
 \section{API stage}{

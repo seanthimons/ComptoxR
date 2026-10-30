@@ -7,17 +7,17 @@
 chemi_chet_reaction_database_stats(reaction_id = NULL)
 }
 \arguments{
-\item{reaction_id}{Optional parameter}
+\item{reaction_id}{reaction_id}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_database_stats(reaction_id = "DTXSID7020182")
+chemi_chet_reaction_database_stats()
 }
 }
 \section{API stage}{

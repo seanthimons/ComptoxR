@@ -1,0 +1,121 @@
+---
+title: "Migrating to ComptoxR 4.0"
+description: >
+  What to change in existing scripts when moving from ComptoxR 3.x to 4.0.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+ComptoxR 4.0 generates its wrappers from the production API schemas. Most
+wrappers return the same data as before, but many have new names and some have
+been removed. `chemi_stdizer_records()` and `chemi_toxprints_bulk()` return a
+different shape; see below. This article lists what to change in a 3.x script. The full
+list, including every rename, is in the [changelog](../news/index.html).
+
+## The API key
+
+`ct_api_key()` is gone. Wrappers read the `ctx_api_key` environment variable
+directly. Set it once in `~/.Renviron`:
+
+```
+ctx_api_key=YOUR_KEY_HERE
+```
+
+or for the current session only:
+
+```r
+Sys.setenv(ctx_api_key = "YOUR_KEY_HERE")
+```
+
+## Renamed wrappers
+
+Wrapper names now follow the API path. Most renames follow one of these
+patterns:
+
+- **The identifier is part of the name.** Wrappers that take a DTXSID end in
+  `_by_dtxsid`, or `_by_dtxsid_bulk` for the POST version:
+  `ct_chemical_detail_search()` is now `ct_chemical_detail_search_by_dtxsid()`,
+  and `ct_hazard_toxval_search_bulk()` is now
+  `ct_hazard_toxval_search_by_dtxsid_bulk()`.
+- **Summary routes say so.** `ct_hazard_genetox_search()` is now
+  `ct_hazard_genetox_summary_search_by_dtxsid()`, and
+  `ct_hazard_cancer_search()` is now
+  `ct_hazard_cancer_summary_search_by_dtxsid()`.
+- **AMOS searches end in `_search`.** `chemi_amos_formula()` is now
+  `chemi_amos_formula_search()`.
+- **No `_by_id` or `_post` suffixes.** A POST that shares a GET's path ends in
+  `_bulk`: `chemi_resolver_ghs_list_count_post()` is now
+  `chemi_resolver_ghs_list_count_bulk()`.
+- **snake_case throughout.** `chemi_resolver_lookupCASRN()` is now
+  `chemi_resolver_lookup_casrn()`.
+- **`epi_api()` is now `epi()`.**
+
+Calling an old name gives "could not find function". Look the name up in the
+rename table in the changelog. One old name now belongs to a different
+endpoint: in 4.0, `chemi_chet_curators_libraries()` is the renamed
+`chemi_chet_curators_libraries_by_lib_id()` and needs a `lib_id`. The 3.x
+function of that name, which created a library, has been removed.
+
+## Bulk argument names
+
+Most bulk CTX wrappers name their input after the identifier instead of
+`query`:
+
+```r
+# 3.x
+ct_hazard_toxval_search_bulk(query = ids)
+# 4.0
+ct_hazard_toxval_search_by_dtxsid_bulk(dtxsid = ids)
+```
+
+Calls that pass the IDs by position only need the new function name.
+`ct_chemical_detail_search_by_dtxsid_bulk()`,
+`ct_chemical_detail_search_by_dtxcid_bulk()` and
+`ct_chemical_search_equal_bulk()` still take `query`;
+`ct_chemical_msready_search_by_mass_bulk()` takes `body`. Check its help page.
+
+## Removed functions
+
+| Removed | Use instead |
+| --- | --- |
+| `ct_api_key()` | the `ctx_api_key` environment variable |
+| `generic_request()`, `generic_chemi_request()` | the wrapper for the endpoint |
+| `chemi_functional_use()` | `chemi_amos_functional_uses_for_dtxsid()` |
+| `chemi_predict()` | `chemi_webtest_predict_bulk()` |
+| `chemi_safety_section()` | `chemi_resolver_pubchem_section()` |
+| `chemi_toxprint()` | `chemi_toxprints_calculate_bulk()` |
+| `chemi_chet_chemicals_database_old()` | `chemi_chet_chemicals_database()` |
+| `chemi_chet_reaction_database_old()` | `chemi_chet_reaction_database()` |
+
+Wrappers for write, admin, upload and export endpoints were also removed, as
+were a few whose production schema is broken. The changelog lists each one.
+
+## Changed arguments
+
+- `chemi_chet_reaction_searchcounts()` requires `search_type`: one of
+  `"lib_id"`, `"reaction_process"`, `"reaction_type"`, `"reaction_scheme"` or
+  `"reaction_phase"`.
+- `chemi_stdizer_records()` takes one `body` argument holding the whole
+  request:
+
+  ```r
+  chemi_stdizer_records(body = list(
+    options = list(workflow = "qsar-ready"),
+    records = list(list(rid = "a", chemical = list(smiles = "CCO")))
+  ))
+  ```
+
+  It returns the decoded service response. The 3.x version always failed with
+  HTTP 500.
+- `chemi_toxprints_bulk()` returns one row per chemical, with the numeric
+  descriptor vectors in a list-column.
+
+- The `format` argument of `chemi_descriptors()`, `chemi_descriptors_bulk()`
+  and `chemi_webtest_bulk()` is deprecated. Results always come back as a
+  tibble.

@@ -1,0 +1,110 @@
+[
+  {
+    "service": "chemi-chet-extra",
+    "operation": "POST /chemicals/chemdelete",
+    "name": "chemi_chet_chemicals_chemdelete",
+    "file": "R/chemi_chet_chemicals_chemdelete.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "GET /admin/database",
+    "name": "chemi_chet_admin_database",
+    "file": "R/chemi_chet_admin_database.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /admin/errorreport",
+    "name": "chemi_chet_admin_errorreport_post",
+    "file": "R/chemi_chet_admin_errorreport_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /admin/login",
+    "name": "chemi_chet_admin_login_post",
+    "file": "R/chemi_chet_admin_login_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /admin/register",
+    "name": "chemi_chet_admin_register_post",
+    "file": "R/chemi_chet_admin_register_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /admin/resolve",
+    "name": "chemi_chet_admin_resolve_post",
+    "file": "R/chemi_chet_admin_resolve_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "GET /auth/errorpage",
+    "name": "chemi_chet_auth_errorpage",
+    "file": "R/chemi_chet_auth_errorpage.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/errorpage",
+    "name": "chemi_chet_auth_errorpage_post",
+    "file": "R/chemi_chet_auth_errorpage_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "GET /auth/errorpage/complete/{idnum}",
+    "name": "chemi_chet_auth_errorpage_complete_idnum",
+    "file": "R/chemi_chet_auth_errorpage_complete_idnum.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/errorpage/complete/{idnum}",
+    "name": "chemi_chet_auth_errorpage_complete_idnum_post",
+    "file": "R/chemi_chet_auth_errorpage_complete_idnum_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "GET /auth/errorpage/{showhide}",
+    "name": "chemi_chet_auth_errorpage_showhide",
+    "file": "R/chemi_chet_auth_errorpage_showhide.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/errorpage/{showhide}",
+    "name": "chemi_chet_auth_errorpage_showhide_post",
+    "file": "R/chemi_chet_auth_errorpage_showhide_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "GET /auth/logout",
+    "name": "chemi_chet_auth_logout",
+    "file": "R/chemi_chet_auth_logout.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "GET /auth/testpage",
+    "name": "chemi_chet_auth_testpage",
+    "file": "R/chemi_chet_auth_testpage.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/testpage",
+    "name": "chemi_chet_auth_testpage_post",
+    "file": "R/chemi_chet_auth_testpage_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/login",
+    "name": "chemi_chet_auth_login_post",
+    "file": "R/chemi_chet_auth_login_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/register",
+    "name": "chemi_chet_auth_register_post",
+    "file": "R/chemi_chet_auth_register_post.R"
+  },
+  {
+    "service": "chemi-chet-admin-auth",
+    "operation": "POST /auth/report",
+    "name": "chemi_chet_auth_report_post",
+    "file": "R/chemi_chet_auth_report_post.R"
+  }
+]

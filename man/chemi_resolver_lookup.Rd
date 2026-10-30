@@ -7,16 +7,16 @@
 chemi_resolver_lookup(query, idType = "AnyId", fuzzy = "Not", mol = FALSE)
 }
 \arguments{
-\item{query}{Required parameter}
+\item{query}{query}
 
-\item{idType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
+\item{idType}{idType}
 
-\item{fuzzy}{Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)}
+\item{fuzzy}{fuzzy}
 
-\item{mol}{Optional parameter (default: FALSE)}
+\item{mol}{mol}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}

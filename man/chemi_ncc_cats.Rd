@@ -7,14 +7,14 @@
 chemi_ncc_cats(smiles, logp = NULL, ws = NULL)
 }
 \arguments{
-\item{smiles}{SMILES to generate NCC categories for}
+\item{smiles}{smiles}
 
-\item{logp}{Octanol-water partition coefficient}
+\item{logp}{logp}
 
-\item{ws}{Water solubility (mg/L)}
+\item{ws}{ws}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

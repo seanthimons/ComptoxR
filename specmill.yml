@@ -1,0 +1,78 @@
+config_version: 1
+package: ComptoxR
+# CTX credential name -> environment variable read by the generated auth.
+authentication:
+  ctx: ctx_api_key
+# Every API uses the package request helper and gets roxygen documentation.
+helper: .ct_request
+documentation: true
+formatter:
+  name: air
+  version: 0.11.0
+# Endpoint adoption is opt-out: everything is generated unless it matches a rule here.
+# Rules match paths; prefix a rule with a method ('POST ^/path$') to ban that method only.
+selection:
+  methods: [GET, POST]
+  exclude:
+  # Server-side file standardization; GET /api/stdizer stays approved.
+  - 'POST ^/api/stdizer/?$'
+  # #354-#356: saved rule-group management and add/replace group mutations (stdizer, alerts).
+  - '^/api/stdizer/groups(/|$)'
+  - '/(add|replace)/?$'
+  # #356/#358: harvest and PubChem-list resolver routes without an established end-user purpose.
+  - '^/api/resolver/(casharvest|universalharvest|getpubchemlist)/?$'
+  # Service file upload and CAS preflight routes.
+  - '^/api/services/(caspreflight|files)/?$'
+  # #357: AMOS XLSX batch exports and write routes; JSON searches stay.
+  - '^/api/amos/(add_aqc_spectrum|add_new_fact_sheet|add_new_method|add_new_product_declaration|add_new_safety_data_sheet|analytical_qc_batch_search|batch_search)/?$'
+  # Curator-mode and protocol writes are not user-facing reads.
+  - 'POST ^/curators/(libraries|units)/?$'
+  - 'POST ^/reaction/editor/\{[^/]+\}$'
+  - 'POST ^/api/stdizer/protocols/?$'
+  # Resolver file exports; duplicated by the JSON routes.
+  - 'POST ^/api/resolver/export(-section)?/?$'
+  # Replaced by existing wrappers (chemical list download, hazard reports).
+  - 'POST ^/chemicals/chemical_DL/?$'
+  - 'POST ^/api/hazard/reports/?$'
+  # ChET login, admin and delete pages are not API.
+  - '^/(auth|admin)/'
+  - '^/chemicals/chemdelete/?$'
+  # #330: ChET legacy database-old pages, superseded by the current search routes.
+  - '^/(chemicals|reaction)/database[-_]old(/|$)'
+  # #330: assay creation is a write route.
+  - 'POST ^/api/toxprints/assays/?$'
+  # #356: alerts are limited to POST /api/alerts, GET /api/alerts/metadata and /version.
+  - '^/api/alerts(?!/(metadata|version)/?$|/?$)'
+# One file per API schema; each file explains its names and per-operation settings.
+services:
+- apis/chemi_alerts.yml
+- apis/chemi_amnb_nate.yml
+- apis/chemi_amos.yml
+- apis/chemi_arn_cats.yml
+- apis/chemi_chet.yml
+- apis/chemi_descriptors.yml
+- apis/chemi_hazard.yml
+- apis/chemi_mordred.yml
+- apis/chemi_ncc_cats.yml
+- apis/chemi_opera.yml
+- apis/chemi_padel.yml
+- apis/chemi_pfas_atlas.yml
+- apis/chemi_pfas_cats.yml
+- apis/chemi_predictor_models.yml
+- apis/chemi_rdkit.yml
+- apis/chemi_resolver.yml
+- apis/chemi_safety.yml
+- apis/chemi_search.yml
+- apis/chemi_services.yml
+- apis/chemi_stdizer.yml
+- apis/chemi_toxprints.yml
+- apis/chemi_webtest.yml
+- apis/ctx_bioactivity.yml
+- apis/ctx_chemical.yml
+- apis/ctx_exposure.yml
+- apis/ctx_hazard.yml
+- apis/epi_suite.yml
+- apis/pubchem.yml
+callback_files:
+- dev/specmill_callbacks.R
+- dev/specmill_pubchem_callbacks.R

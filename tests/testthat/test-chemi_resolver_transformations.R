@@ -1,0 +1,196 @@
+# Native similarity-map and retained RQ-code client behavior. All collaborators are mocked.
+if (!exists("generated_contract_ensure_package", mode = "function")) {
+  source(file.path("tests", "testthat", "helper-generated-contracts.R"))
+}
+generated_contract_ensure_package()
+
+map_response <- function() {
+  list(
+    order = list(list(chemical = list(sid = "A", name = "first")), list(chemical = list(name = "second"))),
+    similarity = list(list(list(sim = 0), list(value = 0.25)), list(list(sim = 0.25), list(sim = 0)))
+  )
+}
+
+test_that("similarity map keeps resolver arguments, flat chemicals, omitted options and sort", {
+  calls <- list()
+  lookup <- NULL
+  local_mocked_bindings(
+    chemi_resolver_lookup_bulk = function(...) {
+      lookup <<- list(...)
+      list(
+        list(result = "FOUND", chemical = list(chemId = "A", canonicalSmiles = "C", name = "first")),
+        list(result = "NOT_FOUND"),
+        list(result = "FOUND", chemical = list(sid = "B", smiles = "CC"))
+      )
+    },
+    .ct_request = function(...) {
+      calls[[length(calls) + 1L]] <<- list(...)
+      map_response()
+    },
+    .package = "ComptoxR"
+  )
+  expected_chemicals <- list(
+    list(
+      sid = "A",
+      smiles = "C",
+      casrn = NULL,
+      inchi = NULL,
+      inchiKey = NULL,
+      name = "first",
+      chemId = "A",
+      canonicalSmiles = "C"
+    ),
+    list(sid = "B", smiles = "CC", casrn = NULL, inchi = NULL, inchiKey = NULL, name = NULL)
+  )
+  result <- chemi_resolver_getsimilaritymap(c("one", "two"))
+  expect_identical(lookup, list(ids = c("one", "two"), idsType = "AnyId", tidy = FALSE))
+  expect_identical(
+    calls[[1]][c("method", "path", "query", "body", "headers", "request_controls")],
+    list(
+      method = "POST",
+      path = "/api/resolver/getsimilaritymap",
+      query = list(sort = "false"),
+      body = list(chemicals = expected_chemicals),
+      headers = list(Accept = "application/json"),
+      request_controls = list(preserve_errors = TRUE)
+    )
+  )
+  expect_identical(names(result), c("mol_names", "similarity", "hc"))
+  expect_identical(result$similarity, matrix(c(0, .25, .25, 0), 2, dimnames = list(c("A", "second"), c("A", "second"))))
+  expect_identical(result$hc$method, "complete")
+  for (value in list(NULL, FALSE, 0, TRUE, "UPPER")) {
+    chemi_resolver_getsimilaritymap("one", idType = value, section = value, sort = value, format = "raw")
+    expect_identical(lookup$idsType, if (is.null(value)) "AnyId" else value)
+    call <- calls[[length(calls)]]
+    expect_identical(call$body$section, value)
+    expect_identical(call$query$sort, if (is.null(value)) NULL else tolower(as.character(value)))
+    expect_identical(call$body$chemicals, expected_chemicals)
+  }
+  for (query in list(NULL, FALSE, 0, character())) {
+    chemi_resolver_getsimilaritymap(query, format = "raw")
+    expect_identical(lookup$ids, query)
+  }
+  expect_identical(chemi_resolver_getsimilaritymap("one", hclust_method = "single")$hc$method, "single")
+  expect_identical(
+    chemi_resolver_getsimilaritymap("one", format = "long"),
+    tibble::tibble(parent = c("A", "second"), child = c("second", "A"), value = c(.25, .25))
+  )
+  expect_identical(chemi_resolver_getsimilaritymap("one", format = "raw"), map_response())
+  expect_identical(chemi_resolver_getsimilaritymap("one", hclust_method = NULL, format = NULL)$hc$method, "complete")
+  expect_error(chemi_resolver_getsimilaritymap(), 'argument "query" is missing', fixed = TRUE)
+  expect_error(chemi_resolver_getsimilaritymap("one", format = FALSE), class = "comptoxr_post_response_hook_error")
+  expect_error(
+    chemi_resolver_getsimilaritymap("one", hclust_method = "invalid"),
+    class = "comptoxr_post_response_hook_error"
+  )
+})
+
+test_that("similarity map preserves exact pre/post states, partial updates and skip", {
+  stages <- calls <- list()
+  skip <- FALSE
+  local_mocked_bindings(
+    run_hook = function(fn, stage, data) {
+      expect_identical(fn, "chemi_resolver_getsimilaritymap")
+      stages[[length(stages) + 1L]] <<- list(stage = stage, data = data)
+      if (stage == "post_response") {
+        return(data$result)
+      }
+      if (skip) {
+        return(list(skip_request = TRUE, result = list(skipped = FALSE, count = 0)))
+      }
+      list(params = list(section = 0, query = NULL, chemicals = list(list(sid = "resolved")), format = "raw"))
+    },
+    .ct_request = function(...) {
+      calls[[length(calls) + 1L]] <<- list(...)
+      "response"
+    },
+    .package = "ComptoxR"
+  )
+  expect_identical(chemi_resolver_getsimilaritymap("one"), "response")
+  expect_identical(
+    stages[[1]]$data,
+    list(
+      params = list(
+        query = "one",
+        idType = "AnyId",
+        section = NULL,
+        sort = FALSE,
+        hclust_method = "complete",
+        format = c("cluster", "long", "raw"),
+        chemicals = NULL
+      )
+    )
+  )
+  expect_identical(
+    calls[[1]][c("method", "path", "query", "body")],
+    list(
+      method = "POST",
+      path = "/api/resolver/getsimilaritymap",
+      query = list(sort = "false"),
+      body = list(chemicals = list(list(sid = "resolved")), section = 0)
+    )
+  )
+  expect_identical(
+    stages[[2]]$data,
+    list(
+      result = "response",
+      params = list(
+        query = NULL,
+        idType = "AnyId",
+        section = 0,
+        sort = FALSE,
+        hclust_method = "complete",
+        format = "raw"
+      )
+    )
+  )
+  skip <- TRUE
+  expect_identical(chemi_resolver_getsimilaritymap("one"), list(skipped = FALSE, count = 0))
+  expect_length(stages, 3L)
+  expect_length(calls, 1L)
+})
+
+test_that("similarity map skips unresolved inputs and wraps hook errors, not transport errors", {
+  lookup_calls <- 0L
+  response <- list(list(result = "NOT_FOUND"))
+  local_mocked_bindings(
+    chemi_resolver_lookup_bulk = function(...) {
+      lookup_calls <<- lookup_calls + 1L
+      if (inherits(response, "error")) {
+        stop(response)
+      }
+      response
+    },
+    .ct_request = function(...) stop("transport sentinel"),
+    .package = "ComptoxR"
+  )
+  expect_warning(
+    expect_null(chemi_resolver_getsimilaritymap("one", format = "invalid")),
+    "No chemicals could be resolved"
+  )
+  response <- simpleError("resolver sentinel")
+  expect_error(chemi_resolver_getsimilaritymap("one"), class = "comptoxr_pre_request_hook_error")
+  expect_identical(lookup_calls, 3L) # first attempt plus fallback
+  response <- list(list(result = "FOUND", chemical = list(sid = "A")))
+  expect_error(chemi_resolver_getsimilaritymap("one"), "transport sentinel", fixed = TRUE)
+})
+
+test_that("similarity map retries resolution without idType and preserves real empty-input errors", {
+  for (query in list(NULL, character(), list())) {
+    expect_error(chemi_resolver_getsimilaritymap(query), class = "comptoxr_pre_request_hook_error")
+  }
+  calls <- list()
+  local_mocked_bindings(
+    chemi_resolver_lookup_bulk = function(...) {
+      calls[[length(calls) + 1L]] <<- list(...)
+      if (length(calls) == 1L) {
+        stop("first resolver attempt")
+      }
+      list(list(result = "FOUND", chemical = list(sid = "A")))
+    },
+    .ct_request = function(...) "raw result",
+    .package = "ComptoxR"
+  )
+  expect_identical(chemi_resolver_getsimilaritymap("one", idType = "CAS", format = "raw"), "raw result")
+  expect_identical(calls, list(list(ids = "one", idsType = "CAS", tidy = FALSE), list(ids = "one", tidy = FALSE)))
+})

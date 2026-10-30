@@ -7,19 +7,19 @@
 chemi_resolver_getannotation(name, heading)
 }
 \arguments{
-\item{name}{Required parameter}
+\item{name}{name}
 
-\item{heading}{Required parameter}
+\item{heading}{heading}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_resolver_getannotation(name = "DTXSID7020182")
+chemi_resolver_getannotation(name = "DTXSID7020182", heading = "benzene")
 }
 }
 \section{API stage}{

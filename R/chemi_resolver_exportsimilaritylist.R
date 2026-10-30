@@ -1,0 +1,213 @@
+#' chemi_resolver_exportsimilaritylist
+#'
+#' @md
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' @param format format
+#' @param showImage showImage
+#' @param limit limit
+#' @param body Request body.
+#' @return Decoded JSON or text, raw binary bytes, or NULL for an empty response.
+#' @apiStage public
+#' @export
+# Generated with specmill; do not edit by hand.
+chemi_resolver_exportsimilaritylist <- function(format, showImage = TRUE, limit = "All", body) {
+  if (base::is.null(format)) {
+    base::stop("Required input: format")
+  }
+  .api_validation$parameter_values(
+    base::list("format" = format, "showImage" = showImage, "limit" = limit),
+    list(
+      format = list(
+        enum = list("UNKNOWN", "SDF", "SMI", "MOL", "CSV", "TSV", "JSON", "XLSX", "PDF", "HTML", "XML", "DOCX"),
+        type = "string"
+      ),
+      showImage = list(default = TRUE, type = "boolean"),
+      limit = list(default = "All", type = "string")
+    ),
+    .api_validation$body_value,
+    c(format = "query", showImage = "query", limit = "query")
+  )
+  if (base::missing(body)) {
+    base::stop("Required body")
+  }
+  if (!base::missing(body)) {
+    body <- base::tryCatch(
+      .api_validation$body_value(
+        body,
+        structure(
+          list(
+            properties = list(
+              chemicals = list(
+                items = structure(
+                  list(
+                    properties = list(
+                      chemical = structure(
+                        list(
+                          properties = list(
+                            additionalProps = list(
+                              additionalProperties = structure(list(), names = character(0)),
+                              type = "object"
+                            ),
+                            averageMass = list(format = "double", type = "number"),
+                            canonicalSmiles = list(type = "string"),
+                            casrn = list(type = "string"),
+                            chemId = list(type = "string"),
+                            cid = list(type = "string"),
+                            id = list(type = "string"),
+                            image = list(type = "string"),
+                            inchi = list(
+                              type = "string"
+                            ),
+                            inchiKey = list(type = "string"),
+                            mol = list(type = "string"),
+                            molFormula = list(type = "string"),
+                            monoisotopicMass = list(format = "double", type = "number"),
+                            name = list(type = "string"),
+                            sid = list(type = "string"),
+                            smiles = list(type = "string")
+                          ),
+                          type = "object"
+                        ),
+                        specmill_id = "#/components/schemas/Chemical"
+                      ),
+                      confidence = list(format = "float", type = "number"),
+                      message = list(type = "string"),
+                      query = list(type = "string"),
+                      resolvedBy = list(
+                        enum = list(
+                          "DTXSID",
+                          "DTXCID",
+                          "SMILES",
+                          "MOL",
+                          "CAS",
+                          "Name",
+                          "InChI",
+                          "InChIKey",
+                          "InChIKey_1",
+                          "AnyId"
+                        ),
+                        type = "string"
+                      ),
+                      result = list(
+                        enum = list("NOT_RESOLVED", "FOUND", "CONVERTED", "MALFORMED", "DUPLICATE"),
+                        type = "string"
+                      ),
+                      similarity = list(format = "float", type = "number"),
+                      source = list(enum = list("DTX", "COMMONCHEMISTRY", "PUBCHEM"), type = "string")
+                    ),
+                    type = "object"
+                  ),
+                  specmill_id = "#/components/schemas/ResolvedChemical"
+                ),
+                type = "array"
+              ),
+              fingerprintName = list(type = "string"),
+              get_chemicals = list(
+                items = structure(
+                  list(
+                    properties = list(
+                      additionalProps = list(
+                        additionalProperties = structure(list(), names = character(0)),
+                        type = "object"
+                      ),
+                      averageMass = list(format = "double", type = "number"),
+                      canonicalSmiles = list(type = "string"),
+                      casrn = list(type = "string"),
+                      chemId = list(type = "string"),
+                      cid = list(type = "string"),
+                      id = list(type = "string"),
+                      image = list(type = "string"),
+                      inchi = list(type = "string"),
+                      inchiKey = list(type = "string"),
+                      mol = list(type = "string"),
+                      molFormula = list(type = "string"),
+                      monoisotopicMass = list(format = "double", type = "number"),
+                      name = list(type = "string"),
+                      sid = list(type = "string"),
+                      smiles = list(type = "string")
+                    ),
+                    type = "object"
+                  ),
+                  specmill_id = "#/components/schemas/Chemical"
+                ),
+                type = "array"
+              ),
+              main = structure(
+                list(
+                  properties = list(
+                    additionalProps = list(
+                      additionalProperties = structure(list(), names = character(0)),
+                      type = "object"
+                    ),
+                    averageMass = list(format = "double", type = "number"),
+                    canonicalSmiles = list(type = "string"),
+                    casrn = list(type = "string"),
+                    chemId = list(type = "string"),
+                    cid = list(type = "string"),
+                    id = list(type = "string"),
+                    image = list(type = "string"),
+                    inchi = list(type = "string"),
+                    inchiKey = list(type = "string"),
+                    mol = list(type = "string"),
+                    molFormula = list(type = "string"),
+                    monoisotopicMass = list(format = "double", type = "number"),
+                    name = list(type = "string"),
+                    sid = list(type = "string"),
+                    smiles = list(type = "string")
+                  ),
+                  type = "object"
+                ),
+                specmill_id = "#/components/schemas/Chemical"
+              ),
+              padelCompute2D = list(type = "boolean"),
+              padelCompute3D = list(type = "boolean"),
+              padelComputeFingerprints = list(type = "boolean"),
+              rdkitBits = list(format = "int32", type = "integer"),
+              rdkitRadius = list(format = "int32", type = "integer"),
+              rdkitType = list(type = "string"),
+              scoreName = list(type = "string"),
+              toxprintsProfile = list(type = "string"),
+              tverskyI = list(format = "int32", type = "integer")
+            ),
+            type = "object"
+          ),
+          specmill_id = "#/components/schemas/OrderSimilarityRequest"
+        )
+      ),
+      error = function(e) base::stop("Invalid body: ", base::conditionMessage(e), call. = FALSE)
+    )
+    if (base::is.null(body)) body <- jsonlite::unbox(NA)
+  }
+  params <- base::list("format" = format, "showImage" = showImage, "limit" = limit, "body" = body)
+  if (base::is.character(params[["format"]]) && base::any(!base::nzchar(params[["format"]]))) {
+    base::stop("Empty query parameter: format")
+  }
+  if (base::is.character(params[["showImage"]]) && base::any(!base::nzchar(params[["showImage"]]))) {
+    base::stop("Empty query parameter: showImage")
+  }
+  if (base::is.character(params[["limit"]]) && base::any(!base::nzchar(params[["limit"]]))) {
+    base::stop("Empty query parameter: limit")
+  }
+  result <- .ct_request(
+    method = "POST",
+    path = "/api/resolver/exportsimilaritylist",
+    path_params = base::list(),
+    query = base::list("format" = params[["format"]], "showImage" = params[["showImage"]], "limit" = params[["limit"]]),
+    body = params[["body"]],
+    request_controls = list(preserve_errors = TRUE),
+    server = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
+    server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
+    auth = list(),
+    parameter_serialization = list(list(
+      name = "showImage",
+      location = "query",
+      schema = list(default = TRUE, type = "boolean"),
+      style = "form",
+      explode = TRUE,
+      collection_format = NULL,
+      required = FALSE
+    ))
+  )
+  result
+}

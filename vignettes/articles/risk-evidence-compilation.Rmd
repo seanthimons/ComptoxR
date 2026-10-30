@@ -78,11 +78,11 @@ make the evidence table look more complete than the input process was.
 Use bulk wrappers when they exist.
 
 ```{r}
-identity <- ct_chemical_detail_search_bulk(ids)
-property_experimental <- ct_chemical_property_experimental_search_bulk(ids)
-property_predicted <- ct_chemical_property_predicted_search_bulk(ids)
-fate <- ct_chemical_fate_search_bulk(ids)
-hazard <- ct_hazard_toxval_search_bulk(ids) |>
+identity <- ct_chemical_detail_search_by_dtxsid_bulk(ids)
+property_experimental <- ct_chemical_property_experimental_search_by_dtxsid_bulk(ids)
+property_predicted <- ct_chemical_property_predicted_search_by_dtxsid_bulk(ids)
+fate <- ct_chemical_fate_search_by_dtxsid_bulk(ids)
+hazard <- ct_hazard_toxval_search_by_dtxsid_bulk(ids) |>
   filter(toxvalTypeSuperCategory %in% c(
     "Point of Departure",
     "Reference Value"
@@ -90,14 +90,14 @@ hazard <- ct_hazard_toxval_search_bulk(ids) |>
   select(dtxsid, source, toxvalType, toxvalTypeSuperCategory,
          toxvalNumeric, toxvalUnits, speciesCommon, studyType,
          quality, qcCategory)
-exposure <- ct_exposure_seem_general_search_bulk(ids)
-bioactivity_detail <- ct_bioactivity_data_search_bulk(ids)
+exposure <- ct_exposure_seem_general_search_by_dtxsid_bulk(ids)
+bioactivity_detail <- ct_bioactivity_data_search_by_dtxsid_bulk(ids)
 ```
 
 Use small iteration for endpoints without bulk wrappers.
 
 ```{r}
-ivive <- lapply(ids, ct_hazard_adme_ivive_search) |>
+ivive <- lapply(ids, ct_hazard_adme_ivive_search_by_dtxsid) |>
   bind_rows()
 
 bioactivity_summary <- lapply(

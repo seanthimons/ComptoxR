@@ -4,7 +4,7 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
   if (
     length(package_name) != 1L ||
       !grepl('^[A-Za-z][A-Za-z0-9.]*[A-Za-z0-9]$', package_name) ||
-      tolower(package_name) %in% c('comptoxr', 'wrapmaint', 'httr2')
+      tolower(package_name) %in% c('comptoxr', 'specmill', 'httr2')
   ) {
     stop('Supply a distinct valid local package name')
   }
@@ -75,7 +75,7 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
   stage <- tempfile('local-client-')
   dir.create(stage)
   on.exit(unlink(stage, recursive = TRUE), add = TRUE)
-  result <- wrapmaint::generate_client(
+  result <- specmill::generate_client(
     stage,
     list(files = schema_path, helper = 'local_request', policy_version = 'local-explicit-url-1'),
     'apply'

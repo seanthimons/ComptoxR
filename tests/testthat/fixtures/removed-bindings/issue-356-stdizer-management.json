@@ -1,0 +1,37 @@
+[
+  {
+    "service": "chemi-stdizer-prod-full",
+    "operation": "GET /api/stdizer/groups/{id}",
+    "name": "chemi_stdizer_groups_by_id",
+    "file": "R/chemi_stdizer_groups_by_id.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "chemi-stdizer-prod-full",
+    "operation": "GET /api/stdizer/groups",
+    "name": "chemi_stdizer_groups",
+    "file": "R/chemi_stdizer_groups.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "held-recursive-facade",
+    "operation": "GET /api/stdizer/groups/{id}/recursive",
+    "name": "chemi_stdizer_groups_recursive",
+    "file": "R/chemi_stdizer_groups_recursive.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "chemi-stdizer-reviewed-preflight",
+    "operation": "POST /api/stdizer/groups/preflight",
+    "name": "chemi_stdizer_groups_preflight_post",
+    "file": "R/chemi_stdizer_groups_preflight_post.R",
+    "implementation": "generated"
+  },
+  {
+    "service": "legacy",
+    "operation": "POST /api/stdizer/groups",
+    "name": "chemi_stdizer_groups_bulk",
+    "file": "R/chemi_stdizer_groups_bulk.R",
+    "implementation": "legacy"
+  }
+]

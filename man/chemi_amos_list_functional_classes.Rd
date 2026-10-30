@@ -2,12 +2,12 @@
 % Please edit documentation in R/chemi_amos_list_functional_classes.R
 \name{chemi_amos_list_functional_classes}
 \alias{chemi_amos_list_functional_classes}
-\title{Returns a list of all functional use classes that are assigned to at least one substance.}
+\title{Returns a list of all functional use classes that are assigned to at least one substance}
 \usage{
 chemi_amos_list_functional_classes()
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

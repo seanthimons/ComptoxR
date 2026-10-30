@@ -74,15 +74,15 @@ ids <- resolution |>
 
 if (!length(ids)) stop("No unambiguous DTXSIDs were resolved.")
 
-details <- ct_chemical_detail_search_bulk(ids)
-property_exp <- ct_chemical_property_experimental_search_bulk(ids)
-property_pred <- ct_chemical_property_predicted_search_bulk(ids)
-fate <- ct_chemical_fate_search_bulk(ids)
-exposure <- ct_exposure_seem_general_search_bulk(ids)
-hazard <- ct_hazard_toxval_search_bulk(ids)
-cancer <- ct_hazard_cancer_search_bulk(ids)
-genetox <- ct_hazard_genetox_search_bulk(ids)
-bioactivity <- ct_bioactivity_data_search_bulk(ids)
+details <- ct_chemical_detail_search_by_dtxsid_bulk(ids)
+property_exp <- ct_chemical_property_experimental_search_by_dtxsid_bulk(ids)
+property_pred <- ct_chemical_property_predicted_search_by_dtxsid_bulk(ids)
+fate <- ct_chemical_fate_search_by_dtxsid_bulk(ids)
+exposure <- ct_exposure_seem_general_search_by_dtxsid_bulk(ids)
+hazard <- ct_hazard_toxval_search_by_dtxsid_bulk(ids)
+cancer <- ct_hazard_cancer_summary_search_by_dtxsid_bulk(ids)
+genetox <- ct_hazard_genetox_summary_search_by_dtxsid_bulk(ids)
+bioactivity <- ct_bioactivity_data_search_by_dtxsid_bulk(ids)
 ```
 
 Each result can be joined to `resolution` by `dtxsid`. Empty endpoint results
@@ -99,8 +99,8 @@ selected_ids <- hazard |>
   distinct(dtxsid) |>
   pull()
 
-selected_details <- ct_chemical_detail_search_bulk(selected_ids)
-selected_exposure <- ct_exposure_seem_general_search_bulk(selected_ids)
+selected_details <- ct_chemical_detail_search_by_dtxsid_bulk(selected_ids)
+selected_exposure <- ct_exposure_seem_general_search_by_dtxsid_bulk(selected_ids)
 ```
 
 ## Iterate only when no bulk wrapper exists
@@ -109,7 +109,7 @@ IVIVE has no bulk wrapper. Property summaries, fate summaries, production
 volume, and bioactivity summaries also require iteration.
 
 ```{r}
-ivive <- lapply(ids, ct_hazard_adme_ivive_search) |>
+ivive <- lapply(ids, ct_hazard_adme_ivive_search_by_dtxsid) |>
   bind_rows()
 ```
 

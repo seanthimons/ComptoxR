@@ -7,19 +7,19 @@
 chemi_stdizer(workflow, smiles)
 }
 \arguments{
-\item{workflow}{Required parameter}
+\item{workflow}{workflow}
 
-\item{smiles}{Required parameter}
+\item{smiles}{smiles}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_stdizer(workflow = "DTXSID7020182")
+chemi_stdizer(workflow = "qsar-ready", smiles = "CCO")
 }
 }
 \section{API stage}{

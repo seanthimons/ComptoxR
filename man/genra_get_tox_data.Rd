@@ -56,5 +56,5 @@ genra_get_tox_data("DTXSID7020182", study_filter = "developmental")
 }
 }
 \seealso{
-\code{\link[=ct_hazard_toxval_search_bulk]{ct_hazard_toxval_search_bulk()}}, \code{\link[=genra_predict]{genra_predict()}}
+\code{\link[=ct_hazard_toxval_search_by_dtxsid_bulk]{ct_hazard_toxval_search_by_dtxsid_bulk()}}, \code{\link[=genra_predict]{genra_predict()}}
 }

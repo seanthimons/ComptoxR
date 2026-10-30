@@ -2,15 +2,15 @@
 % Please edit documentation in R/chemi_amos_get_nmr_spectrum.R
 \name{chemi_amos_get_nmr_spectrum}
 \alias{chemi_amos_get_nmr_spectrum}
-\title{Endpoint for retrieving a specified NMR spectrum from the database.}
+\title{Endpoint for retrieving a specified NMR spectrum from the database}
 \usage{
 chemi_amos_get_nmr_spectrum(internal_id)
 }
 \arguments{
-\item{internal_id}{Unique ID of the NMR spectrum of interest.}
+\item{internal_id}{Unique ID of the NMR spectrum of interest. Accepts a vector: one request is sent per element and the results are combined.}
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

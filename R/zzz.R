@@ -605,7 +605,12 @@ run_verbose <- function(verbose = FALSE) {
 #' Set batch limit for POST requests
 #'
 #' Sets the global batch limit for POST requests. Defaults to 200.
+#' Only wrappers that read the `batch_limit` setting use it. Wrappers that
+#' split requests at a fixed size set per API (100 items for CTX) ignore it.
 #' @param limit Numeric number
+#' @return Called for its side effect of setting the `batch_limit`
+#'   environment variable; returns the result of [Sys.setenv()] invisibly.
+#'   Warns and returns `NULL` for non-numeric input.
 #' @export
 
 batch_limit <- function(limit = 200) {

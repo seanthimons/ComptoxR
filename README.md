@@ -61,8 +61,9 @@ eco_server(2) # Shipped localhost Plumber server
 Selectors still set their environment variables. Call a selector with no
 argument to clear that setting; an option still takes precedence. Use
 `url_only = TRUE` to inspect a target without changing settings or connections.
-Explicit HTTP(S) URLs remain supported. Removed development numeric choices
-now give a configuration error. Public browser sites are not REST APIs.
+Explicit HTTP(S) URLs remain supported. Numeric choices outside each
+selector's documented options give a configuration error. Public browser sites
+are not REST APIs.
 
 Update ComptoxR and the local Plumber server together, then restart the server.
 Keep existing local databases and mapping evidence. ECOTOX results contain
@@ -87,12 +88,8 @@ Add this line to the file, replacing the placeholder with your key:
 ctx_api_key=YOUR_KEY_HERE
 ```
 
-Save the file and restart R. Confirm that R can find the key without printing
-the key in a script or report:
-
-```r
-ct_api_key()
-```
+Save the file and restart R. The startup message and `ComptoxR_package_sitrep()` report
+whether the key was found.
 
 If you only need the key for the current session, use:
 
@@ -107,20 +104,20 @@ Use a chemical identifier to retrieve a compound record:
 ```r
 library(ComptoxR)
 
-ct_chemical_detail_search("DTXSID7020182")
+ct_chemical_detail_search_by_dtxsid("DTXSID7020182")
 ```
 
 For several identifiers, use the bulk function:
 
 ```r
-result <- ct_chemical_detail_search_bulk(
+result <- ct_chemical_detail_search_by_dtxsid_bulk(
   query = c("DTXSID7020182", "DTXSID7020192")
 )
 dplyr::glimpse(result)
 ```
 
-Use `ct_chemical_detail_search()` for one chemical and
-`ct_chemical_detail_search_bulk()` for a vector of identifiers.
+Use `ct_chemical_detail_search_by_dtxsid()` for one chemical and
+`ct_chemical_detail_search_by_dtxsid_bulk()` for a vector of identifiers.
 
 The package site has examples for searching, hazard data, properties, batch
 requests, and local database tools. API-dependent examples are marked so that

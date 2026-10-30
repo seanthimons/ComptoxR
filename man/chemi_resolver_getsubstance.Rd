@@ -7,10 +7,10 @@
 chemi_resolver_getsubstance(name)
 }
 \arguments{
-\item{name}{Required parameter}
+\item{name}{name}
 }
 \value{
-Returns a list with result object
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

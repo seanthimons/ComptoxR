@@ -2,12 +2,12 @@
 % Please edit documentation in R/chemi_amos_release_notes.R
 \name{chemi_amos_release_notes}
 \alias{chemi_amos_release_notes}
-\title{Returns a list of release notes for AMOS.}
+\title{Returns a list of release notes for AMOS}
 \usage{
 chemi_amos_release_notes()
 }
 \value{
-Returns a tibble with results
+Returns a list of results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
