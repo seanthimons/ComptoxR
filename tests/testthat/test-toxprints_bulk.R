@@ -3,6 +3,7 @@ test_that('ToxPrint bulk replacement preserves its GET sibling', {
   root <- test_path('../..')
   path <- test_path('fixtures/toxprints-bulk-before.json')
   skip_if_not(file.exists(path))
+  skip_if_not(file.exists(file.path(root, 'R/chemi_toxprints.R')), 'needs the source checkout; R/ is not in the installed package')
   before <- jsonlite::read_json(path)
   old <- eval(parse(text = before$GET_prefix, keep.source = FALSE)[[1L]][[3L]], baseenv())
   current <- eval(parse(file.path(root, 'R/chemi_toxprints.R'), keep.source = FALSE)[[1L]][[3L]], baseenv())

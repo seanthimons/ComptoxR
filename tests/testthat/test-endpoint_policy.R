@@ -1,5 +1,6 @@
 test_that('banned endpoints cannot be selected or exported', {
   root <- test_path('../..')
+  skip_if_not(file.exists(file.path(root, 'specmill.yml')), 'needs the source checkout; specmill.yml is not in the built package')
   config <- yaml::read_yaml(file.path(root, 'specmill.yml'))
   excluded <- function(path, method = NA_character_) {
     vapply(path, function(p) any(vapply(config$selection$exclude, function(rule) {
@@ -59,4 +60,18 @@ test_that('banned endpoints cannot be selected or exported', {
     expect_false(file.exists(file.path(root, binding$file)))
     expect_false(file.exists(file.path(root, 'man', paste0(binding$name, '.Rd'))))
   }
+})
+
+# Runs under R CMD check too: needs only the installed namespace and fixtures.
+test_that('removed and banned wrappers are not exported', {
+  exports <- getNamespaceExports('ComptoxR')
+  removed <- do.call(c,
+    lapply(list.files(test_path('fixtures/removed-bindings'), full.names = TRUE), jsonlite::read_json))
+  expect_gt(length(removed), 0L)
+  for (binding in removed) {
+    expect_false(binding$name %in% exports, info = binding$name)
+  }
+  expect_setequal(grep('^chemi_alerts', exports, value = TRUE),
+    c('chemi_alerts', 'chemi_alerts_metadata', 'chemi_alerts_version'))
+  expect_length(grep('^chemi_stdizer_groups', exports), 0L)
 })
