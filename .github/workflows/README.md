@@ -36,9 +36,9 @@ Automatic bleeding-edge prerelease workflow named Publish Integration Package.
 
 - Runs on pushes to `integration` and by manual dispatch.
 - Requires a dev-suffixed `DESCRIPTION` version such as `1.6.0.9000`.
-- Builds SHA-stamped source, Windows, and macOS package assets.
-- Uploads assets to the `integration-latest` prerelease.
-- Moves the `integration-latest` tag to the exact integration commit only after all assets build.
+- Builds a SHA-stamped source package (no platform binaries, for speed).
+- Uploads it to the `integration-latest` prerelease.
+- Moves the `integration-latest` tag to the exact integration commit only after the source package uploads.
 - Removes stale `ComptoxR_*` rolling assets after a successful build.
 - Does not affect immutable versioned releases or GitHub's latest stable release selection.
 

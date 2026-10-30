@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up R
-        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
         with:
           r-version: release
           use-public-rspm: true
@@ -90,24 +90,8 @@ jobs:
 
   build-upload:
     needs: [metadata, prepare-release]
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            asset_label: source
-            extension: tar.gz
-            build_binary: false
-          - os: windows-latest
-            asset_label: windows
-            extension: zip
-            build_binary: true
-          - os: macos-latest
-            asset_label: macos
-            extension: tgz
-            build_binary: true
+    # Source tarball only; platform binaries were dropped for speed.
+    runs-on: ubuntu-latest
 
     env:
       GH_TOKEN: ${{ github.token }}
@@ -115,9 +99,6 @@ jobs:
       VERSION: ${{ needs.metadata.outputs.version }}
       COMMIT: ${{ needs.metadata.outputs.commit }}
       SHORT_SHA: ${{ needs.metadata.outputs.short_sha }}
-      ASSET_LABEL: ${{ matrix.asset_label }}
-      EXTENSION: ${{ matrix.extension }}
-      BUILD_BINARY: ${{ matrix.build_binary }}
 
     steps:
       - name: Checkout integration source
@@ -127,16 +108,16 @@ jobs:
           fetch-depth: 0
 
       - name: Set up R
-        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
         with:
           r-version: release
           use-public-rspm: true
 
       - name: Set up pandoc
-        uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+        uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
 
       - name: Install package dependencies
-        uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+        uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
 
       - name: Check public API boundary
         shell: Rscript {0}
@@ -152,22 +133,8 @@ jobs:
           tarball="${PACKAGE}_${VERSION}.tar.gz"
           test -f "$tarball"
 
-          if [ "$BUILD_BINARY" = "true" ]; then
-            R CMD INSTALL --build "$tarball"
-            built_asset="${PACKAGE}_${VERSION}.${EXTENSION}"
-            if [ ! -f "$built_asset" ]; then
-              echo "::error::Expected binary package was not produced: $built_asset"
-              ls -la
-              exit 1
-            fi
-            asset="${PACKAGE}_${VERSION}_${SHORT_SHA}_${ASSET_LABEL}.${EXTENSION}"
-            mv "$built_asset" "$asset"
-          else
-            asset="${PACKAGE}_${VERSION}_${SHORT_SHA}_${ASSET_LABEL}.tar.gz"
-            mv "$tarball" "$asset"
-          fi
-
-          test -f "$asset"
+          asset="${PACKAGE}_${VERSION}_${SHORT_SHA}_source.tar.gz"
+          mv "$tarball" "$asset"
           echo "asset=$asset" >> "$GITHUB_OUTPUT"
 
       - name: Upload package asset to integration prerelease
@@ -222,7 +189,7 @@ jobs:
             | sed 's/^/- /')"
 
           {
-            echo "Bleeding-edge rolling prerelease for collaborator binaries built from integration."
+            echo "Bleeding-edge rolling prerelease: source package built from integration."
             echo
             echo "Built from integration at commit $COMMIT"
             echo "DESCRIPTION Version: $VERSION"
