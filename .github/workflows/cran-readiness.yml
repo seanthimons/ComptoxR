@@ -49,6 +49,9 @@ jobs:
             any::jsonlite
             any::pkgload
             any::testthat
+            any::yaml12
+            any::jsonvalidate
+            any::V8
             any::vcr
             any::withr
           needs: check

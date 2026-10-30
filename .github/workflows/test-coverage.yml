@@ -80,6 +80,9 @@ jobs:
             any::rcmdcheck
             any::covr
             any::testthat
+            any::yaml12
+            any::jsonvalidate
+            any::V8
             any::vcr
           needs: check
 
