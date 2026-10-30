@@ -50,7 +50,9 @@ install_specmill <- function(
   archive <- file.path(work, 'source.tar')
   status <- system2(
     'git',
-    c('-C', shQuote(source_repo), 'archive', '--format=tar', paste0('--output=', shQuote(archive)), pin$source_commit)
+    # Git for Windows defaults to core.autocrlf=true, which git archive applies
+    # to text files; force LF so the checksum matches on every OS.
+    c('-C', shQuote(source_repo), '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', 'archive', '--format=tar', paste0('--output=', shQuote(archive)), pin$source_commit)
   )
   if (status != 0L) {
     stop('Cannot archive the pinned specmill revision.')
