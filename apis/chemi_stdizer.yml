@@ -515,17 +515,17 @@ groups:
           return: The decoded service response, preserving JSON structure, text or media bytes.
           tags:
             apiStage: public
-      # why: server resolver keeps the user-overridable base URL option; body description documents the schema request; docs keep the released title
+      # why: server resolver keeps the user-overridable base URL option; docs keep the released title and document the schema request body
       POST /api/stdizer/records:
         server:
           resolver: .ct_server_url
           key: chemi_burl
-        body:
-          description: 'Named list with records (a list of records, each list(rid = <id>, chemical
-            = list(smiles = <SMILES>))), options (for example list(workflow = "qsar-ready"))
-            and optional full (TRUE or FALSE).'
         docs:
           title: Stdizer Records
+          parameters:
+            body: 'Named list with records (a list of records, each list(rid = <id>, chemical
+              = list(smiles = <SMILES>))), options (for example list(workflow = "qsar-ready"))
+              and optional full (TRUE or FALSE).'
           lifecycle: experimental
           return: The standardized records, one per input record.
           examples:
