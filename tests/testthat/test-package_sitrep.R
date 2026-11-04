@@ -262,3 +262,27 @@ test_that("batch_limit with non-numeric input warns and leaves default", {
   expect_message(batch_limit("lots"), "Invalid limit option")
   expect_identical(Sys.getenv("batch_limit"), "200")
 })
+
+
+test_that("Chemi warnings preserve the full diagnostic report", {
+  withr::with_tempdir({
+    local_sitrep_env()
+    withr::local_options(ComptoxR.chemi_burl = "https://example.invalid")
+    for (status in c(200L, 503L)) {
+      testthat::local_mocked_bindings(
+        req_perform = function(req, ...) httr2::response(
+          status_code = status,
+          headers = list(`Content-Type` = "application/json"),
+          body = charToRaw('[{"is_available":true},{"is_available":false}]')
+        ),
+        .package = "httr2"
+      )
+      result <- ComptoxR_package_sitrep()
+      chemi <- result$ping_results[["Cheminformatics API"]]
+      expect_identical(chemi$status, "WARNING")
+      expect_identical(chemi$message, if (status == 503L) "HTTP 503" else "1/2 endpoints active")
+      expect_true(file.exists(result$log_file))
+      expect_true("local_databases" %in% names(result))
+    }
+  })
+})

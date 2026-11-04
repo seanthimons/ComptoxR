@@ -272,21 +272,31 @@ ComptoxR_package_sitrep <- function() {
 
         latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
 
-        endpoints <- resp %>%
-          httr2::resp_body_json() %>%
-          purrr::map(~ tibble::as_tibble(.x)) %>%
-          purrr::list_rbind() %>%
-          dplyr::filter(!is.na(is_available))
+        sc <- httr2::resp_status(resp)
+        if (sc >= 400) {
+          list(
+            name = "Cheminformatics API",
+            status = "WARNING",
+            message = paste0("HTTP ", sc),
+            latency = latency
+          )
+        } else {
+          endpoints <- resp %>%
+            httr2::resp_body_json() %>%
+            purrr::map(~ tibble::as_tibble(.x)) %>%
+            purrr::list_rbind() %>%
+            dplyr::filter(!is.na(is_available))
 
-        active <- sum(endpoints$is_available, na.rm = TRUE)
-        total <- nrow(endpoints)
+          active <- sum(endpoints$is_available, na.rm = TRUE)
+          total <- nrow(endpoints)
 
-        list(
-          name = "Cheminformatics API",
-          status = "OK",
-          message = sprintf("%d/%d endpoints active", active, total),
-          latency = latency
-        )
+          list(
+            name = "Cheminformatics API",
+            status = if (active == total) "OK" else "WARNING",
+            message = sprintf("%d/%d endpoints active", active, total),
+            latency = latency
+          )
+        }
       } else {
         list(
           name = "Cheminformatics API",

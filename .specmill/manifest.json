@@ -2792,7 +2792,7 @@
       "operations": "epi_suite POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.59",
+  "toolkit_version": "0.2.0",
   "inputs": {
     "DESCRIPTION": "ce957537b552560ccfdc0b05ccc45d15525c6dede995f7a2a88d9a7e92ee0110",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -3278,7 +3278,7 @@
     "R/input_policy.R": "6cf8bde8f3c9c326a2dd0b3bfbd3cb31bf119b42d35aaef055240fae24f6df7e",
     "R/mappings.R": "a9d3db6e4d85926d7a9ce1de04eaae47bd893279bcbe32ec21815d4b57a238f0",
     "R/misc_functions.R": "ff0fc14c243a36c6bd89169895df20a9634723058e1284984ed0dc343647172e",
-    "R/package_sitrep.R": "7b111ebfe3da3a0a2260ce977523e64451a7d53af622b7095aac0c96d97cff83",
+    "R/package_sitrep.R": "e0f2b7464cb0434b56a35a5938322301b0a8f55d45c26699f2d5db20329b22b8",
     "R/prediction_response.R": "f99fbf12f978a68c5980edfc5d1c162c4be502814119dffafcbaec2e0108e600",
     "R/probe_api_function.R": "5ae0039470a578374e350fa13260a326d43a85f25e8196301e82a5e1f6fe352a",
     "R/pubchem_policy.R": "bf4cf3fc71e8aa0d7954ed97ce28cd731a8ef26a808b1985a907ef786396aa5a",
