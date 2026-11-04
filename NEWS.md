@@ -4,6 +4,12 @@
 
 ## Unreleased
 
+- `ComptoxR_package_sitrep()` now names individual endpoint failures and reports
+  Cheminformatics endpoint-list health separately. When discovery fails, it probes
+  the last component list seen for that server in the current session, or shipped
+  endpoints. CTX domains and other HTTP services receive named checks too; EPI
+  specification failures do not stop its search check.
+
 - New `db_installed_version()` reports, offline, the upstream release recorded inside
   the installed ECOTOX, ToxValDB or DSSTox database (for example
   `"ecotox_ascii_09_15_2026.zip"`).
