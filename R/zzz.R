@@ -515,11 +515,16 @@ pubchem_server <- function(server = NULL, url_only = FALSE) {
 #' `run_debug(TRUE)`. The old `run_debug` environment variable is no longer
 #' supported.
 #'
+#' The setter also updates the generated request dry-run option. Use
+#' `run_debug(FALSE)` to disable dry runs even when the native dry-run
+#' environment flag is enabled.
+#'
 #' @return Invisibly returns `NULL`.
 #' @export
 run_debug <- function(debug = FALSE) {
   if (rlang::is_bool(debug)) {
     .ComptoxREnv$run_debug <- debug
+    options(comptoxr_native.dry_run = debug)
     if (isTRUE(debug)) {
       cli::cli_alert_info(
         paste0("Debug mode is now ", cli::style_bold(cli::col_red("ON")))
@@ -536,6 +541,7 @@ run_debug <- function(debug = FALSE) {
     cli::cli_alert_info("Valid options are TRUE or FALSE.")
     cli::cli_alert_warning("Debug mode set to FALSE.")
     .ComptoxREnv$run_debug <- FALSE
+    options(comptoxr_native.dry_run = FALSE)
   }
 
   invisible(NULL)
@@ -562,6 +568,10 @@ run_debug <- function(debug = FALSE) {
 #' header. `run_verbose(FALSE)` overrides it only for the current session. The
 #' package never creates or edits `.Rprofile`.
 #'
+#' Call `run_verbose(TRUE)` after loading the package to enable generated
+#' request diagnostics too. Changing `ComptoxR.run_verbose` directly affects
+#' startup and legacy diagnostics only.
+#'
 #' The old `Sys.setenv(run_verbose = "TRUE")` setting is no longer supported.
 #'
 #' @return Invisibly returns `NULL`.
@@ -580,7 +590,7 @@ run_debug <- function(debug = FALSE) {
 #' @export
 run_verbose <- function(verbose = FALSE) {
   if (rlang::is_bool(verbose)) {
-    options(ComptoxR.run_verbose = verbose)
+    options(ComptoxR.run_verbose = verbose, comptoxr_native.run_verbose = verbose)
     if (isTRUE(verbose)) {
       cli::cli_alert_info(
         paste0("Verbose mode is now ", cli::style_bold(cli::col_green("ON")))
@@ -596,7 +606,7 @@ run_verbose <- function(verbose = FALSE) {
     )
     cli::cli_alert_info("Valid options are TRUE or FALSE.")
     cli::cli_alert_warning("Verbose mode set to FALSE.")
-    options(ComptoxR.run_verbose = FALSE)
+    options(ComptoxR.run_verbose = FALSE, comptoxr_native.run_verbose = FALSE)
   }
 
   invisible(NULL)

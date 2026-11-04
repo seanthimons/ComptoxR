@@ -286,3 +286,48 @@ test_that("Chemi warnings preserve the full diagnostic report", {
     }
   })
 })
+
+test_that("public flags control generated requests", {
+  withr::local_options(list(
+    ComptoxR.chemi_burl = "https://example.invalid",
+    ComptoxR.run_verbose = FALSE,
+    comptoxr_native.dry_run = NULL,
+    comptoxr_native.run_verbose = NULL
+  ))
+  withr::local_envvar(COMPTOXR_NATIVE_DRY_RUN = "false")
+  state <- getFromNamespace(".ComptoxREnv", "ComptoxR")
+  old_debug <- state$run_debug
+  withr::defer(state$run_debug <- old_debug)
+  calls <- 0L
+  perform <- function(req) {
+    calls <<- calls + 1L
+    httr2::response(status_code = 200L,
+      headers = list(`Content-Type` = "application/json"),
+      body = charToRaw('{}'))
+  }
+  suppressMessages(run_debug(TRUE))
+  suppressMessages(run_verbose(TRUE))
+  expect_message(
+    result <- httr2::with_mocked_responses(perform, chemi_services_version()),
+    "GET request \\(dry run\\)"
+  )
+  expect_s3_class(result, "httr2_request")
+  expect_identical(calls, 0L)
+  expect_true(state$run_debug)
+  expect_true(getOption("ComptoxR.run_verbose"))
+
+  Sys.setenv(COMPTOXR_NATIVE_DRY_RUN = "true")
+  for (value in list(FALSE, NA, "invalid", c(TRUE, FALSE))) {
+    suppressMessages(run_debug(TRUE))
+    suppressMessages(run_verbose(TRUE))
+    suppressMessages(run_debug(value))
+    suppressMessages(run_verbose(value))
+    expect_false(state$run_debug)
+    expect_false(getOption("ComptoxR.run_verbose"))
+    expect_message(
+      httr2::with_mocked_responses(perform, chemi_services_version()),
+      NA
+    )
+  }
+  expect_identical(calls, 4L)
+})

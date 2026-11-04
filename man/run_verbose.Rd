@@ -29,6 +29,10 @@ Start a new R session before this setting affects the package startup
 header. \code{run_verbose(FALSE)} overrides it only for the current session. The
 package never creates or edits \code{.Rprofile}.
 
+Call \code{run_verbose(TRUE)} after loading the package to enable generated
+request diagnostics too. Changing \code{ComptoxR.run_verbose} directly affects
+startup and legacy diagnostics only.
+
 The old \code{Sys.setenv(run_verbose = "TRUE")} setting is no longer supported.
 }
 \examples{

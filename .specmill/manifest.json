@@ -2792,7 +2792,7 @@
       "operations": "epi_suite POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.2.0",
+  "toolkit_version": "0.2.1",
   "inputs": {
     "DESCRIPTION": "ce957537b552560ccfdc0b05ccc45d15525c6dede995f7a2a88d9a7e92ee0110",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -3303,7 +3303,7 @@
     "R/z_db_download.R": "9a268696141778e16af30ed29e09dbb082865ab72f322660140d1af7b1fda635",
     "R/z_db_version.R": "f34b732382e83a54511c618936f6aa8022e3c727848a4703f79b842b53aa524c",
     "R/z_specmill_request.R": "5da32e3244f70332d9453f29ba175db2e80072e1daf73daa05830e04d86ae3ba",
-    "R/zzz.R": "c9dc443b94477391102c411698e6bc2b287ad65536b6b318c6eeab70469fd22f",
+    "R/zzz.R": "9d4713924b3e5cf01dea6c8b4996eb4d83a3349c563869371610d1b4d12dc40a",
     "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
     "apis/chemi_alerts.yml": "5ffa651ff33d4caf1d493d91445b15d201c9ffac5da238a04a63c31908549743",
     "apis/chemi_amnb_nate.yml": "b41fe1b0e399bd0d3c5be88dc99251784f412c117fa6a147ca88318a7ecf37c3",
@@ -3881,9 +3881,9 @@
     "man/pubchem_synonyms.Rd": "e1191b3856bda7a8a2831fa64ffd7ab0ad774cdb078a7262e5f1e239b08dd234",
     "man/reach.Rd": "617ba5e22ae1ed7c96a7b47fa8c71e3c41e0e7ff0bcbd70703042b8df8a9ae00",
     "man/reset_servers.Rd": "dd75d0713826cd5881bd1438356ca92f6733a9b0aba884219cb9fda3b7f98a00",
-    "man/run_debug.Rd": "f266686c2052fe6b95ecc4c1b3611508a84b68b222d1d67003ff6e32785d8ed7",
+    "man/run_debug.Rd": "2f870fa145d0430464933ce9069106dcc133c62c4f2d846f509036d72d546f5a",
     "man/run_setup.Rd": "a9c221fe042bfd0c6ab23c78ed2b41b6c763b06323584b9bf9526a4481318b53",
-    "man/run_verbose.Rd": "1a6361c5670af08a43777c1a97bde0ab6a689f3414a89458c05781bae2064a8c",
+    "man/run_verbose.Rd": "230d385d6dd57a311833df3a84733d2a8d8ac538a020932124437500fa7e5d13",
     "man/set_api_token.Rd": "273799f43da33a4e86255f19d30f281d9703be8044fad6df58a576b374fbc099",
     "man/std_spec.Rd": "5a7948884622cb4df5dbd0e921e2b81071caf289e6df2a1f76e4a7406d09bb51",
     "man/testing_chemicals.Rd": "a9966e12dfbcbd8e2a54c909476e36bdd7395616c66c9d7a69b00acf951eab85",
