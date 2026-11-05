@@ -2,9 +2,7 @@
 
 # ComptoxR NEWS
 
-## v4.0.1
-
-#### Release notes
+## Unreleased
 
 - `run_debug()` and `run_verbose()` now control generated requests as well as
   legacy wrappers. Disabling or invalidating a flag resets both settings;
@@ -34,8 +32,6 @@
   place, so it could name the wrong release. They also close the session's cached
   connection before replacing the file, and stop if `source =` cannot be copied.
   `toxval_install()` now errors, like the other two, when no database file is produced.
-
-<!-- end release notes -->
 
 ## v4.0.0 (2026-10-30)
 
