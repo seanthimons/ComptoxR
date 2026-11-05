@@ -200,3 +200,53 @@
   checked$latency <- as.numeric(difftime(Sys.time(), start, units = "secs"))
   .sitrep_summary("Cheminformatics API", checked, discovery, source)
 }
+
+# Shared by the startup summary and the full diagnostic report.
+.sitrep_checks <- function() {
+  ping_results <- list()
+  probes <- list(
+    "CompTox Dashboard API" = list(
+      key = "ctx_burl",
+      paths = c(
+        chemical = "chemical/health",
+        hazard = "hazard/health",
+        exposure = "exposure/health",
+        bioactivity = "bioactivity/health"
+      )
+    ),
+    "EPI Suite API" = list(
+      key = "epi_burl",
+      paths = c(
+        specification = "",
+        search = "search?query=benzene&limit=1"
+      )
+    ),
+    "PubChem PUG REST" = list(
+      key = "pubchem_burl",
+      paths = c(
+        molecular_formula = "compound/cid/2244/property/MolecularFormula/JSON"
+      )
+    ),
+    "Natural Products API" = list(key = "np_burl", paths = c(api_root = "")),
+    "ECOTOX" = list(key = "eco_burl", paths = c(health = "health-check")),
+    "ToxValDB" = list(key = "toxval_burl", paths = c(health = "health-check"))
+  )
+  for (name in names(probes)) {
+    probe <- probes[[name]]
+    url <- .endpoint_target(probe$key)
+    # Local database files are described below rather than sent to HTTP.
+    if (!grepl("^https?://", url, ignore.case = TRUE)) {
+      next
+    }
+    checked <- .sitrep_probe(url, probe$paths)
+    endpoint_list <- if (probe$key == "epi_burl") {
+      as.list(checked$endpoints[1, c("status", "message", "path")])
+    } else {
+      NULL
+    }
+    ping_results[[name]] <- .sitrep_summary(name, checked, endpoint_list)
+  }
+  ping_results[["Cheminformatics API"]] <- .sitrep_chemi(.endpoint_target("chemi_burl"))
+
+  ping_results
+}

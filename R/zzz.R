@@ -14,381 +14,53 @@
 #'
 #' Tests to see if APIs are up and tokens are present.
 #'
-#' @return Ping tests and API tokens.
+#' @details Uses the same service checks as [ComptoxR_package_sitrep()],
+#' with a compact summary and names of failed or unverified checks. Also reports
+#' local database installation and API key presence, without opening databases
+#' or printing credentials. It does not create a diagnostic log.
+#'
+#' @return Invisibly returns `NULL` after displaying the setup summary.
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule(left = 'API endpoints')
-  cli::cli_alert_warning(
-    'Change with *_server() functions'
-  )
-
-  server_urls <- list(
-    "EPI Suite API" = list(
-      display_url = .endpoint_target("epi_burl"),
-      ping_url = .endpoint_target("epi_burl")
-    ),
-    "PubChem PUG REST" = list(
-      display_url = .endpoint_target("pubchem_burl"),
-      ping_url = paste0(.endpoint_target("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
+  cli::cli_rule(left = "Services")
+  results <- .sitrep_checks()
+  for (result in results) {
+    status <- switch(
+      result$status,
+      OK = cli::col_green(result$status),
+      ERROR = cli::col_red(result$status),
+      cli::col_yellow(result$status)
     )
-  )
-
-  # ECOTOX is handled as a custom entry below (not in the ping list)
-  eco_url <- .endpoint_target("eco_burl")
-
-  # Filter out any endpoints with empty/unset URLs
-  active_endpoints <- purrr::keep(
-    server_urls,
-    ~ nzchar(.x$display_url) && !is.na(.x$display_url)
-  )
-
-  # Remove entries with duplicate URLs, keeping the first name. Using `unique()` would strip the names.
-  ping_urls <- purrr::map_chr(active_endpoints, "ping_url")
-  ping_list <- active_endpoints[!duplicated(ping_urls)]
-
-  if (length(ping_list) == 0) {
-    cli::cli_alert_info("No server endpoints are configured to ping.")
-    cli::cli_end()
-  } else {
-    # A more informative and visually appealing check function
-    check_url <- function(endpoint, name) {
-      url <- endpoint$ping_url
-      tryCatch(
-        {
-          # Use HEAD request for efficiency; we just want to check connectivity
-          req <- httr2::request(url) %>%
-            httr2::req_method("HEAD") %>%
-            httr2::req_timeout(5) %>%
-            # Don't error on HTTP status, we check it manually
-            httr2::req_error(is_error = \(resp) FALSE)
-
-          start_time <- Sys.time()
-          resp <- httr2::req_perform(req)
-          end_time <- Sys.time()
-
-          latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
-          latency_fmt <- paste0(round(latency * 1000), "ms")
-
-          status <- httr2::resp_status(resp)
-
-          status_text <- if (status >= 200 && status < 400) {
-            cli::col_green(cli::format_inline("OK ({status})"))
-          } else {
-            cli::col_yellow(cli::format_inline("WARN ({status})"))
-          }
-
-          list(
-            name = name,
-            url = endpoint$display_url,
-            status_text = status_text,
-            latency = latency,
-            latency_fmt = latency_fmt
-          )
-        },
-        error = function(e) {
-          # Catch httr2-specific errors for more robust error messages
-          error_msg <- if (inherits(e, "httr2_timeout")) {
-            "Request timed out"
-          } else if (inherits(e, "httr2_connect_error")) {
-            "Connection failed"
-          } else {
-            "Request failed" # Fallback for other errors
-          }
-          list(
-            name = name,
-            url = endpoint$display_url,
-            status_text = cli::col_red(cli::format_inline("ERROR ({error_msg})")),
-            latency = NA_real_,
-            latency_fmt = ""
-          )
-        }
-      )
+    up <- sum(result$endpoints$status == "OK")
+    total <- nrow(result$endpoints)
+    cli::cli_text("{.strong {result$name}}: {status} ({up}/{total} checks OK, {round(result$latency * 1000)}ms)")
+    if (!is.null(result$endpoint_list) && result$endpoint_list$status != "OK") {
+      cli::cli_text("  Endpoint list: {result$endpoint_list$message}; using {result$source} probes")
     }
-
-    results <- purrr::imap(ping_list, check_url)
-
-    # Check CTX four-domain health (chemical/hazard/exposure/bioactivity) ----
-    # CTX exposes four domains under the same ctx-api base. Ping in parallel so
-    # verbose startup does not pay 4x5s serially. Ordered first in `results`.
-    ctx_result <- tryCatch(
-      {
-        ctx_burl <- .endpoint_target("ctx_burl")
-        ctx_domains <- c("chemical", "hazard", "exposure", "bioactivity")
-        reqs <- purrr::map(ctx_domains, function(domain) {
-          httr2::request(paste0(ctx_burl, domain, "/health")) %>%
-            httr2::req_method("HEAD") %>%
-            httr2::req_timeout(5) %>%
-            httr2::req_error(is_error = \(resp) FALSE)
-        })
-        start_time <- Sys.time()
-        resps <- httr2::req_perform_parallel(reqs, on_error = "continue")
-        end_time <- Sys.time()
-
-        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
-        latency_fmt <- paste0(round(latency * 1000), "ms")
-
-        up <- sum(purrr::map_lgl(resps, \(r) {
-          inherits(r, "httr2_response") &&
-            httr2::resp_status(r) >= 200 &&
-            httr2::resp_status(r) < 400
-        }))
-        total <- length(ctx_domains)
-
-        ctx_status <- if (up == total) {
-          cli::col_green(cli::format_inline("OK ({up}/{total} endpoints active)"))
-        } else if (up > 0) {
-          cli::col_yellow(cli::format_inline("WARN ({up}/{total} endpoints active)"))
-        } else {
-          cli::col_red("ERROR (0 endpoints active)")
-        }
-
-        list(
-          name = "CompTox Dashboard API",
-          url = ctx_burl,
-          status_text = ctx_status,
-          latency = latency,
-          latency_fmt = latency_fmt
-        )
-      },
-      error = function(e) {
-        list(
-          name = "CompTox Dashboard API",
-          url = .endpoint_target("ctx_burl"),
-          status_text = cli::col_red("ERROR (Failed to reach endpoints)"),
-          latency = NA_real_,
-          latency_fmt = ""
-        )
-      }
-    )
-    results <- c(list(ctx_result), results)
-
-    # Check for active Cheminformatics endpoints ----
-    tryCatch(
-      {
-        start_time <- Sys.time()
-        resp <- httr2::request(paste0(.endpoint_target("chemi_burl"), "/services/cim_component_info")) %>%
-          httr2::req_timeout(5) %>%
-          httr2::req_error(is_error = \(resp) FALSE) %>%
-          httr2::req_perform()
-        end_time <- Sys.time()
-
-        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
-        latency_fmt <- paste0(round(latency * 1000), "ms")
-
-        endpoints <- resp %>%
-          httr2::resp_body_json() %>%
-          purrr::map(., ~ tibble::as_tibble(.x)) %>%
-          purrr::list_rbind() %>%
-          dplyr::filter(!is.na(is_available))
-
-        active_chemi_endpoints <- sum(endpoints$is_available, na.rm = TRUE)
-        total_chemi_endpoints <- nrow(endpoints)
-
-        chemi_status <- cli::col_green(
-          cli::format_inline("OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)")
-        )
-        results <- c(
-          results,
-          list(list(
-            name = "Cheminformatics API",
-            url = .endpoint_target("chemi_burl"),
-            status_text = chemi_status,
-            latency = latency,
-            latency_fmt = latency_fmt
-          ))
-        )
-      },
-      error = function(e) {
-        chemi_status <- cli::col_red("ERROR (Failed to get endpoints)")
-        results <<- c(
-          results,
-          list(list(
-            name = "Cheminformatics API",
-            url = .endpoint_target("chemi_burl"),
-            status_text = chemi_status,
-            latency = NA_real_,
-            latency_fmt = ""
-          ))
-        )
-      }
-    )
-
-    # DSSTox — always local, no remote API
-    results <- c(
-      results,
-      list(list(
-        name = "DSSTox",
-        url = "",
-        status_text = cli::col_cyan("local DuckDB (no remote API)"),
-        latency = NA_real_,
-        latency_fmt = ""
-      ))
-    )
-
-    # ECOTOX — show active mode only
-    eco_latency <- NA_real_
-    eco_latency_fmt <- ""
-
-    if (nzchar(eco_url) && grepl("\\.duckdb$", eco_url)) {
-      # Local DuckDB mode
-      if (file.exists(eco_url)) {
-        eco_status <- cli::col_cyan("local DuckDB")
-      } else {
-        eco_status <- cli::col_red("not installed")
-      }
-    } else if (nzchar(eco_url) && grepl("127\\.0\\.0\\.1", eco_url)) {
-      # Plumber mode — ping health-check
-      tryCatch(
-        {
-          req <- httr2::request(paste0(eco_url, "/health-check")) |>
-            httr2::req_timeout(3) |>
-            httr2::req_error(is_error = \(resp) FALSE)
-          start_time <- Sys.time()
-          resp <- httr2::req_perform(req)
-          end_time <- Sys.time()
-          lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
-          eco_latency <- lat
-          eco_latency_fmt <- paste0(round(lat * 1000), "ms")
-          status <- httr2::resp_status(resp)
-          eco_status <- if (status >= 200 && status < 400) {
-            cli::col_green(cli::format_inline("OK ({status})"))
-          } else {
-            cli::col_yellow(cli::format_inline("WARN ({status})"))
-          }
-        },
-        error = function(e) {
-          eco_status <<- cli::col_red("not responding")
-        }
-      )
-    } else if (nzchar(eco_url) && grepl("cfpub\\.epa\\.gov", eco_url)) {
-      eco_status <- cli::col_yellow("not active")
-    } else if (nzchar(eco_url) && grepl("hcd\\.rtpnc\\.epa\\.gov", eco_url)) {
-      eco_status <- cli::col_yellow("placeholder")
-    } else if (nzchar(eco_url)) {
-      eco_status <- cli::col_yellow("unknown endpoint")
-    } else {
-      eco_status <- cli::col_yellow("not configured")
+    failed <- result$endpoints[result$endpoints$status != "OK", ]
+    if (nrow(failed)) {
+      details <- paste0(failed$name, " (", failed$message, ")", collapse = "; ")
+      cli::cli_text("  Check failures or unverified: {details}")
     }
-
-    eco_url_display <- if (nzchar(eco_url) && grepl("^https?://", eco_url)) eco_url else ""
-
-    results <- c(
-      results,
-      list(list(
-        name = "ECOTOX",
-        url = eco_url_display,
-        status_text = eco_status,
-        latency = eco_latency,
-        latency_fmt = eco_latency_fmt
-      ))
-    )
-
-    # ToxValDB — show active mode
-    toxval_url <- .endpoint_target("toxval_burl")
-    toxval_latency <- NA_real_
-    toxval_latency_fmt <- ""
-
-    if (nzchar(toxval_url) && grepl("\\.duckdb$", toxval_url)) {
-      if (file.exists(toxval_url)) {
-        toxval_status <- cli::col_cyan("local DuckDB")
-      } else {
-        toxval_status <- cli::col_red("not installed")
-      }
-    } else if (nzchar(toxval_url) && grepl("127\\.0\\.0\\.1", toxval_url)) {
-      # Plumber mode — ping health-check
-      tryCatch(
-        {
-          req <- httr2::request(paste0(toxval_url, "/health-check")) |>
-            httr2::req_timeout(3) |>
-            httr2::req_error(is_error = \(resp) FALSE)
-          start_time <- Sys.time()
-          resp <- httr2::req_perform(req)
-          end_time <- Sys.time()
-          lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
-          toxval_latency <- lat
-          toxval_latency_fmt <- paste0(round(lat * 1000), "ms")
-          status <- httr2::resp_status(resp)
-          toxval_status <- if (status >= 200 && status < 400) {
-            cli::col_green(cli::format_inline("OK ({status})"))
-          } else {
-            cli::col_yellow(cli::format_inline("WARN ({status})"))
-          }
-        },
-        error = function(e) {
-          toxval_status <<- cli::col_red("not responding")
-        }
-      )
-    } else if (nzchar(toxval_url)) {
-      toxval_status <- cli::col_yellow("unknown endpoint")
-    } else {
-      toxval_status <- cli::col_yellow("not configured")
-    }
-
-    toxval_url_display <- if (nzchar(toxval_url) && grepl("^https?://", toxval_url)) toxval_url else ""
-
-    results <- c(
-      results,
-      list(list(
-        name = "ToxValDB",
-        url = toxval_url_display,
-        status_text = toxval_status,
-        latency = toxval_latency,
-        latency_fmt = toxval_latency_fmt
-      ))
-    )
-
-    healthy_latency <- 0.3
-    degrading_latency <- 1.0
-
-    latency_colour <- function(latency, latency_fmt, healthy_latency, degrading_latency) {
-      if (latency_fmt == "") {
-        return("")
-      }
-      if (!is.finite(latency)) {
-        return(cli::col_yellow(latency_fmt))
-      }
-      if (latency <= healthy_latency) {
-        return(cli::col_green(latency_fmt))
-      }
-      if (latency <= degrading_latency) {
-        return(cli::col_yellow(latency_fmt))
-      }
-      cli::col_red(latency_fmt)
-    }
-
-    results_output <- purrr::map_chr(results, function(result) {
-      latency_display <- if (is.finite(result$latency)) {
-        paste0("[", latency_colour(result$latency, result$latency_fmt, healthy_latency, degrading_latency), "]")
-      } else {
-        ""
-      }
-      url_display <- if (nzchar(result$url)) {
-        paste0(.diagnostic_endpoint(result$url), " - ")
-      } else {
-        ""
-      }
-
-      cli::format_inline(
-        "{.strong {result$name}}: {url_display}{result$status_text} {latency_display}"
-      )
-    })
-
-    cli::cli_li(items = results_output)
-    cli::cli_end()
   }
 
-  # Token check ----
-  cli::cli_rule(left = 'API tokens')
-  # Directly check the environment variable to avoid aborting during package load
-  api_key <- Sys.getenv("ctx_api_key")
-  if (api_key == "") {
-    cli::cli_alert_warning(
-      "CompTox API Key: {.strong NOT SET}. Use {.run Sys.setenv(ctx_api_key= 'YOUR_KEY_HERE')} to set it."
-    )
-  } else {
-    cli::cli_alert_success(cli::col_green("CompTox API Key: {.strong SET}."))
+  cli::cli_rule(left = "Local databases")
+  databases <- list(DSSTox = dss_path(), ECOTOX = eco_path(), ToxValDB = toxval_path())
+  installers <- c(DSSTox = "dss_install()", ECOTOX = "eco_install()", ToxValDB = "toxval_install()")
+  for (name in names(databases)) {
+    path <- databases[[name]]
+    if (file.exists(path)) {
+      size <- round(file.size(path) / 1024^2)
+      cli::cli_text("{name}: installed ({size} MB)")
+    } else {
+      cli::cli_text("{name}: not installed; run {.code {installers[[name]]}}")
+    }
   }
+
+  key_set <- nzchar(Sys.getenv("ctx_api_key"))
+  cli::cli_text("CompTox API key: {if (key_set) 'SET' else 'NOT SET'}")
+  cli::cli_text("Full diagnostics: {.code ComptoxR_package_sitrep()}. Change services with {.code *_server()}.")
   invisible(NULL)
 }
 
@@ -760,97 +432,13 @@ reset_servers <- function() {
 # Header -----------------------------------------------------------------
 
 .header <- function() {
-  if (is.na(utils::packageDate('ComptoxR'))) {
-    build_date <- paste0(
-      as.character(Sys.Date()),
-      cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
-    )
-  } else {
-    build_date <- as.character(utils::packageDate('ComptoxR'))
-  }
-
-  cli::cli({
-    cli::cli_rule()
-
-    pkg_version <- as.character(utils::packageVersion('ComptoxR'))
-    cli::cli_alert_success("This is version {pkg_version} of ComptoxR")
-    cli::cli_alert_success("Built on: {build_date}")
-
-    cli::cli_rule(left = 'Run settings')
-    debug_value <- if (.run_debug_enabled()) {
-      cli::col_red("TRUE")
-    } else {
-      cli::col_green("FALSE")
-    }
-    verbose_value <- if (.run_verbose_enabled()) {
-      cli::col_green("TRUE")
-    } else {
-      cli::col_red("FALSE")
-    }
-    cli::cli_dl(c(
-      'Debug' = "{debug_value}",
-      'Verbose' = "{verbose_value}",
-      'Batch limit' = '{Sys.getenv("batch_limit")}'
-    ))
-
-    cli::cli_rule(left = "Local databases")
-
-    # DSSTox
-    db_path <- dss_path()
-    if (file.exists(db_path)) {
-      db_mb <- round(file.info(db_path)$size / 1024^2)
-      cli::cli_alert_success(
-        "DSSTox: Installed ({db_mb} MB) {cli::col_silver(paste0('-- ', db_path))}"
-      )
-    } else {
-      cli::cli_alert_warning(
-        "DSSTox: Not installed. Run {.run dss_install()} to enable local chemical lookups."
-      )
-    }
-
-    # ECOTOX
-    eco_db_path <- eco_path()
-    if (file.exists(eco_db_path)) {
-      eco_db_mb <- round(file.info(eco_db_path)$size / 1024^2)
-      # Read release date from the _metadata table written by the build
-      eco_version <- tryCatch(
-        {
-          con <- .eco_get_con()
-          d <- .db_metadata_value(.db_metadata_table(con), "ecotox_release_date")
-          if (!.db_is_missing_string(d)) paste0(", v", d) else ""
-        },
-        error = function(e) ""
-      )
-      cli::cli_alert_success(
-        "ECOTOX: Installed ({eco_db_mb} MB{eco_version}) {cli::col_silver(paste0('-- ', eco_db_path))}"
-      )
-    } else {
-      cli::cli_alert_warning(
-        "ECOTOX: Not installed. Run {.run eco_install()} to enable local ECOTOX queries."
-      )
-    }
-
-    # ToxValDB
-    toxval_db_path <- toxval_path()
-    if (file.exists(toxval_db_path)) {
-      toxval_db_mb <- round(file.info(toxval_db_path)$size / 1024^2)
-      toxval_version <- tryCatch(
-        {
-          con <- .tox_get_con()
-          v <- DBI::dbGetQuery(con, "SELECT version_label FROM _metadata WHERE is_latest = TRUE LIMIT 1")
-          if (nrow(v) > 0) paste0(", v", v$version_label[[1]]) else ""
-        },
-        error = function(e) ""
-      )
-      cli::cli_alert_success(
-        "ToxValDB: Installed ({toxval_db_mb} MB{toxval_version}) {cli::col_silver(paste0('-- ', toxval_db_path))}"
-      )
-    } else {
-      cli::cli_alert_warning(
-        "ToxValDB: Not installed. Run {.run toxval_install()} to enable local ToxValDB queries."
-      )
-    }
-  })
-
+  version <- as.character(utils::packageVersion("ComptoxR"))
+  date <- utils::packageDate("ComptoxR")
+  build <- if (is.na(date)) "Development build" else paste0("Built ", date)
+  cli::cli_rule(left = paste("ComptoxR", version))
+  cli::cli_text("{build}")
+  debug <- .run_debug_enabled()
+  verbose <- .run_verbose_enabled()
+  cli::cli_text("Debug: {debug} | Verbose: {verbose} | Batch limit: {Sys.getenv('batch_limit', unset = '200')}")
   run_setup()
 }

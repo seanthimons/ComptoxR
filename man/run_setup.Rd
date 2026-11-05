@@ -7,8 +7,14 @@
 run_setup()
 }
 \value{
-Ping tests and API tokens.
+Invisibly returns \code{NULL} after displaying the setup summary.
 }
 \description{
 Tests to see if APIs are up and tokens are present.
+}
+\details{
+Uses the same service checks as \code{\link[=ComptoxR_package_sitrep]{ComptoxR_package_sitrep()}},
+with a compact summary and names of failed or unverified checks. Also reports
+local database installation and API key presence, without opening databases
+or printing credentials. It does not create a diagnostic log.
 }

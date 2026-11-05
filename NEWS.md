@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+- The verbose startup header now uses the same service checks as sitrep, with
+  compact summaries and names of failed checks. Local databases appear once,
+  and development builds no longer show the current date as their build date.
+
 - `ComptoxR_package_sitrep()` now names individual endpoint failures and reports
   Cheminformatics endpoint-list health separately. When discovery fails, it probes
   the last component list seen for that server in the current session, or shipped
