@@ -2,7 +2,13 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.1
+
+#### Release notes
+
+- `run_debug()` and `run_verbose()` now control generated requests as well as
+  legacy wrappers. Disabling or invalidating a flag resets both settings;
+  explicitly disabling debug mode overrides the native dry-run environment flag.
 
 - Removed the Natural Products service configuration and diagnostics, including
   `np_server()` and the exported `util_classyfire()` integration. Cheminformatics
@@ -28,6 +34,8 @@
   place, so it could name the wrong release. They also close the session's cached
   connection before replacing the file, and stop if `source =` cannot be copied.
   `toxval_install()` now errors, like the other two, when no database file is produced.
+
+<!-- end release notes -->
 
 ## v4.0.0 (2026-10-30)
 

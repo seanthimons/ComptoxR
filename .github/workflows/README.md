@@ -47,6 +47,8 @@ Automatic bleeding-edge prerelease workflow named Publish Integration Package.
 Manual stable-release workflow named Release.
 
 - Defaults to a semantic patch bump, such as v1.5.0 to v1.5.1.
+- Choose `version_type: none` when `DESCRIPTION` already contains the intended
+  release version, so a prepared patch release is not incremented again.
 - Checks the package before pushing release commits and the version tag.
 - Creates an immutable versioned release with the source tarball attached.
 - Refuses to overwrite an existing version tag or release.
