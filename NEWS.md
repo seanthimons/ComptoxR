@@ -2,7 +2,9 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.1 (2026-11-05)
+
+#### Release notes
 
 - Updated the Specmill toolkit to 0.2.2. Generated requests now reword only
   transport failures (such as connection errors, TLS errors or timeouts); other
@@ -37,6 +39,50 @@
   place, so it could name the wrong release. They also close the session's cached
   connection before replacing the file, and stop if `source =` cannot be copied.
   `toxval_install()` now errors, like the other two, when no database file is produced.
+
+<!-- end release notes -->
+
+#### New features
+
+- probe fallback endpoints and name sitrep failures
+  ([9bd1056](https://github.com/seanthimons/ComptoxR/tree/9bd105669bd82f75e19e76cd3ad7bc73b46ab2b9))
+
+#### Bug fixes
+
+- connect public flags to generated request controls
+  ([771a606](https://github.com/seanthimons/ComptoxR/tree/771a6065e7e359a3a38fbf62d775799b3e657d60))
+- keep the .version sidecar in sync on every install path
+  ([e0640b5](https://github.com/seanthimons/ComptoxR/tree/e0640b5da467db5530dda06e3f4709d653080372))
+
+#### Refactorings
+
+- retire Natural Products endpoint and classifier integration
+  ([66f90ab](https://github.com/seanthimons/ComptoxR/tree/66f90ab7c70173686dc49ce6fba1383d894fff83))
+- share sitrep checks and simplify startup header
+  ([37637f1](https://github.com/seanthimons/ComptoxR/tree/37637f198ab1d6d6c3c7753eda7041dca448c120))
+
+#### CI
+
+- bump GitHub Actions and build only the source package for integration
+  ([6881bef](https://github.com/seanthimons/ComptoxR/tree/6881bef602fe12f6ad66282868bbb44985e2bd4a))
+
+#### Other changes
+
+- bump version to 4.0.1 \[skip ci\]
+  ([72d0029](https://github.com/seanthimons/ComptoxR/tree/72d00293d573dcacbad1a573aaf332ce44375d4f))
+- leave patch versioning to the release workflow
+  ([d661349](https://github.com/seanthimons/ComptoxR/tree/d6613498b0ba46fa133d0639fb35f6e7b9e84c61))
+- prepare 4.0.1 patch release
+  ([6bfdeb2](https://github.com/seanthimons/ComptoxR/tree/6bfdeb25addfe48a08df8331b94e690cba0a2c3a))
+- refresh unit test readiness audit
+  ([af65f86](https://github.com/seanthimons/ComptoxR/tree/af65f866134f1c0705e04d84dce2d6c72295214c))
+- update Specmill to 0.2.0 and improve Chemi diagnostics
+  ([5ccd0c8](https://github.com/seanthimons/ComptoxR/tree/5ccd0c8e2598abc38988260c88ff99a643b6b729))
+- bump integration to development version 4.0.0.9000
+  ([f162fca](https://github.com/seanthimons/ComptoxR/tree/f162fcafca2e87aa370ea1cff4415996c639fad1))
+
+Full set of changes:
+[`v4.0.0...v4.0.1`](https://github.com/seanthimons/ComptoxR/compare/v4.0.0...v4.0.1)
 
 ## v4.0.0 (2026-10-30)
 
@@ -531,6 +577,8 @@
 
 #### Docs
 
+- update NEWS.md for v4.0.0 \[skip ci\]
+  ([bff04f5](https://github.com/seanthimons/ComptoxR/tree/bff04f585268e536b13ccce314a490f7b1d8ce33))
 - keep hand-written NEWS across releases, add 4.0 migration article
   ([62773ff](https://github.com/seanthimons/ComptoxR/tree/62773ff722e2797da2fa8bd159e9a0c78c14487c))
 - add 'Building ComptoxR from schemas' maintainer article
