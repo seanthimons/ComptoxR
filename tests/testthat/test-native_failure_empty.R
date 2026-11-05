@@ -47,7 +47,7 @@ test_that("a dropped failed item preserves the successful table rows", {
 
 test_that("transport errors follow effective request count and credentials stay hard", {
   withr::local_envvar(ctx_api_key = "local-failure-key", batch_limit = "2")
-  local_mocked_bindings(req_perform = function(...) stop("transport sentinel"), .package = "httr2")
+  local_mocked_bindings(req_perform = function(...) stop(errorCondition("transport sentinel", class = "httr2_failure")), .package = "httr2")
   expect_error(ct_chemical_detail_search_by_dtxsid_bulk(c("one", "two")), "HTTP request failed")
   withr::local_envvar(batch_limit = "1")
   expect_no_warning(expect_identical(ct_chemical_detail_search_by_dtxsid_bulk(c("one", "two")),
