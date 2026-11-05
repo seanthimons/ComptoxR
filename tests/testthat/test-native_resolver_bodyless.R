@@ -43,7 +43,7 @@ test_that("bodyless resolver keeps HTTP, credential and transport failures hard"
   }
   status <- 401L
   expect_error(chemi_resolver_ghs_list_count(), class = "specmill_call_error")
-  local_mocked_bindings(req_perform = function(...) stop("transport sentinel"),
+  local_mocked_bindings(req_perform = function(...) stop(errorCondition("transport sentinel", class = "httr2_failure")),
     .package = "httr2")
   expect_error(chemi_resolver_ghs_list_count(), "HTTP request failed before a response")
 })

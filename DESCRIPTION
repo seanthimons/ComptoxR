@@ -34,7 +34,7 @@ Imports:
     duckdb,
     glue,
     here,
-    httr2,
+    httr2 (>= 1.0.0),
     jsonlite (>= 1.8.8),
     lifecycle,
     magick,

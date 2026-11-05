@@ -21,7 +21,7 @@ test_that("list-all authentication and transport failures remain hard errors", {
       headers = list(`Content-Type` = "application/json"), body = charToRaw('{}'))
   }, .package = "httr2")
   expect_error(ct_chemical_list_all(), class = "specmill_call_error")
-  local_mocked_bindings(req_perform = function(...) stop("transport sentinel"),
+  local_mocked_bindings(req_perform = function(...) stop(errorCondition("transport sentinel", class = "httr2_failure")),
     .package = "httr2")
   expect_error(ct_chemical_list_all(), "before a response was received")
 })

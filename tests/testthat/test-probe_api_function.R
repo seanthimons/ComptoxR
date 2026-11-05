@@ -96,7 +96,7 @@ test_that("probe reports empty, non-200, redirected, and thrown results", {
     expect_false(any(result$valid))
     expect_match(result$error[[1]], case$message, fixed = TRUE)
   }
-  testthat::local_mocked_bindings(req_perform = function(req) stop('request exploded'), .package = 'httr2')
+  testthat::local_mocked_bindings(req_perform = function(req) stop(errorCondition('request exploded', class = 'httr2_failure')), .package = 'httr2')
   expect_warning(errors <- probe_api_function('chemi_amos_get_info_by_id', internal_id = 'group-42'), "failed")
   expect_false(any(errors$valid))
   expect_match(errors$error[[1]], "HTTP request failed before a response was received", fixed = TRUE)
@@ -118,7 +118,7 @@ test_that("probe rejects partial native batches with unobserved request failures
   testthat::local_mocked_bindings(chemi_amos_get_info_by_id = probe_native_wrapper,
     .package = "ComptoxR")
   testthat::local_mocked_bindings(req_perform = function(req, ...) {
-    if (endsWith(req$url, "/group-2")) stop("request exploded")
+    if (endsWith(req$url, "/group-2")) stop(errorCondition("request exploded", class = "httr2_failure"))
     probe_json_response(req)
   }, .package = "httr2")
   expect_warning(result <- probe_api_function("chemi_amos_get_info_by_id", internal_id = c("group-1", "group-2")), "failed")

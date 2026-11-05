@@ -53,7 +53,7 @@ test_that("AMOS read HTTP, credential and transport errors remain hard", {
     status <- 401L
     expect_error(suppressMessages(do.call(fn, case$args)), class = "specmill_call_error")
   }
-  local_mocked_bindings(req_perform = function(...) stop("transport sentinel"),
+  local_mocked_bindings(req_perform = function(...) stop(errorCondition("transport sentinel", class = "httr2_failure")),
     .package = "httr2")
   expect_error(chemi_amos_spectral_entropy(list(c(100, 1))),
     "HTTP request failed before a response")
