@@ -2,14 +2,16 @@
 
 # ComptoxR NEWS
 
-## v4.0.1 (2026-11-05)
-
-#### Release notes
+## Unreleased
 
 - Updated the Specmill toolkit to 0.2.2. Generated requests now reword only
   transport failures (such as connection errors, TLS errors or timeouts); other
   errors raised while performing a request pass through unchanged. ComptoxR now
   requires httr2 1.0.0 or later.
+
+## v4.0.1 (2026-11-05)
+
+#### Release notes
 
 - `run_debug()` and `run_verbose()` now control generated requests as well as
   legacy wrappers. Disabling or invalidating a flag resets both settings;
