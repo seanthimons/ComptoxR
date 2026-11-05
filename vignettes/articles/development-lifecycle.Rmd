@@ -175,7 +175,7 @@ dispatch; the integration publisher also runs on pushes to `integration`:
   separate from stable releases.
 - **Build Package Artifact** — builds a source tarball and uploads it as a
   workflow artifact (retained 14 days). No release, no tag.
-- **Publish Integration Package** — builds source, Windows, and macOS assets
+- **Publish Integration Package** — builds a source package
   for `integration-latest` when the version ends in `.9000`. Each filename
   records the source commit. It does not publish development API clients.
 - **Record VCR Cassettes** — the only sanctioned path for live cassette

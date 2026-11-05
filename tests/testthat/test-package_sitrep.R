@@ -2,12 +2,16 @@
 # This function generates diagnostic reports
 
 local_sitrep_env <- function() {
+  state <- getFromNamespace(".ComptoxREnv", "ComptoxR")
+  old <- state$sitrep_endpoints
+  state$sitrep_endpoints <- NULL
+  withr::defer(state$sitrep_endpoints <- old, envir = parent.frame())
   testthat::local_mocked_bindings(
     req_perform = function(req, ...) {
       httr2::response(
         status_code = 200L,
         headers = list(`Content-Type` = 'application/json'),
-        body = charToRaw('[{"is_available":true}]')
+        body = charToRaw('[{"name":"rdkit","is_available":true}]')
       )
     },
     req_perform_parallel = function(reqs, ...) lapply(reqs, function(req) httr2::response(status_code = 200L)),
@@ -21,7 +25,6 @@ local_sitrep_env <- function() {
       eco_burl = "",
       toxval_burl = "",
       epi_burl = "",
-      np_burl = "",
       pubchem_burl = ""
     ),
     .local_envir = parent.frame()
@@ -261,4 +264,123 @@ test_that("batch_limit with non-numeric input warns and leaves default", {
   # Unset entry is seeded to "200" before the numeric check runs.
   expect_message(batch_limit("lots"), "Invalid limit option")
   expect_identical(Sys.getenv("batch_limit"), "200")
+})
+
+
+test_that("Chemi warnings preserve the full diagnostic report", {
+  withr::with_tempdir({
+    local_sitrep_env()
+    withr::local_options(ComptoxR.chemi_burl = "https://example.invalid")
+    for (status in c(200L, 503L)) {
+      testthat::local_mocked_bindings(
+        req_perform = function(req, ...) {
+          httr2::response(
+            status_code = status,
+            headers = list(`Content-Type` = "application/json"),
+            body = charToRaw('[{"name":"rdkit","is_available":true},{"name":"opera","is_available":false}]')
+          )
+        },
+        .package = "httr2"
+      )
+      result <- ComptoxR_package_sitrep()
+      chemi <- result$ping_results[["Cheminformatics API"]]
+      expect_identical(chemi$status, "WARNING")
+      if (status == 503L) {
+        expect_match(chemi$message, "Endpoint list unavailable", fixed = FALSE)
+      } else {
+        expect_identical(chemi$message, "1/2 endpoints active")
+      }
+      expect_true(file.exists(result$log_file))
+      expect_true("local_databases" %in% names(result))
+    }
+  })
+})
+
+test_that("public flags control generated requests", {
+  withr::local_options(list(
+    ComptoxR.chemi_burl = "https://example.invalid",
+    ComptoxR.run_verbose = FALSE,
+    comptoxr_native.dry_run = NULL,
+    comptoxr_native.run_verbose = NULL
+  ))
+  withr::local_envvar(COMPTOXR_NATIVE_DRY_RUN = "false")
+  state <- getFromNamespace(".ComptoxREnv", "ComptoxR")
+  old_debug <- state$run_debug
+  withr::defer(state$run_debug <- old_debug)
+  calls <- 0L
+  perform <- function(req) {
+    calls <<- calls + 1L
+    httr2::response(status_code = 200L, headers = list(`Content-Type` = "application/json"), body = charToRaw('{}'))
+  }
+  suppressMessages(run_debug(TRUE))
+  suppressMessages(run_verbose(TRUE))
+  expect_message(
+    result <- httr2::with_mocked_responses(perform, chemi_services_version()),
+    "GET request \\(dry run\\)"
+  )
+  expect_s3_class(result, "httr2_request")
+  expect_identical(calls, 0L)
+  expect_true(state$run_debug)
+  expect_true(getOption("ComptoxR.run_verbose"))
+
+  Sys.setenv(COMPTOXR_NATIVE_DRY_RUN = "true")
+  for (value in list(FALSE, NA, "invalid", c(TRUE, FALSE))) {
+    suppressMessages(run_debug(TRUE))
+    suppressMessages(run_verbose(TRUE))
+    suppressMessages(run_debug(value))
+    suppressMessages(run_verbose(value))
+    expect_false(state$run_debug)
+    expect_false(getOption("ComptoxR.run_verbose"))
+    expect_message(
+      httr2::with_mocked_responses(perform, chemi_services_version()),
+      NA
+    )
+  }
+  expect_identical(calls, 4L)
+})
+
+test_that("sitrep names failures across services in console, log, and returned data", {
+  withr::with_tempdir({
+    local_sitrep_env()
+    withr::local_options(list(
+      ComptoxR.chemi_burl = "https://chemi.invalid/api",
+      ComptoxR.ctx_burl = "https://ctx.invalid/",
+      ComptoxR.eco_burl = "https://eco.invalid/",
+      ComptoxR.toxval_burl = "http://localhost:9999/"
+    ))
+    testthat::local_mocked_bindings(
+      req_perform = function(req, ...) httr2::response(status_code = 503L),
+      req_perform_parallel = function(reqs, ...) {
+        lapply(reqs, function(req) {
+          httr2::response(
+            status_code = if (grepl("/hazard/health$|/rdkit/version$|health-check$|episuite.dev/api$", req$url)) {
+              503L
+            } else {
+              200L
+            }
+          )
+        })
+      },
+      .package = "httr2"
+    )
+    output <- capture.output(
+      result <- ComptoxR_package_sitrep(),
+      type = "message"
+    )
+    log <- readLines(result$log_file)
+    expect_true(any(grepl("hazard: WARNING", output, fixed = TRUE)))
+    expect_true(any(grepl("rdkit: WARNING", output, fixed = TRUE)))
+    expect_true(any(grepl("Endpoint list: ERROR", log, fixed = TRUE)))
+    expect_true(any(grepl("hazard: WARNING HTTP 503", log, fixed = TRUE)))
+    expect_true(any(grepl("rdkit: WARNING HTTP 503", log, fixed = TRUE)))
+    epi <- result$ping_results[["EPI Suite API"]]
+    expect_match(epi$message, "Endpoint list unavailable")
+    expect_identical(epi$endpoints$status, c("WARNING", "OK"))
+    expect_identical(result$ping_results$ECOTOX$endpoints$message, "HTTP 503")
+    expect_identical(result$ping_results$ToxValDB$endpoints$message, "HTTP 503")
+    expect_false("Natural Products API" %in% names(result$ping_results))
+    expect_false("Natural Products API" %in% names(result$server_paths))
+    expect_false(any(grepl("Natural Products", log, fixed = TRUE)))
+    expect_true("local_databases" %in% names(result))
+  })
 })

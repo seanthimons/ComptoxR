@@ -105,3 +105,43 @@ test_that("install defaults request the rolling db-latest release", {
   withr::local_options(ComptoxR.dsstox_path = dest)
   expect_equal(dss_install(overwrite = TRUE), dest)
 })
+
+local_ecotox_db <- function(dir, release = NULL) {
+  path <- file.path(dir, "ecotox.duckdb")
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = path, read_only = FALSE)
+  if (!is.null(release)) {
+    DBI::dbWriteTable(con, "_metadata", data.frame(key = "ecotox_release", value = release))
+  }
+  DBI::dbDisconnect(con, shutdown = TRUE)
+  path
+}
+
+test_that("eco_install rewrites a stale sidecar from the installed metadata", {
+  src <- local_ecotox_db(withr::local_tempdir(), "ecotox_ascii_09_15_2026.zip")
+  dest <- file.path(withr::local_tempdir(), "ecotox.duckdb")
+  withr::local_options(ComptoxR.ecotox_path = dest)
+  sidecar <- sub("[.]duckdb$", ".version", dest)
+  writeLines("ecotox_ascii_03_12_2026.zip", sidecar)
+
+  # Download path: the bug report's case
+  testthat::local_mocked_bindings(
+    .db_download_release = function(db_name, dest_path, tag, ...) file.copy(src, dest_path, overwrite = TRUE),
+    .package = "ComptoxR"
+  )
+  suppressMessages(eco_install(overwrite = TRUE))
+  expect_equal(readLines(sidecar), "ecotox_ascii_09_15_2026.zip")
+  expect_equal(db_installed_version("ecotox"), "ecotox_ascii_09_15_2026.zip")
+
+  # source = path with no recorded version removes the sidecar
+  bare <- local_ecotox_db(withr::local_tempdir())
+  suppressMessages(eco_install(source = bare, overwrite = TRUE))
+  expect_false(file.exists(sidecar))
+  expect_identical(db_installed_version("ecotox"), NA_character_)
+})
+
+test_that("db_installed_version returns NA when the database is missing", {
+  expect_identical(
+    db_installed_version("toxval", path = file.path(withr::local_tempdir(), "none.duckdb")),
+    NA_character_
+  )
+})

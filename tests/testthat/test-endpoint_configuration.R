@@ -1,4 +1,4 @@
-endpoint_keys <- c('ctx_burl', 'chemi_burl', 'epi_burl', 'eco_burl', 'toxval_burl', 'np_burl', 'pubchem_burl')
+endpoint_keys <- c('ctx_burl', 'chemi_burl', 'epi_burl', 'eco_burl', 'toxval_burl', 'pubchem_burl')
 
 test_that('all services use option, environment, then approved defaults', {
   withr::local_envvar(setNames(rep(NA_character_, length(endpoint_keys)), endpoint_keys))
@@ -51,7 +51,7 @@ test_that('source and dated package startup do not change endpoint settings', {
   expected <- vapply(endpoint_keys, .endpoint_default, character(1))
   for (date in c(NA_character_, '2026-09-07')) {
     local_mocked_bindings(packageDate = function(...) date, .package = 'utils')
-    .onLoad(NULL, 'ComptoxR')
+    getFromNamespace('.onLoad', 'ComptoxR')(NULL, 'ComptoxR')
     expect_identical(
       Sys.getenv(endpoint_keys, unset = NA_character_),
       setNames(rep(NA_character_, length(endpoint_keys)), endpoint_keys)

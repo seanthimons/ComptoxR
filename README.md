@@ -49,7 +49,7 @@ their shipped Plumber servers can provide localhost HTTP access.
 
 For each service, `ComptoxR.<key>` options take precedence over the lowercase
 environment variable, then the package default. The keys are `ctx_burl`,
-`chemi_burl`, `epi_burl`, `eco_burl`, `toxval_burl`, `np_burl`, and `pubchem_burl`.
+`chemi_burl`, `epi_burl`, `eco_burl`, `toxval_burl`, and `pubchem_burl`.
 Loading the package does not change these environment variables.
 
 ```r

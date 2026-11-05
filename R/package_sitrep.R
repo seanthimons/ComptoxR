@@ -5,6 +5,28 @@
 #' The output is saved to a timestamped .log file in the working directory and
 #' also displayed in the console.
 #'
+#' @details
+#' The Cheminformatics endpoint list and individual components are checked
+#' separately. If the list is unavailable, checks use the last valid component
+#' names seen for that server in this R session, or the shipped probe list.
+#' The shipped list contains lightweight GET routes from the package schemas.
+#' Cached availability is never treated as a current health result. Components
+#' without a shipped probe are reported as unverified.
+#'
+#' CTX domains and the other configured HTTP services receive named checks too.
+#' EPI checks its specification separately from a lightweight search, so a failed
+#' specification does not prevent checking the shipped search route.
+#' Local ECOTOX and ToxValDB files are reported under local databases; HTTP
+#' deployments use their health-check route. An HTTP 401 or 403 is reported as
+#' unverified rather than an outage. A successful health, version, or root check
+#' establishes reachability of that route, not every operation in the service.
+#' Checks use a five-second timeout and run component probes concurrently.
+#'
+#' Console and log output identify each checked endpoint and its result.
+#' Each entry in `ping_results` includes an `endpoints` tibble with name, path,
+#' status, message, and HTTP status. Cheminformatics additionally includes
+#' `endpoint_list` and `source` (`live`, `last-known`, or `shipped`).
+#'
 #' @return Invisibly returns a list with diagnostic information. Also writes
 #'   a timestamped .log file to the current working directory and displays
 #'   information to the console.
@@ -78,7 +100,6 @@ ComptoxR_package_sitrep <- function() {
     "ECOTOX API" = "eco_burl",
     "ToxValDB" = "toxval_burl",
     "EPI Suite API" = "epi_burl",
-    "Natural Products API" = "np_burl",
     "PubChem PUG REST" = "pubchem_burl"
   )
 
@@ -95,285 +116,27 @@ ComptoxR_package_sitrep <- function() {
   add_log("PING TEST RESULTS")
   add_log(paste0(rep("-", 70), collapse = ""))
 
-  # Define ping endpoints
-  ping_endpoints <- list(
-    "EPI Suite API" = list(
-      url = .endpoint_target("epi_burl"),
-      ping_path = ""
-    ),
-    "PubChem PUG REST" = list(
-      url = .endpoint_target("pubchem_burl"),
-      ping_path = "compound/cid/2244/property/MolecularFormula/JSON"
-    )
-  )
+  ping_results <- .sitrep_checks()
 
-  # Helper function to ping a URL
-  ping_server <- function(name, url, ping_path = "") {
-    if (!nzchar(url) || is.na(url)) {
-      return(list(
-        name = name,
-        status = "SKIPPED",
-        message = "Not configured",
-        latency = NA_real_
-      ))
-    }
-
-    # Construct full ping URL
-    full_url <- if (nzchar(ping_path)) {
-      paste0(url, ping_path)
-    } else {
-      url
-    }
-
-    tryCatch(
-      {
-        # Use HEAD request for efficiency
-        req <- httr2::request(full_url) %>%
-          httr2::req_method("HEAD") %>%
-          httr2::req_timeout(5) %>%
-          httr2::req_error(is_error = function(resp) FALSE)
-
-        start_time <- Sys.time()
-        resp <- httr2::req_perform(req)
-        end_time <- Sys.time()
-
-        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
-        status_code <- httr2::resp_status(resp)
-
-        if (status_code >= 200 && status_code < 400) {
-          list(
-            name = name,
-            status = "OK",
-            message = paste0("HTTP ", status_code),
-            latency = latency
-          )
-        } else {
-          list(
-            name = name,
-            status = "WARNING",
-            message = paste0("HTTP ", status_code),
-            latency = latency
-          )
-        }
-      },
-      error = function(e) {
-        error_msg <- if (inherits(e, "httr2_timeout")) {
-          "Request timed out"
-        } else if (inherits(e, "httr2_connect_error")) {
-          "Connection failed"
-        } else {
-          "Request failed"
-        }
-        list(
-          name = name,
-          status = "ERROR",
-          message = error_msg,
-          latency = NA_real_
-        )
-      }
-    )
-  }
-
-  # Perform ping tests
-  ping_results <- list()
-  for (name in names(ping_endpoints)) {
-    endpoint <- ping_endpoints[[name]]
-    result <- ping_server(name, endpoint$url, endpoint$ping_path)
-    ping_results[[name]] <- result
-
-    latency_str <- if (is.finite(result$latency)) {
-      sprintf("%.0fms", result$latency * 1000)
-    } else {
-      ""
-    }
-
-    add_log(sprintf("%-30s: %-10s %-30s %s", name, result$status, result$message, latency_str))
-  }
-
-  # Check CTX four-domain health (chemical/hazard/exposure/bioactivity)
-  ctx_result <- tryCatch(
-    {
-      ctx_url <- .endpoint_target("ctx_burl")
-      if (nzchar(ctx_url)) {
-        ctx_domains <- c("chemical", "hazard", "exposure", "bioactivity")
-        reqs <- purrr::map(ctx_domains, function(domain) {
-          httr2::request(paste0(ctx_url, domain, "/health")) %>%
-            httr2::req_method("HEAD") %>%
-            httr2::req_timeout(5) %>%
-            httr2::req_error(is_error = function(resp) FALSE)
-        })
-        start_time <- Sys.time()
-        resps <- httr2::req_perform_parallel(reqs, on_error = "continue")
-        end_time <- Sys.time()
-
-        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
-
-        up <- sum(purrr::map_lgl(resps, function(r) {
-          inherits(r, "httr2_response") &&
-            httr2::resp_status(r) >= 200 &&
-            httr2::resp_status(r) < 400
-        }))
-        total <- length(ctx_domains)
-
-        status <- if (up == total) {
-          "OK"
-        } else if (up > 0) {
-          "WARNING"
-        } else {
-          "ERROR"
-        }
-
-        list(
-          name = "CompTox Dashboard API",
-          status = status,
-          message = sprintf("%d/%d endpoints active", up, total),
-          latency = latency
-        )
-      } else {
-        list(
-          name = "CompTox Dashboard API",
-          status = "SKIPPED",
-          message = "Not configured",
-          latency = NA_real_
-        )
-      }
-    },
-    error = function(e) {
-      list(
-        name = "CompTox Dashboard API",
-        status = "ERROR",
-        message = "Failed to reach endpoints",
-        latency = NA_real_
+  for (name in names(ping_results)) {
+    result <- ping_results[[name]]
+    add_log(sprintf("%-30s: %-10s %s %.0fms", name, result$status, result$message, result$latency * 1000))
+    if (!is.null(result$endpoint_list)) {
+      add_log(
+        "  Endpoint list: ",
+        result$endpoint_list$status,
+        " ",
+        result$endpoint_list$message,
+        " [",
+        result$endpoint_list$path,
+        "]"
       )
     }
-  )
-
-  ping_results[["CompTox Dashboard API"]] <- ctx_result
-
-  latency_str <- if (is.finite(ctx_result$latency)) {
-    sprintf("%.0fms", ctx_result$latency * 1000)
-  } else {
-    ""
-  }
-
-  add_log(sprintf("%-30s: %-10s %-30s %s", ctx_result$name, ctx_result$status, ctx_result$message, latency_str))
-
-  # Check Cheminformatics endpoints separately
-  chemi_result <- tryCatch(
-    {
-      chemi_url <- .endpoint_target("chemi_burl")
-      if (nzchar(chemi_url)) {
-        start_time <- Sys.time()
-        resp <- httr2::request(paste0(chemi_url, "/services/cim_component_info")) %>%
-          httr2::req_timeout(5) %>%
-          httr2::req_error(is_error = function(resp) FALSE) %>%
-          httr2::req_perform()
-        end_time <- Sys.time()
-
-        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
-
-        endpoints <- resp %>%
-          httr2::resp_body_json() %>%
-          purrr::map(~ tibble::as_tibble(.x)) %>%
-          purrr::list_rbind() %>%
-          dplyr::filter(!is.na(is_available))
-
-        active <- sum(endpoints$is_available, na.rm = TRUE)
-        total <- nrow(endpoints)
-
-        list(
-          name = "Cheminformatics API",
-          status = "OK",
-          message = sprintf("%d/%d endpoints active", active, total),
-          latency = latency
-        )
-      } else {
-        list(
-          name = "Cheminformatics API",
-          status = "SKIPPED",
-          message = "Not configured",
-          latency = NA_real_
-        )
-      }
-    },
-    error = function(e) {
-      list(
-        name = "Cheminformatics API",
-        status = "ERROR",
-        message = "Failed to get endpoints",
-        latency = NA_real_
-      )
+    for (i in seq_len(nrow(result$endpoints))) {
+      endpoint <- result$endpoints[i, ]
+      add_log("  ", endpoint$name, ": ", endpoint$status, " ", endpoint$message, " [", endpoint$path, "]")
     }
-  )
-
-  ping_results[["Cheminformatics API"]] <- chemi_result
-
-  latency_str <- if (is.finite(chemi_result$latency)) {
-    sprintf("%.0fms", chemi_result$latency * 1000)
-  } else {
-    ""
   }
-
-  add_log(sprintf("%-30s: %-10s %-30s %s", chemi_result$name, chemi_result$status, chemi_result$message, latency_str))
-
-  # ECOTOX — only ping when in Plumber mode (DuckDB handled via local DB section)
-  eco_url_ping <- .endpoint_target("eco_burl")
-  if (nzchar(eco_url_ping) && grepl("127\\.0\\.0\\.1", eco_url_ping)) {
-    eco_ping_result <- tryCatch(
-      {
-        start_time <- Sys.time()
-        resp <- httr2::request(paste0(eco_url_ping, "/health-check")) %>%
-          httr2::req_timeout(5) %>%
-          httr2::req_error(is_error = function(resp) FALSE) %>%
-          httr2::req_perform()
-        end_time <- Sys.time()
-        lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
-        sc <- httr2::resp_status(resp)
-        list(
-          name = "ECOTOX",
-          status = if (sc >= 200 && sc < 400) "OK" else "WARNING",
-          message = paste0("HTTP ", sc),
-          latency = lat
-        )
-      },
-      error = function(e) {
-        list(name = "ECOTOX", status = "ERROR", message = "Connection failed", latency = NA_real_)
-      }
-    )
-    ping_results[["ECOTOX"]] <- eco_ping_result
-    lat_s <- if (is.finite(eco_ping_result$latency)) sprintf("%.0fms", eco_ping_result$latency * 1000) else ""
-    add_log(sprintf("%-30s: %-10s %-30s %s", "ECOTOX", eco_ping_result$status, eco_ping_result$message, lat_s))
-  }
-
-  # ToxValDB — only ping when in Plumber mode (DuckDB handled via local DB section)
-  toxval_url_ping <- .endpoint_target("toxval_burl")
-  if (nzchar(toxval_url_ping) && grepl("127\\.0\\.0\\.1", toxval_url_ping)) {
-    toxval_ping_result <- tryCatch(
-      {
-        start_time <- Sys.time()
-        resp <- httr2::request(paste0(toxval_url_ping, "/health-check")) %>%
-          httr2::req_timeout(5) %>%
-          httr2::req_error(is_error = function(resp) FALSE) %>%
-          httr2::req_perform()
-        end_time <- Sys.time()
-        lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
-        sc <- httr2::resp_status(resp)
-        list(
-          name = "ToxValDB",
-          status = if (sc >= 200 && sc < 400) "OK" else "WARNING",
-          message = paste0("HTTP ", sc),
-          latency = lat
-        )
-      },
-      error = function(e) {
-        list(name = "ToxValDB", status = "ERROR", message = "Connection failed", latency = NA_real_)
-      }
-    )
-    ping_results[["ToxValDB"]] <- toxval_ping_result
-    lat_s <- if (is.finite(toxval_ping_result$latency)) sprintf("%.0fms", toxval_ping_result$latency * 1000) else ""
-    add_log(sprintf("%-30s: %-10s %-30s %s", "ToxValDB", toxval_ping_result$status, toxval_ping_result$message, lat_s))
-  }
-
   add_log("")
 
   # Local Database Status
@@ -443,6 +206,7 @@ ComptoxR_package_sitrep <- function() {
       "WARNING" = cli::col_yellow(result$status),
       "ERROR" = cli::col_red(result$status),
       "SKIPPED" = cli::col_grey(result$status),
+      "UNKNOWN" = cli::col_yellow(result$status),
       result$status
     )
 
@@ -453,6 +217,13 @@ ComptoxR_package_sitrep <- function() {
     }
 
     cli::cli_alert_info("{.strong {name}}: {status_color} - {result$message} {latency_display}")
+    if (!is.null(result$endpoint_list)) {
+      cli::cli_text("  Endpoint list: {result$endpoint_list$status} - {result$endpoint_list$message}")
+    }
+    for (i in seq_len(nrow(result$endpoints))) {
+      endpoint <- result$endpoints[i, ]
+      cli::cli_text("  {endpoint$name}: {endpoint$status} - {endpoint$message} [{endpoint$path}]")
+    }
   }
 
   cli::cli_h2("Local Databases")

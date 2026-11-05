@@ -103,38 +103,40 @@ eco_install <- function(source = NULL, build = FALSE, tag = "db-latest", overwri
     ))
   }
 
-  # 1. Local source file (explicit path)
+  # Release the cached connection before the file underneath it is replaced
+  .eco_close_con()
+
   if (!is.null(source)) {
+    # 1. Local source file (explicit path)
     if (!file.exists(source)) {
       cli::cli_abort("Source file not found: {.path {source}}")
     }
-    file.copy(source, dest, overwrite = TRUE)
-    cli::cli_alert_success("Installed ECOTOX database to {.path {dest}}")
-    return(invisible(dest))
-  }
-
-  # 2. Build from source (explicit opt-in)
-  if (isTRUE(build)) {
-    .eco_build_from_source(dest)
-    return(invisible(dest))
-  }
-
-  # 3. Default: try GitHub Release download, fall back to build
-  tryCatch(
-    .db_download_release("ecotox", dest, tag = tag),
-    error = function(e) {
-      cli::cli_warn(c(
-        "Could not download ECOTOX database from GitHub Release.",
-        "i" = conditionMessage(e),
-        "i" = "Falling back to build-from-source."
-      ))
-      .eco_build_from_source(dest)
+    if (!file.copy(source, dest, overwrite = TRUE)) {
+      cli::cli_abort("Could not copy {.path {source}} to {.path {dest}}")
     }
-  )
+    cli::cli_alert_success("Installed ECOTOX database to {.path {dest}}")
+  } else if (isTRUE(build)) {
+    # 2. Build from source (explicit opt-in)
+    .eco_build_from_source(dest)
+  } else {
+    # 3. Default: try GitHub Release download, fall back to build
+    tryCatch(
+      .db_download_release("ecotox", dest, tag = tag),
+      error = function(e) {
+        cli::cli_warn(c(
+          "Could not download ECOTOX database from GitHub Release.",
+          "i" = conditionMessage(e),
+          "i" = "Falling back to build-from-source."
+        ))
+        .eco_build_from_source(dest)
+      }
+    )
+  }
 
   if (!file.exists(dest)) {
     cli::cli_abort("Installation failed: database not found at {.path {dest}}")
   }
+  .db_sync_version_sidecar("ecotox", dest)
   invisible(dest)
 }
 

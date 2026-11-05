@@ -2,6 +2,37 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- `run_debug()` and `run_verbose()` now control generated requests as well as
+  legacy wrappers. Disabling or invalidating a flag resets both settings;
+  explicitly disabling debug mode overrides the native dry-run environment flag.
+
+- Removed the Natural Products service configuration and diagnostics, including
+  `np_server()` and the exported `util_classyfire()` integration. Cheminformatics
+  classification wrappers remain available.
+
+- The verbose startup header now uses the same service checks as sitrep, with
+  compact summaries and names of failed checks. Local databases appear once,
+  and development builds no longer show the current date as their build date.
+
+- `ComptoxR_package_sitrep()` now names individual endpoint failures and reports
+  Cheminformatics endpoint-list health separately. When discovery fails, it probes
+  the last component list seen for that server in the current session, or shipped
+  endpoints. CTX domains and other HTTP services receive named checks too; EPI
+  specification failures do not stop its search check.
+
+- New `db_installed_version()` reports, offline, the upstream release recorded inside
+  the installed ECOTOX, ToxValDB or DSSTox database (for example
+  `"ecotox_ascii_09_15_2026.zip"`).
+
+- `eco_install()`, `toxval_install()` and `dss_install()` now rewrite the `<db>.version`
+  file from the installed database on every install path, and remove it when no version
+  is recorded. Before, downloads and `source =` installs left an older build's file in
+  place, so it could name the wrong release. They also close the session's cached
+  connection before replacing the file, and stop if `source =` cannot be copied.
+  `toxval_install()` now errors, like the other two, when no database file is produced.
+
 ## v4.0.0 (2026-10-30)
 
 #### Release notes

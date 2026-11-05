@@ -20,4 +20,8 @@ Debug mode applies only to the current R session. It resets to \code{FALSE} each
 time the package loads, so enable it again in each session with
 \code{run_debug(TRUE)}. The old \code{run_debug} environment variable is no longer
 supported.
+
+The setter also updates the generated request dry-run option. Use
+\code{run_debug(FALSE)} to disable dry runs even when the native dry-run
+environment flag is enabled.
 }

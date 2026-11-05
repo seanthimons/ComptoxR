@@ -17,6 +17,28 @@ package version, API token status, server paths, and ping test results.
 The output is saved to a timestamped .log file in the working directory and
 also displayed in the console.
 }
+\details{
+The Cheminformatics endpoint list and individual components are checked
+separately. If the list is unavailable, checks use the last valid component
+names seen for that server in this R session, or the shipped probe list.
+The shipped list contains lightweight GET routes from the package schemas.
+Cached availability is never treated as a current health result. Components
+without a shipped probe are reported as unverified.
+
+CTX domains and the other configured HTTP services receive named checks too.
+EPI checks its specification separately from a lightweight search, so a failed
+specification does not prevent checking the shipped search route.
+Local ECOTOX and ToxValDB files are reported under local databases; HTTP
+deployments use their health-check route. An HTTP 401 or 403 is reported as
+unverified rather than an outage. A successful health, version, or root check
+establishes reachability of that route, not every operation in the service.
+Checks use a five-second timeout and run component probes concurrently.
+
+Console and log output identify each checked endpoint and its result.
+Each entry in \code{ping_results} includes an \code{endpoints} tibble with name, path,
+status, message, and HTTP status. Cheminformatics additionally includes
+\code{endpoint_list} and \code{source} (\code{live}, \code{last-known}, or \code{shipped}).
+}
 \examples{
 \dontrun{
 # Generate diagnostic report

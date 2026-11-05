@@ -7,7 +7,6 @@
     epi_burl = 'https://episuite.dev/api',
     eco_burl = eco_path(),
     toxval_burl = toxval_path(),
-    np_burl = 'https://api.naturalproducts.net/latest/',
     pubchem_burl = 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/',
     NULL
   )

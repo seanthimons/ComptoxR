@@ -314,12 +314,38 @@
     cli::cli_abort("Database sidecar writing requires a database path and version.")
   }
 
+  version_path <- .db_version_sidecar_path(db_path)
+  writeLines(version, version_path, useBytes = TRUE)
+  invisible(version_path)
+}
+
+#' @keywords internal
+.db_version_sidecar_path <- function(db_path) {
   version_path <- sub("[.]duckdb$", ".version", db_path, ignore.case = TRUE)
   if (identical(version_path, db_path)) {
     version_path <- paste0(db_path, ".version")
   }
-  writeLines(version, version_path, useBytes = TRUE)
-  invisible(version_path)
+  version_path
+}
+
+#' Rewrite the `.version` sidecar from the installed database's `_metadata`
+#'
+#' Keeps the sidecar in step with the database on every install path. When no
+#' version can be read, a stale sidecar is removed rather than left behind.
+#'
+#' @keywords internal
+#' @noRd
+.db_sync_version_sidecar <- function(db_name, db_path) {
+  version <- tryCatch(
+    .db_local_recorded_version(db_name, path = db_path),
+    error = function(e) NA_character_
+  )
+  if (.db_is_missing_string(version)) {
+    unlink(.db_version_sidecar_path(db_path))
+    return(invisible(NA_character_))
+  }
+  .db_write_version_sidecar(db_path, version)
+  invisible(version)
 }
 
 #' @keywords internal
@@ -443,6 +469,35 @@
     status = status,
     guidance = guidance
   ))
+}
+
+#' Report the installed local database version
+#'
+#' Reads the upstream release recorded in the installed database's `_metadata`
+#' table. Works offline. The value identifies the upstream source release, not
+#' the GitHub release tag the file was downloaded from:
+#'
+#' * `"ecotox"`: the EPA ECOTOX ASCII archive name, e.g.
+#'   `"ecotox_ascii_09_15_2026.zip"`.
+#' * `"toxval"`: the ToxValDB version, e.g. `"v97_0"`.
+#' * `"dsstox"`: the Clowder release date and file id, joined by `"|"`.
+#'
+#' @param db Which database: `"ecotox"`, `"toxval"`, or `"dsstox"`.
+#' @param path Path to the `.duckdb` file. Defaults to [eco_path()],
+#'   [toxval_path()], or [dss_path()].
+#' @return A string, or `NA_character_` when the database is missing or has no
+#'   recorded version.
+#' @export
+#' @examples
+#' \dontrun{
+#' db_installed_version("ecotox")
+#' }
+db_installed_version <- function(db = c("ecotox", "toxval", "dsstox"), path = NULL) {
+  db <- match.arg(db)
+  if (is.null(path)) {
+    path <- switch(db, ecotox = eco_path(), toxval = toxval_path(), dsstox = dss_path())
+  }
+  .db_local_recorded_version(db, path = path)
 }
 
 #' Check DSSTox database freshness

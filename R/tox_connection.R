@@ -103,35 +103,40 @@ toxval_install <- function(source = NULL, build = FALSE, tag = "db-latest", over
     ))
   }
 
-  # 1. Local source file (explicit path)
+  # Release the cached connection before the file underneath it is replaced
+  .tox_close_con()
+
   if (!is.null(source)) {
+    # 1. Local source file (explicit path)
     if (!file.exists(source)) {
       cli::cli_abort("Source file not found: {.path {source}}")
     }
-    file.copy(source, dest, overwrite = TRUE)
-    cli::cli_alert_success("Installed ToxValDB database to {.path {dest}}")
-    return(invisible(dest))
-  }
-
-  # 2. Build from source (explicit opt-in)
-  if (isTRUE(build)) {
-    .tox_build_from_source(dest)
-    return(invisible(dest))
-  }
-
-  # 3. Default: try GitHub Release download, fall back to build
-  tryCatch(
-    .db_download_release("toxval", dest, tag = tag),
-    error = function(e) {
-      cli::cli_warn(c(
-        "Could not download ToxValDB from GitHub Release.",
-        "i" = conditionMessage(e),
-        "i" = "Falling back to build-from-source."
-      ))
-      .tox_build_from_source(dest)
+    if (!file.copy(source, dest, overwrite = TRUE)) {
+      cli::cli_abort("Could not copy {.path {source}} to {.path {dest}}")
     }
-  )
+    cli::cli_alert_success("Installed ToxValDB database to {.path {dest}}")
+  } else if (isTRUE(build)) {
+    # 2. Build from source (explicit opt-in)
+    .tox_build_from_source(dest)
+  } else {
+    # 3. Default: try GitHub Release download, fall back to build
+    tryCatch(
+      .db_download_release("toxval", dest, tag = tag),
+      error = function(e) {
+        cli::cli_warn(c(
+          "Could not download ToxValDB from GitHub Release.",
+          "i" = conditionMessage(e),
+          "i" = "Falling back to build-from-source."
+        ))
+        .tox_build_from_source(dest)
+      }
+    )
+  }
 
+  if (!file.exists(dest)) {
+    cli::cli_abort("Installation failed: database not found at {.path {dest}}")
+  }
+  .db_sync_version_sidecar("toxval", dest)
   invisible(dest)
 }
 

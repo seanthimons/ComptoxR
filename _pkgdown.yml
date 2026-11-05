@@ -45,6 +45,7 @@ reference:
       - starts_with("toxval_")
       - starts_with("epi_")
       - starts_with("genra_")
+      - db_installed_version
   - title: PubChem and utilities
     contents:
       - starts_with("pubchem_")
