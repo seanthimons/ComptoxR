@@ -50,6 +50,9 @@ Manual stable-release workflow named Release.
 - Checks the package before pushing release commits and the version tag.
 - Creates an immutable versioned release with the source tarball attached.
 - Refuses to overwrite an existing version tag or release.
+- Refreshes `.specmill/manifest.json` after the version bump and commits it
+  with the release, so `main` passes the specmill freshness checks. Fails if
+  regeneration would change anything else.
 
 Existing stable release assets should only be replaced by rebuilding the exact
 tagged source. Changed package code requires a new versioned release or the
@@ -107,10 +110,12 @@ Informational coverage workflow.
 Offline checks for the specmill-maintained portion of the client, on every pull
 request, pushes to `main` and `integration`, and manual dispatch.
 
-- Reads the specmill revision from `dev/specmill-lock.json`, checks out that
-  commit, and uses the existing installer to verify its archive checksum and
-  installed namespace provenance.
-- Uses Air 0.11.0, the version pinned in `specmill.yml`, like every other workflow.
+- Uses the `setup-specmill` action (`.github/actions/setup-specmill`), shared
+  by every workflow that needs specmill. It reads the revision from
+  `dev/specmill-lock.json`, checks out that commit, installs its dependencies,
+  verifies its archive checksum and namespace provenance, and installs Air
+  0.11.0, the formatter pinned in `specmill.yml`. Bumping the lock needs no
+  workflow edits.
 - Checks wrapper and test freshness, runs fixed contracts and client policy
   tests, and requires regeneration to leave no modified or untracked files.
 - Needs no API credentials or sibling repository checkout on the runner.
