@@ -2,12 +2,41 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.2 (2026-11-05)
+
+#### Release notes
 
 - Updated the Specmill toolkit to 0.2.2. Generated requests now reword only
   transport failures (such as connection errors, TLS errors or timeouts); other
   errors raised while performing a request pass through unchanged. ComptoxR now
   requires httr2 1.0.0 or later.
+
+<!-- end release notes -->
+
+#### Bug fixes
+
+- refresh manifest for 4.0.1 DESCRIPTION; keep 0.2.2 note unreleased
+  ([650e014](https://github.com/seanthimons/ComptoxR/tree/650e01469ee15bb33ff81d6b1ae9ef6bc49e77a3))
+- update generated request runtime to 0.2.2
+  ([65a5bd9](https://github.com/seanthimons/ComptoxR/tree/65a5bd92548d179210ab388567ab1c3df3539c09))
+
+#### Tests
+
+- raise httr2_failure in probe transport-error mocks
+  ([4eda771](https://github.com/seanthimons/ComptoxR/tree/4eda7716611cea3d5f8c9ee331d8c03d34edfe75))
+
+#### Docs
+
+- note Specmill 0.2.2 update in NEWS
+  ([e5753a5](https://github.com/seanthimons/ComptoxR/tree/e5753a578ba4eece2c1b5e941faa8b78b5c14190))
+
+#### Other changes
+
+- bump version to 4.0.2 \[skip ci\]
+  ([80be1bc](https://github.com/seanthimons/ComptoxR/tree/80be1bc5c7d52e2d93bad9140d61831a47ef2b6a))
+
+Full set of changes:
+[`v4.0.1...v4.0.2`](https://github.com/seanthimons/ComptoxR/compare/v4.0.1...v4.0.2)
 
 ## v4.0.1 (2026-11-05)
 
@@ -67,6 +96,11 @@
 
 - bump GitHub Actions and build only the source package for integration
   ([6881bef](https://github.com/seanthimons/ComptoxR/tree/6881bef602fe12f6ad66282868bbb44985e2bd4a))
+
+#### Docs
+
+- update NEWS.md for v4.0.1 \[skip ci\]
+  ([054dbfb](https://github.com/seanthimons/ComptoxR/tree/054dbfb99628e439ec506f34f23f5875a4e3b853))
 
 #### Other changes
 
