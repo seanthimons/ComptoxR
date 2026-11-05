@@ -227,7 +227,6 @@
         molecular_formula = "compound/cid/2244/property/MolecularFormula/JSON"
       )
     ),
-    "Natural Products API" = list(key = "np_burl", paths = c(api_root = "")),
     "ECOTOX" = list(key = "eco_burl", paths = c(health = "health-check")),
     "ToxValDB" = list(key = "toxval_burl", paths = c(health = "health-check"))
   )

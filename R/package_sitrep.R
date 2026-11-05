@@ -100,7 +100,6 @@ ComptoxR_package_sitrep <- function() {
     "ECOTOX API" = "eco_burl",
     "ToxValDB" = "toxval_burl",
     "EPI Suite API" = "epi_burl",
-    "Natural Products API" = "np_burl",
     "PubChem PUG REST" = "pubchem_burl"
   )
 

@@ -25,7 +25,6 @@ local_sitrep_env <- function() {
       eco_burl = "",
       toxval_burl = "",
       epi_burl = "",
-      np_burl = "",
       pubchem_burl = ""
     ),
     .local_envir = parent.frame()
@@ -379,7 +378,9 @@ test_that("sitrep names failures across services in console, log, and returned d
     expect_identical(epi$endpoints$status, c("WARNING", "OK"))
     expect_identical(result$ping_results$ECOTOX$endpoints$message, "HTTP 503")
     expect_identical(result$ping_results$ToxValDB$endpoints$message, "HTTP 503")
-    expect_identical(result$ping_results[["Natural Products API"]]$endpoints$status, "OK")
+    expect_false("Natural Products API" %in% names(result$ping_results))
+    expect_false("Natural Products API" %in% names(result$server_paths))
+    expect_false(any(grepl("Natural Products", log, fixed = TRUE)))
     expect_true("local_databases" %in% names(result))
   })
 })

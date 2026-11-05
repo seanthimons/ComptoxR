@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+- Removed the Natural Products service configuration and diagnostics, including
+  `np_server()` and the exported `util_classyfire()` integration. Cheminformatics
+  classification wrappers remain available.
+
 - The verbose startup header now uses the same service checks as sitrep, with
   compact summaries and names of failed checks. Local databases appear once,
   and development builds no longer show the current date as their build date.

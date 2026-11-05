@@ -149,20 +149,6 @@ toxval_server <- function(server = NULL, url_only = FALSE) {
   )
 }
 
-#' Set the Natural Products endpoint
-#'
-#' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
-#'   NULL clears the environment setting and restores option/default resolution.
-#' @param url_only Return the selected target without changing settings or connections.
-#' @details The option `ComptoxR.np_burl` takes precedence over the lowercase
-#'   environment variable `np_burl`. An unset option and empty environment variable
-#'   use the package default. Removed development modes give a configuration error.
-#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
-#' @keywords internal
-np_server <- function(server = NULL, url_only = FALSE) {
-  .set_endpoint('np_burl', server, url_only, list('1' = .endpoint_default('np_burl')))
-}
-
 #' Set the PubChem endpoint
 #'
 #' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
@@ -324,8 +310,6 @@ reset_servers <- function() {
   eco_server()
   # Reset ToxValDB server URL
   toxval_server()
-  # Reset Natural Products server URL
-  np_server()
   # Reset PubChem PUG REST server URL
   pubchem_server()
 }

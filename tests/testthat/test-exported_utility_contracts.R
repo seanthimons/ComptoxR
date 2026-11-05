@@ -34,7 +34,6 @@ test_that("server helpers return URLs without changing process state", {
     epi_burl = "epi-sentinel",
     eco_burl = "eco-sentinel",
     toxval_burl = "toxval-sentinel",
-    np_burl = "np-sentinel",
     pubchem_burl = "pubchem-sentinel"
   ))
 
@@ -44,7 +43,6 @@ test_that("server helpers return URLs without changing process state", {
     list(epi_server, 1, "epi_burl", "https://episuite.dev/api"),
     list(eco_server, 2, "eco_burl", "http://127.0.0.1:5555"),
     list(toxval_server, 2, "toxval_burl", "http://127.0.0.1:5556"),
-    list(np_server, 1, "np_burl", "https://api.naturalproducts.net/latest/"),
     list(pubchem_server, 1, "pubchem_burl", "https://pubchem.ncbi.nlm.nih.gov/rest/pug/")
   )
 
@@ -119,8 +117,13 @@ test_that("small numeric and message formatting helpers keep their contracts", {
   expect_message(pretty_casewhen("x", 1), "x == 1")
 })
 
-test_that("API helper exports validate before external work", {
-  expect_error(util_classyfire(), "query")
+test_that("Natural Products integration is retired without removing Wishart classification", {
+  expect_false("util_classyfire" %in% getNamespaceExports("ComptoxR"))
+  namespace <- asNamespace("ComptoxR")
+  expect_false(exists("np_server", envir = namespace, inherits = FALSE))
+  expect_null(.endpoint_default("np_burl"))
+  expect_true(exists("util_classyfire_wishart", envir = namespace, inherits = FALSE))
+  expect_true("chemi_resolver_classyfire" %in% getNamespaceExports("ComptoxR"))
 })
 
 test_that("ct_classify adds classification fields without network access", {
