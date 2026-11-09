@@ -65,6 +65,22 @@ jobs:
           desc::desc_bump_version("${{ inputs.version_type }}")
           devtools::document()
 
+      # DESCRIPTION, NAMESPACE and man/ are specmill manifest inputs; refresh
+      # the manifest so main stays fresh after the bump.
+      - name: Set up pinned specmill
+        uses: ./.github/actions/setup-specmill
+
+      - name: Refresh specmill manifest
+        run: |
+          Rscript dev/generate_specmill.R --apply
+          Rscript dev/generate_specmill.R --check
+          unexpected="$(git status --porcelain -- . ':!DESCRIPTION' ':!NAMESPACE' ':!man' ':!.specmill/manifest.json')"
+          if [ -n "$unexpected" ]; then
+            echo "::error::Regeneration changed files outside the release bump; run generate_specmill.R --apply on main first."
+            echo "$unexpected"
+            exit 1
+          fi
+
       - name: Read metadata and guard against existing tag
         id: metadata
         shell: bash
@@ -86,7 +102,7 @@ jobs:
         env:
           VERSION: ${{ steps.metadata.outputs.version }}
         run: |
-          git add DESCRIPTION man/ NAMESPACE
+          git add DESCRIPTION man/ NAMESPACE .specmill/manifest.json
           git diff --cached --quiet || git commit -m "chore: bump version to ${VERSION} [skip ci]"
           git tag "v${VERSION}"
 

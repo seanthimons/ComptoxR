@@ -1,0 +1,52 @@
+name: Set up pinned specmill
+description: >
+  Installs Air and the specmill revision pinned in dev/specmill-lock.json,
+  verifies it, and puts its library on R_LIBS. Run after checkout and R setup.
+
+runs:
+  using: composite
+  steps:
+    - name: Install pinned formatter
+      uses: posit-dev/setup-air@482cb5912394878ab5a63b75db0f9d19cc6df5ba # v1
+      with:
+        version: '0.11.0'
+
+    - name: Read reviewed specmill revision
+      id: specmill-pin
+      shell: Rscript {0}
+      run: |
+        pin <- jsonlite::read_json("dev/specmill-lock.json")
+        stopifnot(grepl("^[0-9a-f]{40}$", pin$source_commit))
+        cat(paste0("revision=", pin$source_commit, "\n"),
+            paste0("library=", file.path(getwd(), "dev/specmill-pilot/artifacts/toolkit-library", pin$version), "\n"),
+            file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE, sep = "")
+
+    - name: Check out pinned specmill source
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        repository: seanthimons/specmill
+        ref: ${{ steps.specmill-pin.outputs.revision }}
+        path: dev/specmill-pilot/artifacts/toolkit-source
+        persist-credentials: false
+
+    # Installs the pinned revision's own Imports, so a pin bump needs no
+    # workflow edit when specmill adds a dependency.
+    - name: Install specmill dependencies
+      uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
+      with:
+        working-directory: dev/specmill-pilot/artifacts/toolkit-source
+        dependencies: '"hard"'
+        cache: false
+
+    - name: Install and verify pinned specmill
+      shell: bash
+      env:
+        SPECMILL_SOURCE_REPO: dev/specmill-pilot/artifacts/toolkit-source
+      run: Rscript dev/install_specmill.R
+
+    # Set only after install, so nothing above installs into the toolkit library.
+    - name: Put specmill on R_LIBS
+      shell: bash
+      env:
+        SPECMILL_LIBRARY: ${{ steps.specmill-pin.outputs.library }}
+      run: echo "R_LIBS=$SPECMILL_LIBRARY" >> "$GITHUB_ENV"
