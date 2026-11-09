@@ -219,30 +219,38 @@ not work around a gap with a hand-written wrapper or a patched helper.
 
 ## Updating the Specmill pin
 
-1. Edit `dev/specmill-lock.json`: `version`, `source_commit`, and
-   `source_archive_sha256` (from `git archive --format=tar <commit> | sha256sum`).
-2. `Rscript dev/install_specmill.R` and re-export `R_LIBS` for the new
-   version.
-3. Re-emit the native helper. In R, `source("dev/specmill-342/emit.R")` and
-   run `emit_issue342(mode = "check")`. If it fails, review the new helper
-   and run `emit_issue342(mode = "apply")`. When the helper code itself
-   changed, also pass
-   `adopt = <SHA-256 of the current R/z_specmill_request.R>`. This rewrites `R/z_specmill_request.R` and
-   `.specmill/helpers/.ct_request.json`.
-4. Record the adoption in `dev/specmill-342/adoption.json`: append the
-   existing `current_adoption` to `adoption_history`, then set a new
-   `current_adoption` whose `toolkit` is an exact copy of
-   `dev/specmill-lock.json` and whose `adopted_sha256` holds the new hashes of
-   `R/z_specmill_request.R` and `dev/specmill-342/emit.R`. Add a short
-   `review` note.
-5. `Rscript dev/specmill-342/verify.R` must pass; it checks both the lock
-   match and the helper hash.
-6. Run steps 4 to 6 above. Expect every generated file's header and the
-   manifest to change.
-7. Commit the lock, `adoption.json`, the helper and its
-   `.specmill/helpers/` record, the manifest and the regenerated output
-   together. To roll back, restore the previous pin and its matching output
-   together.
+From a clean ComptoxR checkout, with a specmill clone at `../specmill` (or set
+`SPECMILL_SOURCE_REPO`):
+
+```bash
+Rscript dev/bump_specmill.R                 # latest origin/main
+Rscript dev/bump_specmill.R <commit> --review="what changed"
+```
+
+The script fetches the clone and rewrites `dev/specmill-lock.json` with the new
+version, commit and archive SHA-256. It installs and verifies the toolkit and
+re-emits the native helper (`R/z_specmill_request.R` and its
+`.specmill/helpers/` record). It then records the adoption in
+`dev/specmill-342/adoption.json`: the previous `current_adoption` moves to
+`adoption_history`. Finally it regenerates the wrappers, documentation and
+legacy tests, then runs the checks that **Specmill Maintenance** runs: hook
+config, public API, helper verification and the `--check` modes. It stops at
+the first failing step.
+
+It then reports whether the helper changed. Afterwards:
+
+1. Review the diff of `R/z_specmill_request.R` if the helper changed, and
+   edit the `review` note in `adoption.json` if the default isn't enough.
+2. Run the full test suite and `Rscript dev/cran_readiness.R`. New Specmill
+   behaviour can break tests that mock the helper. If wrappers changed, also
+   run the test-gap and readiness-audit commands under Tests.
+3. Add a `NEWS.md` bullet, then commit the lock, `adoption.json`, the helper,
+   its record, the manifest and the regenerated output together.
+
+To roll back, run `git checkout -- .`, remove any new files `git status`
+lists, re-run `Rscript dev/install_specmill.R`, and point `R_LIBS` back at
+the restored version's toolkit library. CI reads the pin from the
+lock, so a bump needs no workflow edits.
 
 ## A separate local client
 

@@ -33,6 +33,20 @@ verify_specmill <- function(
   invisible(namespace)
 }
 
+# Writes the git archive of `commit` to `archive` and returns its SHA256.
+archive_specmill <- function(source_repo, commit, archive) {
+  status <- system2(
+    'git',
+    # Git for Windows defaults to core.autocrlf=true, which git archive applies
+    # to text files; force LF so the checksum matches on every OS.
+    c('-C', shQuote(source_repo), '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', 'archive', '--format=tar', paste0('--output=', shQuote(archive)), commit)
+  )
+  if (status != 0L) {
+    stop('Cannot archive the pinned specmill revision.')
+  }
+  digest::digest(file = archive, algo = 'sha256')
+}
+
 install_specmill <- function(
   lib = NULL,
   source_repo = Sys.getenv('SPECMILL_SOURCE_REPO', '../specmill'),
@@ -48,16 +62,7 @@ install_specmill <- function(
   dir.create(work)
   on.exit(unlink(work, recursive = TRUE), add = TRUE)
   archive <- file.path(work, 'source.tar')
-  status <- system2(
-    'git',
-    # Git for Windows defaults to core.autocrlf=true, which git archive applies
-    # to text files; force LF so the checksum matches on every OS.
-    c('-C', shQuote(source_repo), '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', 'archive', '--format=tar', paste0('--output=', shQuote(archive)), pin$source_commit)
-  )
-  if (status != 0L) {
-    stop('Cannot archive the pinned specmill revision.')
-  }
-  if (!identical(digest::digest(file = archive, algo = 'sha256'), pin$source_archive_sha256)) {
+  if (!identical(archive_specmill(source_repo, pin$source_commit, archive), pin$source_archive_sha256)) {
     stop('Pinned specmill source archive checksum mismatch.')
   }
   source <- file.path(work, 'source')
