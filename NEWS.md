@@ -2,11 +2,32 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.3 (2026-11-10)
+
+#### Release notes
 
 - Updated the Specmill toolkit to 0.2.3 and regenerated the request helper.
   The helper now supports bounded parallel batches and decodes responses before
   running completion hooks. Existing ComptoxR batches remain sequential.
+
+<!-- end release notes -->
+
+#### CI
+
+- refresh specmill manifest on release and share specmill setup
+  ([a7b1257](https://github.com/seanthimons/ComptoxR/tree/a7b12574c4492fdabdb01c7b244c08ad05f77339))
+
+#### Other changes
+
+- bump version to 4.0.3 \[skip ci\]
+  ([8fb0c86](https://github.com/seanthimons/ComptoxR/tree/8fb0c860a9fdc88c9110e64b21a2b780c96544fb))
+- adopt 0.2.3 request helper
+  ([1fb40b6](https://github.com/seanthimons/ComptoxR/tree/1fb40b69fc8ce71b1cf6c2201aa830087029a9a8))
+- add dev/bump_specmill.R for one-command Specmill pin bumps
+  ([23e0367](https://github.com/seanthimons/ComptoxR/tree/23e0367966d77456ead502dddfafcab83d1e4018))
+
+Full set of changes:
+[`v4.0.2...v4.0.3`](https://github.com/seanthimons/ComptoxR/compare/v4.0.2...v4.0.3)
 
 ## v4.0.2 (2026-11-05)
 
@@ -33,6 +54,8 @@
 
 #### Docs
 
+- update NEWS.md for v4.0.2 \[skip ci\]
+  ([313bea3](https://github.com/seanthimons/ComptoxR/tree/313bea3789f7835b063b71a7e71f3e442c6019b0))
 - note Specmill 0.2.2 update in NEWS
   ([e5753a5](https://github.com/seanthimons/ComptoxR/tree/e5753a578ba4eece2c1b5e941faa8b78b5c14190))
 
