@@ -2,6 +2,12 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- Updated the Specmill toolkit to 0.2.3 and regenerated the request helper.
+  The helper now supports bounded parallel batches and decodes responses before
+  running completion hooks. Existing ComptoxR batches remain sequential.
+
 ## v4.0.2 (2026-11-05)
 
 #### Release notes
