@@ -2,13 +2,8 @@
 
 # ComptoxR NEWS
 
-## v4.0.3 (2026-11-10)
+## Unreleased
 
-#### Release notes
-
-- Updated the Specmill toolkit to 0.2.3 and regenerated the request helper.
-  The helper now supports bounded parallel batches and decodes responses before
-  running completion hooks. Existing ComptoxR batches remain sequential.
 - Fixed `chemi_amnb_nate_bulk()`, `chemi_arn_cats_bulk()`, `chemi_ncc_cats_bulk()`,
   `chemi_pfas_atlas_bulk()` and `chemi_pfas_cats_bulk()`, which the services
   rejected with HTTP 400. They now send the request body the services define:
@@ -17,6 +12,14 @@
   vector. Character input may hold SMILES or DTXSID, DTXCID or CASRN
   identifiers; identifiers are resolved to SMILES first, and duplicates are
   dropped.
+
+## v4.0.3 (2026-11-10)
+
+#### Release notes
+
+- Updated the Specmill toolkit to 0.2.3 and regenerated the request helper.
+  The helper now supports bounded parallel batches and decodes responses before
+  running completion hooks. Existing ComptoxR batches remain sequential.
 
 <!-- end release notes -->
 
