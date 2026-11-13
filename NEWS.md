@@ -2,6 +2,12 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- Updated the Specmill toolkit to 0.4.0. The request helper is unchanged; the
+  generated authentication file gains OAuth sign-in support, which ComptoxR
+  does not configure.
+
 ## v4.0.3 (2026-11-10)
 
 #### Release notes
