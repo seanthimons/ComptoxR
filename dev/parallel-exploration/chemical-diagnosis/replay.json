@@ -1,0 +1,26 @@
+{
+  "reproduced_without_network": true,
+  "original_wrapper_only": true,
+  "single_identifier_sufficient": true,
+  "decoder_deterministic": true,
+  "detects_value_changes": true,
+  "detects_row_reordering": true,
+  "response_fields_a": ["dtxsid", "dtxcid", "casrn", "preferredName", "iupacName", "inchikey"],
+  "response_fields_b": ["inchikey", "dtxsid", "dtxcid", "casrn", "preferredName", "iupacName"],
+  "comparison": {
+    "exact": false,
+    "same_columns": true,
+    "columns_a": ["dtxsid", "dtxcid", "casrn", "preferredName", "iupacName", "inchikey"],
+    "columns_b": ["inchikey", "dtxsid", "dtxcid", "casrn", "preferredName", "iupacName"],
+    "equal_by_column": true,
+    "difference": ["Names: 6 string mismatches", "Component 1: 3 string mismatches", "Component 2: 3 string mismatches", "Component 3: 3 string mismatches", "Component 4: 3 string mismatches", "Component 5: 3 string mismatches", "Component 6: 3 string mismatches"]
+  },
+  "single_response_comparison": {
+    "exact": false,
+    "same_columns": true,
+    "columns_a": ["dtxsid", "dtxcid", "casrn", "preferredName", "iupacName", "inchikey"],
+    "columns_b": ["inchikey", "dtxsid", "dtxcid", "casrn", "preferredName", "iupacName"],
+    "equal_by_column": true,
+    "difference": ["Names: 6 string mismatches", "Component 1: 1 string mismatch", "Component 2: 1 string mismatch", "Component 3: 1 string mismatch", "Component 4: 1 string mismatch", "Component 5: 1 string mismatch", "Component 6: 1 string mismatch"]
+  }
+}

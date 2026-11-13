@@ -1,0 +1,1361 @@
+[
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_dtxsids_from_functional_use",
+    "operation": "GET /api/amos/dtxsids_from_functional_use/{functional_use}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_find_dtxsids",
+    "operation": "GET /api/amos/find_dtxsids/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_formula_search",
+    "operation": "GET /api/amos/formula_search/{formula}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_functional_class_search",
+    "operation": "GET /api/amos/functional_class_search/{functional_class}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_functional_uses_for_dtxsid",
+    "operation": "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_classification_for_dtxsid",
+    "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_fact_sheet_editor_info",
+    "operation": "GET /api/amos/get_fact_sheet_editor_info/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_info_by_id",
+    "operation": "GET /api/amos/get_info_by_id/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_ir_spectrum",
+    "operation": "GET /api/amos/get_ir_spectrum/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_mass_spectrum",
+    "operation": "GET /api/amos/get_mass_spectrum/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_method_editor_info",
+    "operation": "GET /api/amos/get_method_editor_info/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_ms_ready_methods",
+    "operation": "GET /api/amos/get_ms_ready_methods/{inchikey}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_nmr_spectrum",
+    "operation": "GET /api/amos/get_nmr_spectrum/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_nmr_spectrum_editor_info",
+    "operation": "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_pdf",
+    "operation": "GET /api/amos/get_pdf/{record_type}/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_product_declaration_editor_info",
+    "operation": "GET /api/amos/get_product_declaration_editor_info/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_safety_data_sheet_editor_info",
+    "operation": "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_similar_structures",
+    "operation": "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_get_substances_for_search_term",
+    "operation": "GET /api/amos/get_substances_for_search_term/{search_term}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_inchikey_first_block_search",
+    "operation": "GET /api/amos/inchikey_first_block_search/{first_block}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_list_sources_by_record_type",
+    "operation": "GET /api/amos/list_sources_by_record_type/{record_type}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_method_with_spectra",
+    "operation": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_record_id_search",
+    "operation": "GET /api/amos/record_id_search/{internal_id}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_record_ids_for_substance",
+    "operation": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_record_type_count",
+    "operation": "GET /api/amos/record_type_count/{record_type}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_search",
+    "operation": "GET /api/amos/search/{dtxsid}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_search_by_text",
+    "operation": "GET /api/amos/search_by_text/{substr}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_amos",
+    "wrapper": "chemi_amos_substring_search",
+    "operation": "GET /api/amos/substring_search/{substring}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_classyfire",
+    "wrapper": "chemi_classyfire",
+    "operation": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+    "schema": "schema/chemi_amos_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "chemi_chet",
+    "wrapper": "chemi_chet_chemicals_verify",
+    "operation": "GET /chemicals/verify/{dtxsid}",
+    "schema": "schema/chemi_chet_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_chet",
+    "wrapper": "chemi_chet_reaction_mappositions",
+    "operation": "GET /reaction/mappositions/{map_id}",
+    "schema": "schema/chemi_chet_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "chemi_chet",
+    "wrapper": "chemi_chet_reaction_searchcounts",
+    "operation": "GET /reaction/searchcounts/{search_input}/{search_type}",
+    "schema": "schema/chemi_chet_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "chemi_toxprints",
+    "wrapper": "chemi_toxprints_bulk",
+    "operation": "POST /api/toxprints",
+    "schema": "schema/chemi_toxprints_prod.json",
+    "batching": "split",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "chemi_toxprints",
+    "wrapper": "chemi_toxprints_assays_by_name",
+    "operation": "GET /api/toxprints/assays/{name}",
+    "schema": "schema/chemi_toxprints_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_analyticalqc_search_by_dtxsid",
+    "operation": "GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_aop_search_by_entrez_gene_id",
+    "operation": "GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_aop_search_by_event_number",
+    "operation": "GET /bioactivity/aop/search/by-event-number/{eventNumber}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_aop_search_by_toxcast_aeid",
+    "operation": "GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_assay_chemicals_search_by_aeid",
+    "operation": "GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_assay_search_by_aeid_bulk",
+    "operation": "POST /bioactivity/assay/search/by-aeid/",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_assay_search_by_aeid",
+    "operation": "GET /bioactivity/assay/search/by-aeid/{aeid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_assay_search_by_gene",
+    "operation": "GET /bioactivity/assay/search/by-gene/{geneSymbol}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_assay_single_conc_search_by_aeid",
+    "operation": "GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_aed_search_by_dtxsid_bulk",
+    "operation": "POST /bioactivity/data/aed/search/by-dtxsid/",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_aed_search_by_dtxsid",
+    "operation": "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_aeid_bulk",
+    "operation": "POST /bioactivity/data/search/by-aeid/",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_aeid",
+    "operation": "GET /bioactivity/data/search/by-aeid/{aeid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_dtxsid_bulk",
+    "operation": "POST /bioactivity/data/search/by-dtxsid/",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_dtxsid",
+    "operation": "GET /bioactivity/data/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_m4id_bulk",
+    "operation": "POST /bioactivity/data/search/by-m4id/",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_m4id",
+    "operation": "GET /bioactivity/data/search/by-m4id/{m4id}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_spid_bulk",
+    "operation": "POST /bioactivity/data/search/by-spid/",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_search_by_spid",
+    "operation": "GET /bioactivity/data/search/by-spid/{spid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_summary_search_by_aeid",
+    "operation": "GET /bioactivity/data/summary/search/by-aeid/{aeid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_data_summary_search_by_dtxsid",
+    "operation": "GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_models_search_by_dtxsid",
+    "operation": "GET /bioactivity/models/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_search_contain",
+    "operation": "GET /bioactivity/search/contain/{value}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_search_equal",
+    "operation": "GET /bioactivity/search/equal/{value}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_bioactivity",
+    "wrapper": "ct_bioactivity_search_start_with",
+    "operation": "GET /bioactivity/search/start-with/{value}",
+    "schema": "schema/ctx_bioactivity_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_count_by_exact_formula",
+    "operation": "GET /chemical/count/by-exact-formula/{formula}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_count_by_msready_formula",
+    "operation": "GET /chemical/count/by-msready-formula/{formula}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_detail_search_by_dtxcid_bulk",
+    "operation": "POST /chemical/detail/search/by-dtxcid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_detail_search_by_dtxcid",
+    "operation": "GET /chemical/detail/search/by-dtxcid/{dtxcid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_detail_search_by_dtxsid_bulk",
+    "operation": "POST /chemical/detail/search/by-dtxsid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_detail_search_by_dtxsid",
+    "operation": "GET /chemical/detail/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_extra_data_search_by_dtxsid_bulk",
+    "operation": "POST /chemical/extra-data/search/by-dtxsid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_extra_data_search_by_dtxsid",
+    "operation": "GET /chemical/extra-data/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_fate_search_by_dtxsid_bulk",
+    "operation": "POST /chemical/fate/search/by-dtxsid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_fate_search_by_dtxsid",
+    "operation": "GET /chemical/fate/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_fate_summary_search_by_dtxsid",
+    "operation": "GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_file_image_search_by_dtxcid",
+    "operation": "GET /chemical/file/image/search/by-dtxcid/{dtxcid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_file_image_search_by_dtxsid",
+    "operation": "GET /chemical/file/image/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_file_image_search_by_gsid",
+    "operation": "GET /chemical/file/image/search/by-gsid/{gsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_file_mol_search_by_dtxcid",
+    "operation": "GET /chemical/file/mol/search/by-dtxcid/{dtxcid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_file_mol_search_by_dtxsid",
+    "operation": "GET /chemical/file/mol/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_chemicals_search_by_listname",
+    "operation": "GET /chemical/list/chemicals/search/by-listname/{list}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_chemicals_search_contain",
+    "operation": "GET /chemical/list/chemicals/search/contain/{list}/{word}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_chemicals_search_equal",
+    "operation": "GET /chemical/list/chemicals/search/equal/{list}/{word}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_chemicals_search_start_with",
+    "operation": "GET /chemical/list/chemicals/search/start-with/{list}/{word}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_search_by_dtxsid",
+    "operation": "GET /chemical/list/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_search_by_name",
+    "operation": "GET /chemical/list/search/by-name/{listName}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_list_search_by_type",
+    "operation": "GET /chemical/list/search/by-type/{type}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_msready_search_by_dtxcid_bulk",
+    "operation": "POST /chemical/msready/search/by-dtxcid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_msready_search_by_dtxcid",
+    "operation": "GET /chemical/msready/search/by-dtxcid/{dtxcid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_msready_search_by_formula",
+    "operation": "GET /chemical/msready/search/by-formula/{formula}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_msready_search_by_mass",
+    "operation": "GET /chemical/msready/search/by-mass/{start}/{end}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_experimental_search_by_dtxsid_bulk",
+    "operation": "POST /chemical/property/experimental/search/by-dtxsid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_experimental_search_by_dtxsid",
+    "operation": "GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_experimental_search_by_range",
+    "operation": "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_predicted_search_by_dtxsid_bulk",
+    "operation": "POST /chemical/property/predicted/search/by-dtxsid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_predicted_search_by_dtxsid",
+    "operation": "GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_predicted_search_by_range",
+    "operation": "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_property_summary_search_by_dtxsid",
+    "operation": "GET /chemical/property/summary/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_by_exact_formula",
+    "operation": "GET /chemical/search/by-exact-formula/{formula}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_by_msready_formula_bulk",
+    "operation": "POST /chemical/search/by-msready-formula/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_by_msready_formula",
+    "operation": "GET /chemical/search/by-msready-formula/{formula}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_contain",
+    "operation": "GET /chemical/search/contain/{word}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_equal_bulk",
+    "operation": "POST /chemical/search/equal/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": false,
+    "blocker": "request"
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_equal",
+    "operation": "GET /chemical/search/equal/{word}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_search_start_with",
+    "operation": "GET /chemical/search/start-with/{word}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_synonym_search_by_dtxsid_bulk",
+    "operation": "POST /chemical/synonym/search/by-dtxsid/",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_chemical",
+    "wrapper": "ct_chemical_synonym_search_by_dtxsid",
+    "operation": "GET /chemical/synonym/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_chemical_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_ccd_chem_weight_fractions_search_by_dtxsid",
+    "operation": "GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_ccd_functional_use_search_by_dtxsid",
+    "operation": "GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_ccd_keywords_search_by_dtxsid",
+    "operation": "GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_ccd_monitoring_data_search_by_dtxsid",
+    "operation": "GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_ccd_production_volume_search_by_dtxsid",
+    "operation": "GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_ccd_puc_search_by_dtxsid",
+    "operation": "GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_functional_use_probability_search_by_dtxsid",
+    "operation": "GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_functional_use_search_by_dtxsid_bulk",
+    "operation": "POST /exposure/functional-use/search/by-dtxsid/",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_functional_use_search_by_dtxsid",
+    "operation": "GET /exposure/functional-use/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_httk_search_by_dtxsid_bulk",
+    "operation": "POST /exposure/httk/search/by-dtxsid/",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_httk_search_by_dtxsid",
+    "operation": "GET /exposure/httk/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_list_presence_search_by_dtxsid_bulk",
+    "operation": "POST /exposure/list-presence/search/by-dtxsid/",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_list_presence_search_by_dtxsid",
+    "operation": "GET /exposure/list-presence/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_mmdb_aggregate_by_dtxsid",
+    "operation": "GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_mmdb_single_sample_by_dtxsid",
+    "operation": "GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_product_data_search_by_dtxsid_bulk",
+    "operation": "POST /exposure/product-data/search/by-dtxsid/",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_product_data_search_by_dtxsid",
+    "operation": "GET /exposure/product-data/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_seem_demographic_search_by_dtxsid_bulk",
+    "operation": "POST /exposure/seem/demographic/search/by-dtxsid/",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_seem_demographic_search_by_dtxsid",
+    "operation": "GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_seem_general_search_by_dtxsid_bulk",
+    "operation": "POST /exposure/seem/general/search/by-dtxsid/",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_exposure",
+    "wrapper": "ct_exposure_seem_general_search_by_dtxsid",
+    "operation": "GET /exposure/seem/general/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_exposure_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_adme_ivive_search_by_dtxsid",
+    "operation": "GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_cancer_summary_search_by_dtxsid_bulk",
+    "operation": "POST /hazard/cancer-summary/search/by-dtxsid/",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_cancer_summary_search_by_dtxsid",
+    "operation": "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_genetox_details_search_by_dtxsid_bulk",
+    "operation": "POST /hazard/genetox/details/search/by-dtxsid/",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_genetox_details_search_by_dtxsid",
+    "operation": "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_genetox_summary_search_by_dtxsid_bulk",
+    "operation": "POST /hazard/genetox/summary/search/by-dtxsid/",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_genetox_summary_search_by_dtxsid",
+    "operation": "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_hawc_search_by_dtxsid",
+    "operation": "GET /hazard/hawc/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_iris_search_by_dtxsid",
+    "operation": "GET /hazard/iris/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_pprtv_search_by_dtxsid",
+    "operation": "GET /hazard/pprtv/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_skin_eye_search_by_dtxsid_bulk",
+    "operation": "POST /hazard/skin-eye/search/by-dtxsid/",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_skin_eye_search_by_dtxsid",
+    "operation": "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_data_search_by_dtxsid",
+    "operation": "GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_data_search_by_study_id",
+    "operation": "GET /hazard/toxref/data/search/by-study-id/{studyId}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_data_search_by_study_type",
+    "operation": "GET /hazard/toxref/data/search/by-study-type/{studyType}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "pagination"
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_effects_search_by_dtxsid",
+    "operation": "GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_effects_search_by_study_id",
+    "operation": "GET /hazard/toxref/effects/search/by-study-id/{studyId}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_effects_search_by_study_type",
+    "operation": "GET /hazard/toxref/effects/search/by-study-type/{studyType}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "pagination"
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_observations_search_by_dtxsid",
+    "operation": "GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_observations_search_by_study_id",
+    "operation": "GET /hazard/toxref/observations/search/by-study-id/{studyId}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_observations_search_by_study_type",
+    "operation": "GET /hazard/toxref/observations/search/by-study-type/{studyType}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": false,
+    "blocker": "pagination"
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_summary_search_by_dtxsid",
+    "operation": "GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_summary_search_by_study_id",
+    "operation": "GET /hazard/toxref/summary/search/by-study-id/{studyId}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxref_summary_search_by_study_type",
+    "operation": "GET /hazard/toxref/summary/search/by-study-type/{studyType}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxval_search_by_category",
+    "operation": "GET /hazard/toxval/search/by-category/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxval_search_by_dtxsid_bulk",
+    "operation": "POST /hazard/toxval/search/by-dtxsid/",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "split",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxval_search_by_dtxsid",
+    "operation": "GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  },
+  {
+    "service": "ctx_hazard",
+    "wrapper": "ct_hazard_toxval_supercategory_search_by_dtxsid",
+    "operation": "GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}",
+    "schema": "schema/ctx_hazard_prod.json",
+    "batching": "fan_out",
+    "eligible": true,
+    "blocker": ""
+  }
+]

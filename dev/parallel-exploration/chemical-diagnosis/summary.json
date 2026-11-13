@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-11-12 17:56:15",
+  "wrapper": "ct_chemical_detail_search_by_dtxsid_bulk",
+  "operation": "POST /chemical/detail/search/by-dtxsid/",
+  "projection": "chemicalidentifier",
+  "inputs": ["DTXSID7020182", "DTXSID9020112", "DTXSID2021315"],
+  "chunk_size": 1,
+  "execution": "original sequential wrapper only",
+  "calls": 2,
+  "comparisons": [
+    {
+      "exact": false,
+      "same_columns": true,
+      "columns_a": ["dtxsid", "dtxcid", "casrn", "preferredName", "iupacName", "inchikey"],
+      "columns_b": ["inchikey", "dtxsid", "dtxcid", "casrn", "preferredName", "iupacName"],
+      "equal_by_column": true,
+      "difference": ["Names: 6 string mismatches", "Component 1: 3 string mismatches", "Component 2: 3 string mismatches", "Component 3: 3 string mismatches", "Component 4: 3 string mismatches", "Component 5: 3 string mismatches", "Component 6: 3 string mismatches"]
+    }
+  ],
+  "mismatch_captured": true
+}

@@ -1,0 +1,93 @@
+{
+  "ct_chemical_detail_search_by_dtxsid": {
+    "wrapper": "ct_chemical_detail_search_by_dtxsid",
+    "sequential_ok": true,
+    "parallel_ok": true,
+    "identical_result": true,
+    "comparison": true,
+    "result_rows": 2,
+    "result_length": {},
+    "sequential_warnings": [],
+    "parallel_warnings": [],
+    "sequential_error": {},
+    "parallel_error": {}
+  },
+  "ct_bioactivity_analyticalqc_search_by_dtxsid": {
+    "wrapper": "ct_bioactivity_analyticalqc_search_by_dtxsid",
+    "sequential_ok": true,
+    "parallel_ok": true,
+    "identical_result": true,
+    "comparison": true,
+    "result_rows": 55,
+    "result_length": {},
+    "sequential_warnings": [],
+    "parallel_warnings": [],
+    "sequential_error": {},
+    "parallel_error": {}
+  },
+  "ct_exposure_ccd_production_volume_search_by_dtxsid": {
+    "wrapper": "ct_exposure_ccd_production_volume_search_by_dtxsid",
+    "sequential_ok": true,
+    "parallel_ok": true,
+    "identical_result": true,
+    "comparison": true,
+    "result_rows": 4,
+    "result_length": {},
+    "sequential_warnings": [],
+    "parallel_warnings": [],
+    "sequential_error": {},
+    "parallel_error": {}
+  },
+  "ct_hazard_genetox_summary_search_by_dtxsid": {
+    "wrapper": "ct_hazard_genetox_summary_search_by_dtxsid",
+    "sequential_ok": true,
+    "parallel_ok": true,
+    "identical_result": true,
+    "comparison": true,
+    "result_rows": 2,
+    "result_length": {},
+    "sequential_warnings": [],
+    "parallel_warnings": [],
+    "sequential_error": {},
+    "parallel_error": {}
+  },
+  "chemi_amos_find_dtxsids": {
+    "wrapper": "chemi_amos_find_dtxsids",
+    "sequential_ok": true,
+    "parallel_ok": true,
+    "identical_result": true,
+    "comparison": true,
+    "result_rows": {},
+    "result_length": 2,
+    "sequential_warnings": [],
+    "parallel_warnings": [],
+    "sequential_error": {},
+    "parallel_error": {}
+  },
+  "chemi_chet_reaction_mappositions": {
+    "wrapper": "chemi_chet_reaction_mappositions",
+    "sequential_ok": true,
+    "parallel_ok": true,
+    "identical_result": true,
+    "comparison": true,
+    "result_rows": {},
+    "result_length": 2,
+    "sequential_warnings": [],
+    "parallel_warnings": [],
+    "sequential_error": {},
+    "parallel_error": {}
+  },
+  "chemi_toxprints_assays_by_name": {
+    "wrapper": "chemi_toxprints_assays_by_name",
+    "sequential_ok": false,
+    "parallel_ok": false,
+    "identical_result": true,
+    "comparison": {},
+    "result_rows": {},
+    "result_length": 0,
+    "sequential_warnings": "Request for AMES failed: HTTP 404 application/json response",
+    "parallel_warnings": "Request for AMES failed: HTTP 404 application/json response",
+    "sequential_error": {},
+    "parallel_error": {}
+  }
+}

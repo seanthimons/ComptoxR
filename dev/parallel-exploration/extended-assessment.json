@@ -1,0 +1,117 @@
+{
+  "checked_at": "2026-11-12 19:28:18",
+  "paired_comparisons": {
+    "ct_chemical_detail_search_by_dtxsid_bulk/10": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 27,
+      "parallel_rows": 27
+    },
+    "ct_bioactivity_data_aed_search_by_dtxsid_bulk/10": {
+      "exact": false,
+      "same_column_sets": true,
+      "same_ordered_records": false,
+      "same_record_multiset": true,
+      "sequential_rows": 175,
+      "parallel_rows": 175
+    },
+    "ct_exposure_seem_general_search_by_dtxsid_bulk/10": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 10,
+      "parallel_rows": 10
+    },
+    "ct_hazard_genetox_summary_search_by_dtxsid_bulk/10": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 3,
+      "parallel_rows": 3
+    },
+    "ct_chemical_detail_search_by_dtxsid_bulk/25": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 27,
+      "parallel_rows": 27
+    },
+    "ct_bioactivity_data_aed_search_by_dtxsid_bulk/25": {
+      "exact": false,
+      "same_column_sets": true,
+      "same_ordered_records": false,
+      "same_record_multiset": true,
+      "sequential_rows": 175,
+      "parallel_rows": 175
+    },
+    "ct_exposure_seem_general_search_by_dtxsid_bulk/25": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 10,
+      "parallel_rows": 10
+    },
+    "ct_hazard_genetox_summary_search_by_dtxsid_bulk/25": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 3,
+      "parallel_rows": 3
+    }
+  },
+  "cross_chunk_sizes": {
+    "ct_chemical_detail_search_by_dtxsid_bulk": {
+      "exact": false,
+      "same_column_sets": true,
+      "same_ordered_records": false,
+      "same_record_multiset": true,
+      "sequential_rows": 27,
+      "parallel_rows": 27
+    },
+    "ct_bioactivity_data_aed_search_by_dtxsid_bulk": {
+      "exact": false,
+      "same_column_sets": true,
+      "same_ordered_records": false,
+      "same_record_multiset": true,
+      "sequential_rows": 175,
+      "parallel_rows": 175
+    },
+    "ct_exposure_seem_general_search_by_dtxsid_bulk": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 10,
+      "parallel_rows": 10
+    },
+    "ct_hazard_genetox_summary_search_by_dtxsid_bulk": {
+      "exact": true,
+      "same_column_sets": true,
+      "same_ordered_records": true,
+      "same_record_multiset": true,
+      "sequential_rows": 3,
+      "parallel_rows": 3
+    }
+  },
+  "rejects_missing_rows": true,
+  "rejects_changed_values": true,
+  "aed_control_inputs": ["DTXSID1024122", "DTXSID4020533", "DTXSID00205033", "DTXSID00330354", "DTXSID101045959", "DTXSID10185731", "DTXSID10894891", "DTXSID10895040", "DTXSID2023270", "DTXSID2033314"],
+  "aed_table_follows_wire_row_order": [true, true],
+  "original_sequential_aed_control": [
+    {
+      "exact": false,
+      "same_column_sets": true,
+      "same_ordered_records": false,
+      "same_record_multiset": true,
+      "sequential_rows": 175,
+      "parallel_rows": 175
+    }
+  ]
+}

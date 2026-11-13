@@ -1,0 +1,179 @@
+{
+  "checked_at": "2026-11-12 19:43:13",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.2.3",
+    "source_commit": "3a522624bf2941c735b4cc9a4a3a073cc3b66b1b",
+    "source_archive_sha256": "7656cdb9b0e44d169357217f9282922cf59d3f5f0433f0ebfc4d90a2bf71bd3a",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operation": "POST /chemical/detail/search/by-dtxsid/",
+  "config": "apis/ctx_chemical.yml",
+  "schema": "schema/ctx_chemical_prod.json",
+  "transport": "mocked, no network",
+  "results": {
+    "probe_legacy_1/success": {
+      "policy": "legacy",
+      "concurrency": 1,
+      "scenario": "success",
+      "rows": 3,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_legacy_2/success": {
+      "policy": "legacy",
+      "concurrency": 2,
+      "scenario": "success",
+      "rows": 3,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_metadata_1/success": {
+      "policy": "metadata",
+      "concurrency": 1,
+      "scenario": "success",
+      "rows": 3,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_metadata_2/success": {
+      "policy": "metadata",
+      "concurrency": 2,
+      "scenario": "success",
+      "rows": 3,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_defaults_1/success": {
+      "policy": "defaults",
+      "concurrency": 1,
+      "scenario": "success",
+      "rows": 3,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_defaults_2/success": {
+      "policy": "defaults",
+      "concurrency": 2,
+      "scenario": "success",
+      "rows": 3,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_legacy_1/transport": {
+      "policy": "legacy",
+      "concurrency": 1,
+      "scenario": "transport",
+      "rows": 2,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_legacy_2/transport": {
+      "policy": "legacy",
+      "concurrency": 2,
+      "scenario": "transport",
+      "rows": 2,
+      "warnings": [],
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_metadata_1/transport": {
+      "policy": "metadata",
+      "concurrency": 1,
+      "scenario": "transport",
+      "rows": 2,
+      "warnings": [],
+      "failed": "simulated transport timeout",
+      "assertions_passed": true
+    },
+    "probe_metadata_2/transport": {
+      "policy": "metadata",
+      "concurrency": 2,
+      "scenario": "transport",
+      "rows": 2,
+      "warnings": [],
+      "failed": "simulated transport timeout",
+      "assertions_passed": true
+    },
+    "probe_defaults_1/transport": {
+      "policy": "defaults",
+      "concurrency": 1,
+      "scenario": "transport",
+      "rows": 2,
+      "warnings": "Request for middle failed: simulated transport timeout",
+      "failed": "simulated transport timeout",
+      "assertions_passed": true
+    },
+    "probe_defaults_2/transport": {
+      "policy": "defaults",
+      "concurrency": 2,
+      "scenario": "transport",
+      "rows": 2,
+      "warnings": "Request for middle failed: simulated transport timeout",
+      "failed": "simulated transport timeout",
+      "assertions_passed": true
+    },
+    "probe_legacy_1/http": {
+      "policy": "legacy",
+      "concurrency": 1,
+      "scenario": "http",
+      "rows": 2,
+      "warnings": "API request to \"chemical/detail/search/by-dtxsid/\" failed for \"middle\" with\nstatus 503",
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_legacy_2/http": {
+      "policy": "legacy",
+      "concurrency": 2,
+      "scenario": "http",
+      "rows": 2,
+      "warnings": "API request to \"chemical/detail/search/by-dtxsid/\" failed for \"middle\" with\nstatus 503",
+      "failed": null,
+      "assertions_passed": true
+    },
+    "probe_metadata_1/http": {
+      "policy": "metadata",
+      "concurrency": 1,
+      "scenario": "http",
+      "rows": 2,
+      "warnings": "API request to \"chemical/detail/search/by-dtxsid/\" failed for \"middle\" with\nstatus 503",
+      "failed": "HTTP 503 response",
+      "assertions_passed": true
+    },
+    "probe_metadata_2/http": {
+      "policy": "metadata",
+      "concurrency": 2,
+      "scenario": "http",
+      "rows": 2,
+      "warnings": "API request to \"chemical/detail/search/by-dtxsid/\" failed for \"middle\" with\nstatus 503",
+      "failed": "HTTP 503 response",
+      "assertions_passed": true
+    },
+    "probe_defaults_1/http": {
+      "policy": "defaults",
+      "concurrency": 1,
+      "scenario": "http",
+      "rows": 2,
+      "warnings": "Request for middle failed: HTTP 503 response",
+      "failed": "HTTP 503 response",
+      "assertions_passed": true
+    },
+    "probe_defaults_2/http": {
+      "policy": "defaults",
+      "concurrency": 2,
+      "scenario": "http",
+      "rows": 2,
+      "warnings": "Request for middle failed: HTTP 503 response",
+      "failed": "HTTP 503 response",
+      "assertions_passed": true
+    }
+  }
+}
