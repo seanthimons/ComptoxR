@@ -75,21 +75,42 @@ mass_range_path_params <- function(operation) {
   quote(c(end = params[["end"]]))
 }
 
-# Project classifier identifiers and nullable options into the reviewed chemical payload.
+# Send the classifier arguments as the schema's top-level body fields. The services take
+# {id, smiles} records or a smiles array and need an id on every record; identifiers are
+# resolved to SMILES beforehand by the resolve_classifier_inputs pre-request hook.
 classifier_body <- function(operation) {
-  fields <- intersect(vapply(operation$parameters, `[[`, '', 'name'), c('model', 'smiles'))
-  options <- as.call(c(list(quote(base::list)), stats::setNames(lapply(fields, function(name) {
+  fields <- intersect(vapply(operation$parameters, `[[`, '', 'name'), c('chemicals', 'smiles', 'model'))
+  body <- as.call(c(list(quote(base::list)), stats::setNames(lapply(fields, function(name) {
     call('[[', as.name('params'), name)
   }), fields)))
   substitute(base::local({
-    ids <- unique(as.vector(params[['chemicals']]))
-    ids <- ids[!is.na(ids) & ids != '']
-    if (!length(ids)) cli::cli_abort('Either query or chemicals parameter must be provided.')
-    chemicals <- lapply(ids, function(id) base::list(sid = id))
-    options <- Filter(Negate(is.null), OPTIONS)
-    if (!length(options)) options <- structure(list(), names = character())
-    if (WRAP) base::list(chemicals = chemicals, options = options) else chemicals
-  }), list(OPTIONS = options, WRAP = !grepl('/ncc_cats$', operation$key)))
+    body <- BODY
+    for (name in base::intersect(c('chemicals', 'smiles'), base::names(body))) {
+      value <- body[[name]]
+      # Vectors become JSON arrays even at length one; records and data frames pass through.
+      if (base::is.atomic(value)) {
+        value <- value[!base::is.na(value) & value != '']
+        ids <- base::names(value)
+        if (base::is.null(ids)) ids <- base::rep('', base::length(value))
+        value <- base::unname(value)
+        blank <- base::is.na(ids) | ids == ''
+        ids[blank] <- value[blank]
+        keep <- !base::duplicated(base::cbind(ids, value))
+        ids <- ids[keep]
+        value <- value[keep]
+        body[[name]] <- if (name == 'chemicals') {
+          base::lapply(base::seq_along(value), function(i) base::list(id = ids[[i]], smiles = value[[i]]))
+        } else {
+          base::as.list(base::unique(value))
+        }
+      }
+    }
+    body <- base::Filter(base::length, body)
+    if (!base::length(base::intersect(c('chemicals', 'smiles'), base::names(body)))) {
+      cli::cli_abort('Supply chemicals or smiles.')
+    }
+    body
+  }), list(BODY = body))
 }
 
  amos_read_body <- function(operation) {
