@@ -7,9 +7,9 @@
 chemi_amnb_nate_bulk(chemicals = NULL, smiles = NULL)
 }
 \arguments{
-\item{chemicals}{Optional parameter}
+\item{chemicals}{Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns, or a list of such records. Identifiers inside records are not resolved.}
 
-\item{smiles}{Optional parameter}
+\item{smiles}{Character vector of SMILES or identifiers (resolved as for chemicals), sent without ids.}
 }
 \value{
 Returns a list with result object
@@ -19,7 +19,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_amnb_nate_bulk(chemicals = "DTXSID1024122")
+chemi_amnb_nate_bulk(chemicals = "DTXSID7020182")
 }
 }
 \section{API stage}{

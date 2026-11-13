@@ -3,40 +3,58 @@
 #' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param chemicals Array of objects with optional id and smiles, or an array of SMILES strings for backward compatibility.
+#' @param chemicals Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns, or a list of such records. Identifiers inside records are not resolved.
 #' @param model Optional parameter. Options: RF, NN (default: RF)
-#' @param smiles Array of SMILES strings, same input style as amnb_nate.
+#' @param smiles Character vector of SMILES or identifiers (resolved as for chemicals), sent without ids.
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
 #' @examples
 #' \dontrun{
-#' chemi_arn_cats_bulk(chemicals = "DTXSID1024122")
+#' chemi_arn_cats_bulk(chemicals = "DTXSID7020182")
 #' }
 # Generated with specmill; do not edit by hand.
 chemi_arn_cats_bulk <- function(chemicals = NULL, model = "RF", smiles = NULL) {
   params <- base::list("chemicals" = chemicals, "model" = model, "smiles" = smiles)
+  state <- run_hook("chemi_arn_cats_bulk", "pre_request", base::list(params = params))
+  if (base::isTRUE(state$skip_request)) {
+    base::return(state$result)
+  }
+  changed <- base::intersect(base::names(params), base::names(state$params))
+  params[changed] <- state$params[changed]
   result <- .ct_request(
     "method" = "POST",
     "path" = "/api/arn_cats",
     "path_params" = structure(list(), names = character(0)),
     "query" = structure(list(), names = character(0)),
     "body" = base::local({
-      ids <- unique(as.vector(params[["chemicals"]]))
-      ids <- ids[!is.na(ids) & ids != ""]
-      if (!length(ids)) {
-        cli::cli_abort("Either query or chemicals parameter must be provided.")
+      body <- base::list(chemicals = params[["chemicals"]], model = params[["model"]], smiles = params[["smiles"]])
+      for (name in base::intersect(c("chemicals", "smiles"), base::names(body))) {
+        value <- body[[name]]
+        if (base::is.atomic(value)) {
+          value <- value[!base::is.na(value) & value != ""]
+          ids <- base::names(value)
+          if (base::is.null(ids)) {
+            ids <- base::rep("", base::length(value))
+          }
+          value <- base::unname(value)
+          blank <- base::is.na(ids) | ids == ""
+          ids[blank] <- value[blank]
+          keep <- !base::duplicated(base::cbind(ids, value))
+          ids <- ids[keep]
+          value <- value[keep]
+          body[[name]] <- if (name == "chemicals") {
+            base::lapply(base::seq_along(value), function(i) base::list(id = ids[[i]], smiles = value[[i]]))
+          } else {
+            base::as.list(base::unique(value))
+          }
+        }
       }
-      chemicals <- lapply(ids, function(id) base::list(sid = id))
-      options <- Filter(Negate(is.null), base::list(model = params[["model"]], smiles = params[["smiles"]]))
-      if (!length(options)) {
-        options <- structure(list(), names = character())
+      body <- base::Filter(base::length, body)
+      if (!base::length(base::intersect(c("chemicals", "smiles"), base::names(body)))) {
+        cli::cli_abort("Supply chemicals or smiles.")
       }
-      if (TRUE) {
-        base::list(chemicals = chemicals, options = options)
-      } else {
-        chemicals
-      }
+      body
     }),
     "headers" = list(Accept = "application/json"),
     "server" = list(diagnostic = "Relative server URL requires a recorded origin or explicit base URL override"),
