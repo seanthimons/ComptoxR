@@ -7,11 +7,11 @@
 chemi_arn_cats_bulk(chemicals = NULL, model = "RF", smiles = NULL)
 }
 \arguments{
-\item{chemicals}{Array of objects with optional id and smiles, or an array of SMILES strings for backward compatibility.}
+\item{chemicals}{Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns, or a list of such records. Identifiers inside records are not resolved.}
 
 \item{model}{Optional parameter. Options: RF, NN (default: RF)}
 
-\item{smiles}{Array of SMILES strings, same input style as amnb_nate.}
+\item{smiles}{Character vector of SMILES or identifiers (resolved as for chemicals), sent without ids.}
 }
 \value{
 Returns a list with result object
@@ -21,7 +21,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_arn_cats_bulk(chemicals = "DTXSID1024122")
+chemi_arn_cats_bulk(chemicals = "DTXSID7020182")
 }
 }
 \section{API stage}{

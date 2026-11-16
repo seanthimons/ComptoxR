@@ -56,14 +56,13 @@ groups:
             media bytes.
           tags:
             apiStage: public
-      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option
+      # why: inputs keep released argument names/defaults; request arguments pin the released call, with the body following the service schema; docs keep the released title and return; hooks come from inst/hook_config.yml; server resolver keeps the user-overridable base URL option
       POST /api/arn_cats:
         inputs:
           chemicals:
             type: character
             default: ~
-            description: Array of objects with optional id and smiles, or an array of SMILES
-              strings for backward compatibility.
+            description: Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns, or a list of such records. Identifiers inside records are not resolved.
           model:
             type: character
             default: RF
@@ -71,7 +70,7 @@ groups:
           smiles:
             type: character
             default: ~
-            description: Array of SMILES strings, same input style as amnb_nate.
+            description: Character vector of SMILES or identifiers (resolved as for chemicals), sent without ids.
         request:
           arguments:
             method:
@@ -104,13 +103,12 @@ groups:
           title: Generate groups for multiple molecules
           lifecycle: experimental
           parameters:
-            chemicals: Array of objects with optional id and smiles, or an array of SMILES
-              strings for backward compatibility.
+            chemicals: Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns, or a list of such records. Identifiers inside records are not resolved.
             model: 'Optional parameter. Options: RF, NN (default: RF)'
-            smiles: Array of SMILES strings, same input style as amnb_nate.
+            smiles: Character vector of SMILES or identifiers (resolved as for chemicals), sent without ids.
           return: Returns a list with result object
           examples:
-            - chemicals: DTXSID1024122
+            - chemicals: DTXSID7020182
           tags:
             apiStage: public
         server:

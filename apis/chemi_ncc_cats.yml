@@ -56,14 +56,13 @@ groups:
             media bytes.
           tags:
             apiStage: public
-      # why: inputs keep released argument names/defaults; request arguments pin the released wire call; docs keep the released title, return and examples; server resolver keeps the user-overridable base URL option
+      # why: inputs keep released argument names/defaults; request arguments pin the released call, with the body following the service schema; docs keep the released title and return; hooks come from inst/hook_config.yml; server resolver keeps the user-overridable base URL option
       POST /api/ncc_cats:
         inputs:
           chemicals:
             type: character
             default: ~
-            description: Array of input chemicals with optional id, smiles, logp, and ws.
-              Missing smiles are returned as item-level errors.
+            description: Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns and optional logp and ws columns, or a list of such records. Identifiers inside records are not resolved.
         request:
           arguments:
             method:
@@ -96,11 +95,10 @@ groups:
           title: Generate NCC categories for multiple molecules
           lifecycle: experimental
           parameters:
-            chemicals: Array of input chemicals with optional id, smiles, logp, and ws. Missing
-              smiles are returned as item-level errors.
+            chemicals: Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns and optional logp and ws columns, or a list of such records. Identifiers inside records are not resolved.
           return: Returns a list with result object
           examples:
-            - chemicals: DTXSID1024122
+            - chemicals: DTXSID7020182
           tags:
             apiStage: public
         server:
