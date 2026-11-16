@@ -1224,3 +1224,28 @@ pubchem_synonyms:
 
 chemi_toxprints_bulk:
   bespoke_test: "tests/testthat/test-toxprints_bulk.R"
+
+chemi_amnb_nate_bulk:
+  bespoke_test: "tests/testthat/test-native_classifier_bodies.R"
+  pre_request:
+    - resolve_classifier_inputs
+
+chemi_arn_cats_bulk:
+  bespoke_test: "tests/testthat/test-native_classifier_bodies.R"
+  pre_request:
+    - resolve_classifier_inputs
+
+chemi_ncc_cats_bulk:
+  bespoke_test: "tests/testthat/test-native_classifier_bodies.R"
+  pre_request:
+    - resolve_classifier_inputs
+
+chemi_pfas_atlas_bulk:
+  bespoke_test: "tests/testthat/test-native_classifier_bodies.R"
+  pre_request:
+    - resolve_classifier_inputs
+
+chemi_pfas_cats_bulk:
+  bespoke_test: "tests/testthat/test-native_classifier_bodies.R"
+  pre_request:
+    - resolve_classifier_inputs
