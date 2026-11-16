@@ -2,7 +2,9 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.4 (2026-11-16)
+
+#### Release notes
 
 - Updated the Specmill toolkit to 0.4.0. The request helper is unchanged; the
   generated authentication file gains OAuth sign-in support, which ComptoxR
@@ -18,6 +20,40 @@
 - `chemi_webtest_predict_bulk()` no longer fails when WebTEST returns failed
   models without an endpoint object; those entries are skipped (#381).
 
+<!-- end release notes -->
+
+#### Bug fixes
+
+- skip endpoint-less failed models in predictions (#381)
+  ([9632432](https://github.com/seanthimons/ComptoxR/tree/9632432fb673baf40a616962eae00f6b59b18181))
+- send schema bodies from bulk classifier wrappers
+  ([260fe05](https://github.com/seanthimons/ComptoxR/tree/260fe057a3535a6d84627185c1c6c0bd4244ff37))
+
+#### Tests
+
+- archived production orphans now yield LC50 rows (#381)
+  ([6e54413](https://github.com/seanthimons/ComptoxR/tree/6e54413a7a35598d72af14c9b1b61032ceafea86))
+
+#### CI
+
+- make Windows and macOS check jobs opt-in
+  ([1d74c72](https://github.com/seanthimons/ComptoxR/tree/1d74c72ca59722ca250fa34a2b5797e414a06d67))
+
+#### Docs
+
+- move classifier fix entry to Unreleased
+  ([4472836](https://github.com/seanthimons/ComptoxR/tree/4472836168f07e0aadbcbad4b9b5f2eecd0703dd))
+
+#### Other changes
+
+- bump version to 4.0.4 \[skip ci\]
+  ([1a4b4d1](https://github.com/seanthimons/ComptoxR/tree/1a4b4d1a4df83001e341ad9c11cf53d7af1680b1))
+- bump toolkit to 0.4.0
+  ([5ea0785](https://github.com/seanthimons/ComptoxR/tree/5ea0785f78041e32985670da9a2905dbf8eeb640))
+
+Full set of changes:
+[`v4.0.3...v4.0.4`](https://github.com/seanthimons/ComptoxR/compare/v4.0.3...v4.0.4)
+
 ## v4.0.3 (2026-11-10)
 
 #### Release notes
@@ -32,6 +68,11 @@
 
 - refresh specmill manifest on release and share specmill setup
   ([a7b1257](https://github.com/seanthimons/ComptoxR/tree/a7b12574c4492fdabdb01c7b244c08ad05f77339))
+
+#### Docs
+
+- update NEWS.md for v4.0.3 \[skip ci\]
+  ([eef85b5](https://github.com/seanthimons/ComptoxR/tree/eef85b50864c91f2c0fe1eba530d7d0e5692acf4))
 
 #### Other changes
 
