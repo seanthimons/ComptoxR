@@ -70,7 +70,7 @@ groups:
                 Accept: application/json
             server:
               value:
-                url: https://hcd.rtpnc.epa.gov
+                url: https://cim.epa.gov
             server_resolver:
               value:
                 name: .ct_server_url

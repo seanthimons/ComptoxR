@@ -55,7 +55,7 @@ testthat::test_that('protocol search sends reviewed paging fields and preserves 
     withr::local_options(list(ComptoxR.chemi_burl = NULL, comptoxr_native.dry_run = TRUE))
     request <- fn('protocol', body = list())
     testthat::expect_s3_class(request, 'httr2_request')
-    testthat::expect_identical(request$url, 'https://hcd.rtpnc.epa.gov/api/stdizer/protocols/protocol')
+    testthat::expect_identical(request$url, 'https://cim.epa.gov/api/stdizer/protocols/protocol')
   })
   args <- list(id = 'protocol', page = 0L, size = 1L,
     sort = c('type,asc', 'id,desc'), body = list(hidden = FALSE, query = 'x & y'))

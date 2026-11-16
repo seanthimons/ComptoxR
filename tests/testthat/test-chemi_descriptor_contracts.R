@@ -276,7 +276,7 @@ test_that("raw descriptor output retains actual route provenance", {
 })
 
 test_that("descriptor routing stays on the effective production or explicit host", {
-  production <- "https://hcd.rtpnc.epa.gov/api"
+  production <- "https://cim.epa.gov/api"
   withr::local_envvar(chemi_burl = production)
   calls <- list()
   local_mocked_bindings(

@@ -71,7 +71,7 @@ chemi_stdizer_protocols_by_id_bulk <- function(id, page = NULL, size = NULL, sor
     "query" = base::list("page" = params[["page"]], "size" = params[["size"]], "sort" = params[["sort"]]),
     "body" = params[["body"]],
     "headers" = structure(list(), names = character(0)),
-    "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+    "server" = list(url = "https://cim.epa.gov"),
     "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
     "auth" = list(),
     "query_serialization" = list(sort = "explode"),
