@@ -2,6 +2,11 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- `chemi_webtest_predict_bulk()` no longer fails when WebTEST returns failed
+  models without an endpoint object; those entries are skipped (#381).
+
 ## v4.0.3 (2026-11-10)
 
 #### Release notes

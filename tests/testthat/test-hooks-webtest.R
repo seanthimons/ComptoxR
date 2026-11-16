@@ -178,6 +178,33 @@ test_that("wide prediction preserves duplicates and emits one row per failure", 
   expect_match(result$error[[7]], "No requested WebTEST prediction")
 })
 
+test_that("endpoint-less failed models are skipped, not treated as malformed (#381)", {
+  orphan <- list(
+    predicted = list(list(
+      method = "consensus",
+      errorCode = "AE",
+      error = "Cannot invoke \"wekalite.Instances.numAttributes()\" because \"trainingSet\" is null"
+    )),
+    displayedExperimentalString = "",
+    displayedPredictedString = ""
+  )
+  with_orphans <- webtest_contract_prediction(chemical_id = "CCO", smiles = "CCO")
+  with_orphans$endpoints <- c(list(orphan), with_orphans$endpoints, list(orphan))
+  only_orphans <- webtest_contract_prediction(chemical_id = "CCC", smiles = "CCC")
+  only_orphans$endpoints <- list(orphan)
+  local_mocked_bindings(
+    .ct_request = function(...) webtest_prediction_result(chemicals = list(with_orphans, only_orphans)),
+    .package = "ComptoxR"
+  )
+
+  result <- chemi_webtest_predict_bulk(c("CCO", "CCC"), endpoints = "LC50", methods = "consensus")
+
+  expect_identical(result$status, c("ok", "error"))
+  expect_identical(result$endpoint_id[[1]], "LC50")
+  expect_identical(result$method[[1]], "consensus")
+  expect_match(result$error[[2]], "No requested WebTEST prediction")
+})
+
 test_that("all-invalid prediction skips HTTP and still formats error rows", {
   called <- FALSE
   local_mocked_bindings(

@@ -81,6 +81,10 @@ evaluate_probe <- function(kind, value, expected = NULL) {
   fail <- function(detail) list(pass = FALSE, detail = detail)
   pass <- function(detail = "contract satisfied") list(pass = TRUE, detail = detail)
 
+  if (startsWith(kind, "wrapper_") && inherits(value, "condition")) {
+    return(fail(paste("wrapper errored:", conditionMessage(value))))
+  }
+
   if (kind == "http") {
     return(if (isTRUE(value$ok)) pass() else fail("request failed"))
   }
