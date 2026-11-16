@@ -2,7 +2,9 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.5 (2026-11-16)
+
+#### Release notes
 
 - The cheminformatics (CIM) services moved to `https://cim.epa.gov`, so the
   default `chemi_burl` is now `https://cim.epa.gov/api`. The old
@@ -10,6 +12,25 @@
   `ComptoxR.chemi_burl` to the old host, switch it to the new one or unset it.
   Until you do, the RDKit descriptor fallback stays off, because it only
   applies on the default server.
+
+<!-- end release notes -->
+
+#### Docs
+
+- restore Unreleased NEWS section for CIM host migration
+  ([dfe8e0f](https://github.com/seanthimons/ComptoxR/tree/dfe8e0f14fbe20562ff8b5ec74d54122fb1145bc))
+
+#### Other changes
+
+- bump version to 4.0.5 \[skip ci\]
+  ([8baa72e](https://github.com/seanthimons/ComptoxR/tree/8baa72e5e8198571a7730d708b1a058350553706))
+- migrate CIM base URL from hcd.rtpnc.epa.gov to cim.epa.gov
+  ([7a10ec3](https://github.com/seanthimons/ComptoxR/tree/7a10ec30dd975fc373677ed572d45a352853d4ce))
+- set integration to dev version 4.0.4.9000
+  ([d0bcd89](https://github.com/seanthimons/ComptoxR/tree/d0bcd8999f9a6efd7b703c85d9b96a3a529f83a5))
+
+Full set of changes:
+[`v4.0.4...v4.0.5`](https://github.com/seanthimons/ComptoxR/compare/v4.0.4...v4.0.5)
 
 ## v4.0.4 (2026-11-16)
 
@@ -50,6 +71,8 @@
 
 #### Docs
 
+- update NEWS.md for v4.0.4 \[skip ci\]
+  ([f2ce3fb](https://github.com/seanthimons/ComptoxR/tree/f2ce3fb50841fbcf96386ce7f5c392523990d7b6))
 - move classifier fix entry to Unreleased
   ([4472836](https://github.com/seanthimons/ComptoxR/tree/4472836168f07e0aadbcbad4b9b5f2eecd0703dd))
 
