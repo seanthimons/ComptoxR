@@ -92,7 +92,7 @@ testthat::test_that('original and generated default/configured API dry-run URLs 
   testthat::expect_identical(a$value$result$path,httr2::url_parse(b$value$url)$path)
   testthat::expect_identical(httr2::req_url_path_append(httr2::request(get('.endpoint_url',ns)('chemi_burl')),'search')$url,b$value$url)
   observations[[paste0('dryrun-',if(is.null(base))'default'else base)]] <<-list(old=a,candidate=b)
-  testthat::expect_identical(b$value$url,paste0(if(is.null(base))'https://hcd.rtpnc.epa.gov/api' else base,'/search'))
+  testthat::expect_identical(b$value$url,paste0(if(is.null(base))'https://cim.epa.gov/api' else base,'/search'))
   testthat::expect_length(a$wires,0L);testthat::expect_length(b$wires,0L)
   testthat::expect_length(b$observed,0L)
  }

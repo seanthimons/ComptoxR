@@ -54,7 +54,7 @@ testthat::test_that('released ownership declarations preserve real descriptor be
    params[if(name=='chemi_descriptors')'smiles'else'query']<-list('CCO')
    if(name=='chemi_descriptors_bulk')params$chemIdType<-'AnyId'
    testthat::expect_warning(pre<-get('run_hook',ns)(name,'pre_request',list(params=params)),'dedicated RDKit')
-   testthat::expect_identical(pre$request$endpoint,'rdkit');testthat::expect_identical(pre$request$server,'https://hcd.rtpnc.epa.gov/api')
+   testthat::expect_identical(pre$request$endpoint,'rdkit');testthat::expect_identical(pre$request$server,'https://cim.epa.gov/api')
    testthat::expect_true(pre$params$.route$fallback_used);testthat::expect_identical(pre$params$.engine_options$bits,1024L)
   }
  })

@@ -30,7 +30,7 @@ chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL,
     "query" = base::list("width" = params[["width"]], "height" = params[["height"]], "format" = params[["format"]]),
     "body" = NULL,
     "headers" = list(Accept = "application/pdf, image/png, image/svg+xml"),
-    "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+    "server" = list(url = "https://cim.epa.gov"),
     "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
     "auth" = list(),
     "response_policy" = function(response, context, decode) {

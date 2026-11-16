@@ -260,7 +260,7 @@ groups:
                 Accept: application/json
             server:
               value:
-                url: https://hcd.rtpnc.epa.gov/api
+                url: https://cim.epa.gov/api
             server_resolver:
               value:
                 name: .ct_server_url

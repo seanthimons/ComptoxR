@@ -8,7 +8,7 @@ test_that('public wrappers retain the configured host without fallback hooks', {
       body = charToRaw('[{"ok":true}]'))
   }, .package = "httr2")
   expect_identical(chemi_alerts_metadata(), list(list(ok = TRUE)))
-  expect_identical(seen, 'https://hcd.rtpnc.epa.gov/api/alerts/metadata')
+  expect_identical(seen, 'https://cim.epa.gov/api/alerts/metadata')
   options(ComptoxR.chemi_burl = 'https://configured.example/api')
   expect_identical(chemi_alerts_metadata(), list(list(ok = TRUE)))
   expect_identical(seen, 'https://configured.example/api/alerts/metadata')

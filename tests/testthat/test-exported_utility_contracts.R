@@ -12,7 +12,7 @@ test_that("server helpers set and reset exported API base URLs", {
   expect_equal(Sys.getenv("ctx_burl"), "")
 
   suppressMessages(chemi_server(1))
-  expect_equal(Sys.getenv("chemi_burl"), "https://hcd.rtpnc.epa.gov/api")
+  expect_equal(Sys.getenv("chemi_burl"), "https://cim.epa.gov/api")
   suppressMessages(chemi_server(NULL))
   expect_equal(Sys.getenv("chemi_burl"), "")
 
@@ -39,7 +39,7 @@ test_that("server helpers return URLs without changing process state", {
 
   cases <- list(
     list(ctx_server, 1, "ctx_burl", "https://comptox.epa.gov/ctx-api/"),
-    list(chemi_server, 1, "chemi_burl", "https://hcd.rtpnc.epa.gov/api"),
+    list(chemi_server, 1, "chemi_burl", "https://cim.epa.gov/api"),
     list(epi_server, 1, "epi_burl", "https://episuite.dev/api"),
     list(eco_server, 2, "eco_burl", "http://127.0.0.1:5555"),
     list(toxval_server, 2, "toxval_burl", "http://127.0.0.1:5556"),

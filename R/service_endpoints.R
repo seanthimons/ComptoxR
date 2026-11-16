@@ -3,7 +3,7 @@
   switch(
     key,
     ctx_burl = 'https://comptox.epa.gov/ctx-api/',
-    chemi_burl = 'https://hcd.rtpnc.epa.gov/api',
+    chemi_burl = 'https://cim.epa.gov/api',
     epi_burl = 'https://episuite.dev/api',
     eco_burl = eco_path(),
     toxval_burl = toxval_path(),
