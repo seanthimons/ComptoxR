@@ -7,7 +7,7 @@
 chemi_ncc_cats_bulk(chemicals = NULL)
 }
 \arguments{
-\item{chemicals}{Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors.}
+\item{chemicals}{Chemicals to classify, as a character vector of SMILES or of DTXSID, DTXCID or CASRN identifiers, which are resolved to SMILES first (names, if any, are sent as ids, otherwise the identifier or SMILES is; duplicates are dropped), a data frame with id and smiles columns and optional logp and ws columns, or a list of such records. Identifiers inside records are not resolved.}
 }
 \value{
 Returns a list with result object
@@ -17,7 +17,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_ncc_cats_bulk(chemicals = "DTXSID1024122")
+chemi_ncc_cats_bulk(chemicals = "DTXSID7020182")
 }
 }
 \section{API stage}{

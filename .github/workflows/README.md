@@ -87,11 +87,15 @@ Blocking CRAN-safe readiness workflow for pull requests and manual runs.
 
 Standard package check on pull requests and pushes to `main`.
 
+- Runs on Ubuntu automatically.
+- Windows and macOS are opt-in: `gh workflow run r-cmd-check.yaml --ref <branch> -f all_os=true`.
+
 ### `test-coverage.yml`
 
 Cross-platform package test and coverage workflow.
 
-- Runs on Ubuntu, Windows, and macOS for release and devel R.
+- Runs on Ubuntu for release and devel R automatically.
+- Windows and macOS are opt-in: `gh workflow run test-coverage.yml --ref <branch> -f all_os=true`.
 - Runs `devtools::test()`.
 - Calculates and uploads coverage on Ubuntu release R.
 - Must not auto-record cassettes from production APIs.

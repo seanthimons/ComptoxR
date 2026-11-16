@@ -78,6 +78,9 @@ test_that("probe evaluator detects wrapper drift without network calls", {
   expect_true(evaluate_probe("wrapper_webtest", webtest, inputs)$pass)
   webtest$method[[1]] <- "hc"
   expect_false(evaluate_probe("wrapper_webtest", webtest, inputs)$pass)
+  errored <- evaluate_probe("wrapper_webtest", simpleError("hook failed"), inputs)
+  expect_false(errored$pass)
+  expect_match(errored$detail, "wrapper errored: hook failed")
 })
 
 test_that("known direct defects are reported without becoming wrapper failures", {

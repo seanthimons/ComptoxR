@@ -197,7 +197,7 @@ test_that('native hook lifecycle keeps private state, partial updates and skips'
   }
 })
 
-test_that('archived production Mordred rows survive and malformed predictions stay rejected', {
+test_that('archived production Mordred rows and WebTEST orphan-endpoint predictions survive', {
   archive <- readRDS(test_path('fixtures/native-four-calculations-production.rds'))
   for (name in four_calculation_names) local({
     evidence <- archive$results[[name]]
@@ -219,8 +219,12 @@ test_that('archived production Mordred rows survive and malformed predictions st
           expect_identical(actual$value$status, 'ok')
         }
       } else if (output == 'wide') {
-        expect_contains(actual$error$class, 'comptoxr_post_response_hook_error')
-        expect_match(actual$error$message, 'endpoint is missing its endpoint id', fixed = TRUE)
+        # The archived response carries endpoint-less failed models (#381); they are skipped.
+        expect_null(actual$error)
+        expect_true(all(actual$value$status == 'ok'))
+        expect_true(all(actual$value$endpoint_id == 'LC50'))
+        consensus <- actual$value$value[actual$value$method == 'consensus']
+        expect_equal(consensus, 803.1927, tolerance = 1e-6)
       } else {
         expect_null(actual$error)
         body <- jsonlite::fromJSON(rawToChar(response$body), simplifyVector = FALSE)

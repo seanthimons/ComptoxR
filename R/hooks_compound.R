@@ -214,6 +214,58 @@ looks_like_smiles_identifier <- function(x) {
     isTRUE(is_cas(x))
 }
 
+#' Resolve identifiers in classifier inputs to SMILES
+#'
+#' Pre-request hook for the bulk classifier endpoints, which need a SMILES for
+#' every chemical and do not look up identifiers. DTXSID, DTXCID and CASRN
+#' values in character `chemicals` or `smiles` are replaced by their resolved
+#' SMILES; an unnamed identifier becomes the name, which the body sends as id.
+#'
+#' @param data Hook data structure with list(params = list(chemicals = ..., smiles = ...))
+#' @return Modified data; identifiers that do not resolve become NA with a warning
+#' @noRd
+resolve_classifier_inputs <- function(data) {
+  for (name in intersect(c("chemicals", "smiles"), names(data$params))) {
+    value <- data$params[[name]]
+    if (!is.character(value)) {
+      next
+    }
+    ids <- names(value)
+    if (is.null(ids)) {
+      ids <- rep("", length(value))
+    }
+    value <- trimws(unname(value))
+    hit <- vapply(value, looks_like_smiles_identifier, logical(1), USE.NAMES = FALSE)
+    if (!any(hit)) {
+      next
+    }
+    lookup <- unique(value[hit])
+    resolved <- tryCatch(
+      chemi_resolver_lookup_bulk(ids = lookup, idsType = "AnyId", tidy = FALSE),
+      error = function(e) {
+        cli::cli_abort("Identifier resolution failed: {conditionMessage(e)}")
+      }
+    )
+    smiles <- stats::setNames(rep(NA_character_, length(lookup)), lookup)
+    for (i in seq_along(resolved)) {
+      # Match on the echoed query, falling back to position.
+      query <- descriptor_scalar_chr(resolved[[i]]$query, "")
+      key <- if (query %in% lookup) query else if (i <= length(lookup)) lookup[[i]] else next
+      smiles[[key]] <- descriptor_resolved_smiles(resolved[[i]])
+    }
+    blank <- hit & (is.na(ids) | ids == "")
+    ids[blank] <- value[blank]
+    value[hit] <- smiles[value[hit]]
+    missing <- lookup[is.na(smiles) | smiles == ""]
+    if (length(missing) > 0) {
+      value[hit][value[hit] %in% ""] <- NA_character_
+      cli::cli_warn("Could not resolve {.val {missing}} to SMILES; skipped.")
+    }
+    data$params[[name]] <- stats::setNames(value, ids)
+  }
+  data
+}
+
 #' Resolve identifier-like smiles inputs to canonical SMILES
 #'
 #' Pre-request hook for descriptor endpoints whose scalar `smiles` parameter is
