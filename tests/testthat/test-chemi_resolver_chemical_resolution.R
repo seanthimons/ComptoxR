@@ -21,7 +21,7 @@ test_that("bulk resolver validates ids before options and HTTP", {
 
 test_that("bulk resolver preserves captured results and complete JSON requests", {
   cases <- readRDS(test_path("fixtures/native-resolver-lookup.rds"))
-  withr::local_options(ComptoxR.chemi_burl = "https://hcd.rtpnc.epa.gov")
+  withr::local_options(ComptoxR.chemi_burl = "https://cim.epa.gov")
   for (case in cases) local({
     requests <- list()
     local_mocked_bindings(req_perform = function(req, ...) {

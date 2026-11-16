@@ -14,7 +14,7 @@ test_that('ToxPrint bulk replacement preserves its GET sibling', {
 
 test_that('ToxPrint bulk builds cleaned canonical chunks without CTX authentication', {
   withr::local_options(comptoxr_native.dry_run = TRUE,
-    ComptoxR.chemi_burl = "https://hcd.rtpnc.epa.gov")
+    ComptoxR.chemi_burl = "https://cim.epa.gov")
   withr::local_envvar(c(batch_limit = '2', ctx_api_key = 'unused-test-key'))
   requests <- chemi_toxprints_bulk(c('CCO', 'CCCO', 'CCCCO', 'CCO', NA, ''))
   expect_length(requests, 2L)
@@ -23,7 +23,7 @@ test_that('ToxPrint bulk builds cleaned canonical chunks without CTX authenticat
   for (request in requests) {
     expect_s3_class(request, 'httr2_request')
     expect_identical(request$method, 'POST')
-    expect_identical(request$url, 'https://hcd.rtpnc.epa.gov/api/toxprints')
+    expect_identical(request$url, 'https://cim.epa.gov/api/toxprints')
     expect_false('x-api-key' %in% tolower(names(request$headers)))
   }
   expect_error(chemi_toxprints_bulk(c('', NA_character_)), 'Query must')

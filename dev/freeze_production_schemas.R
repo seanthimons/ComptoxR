@@ -7,7 +7,7 @@ freeze_production_schemas <- function(root = '.migration-evidence/production') {
   ctx <- c('chemical', 'hazard', 'exposure', 'bioactivity')
   urls <- c(
     stats::setNames(paste0('https://comptox.epa.gov/ctx-api/docs/', ctx, '.json'), paste0('ctx_', ctx, '_prod.json')),
-    stats::setNames(paste0('https://hcd.rtpnc.epa.gov/api/', components, '/api-docs'), files),
+    stats::setNames(paste0('https://cim.epa.gov/api/', components, '/api-docs'), files),
     'epi_suite_prod.json' = 'https://episuite.dev/api'
   )
   requests <- lapply(urls, function(url) {

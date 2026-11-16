@@ -35,7 +35,7 @@ testthat::test_that('reviewed protocol GET preserves schema boolean and paging w
     withr::local_options(list(ComptoxR.chemi_burl=NULL,comptoxr_native.dry_run=TRUE))
     request <- fn('protocol',hidden=FALSE,passed=TRUE)
     testthat::expect_s3_class(request,'httr2_request')
-    testthat::expect_identical(request$url,'https://hcd.rtpnc.epa.gov/api/stdizer/protocols/protocol?hidden=false&passed=true')
+    testthat::expect_identical(request$url,'https://cim.epa.gov/api/stdizer/protocols/protocol?hidden=false&passed=true')
   })
   grid <- expand.grid(rep(list(c(FALSE,TRUE)),length(flags)));names(grid)<-flags
   for(i in seq_len(nrow(grid))){

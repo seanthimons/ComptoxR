@@ -130,7 +130,7 @@ chemi_search <- function(
       body = state[["request"]][["body"]],
       body_media = "application/json",
       headers = list(Accept = "application/json"),
-      server = list(url = "https://hcd.rtpnc.epa.gov/api"),
+      server = list(url = "https://cim.epa.gov/api"),
       server_resolver = list(name = ".ct_server_url", key = "chemi_burl", relative = ""),
       auth = list(),
       response_policy = ".ct_search_page_response",

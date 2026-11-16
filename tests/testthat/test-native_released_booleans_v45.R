@@ -69,7 +69,7 @@ testthat::test_that('released boolean bindings validate inputs and send exact na
       withr::local_options(list(ComptoxR.chemi_burl = NULL, comptoxr_native.dry_run = TRUE))
       request <- do.call(fns[[i]], args[[i]])
       testthat::expect_identical(sub('[?].*$', '', request$url),
-        paste0('https://hcd.rtpnc.epa.gov', paths[[i]]))
+        paste0('https://cim.epa.gov', paths[[i]]))
     })
   }
   for (status in c(400L, 404L, 500L, 401L)) {

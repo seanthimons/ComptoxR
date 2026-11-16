@@ -47,7 +47,7 @@ chemi_amos_get_info_by_id <- function(internal_id) {
       "query" = structure(list(), names = character(0)),
       "body" = NULL,
       "headers" = list(Accept = "application/json"),
-      "server" = list(url = "https://hcd.rtpnc.epa.gov"),
+      "server" = list(url = "https://cim.epa.gov"),
       "server_resolver" = list(name = ".ct_server_url", key = "chemi_burl", relative = "/"),
       "auth" = list(),
       "response_policy" = function(response, context, decode) {
