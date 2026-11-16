@@ -433,7 +433,12 @@ webtest_prediction_wide <- function(data, prediction_result) {
 
     matched <- 0L
     for (endpoint in chemical$endpoints) {
-      endpoint_id <- if (is.list(endpoint$endpoint)) descriptor_scalar_chr(endpoint$endpoint$id) else NA_character_
+      # WebTEST 5.2.1 emits failed models with no endpoint object (#381); they
+      # cannot be attributed to a requested endpoint, so skip them.
+      if (!is.list(endpoint$endpoint)) {
+        next
+      }
+      endpoint_id <- descriptor_scalar_chr(endpoint$endpoint$id)
       if (is.na(endpoint_id)) {
         stop("PredictionResult endpoint is missing its endpoint id.", call. = FALSE)
       }
