@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+- Updated the Specmill toolkit to 0.4.0. The request helper is unchanged; the
+  generated authentication file gains OAuth sign-in support, which ComptoxR
+  does not configure.
 - Fixed `chemi_amnb_nate_bulk()`, `chemi_arn_cats_bulk()`, `chemi_ncc_cats_bulk()`,
   `chemi_pfas_atlas_bulk()` and `chemi_pfas_cats_bulk()`, which the services
   rejected with HTTP 400. They now send the request body the services define:

@@ -2,7 +2,7 @@
   "version": 1,
   "files": {
     "R/api_auth.R": {
-      "hash": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
+      "hash": "e0948f6c30f7d2c22902e4f658055ca33ca19110640692eb53e1ea13e32d5763",
       "operations": "specmill authentication"
     },
     "R/api_validation.R": {
@@ -2792,14 +2792,14 @@
       "operations": "epi_suite POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.2.3",
+  "toolkit_version": "0.4.0",
   "inputs": {
     "DESCRIPTION": "2f70d82ec92c4feed4d95a3832903c37c1c313b4252667a46c3b5c8da4ded542",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
     "NAMESPACE": "b88b4581f902b6d0678c83e85fb00cc88ac1471b976d5aed2de8184a1fa19ff9",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
-    "R/api_auth.R": "ee87e95a3ec50bcaac24d70f8dc4ea0a87c24482780de5991d451f5f46950f52",
+    "R/api_auth.R": "e0948f6c30f7d2c22902e4f658055ca33ca19110640692eb53e1ea13e32d5763",
     "R/api_validation.R": "63a87dff875f1d9b3c5b889594d8de76cdde76373660db341a1ecd20897d67f2",
     "R/batch_failure_policy.R": "9762bedb53abeabc4f5a9ac7265cb16735ac74c271f30557f658070c41f499b3",
     "R/chemi_alerts.R": "bf95d4eaebbb3dea128ceb21b55f21fa1076592204f13606564f8d7f1088de8b",
@@ -6088,6 +6088,120 @@
       "fingerprint": "v1:8e94fec1425b005fc31ed363c28da6d9fac26bd59b2f0aa8d0e260c1dc3be374",
       "version": 1,
       "functions": []
+    }
+  },
+  "importers": {
+    "schema/chemi_alerts_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_amnb_nate_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_amos_prod.json": {
+      "source_format": "swagger",
+      "importer_version": "1"
+    },
+    "schema/chemi_arn_cats_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_chet_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_descriptors_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_rdkit_prod.json": {
+      "source_format": "swagger",
+      "importer_version": "1"
+    },
+    "schema/chemi_hazard_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_mordred_prod.json": {
+      "source_format": "swagger",
+      "importer_version": "1"
+    },
+    "schema/chemi_ncc_cats_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_opera_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_padel_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_pfas_atlas_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_pfas_cats_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_predictor_models_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_resolver_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_safety_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_search_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_services_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_stdizer_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_toxprints_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/chemi_webtest_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/ctx_bioactivity_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/ctx_chemical_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/ctx_exposure_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/ctx_hazard_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/epi_suite_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/pubchem-reviewed.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
     }
   }
 }
