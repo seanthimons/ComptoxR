@@ -2,9 +2,7 @@
 
 # ComptoxR NEWS
 
-## v4.0.4 (2026-11-16)
-
-#### Release notes
+## Unreleased
 
 - The cheminformatics (CIM) services moved to `https://cim.epa.gov`, so the
   default `chemi_burl` is now `https://cim.epa.gov/api`. The old
@@ -12,6 +10,11 @@
   `ComptoxR.chemi_burl` to the old host, switch it to the new one or unset it.
   Until you do, the RDKit descriptor fallback stays off, because it only
   applies on the default server.
+
+## v4.0.4 (2026-11-16)
+
+#### Release notes
+
 - Updated the Specmill toolkit to 0.4.0. The request helper is unchanged; the
   generated authentication file gains OAuth sign-in support, which ComptoxR
   does not configure.
