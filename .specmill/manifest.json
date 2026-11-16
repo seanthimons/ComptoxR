@@ -2794,7 +2794,7 @@
   },
   "toolkit_version": "0.4.0",
   "inputs": {
-    "DESCRIPTION": "c1e6a33f047982bbd914bda5ad8924ac87fa0ab2b2defd8b5f4ea2c458dee35f",
+    "DESCRIPTION": "9d2deb6ed3d15b7a4ab9d763fa25e9247b273b6c2996a1906fd6663b09215ad3",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
     "NAMESPACE": "b88b4581f902b6d0678c83e85fb00cc88ac1471b976d5aed2de8184a1fa19ff9",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
