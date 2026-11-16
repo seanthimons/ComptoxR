@@ -25,6 +25,11 @@ on:
       - 'man/**'
       - 'vignettes/**'
   workflow_dispatch:
+    inputs:
+      all_os:
+        description: Also run on Windows and macOS
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -36,22 +41,21 @@ concurrency:
 jobs:
   r-cmd-check:
     if: github.actor != 'github-actions[bot]' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.os }} (${{ matrix.r }})
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - { os: ubuntu-latest,  r: release }
-          - { os: windows-latest, r: release }
-          - { os: macos-latest,   r: release }
+        # Windows and macOS are opt-in: run manually with all_os.
+        os: ${{ fromJSON(inputs.all_os && '["ubuntu-latest", "windows-latest", "macos-latest"]' || '["ubuntu-latest"]') }}
+        r: [release]
 
     env:
       GITHUB_PAT: ${{ github.token }}
       R_KEEP_PKG_SOURCE: yes
       # Native database tests can crash a parallel Windows subprocess.
-      TESTTHAT_PARALLEL: ${{ matrix.config.os == 'windows-latest' && 'false' || 'true' }}
+      TESTTHAT_PARALLEL: ${{ matrix.os == 'windows-latest' && 'false' || 'true' }}
 
     steps:
       - name: Checkout repository
@@ -60,7 +64,7 @@ jobs:
       - name: Set up R
         uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
         with:
-          r-version: ${{ matrix.config.r }}
+          r-version: ${{ matrix.r }}
           use-public-rspm: true
 
       - name: Set up pandoc
