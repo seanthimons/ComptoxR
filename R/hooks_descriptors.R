@@ -225,7 +225,9 @@ validate_descriptor_request <- function(data) {
 
 descriptor_found_record <- function(item) {
   is.list(item) &&
-    identical(toupper(descriptor_scalar_chr(item$result, "")), "FOUND") &&
+    # DUPLICATE (a second identifier for an already-listed substance) and
+    # CONVERTED (a structure not in DSSTox) still carry a usable chemical record.
+    toupper(descriptor_scalar_chr(item$result, "")) %in% c("FOUND", "DUPLICATE", "CONVERTED") &&
     is.list(item$chemical)
 }
 
@@ -237,13 +239,60 @@ descriptor_resolved_smiles <- function(item) {
 }
 
 descriptor_resolved_sid <- function(item) {
-  if (!descriptor_found_record(item)) {
+  # A CONVERTED structure has no DSSTox record; its chemId is an InChIKey.
+  if (!descriptor_found_record(item) || identical(toupper(descriptor_scalar_chr(item$result, "")), "CONVERTED")) {
     return(NA_character_)
   }
   descriptor_scalar_chr(
     item$chemical$sid,
     descriptor_scalar_chr(item$chemical$chemId, descriptor_scalar_chr(item$chemical$id))
   )
+}
+
+#' Map resolver items back to the identifiers that were looked up
+#'
+#' The resolver returns one or more items per identifier, in input order, and
+#' may normalize the query it echoes ("0000080-05-7" comes back as "80-05-7").
+#' Runs of items with the same echo are one input. When the run count doesn't
+#' match `lookup` (two inputs that normalize to the same echo), only exact
+#' echoes are matched, so a normalized input goes unresolved rather than
+#' taking another input's record.
+#'
+#' @param resolved Untidied `chemi_resolver_lookup_bulk()` result.
+#' @param lookup Unique identifiers sent to the resolver.
+#' @return List named by `lookup`; each element is the first item with SMILES
+#'   for that identifier (or its first item), or NULL.
+#' @noRd
+descriptor_resolver_items <- function(resolved, lookup) {
+  out <- stats::setNames(vector("list", length(lookup)), lookup)
+  if (!is.list(resolved) || length(resolved) == 0) {
+    return(out)
+  }
+  if (!is.null(names(resolved)) && any(names(resolved) %in% lookup)) {
+    for (name in intersect(names(resolved), lookup)) {
+      out[name] <- list(resolved[[name]])
+    }
+    return(out)
+  }
+  queries <- vapply(
+    resolved,
+    function(item) descriptor_scalar_chr(if (is.list(item)) item$query, ""),
+    character(1)
+  )
+  n <- length(queries)
+  # Items without an echo each count as one input.
+  group <- cumsum(c(TRUE, queries[-1] == "" | queries[-1] != queries[-n]))
+  groups <- unname(split(resolved, group))
+  keys <- if (length(groups) == length(lookup)) lookup else queries[!duplicated(group)]
+  for (i in seq_along(groups)) {
+    key <- keys[[i]]
+    if (!key %in% lookup || !is.null(out[[key]])) {
+      next
+    }
+    usable <- Filter(function(item) !is.na(descriptor_resolved_smiles(item)), groups[[i]])
+    out[key] <- list(if (length(usable) > 0) usable[[1]] else groups[[i]][[1]])
+  }
+  out
 }
 
 descriptor_should_resolve <- function(value, chem_id_type) {
@@ -297,16 +346,7 @@ resolve_descriptor_inputs <- function(data) {
         input_map[[index]]$error <- paste0("Identifier resolution failed: ", conditionMessage(resolved))
       }
     } else {
-      by_identifier <- stats::setNames(vector("list", length(unique_identifiers)), unique_identifiers)
-      for (i in seq_along(unique_identifiers)) {
-        item <- if (length(resolved) >= i) resolved[[i]] else NULL
-        by_identifier[[unique_identifiers[[i]]]] <- item
-      }
-      if (!is.null(names(resolved)) && any(nzchar(names(resolved)))) {
-        for (name in intersect(names(resolved), unique_identifiers)) {
-          by_identifier[[name]] <- resolved[[name]]
-        }
-      }
+      by_identifier <- descriptor_resolver_items(resolved, unique_identifiers)
 
       for (index in resolve_index) {
         identifier <- input_map[[index]]$query

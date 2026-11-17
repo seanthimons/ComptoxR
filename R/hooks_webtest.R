@@ -153,20 +153,6 @@ validate_webtest_prediction_request <- function(data) {
   data
 }
 
-webtest_prediction_resolver_item <- function(resolved, identifier, index) {
-  if (
-    is.list(resolved) &&
-      !is.null(names(resolved)) &&
-      identifier %in% names(resolved)
-  ) {
-    return(resolved[[identifier]])
-  }
-  if (is.list(resolved) && length(resolved) >= index) {
-    return(resolved[[index]])
-  }
-  NULL
-}
-
 #' Resolve identifier-like WebTEST prediction inputs
 #'
 #' @param data Hook data with scalar `smiles` or bulk `structures`.
@@ -201,14 +187,11 @@ resolve_webtest_prediction_inputs <- function(data) {
       error = function(error) error
     )
     unresolved <- character()
+    by_identifier <- if (inherits(resolved, "error")) list() else descriptor_resolver_items(resolved, identifiers)
 
     for (index in resolve_index) {
       identifier <- input_map[[index]]$query
-      item <- if (inherits(resolved, "error")) {
-        NULL
-      } else {
-        webtest_prediction_resolver_item(resolved, identifier, match(identifier, identifiers))
-      }
+      item <- by_identifier[[identifier]]
       smiles <- descriptor_resolved_smiles(item)
       if (is.na(smiles) || !nzchar(smiles)) {
         input_map[[index]]$request_value <- NA_character_

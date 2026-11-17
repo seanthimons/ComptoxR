@@ -2,6 +2,20 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- The bulk classifier wrappers (`chemi_amnb_nate_bulk()` and the other four),
+  the descriptor wrappers and the WebTEST prediction wrappers no longer drop
+  an identifier when another input names the same substance, for example a
+  DTXSID and its CASRN in one call. The resolver marks the second one
+  `DUPLICATE`, which was treated as unresolved and reported with a
+  "could not resolve" warning (#387). Resolver results marked `CONVERTED`
+  (a structure that isn't in DSSTox) are now used too.
+- The same wrappers now match resolver results to the right input when one
+  identifier returns several matches or the resolver echoes it back in a
+  normalized form (for example `0000080-05-7` as `80-05-7`). Before, later
+  inputs in the call could be given another input's structure.
+
 ## v4.0.5 (2026-11-16)
 
 #### Release notes

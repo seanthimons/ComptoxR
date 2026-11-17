@@ -246,13 +246,7 @@ resolve_classifier_inputs <- function(data) {
         cli::cli_abort("Identifier resolution failed: {conditionMessage(e)}")
       }
     )
-    smiles <- stats::setNames(rep(NA_character_, length(lookup)), lookup)
-    for (i in seq_along(resolved)) {
-      # Match on the echoed query, falling back to position.
-      query <- descriptor_scalar_chr(resolved[[i]]$query, "")
-      key <- if (query %in% lookup) query else if (i <= length(lookup)) lookup[[i]] else next
-      smiles[[key]] <- descriptor_resolved_smiles(resolved[[i]])
-    }
+    smiles <- vapply(descriptor_resolver_items(resolved, lookup), descriptor_resolved_smiles, character(1))
     blank <- hit & (is.na(ids) | ids == "")
     ids[blank] <- value[blank]
     value[hit] <- smiles[value[hit]]
