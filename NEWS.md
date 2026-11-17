@@ -2,7 +2,9 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.6 (2026-11-17)
+
+#### Release notes
 
 - The bulk classifier wrappers (`chemi_amnb_nate_bulk()` and the other four),
   the descriptor wrappers and the WebTEST prediction wrappers no longer drop
@@ -15,6 +17,21 @@
   identifier returns several matches or the resolver echoes it back in a
   normalized form (for example `0000080-05-7` as `80-05-7`). Before, later
   inputs in the call could be given another input's structure.
+
+<!-- end release notes -->
+
+#### Bug fixes
+
+- map resolver results to the right inputs (#388)
+  ([657cba1](https://github.com/seanthimons/ComptoxR/tree/657cba1df7b30e325f48b2233c781941d88fda26))
+
+#### Other changes
+
+- bump version to 4.0.6 \[skip ci\]
+  ([2c4ce1b](https://github.com/seanthimons/ComptoxR/tree/2c4ce1b22745282032a8a3970df7fe55896758c8))
+
+Full set of changes:
+[`v4.0.5...v4.0.6`](https://github.com/seanthimons/ComptoxR/compare/v4.0.5...v4.0.6)
 
 ## v4.0.5 (2026-11-16)
 
@@ -31,6 +48,8 @@
 
 #### Docs
 
+- update NEWS.md for v4.0.5 \[skip ci\]
+  ([a49f788](https://github.com/seanthimons/ComptoxR/tree/a49f788bf0df12b6c7d05c0e8b135f9a4043a44f))
 - restore Unreleased NEWS section for CIM host migration
   ([dfe8e0f](https://github.com/seanthimons/ComptoxR/tree/dfe8e0f14fbe20562ff8b5ec74d54122fb1145bc))
 
