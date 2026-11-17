@@ -187,7 +187,11 @@ resolve_webtest_prediction_inputs <- function(data) {
       error = function(error) error
     )
     unresolved <- character()
-    by_identifier <- if (inherits(resolved, "error")) list() else descriptor_resolver_items(resolved, identifiers)
+    by_identifier <- if (inherits(resolved, "error")) {
+      list()
+    } else {
+      descriptor_resolver_items(resolved, identifiers)
+    }
 
     for (index in resolve_index) {
       identifier <- input_map[[index]]$query

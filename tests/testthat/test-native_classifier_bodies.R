@@ -67,7 +67,7 @@ test_that("native classifiers resolve identifiers to SMILES before the request",
   expect_null(captured)
 })
 
-test_that("native classifiers keep identifiers the resolver marks DUPLICATE or CONVERTED", {
+test_that("native classifiers keep DUPLICATE and CONVERTED resolver results", {
   captured <- NULL
   smiles <- "CC(C)(c1ccc(O)cc1)c1ccc(O)cc1"
   testthat::local_mocked_bindings(.ct_request = function(...) {
@@ -86,14 +86,18 @@ test_that("native classifiers keep identifiers the resolver marks DUPLICATE or C
     list(id = "80-05-7", smiles = smiles),
     list(id = "64-17-5", smiles = "CCO")
   ))
-  converted <- list(result = "CONVERTED", chemical = list(chemId = "LFQSCWFLJHTTHZ-UHFFFAOYSA-N", smiles = "CCO"))
+  converted <- list(
+    result = "CONVERTED",
+    chemical = list(chemId = "LFQSCWFLJHTTHZ-UHFFFAOYSA-N", smiles = "CCO")
+  )
   expect_identical(ComptoxR:::descriptor_resolved_sid(converted), NA_character_)
 })
 
 test_that("resolver items map to inputs when one input returns several items", {
   bpa <- "CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1"
   item <- function(query, result, smiles = NULL, sid = NULL) {
-    list(result = result, query = query, chemical = list(canonicalSmiles = smiles, sid = sid))
+    chemical <- list(canonicalSmiles = smiles, sid = sid)
+    list(result = result, query = query, chemical = chemical)
   }
   # Shape of a live response: an InChIKey with three matches and a CASRN echoed
   # without its leading zeros.
@@ -106,7 +110,10 @@ test_that("resolver items map to inputs when one input returns several items", {
     item("50-00-0", "FOUND", "C=O", "DTXSID7020637"),
     list(result = "NOT_RESOLVED", query = "DTXSID0000000000")
   )
-  lookup <- c("LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "DTXSID7020182", "0000080-05-7", "50-00-0", "DTXSID0000000000")
+  lookup <- c(
+    "LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "DTXSID7020182", "0000080-05-7", "50-00-0",
+    "DTXSID0000000000"
+  )
   items <- ComptoxR:::descriptor_resolver_items(live, lookup)
   expect_identical(names(items), lookup)
   expect_identical(
@@ -116,8 +123,14 @@ test_that("resolver items map to inputs when one input returns several items", {
   expect_identical(ComptoxR:::descriptor_resolved_sid(items[[1]]), "DTXSID9020584")
 
   # Two inputs that echo the same query: only exact echoes match.
-  merged <- list(item("80-05-7", "FOUND", bpa), item("80-05-7", "DUPLICATE", bpa), item("50-00-0", "FOUND", "C=O"))
-  items <- ComptoxR:::descriptor_resolver_items(merged, c("0000080-05-7", "80-05-7", "50-00-0"))
+  merged <- list(
+    item("80-05-7", "FOUND", bpa),
+    item("80-05-7", "DUPLICATE", bpa),
+    item("50-00-0", "FOUND", "C=O")
+  )
+  items <- ComptoxR:::descriptor_resolver_items(
+    merged, c("0000080-05-7", "80-05-7", "50-00-0")
+  )
   expect_null(items[["0000080-05-7"]])
   expect_identical(items[["80-05-7"]]$result, "FOUND")
   expect_identical(items[["50-00-0"]]$chemical$canonicalSmiles, "C=O")

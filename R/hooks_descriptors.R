@@ -227,7 +227,8 @@ descriptor_found_record <- function(item) {
   is.list(item) &&
     # DUPLICATE (a second identifier for an already-listed substance) and
     # CONVERTED (a structure not in DSSTox) still carry a usable chemical record.
-    toupper(descriptor_scalar_chr(item$result, "")) %in% c("FOUND", "DUPLICATE", "CONVERTED") &&
+    toupper(descriptor_scalar_chr(item$result, "")) %in%
+      c("FOUND", "DUPLICATE", "CONVERTED") &&
     is.list(item$chemical)
 }
 
@@ -240,7 +241,8 @@ descriptor_resolved_smiles <- function(item) {
 
 descriptor_resolved_sid <- function(item) {
   # A CONVERTED structure has no DSSTox record; its chemId is an InChIKey.
-  if (!descriptor_found_record(item) || identical(toupper(descriptor_scalar_chr(item$result, "")), "CONVERTED")) {
+  converted <- identical(toupper(descriptor_scalar_chr(item$result, "")), "CONVERTED")
+  if (!descriptor_found_record(item) || converted) {
     return(NA_character_)
   }
   descriptor_scalar_chr(
@@ -283,13 +285,20 @@ descriptor_resolver_items <- function(resolved, lookup) {
   # Items without an echo each count as one input.
   group <- cumsum(c(TRUE, queries[-1] == "" | queries[-1] != queries[-n]))
   groups <- unname(split(resolved, group))
-  keys <- if (length(groups) == length(lookup)) lookup else queries[!duplicated(group)]
+  keys <- if (length(groups) == length(lookup)) {
+    lookup
+  } else {
+    queries[!duplicated(group)]
+  }
   for (i in seq_along(groups)) {
     key <- keys[[i]]
     if (!key %in% lookup || !is.null(out[[key]])) {
       next
     }
-    usable <- Filter(function(item) !is.na(descriptor_resolved_smiles(item)), groups[[i]])
+    usable <- Filter(
+      function(item) !is.na(descriptor_resolved_smiles(item)),
+      groups[[i]]
+    )
     out[key] <- list(if (length(usable) > 0) usable[[1]] else groups[[i]][[1]])
   }
   out

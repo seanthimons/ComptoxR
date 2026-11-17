@@ -246,7 +246,8 @@ resolve_classifier_inputs <- function(data) {
         cli::cli_abort("Identifier resolution failed: {conditionMessage(e)}")
       }
     )
-    smiles <- vapply(descriptor_resolver_items(resolved, lookup), descriptor_resolved_smiles, character(1))
+    items <- descriptor_resolver_items(resolved, lookup)
+    smiles <- vapply(items, descriptor_resolved_smiles, character(1))
     blank <- hit & (is.na(ids) | ids == "")
     ids[blank] <- value[blank]
     value[hit] <- smiles[value[hit]]
