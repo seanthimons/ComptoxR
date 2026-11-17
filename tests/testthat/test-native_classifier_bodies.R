@@ -90,7 +90,7 @@ test_that("native classifiers keep DUPLICATE and CONVERTED resolver results", {
     result = "CONVERTED",
     chemical = list(chemId = "LFQSCWFLJHTTHZ-UHFFFAOYSA-N", smiles = "CCO")
   )
-  expect_identical(ComptoxR:::descriptor_resolved_sid(converted), NA_character_)
+  expect_identical(descriptor_resolved_sid(converted), NA_character_)
 })
 
 test_that("resolver items map to inputs when one input returns several items", {
@@ -114,13 +114,13 @@ test_that("resolver items map to inputs when one input returns several items", {
     "LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "DTXSID7020182", "0000080-05-7", "50-00-0",
     "DTXSID0000000000"
   )
-  items <- ComptoxR:::descriptor_resolver_items(live, lookup)
+  items <- descriptor_resolver_items(live, lookup)
   expect_identical(names(items), lookup)
   expect_identical(
-    unname(vapply(items, ComptoxR:::descriptor_resolved_smiles, character(1))),
+    unname(vapply(items, descriptor_resolved_smiles, character(1))),
     c("CCO", bpa, bpa, "C=O", NA)
   )
-  expect_identical(ComptoxR:::descriptor_resolved_sid(items[[1]]), "DTXSID9020584")
+  expect_identical(descriptor_resolved_sid(items[[1]]), "DTXSID9020584")
 
   # Two inputs that echo the same query: only exact echoes match.
   merged <- list(
@@ -128,7 +128,7 @@ test_that("resolver items map to inputs when one input returns several items", {
     item("80-05-7", "DUPLICATE", bpa),
     item("50-00-0", "FOUND", "C=O")
   )
-  items <- ComptoxR:::descriptor_resolver_items(
+  items <- descriptor_resolver_items(
     merged, c("0000080-05-7", "80-05-7", "50-00-0")
   )
   expect_null(items[["0000080-05-7"]])
