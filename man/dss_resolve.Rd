@@ -4,12 +4,44 @@
 \alias{dss_resolve}
 \title{Resolve chemical identifiers to DTXSIDs}
 \usage{
-dss_resolve(query, con = NULL)
+dss_resolve(
+  query,
+  con = NULL,
+  ignore_case = FALSE,
+  fields = NULL,
+  best_match = FALSE
+)
 }
 \arguments{
 \item{query}{A character vector of values to resolve.}
 
 \item{con}{An optional \code{DBI::DBIConnection}.}
+
+\item{ignore_case}{If \code{TRUE}, names are matched without regard to case:
+preferred names, IUPAC names and synonyms. A synonym match is then
+always reported as \code{"IDENTIFIER"}, never \code{"ident_upper"}. CAS numbers,
+formulas, InChIKeys, SMILES and DTXSIDs are still matched exactly,
+because case carries meaning in a SMILES string (\code{c} and \code{C}) and in a
+formula (\code{Co} and \code{CO}). Default \code{FALSE}.}
+
+\item{fields}{Optional character vector naming the fields that may match:
+any of \code{"PREFERRED_NAME"}, \code{"CASRN"}, \code{"MOLECULAR_FORMULA"},
+\code{"INCHIKEY"}, \code{"IUPAC_NAME"}, \code{"SMILES"}, \code{"IDENTIFIER"},
+\code{"ident_upper"} and \code{"DTXSID"}. An input that matches only other fields
+is returned as unmatched. \code{NULL} (default) allows every field. Synonyms
+include strings that look like formulas or SMILES, so use \code{fields}, not
+\code{ignore_case}, to keep \code{"CO"} from matching as a formula. With
+\code{ignore_case = FALSE}, include \code{"ident_upper"} to keep the upper-case
+synonym matches; with \code{ignore_case = TRUE} it means \code{"IDENTIFIER"}.}
+
+\item{best_match}{If \code{TRUE}, return one row per input and DTXSID. An input
+can match one substance under several fields (the synonym list repeats
+the preferred name, for example); only the first of these is kept, in
+the order \code{"DTXSID"}, \code{"PREFERRED_NAME"}, \code{"CASRN"},
+\code{"MOLECULAR_FORMULA"}, \code{"INCHIKEY"}, \code{"IUPAC_NAME"}, \code{"SMILES"},
+\code{"ident_upper"}, \code{"IDENTIFIER"}. \code{fields} is applied first. An input
+that matches several substances still returns one row for each.
+Default \code{FALSE}.}
 }
 \value{
 A tibble with columns: input, DTXSID, PREFERRED_NAME, CASRN,
@@ -20,9 +52,22 @@ Takes a vector of chemical names, CAS numbers, SMILES, or any identifier
 and returns a tibble mapping each input to its DTXSID and preferred name.
 Unmatched inputs are included with \code{NA} values.
 }
+\details{
+By default every field is matched exactly and case-sensitively. The table
+also holds an upper-cased copy of each synonym (\code{ident_upper}), so an
+upper-case input can match a synonym written in another case.
+}
 \examples{
 \dontrun{
 dss_resolve(c("Formaldehyde", "7440-38-2", "DTXSID7020637"))
+
+# Names and CAS numbers only, in any case
+dss_resolve(
+  c("formaldehyde", "CO"),
+  ignore_case = TRUE,
+  fields = c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN"),
+  best_match = TRUE
+)
 }
 }
 \seealso{

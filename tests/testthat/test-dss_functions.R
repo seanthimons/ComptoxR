@@ -122,3 +122,165 @@ test_that("dss_connect() / dss_disconnect() lifecycle works", {
   # Restore
   .ComptoxREnv$dsstox_db <- old_con
 })
+
+# -- dss_resolve() options (fixture connection, no installed database) -------
+
+local_dss_fixture <- function(envir = parent.frame()) {
+  testthat::skip_if_not_installed("duckdb")
+  substance <- function(id, name, cas, formula, inchikey, iupac, smiles, synonyms) {
+    data.frame(
+      DTXSID = id,
+      parent_col = c(
+        "PREFERRED_NAME",
+        "CASRN",
+        "MOLECULAR_FORMULA",
+        "INCHIKEY",
+        "IUPAC_NAME",
+        "SMILES",
+        rep("ident_upper", length(synonyms)),
+        rep("IDENTIFIER", length(synonyms))
+      ),
+      values = c(name, cas, formula, inchikey, iupac, smiles, toupper(synonyms), synonyms),
+      sort_order = c(1:6, rep(7L, length(synonyms)), rep(8L, length(synonyms)))
+    )
+  }
+  dsstox <- rbind(
+    substance("DTXSID1", "Formaldehyde", "50-00-0", "CH2O", "WSFSSNUMVMOOMR-UHFFFAOYSA-N", "Methanal", "C=O", c("Formalin", "BFV")),
+    substance("DTXSID2", "Carbon monoxide", "630-08-0", "CO", "UGFAIRIUMAVXCW-UHFFFAOYSA-N", "Carbon monooxide", "[C-]#[O+]", "Carbon oxide"),
+    substance("DTXSID3", "Cobalt", "7440-48-4", "Co", "GUTLYIVDDKVIGB-UHFFFAOYSA-N", "Cobalt", "[Co]", "Co"),
+    substance("DTXSID4", "Methanol", "67-56-1", "CH4O", "OKKJLVBELUTLKV-UHFFFAOYSA-N", "Methanol", "CO", "Carbinol")
+  )
+  con <- DBI::dbConnect(duckdb::duckdb())
+  withr::defer(DBI::dbDisconnect(con, shutdown = TRUE), envir = envir)
+  DBI::dbWriteTable(con, "dsstox", unique(dsstox))
+  con
+}
+
+# One "input > DTXSID > matched_on" string per row, sorted
+dss_resolve_rows <- function(x) {
+  sort(paste(x$input, x$DTXSID, x$matched_on, sep = " > "))
+}
+
+test_that("dss_resolve() default is exact and case-sensitive on every field", {
+  con <- local_dss_fixture()
+  result <- dss_resolve(
+    c("Formaldehyde", "formaldehyde", "FORMALIN", "BFV", "CO", "DTXSID1", "nope"),
+    con = con
+  )
+  expect_named(result, c("input", "DTXSID", "PREFERRED_NAME", "CASRN", "matched_on"))
+  expect_equal(
+    dss_resolve_rows(result),
+    sort(c(
+      "Formaldehyde > DTXSID1 > PREFERRED_NAME",
+      "formaldehyde > NA > NA",
+      "FORMALIN > DTXSID1 > ident_upper",
+      "BFV > DTXSID1 > IDENTIFIER",
+      "BFV > DTXSID1 > ident_upper",
+      "CO > DTXSID2 > MOLECULAR_FORMULA",
+      "CO > DTXSID3 > ident_upper",
+      "CO > DTXSID4 > SMILES",
+      "DTXSID1 > DTXSID1 > DTXSID",
+      "nope > NA > NA"
+    ))
+  )
+  expect_equal(unique(result$PREFERRED_NAME[result$input == "BFV"]), "Formaldehyde")
+  expect_equal(unique(result$CASRN[result$input == "BFV"]), "50-00-0")
+})
+
+test_that("dss_resolve(ignore_case = TRUE) folds names only", {
+  con <- local_dss_fixture()
+  result <- dss_resolve(
+    c("formaldehyde", "METHANAL", "formalin", "BFV", "co", "CO", "dtxsid1", "ch2o", "wsfssnumvmoomr-uhfffaoysa-n"),
+    con = con,
+    ignore_case = TRUE
+  )
+  expect_named(result, c("input", "DTXSID", "PREFERRED_NAME", "CASRN", "matched_on"))
+  expect_equal(
+    dss_resolve_rows(result),
+    sort(c(
+      "formaldehyde > DTXSID1 > PREFERRED_NAME",
+      "METHANAL > DTXSID1 > IUPAC_NAME",
+      "formalin > DTXSID1 > IDENTIFIER",
+      "BFV > DTXSID1 > IDENTIFIER",
+      "co > DTXSID3 > IDENTIFIER",
+      "CO > DTXSID2 > MOLECULAR_FORMULA",
+      "CO > DTXSID3 > IDENTIFIER",
+      "CO > DTXSID4 > SMILES",
+      "dtxsid1 > NA > NA",
+      "ch2o > NA > NA",
+      "wsfssnumvmoomr-uhfffaoysa-n > NA > NA"
+    ))
+  )
+})
+
+test_that("dss_resolve(fields = ) limits which fields may match", {
+  con <- local_dss_fixture()
+  name_fields <- c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN")
+
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("CO", "DTXSID1", "50-00-0", "Formalin"), con = con, fields = name_fields)),
+    sort(c("CO > NA > NA", "DTXSID1 > NA > NA", "50-00-0 > DTXSID1 > CASRN", "Formalin > DTXSID1 > IDENTIFIER"))
+  )
+  expect_equal(
+    dss_resolve_rows(dss_resolve("CO", con = con, fields = c(name_fields, "ident_upper"))),
+    "CO > DTXSID3 > ident_upper"
+  )
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("CO", "cobalt"), con = con, ignore_case = TRUE, fields = name_fields)),
+    sort(c("CO > DTXSID3 > IDENTIFIER", "cobalt > DTXSID3 > IUPAC_NAME", "cobalt > DTXSID3 > PREFERRED_NAME"))
+  )
+  # With ignore_case, "ident_upper" means the synonym field
+  expect_equal(
+    dss_resolve_rows(dss_resolve("formalin", con = con, ignore_case = TRUE, fields = "ident_upper")),
+    "formalin > DTXSID1 > IDENTIFIER"
+  )
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("DTXSID1", "CO"), con = con, fields = "DTXSID")),
+    sort(c("DTXSID1 > DTXSID1 > DTXSID", "CO > NA > NA"))
+  )
+})
+
+test_that("dss_resolve(best_match = TRUE) keeps one field per input and DTXSID", {
+  con <- local_dss_fixture()
+  name_fields <- c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN")
+
+  # Default mode: BFV matches IDENTIFIER and ident_upper, CO matches three substances
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("BFV", "CO", "DTXSID1", "nope"), con = con, best_match = TRUE)),
+    sort(c(
+      "BFV > DTXSID1 > ident_upper",
+      "CO > DTXSID2 > MOLECULAR_FORMULA",
+      "CO > DTXSID3 > ident_upper",
+      "CO > DTXSID4 > SMILES",
+      "DTXSID1 > DTXSID1 > DTXSID",
+      "nope > NA > NA"
+    ))
+  )
+  # cobalt matches as preferred name and IUPAC name; preferred name wins
+  result <- dss_resolve(c("cobalt", "formalin"), con = con, ignore_case = TRUE, best_match = TRUE)
+  expect_named(result, c("input", "DTXSID", "PREFERRED_NAME", "CASRN", "matched_on"))
+  expect_equal(
+    dss_resolve_rows(result),
+    sort(c("cobalt > DTXSID3 > PREFERRED_NAME", "formalin > DTXSID1 > IDENTIFIER"))
+  )
+  expect_equal(result$PREFERRED_NAME[result$input == "cobalt"], "Cobalt")
+  # fields is applied before the best field is picked
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("cobalt", "CO"), con = con, ignore_case = TRUE, fields = "IUPAC_NAME", best_match = TRUE)),
+    sort(c("cobalt > DTXSID3 > IUPAC_NAME", "CO > NA > NA"))
+  )
+  expect_equal(
+    dss_resolve_rows(dss_resolve("CO", con = con, ignore_case = TRUE, fields = name_fields, best_match = TRUE)),
+    "CO > DTXSID3 > IDENTIFIER"
+  )
+})
+
+test_that("dss_resolve() rejects bad options", {
+  con <- local_dss_fixture()
+  expect_error(dss_resolve("CO", con = con, fields = "EVIL_COL"), "Invalid field")
+  expect_error(dss_resolve("CO", con = con, fields = character(0)), "fields")
+  expect_error(dss_resolve("CO", con = con, fields = NA_character_), "fields")
+  expect_error(dss_resolve("CO", con = con, fields = 1), "fields")
+  expect_error(dss_resolve("CO", con = con, ignore_case = NA), "ignore_case")
+  expect_error(dss_resolve("CO", con = con, best_match = "yes"), "best_match")
+})
