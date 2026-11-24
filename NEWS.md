@@ -4,12 +4,14 @@
 
 ## Unreleased
 
-- `dss_resolve()` gains two options. `ignore_case = TRUE` matches preferred
+- `dss_resolve()` gains three options. `ignore_case = TRUE` matches preferred
   names, IUPAC names and synonyms without regard to case; CAS numbers,
   formulas, InChIKeys, SMILES and DTXSIDs are still matched exactly.
   `fields` limits which fields may match, so a name lookup can leave out
-  formulas and SMILES (`"CO"` then matches only as a name). The defaults
-  return the same rows and columns as before.
+  formulas and SMILES (`"CO"` then matches only as a name).
+  `best_match = TRUE` returns one row per input and DTXSID when an input
+  matches the same substance under several fields. The defaults return the
+  same rows and columns as before.
 
 ## v4.0.6 (2026-11-17)
 

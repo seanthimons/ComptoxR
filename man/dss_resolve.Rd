@@ -4,7 +4,13 @@
 \alias{dss_resolve}
 \title{Resolve chemical identifiers to DTXSIDs}
 \usage{
-dss_resolve(query, con = NULL, ignore_case = FALSE, fields = NULL)
+dss_resolve(
+  query,
+  con = NULL,
+  ignore_case = FALSE,
+  fields = NULL,
+  best_match = FALSE
+)
 }
 \arguments{
 \item{query}{A character vector of values to resolve.}
@@ -27,6 +33,15 @@ include strings that look like formulas or SMILES, so use \code{fields}, not
 \code{ignore_case}, to keep \code{"CO"} from matching as a formula. With
 \code{ignore_case = FALSE}, include \code{"ident_upper"} to keep the upper-case
 synonym matches; with \code{ignore_case = TRUE} it means \code{"IDENTIFIER"}.}
+
+\item{best_match}{If \code{TRUE}, return one row per input and DTXSID. An input
+can match one substance under several fields (the synonym list repeats
+the preferred name, for example); only the first of these is kept, in
+the order \code{"DTXSID"}, \code{"PREFERRED_NAME"}, \code{"CASRN"},
+\code{"MOLECULAR_FORMULA"}, \code{"INCHIKEY"}, \code{"IUPAC_NAME"}, \code{"SMILES"},
+\code{"ident_upper"}, \code{"IDENTIFIER"}. \code{fields} is applied first. An input
+that matches several substances still returns one row for each.
+Default \code{FALSE}.}
 }
 \value{
 A tibble with columns: input, DTXSID, PREFERRED_NAME, CASRN,
@@ -50,7 +65,8 @@ dss_resolve(c("Formaldehyde", "7440-38-2", "DTXSID7020637"))
 dss_resolve(
   c("formaldehyde", "CO"),
   ignore_case = TRUE,
-  fields = c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN")
+  fields = c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN"),
+  best_match = TRUE
 )
 }
 }

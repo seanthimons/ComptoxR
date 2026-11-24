@@ -1,7 +1,8 @@
 # DSSTox Local Database — Query Functions
 # ------------------------------------------
 # All SQL uses parameterized queries or temp-table + JOIN patterns.
-# Zero string interpolation of user-supplied values in SQL.
+# User-supplied values are never interpolated into SQL, except field names
+# that have first been checked against an allowlist.
 
 # Column allowlist for validation
 .DSS_VALID_COLS <- c(
@@ -141,6 +142,14 @@ dss_synonyms <- function(query, con = NULL) {
 #'   `ignore_case`, to keep `"CO"` from matching as a formula. With
 #'   `ignore_case = FALSE`, include `"ident_upper"` to keep the upper-case
 #'   synonym matches; with `ignore_case = TRUE` it means `"IDENTIFIER"`.
+#' @param best_match If `TRUE`, return one row per input and DTXSID. An input
+#'   can match one substance under several fields (the synonym list repeats
+#'   the preferred name, for example); only the first of these is kept, in
+#'   the order `"DTXSID"`, `"PREFERRED_NAME"`, `"CASRN"`,
+#'   `"MOLECULAR_FORMULA"`, `"INCHIKEY"`, `"IUPAC_NAME"`, `"SMILES"`,
+#'   `"ident_upper"`, `"IDENTIFIER"`. `fields` is applied first. An input
+#'   that matches several substances still returns one row for each.
+#'   Default `FALSE`.
 #' @return A tibble with columns: input, DTXSID, PREFERRED_NAME, CASRN,
 #'   matched_on.
 #' @export
@@ -153,12 +162,16 @@ dss_synonyms <- function(query, con = NULL) {
 #' dss_resolve(
 #'   c("formaldehyde", "CO"),
 #'   ignore_case = TRUE,
-#'   fields = c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN")
+#'   fields = c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN"),
+#'   best_match = TRUE
 #' )
 #' }
-dss_resolve <- function(query, con = NULL, ignore_case = FALSE, fields = NULL) {
+dss_resolve <- function(query, con = NULL, ignore_case = FALSE, fields = NULL, best_match = FALSE) {
   if (!isTRUE(ignore_case) && !isFALSE(ignore_case)) {
     cli::cli_abort("{.arg ignore_case} must be `TRUE` or `FALSE`.")
+  }
+  if (!isTRUE(best_match) && !isFALSE(best_match)) {
+    cli::cli_abort("{.arg best_match} must be `TRUE` or `FALSE`.")
   }
   field_clause <- ""
   if (!is.null(fields)) {
@@ -181,6 +194,33 @@ dss_resolve <- function(query, con = NULL, ignore_case = FALSE, fields = NULL) {
       paste0("'", unique(fields), "'", collapse = ", "),
       ")"
     )
+  }
+
+  matched_from <- "matched m"
+  if (best_match) {
+    # The order is sort_order from the build, with a DTXSID match first
+    matched_from <- paste0(
+      "(
+         SELECT * FROM matched m",
+      field_clause,
+      "
+         QUALIFY row_number() OVER (
+           PARTITION BY m.input, m.DTXSID
+           ORDER BY CASE m.parent_col
+             WHEN 'DTXSID'            THEN 0
+             WHEN 'PREFERRED_NAME'    THEN 1
+             WHEN 'CASRN'             THEN 2
+             WHEN 'MOLECULAR_FORMULA' THEN 3
+             WHEN 'INCHIKEY'          THEN 4
+             WHEN 'IUPAC_NAME'        THEN 5
+             WHEN 'SMILES'            THEN 6
+             WHEN 'ident_upper'       THEN 7
+             ELSE 8
+           END
+         ) = 1
+       ) m"
+    )
+    field_clause <- ""
   }
 
   con <- dss_get_con(con)
@@ -241,7 +281,9 @@ dss_resolve <- function(query, con = NULL, ignore_case = FALSE, fields = NULL) {
          m.parent_col,
          pn.values AS PREFERRED_NAME,
          cas.values AS CASRN
-       FROM matched m
+       FROM ",
+      matched_from,
+      "
        LEFT JOIN dsstox pn
          ON pn.DTXSID = m.DTXSID AND pn.parent_col = 'PREFERRED_NAME'
        LEFT JOIN dsstox cas

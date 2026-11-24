@@ -240,6 +240,41 @@ test_that("dss_resolve(fields = ) limits which fields may match", {
   )
 })
 
+test_that("dss_resolve(best_match = TRUE) keeps one field per input and DTXSID", {
+  con <- local_dss_fixture()
+  name_fields <- c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN")
+
+  # Default mode: BFV matches IDENTIFIER and ident_upper, CO matches three substances
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("BFV", "CO", "DTXSID1", "nope"), con = con, best_match = TRUE)),
+    sort(c(
+      "BFV > DTXSID1 > ident_upper",
+      "CO > DTXSID2 > MOLECULAR_FORMULA",
+      "CO > DTXSID3 > ident_upper",
+      "CO > DTXSID4 > SMILES",
+      "DTXSID1 > DTXSID1 > DTXSID",
+      "nope > NA > NA"
+    ))
+  )
+  # cobalt matches as preferred name and IUPAC name; preferred name wins
+  result <- dss_resolve(c("cobalt", "formalin"), con = con, ignore_case = TRUE, best_match = TRUE)
+  expect_named(result, c("input", "DTXSID", "PREFERRED_NAME", "CASRN", "matched_on"))
+  expect_equal(
+    dss_resolve_rows(result),
+    sort(c("cobalt > DTXSID3 > PREFERRED_NAME", "formalin > DTXSID1 > IDENTIFIER"))
+  )
+  expect_equal(result$PREFERRED_NAME[result$input == "cobalt"], "Cobalt")
+  # fields is applied before the best field is picked
+  expect_equal(
+    dss_resolve_rows(dss_resolve(c("cobalt", "CO"), con = con, ignore_case = TRUE, fields = "IUPAC_NAME", best_match = TRUE)),
+    sort(c("cobalt > DTXSID3 > IUPAC_NAME", "CO > NA > NA"))
+  )
+  expect_equal(
+    dss_resolve_rows(dss_resolve("CO", con = con, ignore_case = TRUE, fields = name_fields, best_match = TRUE)),
+    "CO > DTXSID3 > IDENTIFIER"
+  )
+})
+
 test_that("dss_resolve() rejects bad options", {
   con <- local_dss_fixture()
   expect_error(dss_resolve("CO", con = con, fields = "EVIL_COL"), "Invalid field")
@@ -247,4 +282,5 @@ test_that("dss_resolve() rejects bad options", {
   expect_error(dss_resolve("CO", con = con, fields = NA_character_), "fields")
   expect_error(dss_resolve("CO", con = con, fields = 1), "fields")
   expect_error(dss_resolve("CO", con = con, ignore_case = NA), "ignore_case")
+  expect_error(dss_resolve("CO", con = con, best_match = "yes"), "best_match")
 })
