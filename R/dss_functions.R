@@ -1,7 +1,8 @@
 # DSSTox Local Database — Query Functions
 # ------------------------------------------
 # All SQL uses parameterized queries or temp-table + JOIN patterns.
-# Zero string interpolation of user-supplied values in SQL.
+# User-supplied values are never interpolated into SQL, except field names
+# that have first been checked against an allowlist.
 
 # Column allowlist for validation
 .DSS_VALID_COLS <- c(
@@ -13,6 +14,9 @@
   "INCHIKEY",
   "IUPAC_NAME"
 )
+
+# Values `matched_on` can take in dss_resolve()
+.DSS_RESOLVE_FIELDS <- c(.DSS_VALID_COLS, "ident_upper", "DTXSID")
 
 #' Validate column names against the DSSTox allowlist
 #' @param cols Character vector of column names to validate.
@@ -117,8 +121,35 @@ dss_synonyms <- function(query, con = NULL) {
 #' and returns a tibble mapping each input to its DTXSID and preferred name.
 #' Unmatched inputs are included with `NA` values.
 #'
+#' By default every field is matched exactly and case-sensitively. The table
+#' also holds an upper-cased copy of each synonym (`ident_upper`), so an
+#' upper-case input can match a synonym written in another case.
+#'
 #' @param query A character vector of values to resolve.
 #' @param con An optional `DBI::DBIConnection`.
+#' @param ignore_case If `TRUE`, names are matched without regard to case:
+#'   preferred names, IUPAC names and synonyms. A synonym match is then
+#'   always reported as `"IDENTIFIER"`, never `"ident_upper"`. CAS numbers,
+#'   formulas, InChIKeys, SMILES and DTXSIDs are still matched exactly,
+#'   because case carries meaning in a SMILES string (`c` and `C`) and in a
+#'   formula (`Co` and `CO`). Default `FALSE`.
+#' @param fields Optional character vector naming the fields that may match:
+#'   any of `"PREFERRED_NAME"`, `"CASRN"`, `"MOLECULAR_FORMULA"`,
+#'   `"INCHIKEY"`, `"IUPAC_NAME"`, `"SMILES"`, `"IDENTIFIER"`,
+#'   `"ident_upper"` and `"DTXSID"`. An input that matches only other fields
+#'   is returned as unmatched. `NULL` (default) allows every field. Synonyms
+#'   include strings that look like formulas or SMILES, so use `fields`, not
+#'   `ignore_case`, to keep `"CO"` from matching as a formula. With
+#'   `ignore_case = FALSE`, include `"ident_upper"` to keep the upper-case
+#'   synonym matches; with `ignore_case = TRUE` it means `"IDENTIFIER"`.
+#' @param best_match If `TRUE`, return one row per input and DTXSID. An input
+#'   can match one substance under several fields (the synonym list repeats
+#'   the preferred name, for example); only the first of these is kept, in
+#'   the order `"DTXSID"`, `"PREFERRED_NAME"`, `"CASRN"`,
+#'   `"MOLECULAR_FORMULA"`, `"INCHIKEY"`, `"IUPAC_NAME"`, `"SMILES"`,
+#'   `"ident_upper"`, `"IDENTIFIER"`. `fields` is applied first. An input
+#'   that matches several substances still returns one row for each.
+#'   Default `FALSE`.
 #' @return A tibble with columns: input, DTXSID, PREFERRED_NAME, CASRN,
 #'   matched_on.
 #' @export
@@ -126,8 +157,72 @@ dss_synonyms <- function(query, con = NULL) {
 #' @examples
 #' \dontrun{
 #' dss_resolve(c("Formaldehyde", "7440-38-2", "DTXSID7020637"))
+#'
+#' # Names and CAS numbers only, in any case
+#' dss_resolve(
+#'   c("formaldehyde", "CO"),
+#'   ignore_case = TRUE,
+#'   fields = c("PREFERRED_NAME", "IUPAC_NAME", "IDENTIFIER", "CASRN"),
+#'   best_match = TRUE
+#' )
 #' }
-dss_resolve <- function(query, con = NULL) {
+dss_resolve <- function(query, con = NULL, ignore_case = FALSE, fields = NULL, best_match = FALSE) {
+  if (!isTRUE(ignore_case) && !isFALSE(ignore_case)) {
+    cli::cli_abort("{.arg ignore_case} must be `TRUE` or `FALSE`.")
+  }
+  if (!isTRUE(best_match) && !isFALSE(best_match)) {
+    cli::cli_abort("{.arg best_match} must be `TRUE` or `FALSE`.")
+  }
+  field_clause <- ""
+  if (!is.null(fields)) {
+    if (!is.character(fields) || length(fields) == 0L || anyNA(fields)) {
+      cli::cli_abort("{.arg fields} must be `NULL` or a character vector of field names.")
+    }
+    bad <- setdiff(fields, .DSS_RESOLVE_FIELDS)
+    if (length(bad) > 0) {
+      cli::cli_abort(c(
+        "Invalid field name{?s}: {.val {bad}}.",
+        "i" = "Allowed fields: {.val {(.DSS_RESOLVE_FIELDS)}}"
+      ))
+    }
+    if (ignore_case) {
+      fields[fields == "ident_upper"] <- "IDENTIFIER"
+    }
+    # Values are from the allowlist, not user input
+    field_clause <- paste0(
+      "\n       WHERE m.parent_col IN (",
+      paste0("'", unique(fields), "'", collapse = ", "),
+      ")"
+    )
+  }
+
+  matched_from <- "matched m"
+  if (best_match) {
+    # The order is sort_order from the build, with a DTXSID match first
+    matched_from <- paste0(
+      "(
+         SELECT * FROM matched m",
+      field_clause,
+      "
+         QUALIFY row_number() OVER (
+           PARTITION BY m.input, m.DTXSID
+           ORDER BY CASE m.parent_col
+             WHEN 'DTXSID'            THEN 0
+             WHEN 'PREFERRED_NAME'    THEN 1
+             WHEN 'CASRN'             THEN 2
+             WHEN 'MOLECULAR_FORMULA' THEN 3
+             WHEN 'INCHIKEY'          THEN 4
+             WHEN 'IUPAC_NAME'        THEN 5
+             WHEN 'SMILES'            THEN 6
+             WHEN 'ident_upper'       THEN 7
+             ELSE 8
+           END
+         ) = 1
+       ) m"
+    )
+    field_clause <- ""
+  }
+
   con <- dss_get_con(con)
   query <- unique(as.character(query))
   input_df <- data.frame(input = query, stringsAsFactors = FALSE)
@@ -141,12 +236,39 @@ dss_resolve <- function(query, con = NULL) {
     add = TRUE
   )
 
-  result <- DBI::dbGetQuery(
-    con,
-    "WITH matched AS (
-       SELECT i.input, d.DTXSID, d.parent_col
+  # Folding uses DuckDB's upper(), the function that built ident_upper, so
+  # the two sides agree whatever the R locale is.
+  matched <- if (ignore_case) {
+    "SELECT i.input, d.DTXSID,
+              CASE d.parent_col WHEN 'ident_upper' THEN 'IDENTIFIER' ELSE d.parent_col END AS parent_col
        FROM dss_resolve_input i
        INNER JOIN dsstox d ON d.values = i.input
+       UNION
+       SELECT i.input, d.DTXSID, 'IDENTIFIER' AS parent_col
+       FROM dss_resolve_input i
+       INNER JOIN dsstox d ON d.values = upper(i.input)
+       WHERE d.parent_col = 'ident_upper'
+       UNION
+       SELECT i.input, d.DTXSID, d.parent_col
+       FROM dss_resolve_input i
+       INNER JOIN (
+         SELECT DTXSID, parent_col, upper(values) AS values_upper
+         FROM dsstox
+         WHERE parent_col IN ('PREFERRED_NAME', 'IUPAC_NAME')
+       ) d ON d.values_upper = upper(i.input)"
+  } else {
+    "SELECT i.input, d.DTXSID, d.parent_col
+       FROM dss_resolve_input i
+       INNER JOIN dsstox d ON d.values = i.input"
+  }
+
+  result <- DBI::dbGetQuery(
+    con,
+    paste0(
+      "WITH matched AS (
+       ",
+      matched,
+      "
        UNION
        SELECT DISTINCT i.input, d.DTXSID, 'DTXSID' AS parent_col
        FROM dss_resolve_input i
@@ -159,11 +281,15 @@ dss_resolve <- function(query, con = NULL) {
          m.parent_col,
          pn.values AS PREFERRED_NAME,
          cas.values AS CASRN
-       FROM matched m
+       FROM ",
+      matched_from,
+      "
        LEFT JOIN dsstox pn
          ON pn.DTXSID = m.DTXSID AND pn.parent_col = 'PREFERRED_NAME'
        LEFT JOIN dsstox cas
-         ON cas.DTXSID = m.DTXSID AND cas.parent_col = 'CASRN'
+         ON cas.DTXSID = m.DTXSID AND cas.parent_col = 'CASRN'",
+      field_clause,
+      "
      )
      SELECT
        i.input,
@@ -174,6 +300,7 @@ dss_resolve <- function(query, con = NULL) {
      FROM dss_resolve_input i
      LEFT JOIN enriched e ON i.input = e.input
      ORDER BY i.input, e.DTXSID"
+    )
   )
 
   tibble::as_tibble(result)

@@ -2,6 +2,34 @@
 
 # ComptoxR NEWS
 
+## v4.0.7 (2026-11-24)
+
+#### Release notes
+
+- `dss_resolve()` gains three options. `ignore_case = TRUE` matches preferred
+  names, IUPAC names and synonyms without regard to case; CAS numbers,
+  formulas, InChIKeys, SMILES and DTXSIDs are still matched exactly.
+  `fields` limits which fields may match, so a name lookup can leave out
+  formulas and SMILES (`"CO"` then matches only as a name).
+  `best_match = TRUE` returns one row per input and DTXSID when an input
+  matches the same substance under several fields. The defaults return the
+  same rows and columns as before.
+
+<!-- end release notes -->
+
+#### New features
+
+- add ignore_case, fields and best_match options to dss_resolve() (#400)
+  ([2dea292](https://github.com/seanthimons/ComptoxR/tree/2dea292d292b92111176d6c09507fbe60eae3a7e))
+
+#### Other changes
+
+- bump version to 4.0.7 \[skip ci\]
+  ([25f7a5c](https://github.com/seanthimons/ComptoxR/tree/25f7a5cf2feb4860edbe16557d8ddb420524b017))
+
+Full set of changes:
+[`v4.0.6...v4.0.7`](https://github.com/seanthimons/ComptoxR/compare/v4.0.6...v4.0.7)
+
 ## v4.0.6 (2026-11-17)
 
 #### Release notes
@@ -24,6 +52,11 @@
 
 - map resolver results to the right inputs (#388)
   ([657cba1](https://github.com/seanthimons/ComptoxR/tree/657cba1df7b30e325f48b2233c781941d88fda26))
+
+#### Docs
+
+- update NEWS.md for v4.0.6 \[skip ci\]
+  ([96a384c](https://github.com/seanthimons/ComptoxR/tree/96a384ca3b7012fd66cd6149a973dcfdcb84f886))
 
 #### Other changes
 
