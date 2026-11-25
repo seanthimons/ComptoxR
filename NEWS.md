@@ -2,7 +2,9 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.8 (2026-11-25)
+
+#### Release notes
 
 - `ct_chemical_search_equal()` now sends up to 16 requests at once, and a
   vector of 351 names finishes in about half the time. Pass the whole vector
@@ -17,6 +19,26 @@
 - specmill 0.5.1 is now the pinned generator. The three
   `ct_hazard_toxref_*_search_by_study_type()` wrappers stop with a clear
   error when `all_pages = TRUE` and `pageNumber` is `NULL`.
+
+<!-- end release notes -->
+
+#### New features
+
+- parallel batches for ct_chemical_search_equal (#404)
+  ([0e5563f](https://github.com/seanthimons/ComptoxR/tree/0e5563fc1bd4a77bc1d59a9985845b814b00b0b8))
+
+#### CI
+
+- add new issues to the Tooling project (#403)
+  ([0d6cd1d](https://github.com/seanthimons/ComptoxR/tree/0d6cd1d04ed6571a476a986a66ccda1759076885))
+
+#### Other changes
+
+- bump version to 4.0.8 \[skip ci\]
+  ([6e042ea](https://github.com/seanthimons/ComptoxR/tree/6e042ea11ee3ed278281661f384b9f70a05d28fd))
+
+Full set of changes:
+[`v4.0.7...v4.0.8`](https://github.com/seanthimons/ComptoxR/compare/v4.0.7...v4.0.8)
 
 ## v4.0.7 (2026-11-24)
 
@@ -37,6 +59,11 @@
 
 - add ignore_case, fields and best_match options to dss_resolve() (#400)
   ([2dea292](https://github.com/seanthimons/ComptoxR/tree/2dea292d292b92111176d6c09507fbe60eae3a7e))
+
+#### Docs
+
+- update NEWS.md for v4.0.7 \[skip ci\]
+  ([c63ff7d](https://github.com/seanthimons/ComptoxR/tree/c63ff7d98f398386f04cdd68b1bdeb8946e4e113))
 
 #### Other changes
 
