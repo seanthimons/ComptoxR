@@ -35,7 +35,7 @@ ct_chemical_search_equal <- function(word, projection = "chemicalsearchall") {
   if (base::is.character(params[["projection"]]) && base::any(!base::nzchar(params[["projection"]]))) {
     base::stop("Empty query parameter: projection")
   }
-  send <- function(params) {
+  send <- function(params, .specmill_prepare = FALSE) {
     result <- .ct_request(
       method = "GET",
       path = "/chemical/search/equal/{word}",
@@ -43,6 +43,7 @@ ct_chemical_search_equal <- function(word, projection = "chemicalsearchall") {
       query = base::list("projection" = params[["projection"]]),
       body = NULL,
       response_policy = ".ct_tidy",
+      request_controls = list(max_retries = 0L, throttle = list(capacity = 75L, fill_time_s = 1L)),
       server = list(url = "https://comptox.epa.gov/ctx-api"),
       server_resolver = list(name = ".ct_server_url", key = "ctx_burl"),
       auth = list(list(list(
@@ -51,18 +52,22 @@ ct_chemical_search_equal <- function(word, projection = "chemicalsearchall") {
         location = "header",
         name = "x-api-key",
         envvar = "ctx_api_key"
-      )))
+      ))),
+      .prepare = .specmill_prepare
     )
-    result
+    .ct_request_then(result, function(result) {
+      result
+    })
   }
   .ct_request_each(
-    function(chunk) {
+    function(chunk, .specmill_prepare = FALSE) {
       params["word"] <- base::list(chunk)
-      send(params)
+      send(params, .specmill_prepare)
     },
     params[["word"]],
     1L,
     on_error = "drop",
+    concurrency = 16L,
     empty = .ct_empty_table
   )
 }

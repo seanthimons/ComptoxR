@@ -37,6 +37,9 @@ ct_hazard_toxref_data_search_by_study_type <- function(studyType, pageNumber = 1
   if (!base::is.logical(all_pages) || base::length(all_pages) != 1L || base::is.na(all_pages)) {
     base::stop("all_pages must be TRUE or FALSE", call. = FALSE)
   }
+  if (base::isTRUE(all_pages) && base::is.null(pageNumber)) {
+    base::stop("Supply pageNumber to start paging, or set all_pages = FALSE", call. = FALSE)
+  }
   if (base::is.character(params[["pageNumber"]]) && base::any(!base::nzchar(params[["pageNumber"]]))) {
     base::stop("Empty query parameter: pageNumber")
   }

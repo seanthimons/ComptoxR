@@ -2,6 +2,22 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- `ct_chemical_search_equal()` now sends up to 16 requests at once, and a
+  vector of 351 names finishes in about half the time. Pass the whole vector
+  in one call to benefit. To lower the ceiling for a session, use
+  `options(comptoxr_native.ct_request.batching = list(concurrency = n))`;
+  `n = 1` turns it off, and values above 16 are capped. Setting
+  `max_retries` in `options(comptoxr_native.request = ...)` sends batches
+  one at a time so retries still apply.
+- HTTP errors that the server returns as `application/problem+json` now
+  include the server's title, detail and request id in the error message.
+- ComptoxR now requires httr2 1.3.0 or later.
+- specmill 0.5.1 is now the pinned generator. The three
+  `ct_hazard_toxref_*_search_by_study_type()` wrappers stop with a clear
+  error when `all_pages = TRUE` and `pageNumber` is `NULL`.
+
 ## v4.0.7 (2026-11-24)
 
 #### Release notes
