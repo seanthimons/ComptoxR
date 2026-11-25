@@ -1243,6 +1243,10 @@ groups:
         normalize_inputs:
           word: .ct_legacy_query
       # why: server resolver keeps the user-overridable base URL option; response policy keeps the released result shape; batching keeps the released vector fan-out and error handling; post-processing still runs when a hook skips the request; post-processing state carries hook data; docs keep the released title, return and examples; accepts the released identifier/query input forms
+      # why: concurrency 16 from a live probe on 2026-11-25 (1,404 GETs per level, testing_chemicals names/CAS/DTXSIDs):
+      # level 1 = 21 req/s, 16 = 57, 32 = 65, 64-256 = ~74 (plateau). No 429, 5xx or rate-limit headers at any level up to 256.
+      # 16 takes ~2.7x of the ~3.5x available; the throttle sits at the measured plateau so it never binds below it.
+      # Parallel execution needs max_retries: 0 (specmill rule).
       GET /chemical/search/equal/{word}:
         server:
           resolver: .ct_server_url
@@ -1252,6 +1256,12 @@ groups:
           fan_out: word
           on_error: drop
           empty: .ct_empty_table
+          concurrency: 16
+        request_controls:
+          max_retries: 0
+          throttle:
+            capacity: 75
+            fill_time_s: 1
         post_on_skip: no
         post_state: parameters
         docs:

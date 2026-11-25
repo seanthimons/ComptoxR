@@ -78,21 +78,21 @@
     "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
   },
   "current_adoption": {
-    "reviewed_at": "2026-11-13",
-    "base_commit": "eef85b50864c91f2c0fe1eba530d7d0e5692acf4",
+    "reviewed_at": "2026-11-25",
+    "base_commit": "0d6cd1d04ed6571a476a986a66ccda1759076885",
     "toolkit": {
       "package": "specmill",
-      "version": "0.4.0",
-      "source_commit": "b913424a5904bcf636eab3f135e2c728603dcf8f",
-      "source_archive_sha256": "ccc35fbcf500234380b946cfd94acb4abbe7170028db5d418074e05573b23177",
+      "version": "0.5.1",
+      "source_commit": "0f67428f2681f24db98b2166d2e7ed44ea5a3940",
+      "source_archive_sha256": "2a3fdfd03aa43af3014e802ce80df1a48c23a7b79e2b3f5b8676cc9d72562d1d",
       "source_repository": "https://github.com/seanthimons/specmill",
       "archive_format": "git archive --format=tar <source_commit>"
     },
     "adopted_sha256": {
-      "R/z_specmill_request.R": "35139d02087ebc1b8c3ffa3e355930f1ec76c74f544a9390a33821c70c98742d",
+      "R/z_specmill_request.R": "a8dd447919e0832023e1daf0bb0a4737cede7571ebec8332cffea4078178cf07",
       "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
     },
-    "review": "Specmill 0.4.0 scaffold emission; helper output unchanged.",
+    "review": "specmill v0.5.1 for runtime batch concurrency (#401)",
     "facades_retired": [
       "generic_request",
       "generic_chemi_request",
@@ -630,6 +630,29 @@
         "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
       },
       "review": "Reviewed Specmill 0.2.3 helper emission: adds request preparation, decoded-response continuations and bounded parallel batching. Existing wrappers retain concurrency = 1; transport error handling and public wrapper signatures remain unchanged.",
+      "facades_retired": [
+        "generic_request",
+        "generic_chemi_request",
+        "generic_search_request",
+        "generic_pubchem_request"
+      ]
+    },
+    {
+      "reviewed_at": "2026-11-13",
+      "base_commit": "eef85b50864c91f2c0fe1eba530d7d0e5692acf4",
+      "toolkit": {
+        "package": "specmill",
+        "version": "0.4.0",
+        "source_commit": "b913424a5904bcf636eab3f135e2c728603dcf8f",
+        "source_archive_sha256": "ccc35fbcf500234380b946cfd94acb4abbe7170028db5d418074e05573b23177",
+        "source_repository": "https://github.com/seanthimons/specmill",
+        "archive_format": "git archive --format=tar <source_commit>"
+      },
+      "adopted_sha256": {
+        "R/z_specmill_request.R": "35139d02087ebc1b8c3ffa3e355930f1ec76c74f544a9390a33821c70c98742d",
+        "dev/specmill-342/emit.R": "5efd784c037ad6d708ab96047127be7148e3df58ee64ff5b22168b2e0c41816b"
+      },
+      "review": "Specmill 0.4.0 scaffold emission; helper output unchanged.",
       "facades_retired": [
         "generic_request",
         "generic_chemi_request",
