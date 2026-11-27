@@ -1,0 +1,44 @@
+# The reviewed subset of EPA's schema uses the observed JSON response envelopes
+# and requires the run fields that the live service needs.
+api: cts
+schemas:
+  files: [schema/cts-reviewed.json]
+  origin: https://qed.epa.gov/cts/rest/swag
+groups:
+  cts:
+    names:
+      GET /metabolizer: cts_metabolizer
+      POST /metabolizer/inputs: cts_metabolizer_inputs
+      POST /metabolizer/run: cts_metabolizer_run
+    operations:
+      GET /metabolizer:
+        docs:
+          title: Get CTS metabolizer metadata
+          return: A list containing CTS metadata and links.
+      POST /metabolizer/inputs:
+        docs:
+          title: Get the CTS metabolizer input template
+          parameters:
+            body: A named list of JSON fields. Use an empty list to fetch the template.
+          return: A list containing CTS metadata and the input template.
+          examples:
+            - body: {}
+      POST /metabolizer/run:
+        normalize_inputs:
+          body: .cts_resolve_structure
+        response_policy: .cts_check_calculation
+        docs:
+          title: Predict CTS transformation products
+          parameters:
+            body: >-
+              A named list with one SMILES string or DTXSID in `structure`,
+              an integer `generationLimit`, and one reaction library in
+              `transformationLibraries`. The wrapper resolves DTXSIDs to SMILES.
+          return: >-
+            A list containing CTS metadata and calculation data. The product
+            tree is in `data$data`. CTS calculation failures raise an error.
+          examples:
+            - body:
+                structure: CC(=O)Oc1ccccc1C(=O)O
+                generationLimit: 4
+                transformationLibraries: [hydrolysis]

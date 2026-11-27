@@ -72,6 +72,7 @@ services:
 - apis/ctx_exposure.yml
 - apis/ctx_hazard.yml
 - apis/epi_suite.yml
+- apis/cts.yml
 - apis/pubchem.yml
 callback_files:
 - dev/specmill_callbacks.R

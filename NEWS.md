@@ -2,6 +2,11 @@
 
 # ComptoxR NEWS
 
+## Unreleased
+
+- Restore the EPA CTS metabolizer endpoints. `cts_metabolizer_run()` accepts
+  one SMILES or DTXSID and raises an R error when CTS reports a failed calculation.
+
 ## v4.0.8 (2026-11-25)
 
 #### Release notes
