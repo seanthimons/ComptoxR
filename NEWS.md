@@ -2,10 +2,27 @@
 
 # ComptoxR NEWS
 
-## Unreleased
+## v4.0.9 (2026-11-27)
+
+#### Release notes
 
 - Restore the EPA CTS metabolizer endpoints. `cts_metabolizer_run()` accepts
   one SMILES or DTXSID and raises an R error when CTS reports a failed calculation.
+
+<!-- end release notes -->
+
+#### New features
+
+- restore CTS metabolizer endpoints (#406)
+  ([791dd6b](https://github.com/seanthimons/ComptoxR/tree/791dd6b01d49936e52b33997f719b3d635da2512))
+
+#### Other changes
+
+- bump version to 4.0.9 \[skip ci\]
+  ([809e053](https://github.com/seanthimons/ComptoxR/tree/809e053ba335fa427b5caf634d2360fd61db240a))
+
+Full set of changes:
+[`v4.0.8...v4.0.9`](https://github.com/seanthimons/ComptoxR/compare/v4.0.8...v4.0.9)
 
 ## v4.0.8 (2026-11-25)
 
@@ -37,6 +54,11 @@
 - add new issues to the Tooling project (#403)
   ([0d6cd1d](https://github.com/seanthimons/ComptoxR/tree/0d6cd1d04ed6571a476a986a66ccda1759076885))
 
+#### Docs
+
+- update NEWS.md for v4.0.8 \[skip ci\]
+  ([1e3e8e4](https://github.com/seanthimons/ComptoxR/tree/1e3e8e407f2728a14206cd4266dd549804261999))
+
 #### Other changes
 
 - bump version to 4.0.8 \[skip ci\]
@@ -64,6 +86,11 @@ Full set of changes:
 
 - add ignore_case, fields and best_match options to dss_resolve() (#400)
   ([2dea292](https://github.com/seanthimons/ComptoxR/tree/2dea292d292b92111176d6c09507fbe60eae3a7e))
+
+#### CI
+
+- bump peter-evans/create-pull-request
+  ([1a20dd6](https://github.com/seanthimons/ComptoxR/tree/1a20dd64f1169dcce392f2fe6877bc7884d0bb08))
 
 #### Docs
 
