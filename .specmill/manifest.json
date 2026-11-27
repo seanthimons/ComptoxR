@@ -2808,7 +2808,7 @@
   "inputs": {
     "DESCRIPTION": "4d55b3be0cae7de1f11956003fbf3336cc6566616629ce427f8a9344c6145224",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
-    "NAMESPACE": "b88b4581f902b6d0678c83e85fb00cc88ac1471b976d5aed2de8184a1fa19ff9",
+    "NAMESPACE": "d6e5670c7dd1760fb86d05819b15d4cbfe40b23047130d64b26bf3e35eb05ed7",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
     "R/api_auth.R": "e0948f6c30f7d2c22902e4f658055ca33ca19110640692eb53e1ea13e32d5763",
@@ -3818,6 +3818,9 @@
     "man/ct_related.Rd": "cc2d478078965476502b126844c660857e6c3f76534d901321f399e711a4b5c2",
     "man/ct_schema.Rd": "156252ad16bb5ec61234d843a23ded920dbe354e824e85a7473bb2318d76e92f",
     "man/ct_similar.Rd": "3c553de1c5c8d92b8d9dec9be73c0ae2aa388f5a7845e2f631ac03a42bfd05ec",
+    "man/cts_metabolizer.Rd": "1826662085b4ff3e39bb107b08c3127d226b9bc1d406a5ba5c5d5b0bc9168f56",
+    "man/cts_metabolizer_inputs.Rd": "2e3916a621f64e57342c57d2faa17fec94037b6872271df31494e14efb9b386e",
+    "man/cts_metabolizer_run.Rd": "9a814508dffff91c39cd6fe460cc12eac64e7d4bbd77995d8fdfff2aaff58ea0",
     "man/ctx_server.Rd": "6e01d8a4c204e25d3cff8319dce7d2b2942dc09bbcab3332de264588bbed5002",
     "man/cust_pal.Rd": "5f785ba20ec480742496dc33a34ef16bacd20f46c8ccf36e659a262b472d7b64",
     "man/db_installed_version.Rd": "4589b7d7f23c9c99bc0e39bf137cdb466f8ab2765f97929a90d765f145dac748",
