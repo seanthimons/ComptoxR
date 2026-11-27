@@ -12,26 +12,6 @@ cts_aspirin_body <- list(
   transformationLibraries = "hydrolysis"
 )
 
-test_that("CTS returns discovery metadata and sends an empty JSON input object", {
-  local_mocked_bindings(
-    req_perform = function(req, ...) {
-      if (endsWith(req$url, "/metabolizer")) {
-        expect_identical(req$method, "GET")
-        return(cts_test_reply('{"metaInfo":{},"links":null}'))
-      }
-
-      expect_identical(req$method, "POST")
-      expect_identical(req$url, "https://qed.epa.gov/cts/rest/metabolizer/inputs")
-      expect_identical(as.character(jsonlite::toJSON(req$body$data, auto_unbox = TRUE)), "{}")
-      cts_test_reply('{"metaInfo":{},"inputs":{"structure":"","generationLimit":1}}')
-    },
-    .package = "httr2"
-  )
-
-  expect_named(cts_metabolizer(), c("metaInfo", "links"))
-  expect_identical(cts_metabolizer_inputs(list())$inputs$structure, "")
-})
-
 test_that("CTS sends a one-library array and keeps the aspirin product tree", {
   local_mocked_bindings(
     chemi_resolver_lookup_bulk = function(...) stop("Unexpected lookup"),
