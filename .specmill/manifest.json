@@ -1797,6 +1797,18 @@
       "hash": "7bd56c01985678a619f2ccc278dbb3c071b9ccbca41640b7a1ebba97d1831619",
       "operations": "ctx_hazard GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"
     },
+    "R/cts_metabolizer.R": {
+      "hash": "7ac41dbad18fff3d3287bbe865de08e0b7419d84a5065ae2d8ee7a6e25f6da35",
+      "operations": "cts GET /metabolizer"
+    },
+    "R/cts_metabolizer_inputs.R": {
+      "hash": "3eb7552a0d7901a9994461f497620f8a0c8683af66a835d7f281141c4168c472",
+      "operations": "cts POST /metabolizer/inputs"
+    },
+    "R/cts_metabolizer_run.R": {
+      "hash": "5e75e3e9e50531b6d022f37cb887aa6b19e9c470e6daa2d42ea671ea53eb2434",
+      "operations": "cts POST /metabolizer/run"
+    },
     "R/epi.R": {
       "hash": "4b39749b26a7d5e2c6b549935f9a0e2fc55765ba3958583c74492939bc96241b",
       "operations": "epi_suite GET /api"
@@ -2796,7 +2808,7 @@
   "inputs": {
     "DESCRIPTION": "4d55b3be0cae7de1f11956003fbf3336cc6566616629ce427f8a9344c6145224",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
-    "NAMESPACE": "b88b4581f902b6d0678c83e85fb00cc88ac1471b976d5aed2de8184a1fa19ff9",
+    "NAMESPACE": "d6e5670c7dd1760fb86d05819b15d4cbfe40b23047130d64b26bf3e35eb05ed7",
     "R/ComptoxR-package.R": "c2a54486d895a52cd35bc2e555278641ab2f416a867ca543e178b3a7a0c989a8",
     "R/amos_read_response.R": "fbf581d905c8af8ab73472f00896b8d571ab1f84e0e2bd00751d9442a3f16b83",
     "R/api_auth.R": "e0948f6c30f7d2c22902e4f658055ca33ca19110640692eb53e1ea13e32d5763",
@@ -3241,6 +3253,9 @@
     "R/ct_hazard_toxval_supercategory_search_by_dtxsid.R": "7bd56c01985678a619f2ccc278dbb3c071b9ccbca41640b7a1ebba97d1831619",
     "R/ct_related.R": "04350b593905f34bd5fbfee1c136e831a5504e3962a9994bdabea7cb6217ef2a",
     "R/ct_similar.R": "f683d2530d1e709a8281a3624491bc285e8c3646205e39cf0b7b6cce0530bab5",
+    "R/cts_metabolizer.R": "7ac41dbad18fff3d3287bbe865de08e0b7419d84a5065ae2d8ee7a6e25f6da35",
+    "R/cts_metabolizer_inputs.R": "3eb7552a0d7901a9994461f497620f8a0c8683af66a835d7f281141c4168c472",
+    "R/cts_metabolizer_run.R": "5e75e3e9e50531b6d022f37cb887aa6b19e9c470e6daa2d42ea671ea53eb2434",
     "R/data.R": "6281deea848d50c1bd30883dcbcc9a92cf70690c486116416b644c1917eb3340",
     "R/dss_connection.R": "b8950e1d83479572171f3deff40cf2adc4c164b75b1a56ab2ca4b030bb2495dc",
     "R/dss_functions.R": "13b6ce1390e04a7683c39c17bc8bd4174442b73c10d1faf410b7102bc5bfaf3f",
@@ -3267,6 +3282,7 @@
     "R/hook_registry.R": "50648a4d4e5acd32f1356a7f1437f5fc0b6362c4f7ca9f90045f735a1a1b7048",
     "R/hooks_classyfire.R": "c4de723661190d22865e2793afce1367e8e2348a4882c1e94ba1b570c119b6ba",
     "R/hooks_compound.R": "17cf5eb56f4266a432c45a325b211410780a79e865155244c6391ab9c23dbf2f",
+    "R/hooks_cts.R": "6bbd4e041d6347bdedd0b05f23e9b8523912b93b353c03e9ef9a51c13b35970e",
     "R/hooks_descriptors.R": "a94ed1b169ec8cd20adb9fef70cf11ae7c221bc92c0d4b3485c80e11a0e5ba43",
     "R/hooks_epi.R": "2d73c60fe7b12ec5a5a0e4b398c39af42779bb05338d081f26e071719f7d772f",
     "R/hooks_hazard.R": "52ccb3a00880c5f70ec1e3639abc24c4adbbd6736a846c8cf72ae3a085694f3e",
@@ -3327,6 +3343,7 @@
     "apis/chemi_stdizer.yml": "3453bb338543f0ebfbd95ebc4060eb06945889764d37d693adda70a7492a8acc",
     "apis/chemi_toxprints.yml": "2853bd805e3dc6d698d4e0ddd815c6c69192a3be89863beb2fadcfad8c7b8bc7",
     "apis/chemi_webtest.yml": "2104cd504cee82822b67b384f08c9aeeeaf247fb4a6a291d74f1d1f09db9e1fd",
+    "apis/cts.yml": "55aa9c560a1f89ad7dcb4342462c48abd4d7668dccf5b2219b99cdd883254b8a",
     "apis/ctx_bioactivity.yml": "f36ce6d55279f2a949a8967d1201788085fd259a86784ff3a17159880fb8232f",
     "apis/ctx_chemical.yml": "254cb421acb5a3d428bf3499909f81326901ced666c8bcd14bb9a818b0cb9de8",
     "apis/ctx_exposure.yml": "13f4359eaa437f6bc1a21cb44ba415fb076026ce286a0a8f4f8dddcbdb8a20f5",
@@ -3801,6 +3818,9 @@
     "man/ct_related.Rd": "cc2d478078965476502b126844c660857e6c3f76534d901321f399e711a4b5c2",
     "man/ct_schema.Rd": "156252ad16bb5ec61234d843a23ded920dbe354e824e85a7473bb2318d76e92f",
     "man/ct_similar.Rd": "3c553de1c5c8d92b8d9dec9be73c0ae2aa388f5a7845e2f631ac03a42bfd05ec",
+    "man/cts_metabolizer.Rd": "1826662085b4ff3e39bb107b08c3127d226b9bc1d406a5ba5c5d5b0bc9168f56",
+    "man/cts_metabolizer_inputs.Rd": "2e3916a621f64e57342c57d2faa17fec94037b6872271df31494e14efb9b386e",
+    "man/cts_metabolizer_run.Rd": "9a814508dffff91c39cd6fe460cc12eac64e7d4bbd77995d8fdfff2aaff58ea0",
     "man/ctx_server.Rd": "6e01d8a4c204e25d3cff8319dce7d2b2942dc09bbcab3332de264588bbed5002",
     "man/cust_pal.Rd": "5f785ba20ec480742496dc33a34ef16bacd20f46c8ccf36e659a262b472d7b64",
     "man/db_installed_version.Rd": "4589b7d7f23c9c99bc0e39bf137cdb466f8ab2765f97929a90d765f145dac748",
@@ -3926,13 +3946,14 @@
     "schema/chemi_stdizer_prod.json": "ba0b33f97722645015547f86999a67a71bdaec3c97e6fedf2631dd6c90aeb93f",
     "schema/chemi_toxprints_prod.json": "ec06631508780ed4b0accc3afc4f1c2afa7d6dd86aafd97039c8d90693ee70da",
     "schema/chemi_webtest_prod.json": "1f09783af1a8084952b6f2e448f4e672fb1a25c98154e525a1b1b922f1f9fcf3",
+    "schema/cts-reviewed.json": "1f1c721681fc2640267a78fc04f0f9d16c0aedddd9d316fb0733c4e49e373209",
     "schema/ctx_bioactivity_prod.json": "f4464f8b3cef99c4447a0b5db905d71475a8ff4e5804d61324cb85d72d37c3f5",
     "schema/ctx_chemical_prod.json": "bb45195d49c9bec334449f4c7d23283f609523120f3b075982e99acd56414f9e",
     "schema/ctx_exposure_prod.json": "1af4a35e7998d2a1a00a675ae3da850164b2afa2dd595f4be6cb3b4b37ed582d",
     "schema/ctx_hazard_prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi_suite_prod.json": "9141ea5d85e794624dee3e964b1946d85fc94b2edc2c036e36a4deaa96f0a539",
     "schema/pubchem-reviewed.json": "ec4ee5c2c6b10c63248dfaa2f6f1b3198b6b6ebe9cfb11422d52de3adead5a9e",
-    "specmill.yml": "7eeb4118c993f4a57611e1ec804f314f53f655343d61ba422e22a9635499c77b",
+    "specmill.yml": "0a9215eb43626036231bf400919d629995bfb3d0fee166099eeb86e2eee98f2e",
     "tests/testthat/fixtures/specmill-contracts.rds": "8a0cffd99d64f7ea0bd2cc25afcaab205e7f4baed1f8875a11e422286a01f735"
   },
   "callbacks": "3952d8a9c1c49fe7b42bb669fec255fed37d6d8006d6b3fd2d2719578d81d4cd",
@@ -5986,6 +6007,24 @@
         ]
       }
     },
+    "schema/cts-reviewed.json": {
+      "keys": [
+        "GET /metabolizer",
+        "POST /metabolizer/inputs",
+        "POST /metabolizer/run"
+      ],
+      "functions": {
+        "GET /metabolizer": [
+          "cts_metabolizer"
+        ],
+        "POST /metabolizer/inputs": [
+          "cts_metabolizer_inputs"
+        ],
+        "POST /metabolizer/run": [
+          "cts_metabolizer_run"
+        ]
+      }
+    },
     "schema/pubchem-reviewed.json": {
       "keys": [
         "GET /compound/{namespace}/{query}/cids/JSON",
@@ -6196,6 +6235,10 @@
       "importer_version": "1"
     },
     "schema/epi_suite_prod.json": {
+      "source_format": "openapi",
+      "importer_version": "1"
+    },
+    "schema/cts-reviewed.json": {
       "source_format": "openapi",
       "importer_version": "1"
     },

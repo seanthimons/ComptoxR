@@ -1,0 +1,239 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "CTS metabolizer API (reviewed subset)",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/cts/rest"
+    }
+  ],
+  "paths": {
+    "/metabolizer": {
+      "get": {
+        "tags": [
+          "metabolizer"
+        ],
+        "summary": "Transformation pathways predictions.",
+        "description": "This endpoint makes transformation pathways predictions and is a ChemAxon metabolizer library wrapper.\n",
+        "responses": {
+          "200": {
+            "description": "Metabolizer REST endpoints.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetabolizerDiscovery"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "CTS HTTP error."
+          }
+        }
+      }
+    },
+    "/metabolizer/inputs": {
+      "post": {
+        "tags": [
+          "metabolizer"
+        ],
+        "summary": "Metabolizer input schema",
+        "description": "This endpoint returns the inputs used to\nget estimated values from Metabolizer.\n",
+        "requestBody": {
+          "description": "Inputs for Metabolizer p-chem property request.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "chemical": {
+                    "type": "string",
+                    "default": "CCCC"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "metabolizer input schema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetabolizerInputsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "CTS HTTP error."
+          }
+        },
+        "x-codegen-request-body-name": "inputs"
+      }
+    },
+    "/metabolizer/run": {
+      "post": {
+        "tags": [
+          "metabolizer"
+        ],
+        "summary": "Run metabolizer calculator for p-chem data.",
+        "description": "This endpoint runs metabolizer and returns p-chem data\nfrom requested p-chem property.\n",
+        "requestBody": {
+          "description": "Outputs for Metabolizer p-chem property request.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetabolizerInputs"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Run metabolizer calculator for p-chem data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetabolizerOutput"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "CTS HTTP error."
+          }
+        },
+        "x-codegen-request-body-name": "inputs"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MetabolizerInputs": {
+        "type": "object",
+        "properties": {
+          "structure": {
+            "type": "string",
+            "description": "Chemical for metabolizer in smiles format."
+          },
+          "generationLimit": {
+            "type": "integer",
+            "description": "Number of generations for structure's transformation products."
+          },
+          "transformationLibraries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 1
+          }
+        },
+        "required": [
+          "structure",
+          "generationLimit",
+          "transformationLibraries"
+        ]
+      },
+      "MetabolizerInputsResponse": {
+        "type": "object",
+        "properties": {
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "structure": {
+                "type": "string",
+                "description": "Chemical for metabolizer in smiles format.",
+                "default": "CCCC"
+              },
+              "generationLimit": {
+                "type": "integer",
+                "description": "Number of generations for structure's transformation products.",
+                "default": 1
+              },
+              "transformationLibraries": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [
+                  "hydrolysis"
+                ]
+              }
+            }
+          },
+          "metaInfo": {
+            "$ref": "#/components/schemas/MetaInfo"
+          }
+        }
+      },
+      "MetaInfo": {
+        "type": "object",
+        "description": "CTS calculation metadata."
+      },
+      "MetabolizerDiscovery": {
+        "type": "object",
+        "properties": {
+          "metaInfo": {
+            "$ref": "#/components/schemas/MetaInfo"
+          },
+          "links": {
+            "nullable": true
+          }
+        }
+      },
+      "MetabolizerNode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetabolizerNode"
+            }
+          }
+        },
+        "nullable": true
+      },
+      "MetabolizerOutput": {
+        "type": "object",
+        "properties": {
+          "metaInfo": {
+            "$ref": "#/components/schemas/MetaInfo"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/MetabolizerNode"
+              },
+              "error": {
+                "type": "string"
+              },
+              "total_products": {
+                "type": "integer"
+              },
+              "unique_products": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
